@@ -57,7 +57,6 @@ const actions = {
       commit('SET_TOKEN', 'admin-token')
       setToken('admin-token')
       resolve()
-      console.log(resolve, reject)
     })
   },
 
@@ -134,18 +133,18 @@ const actions = {
       // }).catch(error => {
       //   reject(error)
       // })
-	  
+
 	  commit('SET_TOKEN', '')
 	  commit('SET_ROLES', [])
 	  removeToken()
 	  resetRouter()
-	  
+
 	  // reset visited views and cached views
 	  // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
 	  dispatch('tagsView/delAllViews', null, {
 	    root: true
 	  })
-	  
+
 	  resolve()
     })
   },

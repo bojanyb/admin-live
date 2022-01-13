@@ -114,7 +114,6 @@ export default {
   watch: {
     $route: {
       handler: function(route) {
-        console.log(route)
         const query = route.query
         if (query) {
           this.redirect = query.redirect
@@ -160,7 +159,6 @@ export default {
 				    this.loading = true
 				    this.$store.dispatch('user/login', this.loginForm)
 				      .then(() => {
-						  console.log('--136---', this.redirect, this.otherQuery)
 				        this.$router.push({
 				          path: this.redirect || '/',
 				          query: this.otherQuery
