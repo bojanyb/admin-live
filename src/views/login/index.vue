@@ -156,23 +156,25 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({
-                path: this.redirect || '/',
-                query: this.otherQuery
-              })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+				  if (valid) {
+				    this.loading = true
+				    this.$store.dispatch('user/login', this.loginForm)
+				      .then(() => {
+						  console.log('--136---', this.redirect, this.otherQuery)
+				        this.$router.push({
+				          path: this.redirect || '/',
+				          query: this.otherQuery
+				        })
+				        this.loading = false
+				      })
+				      .catch(() => {
+				        this.loading = false
+				      })
+					 this.loading = false
+				  } else {
+				    console.log('error submit!!')
+				    return false
+				  }
       })
     },
     getOtherQuery(query) {
