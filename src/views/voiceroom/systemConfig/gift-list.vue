@@ -31,7 +31,6 @@
       highlight-current-row
     >
       <el-table-column label="排序" prop="sort" align="center" width="85" />
-      <el-table-column label="礼物ID" prop="id" align="center" width="85" />
       <el-table-column label="礼物名称" prop="gift_name" align="center" width="100" show-overflow-tooltip />
       <el-table-column label="礼物图片" prop="gift_genre" align="center">
         <template slot-scope="scope">

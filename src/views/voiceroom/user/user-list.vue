@@ -27,7 +27,7 @@
     >
       <el-table-column label="ID" align="center" prop="id" width="95" />
       <el-table-column label="昵称" prop="nickname" align="center" />
-      <el-table-column label="图像" prop="face" align="center" width="95">
+      <el-table-column label="头像" prop="face" align="center" width="95">
         <template slot-scope="scope">
           <el-image
             style="width: 40px; height: 40px"
