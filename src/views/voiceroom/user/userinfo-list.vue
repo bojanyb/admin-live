@@ -43,7 +43,7 @@
       <el-table-column label="ID" align="center" prop="id" width="95" />
       <el-table-column label="用户ID" prop="user_id" align="center" width="95" />
       <el-table-column label="直播头衔" prop="live_rank" align="center" width="95" />
-      <el-table-column label="消费等级名称" prop="rank_name" align="center" width="200" show-overflow-tooltip/>
+      <el-table-column label="消费等级名称" prop="rank_name" align="center" width="200" show-overflow-tooltip />
       <el-table-column label="头衔名称" prop="live_rank_name" align="center" />
       <el-table-column label="用户消费等级" prop="user_rank" align="center" />
       <el-table-column label="消费钻石总数" prop="diamond_total" align="center" />
@@ -104,7 +104,7 @@ export default {
         'order': this.filters.order,
         'sort': this.filters.sort,
         'page': this.page.page,
-		'pagesize': this.page.limit
+        'pagesize': this.page.limit
       }
       getUserInfoList(params).then(response => {
         this.total = response.data.count

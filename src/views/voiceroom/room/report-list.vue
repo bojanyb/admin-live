@@ -124,7 +124,7 @@ export default {
       this.listLoading = true
       var params = {
         'page': this.page.page,
-				'pagesize': this.page.limit,
+        'pagesize': this.page.limit
       }
       getFeedBackList(params).then(response => {
         this.total = response.data.count

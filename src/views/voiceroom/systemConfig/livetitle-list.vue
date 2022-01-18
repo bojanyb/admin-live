@@ -145,7 +145,7 @@ export default {
     getGift() {
       var params = {
         'page': this.page.page,
-				'pagesize': this.page.limit,
+        'pagesize': this.page.limit
       }
       this.giftLoading = true
       getGiftList(params).then(response => {

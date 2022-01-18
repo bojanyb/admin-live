@@ -295,7 +295,7 @@ export default {
       var params = {
         'status': this.filters.status,
         'page': this.page.page,
-		'pagesize': this.page.limit,
+        'pagesize': this.page.limit
       }
       getGiftList(params).then(response => {
         this.total = response.data.count

@@ -139,7 +139,7 @@ export default {
     getUserRank() {
       var params = {
         'page': this.page.page,
-				'pagesize': this.page.limit,
+        'pagesize': this.page.limit
       }
       this.listLoading = true
       getUserRankList(params).then(response => {

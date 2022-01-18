@@ -64,7 +64,7 @@ export default {
       this.listLoading = true
       var params = {
         'page': this.page.page,
-		'pagesize': this.page.limit
+        'pagesize': this.page.limit
       }
       getVerifyList(params).then(response => {
         this.total = response.data.count
