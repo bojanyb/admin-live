@@ -123,6 +123,7 @@ export default {
       this.listLoading = true
       var params = {
         'page': this.page.page,
+		'pagesize': this.page.limit,
         'room_number': this.filters.room_number,
         'is_live': this.filters.is_live
       }

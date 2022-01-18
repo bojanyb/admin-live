@@ -128,6 +128,7 @@ export default {
       this.listLoading = true
       var params = {
         'page': this.page.page,
+		'pagesize': this.page.limit,
         'user_id': this.filters.user_id,
         'order': this.filters.order,
         'sort': this.filters.sort

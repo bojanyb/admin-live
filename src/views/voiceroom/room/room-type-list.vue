@@ -128,7 +128,8 @@ export default {
     getGenreList() {
       this.listLoading = true
       var params = {
-        'page': this.page.page
+        'page': this.page.page,
+		'pagesize': this.page.limit,
       }
       getRoomGenre(params).then(response => {
         if (response && response.data.list.length > 0) {

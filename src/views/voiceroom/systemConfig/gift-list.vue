@@ -294,7 +294,8 @@ export default {
       this.srcList = []
       var params = {
         'status': this.filters.status,
-        'page': this.page.page
+        'page': this.page.page,
+		'pagesize': this.page.limit,
       }
       getGiftList(params).then(response => {
         this.total = response.data.count
@@ -472,10 +473,10 @@ export default {
         this.$message.error('礼物图片不能为空')
         return
       }
-      if (this.popForm.gift_gif == '') {
-        this.$message.error('礼物特效不能为空')
-        return
-      }
+      // if (this.popForm.gift_gif == '') {
+      //   this.$message.error('礼物特效不能为空')
+      //   return
+      // }
       if (this.popForm.gift_diamond == '') {
         this.$message.error('钻石价格不能为空')
         return
