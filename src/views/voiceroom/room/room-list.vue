@@ -178,7 +178,7 @@ export default {
 	.pagination-container {
 		margin-top: initial;
 	}
-	
+
 	.colorNormal{
 		color: #67C23A;
 	}
