@@ -10,7 +10,6 @@
         <el-form-item label="直播状态">
           <el-select v-model="filters.is_live" placeholder="请选择" @change="roomList">
             <el-option label="全部" value="" />
-            <el-option key="0" label="未开始" value="0" />
             <el-option key="1" label="直播中" value="1" />
             <el-option key="2" label="已结束" value="2" />
           </el-select>
@@ -35,14 +34,14 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="房间号码">
+      <el-table-column align="center" label="房间号码" width="100">
         <template slot-scope="scope">
           {{ scope.row.room_number }}
         </template>
       </el-table-column>
-      <el-table-column label="房间名称" prop="room_name" align="center" show-overflow-tooltip />
-      <el-table-column label="房主昵称" prop="live_user_name" align="center" />
-      <el-table-column label="房间类型" prop="room_genre_name" align="center" />
+      <el-table-column label="房间名称" prop="room_name" align="center" width="180" show-overflow-tooltip />
+      <el-table-column label="房主昵称" prop="live_user_name" align="center" width="180" show-overflow-tooltip/>
+      <el-table-column label="房间类型" prop="room_genre_name" align="center" width="100"/>
       <el-table-column label="在线时长" prop="live_timeText" align="center" />
       <el-table-column label="开播时间" prop="start_timeText" align="center" />
       <el-table-column label="结束时间" prop="end_timeText" align="center" />
