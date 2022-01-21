@@ -292,6 +292,7 @@ export default {
 			right: 0;
 			left: 0;
 			margin: auto;
+			z-index: 0;
 
 			.animationClass1 {
 				width: 35rem;

@@ -8,7 +8,7 @@
           <el-input v-model="filters.user_id" v-input-limit="0" placeholder="请输入用户ID" clearable />
         </el-form-item>
         <el-form-item label="排序类型">
-          <el-select v-model="filters.order" placeholder="请选择">
+          <el-select v-model="filters.order" placeholder="请选择" @change="getUserInfo">
             <el-option label="全部" value="" />
             <el-option key="gain_total" label="按照收入喵粮总数排序" value="gain_total" />
             <el-option key="live_time" label="按照直播时长排序" value="live_time" />
@@ -19,7 +19,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="排序方式">
-          <el-select v-model="filters.sort" placeholder="请选择">
+          <el-select v-model="filters.sort" placeholder="请选择" @change="getUserInfo">
             <el-option label="全部" value="" />
             <el-option key="asc" label="正序" value="asc" />
             <el-option key="desc" label="倒序" value="desc" />
@@ -40,7 +40,6 @@
       fit
       highlight-current-row
     >
-      <el-table-column label="ID" align="center" prop="id" width="95" />
       <el-table-column label="用户ID" prop="user_id" align="center" width="95" />
       <el-table-column label="直播头衔" prop="live_rank" align="center" width="95" />
       <el-table-column label="消费等级名称" prop="rank_name" align="center" width="200" show-overflow-tooltip />

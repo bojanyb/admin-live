@@ -8,7 +8,7 @@
           <el-input v-model="filters.user_id" v-input-limit="0" placeholder="请输入用户ID" clearable />
         </el-form-item>
         <el-form-item label="排序类型">
-          <el-select v-model="filters.order" placeholder="请选择">
+          <el-select v-model="filters.order" placeholder="请选择" @change="getWallet">
             <el-option label="全部" value="" />
             <el-option key="gain" label="按照收入喵粮排序" value="gain" />
             <el-option key="diamond" label="按照钻石数排序" value="diamond" />
@@ -17,7 +17,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="排序方式">
-          <el-select v-model="filters.sort" placeholder="请选择">
+          <el-select v-model="filters.sort" placeholder="请选择" @change="getWallet">
             <el-option label="全部" value="" />
             <el-option key="asc" label="正序" value="asc" />
             <el-option key="desc" label="倒序" value="desc" />

@@ -8,7 +8,7 @@
           <el-input v-model="filters.room_number" v-input-limit="0" placeholder="请输入房间号码" clearable />
         </el-form-item>
         <el-form-item label="直播状态">
-          <el-select v-model="filters.is_live" placeholder="请选择">
+          <el-select v-model="filters.is_live" placeholder="请选择" @change="roomList">
             <el-option label="全部" value="" />
             <el-option key="0" label="未开始" value="0" />
             <el-option key="1" label="直播中" value="1" />
@@ -51,8 +51,8 @@
       <el-table-column label="直播状态" align="center" width="95">
         <template slot-scope="scope">
           <div v-if="scope.row.is_live == 0">未开始</div>
-          <div v-else-if="scope.row.is_live == 1">直播中</div>
-          <div v-else-if="scope.row.is_live == 2">已结束</div>
+          <div v-else-if="scope.row.is_live == 1" class="colorNormal">直播中</div>
+          <div v-else-if="scope.row.is_live == 2" class="colorDel">已结束</div>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" prop="statusText" width="95">
@@ -177,5 +177,12 @@ export default {
 
 	.pagination-container {
 		margin-top: initial;
+	}
+	
+	.colorNormal{
+		color: #67C23A;
+	}
+	.colorDel{
+		color: #F56C6C;
 	}
 </style>
