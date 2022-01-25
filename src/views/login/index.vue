@@ -14,15 +14,15 @@
       <div class="title-container">
         <h3 class="title">直播管理平台</h3>
       </div>
-      <el-form-item prop="username">
+      <el-form-item prop="account">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
+          ref="account"
+          v-model="loginForm.account"
           placeholder="请输入账户"
-          name="username"
+          name="account"
           type="text"
           tabindex="1"
           autocomplete="on"
@@ -80,19 +80,19 @@ export default {
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('密码不能少于6位'))
+      if (!value) {
+        callback(new Error('密码不能为空'))
       } else {
         callback()
       }
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        account: 'admin',
+        password: 'admin'
       },
       loginRules: {
-        username: [{
+        account: [{
           required: true,
           trigger: 'blur',
           validator: validateUsername
@@ -127,8 +127,8 @@ export default {
     // window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {
-    if (this.loginForm.username === '') {
-      this.$refs.username.focus()
+    if (this.loginForm.account === '') {
+      this.$refs.account.focus()
     } else if (this.loginForm.password === '') {
       this.$refs.password.focus()
     }

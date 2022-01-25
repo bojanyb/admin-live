@@ -2,7 +2,7 @@
   <div ref="rightPanel" :class="{show:show}" class="rightPanel-container">
     <div class="rightPanel-background" />
     <div class="rightPanel">
-      <div class="handle-button" :style="{'top':buttonTop+'px','background-color':theme}" @click="show=!show">
+      <div class="handle-button hidden" :style="{'top':buttonTop+'px','background-color':theme}" @click="show=!show">
         <i :class="show?'el-icon-close':'el-icon-setting'" />
       </div>
       <div class="rightPanel-items">
@@ -81,6 +81,9 @@ export default {
   overflow: hidden;
   position: relative;
   width: calc(100% - 15px);
+}
+.hidden{
+	display: none;
 }
 </style>
 

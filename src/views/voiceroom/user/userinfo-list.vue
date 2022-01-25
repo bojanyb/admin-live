@@ -86,7 +86,7 @@ export default {
         limit: 10
       },
       filters: {
-        'id': '',
+        'user_id': '',
         'order': '',
         'sort': ''
       }
@@ -99,7 +99,7 @@ export default {
     getUserInfo() {
       this.listLoading = true
       var params = {
-        'id': this.filters.id,
+        'user_id': this.filters.user_id,
         'order': this.filters.order,
         'sort': this.filters.sort,
         'page': this.page.page,

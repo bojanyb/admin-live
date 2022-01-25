@@ -1,199 +1,195 @@
 // import { login, logout, getInfo } from '@/api/user'
 import {
-  logout,
-  getInfo
+	getRoomLogin,
+	getRoomLogout
+} from '@/api/videoRoom.js'
+import {
+	logout,
+	getInfo
 } from '@/api/user'
 import {
-  getToken,
-  setToken,
-  removeToken
+	getToken,
+	setToken,
+	removeToken
 } from '@/utils/auth'
 import router, {
-  resetRouter
+	resetRouter
 } from '@/router'
 
 const state = {
-  token: getToken(),
-  name: '',
-  avatar: '',
-  introduction: '',
-  roles: []
+	token: getToken(),
+	name: '',
+	avatar: '',
+	introduction: '',
+	roles: []
 }
 
 const mutations = {
-  SET_TOKEN: (state, token) => {
-    state.token = token
-  },
-  SET_INTRODUCTION: (state, introduction) => {
-    state.introduction = introduction
-  },
-  SET_NAME: (state, name) => {
-    state.name = name
-  },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
-  },
-  SET_ROLES: (state, roles) => {
-    state.roles = roles
-  }
+	SET_TOKEN: (state, token) => {
+		state.token = token
+	},
+	SET_INTRODUCTION: (state, introduction) => {
+		state.introduction = introduction
+	},
+	SET_NAME: (state, name) => {
+		state.name = name
+	},
+	SET_AVATAR: (state, avatar) => {
+		state.avatar = avatar
+	},
+	SET_ROLES: (state, roles) => {
+		state.roles = roles
+	}
 }
 
 const actions = {
-  login({
-    commit
-  }, userInfo) {
-    // const { username, password } = userInfo
-    return new Promise((resolve, reject) => {
-      //     login({ username: username.trim(), password: password }).then(response => {
-      //       const { data } = response
-      // console.log(data)
-      //       commit('SET_TOKEN', data.token)
-      //       setToken(data.token)
-      //       resolve()
-      //     }).catch(error => {
-      //       reject(error)
-      //     })
+	login({
+		commit
+	}, userInfo) {
+		const {
+			account,
+			password
+		} = userInfo
+		return new Promise((resolve, reject) => {
+			var params = {
+				"account": account.trim(),
+				"password": password,
+			}
+			getRoomLogin(params).then(response => {
+				const {
+					data
+				} = response
+				console.log(data)
+				commit('SET_TOKEN', data.token)
+				setToken(data.token)
+				resolve()
+			}).catch(error => {
+				reject(error)
+			})
+		})
+	},
 
-      commit('SET_TOKEN', 'admin-token')
-      setToken('admin-token')
-      resolve()
-    })
-  },
+	// get user info
+	getInfo({
+		commit,
+		state
+	}) {
+		return new Promise((resolve, reject) => {
+			// getInfo(state.token).then(response => {
+			// 	const {
+			// 		data
+			// 	} = response
 
-  // get user info
-  getInfo({
-    commit,
-    state
-  }) {
-    return new Promise((resolve, reject) => {
-      // getInfo(state.token).then(response => {
-      // 	const {
-      // 		data
-      // 	} = response
+			// 	if (!data) {
+			// 		reject('Verification failed, please Login again.')
+			// 	}
 
-      // 	if (!data) {
-      // 		reject('Verification failed, please Login again.')
-      // 	}
+			// 	console.log("--79---",data)
+			// 	const {
+			// 		roles,
+			// 		name,
+			// 		avatar,
+			// 		introduction
+			// 	} = data
 
-      // 	console.log("--79---",data)
-      // 	const {
-      // 		roles,
-      // 		name,
-      // 		avatar,
-      // 		introduction
-      // 	} = data
+			// 	// roles must be a non-empty array
+			// 	if (!roles || roles.length <= 0) {
+			// 		reject('getInfo: roles must be a non-null array!')
+			// 	}
 
-      // 	// roles must be a non-empty array
-      // 	if (!roles || roles.length <= 0) {
-      // 		reject('getInfo: roles must be a non-null array!')
-      // 	}
+			// 	commit('SET_ROLES', roles)
+			// 	commit('SET_NAME', name)
+			// 	commit('SET_AVATAR', avatar)
+			// 	commit('SET_INTRODUCTION', introduction)
+			// 	resolve(data)
+			// }).catch(error => {
+			// 	reject(error)
+			// })
+			var data = {
+				'roles': ['admin'],
+				'name': 'Super Admin',
+				'avatar': 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+				'introduction': 'I am a super administrator'
+			}
+			commit('SET_ROLES', data.roles)
+			commit('SET_NAME', data.name)
+			commit('SET_AVATAR', data.avatar)
+			commit('SET_INTRODUCTION', data.introduction)
+			resolve(data)
+		})
+	},
 
-      // 	commit('SET_ROLES', roles)
-      // 	commit('SET_NAME', name)
-      // 	commit('SET_AVATAR', avatar)
-      // 	commit('SET_INTRODUCTION', introduction)
-      // 	resolve(data)
-      // }).catch(error => {
-      // 	reject(error)
-      // })
-      var data = {
-        'roles': ['admin'],
-        'name': 'Super Admin',
-        'avatar': 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-        'introduction': 'I am a super administrator'
-      }
-      commit('SET_ROLES', data.roles)
-      commit('SET_NAME', data.name)
-      commit('SET_AVATAR', data.avatar)
-      commit('SET_INTRODUCTION', data.introduction)
-      resolve(data)
-    })
-  },
+	// user logout
+	logout({
+		commit,
+		state,
+		dispatch
+	}) {
+		return new Promise((resolve, reject) => {
+			var params = {
+				"account": "admin"
+			}
+			getRoomLogout(params).then(() => {
+				commit('SET_TOKEN', '')
+				commit('SET_ROLES', [])
+				removeToken()
+				resetRouter()
+				dispatch('tagsView/delAllViews', null, {
+					root: true
+				})
 
-  // user logout
-  logout({
-    commit,
-    state,
-    dispatch
-  }) {
-    return new Promise((resolve, reject) => {
-      // logout(state.token).then(() => {
-      //   commit('SET_TOKEN', '')
-      //   commit('SET_ROLES', [])
-      //   removeToken()
-      //   resetRouter()
+				resolve()
+			}).catch(error => {
+				reject(error)
+			})
+		})
+	},
 
-      //   // reset visited views and cached views
-      //   // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
-      //   dispatch('tagsView/delAllViews', null, {
-      //     root: true
-      //   })
+	// remove token
+	resetToken({
+		commit
+	}) {
+		return new Promise(resolve => {
+			commit('SET_TOKEN', '')
+			commit('SET_ROLES', [])
+			removeToken()
+			resolve()
+		})
+	},
 
-      //   resolve()
-      // }).catch(error => {
-      //   reject(error)
-      // })
+	// dynamically modify permissions
+	async changeRoles({
+		commit,
+		dispatch
+	}, role) {
+		const token = role + '-token'
 
-	  commit('SET_TOKEN', '')
-	  commit('SET_ROLES', [])
-	  removeToken()
-	  resetRouter()
+		commit('SET_TOKEN', token)
+		setToken(token)
 
-	  // reset visited views and cached views
-	  // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
-	  dispatch('tagsView/delAllViews', null, {
-	    root: true
-	  })
+		const {
+			roles
+		} = await dispatch('getInfo')
 
-	  resolve()
-    })
-  },
+		resetRouter()
 
-  // remove token
-  resetToken({
-    commit
-  }) {
-    return new Promise(resolve => {
-      commit('SET_TOKEN', '')
-      commit('SET_ROLES', [])
-      removeToken()
-      resolve()
-    })
-  },
+		// generate accessible routes map based on roles
+		const accessRoutes = await dispatch('permission/generateRoutes', roles, {
+			root: true
+		})
+		// dynamically add accessible routes
+		router.addRoutes(accessRoutes)
 
-  // dynamically modify permissions
-  async changeRoles({
-    commit,
-    dispatch
-  }, role) {
-    const token = role + '-token'
-
-    commit('SET_TOKEN', token)
-    setToken(token)
-
-    const {
-      roles
-    } = await dispatch('getInfo')
-
-    resetRouter()
-
-    // generate accessible routes map based on roles
-    const accessRoutes = await dispatch('permission/generateRoutes', roles, {
-      root: true
-    })
-    // dynamically add accessible routes
-    router.addRoutes(accessRoutes)
-
-    // reset visited views and cached views
-    dispatch('tagsView/delAllViews', null, {
-      root: true
-    })
-  }
+		// reset visited views and cached views
+		dispatch('tagsView/delAllViews', null, {
+			root: true
+		})
+	}
 }
 
 export default {
-  namespaced: true,
-  state,
-  mutations,
-  actions
+	namespaced: true,
+	state,
+	mutations,
+	actions
 }

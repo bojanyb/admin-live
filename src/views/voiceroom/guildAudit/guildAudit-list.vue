@@ -102,7 +102,6 @@
           </el-button>
         </template>
       </el-table-column>
-      </el-table-column>
     </el-table>
 
     <!--工具条-->

@@ -12,6 +12,9 @@ import voiceroomRouter from './modules/room/voiceroom'
 import systemConfigRouter from './modules/systemConfig/system'
 import userRouter from './modules/user/user'
 import guildAuditRouter from './modules/guild/guildAudit'
+import recordRouter from './modules/record/record'
+import guildFinanceRouter from './modules/finance/finance.js'
+
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -40,75 +43,77 @@ import guildAuditRouter from './modules/guild/guildAudit'
  * all roles can be accessed
  */
 export const constantRoutes = [{
-  path: '/login',
-  component: () => import('@/views/login/index'),
-  hidden: true
-},
-{
-  path: '/register',
-  component: () => import('@/views/login/register'),
-  hidden: true
-},
-{
-  path: '/auth-redirect',
-  component: () => import('@/views/login/auth-redirect'),
-  hidden: true
-},
-{
-  path: '/404',
-  component: () => import('@/views/error-page/404'),
-  hidden: true
-},
-{
-  path: '/401',
-  component: () => import('@/views/error-page/401'),
-  hidden: true
-},
-{
-  path: '/',
-  component: Layout,
-  redirect: '/dashboard',
-  children: [{
-    path: 'dashboard',
-    component: () => import('@/views/dashboard/index'),
-    name: 'Dashboard',
-    meta: {
-      title: '总览',
-      icon: 'dashboard',
-      affix: true
-    }
-  }]
-}
+		path: '/login',
+		component: () => import('@/views/login/index'),
+		hidden: true
+	},
+	{
+		path: '/register',
+		component: () => import('@/views/login/register'),
+		hidden: true
+	},
+	{
+		path: '/auth-redirect',
+		component: () => import('@/views/login/auth-redirect'),
+		hidden: true
+	},
+	{
+		path: '/404',
+		component: () => import('@/views/error-page/404'),
+		hidden: true
+	},
+	{
+		path: '/401',
+		component: () => import('@/views/error-page/401'),
+		hidden: true
+	},
+	{
+		path: '/',
+		component: Layout,
+		redirect: '/dashboard',
+		children: [{
+			path: 'dashboard',
+			component: () => import('@/views/dashboard/index'),
+			name: 'Dashboard',
+			meta: {
+				title: '总览',
+				icon: 'dashboard',
+				affix: true
+			}
+		}]
+	}
 ]
 
 export const asyncRoutes = [
-  // chartsRouter,
-  userRouter,
-  systemConfigRouter,
-  voiceroomRouter,
-  guildAuditRouter,
-  // 404 page must be placed at the end !!!
-  {
-    path: '*',
-    redirect: '/404',
-    hidden: true
-  }
+	// chartsRouter,
+	userRouter,
+	systemConfigRouter,
+	voiceroomRouter,
+	guildAuditRouter,
+	recordRouter,
+	guildFinanceRouter,
+	// 404 page must be placed at the end !!!
+	{
+		path: '*',
+		redirect: '/404',
+		hidden: true
+	}
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({
-    y: 0
-  }),
-  routes: constantRoutes
+	// mode: 'history', // require service support
+	scrollBehavior: () => ({
+		y: 0
+	}),
+	routes: constantRoutes
 })
 
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+	const newRouter = createRouter()
+	router.matcher = newRouter.matcher // reset router
 }
 
 export default router

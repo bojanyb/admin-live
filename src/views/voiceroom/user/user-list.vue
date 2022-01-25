@@ -85,7 +85,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="editPop = false">取 消</el-button>
-        <el-button :loading="loading" disabled type="primary" @click="handleChange">确 定</el-button>
+        <el-button :loading="loading" type="primary" @click="handleChange">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -184,6 +184,9 @@ export default {
         this.$message.error('封禁说明不能为空')
         return
       }
+	  if(this.popForm.status == 1){
+		  this.popForm.remark = ''
+	  }
       this.loading = true
       getUserSave(this.popForm).then(res => {
         this.$message.success('操作成功')

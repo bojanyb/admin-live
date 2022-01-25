@@ -1,5 +1,32 @@
 import request from '@/utils/request2'
 
+// 登录
+export function getRoomLogin(data) {
+  return request({
+    url: '/Login/login',
+    method: 'post',
+    data
+  })
+}
+
+// 退出登录
+export function getRoomLogout(data) {
+  return request({
+    url: '/Wallet/logout',
+    method: 'post',
+    data
+  })
+}
+
+// 主页
+export function getRoomWallet(data) {
+  return request({
+    url: '/Wallet',
+    method: 'post',
+    data
+  })
+}
+
 // 房间类型列表
 export function getRoomGenre(data) {
   return request({
@@ -108,6 +135,16 @@ export function getWalletSave(data) {
   })
 }
 
+// 礼物赠送记录
+export function getGiftRecordList(data) {
+  return request({
+    url: 'Gift/history',
+    method: 'post',
+    data
+  })
+}
+
+
 // 礼物列表
 export function getGiftList(data) {
   return request({
@@ -171,6 +208,15 @@ export function getUserRankConfig(data) {
   })
 }
 
+// 公会列表
+export function getGuildList(data) {
+  return request({
+    url: 'Guild/guildList',
+    method: 'post',
+    data
+  })
+}
+
 // 公会待审核列表
 export function getGuildCheckList(data) {
   return request({
@@ -188,3 +234,21 @@ export function getGuildCheck(data) {
     data
   })
 }
+
+// 公会待审核列表
+export function getGuildWithdrawList(data) {
+  return request({
+    url: 'Wallet/withdrawList',
+    method: 'post',
+    data
+  })
+}
+// 公会提现审核
+export function getGuildWalletCheck(data) {
+  return request({
+    url: '/Wallet/check',
+    method: 'post',
+    data
+  })
+}
+

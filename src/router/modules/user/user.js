@@ -46,7 +46,7 @@ const userRouter = {
       title: '用户账户列表',
       noCache: true
     }
-  }
+  },
   ]
 }
 
