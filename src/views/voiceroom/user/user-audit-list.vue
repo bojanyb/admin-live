@@ -66,7 +66,7 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="editPop = false">取 消</el-button>
-				<el-button :loading="loading" type="primary" @click="handleChange">确 定</el-button>
+				<el-button :loading="loading" type="primary" @click="handleChange()">确 定</el-button>
 			</div>
 		</el-dialog>
 	</div>
@@ -177,7 +177,7 @@
 					this.handleChangeCheckedCities(row);
 					this.editPop = true;
 				} else {
-					this.handleChange();
+					this.handleChange(row);
 				}
 			},
 			handleChange(source) {
