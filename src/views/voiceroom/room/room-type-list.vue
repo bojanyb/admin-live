@@ -19,8 +19,8 @@
       fit
       highlight-current-row
     >
-      <el-table-column label="序号" prop="sort" align="center" width="150" />
-      <el-table-column label="ID" prop="id" align="center" width="150" />
+      <el-table-column label="序号" prop="sort" align="center" width="95" />
+      <!-- <el-table-column label="ID" prop="id" align="center" width="150" /> -->
       <el-table-column label="类型名称" prop="name" align="center" />
       <el-table-column label="创建时间" align="center" prop="create_timeText" />
       <el-table-column label="开始时间" align="center" prop="start_timeText" />
@@ -183,10 +183,10 @@ export default {
           this.list = response.data.list
           this.list.map(function(item) {
             item.create_timeText = moment(item.create_time * 1000).format(
-              'YYYY-MM-DD HH:MM:SS')
+              'YYYY-MM-DD HH:mm:ss')
             item.start_timeText = JSON.stringify(item.start_time).length > 9 ? moment(item
               .start_time * 1000).format(
-              'YYYY-MM-DD HH:MM:SS') : ''
+              'YYYY-MM-DD HH:mm:ss') : ''
             if (item.live_time > 60) {
               item.live_timeText = parseInt(item.live_time / 60) + '小时 ' + (item
                 .live_time %
@@ -214,7 +214,6 @@ export default {
       this.popForm.start_time = JSON.stringify(row.start_time).length == 10 ? row.start_time * 1000 : ''
       this.popForm.is_del = '0'
       this.popFormVisible = true
-      console.log(this.popForm)
     },
 
     // 新增

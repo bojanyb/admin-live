@@ -154,7 +154,7 @@
 						} else if (res.guild_genre == '2') {
 							res.guild_genreText = "对公"
 						}
-						res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:MM:SS')
+						res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
 					})
 					this.listLoading = false
 				}).catch(err => {

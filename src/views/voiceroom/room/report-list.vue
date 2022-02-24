@@ -11,7 +11,7 @@
       fit
       highlight-current-row
     >
-      <el-table-column label="ID" prop="id" align="center" width="95" />
+      <!-- <el-table-column label="ID" prop="id" align="center" width="95" /> -->
       <el-table-column label="用户ID" prop="user_id" align="center" width="95" />
       <el-table-column label="直播场次ID" prop="live_room_id" align="center" width="95" />
       <el-table-column label="房间号码" prop="room_number" align="center" />
@@ -130,7 +130,7 @@ export default {
         this.total = response.data.count
         this.list = response.data.list
         this.list.map(res => {
-          res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:MM:SS')
+          res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
           var status = ''
           switch (res.status) {
             case 1:

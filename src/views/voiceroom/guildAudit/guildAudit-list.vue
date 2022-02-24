@@ -263,8 +263,8 @@ export default {
               }
             }
           }
-          item.create_timeText = moment(item.create_time * 1000).format('YYYY-MM-DD HH:MM:SS')
-          item.update_timeText = moment(item.update_time * 1000).format('YYYY-MM-DD HH:MM:SS')
+          item.create_timeText = moment(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+          item.update_timeText = moment(item.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
           if (item.id_card_one !== '') {
             this.cardsList1.push(item.id_card_one)
           }

@@ -157,8 +157,8 @@
 						}
 						res.amountText = res.amount / 100;
 						res.feeText = res.fee / 100;
-						res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:MM:SS')
-						res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:MM:SS')
+						res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+						res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
 					})
 					this.listLoading = false
 				}).catch(err => {

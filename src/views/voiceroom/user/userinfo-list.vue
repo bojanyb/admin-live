@@ -41,6 +41,7 @@
       highlight-current-row
     >
       <el-table-column label="用户ID" prop="user_id" align="center" width="95" />
+	  <el-table-column label="用户手机号" prop="user_phone" align="center" />
       <el-table-column label="直播头衔" prop="live_rank" align="center" width="95" />
       <el-table-column label="消费等级名称" prop="rank_name" align="center" width="200" show-overflow-tooltip />
       <el-table-column label="头衔名称" prop="live_rank_name" align="center" />
@@ -109,7 +110,7 @@ export default {
         this.total = response.data.count
         this.list = response.data.list
         this.list.map(res => {
-          res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:MM:SS')
+          res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
         })
         this.listLoading = false
       }).catch(err => {

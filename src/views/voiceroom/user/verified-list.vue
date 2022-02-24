@@ -13,7 +13,6 @@
       fit
       highlight-current-row
     >
-      <el-table-column label="ID" prop="id" align="center" width="95" />
       <el-table-column label="用户ID" prop="user_id" align="center" width="95" />
       <el-table-column label="姓名" prop="name" align="center" width="160" show-overflow-tooltip />
       <el-table-column label="昵称" prop="nickname" align="center"  show-overflow-tooltip />
@@ -70,7 +69,7 @@ export default {
         this.total = response.data.count
         this.list = response.data.list
         this.list.map(res => {
-          res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:MM:SS')
+          res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
         })
         this.listLoading = false
       }).catch(err => {

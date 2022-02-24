@@ -34,6 +34,7 @@
 			<el-table-column label="用户ID" prop="user_id" align="center" width="95" />
 			<el-table-column label="星探ID" prop="scout_id" align="center" width="95" />
 			<el-table-column label="公会ID" prop="guild_id" align="center" width="95" />
+			<el-table-column label="手机号" prop="phone" align="center" width="95" />
 			<el-table-column label="钻石数" prop="diamond" align="center" />
 			<el-table-column label="喵粮(个)" prop="gain" align="center" />
 			<el-table-column label="冻结喵粮(个)" prop="freeze_gain" align="center" />
@@ -124,7 +125,7 @@
 					this.total = response.data.count
 					this.list = response.data.list
 					this.list.map(res => {
-						res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:MM:SS')
+						res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
 						if (res.guild_genre == 1) {
 							res.guild_genreText = '对私结算'
 						} else if (res.guild_genre == 2) {

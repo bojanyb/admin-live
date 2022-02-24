@@ -318,10 +318,10 @@
 					this.total = response.data.count
 					this.list = response.data.list
 					this.list.map(res => {
-						res.start_timeText = moment(res.start_time * 1000).format('YYYY-MM-DD HH:MM:SS')
-						res.end_timeText = moment(res.end_time * 1000).format('YYYY-MM-DD HH:MM:SS')
-						res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:MM:SS')
-						res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:MM:SS')
+						res.start_timeText = moment(res.start_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+						res.end_timeText = moment(res.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+						res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+						res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
 						res.gain_priceText = res.gain_price + '喵粮'
 						res.gift_rateText = res.gift_rate / 100 + '%'
 						if (res.gift_genre == 1) {

@@ -12,7 +12,7 @@
 
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
-			<el-table-column label="ID" align="center" prop="id" width="95" />
+			<!-- <el-table-column label="ID" align="center" prop="id" width="95" /> -->
 			<el-table-column label="头衔" prop="live_rank" align="center" width="95" />
 			<el-table-column label="头衔名称" prop="live_rank_name" align="center" />
 			<el-table-column label="收入喵粮总数" prop="gain_total" align="center" />
@@ -172,7 +172,7 @@
 					this.total = response.data.count
 					this.list = response.data.list
 					this.list.map(res => {
-						res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:MM:SS')
+						res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
 					})
 					this.listLoading = false
 				})

@@ -135,6 +135,26 @@ export function getWalletSave(data) {
   })
 }
 
+
+// 用户资料审核列表 
+export function getUserAuditList(data) {
+  return request({
+    url: 'User/checkList',
+    method: 'post',
+    data
+  })
+}
+
+// 用户资料审核
+export function getUserAudit(data) {
+  return request({
+    url: 'User/checkInfo',
+    method: 'post',
+    data
+  })
+}
+
+
 // 礼物赠送记录
 export function getGiftRecordList(data) {
   return request({
@@ -247,6 +267,15 @@ export function getGuildWithdrawList(data) {
 export function getGuildWalletCheck(data) {
   return request({
     url: '/Wallet/check',
+    method: 'post',
+    data
+  })
+}
+
+// 聊天室、单聊记录 Im
+export function getChatRecord(data) {
+  return request({
+    url: '/Im',
     method: 'post',
     data
   })
