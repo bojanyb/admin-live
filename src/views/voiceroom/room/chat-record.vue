@@ -2,7 +2,7 @@
 	<div id="chartRecordPgae">
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="getChatRecordList">
+			<el-form :inline="true" :model="filters" @keyup.enter.native="handleSearch">
 				<el-form-item label="用户ID">
 					<el-input v-model="filters.from_id" v-input-limit="0" placeholder="请输入发送消息用户ID" clearable />
 				</el-form-item>
@@ -11,12 +11,12 @@
 				</el-form-item>
 				<el-form-item label="选择时间">
 					<el-date-picker v-model="timer" type="datetimerange" range-separator="至" start-placeholder="开始日期"
-						end-placeholder="结束日期" @change="getChatRecordList">
+						end-placeholder="结束日期" @change="handleSearch">
 					</el-date-picker>
 				</el-form-item>
 
 				<el-form-item>
-					<el-button type="primary" @click="getChatRecordList">查询</el-button>
+					<el-button type="primary" @click="handleSearch">查询</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -24,24 +24,28 @@
 			<el-card class="phoneMode">
 				<div class="chatListBox" v-if="chatList.length > 0">
 					<div class="chatItem" v-for="item in chatList">
-						<div class="timeBox" v-if="item.create_time !== '' ">{{item.create_time}}</div>
+						<div class="timeBox" v-if="item.create_timeText !== '' ">{{item.create_timeText}}</div>
 						<div>
-							<div class="userImg fl">
+							<div class="userImg fl"
+								v-if="item.isShow == true">
 								<img :src="item.remark.face" />
 							</div>
 							<div class="userChat fl">
-								<div class="userChatHead">
+								<div class="userChatHead"
+									v-if="item.isShow == true">
 									<div class="userName fl">{{ item.remark.nickname }}</div>
 									<!-- <div class="userTitle fl">{{item.homeOwer}}</div> -->
 								</div>
-								<div class="userChatMsg" v-if="item.type == 1 || item.type == 8">{{ item.content }}</div>
+								<div class="userChatMsg" v-if="item.type == 1 || item.type == 8">{{ item.content }}
+								</div>
 								<div class="userChatMsg imgBox" v-else-if="item.type == 2">
 									<el-image style="max-width: 239px;" :src="item.content.remoteUrl"
 										:preview-src-list="srcShowList">
 									</el-image>
 								</div>
 								<div class="userChatMsg videoBox" v-else-if="item.type == 4">
-									<video v-if="item.content.remoteUrl !== '' "  :class="'videoPlayer' + index" :ref="'videoPlayer' + index" controls="true">
+									<video v-if="item.content.remoteUrl !== '' " :class="'videoPlayer' + index"
+										:ref="'videoPlayer' + index" controls="true">
 										<source :src="item.content.remoteUrl" type="video/mp4">
 									</video>
 								</div>
@@ -86,7 +90,7 @@
 				currentChatList: [],
 				isFinished: false,
 				srcShowList: [],
-				currentTime : "",
+				currentTime: "",
 			}
 		},
 		created() {
@@ -107,35 +111,125 @@
 					if (res.code == 2000) {
 						this.currentChatList = res.data.list;
 						if (this.currentChatList.length > 0) {
-							this.currentChatList.forEach((item,i) => {
-								if(i == 0){
-									if(this.page.page == 1){
+							this.currentChatList.forEach((item, i) => {
+								if (i == 0) {
+									if (this.page.page == 1) {
 										this.currentTime = item.create_time;
 										item.create_timeText = moment(item.create_time * 1000).format(
 											'YYYY-MM-DD HH:mm:ss');
-									}else{
+									} else {
 										item.create_timeText = "";
 									}
-								}else{
-									
+								} else {
+
 									// 当前内容与上一条显示时间的内容是否超过5分钟
 									let separatedNum = (item.create_time - this.currentTime) / 60;
-									if(separatedNum > 5){
+									if (separatedNum > 5) {
 										this.currentTime = item.create_time;
 										item.create_timeText = moment(item.create_time * 1000).format(
 											'YYYY-MM-DD HH:mm:ss');
-									}else{
+									} else {
 										item.create_timeText = "";
 									}
 								}
-								item.remark = JSON.parse(item.remark);	
+								item.remark = JSON.parse(item.remark);
+
+								if ((item.remark.genre == 2 || item.remark.genre == 5 || item.remark
+										.genre == 6) && item.type == 1) {
+									item.content = '( 用户: ' + item.from_id + ' ) ' + item.content;
+								}
+								if (item.remark.genre == 4) { // 权限麦
+									let contentText = "";
+									switch (item.remark.action) {
+										case "1":
+											contentText = "邀请上麦";
+											break;
+										case "2":
+											contentText = "申请上麦";
+											break;
+										case "3":
+											contentText = "上麦";
+											break;
+										case "4":
+											contentText = "下麦";
+											break;
+										case "5":
+											contentText = "自己闭麦";
+											break;
+										case "6":
+											contentText = "开麦";
+											break;
+										case "7":
+											contentText = "禁麦";
+											break;
+									}
+									item.content = '( 用户: ' + item.from_id + ' ) ' + contentText;
+								}
+
+								// if (item.remark.genre == 8) { // 升级提示
+								// 	if (item.remark.user_rank && item.remark.user_rank !== "") {
+								// 		item.content = '(恭喜用户: ' + item.from_id + ' ) 等级提升到' + item.remark
+								// 			.user_rank + "级了";
+								// 	}
+								// 	if (item.remark.live_rank && item.remark.live_rank !== "") {
+								// 		item.content = '(恭喜用户: ' + item.from_id + ' ) 头衔提升到' + item.remark
+								// 			.live_rank + "级了";
+								// 	}
+								// }
+
+								/**
+								 *  是否展示用户图片和昵称 isShow
+								 *  genre： 1. 进入直播间 2. 退出直播间 3. 聊天消息，指通过非App渠道发的聊天消息，通常是接口形式
+								 *  4. 权限麦
+								 *  	action_user_id 1 操作人id*
+								 *  	action_room_number 123222 操作直播间号码*
+								 *  	action 1 邀请上麦*
+								 *  	action 2 申请上麦*
+								 *  	action 3 上麦*
+								 *  	action 4 下麦*
+								 *  	action 5 自己闭麦*
+								 *  	action 6开麦*
+								 *  	action 7 禁麦*
+								 * 	5. 房间操作
+								 *  	action 1 解散*
+								 *  	action 2 冻结*
+								 *  6. 房间资料修改，可能涉及字段
+								 *  	notice 公告*
+								 *  	room_name 房间名称*
+								 *  	wheat_genre 上麦类型*
+								 *  7.礼物类
+								 *		gift_gif  礼物动效，可能为空*
+								 *		gift_photo  礼物图片*
+								 *		batter  连击次数*
+								 *		gift_num 礼物数量*
+								 *		gift_name 礼物名称*
+								 *		level 礼物显示等级*
+								 *		world 是否全频广播*
+								 *		nickname 送礼人昵称*
+								 *		face 送礼人头像*
+								 *		to_nickname 收礼人昵称*
+								 *		to_face 收礼人头像*
+								 *		to_id 收礼人id*
+								 *		room_number 直播间号，可能为空*
+								 *	8.升级提示
+								 *		level_genre 1 等级升级*
+								 *		level_genre 2 头衔升级*
+								 *		user_rank 提升后的用户等级*
+								 *		live_rank 提升后的头衔等级*
+								 * */
+								if (item.remark.genre !== 2 && item.remark.genre !== 4 && item.remark
+									.genre !== 5 && item.remark.genre !== 6) {
+									item.isShow = true;
+								} else {
+									item.isShow = false;
+								}
+
 								if (item.type == 2 || item.type == 4) { // 消息图片类型 预览数据
 									item.content = JSON.parse(item.content);
-									if(item.type == 2){
+									if (item.type == 2) {
 										this.srcShowList.push(item.content.remoteUrl);
 									}
 								}
-								console.log(item)
 								this.chatList.push(item);
 							})
 							if (this.chatList.length > 0) {
@@ -166,6 +260,15 @@
 					};
 				});
 			},
+			handleSearch() {
+				if (this.filters.to_id == "") {
+					this.$message.error("群ID参数为必填！")
+					return
+				}
+				this.chatList = [];
+				this.page.page = 1;
+				this.getChatRecordList();
+			}
 		}
 	}
 </script>
@@ -210,14 +313,14 @@
 							height: auto;
 							margin-bottom: 15px;
 							display: inline-block;
-							
+
 							.timeBox {
-								color: #999999;
+								color: #ffffff;
 								font-size: 11px;
 								text-align: center;
 								margin-bottom: 14.5px;
 							}
-							
+
 							.userImg {
 								width: 34px;
 								height: 34px;
@@ -253,6 +356,7 @@
 										background: #3FBCFD;
 										border: solid 1px #ffffff;
 										color: #FFFFFF;
+										width: fit-content;
 									}
 								}
 
@@ -264,6 +368,7 @@
 									background: rgba($color: #000000, $alpha: 0.5);
 									border-radius: 10px;
 									border-top-left-radius: 3px;
+									width: fit-content;
 								}
 							}
 						}

@@ -7,9 +7,6 @@
 				<el-form-item label="用户ID">
 					<el-input v-model="filters.id" v-input-limit="0" placeholder="请输入用户ID" clearable />
 				</el-form-item>
-				<el-form-item label="昵称">
-					<el-input v-model="filters.nickname" placeholder="请输入昵称" clearable />
-				</el-form-item>
 				<el-form-item label="手机号">
 					<el-input v-model="filters.phone" v-input-limit="0" placeholder="请输入手机号" clearable />
 				</el-form-item>

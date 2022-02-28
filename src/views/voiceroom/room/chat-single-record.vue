@@ -2,27 +2,27 @@
 	<div id="chartRecordPage">
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="getChatRecordList">
-				<el-form-item label="fromID">
+			<el-form :inline="true" :model="filters" @keyup.enter.native="handleSearch">
+				<el-form-item label="发送消息ID">
 					<el-input v-model="filters.from_id" v-input-limit="0" placeholder="请输入发送消息用户ID" clearable />
 				</el-form-item>
-				<el-form-item label="toID">
+				<el-form-item label="接收消息ID">
 					<el-input v-model="filters.to_id" v-input-limit="0" placeholder="请输入接收消息用户ID" clearable />
 				</el-form-item>
 				<el-form-item label="类型">
-					<el-select v-model="filters.type" placeholder="请选择" @change="getChangeType">
+					<el-select v-model="filters.type" placeholder="请选择" @change="handleSearch">
 						<el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="选择时间">
 					<el-date-picker v-model="timer" type="datetimerange" range-separator="至" start-placeholder="开始日期"
-						end-placeholder="结束日期" @change="getChatRecordList">
+						end-placeholder="结束日期" @change="handleSearch">
 					</el-date-picker>
 				</el-form-item>
 
 				<el-form-item>
-					<el-button type="primary" @click="getChatRecordList">查询</el-button>
+					<el-button type="primary" @click="handleSearch">查询</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -32,23 +32,25 @@
 					<div class="chatItem" v-for="(item,index) in chatList" :key="index">
 						<div class="timeBox" v-if="item.create_timeText !== '' ">{{item.create_timeText}}</div>
 						<div class="otherBox fl" v-if="item.userType == 'other'">
-							<div class="userImg fl">
+							<div class="userImg fl" v-if="item.isShow == true">
 								<img :src="item.remark.face" />
 							</div>
 							<div class="userChat fl">
-								<div class="userChatHead">
+								<div class="userChatHead" v-if="item.isShow == true">
 									<div class="userName fl" style="margin: 0;margin-left: 5px;">
 										{{ item.remark.nickname }}
 									</div>
 								</div>
-								<div class="userChatMsg" v-if="item.type == 1">{{ item.content }}</div>
+								<div class="userChatMsg" v-if="item.type == 1 || item.type == 8">{{ item.content }}
+								</div>
 								<div class="userChatMsg imgBox" v-else-if="item.type == 2">
 									<el-image style="max-width: 239px;" :src="item.content.remoteUrl"
 										:preview-src-list="srcShowList">
 									</el-image>
 								</div>
 								<div class="userChatMsg videoBox" v-else-if="item.type == 4">
-									<video  v-if="item.content.remoteUrl !== '' " :class="'videoPlayer' + index" :ref="'videoPlayer' + index" controls="true">
+									<video v-if="item.content.remoteUrl !== '' " :class="'videoPlayer' + index"
+										:ref="'videoPlayer' + index" controls="true">
 										<source :src="item.content.remoteUrl" type="video/mp4">
 									</video>
 								</div>
@@ -56,24 +58,26 @@
 						</div>
 						<div class="selfBox fr" v-else-if="item.userType = 'self'">
 							<div class="userChat fl">
-								<div class="userChatHead">
+								<div class="userChatHead" v-if="item.isShow == true">
 									<div class="userName fr" style="margin: 0;margin-left: 5px;">
 										{{ item.remark.nickname }}
 									</div>
 								</div>
-								<div class="userChatMsg" v-if="item.type == 1">{{ item.content }}</div>
+								<div class="userChatMsg" v-if="item.type == 1 || item.type == 8 ">{{ item.content }}
+								</div>
 								<div class="userChatMsg imgBox" v-else-if="item.type == 2">
 									<el-image style="max-width: 239px;" :src="item.content.remoteUrl"
 										:preview-src-list="srcShowList">
 									</el-image>
 								</div>
 								<div class="userChatMsg videoBox" v-else-if="item.type == 4">
-									<video v-if="item.content.remoteUrl !== '' "  :class="'videoPlayer' + index" :ref="'videoPlayer' + index" controls="true">
+									<video v-if="item.content.remoteUrl !== '' " :class="'videoPlayer' + index"
+										:ref="'videoPlayer' + index" controls="true">
 										<source :src="item.content.remoteUrl" type="video/mp4">
 									</video>
 								</div>
 							</div>
-							<div class="userImg fl" style="margin: 0;margin-left: 5px;">
+							<div class="userImg fl" style="margin: 0;margin-left: 5px;" v-if="item.isShow == true">
 								<img :src="item.remark.face" />
 							</div>
 						</div>
@@ -149,7 +153,7 @@
 				currentChatList: [],
 				isFinished: false,
 				srcShowList: [],
-				currentTime : "",
+				currentTime: "",
 			}
 		},
 		created() {
@@ -171,29 +175,108 @@
 					if (res.code == 2000) {
 						this.currentChatList = res.data.list;
 						if (this.currentChatList.length > 0) {
-							this.currentChatList.forEach((item,i) => {
-								if(i == 0){
-									if(this.page.page == 1){
+							this.currentChatList.forEach((item, i) => {
+								if (i == 0) {
+									if (this.page.page == 1) {
 										this.currentTime = item.create_time;
 										item.create_timeText = moment(item.create_time * 1000).format(
 											'YYYY-MM-DD HH:mm:ss');
-									}else{
+									} else {
 										item.create_timeText = "";
 									}
-								}else{
-									
+								} else {
+
 									// 当前内容与上一条显示时间的内容是否超过5分钟
 									let separatedNum = (item.create_time - this.currentTime) / 60;
-									if(separatedNum > 5){
+									if (separatedNum > 5) {
 										this.currentTime = item.create_time;
 										item.create_timeText = moment(item.create_time * 1000).format(
 											'YYYY-MM-DD HH:mm:ss');
-									}else{
+									} else {
 										item.create_timeText = "";
 									}
 								}
-								
-								item.remark = JSON.parse(item.remark);	
+
+								item.remark = JSON.parse(item.remark);
+								if ((item.remark.genre == 2 || item.remark.genre == 5 || item.remark
+										.genre == 6) && item.type == 1) {
+									item.content = '( 用户: ' + item.from_id + ' ) ' + item.content;
+								}
+								if (item.remark.genre == 4) { // 权限麦
+									let contentText = "";
+									switch (item.remark.action) {
+										case "1":
+											contentText = "邀请上麦";
+											break;
+										case "2":
+											contentText = "申请上麦";
+											break;
+										case "3":
+											contentText = "上麦";
+											break;
+										case "4":
+											contentText = "下麦";
+											break;
+										case "5":
+											contentText = "自己闭麦";
+											break;
+										case "6":
+											contentText = "开麦";
+											break;
+										case "7":
+											contentText = "禁麦";
+											break;
+									}
+									item.content = '( 用户: ' + item.from_id + ' ) ' + contentText;
+								}
+
+								/**
+								 *  是否展示用户图片和昵称 isShow
+								 *  genre： 1. 进入直播间 2. 退出直播间 3. 聊天消息，指通过非App渠道发的聊天消息，通常是接口形式
+								 *  4. 权限麦
+								 *  	action_user_id 1 操作人id*
+								 *  	action_room_number 123222 操作直播间号码*
+								 *  	action 1 邀请上麦*
+								 *  	action 2 申请上麦*
+								 *  	action 3 上麦*
+								 *  	action 4 下麦*
+								 *  	action 5 自己闭麦*
+								 *  	action 6开麦*
+								 *  	action 7 禁麦*
+								 * 	5. 房间操作
+								 *  	action 1 解散*
+								 *  	action 2 冻结*
+								 *  6. 房间资料修改，可能涉及字段
+								 *  	notice 公告*
+								 *  	room_name 房间名称*
+								 *  	wheat_genre 上麦类型*
+								 *  7.礼物类
+								 *		gift_gif  礼物动效，可能为空*
+								 *		gift_photo  礼物图片*
+								 *		batter  连击次数*
+								 *		gift_num 礼物数量*
+								 *		gift_name 礼物名称*
+								 *		level 礼物显示等级*
+								 *		world 是否全频广播*
+								 *		nickname 送礼人昵称*
+								 *		face 送礼人头像*
+								 *		to_nickname 收礼人昵称*
+								 *		to_face 收礼人头像*
+								 *		to_id 收礼人id*
+								 *		room_number 直播间号，可能为空*
+								 *	8.升级提示
+								 *		level_genre 1 等级升级*
+								 *		level_genre 2 头衔升级*
+								 *		user_rank 提升后的用户等级*
+								 *		live_rank 提升后的头衔等级*
+								 * */
+								if (item.remark.genre !== 2 && item.remark.genre !== 4 && item.remark
+									.genre !== 5 && item.remark.genre !== 6) {
+									item.isShow = true;
+								} else {
+									item.isShow = false;
+								}
+
 								if (item.from_id == this.filters.from_id) {
 									item.userType = "other";
 								} else if (item.from_id == this.filters.to_id) {
@@ -201,10 +284,24 @@
 								}
 								if (item.type == 2 || item.type == 4) { // 消息图片类型 预览数据
 									item.content = JSON.parse(item.content);
-									if(item.type == 2){
+									if (item.type == 2) {
 										this.srcShowList.push(item.content.remoteUrl);
 									}
 								}
+
+
+								// 临时处理 后台返回的type值与值对应上后可以去掉，不去掉也不影响
+								if (item.type == 1 || item.type == 2) { // 文字、图片类型 如果出现mp4格式的地址，手动变更为视频类型
+									if (typeof item.content == "string" && item.content.indexOf("{") > -
+										1) {
+										item.content = JSON.parse(item.content);
+									}
+									if (item.content.remoteUrl && item.content.remoteUrl.indexOf(".mp4") >
+										-1) {
+										item.type = 4;
+									}
+								}
+
 								this.chatList.push(item);
 							})
 							if (this.chatList.length > 0) {
@@ -235,11 +332,15 @@
 					};
 				});
 			},
-			getChangeType() {
+			handleSearch() {
+				if (this.filters.to_id == "") {
+					this.$message.error("接收消息ID参数为必填！")
+					return
+				}
 				this.chatList = [];
 				this.isFinished = false;
 				this.getChatRecordList();
-			},
+			}
 		}
 	}
 </script>
@@ -294,7 +395,7 @@
 							display: inline-block;
 
 							.timeBox {
-								color: #999999;
+								color: #ffffff;
 								font-size: 11px;
 								text-align: center;
 								margin-bottom: 14.5px;
@@ -335,6 +436,7 @@
 									background: #F6F6F7;
 									border-radius: 10px;
 									border-top-left-radius: 3px;
+									width: fit-content;
 								}
 
 								.imgBox,

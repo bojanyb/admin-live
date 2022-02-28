@@ -38,25 +38,24 @@ const voiceroomRouter = {
 				noCache: true
 			}
 		},
-		// {
-		// 	path: 'chat-record',
-		// 	component: () => import('@/views/voiceroom/room/chat-record'),
-		// 	name: 'chat-record',
-		// 	meta: {
-		// 		title: '语音房聊天记录',
-		// 		noCache: true
-		// 	}
-		// },
-		// {
-		// 	path: 'chat-single-record',
-		// 	component: () => import('@/views/voiceroom/room/chat-single-record'),
-		// 	name: 'chat-single-record',
-		// 	meta: {
-		// 		title: '语音房单聊记录',
-		// 		noCache: true
-		// 	}
-		// },
-
+		{
+			path: 'chat-record',
+			component: () => import('@/views/voiceroom/room/chat-record'),
+			name: 'chat-record',
+			meta: {
+				title: '语音房聊天记录',
+				noCache: true
+			}
+		},
+		{
+			path: 'chat-single-record',
+			component: () => import('@/views/voiceroom/room/chat-single-record'),
+			name: 'chat-single-record',
+			meta: {
+				title: '语音房单聊记录',
+				noCache: true
+			}
+		},
 	]
 }
 
