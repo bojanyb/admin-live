@@ -276,5 +276,15 @@
 			background: red;
 			color: #FFFFFF;
 		}
+		
+		.showText{
+			overflow: hidden;
+			text-overflow:ellipsis;
+			white-space: nowrap;
+		}
+	}
+	
+	::v-deep .el-table .cell.el-tooltip{
+		padding: 0 30px;
 	}
 </style>
