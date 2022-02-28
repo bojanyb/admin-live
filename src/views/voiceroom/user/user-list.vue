@@ -21,7 +21,7 @@
 
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
-			<!-- <el-table-column label="ID" align="center" prop="id" width="95" /> -->
+			<el-table-column label="用户ID" align="center" prop="id" width="95" />
 			<el-table-column label="昵称" prop="nickname" align="center" />
 			<el-table-column label="头像" prop="face" align="center" width="95">
 				<template slot-scope="scope">

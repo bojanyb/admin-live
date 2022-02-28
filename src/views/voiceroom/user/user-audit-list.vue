@@ -177,7 +177,7 @@
 					this.handleChangeCheckedCities(row);
 					this.editPop = true;
 				} else {
-					this.handleChange(row);
+					this.handleChange(this.popForm);
 				}
 			},
 			handleChange(source) {
@@ -188,7 +188,10 @@
 						"status": JSON.stringify(this.popForm.status),
 					}
 				} else {
-					params = source;
+					params = {
+						"user_id": source.user_id,
+						"status": source.status,
+					}
 				}
 				getUserAudit(params).then(res => {
 					if (res.code == 2000) {
