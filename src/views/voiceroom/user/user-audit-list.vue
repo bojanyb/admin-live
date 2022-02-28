@@ -155,9 +155,9 @@
 						}
 						if (res.startList.length == 3) {
 							res.startList[0] = res.startList[0] + "00";
-							res.startList[1] = res.startList[1] + "0";
+							res.startList[1] = res.startList[1] > 0 ? res.startList[1] + "0" : "0";
 						}
-						res.startList = res.startList.sort();
+						res.startList.reverse()
 						this.userImglist.push(res.face)
 					})
 					this.listLoading = false
