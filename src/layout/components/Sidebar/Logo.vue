@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: '汇达直播管理平台',
+      title: '喵喵星球管理平台',
       logo: '../../../../public/images/logo.png'
     }
   }

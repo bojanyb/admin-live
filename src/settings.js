@@ -1,5 +1,5 @@
 module.exports = {
-  title: '汇达直播管理平台',
+  title: '喵喵星球管理平台',
 
   /**
 	 * @type {boolean} true | false
