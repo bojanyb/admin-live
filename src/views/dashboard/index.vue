@@ -9,7 +9,7 @@
 						start-placeholder="开始日期" end-placeholder="结束日期" @change="getRoomWalletInfo" />
 				</div>
 			</div>
-			<div class="userInfoBox">
+			<div class="userInfoBox" v-loading.fullscreen.lock="fullscreenLoading">
 				<div class="userInfoItem text item">
 					<div class="userTitle">
 						钻石总数:
@@ -173,6 +173,7 @@
 		components: {},
 		data() {
 			return {
+				fullscreenLoading: false,
 				accountInfo: {
 					"recharge": "", //时间段内用户总充值，单位分
 					"guild_gain": "", //时间段内公会总提取，单位分
@@ -200,17 +201,22 @@
 		},
 		methods: {
 			getRoomWalletInfo() {
+				this.fullscreenLoading = true;
 				var params = {
 					'account': 'ling12345',
-					'create_time': this.timer ? JSON.stringify(new Date(this.timer[0]).getTime() / 1000) : "",
+					'start_time': this.timer ? JSON.stringify(new Date(this.timer[0]).getTime() / 1000) : "",
 					'end_time': this.timer ? JSON.stringify(new Date(this.timer[1]).getTime() / 1000) : "",
 				}
 				getRoomWallet(params).then(res => {
 					if (res.code == 2000) {
-						this.accountInfo = res.data
+						this.accountInfo = res.data;
+						setTimeout(() => {
+						  this.fullscreenLoading = false;
+						}, 500);
 					}
 				}).catch(err => {
-					this.$message.error(err)
+					this.$message.error(err);
+					this.fullscreenLoading = false;
 				})
 			},
 			handleReply() {
