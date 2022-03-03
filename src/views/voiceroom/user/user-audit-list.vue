@@ -195,14 +195,14 @@
 				}
 				getUserAudit(params).then(res => {
 					if (res.code == 2000) {
-						if (this.auditAllNum == this.multipleSelection.length || this.IsAuditAll == false) {
-							this.$message.success("审核成功");
-							this.getUserAuditSource();
-						}
 						if (this.IsAuditAll == true) {
 							this.auditAllNum++;
 						} else {
 							this.editPop = false;
+						}
+						if (this.auditAllNum == this.multipleSelection.length || this.IsAuditAll == false) {
+							this.$message.success("审核成功");
+							this.getUserAuditSource();
 						}
 					}
 				}).catch(err => {
