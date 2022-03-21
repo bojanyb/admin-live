@@ -10,8 +10,9 @@
 							:value="item.value" />
 					</el-select>
 				</el-form-item>
-				<el-form-item>
+				<el-form-item class="toolbarBtns">
 					<el-button type="success" @click="handleGiftAdd">新增</el-button>
+					<el-button class="refreshBtn" type="info" @click="handleGiftRefresh">刷新</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -140,7 +141,8 @@
 	import {
 		getGiftList,
 		getGiftAdd,
-		getGiftEdit
+		getGiftEdit,
+		getGiftRefresh
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
@@ -634,6 +636,22 @@
 				if (gift_rateText !== '' && gift_diamond !== '') {
 					this.diamondNum = Math.round(gift_diamond - gift_diamond * ((100 - gift_rateText) / 100))
 				}
+			},
+			handleGiftRefresh() {
+				this.$prompt('请输入缓存刷新密码', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+				}).then(res=>{
+					if(res.value == "888888"){
+						getGiftRefresh().then(row=>{
+							console.log(row)
+						}).catch(err=>{
+							this.$message.error(err)
+						})
+					}else{
+						this.$message.error("请输入正确的密码")
+					}
+				}).catch(() => {});
 			}
 		}
 	}
@@ -724,5 +742,20 @@
 
 	.colorDel {
 		color: #F56C6C;
+	}
+	::v-deep.toolbarBtns{
+		width: 80%;
+		position: relative;
+		.el-form-item__content{
+			width: 100%;
+			.refreshBtn{
+				opacity: 0.2;
+				padding: 0px;
+				font-size: 12px;
+				position: absolute;
+				right: 0;
+				bottom: 0;
+			}
+		}
 	}
 </style>

@@ -69,6 +69,7 @@ export default {
         this.total = response.data.count
         this.list = response.data.list
         this.list.map(res => {
+		  res.id_card = res.id_card.replace(/^(.{6})(?:\d+)(.{4})$/, "$1****$2")
           res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
         })
         this.listLoading = false

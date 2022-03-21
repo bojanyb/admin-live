@@ -7,13 +7,14 @@ import store from '@/store'
 import {
 // getToken
 } from '@/utils/auth'
-var baseUrlApi = ''
+var baseUrlApi = '';
+	console.log(process.env.NODE_ENV);
 switch (process.env.NODE_ENV) {
   case 'development':
-    baseUrlApi = 'http://api.live.huidapay.net'
+    baseUrlApi = process.env.VUE_APP_BASE_API
     break
   case 'test':
-    baseUrlApi = 'http://api.live.huidapay.net'
+    baseUrlApi = 'http://test.api.live.huidapay.net'
     break
   case 'production':
     baseUrlApi = 'http://api.live.huidapay.net'

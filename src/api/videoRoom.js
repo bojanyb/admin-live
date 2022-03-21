@@ -136,7 +136,7 @@ export function getWalletSave(data) {
 }
 
 
-// 用户资料审核列表 
+// 用户资料审核列表
 export function getUserAuditList(data) {
   return request({
     url: 'User/checkList',
@@ -187,6 +187,15 @@ export function getGiftAdd(data) {
 export function getGiftEdit(data) {
   return request({
     url: 'Gift/saveGift',
+    method: 'post',
+    data
+  })
+}
+
+// 礼物缓存刷新，慎用， 一般在缓存数据丢失下使用
+export function getGiftRefresh(data) {
+  return request({
+    url: 'Gift/refresh',
     method: 'post',
     data
   })
@@ -281,3 +290,156 @@ export function getChatRecord(data) {
   })
 }
 
+// 活动列表 
+export function getActivetyList(data) {
+  return request({
+    url: '/Activity/index',
+    method: 'post',
+    data
+  })
+}
+
+// 活动新增
+export function getActivetyAdd(data) {
+  return request({
+    url: '/Activity/create',
+    method: 'post',
+    data
+  })
+}
+
+// 活动编辑
+export function getActivetyUpdate(data) {
+  return request({
+    url: '/Activity/update',
+    method: 'post',
+    data
+  })
+}
+
+// 活动删除
+export function getActivetyDel(data) {
+  return request({
+    url: '/Activity/delete',
+    method: 'post',
+    data
+  })
+}
+
+
+// 活动礼物列表 
+export function getActivetyGiftList(data) {
+  return request({
+    url: '/Activity/giftList',
+    method: 'post',
+    data
+  })
+}
+
+// 获取已配置礼物 
+export function getActivetyHasGiftList(data) {
+  return request({
+    url: '/Activity/getHasAddGift',
+    method: 'post',
+    data
+  })
+}
+
+// 配置礼物
+export function getActivetyGiftSave(data) {
+  return request({
+    url: '/Activity/saveGift',
+    method: 'post',
+    data
+  })
+}
+
+// 活动礼物编辑
+export function getActivetyGiftDetail(data) {
+  return request({
+    url: '/Activity/detail',
+    method: 'post',
+    data
+  })
+}
+
+// 增加库存
+export function getActivetyGiftAddInventory(data) {
+  return request({
+    url: '/Activity/addInventory',
+    method: 'post',
+    data
+  })
+}
+
+// 打招呼常用语 列表 
+export function getDesignateList(data) {
+  return request({
+    url: '/designate/index',
+    method: 'post',
+    data
+  })
+}
+
+// 打招呼常用语 新增 
+export function getDesignateAdd(data) {
+  return request({
+    url: '/designate/create',
+    method: 'post',
+    data
+  })
+}
+
+// 打招呼常用语 修改 
+export function getDesignateUpdate(data) {
+  return request({
+    url: '/designate/update',
+    method: 'post',
+    data
+  })
+}
+
+// 打招呼常用语 删除 
+export function getDesignateDelete(data) {
+  return request({
+    url: '/designate/delete',
+    method: 'post',
+    data
+  })
+}
+
+//  房间名称列表
+export function getLiveRoomList(data) {
+  return request({
+    url: '/LiveRoom/index',
+    method: 'post',
+    data
+  })
+}
+
+//  新增推荐房名
+export function getLiveCreate(data) {
+  return request({
+    url: '/live_room/create',
+    method: 'post',
+    data
+  })
+}
+
+//  修改推荐房名
+export function getLiveUpdate(data) {
+  return request({
+    url: '/live_room/update',
+    method: 'post',
+    data
+  })
+}
+
+// 删除房名
+export function getLiveDelete(data) {
+  return request({
+    url: '/Live_Room/delete',
+    method: 'post',
+    data
+  })
+}

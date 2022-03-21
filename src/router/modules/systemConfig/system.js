@@ -37,7 +37,16 @@ const systemConfigRouter = {
       title: '礼物列表',
       noCache: true
     }
-  }
+  },
+	{
+	  path: 'greet-list',
+	  component: () => import('@/views/voiceroom/systemConfig/greet-list'),
+	  name: 'greet-list',
+	  meta: {
+	    title: '打招呼常用语',
+	    noCache: true
+	  }
+	},
   ]
 }
 

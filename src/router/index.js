@@ -14,6 +14,7 @@ import userRouter from './modules/user/user'
 import guildAuditRouter from './modules/guild/guildAudit'
 import recordRouter from './modules/record/record'
 import guildFinanceRouter from './modules/finance/finance.js'
+import activityRouter from "./modules/activity/activity.js"
 
 
 /**
@@ -92,6 +93,7 @@ export const asyncRoutes = [
 	guildAuditRouter,
 	recordRouter,
 	guildFinanceRouter,
+  	activityRouter,
 	// 404 page must be placed at the end !!!
 	{
 		path: '*',
