@@ -42,11 +42,11 @@
 			<el-table-column label="礼物失效时间" prop="end_timeText" align="center" width="155" />
 			<el-table-column label="礼物添加时间" prop="create_timeText" align="center" width="155" />
 			<el-table-column label="礼物修改时间" prop="create_timeText" align="center" width="155" />
-			<el-table-column label="操作" align="center" width="180">
+			<el-table-column label="操作" align="center" width="120">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.status == '1'" type="primary" @click="handleEdit(scope.row)">修改
 					</el-button>
-					<el-button v-if="scope.row.status == '1'" type="danger" @click="handleDel(scope.row)">删除</el-button>
+					<!-- <el-button v-if="scope.row.status == '1'" type="danger" @click="handleDel(scope.row)">删除</el-button> -->
 				</template>
 			</el-table-column>
 		</el-table>
@@ -127,13 +127,13 @@
 				<el-button :loading="loading" type="primary" @click="handleChange">确 定</el-button>
 			</div>
 		</el-dialog>
-		<el-dialog class="popDel" title="删除" :visible.sync="delVisible" width="30%">
+		<!-- <el-dialog class="popDel" title="删除" :visible.sync="delVisible" width="30%">
 			<span>确定删除该礼物吗</span>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="delVisible = false">取 消</el-button>
 				<el-button type="primary" @click="handleDelSubmit">确 定</el-button>
 			</span>
-		</el-dialog>
+		</el-dialog> -->
 	</div>
 </template>
 
@@ -381,6 +381,9 @@
 					'gift_desc': '',
 					'type': 'Add'
 				}
+				if (this.$refs['popForm']) {
+					this.$refs['popForm'].resetFields()
+				}
 				this.editPop = true
 			},
 			handleEdit(row) {
@@ -405,6 +408,10 @@
 				this.imageSvgUrl = ''
 				this.imageSvgUrl = row.gift_gif
 				this.editTitle = '修改'
+				if (this.$refs['popForm']) {
+					this.$refs['popForm'].resetFields()
+				}
+				this.changeDiamond()
 				this.editPop = true
 			},
 			handleChange() {
@@ -413,17 +420,9 @@
 				this.popForm.start_time = new Date(this.popForm.start_timeText).getTime()
 				this.popForm.end_time = new Date(this.popForm.end_timeText).getTime()
 				this.popForm.gift_rate = this.popForm.gift_rateText * 100
-				delete this.popForm.start_timeText
-				delete this.popForm.end_timeText
-				delete this.popForm.statusText
 				if (this.popForm.type == 'Edit') {
-					delete this.popForm.type
 					this.giftEdit()
 				} else if (this.popForm.type == 'Add') {
-					delete this.popForm.type
-					delete this.popForm.id
-					delete this.popForm.status
-					delete this.popForm.gift_rateText
 					this.giftAdd()
 				}
 			},
@@ -432,161 +431,110 @@
 				this.imageSvgUrl = ''
 			},
 			giftAdd() {
-				if (this.popForm.gift_name == '') {
-					this.$message.error('礼物名不能为空')
-					return
-				}
-				if (this.popForm.gift_photo == '') {
-					this.$message.error('礼物图片不能为空')
-					return
-				}
-				// if (this.popForm.gift_gif == "") {
-				// 	this.$message.error("礼物特效不能为空");
-				// 	return
-				// }
-				if (this.popForm.gift_diamond == '') {
-					this.$message.error('钻石价格不能为空')
-					return
-				}
-				if (this.popForm.gift_rate == '') {
-					this.$message.error('平台分成不能为空')
-					return
-				}
-				if (this.popForm.start_time == '') {
-					this.$message.error('礼物生效时间不能为空')
-					return
-				}
-				if (this.popForm.end_time == '') {
-					this.$message.error('礼物过期时间不能为空')
-					return
-				}
-				if (this.popForm.sort == '') {
-					this.$message.error('排序不能为空')
-					return
-				}
-				if (this.popForm.gift_desc == '') {
-					this.$message.error('礼物说明不能为空')
-					return
-				}
-				const formData = new FormData()
-				formData.append('gift_name', this.popForm.gift_name)
-				formData.append('gift_diamond', this.popForm.gift_diamond)
-				formData.append('gift_rate', this.popForm.gift_rate)
-				formData.append('start_time', this.popForm.start_time / 1000)
-				formData.append('end_time', this.popForm.end_time / 1000)
-				formData.append('sort', this.popForm.sort)
-				formData.append('gift_desc', this.popForm.gift_desc)
-
-				if (this.imageFile !== '') {
-					formData.append('gift_photo', this.imageFile.raw)
-				} else {
-					formData.append('gift_photo', '')
-				}
-				if (this.imageSvgFile !== '') {
-					formData.append('gift_gif', this.imageSvgFile.raw)
-				}
-
-				this.loading = true
-				getGiftAdd(formData).then(res => {
-					this.loading = false
-					this.handleEditClose()
-					this.giftlist()
-				}).catch(err => {
-					this.handleEditClose()
-					this.loading = false
+				this.$refs.popForm.validate(valid => {
+					if (valid) {
+						const formData = new FormData()
+						formData.append('gift_name', this.popForm.gift_name)
+						formData.append('gift_diamond', this.popForm.gift_diamond)
+						formData.append('gift_rate', this.popForm.gift_rate)
+						formData.append('start_time', this.popForm.start_time / 1000)
+						formData.append('end_time', this.popForm.end_time / 1000)
+						formData.append('sort', this.popForm.sort)
+						formData.append('gift_desc', this.popForm.gift_desc)
+						if (this.imageFile !== '') {
+							formData.append('gift_photo', this.imageFile.raw)
+						} else {
+							formData.append('gift_photo', '')
+						}
+						if (this.imageSvgFile !== '') {
+							formData.append('gift_gif', this.imageSvgFile.raw)
+						}
+						this.loading = true
+						getGiftAdd(formData).then(res => {
+							this.$message.success("添加成功")
+							this.loading = false
+							this.handleEditClose()
+							this.giftlist()
+						}).catch(err => {
+							this.$message.error("添加成功")
+							this.handleEditClose()
+							this.loading = false
+						})
+					}
 				})
 			},
 			giftEdit() {
-				if (this.popForm.gift_name == '') {
-					this.$message.error('礼物名不能为空')
-					return
-				}
-				if (this.popForm.gift_photo == '') {
-					this.$message.error('礼物图片不能为空')
-					return
-				}
-				// if (this.popForm.gift_gif == '') {
-				//   this.$message.error('礼物特效不能为空')
-				//   return
-				// }
-				if (this.popForm.gift_diamond == '') {
-					this.$message.error('钻石价格不能为空')
-					return
-				}
-				if (this.popForm.gift_rate == '') {
-					this.$message.error('平台分成不能为空')
-					return
-				}
-				if (this.popForm.start_time == '') {
-					this.$message.error('礼物生效时间不能为空')
-					return
-				}
-				if (this.popForm.end_time == '') {
-					this.$message.error('礼物过期时间不能为空')
-					return
-				}
-				if (this.popForm.sort == '') {
-					this.$message.error('排序不能为空')
-					return
-				}
-				if (this.popForm.gift_desc == '') {
-					this.$message.error('礼物说明不能为空')
-					return
-				}
-				const formData = new FormData()
-				formData.append('id', this.popForm.id)
-				formData.append('gift_name', this.popForm.gift_name)
-				if (this.imageFile !== '') {
-					formData.append('gift_photo', this.imageFile.raw)
-				} else {
-					formData.append('gift_photo', '')
-				}
-				if (this.imageSvgFile !== '') {
-					formData.append('gift_gif', this.imageSvgFile.raw)
-				}
-				formData.append('gift_diamond', this.popForm.gift_diamond)
-				formData.append('gift_rate', this.popForm.gift_rate)
-				formData.append('start_time', this.popForm.start_time / 1000)
-				formData.append('end_time', this.popForm.end_time / 1000)
-				formData.append('sort', this.popForm.sort)
-				formData.append('gift_desc', this.popForm.gift_desc)
-				formData.append('status', this.popForm.status)
-				this.loading = true
-				getGiftEdit(formData).then(res => {
-					this.loading = false
-					this.handleEditClose()
-					this.giftlist()
-				}).catch(err => {
-					this.handleEditClose()
+				this.$refs.popForm.validate(valid => {
+					if (valid) {
+						const formData = new FormData()
+						formData.append('id', this.popForm.id)
+						formData.append('gift_name', this.popForm.gift_name)
+						if (this.imageFile !== '') {
+							formData.append('gift_photo', this.imageFile.raw)
+						} else {
+							formData.append('gift_photo', '')
+						}
+						if (this.imageSvgFile !== '') {
+							formData.append('gift_gif', this.imageSvgFile.raw)
+						}
+						formData.append('gift_diamond', this.popForm.gift_diamond)
+						formData.append('gift_rate', this.popForm.gift_rate)
+						formData.append('start_time', this.popForm.start_time / 1000)
+						formData.append('end_time', this.popForm.end_time / 1000)
+						formData.append('sort', this.popForm.sort)
+						formData.append('gift_desc', this.popForm.gift_desc)
+						formData.append('status', this.popForm.status)
+						this.loading = true
+						this.$prompt('请输入二级密码', '提示', {
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+						}).then(res => {
+							if (res.value == "888888") {
+								getGiftEdit(formData).then(res => {
+									this.loading = false
+									this.$message.success("修改成功")
+									this.handleEditClose()
+									this.giftlist()
+								}).catch(err => {
+									this.loading = false
+									this.$message.error("修改成功")
+									this.handleEditClose()
+								})
+							} else {
+								this.$message.error("请输入正确的密码")
+							}
+						}).catch(() => {
+							this.loading = false
+						});
+					}
 				})
 			},
 			handleEditClose() {
 				this.editPop = false
 			},
-			handleDel(row) {
-				this.delSource = row
-				this.delVisible = true
-			},
-			handleDelSubmit() {
-				this.delSource.status = '2'
-				for (const item in this.delSource) {
-					if (item.indexOf('Text') > -1) {
-						delete this.delSource[item]
-					}
-				}
-				getGiftEdit(this.delSource).then(res => {
-					this.$message.success('删除成功')
-					this.giftlist()
-					this.delVisible = false
-				}).catch(err => {
-					this.$message.error('删除失败')
-					this.delVisible = false
-				})
-			},
+			// handleDel(row) {
+			// 	this.delSource = row
+			// 	this.delVisible = true
+			// },
+			// handleDelSubmit() {
+			// 	this.delSource.status = '2'
+			// 	for (const item in this.delSource) {
+			// 		if (item.indexOf('Text') > -1) {
+			// 			delete this.delSource[item]
+			// 		}
+			// 	}
+			// 	getGiftEdit(this.delSource).then(res => {
+			// 		this.$message.success('删除成功')
+			// 		this.giftlist()
+			// 		this.delVisible = false
+			// 	}).catch(err => {
+			// 		this.$message.error('删除失败')
+			// 		this.delVisible = false
+			// 	})
+			// },
 			imgPreview(file, fileList) {
 				const fileName = file.name
 				this.imageFile = file
-				console.log(this.imageFile)
 				const regex = /(.jpg|.jpeg|.gif|.png|.bmp)$/
 				if (regex.test(fileName.toLowerCase())) {
 					this.imageUrl = file.url
@@ -630,7 +578,6 @@
 				}
 			},
 			changeDiamond() {
-				console.log(this.popForm)
 				var gift_rateText = this.popForm.gift_rateText ? this.popForm.gift_rateText : ''
 				var gift_diamond = this.popForm.gift_diamond ? parseInt(this.popForm.gift_diamond) : ''
 				if (gift_rateText !== '' && gift_diamond !== '') {
@@ -641,14 +588,14 @@
 				this.$prompt('请输入缓存刷新密码', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
-				}).then(res=>{
-					if(res.value == "888888"){
-						getGiftRefresh().then(row=>{
+				}).then(res => {
+					if (res.value == "888888") {
+						getGiftRefresh().then(row => {
 							console.log(row)
-						}).catch(err=>{
+						}).catch(err => {
 							this.$message.error(err)
 						})
-					}else{
+					} else {
 						this.$message.error("请输入正确的密码")
 					}
 				}).catch(() => {});
@@ -743,12 +690,15 @@
 	.colorDel {
 		color: #F56C6C;
 	}
-	::v-deep.toolbarBtns{
+
+	::v-deep.toolbarBtns {
 		width: 80%;
 		position: relative;
-		.el-form-item__content{
+
+		.el-form-item__content {
 			width: 100%;
-			.refreshBtn{
+
+			.refreshBtn {
 				opacity: 0.2;
 				padding: 0px;
 				font-size: 12px;

@@ -40,7 +40,8 @@ export default {
     },
     layout: {
       type: String,
-      default: 'total, sizes, prev, pager, next, jumper'
+      // default: 'total, sizes, prev, pager, next, jumper'
+	  default: 'total, prev, pager, next, jumper'
     },
     background: {
       type: Boolean,

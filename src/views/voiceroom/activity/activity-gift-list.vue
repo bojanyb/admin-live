@@ -12,142 +12,169 @@
 
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
-      <el-table-column label="活动名称" prop="name" align="center" show-overflow-tooltip />
-			<el-table-column label="活动类别" prop="cost" align="center" />
-
-			<el-table-column label="礼物种类" prop="start_timeText" align="center" />
-			<el-table-column label="收入" prop="end_timeText" align="center" />
-      <el-table-column label="支出" prop="end_timeText" align="center" />
-      <el-table-column label="活动状态" align="center">
-      	<template slot-scope="scope">
-      		<div v-if="scope.row.status == 1" class="colorNormal">开启</div>
-      		<div v-if="scope.row.status == 0" class="colorDel">关闭</div>
-      	</template>
-      </el-table-column>
-      <el-table-column label="开启时间" prop="start_timeText" align="center" />
-      <el-table-column label="结束时间" prop="end_timeText" align="center" />
+			<el-table-column label="活动名称" prop="name" align="center" show-overflow-tooltip />
+			<el-table-column label="活动类别" prop="typeText" align="center" />
+			<el-table-column label="礼物种类" prop="gift_count" align="center" />
+			<el-table-column label="收入" prop="in" align="center" />
+			<el-table-column label="支出" prop="out" align="center" />
+			<el-table-column label="活动状态" prop="statusText" align="center" />
+			<el-table-column label="开启时间" prop="start_timeText" align="center" />
+			<el-table-column label="结束时间" prop="end_timeText" align="center" />
 			<el-table-column label="操作" align="center" width="180">
 				<template slot-scope="scope">
-					<el-button v-if="scope.row.status == '1'" type="primary" @click="handleEdit(scope.row,scope.$index)">修改
-					</el-button>
-					<el-button v-if="scope.row.status == '1'" type="danger" @click="handleDetails(scope.row)">查看</el-button>
+					<el-button type="primary" @click="handleEdit(scope.row,scope.$index)">修改</el-button>
+					<el-button type="primary" @click="handleDetails(scope.row)">查看</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
+		<!--工具条-->
+		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
+			@pagination="activetyGiftList" />
 
-		<el-dialog :title="editTitle" :visible.sync="editPop" @close="handleCancel">
+		<el-dialog :title="editTitle" :visible.sync="editPop" :before-close="handleCancel">
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
-        <el-form-item label="活动名称" prop="name" :label-width="formLabelWidth">
-        	<el-col :span="17">
-        		<el-input v-model="popForm.name" style="width: 335px;" placeholder="请输入活动名称" clearable
-        			autocomplete="off" />
-        	</el-col>
-        </el-form-item>
-				<el-form-item label="单次抽奖钻石" prop="cost" :label-width="formLabelWidth">
-					<el-input v-model="popForm.cost" v-input-limit="0" style="width: 335px;"
-						placeholder="请输入单次抽奖钻石(0~9999999)" clearable autocomplete="off" />
+				<el-form-item label="活动名称" prop="activity_id" :label-width="formLabelWidth">
+					<el-col :span="17">
+						<el-select v-model="popForm.activity_id" placeholder="请选择"
+							:disabled="popForm.typeName == 'Detail' ? true : false ">
+							<el-option v-for="item in lotteryName" :key="item.id" :label="item.name" :value="item.id" />
+						</el-select>
+					</el-col>
 				</el-form-item>
-        <el-form-item label="状态" prop="status" :label-width="formLabelWidth">
-          <el-radio-group v-model="popForm.status">
-              <el-radio :label="1">开启</el-radio>
-              <el-radio :label="0">关闭</el-radio>
-            </el-radio-group>
-        </el-form-item>
-				<el-form-item label="活动开始时间" prop="start_timeText" :label-width="formLabelWidth">
+				<el-form-item label="活动类别" prop="type" :label-width="formLabelWidth">
+					<el-col :span="17">
+						<el-select v-model="popForm.type" placeholder="请选择"
+							:disabled="popForm.typeName == 'Detail' ? true : false ">
+							<el-option v-for="item in lotteryType" :key="item.id" :label="item.name" :value="item.id" />
+						</el-select>
+					</el-col>
+				</el-form-item>
+				<el-form-item label="开始时间" prop="start_timeText" :label-width="formLabelWidth">
 					<el-date-picker v-model="popForm.start_timeText" style="width: 335px;" type="datetime"
 						placeholder="选择时间" :picker-options="pickerBeginDateBefore" value-format="yyyy-MM-dd HH:mm:ss"
-						format="yyyy-MM-dd HH:mm:ss" clearable />
+						format="yyyy-MM-dd HH:mm:ss" clearable
+						:disabled="popForm.typeName == 'Detail' ? true : false " />
 				</el-form-item>
-				<el-form-item label="活动结束时间" prop="end_timeText" :label-width="formLabelWidth">
+				<el-form-item label="结束时间" prop="end_timeText" :label-width="formLabelWidth">
 					<el-date-picker v-model="popForm.end_timeText" style="width: 335px;" type="datetime"
 						placeholder="选择时间" :picker-options="pickerBeginDateBefore" value-format="yyyy-MM-dd HH:mm:ss"
-						format="yyyy-MM-dd HH:mm:ss" clearable />
+						format="yyyy-MM-dd HH:mm:ss" clearable
+						:disabled="popForm.typeName == 'Detail' ? true : false " />
 				</el-form-item>
-
+				<el-form-item label="添加礼物" :label-width="formLabelWidth">
+					<el-button type="primary" @click="handleAddGiftShow" v-if="popForm.typeName !== 'Detail'">添 加
+					</el-button>
+				</el-form-item>
+				<giftConfig v-if="popForm.gifts.length > 0" v-for="item in popForm.gifts" v-model="popForm.gifts"
+					:source="item" :activity_id="popForm.activity_id" :typeName="popForm.typeName" :gifts="popForm.gifts"
+					@handleDelSelect="handleDelSelect"></giftConfig>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="handleCancel">取 消</el-button>
+				<el-button @click="handleCancel" v-if="popForm.typeName !== 'Detail'">取 消</el-button>
 				<el-button :loading="loading" type="primary" @click="handleChange">确 定</el-button>
 			</div>
 		</el-dialog>
+		<el-drawer title="礼物库" :visible.sync="drawer" :direction="direction" :before-close="handleClose">
+			<div class="giftListBox">
+				<el-table ref="giftTable" v-loading="giftLoading" :data="giftListArr" element-loading-text="拼命加载中"
+					border fit highlight-current-row>
+					<el-table-column label="礼物名称" prop="gift_name" align="center" show-overflow-tooltip />
+					<el-table-column label="礼物图片" prop="gift_genre" align="center">
+						<template slot-scope="scope">
+							<el-image style="width: 50px; " :lazy="true"
+								:src="scope.row.gift_photo ? scope.row.gift_photo : ''" />
+						</template>
+					</el-table-column>
+					<el-table-column label="礼物类型" prop="gift_count" align="center">
+						<template slot-scope="scope">
+							<div v-if="scope.row.gift_genre == 1">基本礼物</div>
+							<div v-else-if="scope.row.gift_genre == 2">抽奖礼物</div>
+						</template>
+					</el-table-column>
+					<el-table-column label="钻石价格" prop="gift_diamond" align="center" />
+					<el-table-column label="操作" align="center">
+						<template slot-scope="scope">
+							<el-button type="primary" v-if="scope.row.isSelect == false"
+								@click="handleSelect(scope.row)">使用</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+				<!--工具条-->
+				<pagination v-show="giftTotal>0" :total="giftTotal" :page.sync="giftPage.page"
+					:limit.sync="giftPage.limit" @pagination="giftList" />
+			</div>
+		</el-drawer>
 	</div>
 </template>
 
 <script>
 	import {
+		getActivetyList,
+		getActivetyGiftSource,
 		getActivetyGiftList,
-    getActivetyDel,
+		getActivetyDel,
 		getActivetyAdd,
-		getActivetyUpdate
+		getGiftEdit,
+		getActivetyHasGiftList
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
-	import svgaplayer from '../components/svgaplayer.vue'
+	import giftConfig from '../components/giftConfig.vue'
 	export default {
 		name: 'GiftList',
 		components: {
 			Pagination,
-			svgaplayer
+			giftConfig
 		},
 		data() {
 			return {
 				list: [],
 				listLoading: true,
 				total: 0,
+				giftTotal: 0,
 				page: {
-					page: 1
+					page: 1,
+					limit: 10
+				},
+				giftPage: {
+					page: 1,
+					limit: 10
 				},
 				showImgUrl: '',
 				editTitle: '',
 				editPop: false,
 				loading: false,
+				giftLoading: false,
 				formLabelWidth: '120px',
 				imageUrl: '',
 				popForm: {
-					'name': '',
-					'icon': '',
-					'cost': '',
-					'status': 1,
+					'activity_id': '',
+					'type': '',
 					'start_time': 0,
 					'end_time': 0,
-					'id': '',
-					'type': 'Add'
+					'start_timeText': '',
+					'end_timeText': '',
+					"gifts": [],
+					'typeName': 'Add'
 				},
 				popFormRules: {
-					name: [{
+					activity_id: [{
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.name) {
+							if (!this.popForm.activity_id || this.popForm.activity_id == "") {
 								return cb(new Error('活动名称不能为空!'))
 							}
 							return cb()
 						}
 					}],
-					icon: [{
+					type: [{
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (!this.icon) {
-								return cb(new Error('活动图标不能为空!'))
-							}
-							return cb()
-						}
-					}],
-					cost: [{
-						required: true,
-						trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!this.popForm.cost) {
-								return cb(new Error('单次抽奖钻石不能为空!'))
-							}
-							if (this.popForm.cost < 1) {
-								this.popForm.cost = 1
-								return cb(new Error('单次抽奖钻石范围1 ~ 9999999'))
-							}
-							if (this.popForm.cost > 9999999) {
-								this.popForm.cost = 9999999
-								return cb(new Error('单次抽奖钻石范围1 ~ 9999999'))
+							console.log(this.popForm.type,value)
+							if (this.popForm.type == "") {
+								return cb(new Error('活动类别不能为空!'))
 							}
 							return cb()
 						}
@@ -156,7 +183,7 @@
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.start_timeText) {
+							if (!this.popForm.start_timeText || this.popForm.start_timeText == "") {
 								return cb(new Error('活动生效时间不能为空!'))
 							}
 							return cb()
@@ -166,33 +193,13 @@
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.end_timeText) {
+							if (!this.popForm.end_timeText || this.popForm.end_timeText == "") {
 								return cb(new Error('活动结束时间不能为空!'))
 							}
 							return cb()
 						}
 					}],
-					sort: [{
-						required: true,
-						trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!this.popForm.gift_rate) {
-								return cb(new Error('排序不能为空!'))
-							}
-							return cb()
-						}
-					}],
-          status: [{
-            	required: true,
-            	trigger: 'change',
-            	validator: (rules, value, cb) => {
-            		if (!this.popForm.name) {
-            			return cb(new Error('活动状态不能为空!'))
-            		}
-            		return cb()
-            	}
-          }]
-        },
+				},
 				pickerBeginDateBefore: {
 					disabledDate(value) {
 						if (new Date(value).getTime() + 3600 * 1000 * 24 < new Date().getTime()) {
@@ -203,15 +210,61 @@
 				},
 				imageFile: '',
 				diamondNum: 0,
-				delSource: {},
 				delVisible: false,
-        editIndex : "",
+				editIndex: "",
+				giftListArr: [],
+				lotteryName: [],
+				lotteryType: [{
+						"id": 1,
+						"name": "派对"
+					},
+					{
+						"id": 2,
+						"name": "背包"
+					}
+				],
+				drawer: false,
+				direction: 'rtl',
 			}
 		},
 		created() {
+			this.activetyList();
+			this.giftList();
 			this.activetyGiftList()
 		},
 		methods: {
+			activetyList() {
+				getActivetyList().then(res => {
+					if (res.data.list.length > 0) {
+						res.data.list.map(res => {
+							res.start_timeText = moment(res.start_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+							res.end_timeText = moment(res.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+						})
+						this.lotteryName = res.data.list;
+					}
+				}).catch(err => {})
+			},
+			giftList() {
+				var params = {
+					'page': this.giftPage.page,
+					'pagesize': this.giftPage.limit
+				}
+				this.giftListArr = [];
+				getActivetyGiftSource(params).then(res => {
+					this.giftTotal = res.data.count
+					res.data.list.map(re => {
+						re.isSelect = false; // 默认当前礼物未被选中
+						if (this.popForm.gifts.length > 0) {
+							this.popForm.gifts.map(item => {
+								if (item.id == re.id) {
+									re.isSelect = true;
+								}
+							})
+						}
+						this.giftListArr.push(re)
+					})
+				}).catch(err => {})
+			},
 			activetyGiftList() {
 				this.listLoading = true
 				this.srcList = []
@@ -220,8 +273,31 @@
 					'pagesize': this.page.limit
 				}
 				getActivetyGiftList(params).then(response => {
-					this.list = response.msg.list
+					this.total = response.data.count
+					this.list = response.data.list
 					this.list.map(res => {
+						switch (res.type) {
+							case 1:
+								res.typeText = '背包';
+								break;
+							case 2:
+								res.typeText = '派对';
+								break;
+						}
+						switch (res.status) {
+							case 0:
+								res.statusText = "未开始";
+								break;
+							case 1:
+								res.statusText = "开始中";
+								break;
+							case 2:
+								res.statusText = "已结束";
+								break;
+							case 3:
+								res.statusText = "特殊停止";
+								break;
+						}
 						res.start_timeText = moment(res.start_time * 1000).format('YYYY-MM-DD HH:mm:ss')
 						res.end_timeText = moment(res.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')
 					})
@@ -230,113 +306,154 @@
 					this.listLoading = false
 				})
 			},
+			activetyHasGiftList(id) {
+				var params = {
+					"activity_id": id
+				}
+				getActivetyHasGiftList(params).then(res => {
+					this.popForm.gifts = res.data.list;
+					this.$forceUpdate();
+				}).catch(err => {})
+			},
 			handleActivityAdd() {
 				this.editTitle = '新增'
 				this.imageUrl = ''
 				this.popForm = {
-					'name': '',
-					'icon': '',
-					'cost': '',
-					'status': 1,
-					'start_time': '',
-					'end_time': '',
-					'id': '',
-					'type': 'Add'
+					'activity_id': '',
+					'type': '',
+					'start_time': 0,
+					'end_time': 0,
+					"gifts": [],
+					'typeName': 'Add'
+				}
+				if (this.$refs['popForm']) {
+					this.$refs['popForm'].resetFields()
 				}
 				this.editPop = true
 			},
-			handleEdit(row,index) {
-        this.editIndex = index;
+			handleEdit(row, index) {
+				this.activetyHasGiftList(row.id);
+				this.editIndex = index;
 				this.popForm = {
-					'name': row.name,
-					'icon': row.icon,
-					'cost': row.cost,
-					'status': row.status,
+					'activity_id': row.id,
+					'type': row.type,
 					'start_time': row.start_time,
 					'end_time': row.end_time,
-          'start_timeText': moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
-          'end_timeText': moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
+					'start_timeText': moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
+					'end_timeText': moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
 					'id': row.id,
-					'type': 'Edit'
+					'gifts': row.gifts,
+					'typeName': 'Edit'
 				}
-        this.imageUrl = row.icon
 				this.editTitle = '修改'
+				if (this.$refs['popForm']) {
+					this.$refs['popForm'].resetFields()
+				}
 				this.editPop = true
 			},
 			handleChange() {
-				this.popForm.icon = this.imageUrl
-				this.popForm.start_time = new Date(this.popForm.start_timeText).getTime()
-				this.popForm.end_time = new Date(this.popForm.end_timeText).getTime()
-				delete this.popForm.start_timeText
-				delete this.popForm.end_timeText
-				delete this.popForm.statusText
-				if (this.popForm.type == 'Edit') {
-					delete this.popForm.type
+				this.popForm.start_time = this.popForm.start_timeText ? new Date(this.popForm.start_timeText).getTime() :
+					""
+				this.popForm.end_time = this.popForm.end_timeText ? new Date(this.popForm.end_timeText).getTime() : ""
+				if (this.popForm.typeName == 'Edit') {
 					this.activityEdit()
-				} else if (this.popForm.type == 'Add') {
-					delete this.popForm.type
-					delete this.popForm.id
-					this.popForm.status = 1;
+				} else if (this.popForm.typeName == 'Add') {
 					this.activityAdd()
+				} else if (this.popForm.typeName == 'Detail') {
+					this.editPop = false
 				}
 			},
 			handleCancel() {
-				this.editPop = false
-				this.imageSvgUrl = ''
+				if (this.popForm.typeName == 'Detail') {
+					this.editPop = false
+				} else {
+					this.$confirm('关闭后数据不会保存，确定关闭吗？')
+						.then(res => {
+							this.giftListArr = [];
+							this.editPop = false
+						}).catch(err => {});
+				}
 			},
 			activityAdd() {
-				const formData = new FormData()
-				formData.append('name', this.popForm.name)
-				formData.append('cost', this.popForm.cost)
-				formData.append('status', this.popForm.status)
-				formData.append('start_time', this.popForm.start_time / 1000)
-				formData.append('end_time', this.popForm.end_time / 1000)
-				if (this.imageFile !== '') {
-					formData.append('icon', this.imageFile.raw)
-				} else {
-					formData.append('icon', '')
-				}
-				this.loading = true
-				getActivetyAdd(formData).then(res => {
-					this.loading = false
-					this.handleEditClose()
-					this.giftlist()
-				}).catch(err => {
-          this.$message.error(err);
-					this.handleEditClose()
-					this.loading = false
+				this.$refs.popForm.validate(valid => {
+					if (valid) {
+						this.loading = true
+						var params = {
+							"activity_id" : this.popForm.activity_id,
+							"end_time" : this.popForm.end_time / 1000,
+							"start_time" : this.popForm.start_time / 1000,
+							"type" : this.popForm.type,
+							"id" : this.popForm.id,
+							"gifts" : this.popForm.gifts
+						}
+						params.gifts.map(re=>{
+							delete re.gift_name
+							delete re.gift_photo
+							delete re.gift_diamond
+							delete re.status
+							delete re.time_limit
+							re.probability = re.probability * 100000
+						})
+						getGiftEdit(this.popForm).then(res => {
+							this.loading = false
+							this.editPop = false
+							this.giftlist()
+						}).catch(err => {
+							this.$message.error(err);
+							this.loading = false
+						})
+					}
 				})
 			},
 			activityEdit(row) {
-				const formData = new FormData()
-				formData.append('id', this.popForm.id)
-				formData.append('name', this.popForm.name)
-				if (this.imageFile !== '') {
-					formData.append('icon', this.imageFile.raw)
-				} else {
-					// formData.append('icon', '')
-				}
-				formData.append('start_time', this.popForm.start_time / 1000)
-				formData.append('end_time', this.popForm.end_time / 1000)
-				formData.append('cost', this.popForm.cost)
-				formData.append('status', this.popForm.status)
-				this.loading = true
-				getActivetyUpdate(formData).then(res => {
-					this.loading = false
-					this.handleEditClose()
-					this.giftlist()
-          this.loading = false;
-				}).catch(err => {
-          this.$message.error(err);
-					this.handleEditClose()
-          this.loading = false;
+				this.$refs.popForm.validate(valid => {
+					if (valid) {
+						this.loading = true
+						var params = {
+							"activity_id" : this.popForm.activity_id,
+							"end_time" : this.popForm.end_time / 1000,
+							"start_time" : this.popForm.start_time / 1000,
+							"type" : this.popForm.type,
+							"id" : this.popForm.id,
+							"gifts" : this.popForm.gifts
+						}
+						params.gifts.map(re=>{
+							delete re.gift_name
+							delete re.gift_photo
+							delete re.gift_diamond
+							delete re.status
+							delete re.time_limit
+							re.probability = re.probability * 100000
+						})
+						getGiftEdit(params).then(res => {
+							this.loading = false
+							this.editPop = false
+							this.giftlist()
+						}).catch(err => {
+							this.$message.error(err);
+							this.loading = false;
+						})
+					}
 				})
 			},
-			handleEditClose() {
-				this.editPop = false
-			},
 			handleDetails(row) {
-				this.delSource = row
+				this.activetyHasGiftList(row.id);
+				this.popForm = {
+					'activity_id': row.id,
+					'type': row.type,
+					'start_time': row.start_time,
+					'end_time': row.end_time,
+					'start_timeText': moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
+					'end_timeText': moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
+					'id': row.id,
+					'gifts': row.gifts,
+					'typeName': 'Detail'
+				}
+				this.editTitle = '详情'
+				if (this.$refs['popForm']) {
+					this.$refs['popForm'].resetFields()
+				}
+				this.editPop = true
 			},
 			numberChange(val, maxNum, name) {
 				// 转换数字类型
@@ -355,6 +472,54 @@
 					}
 				})
 			},
+			handleAddGiftShow() {
+				this.drawer = true
+			},
+			handleClose(done) {
+				this.$confirm('确认关闭礼物库？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
+			},
+			handleSelect(row) {
+				let currentGift = {};
+				this.giftListArr.map(res => {
+					if (res.id == row.id) {
+						res.isSelect = true; // 默认当前礼物未被选中
+						currentGift.id = row.id;
+						currentGift.gift_name = row.gift_name;
+						currentGift.gift_photo = row.gift_photo;
+						currentGift.gift_diamond = row.gift_diamond;
+						currentGift.type = 1
+						currentGift.time_limit = 0
+						currentGift.status = 0 // 0可用1不可用
+						currentGift.inventory = 0
+						currentGift.probability = 0
+						this.popForm.gifts.push(currentGift)
+					}
+				})
+
+				/* 多条勾选打印结算单会出现重复的结算单号 去重处理 */
+				this.popForm.gifts = new Set(this.popForm.gifts);
+				this.popForm.gifts = Array.from(this.popForm.gifts);
+			},
+			handleDelSelect(row) {
+				if (row.typeName == "Del") { // 删除礼物库中选中的礼物
+					this.popForm.gifts.map((res, i) => {
+						if (res.id == row.id) {
+							this.popForm.gifts.splice(i, 1)
+						}
+					})
+					this.giftListArr.map(res => {
+						if (res.id == row.id) {
+							res.isSelect = false;
+						}
+					})
+				} else if (row.typeName == "inventoryAdd") { // 更新礼物库存
+					this.activetyHasGiftList(row.id);
+				}
+			}
 		}
 	}
 </script>
@@ -404,7 +569,7 @@
 
 	.avatar {
 		width: auto;
-    max-width: 178px;
+		max-width: 178px;
 		height: 178px;
 	}
 
@@ -445,5 +610,18 @@
 
 	.colorDel {
 		color: #F56C6C;
+	}
+
+	::v-deep .el-drawer {
+		width: 35% !important;
+
+		.giftListBox {
+			width: 100%;
+
+			.el-table {
+				width: 90%;
+				margin: auto;
+			}
+		}
 	}
 </style>

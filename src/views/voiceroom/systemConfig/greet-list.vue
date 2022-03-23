@@ -50,7 +50,6 @@
 		getDesignateDelete
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
 	export default {
 		name: 'greet-list',
 		components: {

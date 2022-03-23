@@ -29,6 +29,15 @@ const activityRouter = {
 				noCache: true
 			}
 		},
+		{
+			path: 'lottery-list',
+			component: () => import('@/views/voiceroom/activity/lottery-list'),
+			name: 'lotteryList',
+			meta: {
+				title: '抽奖记录',
+				noCache: true
+			}
+		},
 	]
 }
 

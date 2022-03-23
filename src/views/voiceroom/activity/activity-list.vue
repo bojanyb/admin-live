@@ -33,10 +33,10 @@
 			</el-table-column>
 			<el-table-column label="操作" align="center" width="180">
 				<template slot-scope="scope">
-					<el-button v-if="scope.row.status == '1'" type="primary"
+					<el-button type="primary"
 						@click="handleEdit(scope.row,scope.$index)">修改
 					</el-button>
-					<el-button v-if="scope.row.status == '1'" type="danger" @click="handleDel(scope.row)">删除</el-button>
+					<el-button type="danger" @click="handleDel(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -128,7 +128,7 @@
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.name) {
+							if (!this.popForm.name || this.popForm.name == "") {
 								return cb(new Error('活动名称不能为空!'))
 							}
 							return cb()
@@ -138,7 +138,7 @@
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (!this.icon) {
+							if (!this.icon || this.icon == "") {
 								return cb(new Error('活动图标不能为空!'))
 							}
 							return cb()
@@ -148,7 +148,7 @@
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.cost) {
+							if (this.popForm.cost == "") {
 								return cb(new Error('单次抽奖钻石不能为空!'))
 							}
 							if (this.popForm.cost < 1) {
@@ -165,7 +165,7 @@
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.gift_rate) {
+							if (this.popForm.gift_rate == "") {
 								return cb(new Error('排序不能为空!'))
 							}
 							return cb()
@@ -175,7 +175,7 @@
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.name) {
+							if (this.popForm.status == "" && this.popForm.status !== 0 ) {
 								return cb(new Error('活动状态不能为空!'))
 							}
 							return cb()

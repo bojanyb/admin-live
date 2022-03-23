@@ -186,7 +186,7 @@ export function getGiftAdd(data) {
 // 礼物修改
 export function getGiftEdit(data) {
   return request({
-    url: 'Gift/saveGift',
+    url: 'activity/saveGift',
     method: 'post',
     data
   })
@@ -330,6 +330,15 @@ export function getActivetyDel(data) {
 // 活动礼物列表 
 export function getActivetyGiftList(data) {
   return request({
+    url: '/Activity/aclist',
+    method: 'post',
+    data
+  })
+}
+
+// 活动礼物库列表 
+export function getActivetyGiftSource(data) {
+  return request({
     url: '/Activity/giftList',
     method: 'post',
     data
@@ -367,6 +376,15 @@ export function getActivetyGiftDetail(data) {
 export function getActivetyGiftAddInventory(data) {
   return request({
     url: '/Activity/addInventory',
+    method: 'post',
+    data
+  })
+}
+
+// 抽奖日志
+export function getActivetyDrawLog(data) {
+  return request({
+    url: '/Activity/drawLog',
     method: 'post',
     data
   })
