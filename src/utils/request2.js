@@ -9,7 +9,7 @@ import {
 } from '@/utils/auth'
 var baseUrlApi = '';
 	console.log(process.env.NODE_ENV);
-switch (process.env.ENV) {
+switch (process.env.NODE_ENV) {
   case 'development':
     baseUrlApi = process.env.VUE_APP_BASE_API
     break
