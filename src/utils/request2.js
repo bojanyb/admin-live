@@ -11,10 +11,10 @@ var baseUrlApi = '';
 	console.log(process.env.NODE_ENV);
 switch (process.env.NODE_ENV) {
   case 'development':
-    baseUrlApi = 'http://test.api.live.huidapay.net'
+    baseUrlApi = 'http://test.api.live.huida.ink'
     break
   case 'test':
-    baseUrlApi = 'http://test.api.live.huidapay.net'
+    baseUrlApi = 'http://test.api.live.huida.ink'
     break
   case 'production':
     baseUrlApi = 'http://api.live.huidapay.net'
