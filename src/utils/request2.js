@@ -11,7 +11,7 @@ var baseUrlApi = '';
 	console.log(process.env.NODE_ENV);
 switch (process.env.NODE_ENV) {
   case 'development':
-    baseUrlApi = process.env.VUE_APP_BASE_API
+    baseUrlApi = 'http://test.api.live.huidapay.net'
     break
   case 'test':
     baseUrlApi = 'http://test.api.live.huidapay.net'
