@@ -17,6 +17,7 @@
 			<el-table-column label="礼物种类" prop="gift_count" align="center" />
 			<el-table-column label="收入" prop="in" align="center" />
 			<el-table-column label="支出" prop="out" align="center" />
+			<el-table-column label="单次消耗钻石数" prop="cost" align="center" />
 			<el-table-column label="活动状态" prop="statusText" align="center" />
 			<el-table-column label="开启时间" prop="start_timeText" align="center" />
 			<el-table-column label="结束时间" prop="end_timeText" align="center" />
@@ -33,9 +34,9 @@
 
 		<el-dialog :title="editTitle" :visible.sync="editPop" :before-close="handleCancel">
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
-				<el-form-item label="活动名称" prop="activity_id" :label-width="formLabelWidth">
+				<el-form-item label="活动名称" prop="activity_type_id" :label-width="formLabelWidth">
 					<el-col :span="17">
-						<el-select v-model="popForm.activity_id" placeholder="请选择"
+						<el-select v-model="popForm.activity_type_id" placeholder="请选择"
 							:disabled="popForm.typeName == 'Detail' ? true : false ">
 							<el-option v-for="item in lotteryName" :key="item.id" :label="item.name" :value="item.id" />
 						</el-select>
@@ -48,6 +49,10 @@
 							<el-option v-for="item in lotteryType" :key="item.id" :label="item.name" :value="item.id" />
 						</el-select>
 					</el-col>
+				</el-form-item>
+				<el-form-item label="单次抽奖钻石" prop="cost" :label-width="formLabelWidth">
+					<el-input v-model="popForm.cost" v-input-limit="0" style="width: 335px;"
+						placeholder="请输入单次抽奖钻石(0~9999999)" clearable autocomplete="off" />
 				</el-form-item>
 				<el-form-item label="开始时间" prop="start_timeText" :label-width="formLabelWidth">
 					<el-date-picker v-model="popForm.start_timeText" style="width: 335px;" type="datetime"
@@ -66,7 +71,7 @@
 					</el-button>
 				</el-form-item>
 				<giftConfig v-if="popForm.gifts.length > 0" v-for="item in popForm.gifts" v-model="popForm.gifts"
-					:source="item" :activity_id="popForm.activity_id" :typeName="popForm.typeName" :gifts="popForm.gifts"
+					:source="item" :activity_id="popForm.activity_type_id" :typeName="popForm.typeName" :gifts="popForm.gifts"
 					@handleDelSelect="handleDelSelect"></giftConfig>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -148,21 +153,22 @@
 				formLabelWidth: '120px',
 				imageUrl: '',
 				popForm: {
-					'activity_id': '',
+					'activity_type_id': '',
 					'type': '',
 					'start_time': 0,
 					'end_time': 0,
 					'start_timeText': '',
 					'end_timeText': '',
 					"gifts": [],
+					"cost" : "",
 					'typeName': 'Add'
 				},
 				popFormRules: {
-					activity_id: [{
+					activity_type_id: [{
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.activity_id || this.popForm.activity_id == "") {
+							if (!this.popForm.activity_type_id || this.popForm.activity_type_id == "") {
 								return cb(new Error('活动名称不能为空!'))
 							}
 							return cb()
@@ -185,6 +191,23 @@
 						validator: (rules, value, cb) => {
 							if (!this.popForm.start_timeText || this.popForm.start_timeText == "") {
 								return cb(new Error('活动生效时间不能为空!'))
+							}
+							return cb()
+						}
+					}],
+					cost: [{
+						required: true,
+						trigger: 'blur',
+						validator: (rules, value, cb) => {
+							if (this.popForm.cost == "") {
+								return cb(new Error('单次抽奖钻石不能为空!'))
+							}
+							if (this.popForm.cost < 1) {
+								this.popForm.cost = 1
+								return cb(new Error('单次抽奖钻石范围1 ~ 9999999'))
+							}
+							if (this.popForm.cost > 9999999) {
+								return cb(new Error('单次抽奖钻石范围1 ~ 9999999'))
 							}
 							return cb()
 						}
@@ -278,10 +301,10 @@
 					this.list.map(res => {
 						switch (res.type) {
 							case 1:
-								res.typeText = '背包';
+								res.typeText = '派对';
 								break;
 							case 2:
-								res.typeText = '派对';
+								res.typeText = '背包';
 								break;
 						}
 						switch (res.status) {
@@ -298,8 +321,10 @@
 								res.statusText = "特殊停止";
 								break;
 						}
-						res.start_timeText = moment(res.start_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-						res.end_timeText = moment(res.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+						let start_time = JSON.stringify(res.start_time).length > 10 ? res.start_time : (res.start_time *1000);
+						let end_time = JSON.stringify(res.end_time).length > 10 ? res.end_time : (res.end_time * 1000);
+						res.start_timeText = moment(start_time).format('YYYY-MM-DD HH:mm:ss')
+						res.end_timeText = moment(end_time).format('YYYY-MM-DD HH:mm:ss')
 					})
 					this.listLoading = false
 				}).catch(err => {
@@ -319,8 +344,9 @@
 				this.editTitle = '新增'
 				this.imageUrl = ''
 				this.popForm = {
-					'activity_id': '',
+					'activity_type_id': '',
 					'type': '',
+					"cost" : '',
 					'start_time': 0,
 					'end_time': 0,
 					"gifts": [],
@@ -334,14 +360,17 @@
 			handleEdit(row, index) {
 				this.activetyHasGiftList(row.id);
 				this.editIndex = index;
+				let start_time = JSON.stringify(row.start_time).length > 10 ? row.start_time : (row.start_time *1000);
+				let end_time = JSON.stringify(row.end_time).length > 10 ? row.end_time : (row.end_time * 1000);
 				this.popForm = {
-					'activity_id': row.id,
+					'activity_type_id': row.id,
 					'type': row.type,
 					'start_time': row.start_time,
 					'end_time': row.end_time,
-					'start_timeText': moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
-					'end_timeText': moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
+					'start_timeText': moment(start_time).format('YYYY-MM-DD HH:mm:ss'),
+					'end_timeText': moment(end_time).format('YYYY-MM-DD HH:mm:ss'),
 					'id': row.id,
+					'cost': row.cost,
 					'gifts': row.gifts,
 					'typeName': 'Edit'
 				}
@@ -355,6 +384,12 @@
 				this.popForm.start_time = this.popForm.start_timeText ? new Date(this.popForm.start_timeText).getTime() :
 					""
 				this.popForm.end_time = this.popForm.end_timeText ? new Date(this.popForm.end_timeText).getTime() : ""
+				
+				if(this.popForm.gifts.length == 0){
+					this.$message.error("礼物配置不能为空");
+					return
+				}
+				
 				if (this.popForm.typeName == 'Edit') {
 					this.activityEdit()
 				} else if (this.popForm.typeName == 'Add') {
@@ -369,7 +404,6 @@
 				} else {
 					this.$confirm('关闭后数据不会保存，确定关闭吗？')
 						.then(res => {
-							this.giftListArr = [];
 							this.editPop = false
 						}).catch(err => {});
 				}
@@ -379,11 +413,12 @@
 					if (valid) {
 						this.loading = true
 						var params = {
-							"activity_id" : this.popForm.activity_id,
+							"activity_type_id" : this.popForm.activity_type_id,
 							"end_time" : this.popForm.end_time / 1000,
 							"start_time" : this.popForm.start_time / 1000,
 							"type" : this.popForm.type,
 							"id" : this.popForm.id,
+							'cost': this.popForm.cost,
 							"gifts" : this.popForm.gifts
 						}
 						params.gifts.map(re=>{
@@ -397,7 +432,7 @@
 						getGiftEdit(this.popForm).then(res => {
 							this.loading = false
 							this.editPop = false
-							this.giftlist()
+							this.activetyGiftList()
 						}).catch(err => {
 							this.$message.error(err);
 							this.loading = false
@@ -410,11 +445,12 @@
 					if (valid) {
 						this.loading = true
 						var params = {
-							"activity_id" : this.popForm.activity_id,
+							"activity_type_id" : this.popForm.activity_type_id,
 							"end_time" : this.popForm.end_time / 1000,
 							"start_time" : this.popForm.start_time / 1000,
 							"type" : this.popForm.type,
 							"id" : this.popForm.id,
+							'cost': this.popForm.cost,
 							"gifts" : this.popForm.gifts
 						}
 						params.gifts.map(re=>{
@@ -428,7 +464,7 @@
 						getGiftEdit(params).then(res => {
 							this.loading = false
 							this.editPop = false
-							this.giftlist()
+							this.activetyGiftList()
 						}).catch(err => {
 							this.$message.error(err);
 							this.loading = false;
@@ -439,7 +475,7 @@
 			handleDetails(row) {
 				this.activetyHasGiftList(row.id);
 				this.popForm = {
-					'activity_id': row.id,
+					'activity_type_id': row.id,
 					'type': row.type,
 					'start_time': row.start_time,
 					'end_time': row.end_time,

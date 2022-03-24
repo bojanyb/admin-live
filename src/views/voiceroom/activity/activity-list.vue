@@ -24,7 +24,6 @@
 				</template>
 			</el-table-column>
 			<el-table-column label="活动名称" prop="name" align="center" show-overflow-tooltip />
-			<el-table-column label="单次消耗钻石数" prop="cost" align="center" />
 			<el-table-column label="活动状态" align="center">
 				<template slot-scope="scope">
 					<div v-if="scope.row.status == 1" class="colorNormal">开启</div>
@@ -33,8 +32,7 @@
 			</el-table-column>
 			<el-table-column label="操作" align="center" width="180">
 				<template slot-scope="scope">
-					<el-button type="primary"
-						@click="handleEdit(scope.row,scope.$index)">修改
+					<el-button type="primary" @click="handleEdit(scope.row,scope.$index)">修改
 					</el-button>
 					<el-button type="danger" @click="handleDel(scope.row)">删除</el-button>
 				</template>
@@ -52,15 +50,19 @@
 						</el-upload>
 					</el-col>
 				</el-form-item>
+				<el-form-item label="活动图标特效" :label-width="formLabelWidth">
+					<el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgSvgPreview"
+						:auto-upload="false">
+						<svgaplayer v-if="imageSvgUrl.indexOf('.svga') > -1" :data-title="imageSvgUrl" :height="178"
+							:width="178" :show-img="imageSvgUrl" />
+						<i v-else class="el-icon-plus avatar-uploader-icon" />
+					</el-upload>
+				</el-form-item>
 				<el-form-item label="活动名称" prop="name" :label-width="formLabelWidth">
 					<el-col :span="17">
-						<el-input v-model="popForm.name" style="width: 335px;" placeholder="请输入活动名称" clearable
+						<el-input v-model="popForm.name" style="width: 335px;"  maxlength="4" placeholder="请输入活动名称 (最多4位)" clearable
 							autocomplete="off" />
 					</el-col>
-				</el-form-item>
-				<el-form-item label="单次抽奖钻石" prop="cost" :label-width="formLabelWidth">
-					<el-input v-model="popForm.cost" v-input-limit="0" style="width: 335px;"
-						placeholder="请输入单次抽奖钻石(0~9999999)" clearable autocomplete="off" />
 				</el-form-item>
 				<el-form-item label="状态" prop="status" :label-width="formLabelWidth">
 					<el-radio-group v-model="popForm.status">
@@ -81,6 +83,12 @@
 				<el-button @click="delVisible = false">取 消</el-button>
 				<el-button type="primary" @click="handleDelSubmit">确 定</el-button>
 			</span>
+		</el-dialog>
+
+		<el-dialog title="特效图预览" class="showImgDialog" :visible.sync="dialogVisible" width="50%"
+			:before-close="handleClose">
+			<el-image v-if="showImgUrl.indexOf('.png') > -1" :lazy="true" :src="showImgUrl ? showImgUrl : ''" />
+			<svgaplayer v-if="showImgUrl.indexOf('.svga') > -1" :height="667" :width="375" :show-img="showImgUrl" />
 		</el-dialog>
 	</div>
 </template>
@@ -114,11 +122,10 @@
 				editPop: false,
 				loading: false,
 				formLabelWidth: '120px',
-				imageUrl: '',
 				popForm: {
 					'name': '',
 					'icon': '',
-					'cost': '',
+					'gif': '',
 					'status': 1,
 					'id': '',
 					'type': 'Add'
@@ -138,25 +145,18 @@
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (!this.icon || this.icon == "") {
+							if (!this.imageUrl) {
 								return cb(new Error('活动图标不能为空!'))
 							}
 							return cb()
 						}
 					}],
-					cost: [{
+					gif: [{
 						required: true,
-						trigger: 'blur',
+						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (this.popForm.cost == "") {
-								return cb(new Error('单次抽奖钻石不能为空!'))
-							}
-							if (this.popForm.cost < 1) {
-								this.popForm.cost = 1
-								return cb(new Error('单次抽奖钻石范围1 ~ 9999999'))
-							}
-							if (this.popForm.cost > 9999999) {
-								return cb(new Error('单次抽奖钻石范围1 ~ 9999999'))
+							if (!this.imageSvgUrl) {
+								return cb(new Error('活动图标特效不能为空!'))
 							}
 							return cb()
 						}
@@ -175,7 +175,7 @@
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (this.popForm.status == "" && this.popForm.status !== 0 ) {
+							if (this.popForm.status == "" && this.popForm.status !== 0) {
 								return cb(new Error('活动状态不能为空!'))
 							}
 							return cb()
@@ -190,11 +190,15 @@
 						return false
 					}
 				},
+				imageUrl: '',
+				imageSvgUrl: '',
 				imageFile: '',
+				imageSvgFile: '',
 				diamondNum: 0,
 				delSource: {},
 				delVisible: false,
 				editIndex: "",
+				dialogVisible: false,
 			}
 		},
 		created() {
@@ -221,16 +225,13 @@
 				this.popForm = {
 					'name': '',
 					'icon': '',
-					'cost': '',
 					'status': 1,
 					'id': '',
 					'type': 'Add'
 				}
-								
 				if (this.$refs['popForm']) {
-				  this.$refs['popForm'].resetFields()
+					this.$refs['popForm'].resetFields()
 				}
-				
 				this.editPop = true
 			},
 			handleEdit(row, index) {
@@ -238,20 +239,22 @@
 				this.popForm = {
 					'name': row.name,
 					'icon': row.icon,
-					'cost': row.cost,
+					'gif': row.gif,
 					'status': row.status,
 					'id': row.id,
 					'type': 'Edit'
 				}
 				this.imageUrl = row.icon
+				this.imageSvgUrl = row.gif
 				this.editTitle = '修改'
 				if (this.$refs['popForm']) {
-				  this.$refs['popForm'].resetFields()
+					this.$refs['popForm'].resetFields()
 				}
 				this.editPop = true
 			},
 			handleChange() {
 				this.popForm.icon = this.imageUrl
+				this.popForm.gif = this.imageSvgUrl
 				delete this.popForm.statusText
 				if (this.popForm.type == 'Edit') {
 					delete this.popForm.type
@@ -270,13 +273,18 @@
 			activityAdd() {
 				const formData = new FormData()
 				formData.append('name', this.popForm.name)
-				formData.append('cost', this.popForm.cost)
 				formData.append('status', this.popForm.status)
 				if (this.imageFile !== '') {
 					formData.append('icon', this.imageFile.raw)
 				} else {
-					formData.append('icon', '')
+					// formData.append('icon', '')
 				}
+				if (this.imageSvgFile !== '') {
+					formData.append('gif', this.imageSvgFile.raw)
+				} else {
+					// formData.append('gif', '')
+				}
+
 				this.loading = true
 				getActivetyAdd(formData).then(res => {
 					this.loading = false
@@ -293,12 +301,17 @@
 				formData.append('id', this.popForm.id)
 				formData.append('name', this.popForm.name)
 				formData.append('icon', this.popForm.icon)
+				formData.append('gif', this.popForm.gif)
 				if (this.imageFile !== '') {
 					formData.append('icon', this.imageFile.raw)
 				} else {
 					// formData.append('icon', '')
 				}
-				formData.append('cost', this.popForm.cost)
+				if (this.imageSvgFile !== '') {
+					formData.append('gif', this.imageSvgFile.raw)
+				} else {
+					// formData.append('gif', '')
+				}
 				formData.append('status', this.popForm.status)
 				this.loading = true
 				getActivetyUpdate(formData).then(res => {
@@ -336,13 +349,24 @@
 			imgPreview(file, fileList) {
 				const fileName = file.name
 				this.imageFile = file
-				console.log(this.imageFile)
 				const regex = /(.jpg|.jpeg|.gif|.png|.bmp)$/
 				if (regex.test(fileName.toLowerCase())) {
 					this.imageUrl = file.url
 					this.imageUrl = URL.createObjectURL(file.raw)
 				} else {
 					this.$message.error('请选择图片文件')
+				}
+			},
+			imgSvgPreview(file, fileList) {
+				const fileName = file.name
+				this.imageSvgFile = file
+				const regex = /(.svg|.svga)$/
+				this.imageSvgUrl = ''
+				if (regex.test(fileName.toLowerCase())) {
+					this.imageSvgUrl = file.url
+					this.imageSvgUrl = URL.createObjectURL(file.raw)
+				} else {
+					this.$message.error('请选择特效svga格式图片文件')
 				}
 			},
 			numberChange(val, maxNum, name) {
@@ -361,6 +385,22 @@
 						this.popForm[name] = num
 					}
 				})
+			},
+			showImg(e) {
+				this.showImgUrl = ''
+				this.$nextTick(res => {
+					this.showImgUrl = e.gif
+					if (this.showImgUrl.indexOf('.svga') > -1) {
+						this.dialogVisible = true
+					} else {
+						this.$message.warning('暂无特效图')
+					}
+				})
+			},
+			handleClose() {
+				this.showImgUrl = ''
+				this.imageSvgUrl = ''
+				this.dialogVisible = false
 			},
 		}
 	}
@@ -412,7 +452,7 @@
 	.avatar {
 		width: auto;
 		max-width: 178px;
-		height: 178px;
+		max-height: 178px;
 	}
 
 	::v-deep .el-dialog {

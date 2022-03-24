@@ -25,7 +25,7 @@ const activityRouter = {
 			component: () => import('@/views/voiceroom/activity/activity-gift-list'),
 			name: 'ActivityGiftlist',
 			meta: {
-				title: '活动礼物列表',
+				title: '活动配置列表',
 				noCache: true
 			}
 		},

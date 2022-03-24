@@ -190,7 +190,6 @@
 			},
 			getChangeProbability(){
 				let bigNum = 0,smallNum = 0;
-				console.log(this.gifts)
 				this.gifts.map(res=>{
 					if(res.type == 1){
 						if(res.probability > this.probabilityBig){ // 获取大礼物最大值
@@ -204,7 +203,6 @@
 				this.probabilityBig_last = 100 - bigNum;
 				this.probabilitySmallMax = ((this.probabilityBig * this.defaultNum) / this.defaultNum) < 100 ? (((99 - this.probabilityBig) *  this.defaultNum) / this.defaultNum) : 0;
 				this.probabilitySmall_last = (((this.probabilitySmallMax - smallNum )* this.defaultNum) / this.defaultNum);
-				console.log("小礼物剩余分配概率数：",this.probabilitySmall_last)
 			}
 		}
 	}
