@@ -18,7 +18,7 @@
 			</div>
 			<div class="giftBox fl">
 				<div class="giftTitle fl">概率：</div>
-				<el-input v-model="popGiftForm.probability" style="width: 120px;" v-input-limit="5" placeholder="请输入概率"
+				<el-input v-model="popGiftForm.probability" style="width: 120px;" v-input-limit="0" placeholder="请输入概率"
 					clearable autocomplete="off" @change="handleProbability"
 					:disabled="typeName == 'Detail' ? true : false " /> %
 			</div>
@@ -90,11 +90,12 @@
 					"time_limit": 0, // 0永久有效1限时
 				},
 				inventory: 1,
-				defaultNum: 100000, // 处理小数点精度默认值
 				probabilityBig: 0,  // 大礼物最大值
 				probabilitySmallMax: 0, // 小礼物最大值
 				probabilityBig_last: 0, // 大礼物剩余分配概率数
 				probabilitySmall_last: 0, // 小礼物剩余分配概率数
+				bigNum : 0,
+				smallNum : 0,
 			}
 		},
 		watch:{
@@ -144,24 +145,25 @@
 			this.probabilityBig_last = 0;
 			this.probabilitySmall_last = 0;
 			this.probabilityBig_last = 0;
-				if (e > 100) {
+				if (e >= 100) {
+					console.log(this.bigNum)
 					this.popGiftForm.probability = 100;
 				} else {
 					this.getChangeProbability();
 					if(this.popGiftForm.type == 1) { // 大礼物
 						if(this.probabilityBig_last < 0){
 							this.$message.error("大礼物概率之和最大100%");
-							this.popGiftForm.probability = (e * this.defaultNum + this.probabilityBig_last * this.defaultNum) / this.defaultNum;
+							this.popGiftForm.probability = e + this.probabilityBig_last;
 						}else {
-							this.popGiftForm.probability = (e * this.defaultNum) / this.defaultNum
+							this.popGiftForm.probability = e
 						}
 					}
 					if(this.popGiftForm.type == 2){ // 小礼物
 						if(this.probabilitySmall_last < 0){
 							this.$message.error("小礼物概率之和最大值为" + this.probabilitySmallMax +'%');
-							this.popGiftForm.probability = (e * this.defaultNum + this.probabilitySmall_last * this.defaultNum) / this.defaultNum;
+							this.popGiftForm.probability = e + this.probabilitySmall_last;
 						}else {
-							this.popGiftForm.probability = (e * this.defaultNum) / this.defaultNum
+							this.popGiftForm.probability = e
 						}
 					}
 				}
@@ -189,20 +191,22 @@
 				})
 			},
 			getChangeProbability(){
-				let bigNum = 0,smallNum = 0;
+				this.bigNum = 0;this.smallNum = 0;
 				this.gifts.map(res=>{
 					if(res.type == 1){
 						if(res.probability > this.probabilityBig){ // 获取大礼物最大值
 							this.probabilityBig = res.probability
 						}
-						bigNum += ((res.probability * this.defaultNum) / this.defaultNum)
+						this.bigNum += res.probability
 					}else if(res.type == 2){
-						smallNum += ((res.probability * this.defaultNum) / this.defaultNum)
+						this.smallNum += res.probability
 					}
 				})
-				this.probabilityBig_last = 100 - bigNum;
-				this.probabilitySmallMax = ((this.probabilityBig * this.defaultNum) / this.defaultNum) < 100 ? (((99 - this.probabilityBig) *  this.defaultNum) / this.defaultNum) : 0;
-				this.probabilitySmall_last = (((this.probabilitySmallMax - smallNum )* this.defaultNum) / this.defaultNum);
+				
+				console.log(this.bigNum)
+				this.probabilityBig_last = 100 - this.bigNum;
+				this.probabilitySmallMax = this.probabilityBig < 100 ? (99 - this.probabilityBig) : 0;
+				this.probabilitySmall_last = this.probabilitySmallMax - this.smallNum;
 			}
 		}
 	}
