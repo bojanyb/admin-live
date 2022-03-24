@@ -9,22 +9,20 @@ import {
 } from '@/utils/auth'
 var baseUrlApi = '';
 	console.log(process.env.NODE_ENV);
-	baseUrlApi = process.env.VUE_APP_BASE_API
-	console.log(baseUrlApi);
-// switch (process.env.ENV) {
-//   case 'development':
-//     baseUrlApi = process.env.VUE_APP_BASE_API
-//     break
-//   case 'test':
-//     baseUrlApi = 'http://test.api.live.huidapay.net'
-//     break
-//   case 'production':
-//     baseUrlApi = 'http://api.live.huidapay.net'
-//     break
-//   default:
-    
-//     break
-// }
+switch (process.env.ENV) {
+  case 'development':
+    baseUrlApi = process.env.VUE_APP_BASE_API
+    break
+  case 'test':
+    baseUrlApi = 'http://test.api.live.huidapay.net'
+    break
+  case 'production':
+    baseUrlApi = 'http://api.live.huidapay.net'
+    break
+  default:
+    break
+}
+console.log(baseUrlApi);
 
 // create an axios instance
 const service = axios.create({
