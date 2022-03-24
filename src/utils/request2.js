@@ -9,8 +9,8 @@ import {
 } from '@/utils/auth'
 var baseUrlApi = '';
 	console.log(process.env.NODE_ENV);
-	console.log(baseUrlApi);
 	baseUrlApi = process.env.VUE_APP_BASE_API
+	console.log(baseUrlApi);
 // switch (process.env.ENV) {
 //   case 'development':
 //     baseUrlApi = process.env.VUE_APP_BASE_API
