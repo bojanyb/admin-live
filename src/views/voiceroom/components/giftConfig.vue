@@ -18,8 +18,8 @@
 			</div>
 			<div class="giftBox fl">
 				<div class="giftTitle fl">概率：</div>
-				<el-input v-model="popGiftForm.probability" style="width: 120px;" v-input-limit="0" placeholder="请输入概率"
-					clearable autocomplete="off" @change="handleProbability"
+				<el-input v-model="popGiftForm.probability" style="width: 120px;" v-input-limit="0" maxlength="3" placeholder="请输入概率"
+					clearable autocomplete="off" @change="handleProbability(popGiftForm)"
 					:disabled="typeName == 'Detail' ? true : false " /> %
 			</div>
 			<div class="giftBox fl">
@@ -34,17 +34,22 @@
 				<div class="giftTitle fl">礼物有效期：</div>
 				<div class="giftInfo fl">永久</div>
 			</div>
-			<div class="fl"><el-button type="danger" v-if="typeName !== 'Detail'" @click="handleSelectGiftDel(popGiftForm)">删除</el-button></div>
+			<div class="fl">
+				<el-button type="danger" v-if="typeName !== 'Detail'" @click="handleSelectGiftDel(popGiftForm)">删除
+				</el-button>
+			</div>
 			<div class="giftBox fl" v-if="typeName == 'Detail'">
 				<div class="giftTitle fl">添加库存：</div>
 				<el-input v-model="inventory" style="width: 120px;" v-input-limit="0" placeholder="请添加库存" clearable
 					autocomplete="off" @change="numberChange(arguments[0],9999,'inventoryNum')"
 					@input="numberChange(arguments[0],9999,'inventoryNum')" />
 			</div>
-			<el-button type="success" v-if="typeName == 'Detail'" @click="handleGiftSave(popGiftForm.id)">保 存</el-button>
+			<el-button type="success" v-if="typeName == 'Detail'" @click="handleGiftSave(popGiftForm.id)">保 存
+			</el-button>
 		</el-form-item>
 		<el-form-item label="礼物属性" :label-width="formLabelWidth" style="float: left;">
-			<el-radio-group v-model="popGiftForm.type" @change="handleType" :disabled="typeName == 'Detail' ? true : false ">
+			<el-radio-group v-model="popGiftForm.type" @change="handleType(popGiftForm)"
+				:disabled="typeName == 'Detail' ? true : false ">
 				<el-radio :label="1">大礼物</el-radio>
 				<el-radio :label="2">小礼物</el-radio>
 			</el-radio-group>
@@ -73,7 +78,7 @@
 				type: Number,
 				default: {}
 			},
-			gifts:{
+			gifts: {
 				type: Array,
 				default: {}
 			}
@@ -90,21 +95,19 @@
 					"time_limit": 0, // 0永久有效1限时
 				},
 				inventory: 1,
-				probabilityBig: 0,  // 大礼物最大值
-				probabilitySmallMax: 0, // 小礼物最大值
+				probability: 0,
+				probabilityBig: 0, // 大礼物最大值
 				probabilityBig_last: 0, // 大礼物剩余分配概率数
-				probabilitySmall_last: 0, // 小礼物剩余分配概率数
-				bigNum : 0,
-				smallNum : 0,
+				bigNum: 0,
+				smallNum: 0,
 			}
 		},
-		watch:{
-			source(val){
+		watch: {
+			source(val) {
 				this.popGiftForm = val;
 			}
 		},
 		mounted() {
-			this.source.probability = this.source.probability / 100000;
 			this.popGiftForm = this.source;
 			this.getChangeProbability();
 		},
@@ -114,7 +117,7 @@
 				this.$emit("handleDelSelect", row)
 			},
 			numberChange(val, maxNum, name) {
-				
+
 				// 转换数字类型
 				this.popGiftForm[name] = Number(val)
 				// 重新渲染
@@ -139,74 +142,108 @@
 					}
 				})
 			},
-			handleProbability(e) {  // 概率
-			this.probabilityBig = 0;
-			this.probabilitySmallMax = 0;
-			this.probabilityBig_last = 0;
-			this.probabilitySmall_last = 0;
-			this.probabilityBig_last = 0;
-				if (e >= 100) {
-					console.log(this.bigNum)
-					this.popGiftForm.probability = 100;
-				} else {
-					this.getChangeProbability();
-					if(this.popGiftForm.type == 1) { // 大礼物
-						if(this.probabilityBig_last < 0){
-							this.$message.error("大礼物概率之和最大100%");
-							this.popGiftForm.probability = e + this.probabilityBig_last;
-						}else {
-							this.popGiftForm.probability = e
-						}
-					}
-					if(this.popGiftForm.type == 2){ // 小礼物
-						if(this.probabilitySmall_last < 0){
-							this.$message.error("小礼物概率之和最大值为" + this.probabilitySmallMax +'%');
-							this.popGiftForm.probability = e + this.probabilitySmall_last;
-						}else {
-							this.popGiftForm.probability = e
+			handleProbability(e) { // 概率
+				let probability = parseInt(e.probability);
+				this.probabilityBig = 0;
+				this.probabilityBig_last = 0;
+				this.getChangeProbability(e.id);
+				if (this.popGiftForm.type == 1) { // 大礼物
+					if (this.probabilityBig_last < 0) {
+						this.$message.error("大礼物概率之和最大100%");
+						this.popGiftForm.probability = this.probability + this.probabilityBig_last;
+					} else {
+						if (this.smallNum > 0) { // 已存在小礼物
+						let sumBig = parseInt(this.bigNum) + parseInt(this.probability) 
+							if(sumBig < 100){
+								if(this.probability > (99 - this.smallNum)){
+									this.$message.error("小礼物概率和大礼物最大值之和最大值为99%");
+									this.popGiftForm.probability = 99 - this.smallNum
+								}else{
+									this.popGiftForm.probability = this.probability
+								}
+							}else{
+								this.$message.error("大礼物概率之和最大100%");
+								this.popGiftForm.probability = 100 - this.bigNum;
+							}
+						} else {
+							if(parseInt(this.probability) > 100){
+								this.$message.error("大礼物概率之和最大100%");
+							}else{
+								if(parseInt(this.probability) > this.probabilityBig_last){
+									this.popGiftForm.probability = this.probabilityBig_last
+								}else{
+									this.popGiftForm.probability = parseInt(this.probability);
+								}
+							}
 						}
 					}
 				}
+				if (this.popGiftForm.type == 2) { // 小礼物
+						if (this.bigNum > 0) { // 存在大礼物
+							let lastSmall = parseInt(this.smallNum) + parseInt(this.probabilityBig)
+							if(lastSmall < 99){
+								if(this.probability > (99 - lastSmall)){
+									this.$message.error("小礼物概率和大礼物最大值之和最大值为99%");
+									this.popGiftForm.probability = 99 - lastSmall;
+								}else{
+									this.popGiftForm.probability = this.probability;
+								}
+							}else{
+								this.$message.error("小礼物概率和大礼物最大值之和最大值为99%");
+								return
+							}
+						}else{
+							this.$message.error("请先配置大礼物");
+							return
+						}
+				}
 			},
-			handleType(value) {
+			handleType(popGiftForm) {
 				this.probabilityBig = 0;
-				this.popGiftForm.type = value
-				this.getChangeProbability()
+				this.popGiftForm.type = popGiftForm.type;
+				this.popGiftForm.probability = 0;
 			},
-			handleGiftSave(id){
+			handleGiftSave(id) {
 				const formData = new FormData()
 				formData.append('activity_id', this.activity_id);
 				formData.append('gift_id', this.popGiftForm.id);
 				formData.append('inventory', this.inventory);
-				getActivetyGiftAddInventory(formData).then(res=>{
+				getActivetyGiftAddInventory(formData).then(res => {
 					this.$message.success("添加库存成功")
 					let sendSource = {
-						"id" : this.activity_id,
-						"typeName" : "inventoryAdd"
+						"id": this.activity_id,
+						"typeName": "inventoryAdd"
 					}
 					this.inventory = 1;
 					this.$emit("handleDelSelect", sendSource)
-				}).catch(err=>{
+				}).catch(err => {
 					this.$message.error(err)
 				})
 			},
-			getChangeProbability(){
-				this.bigNum = 0;this.smallNum = 0;
-				this.gifts.map(res=>{
-					if(res.type == 1){
-						if(res.probability > this.probabilityBig){ // 获取大礼物最大值
-							this.probabilityBig = res.probability
+			getChangeProbability(id) {
+				this.bigNum = 0;
+				this.smallNum = 0;
+				this.gifts.map(res => {
+					if (res.type == 1) {
+						if (id && id == res.id) {
+							this.probability = res.probability;
+							res.probability = 0;
+						} else {
+							if (res.probability > this.probabilityBig) { // 获取大礼物最大值
+								this.probabilityBig = parseInt(res.probability)
+							}
+							this.bigNum += parseInt(res.probability)
 						}
-						this.bigNum += res.probability
-					}else if(res.type == 2){
-						this.smallNum += res.probability
+					} else if (res.type == 2) {
+						if (id && id == res.id) {
+							this.probability = res.probability;
+							res.probability = 0;
+						} else {
+							this.smallNum += parseInt(res.probability)
+						}
 					}
 				})
-				
-				console.log(this.bigNum)
 				this.probabilityBig_last = 100 - this.bigNum;
-				this.probabilitySmallMax = this.probabilityBig < 100 ? (99 - this.probabilityBig) : 0;
-				this.probabilitySmall_last = this.probabilitySmallMax - this.smallNum;
 			}
 		}
 	}
@@ -215,9 +252,11 @@
 	.el-dialog {
 		width: 80%;
 	}
-	.giftConfigItem{
+
+	.giftConfigItem {
 		display: inline-block;
 	}
+
 	.giftBox {
 		margin-right: 15px;
 		max-width: 30%;
@@ -231,7 +270,8 @@
 			display: flex;
 		}
 	}
-	.el-image__error{
+
+	.el-image__error {
 		height: 50px;
 		text-align: center;
 		font-size: 12px;
