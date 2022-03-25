@@ -550,10 +550,7 @@
 						this.popForm.gifts.push(currentGift)
 					}
 				})
-				
-				console.log(this.popForm.gifts)
-				
-
+				this.popForm.gifts = JSON.parse(JSON.stringify(this.popForm.gifts));
 				/* 多条勾选打印结算单会出现重复的结算单号 去重处理 */
 				this.popForm.gifts = new Set(this.popForm.gifts);
 				this.popForm.gifts = Array.from(this.popForm.gifts);

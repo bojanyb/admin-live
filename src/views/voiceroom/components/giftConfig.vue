@@ -143,60 +143,60 @@
 				})
 			},
 			handleProbability(e) { // 概率
-				// let probability = parseInt(e.probability);
-				// this.probabilityBig = 0;
-				// this.probabilityBig_last = 0;
-				// this.getChangeProbability(e.id);
-				// if (this.popGiftForm.type == 1) { // 大礼物
-				// 	if (this.probabilityBig_last < 0) {
-				// 		this.$message.error("大礼物概率之和最大100%");
-				// 		this.popGiftForm.probability = this.probability + this.probabilityBig_last;
-				// 	} else {
-				// 		if (this.smallNum > 0) { // 已存在小礼物
-				// 		let sumBig = parseInt(this.bigNum) + parseInt(this.probability) 
-				// 			if(sumBig < 100){
-				// 				if(this.probability > (99 - this.smallNum)){
-				// 					this.$message.error("小礼物概率和大礼物最大值之和最大值为99%");
-				// 					this.popGiftForm.probability = 99 - this.smallNum
-				// 				}else{
-				// 					this.popGiftForm.probability = this.probability
-				// 				}
-				// 			}else{
-				// 				this.$message.error("大礼物概率之和最大100%");
-				// 				this.popGiftForm.probability = 100 - this.bigNum;
-				// 			}
-				// 		} else {
-				// 			if(parseInt(this.probability) > 100){
-				// 				this.$message.error("大礼物概率之和最大100%");
-				// 			}else{
-				// 				if(parseInt(this.probability) > this.probabilityBig_last){
-				// 					this.popGiftForm.probability = this.probabilityBig_last
-				// 				}else{
-				// 					this.popGiftForm.probability = parseInt(this.probability);
-				// 				}
-				// 			}
-				// 		}
-				// 	}
-				// }
-				// if (this.popGiftForm.type == 0) { // 小礼物
-				// 		if (this.bigNum > 0) { // 存在大礼物
-				// 			let lastSmall = parseInt(this.smallNum) + parseInt(this.probabilityBig)
-				// 			if(lastSmall < 99){
-				// 				if(this.probability > (99 - lastSmall)){
-				// 					this.$message.error("小礼物概率和大礼物最大值之和最大值为99%");
-				// 					this.popGiftForm.probability = 99 - lastSmall;
-				// 				}else{
-				// 					this.popGiftForm.probability = this.probability;
-				// 				}
-				// 			}else{
-				// 				this.$message.error("小礼物概率和大礼物最大值之和最大值为99%");
-				// 				return
-				// 			}
-				// 		}else{
-				// 			this.$message.error("请先配置大礼物");
-				// 			return
-				// 		}
-				// }
+				let probability = parseInt(e.probability);
+				this.probabilityBig = 0;
+				this.probabilityBig_last = 0;
+				this.getChangeProbability(e.activity_type_id);
+				if (this.popGiftForm.type == 1) { // 大礼物
+					if (this.probabilityBig_last < 0) {
+						this.$message.error("大礼物概率之和最大100%");
+						this.popGiftForm.probability = this.probability + this.probabilityBig_last;
+					} else {
+						if (this.smallNum > 0) { // 已存在小礼物
+						let sumBig = parseInt(this.bigNum) + parseInt(this.probability) 
+							if(sumBig < 100){
+								if(this.probability > (99 - this.smallNum)){
+									this.$message.error("小礼物概率和大礼物最大值之和最大值为99%");
+									this.popGiftForm.probability = 99 - this.smallNum
+								}else{
+									this.popGiftForm.probability = this.probability
+								}
+							}else{
+								this.$message.error("大礼物概率之和最大100%");
+								this.popGiftForm.probability = 100 - this.bigNum;
+							}
+						} else {
+							if(parseInt(this.probability) > 100){
+								this.$message.error("大礼物概率之和最大100%");
+							}else{
+								if(parseInt(this.probability) > this.probabilityBig_last){
+									this.popGiftForm.probability = this.probabilityBig_last
+								}else{
+									this.popGiftForm.probability = parseInt(this.probability);
+								}
+							}
+						}
+					}
+				}
+				if (this.popGiftForm.type == 0) { // 小礼物
+						if (this.bigNum > 0) { // 存在大礼物
+							let lastSmall = parseInt(this.smallNum) + parseInt(this.probabilityBig)
+							if(lastSmall < 99){
+								if(this.probability > (99 - lastSmall)){
+									this.$message.error("小礼物概率和大礼物最大值之和最大值为99%");
+									this.popGiftForm.probability = 99 - lastSmall;
+								}else{
+									this.popGiftForm.probability = this.probability;
+								}
+							}else{
+								this.$message.error("小礼物概率和大礼物最大值之和最大值为99%");
+								return
+							}
+						}else{
+							this.$message.error("请先配置大礼物");
+							return
+						}
+				}
 			},
 			handleType(popGiftForm) {
 				this.probabilityBig = 0;
@@ -206,7 +206,7 @@
 			handleGiftSave(id) {
 				const formData = new FormData()
 				formData.append('activity_id', this.activity_id);
-				formData.append('gift_id', this.popGiftForm.id);
+				formData.append('gift_id', this.popGiftForm.activity_type_id);
 				formData.append('inventory', this.inventory);
 				getActivetyGiftAddInventory(formData).then(res => {
 					this.$message.success("添加库存成功")
@@ -225,7 +225,7 @@
 				this.smallNum = 0;
 				this.gifts.map(res => {
 					if (res.type == 1) {
-						if (id && id == res.id) {
+						if (id && id == res.activity_type_id) {
 							this.probability = res.probability;
 							res.probability = 0;
 						} else {
@@ -234,8 +234,8 @@
 							}
 							this.bigNum += parseInt(res.probability)
 						}
-					} else if (res.type == 2) {
-						if (id && id == res.id) {
+					} else if (res.type == 0) {
+						if (id && id == res.activity_type_id) {
 							this.probability = res.probability;
 							res.probability = 0;
 						} else {
