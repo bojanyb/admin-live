@@ -168,6 +168,9 @@
 					'diamond_total': '',
 					'spending': ''
 				}
+				if(this.$refs["popForm"]){
+					this.$refs["popForm"].resetFields();
+				}
 				this.editPop = true
 			},
 			handleLiveRankEdit(row) {
@@ -177,6 +180,9 @@
 					'rank_name': row.rank_name,
 					'diamond_total': row.diamond_total,
 					'spending': row.spending
+				}
+				if(this.$refs["popForm"]){
+					this.$refs["popForm"].resetFields();
 				}
 				this.editPop = true
 			},
