@@ -16,7 +16,7 @@
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="活动类型">
-					<el-select v-model="filters.type" placeholder="请选择" @change="activetyList">
+					<el-select v-model="filters.type" placeholder="请选择" @change="handleChangeType">
 						<el-option v-for="item in lotteryType" :key="item.value" :label="item.label"
 							:value="item.value" />
 					</el-select>
@@ -87,6 +87,9 @@
 					"type": ""
 				},
 				lotteryType: [{
+					"value": '',
+					"label": "全部",
+				},{
 					"value": 1,
 					"label": "背包",
 				}, {
@@ -108,8 +111,8 @@
 					'pagesize': this.page.limit,
 					"user_id": this.filters.user_id,
 					"gift_name": this.filters.gift_name,
-					"start_time": this.timer ? JSON.stringify(new Date(this.timer[0]).getTime() / 1000) : "",
-					"end_time": this.timer ? JSON.stringify(new Date(this.timer[0]).getTime() / 1000) : "",
+					"start_time": this.timer ? (new Date(this.timer[0]).getTime() / 1000) : "",
+					"end_time": this.timer ? (new Date(this.timer[1]).getTime() / 1000) : "",
 					"type": this.filters.type
 				}
 
@@ -130,6 +133,12 @@
 					this.listLoading = false
 				})
 			},
+			handleChangeType(e){
+				if(e == ""){
+					this.page.page = 1;
+				}
+				this.activetyList()
+			}
 		}
 	}
 </script>
