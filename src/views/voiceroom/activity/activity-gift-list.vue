@@ -426,12 +426,13 @@
 						}
 						let isSmallEmpty = true;
 						params.gifts.map(re => {
+							re.id = re.activity_type_id;
 							delete re.gift_name
 							delete re.gift_photo
 							delete re.gift_diamond
 							delete re.status
 							delete re.time_limit
-							re.id = re.activity_type_id;
+							delete re.activity_type_id
 							if (re.probability > 0) {
 								isSmallEmpty = false
 								re.probability = re.probability * 100000
@@ -470,7 +471,10 @@
 							delete re.gift_diamond
 							delete re.status
 							delete re.time_limit
-							re.id = re.activity_type_id;
+							if(re.activity_type_id){
+								re.id = re.activity_type_id;
+								delete re.activity_type_id
+							}
 							re.probability = re.probability * 100000
 							if (re.type == 2 && re.probability == 0) {
 								isSmallEmpty = true
