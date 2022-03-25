@@ -51,10 +51,10 @@
 			<el-radio-group v-model="popGiftForm.type" @change="handleType(popGiftForm)"
 				:disabled="typeName == 'Detail' ? true : false ">
 				<el-radio :label="1">大礼物</el-radio>
-				<el-radio :label="2">小礼物</el-radio>
+				<el-radio :label="0">小礼物</el-radio>
 			</el-radio-group>
 		</el-form-item>
-		<el-form-item label="礼物有效期" prop="time_limit" :label-width="formLabelWidth" style="float: left;">
+		<el-form-item label="礼物有效期" prop="time_limit" :label-width="formLabelWidth" style="float: left;" v-if="typeName == 'Detail'">
 			<div class="giftInfo fl">永久</div>
 		</el-form-item>
 	</div>
@@ -178,7 +178,7 @@
 						}
 					}
 				}
-				if (this.popGiftForm.type == 2) { // 小礼物
+				if (this.popGiftForm.type == 0) { // 小礼物
 						if (this.bigNum > 0) { // 存在大礼物
 							let lastSmall = parseInt(this.smallNum) + parseInt(this.probabilityBig)
 							if(lastSmall < 99){

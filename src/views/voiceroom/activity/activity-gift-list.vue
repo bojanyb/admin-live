@@ -279,18 +279,9 @@
 				}
 				this.giftListArr = [];
 				getActivetyGiftSource(params).then(res => {
-					this.giftTotal = res.data.count
-					res.data.list.map(re => {
-						re.isSelect = false; // 默认当前礼物未被选中
-						if (this.popForm.gifts.length > 0) {
-							this.popForm.gifts.map(item => {
-								if (item.id == re.id) {
-									re.isSelect = true;
-								}
-							})
-						}
-						this.giftListArr.push(re)
-					})
+					this.giftTotal = res.data.count;
+					this.giftListArr = res.data.list;
+					this.giftSelectSource();
 				}).catch(err => {})
 			},
 			activetyGiftList() {
@@ -430,7 +421,6 @@
 							"end_time": this.popForm.end_time / 1000,
 							"start_time": this.popForm.start_time / 1000,
 							"type": this.popForm.type,
-							"id": this.popForm.id,
 							'cost': parseInt(this.popForm.cost),
 							"gifts": JSON.parse(JSON.stringify(this.popForm.gifts))
 						}
@@ -448,7 +438,7 @@
 								isSmallEmpty = true
 							}
 						})
-						getGiftEdit(this.popForm).then(res => {
+						getGiftEdit(params).then(res => {
 							this.loading = false
 							this.editPop = false
 							this.activetyGiftList()
@@ -533,17 +523,7 @@
 				})
 			},
 			handleAddGiftShow() {
-				this.giftListArr.map(re => {
-					re.isSelect = false; // 默认当前礼物未被选中
-					if (this.popForm.gifts.length > 0) {
-						this.popForm.gifts.map(item => {
-							if (item.id == re.id) {
-								re.isSelect = true;
-							}
-						})
-					}
-				})
-				console.log(this.giftListArr)
+				this.giftSelectSource();
 				this.drawer = true
 			},
 			handleClose(done) {
@@ -558,7 +538,7 @@
 				this.giftListArr.map(res => {
 					if (res.id == row.id) {
 						res.isSelect = true; // 默认当前礼物未被选中
-						currentGift.id = row.id;
+						currentGift.activity_type_id = row.id;
 						currentGift.gift_name = row.gift_name;
 						currentGift.gift_photo = row.gift_photo;
 						currentGift.gift_diamond = row.gift_diamond;
@@ -570,6 +550,9 @@
 						this.popForm.gifts.push(currentGift)
 					}
 				})
+				
+				console.log(this.popForm.gifts)
+				
 
 				/* 多条勾选打印结算单会出现重复的结算单号 去重处理 */
 				this.popForm.gifts = new Set(this.popForm.gifts);
@@ -590,7 +573,19 @@
 				} else if (row.typeName == "inventoryAdd") { // 更新礼物库存
 					this.activetyHasGiftList(row.id);
 				}
-			}
+			},
+			giftSelectSource(){
+				this.giftListArr.map(re => {
+					re.isSelect = false; // 默认当前礼物未被选中
+					if (this.popForm.gifts.length > 0) {
+						this.popForm.gifts.map(item => {
+							if (item.id == re.id) {
+								re.isSelect = true;
+							}
+						})
+					}
+				})
+			},
 		}
 	}
 </script>
