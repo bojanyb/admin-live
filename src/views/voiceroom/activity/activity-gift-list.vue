@@ -72,11 +72,12 @@
 						<el-button type="primary" @click="handleAddGiftShow" v-if="popForm.typeName !== 'Detail'">添 加
 						</el-button>
 					</div>
-					<div class="fl" style="margin-left: 10px; color: red;font-size: 12px; display: none;">1、所有大礼物概率之和为100%; 2、大礼物单个最大概率与所有小礼物概率之和不超过99%; 3、至少保留一个小礼物概率为0%。 </div>
+					<div class="fl" style="margin-left: 10px; color: red;font-size: 12px; display: none;">
+						1、所有大礼物概率之和为100%; 2、大礼物单个最大概率与所有小礼物概率之和不超过99%; 3、至少保留一个小礼物概率为0%。 </div>
 				</el-form-item>
 				<giftConfig v-if="popForm.gifts.length > 0" v-for="item in popForm.gifts" v-model="popForm.gifts"
-					:source="item" :activity_id="popForm.activity_type_id" :typeName="popForm.typeName" :gifts="popForm.gifts"
-					@handleDelSelect="handleDelSelect"></giftConfig>
+					:source="item" :activity_id="popForm.activity_type_id" :typeName="popForm.typeName"
+					:gifts="popForm.gifts" @handleDelSelect="handleDelSelect"></giftConfig>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="handleCancel" v-if="popForm.typeName !== 'Detail'">取 消</el-button>
@@ -164,7 +165,7 @@
 					'start_timeText': '',
 					'end_timeText': '',
 					"gifts": [],
-					"cost" : 0,
+					"cost": 0,
 					'typeName': 'Add'
 				},
 				popFormRules: {
@@ -242,11 +243,11 @@
 				lotteryName: [],
 				lotteryType: [{
 						"id": 1,
-						"name": "派对"
+						"name": "背包"
 					},
 					{
 						"id": 2,
-						"name": "背包"
+						"name": "派对"
 					}
 				],
 				drawer: false,
@@ -263,7 +264,8 @@
 				getActivetyList().then(res => {
 					if (res.data.list.length > 0) {
 						res.data.list.map(res => {
-							res.start_timeText = moment(res.start_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+							res.start_timeText = moment(res.start_time * 1000).format(
+								'YYYY-MM-DD HH:mm:ss')
 							res.end_timeText = moment(res.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')
 						})
 						this.lotteryName = res.data.list;
@@ -304,10 +306,10 @@
 					this.list.map(res => {
 						switch (res.type) {
 							case 1:
-								res.typeText = '派对';
+								res.typeText = '背包';
 								break;
 							case 2:
-								res.typeText = '背包';
+								res.typeText = '派对';
 								break;
 						}
 						switch (res.status) {
@@ -324,8 +326,10 @@
 								res.statusText = "特殊停止";
 								break;
 						}
-						let start_time = JSON.stringify(res.start_time).length > 10 ? res.start_time : (res.start_time *1000);
-						let end_time = JSON.stringify(res.end_time).length > 10 ? res.end_time : (res.end_time * 1000);
+						let start_time = JSON.stringify(res.start_time).length > 10 ? res.start_time : (res
+							.start_time * 1000);
+						let end_time = JSON.stringify(res.end_time).length > 10 ? res.end_time : (res
+							.end_time * 1000);
 						res.start_timeText = moment(start_time).format('YYYY-MM-DD HH:mm:ss')
 						res.end_timeText = moment(end_time).format('YYYY-MM-DD HH:mm:ss')
 					})
@@ -339,7 +343,7 @@
 					"activity_id": id
 				}
 				getActivetyHasGiftList(params).then(res => {
-					res.data.list.map(re=>{
+					res.data.list.map(re => {
 						re.probability = re.probability / 100000
 					})
 					this.popForm.gifts = res.data.list;
@@ -352,7 +356,7 @@
 				this.popForm = {
 					'activity_type_id': '',
 					'type': '',
-					"cost" : 0,
+					"cost": 0,
 					'start_time': 0,
 					'end_time': 0,
 					"gifts": [],
@@ -366,7 +370,7 @@
 			handleEdit(row, index) {
 				this.activetyHasGiftList(row.id);
 				this.editIndex = index;
-				let start_time = JSON.stringify(row.start_time).length > 10 ? row.start_time : (row.start_time *1000);
+				let start_time = JSON.stringify(row.start_time).length > 10 ? row.start_time : (row.start_time * 1000);
 				let end_time = JSON.stringify(row.end_time).length > 10 ? row.end_time : (row.end_time * 1000);
 				this.popForm = {
 					'activity_type_id': row.activity_type_id,
@@ -387,9 +391,10 @@
 				this.editPop = true
 			},
 			handleChange() {
-				this.popForm.start_time = this.popForm.start_timeText ? new Date(this.popForm.start_timeText).getTime() : ""
+				this.popForm.start_time = this.popForm.start_timeText ? new Date(this.popForm.start_timeText).getTime() :
+					""
 				this.popForm.end_time = this.popForm.end_timeText ? new Date(this.popForm.end_timeText).getTime() : ""
-				if(this.popForm.gifts.length == 0){
+				if (this.popForm.gifts.length == 0) {
 					this.$message.error("礼物配置不能为空");
 					return
 				}
@@ -407,9 +412,12 @@
 				} else {
 					this.$confirm('关闭后数据不会保存，确定关闭吗？')
 						.then(res => {
+							// 去掉礼物库已选择状态
+							this.giftListArr.map(re => {
+								re.isSelect = false;
+							})
 							this.loading = false
 							this.editPop = false
-							
 						}).catch(err => {});
 				}
 			},
@@ -418,25 +426,25 @@
 					if (valid) {
 						this.loading = true
 						var params = {
-							"activity_type_id" : this.popForm.activity_type_id,
-							"end_time" : this.popForm.end_time / 1000,
-							"start_time" : this.popForm.start_time / 1000,
-							"type" : this.popForm.type,
-							"id" : this.popForm.id,
+							"activity_type_id": this.popForm.activity_type_id,
+							"end_time": this.popForm.end_time / 1000,
+							"start_time": this.popForm.start_time / 1000,
+							"type": this.popForm.type,
+							"id": this.popForm.id,
 							'cost': parseInt(this.popForm.cost),
-							"gifts" : JSON.parse(JSON.stringify(this.popForm.gifts))
+							"gifts": JSON.parse(JSON.stringify(this.popForm.gifts))
 						}
 						let isSmallEmpty = true;
-						params.gifts.map(re=>{
+						params.gifts.map(re => {
 							delete re.gift_name
 							delete re.gift_photo
 							delete re.gift_diamond
 							delete re.status
 							delete re.time_limit
-							if(re.probability > 0){
+							if (re.probability > 0) {
 								isSmallEmpty = false
 								re.probability = re.probability * 100000
-							}else{
+							} else {
 								isSmallEmpty = true
 							}
 						})
@@ -456,23 +464,23 @@
 					if (valid) {
 						this.loading = true
 						var params = {
-							"activity_type_id" : this.popForm.activity_type_id,
-							"end_time" : this.popForm.end_time / 1000,
-							"start_time" : this.popForm.start_time / 1000,
-							"type" : this.popForm.type,
-							"id" : this.popForm.id,
+							"activity_type_id": this.popForm.activity_type_id,
+							"end_time": this.popForm.end_time / 1000,
+							"start_time": this.popForm.start_time / 1000,
+							"type": this.popForm.type,
+							"id": this.popForm.id,
 							'cost': parseInt(this.popForm.cost),
-							"gifts" : JSON.parse(JSON.stringify(this.popForm.gifts))
+							"gifts": JSON.parse(JSON.stringify(this.popForm.gifts))
 						}
 						let isSmallEmpty = false;
-						params.gifts.map(re=>{
+						params.gifts.map(re => {
 							delete re.gift_name
 							delete re.gift_photo
 							delete re.gift_diamond
 							delete re.status
 							delete re.time_limit
 							re.probability = re.probability * 100000
-							if(re.type == 2 && re.probability == 0){
+							if (re.type == 2 && re.probability == 0) {
 								isSmallEmpty = true
 							}
 						})
@@ -525,6 +533,17 @@
 				})
 			},
 			handleAddGiftShow() {
+				this.giftListArr.map(re => {
+					re.isSelect = false; // 默认当前礼物未被选中
+					if (this.popForm.gifts.length > 0) {
+						this.popForm.gifts.map(item => {
+							if (item.id == re.id) {
+								re.isSelect = true;
+							}
+						})
+					}
+				})
+				console.log(this.giftListArr)
 				this.drawer = true
 			},
 			handleClose(done) {

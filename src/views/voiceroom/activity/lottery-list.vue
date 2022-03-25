@@ -48,8 +48,8 @@
 			<el-table-column label="活动名称" prop="activity_name" align="center" />
 			<el-table-column label="活动类型" prop="activity_type" align="center">
 				<template slot-scope="scope">
-					<div v-if="scope.row.activity_type == 1">派对</div>
-					<div v-else-if="scope.row.activity_type == 2">背包</div>
+					<div v-if="scope.row.activity_type == 1">背包</div>
+					<div v-else-if="scope.row.activity_type == 2">派对</div>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -88,10 +88,10 @@
 				},
 				lotteryType: [{
 					"value": 1,
-					"label": "派对",
+					"label": "背包",
 				}, {
 					"value": 2,
-					"label": "背包",
+					"label": "派对",
 				}],
 				timer: "",
 			}
