@@ -196,6 +196,22 @@
 							if (!this.popForm.start_timeText || this.popForm.start_timeText == "") {
 								return cb(new Error('活动生效时间不能为空!'))
 							}
+							if (this.popForm.start_time > this.popForm.end_time) {
+								return cb(new Error('开始时间不能大于结束时间!'))
+							}
+							return cb()
+						}
+					}],
+					end_timeText: [{
+						required: true,
+						trigger: 'change',
+						validator: (rules, value, cb) => {
+							if (!this.popForm.end_timeText || this.popForm.end_timeText == "") {
+								return cb(new Error('活动结束时间不能为空!'))
+							}
+							if (this.popForm.start_time > this.popForm.end_time) {
+								return cb(new Error('开始时间不能大于结束时间!'))
+							}
 							return cb()
 						}
 					}],
@@ -212,16 +228,6 @@
 							}
 							if (this.popForm.cost > 9999999) {
 								return cb(new Error('单次抽奖钻石范围1 ~ 9999999'))
-							}
-							return cb()
-						}
-					}],
-					end_timeText: [{
-						required: true,
-						trigger: 'change',
-						validator: (rules, value, cb) => {
-							if (!this.popForm.end_timeText || this.popForm.end_timeText == "") {
-								return cb(new Error('活动结束时间不能为空!'))
 							}
 							return cb()
 						}
@@ -353,6 +359,9 @@
 					"gifts": [],
 					'typeName': 'Add'
 				}
+				this.giftListArr.map(res => {
+					res.isSelect = true;
+				})
 				if (this.$refs['popForm']) {
 					this.$refs['popForm'].resetFields()
 				}
@@ -424,7 +433,13 @@
 							'cost': parseInt(this.popForm.cost),
 							"gifts": JSON.parse(JSON.stringify(this.popForm.gifts))
 						}
-						let isSmallEmpty = true;
+						let maxBigNum = 0,
+							bigSum = 0,
+							smallSum = 0,
+							bigSmallSum = 0,
+							isBigEmpty = false,
+							isSmallEmpty = false,
+							isInventory = false;
 						params.gifts.map(re => {
 							re.id = re.activity_type_id;
 							delete re.gift_name
@@ -433,13 +448,51 @@
 							delete re.status
 							delete re.time_limit
 							delete re.activity_type_id
-							if (re.probability > 0) {
+							if (re.probability > maxBigNum) {
+								maxBigNum = parseFloat(re.probability);
+							}
+							if (re.type == 1) { // 大礼物
+								if (re.probability == 0) {
+									isBigEmpty = true;
+								}
+								bigSum += parseFloat(re.probability);
+							}
+
+							if (re.type == 0) { // 小礼物
+								smallSum += parseFloat(re.probability);
+							}
+
+							if (re.type == 0 && re.probability > 0) {
 								isSmallEmpty = false
-								re.probability = re.probability * 100000
-							} else {
+							} else if (re.type == 0 && re.probability == 0) {
 								isSmallEmpty = true
 							}
+							if (re.inventory == 0) {
+								isInventory = true;
+							}
+							re.probability = re.probability * 100000
 						})
+						bigSmallSum = smallSum + maxBigNum;
+						if (isBigEmpty == true) {
+							this.$message.error("大礼物概率不能为0");
+							return
+						}
+						if (bigSum > 100) {
+							this.$message.error("大礼物概率之和最大为100%");
+							return
+						}
+						if (isSmallEmpty == false) {
+							this.$message.error("小礼物概率至少保留一个概率为0");
+							return
+						}
+						if (bigSmallSum > 99) {
+							this.$message.error("大礼物最大概率与小礼物之和最大为99%");
+							return
+						}
+						if (isInventory == true) {
+							this.$message.error("礼物数量不能为0");
+							return
+						}
 						getGiftEdit(params).then(res => {
 							this.loading = false
 							this.editPop = false
@@ -464,25 +517,70 @@
 							'cost': parseInt(this.popForm.cost),
 							"gifts": JSON.parse(JSON.stringify(this.popForm.gifts))
 						}
-						let isSmallEmpty = false;
+						let maxBigNum = 0,
+							bigSum = 0,
+							smallSum = 0,
+							bigSmallSum = 0,
+							isBigEmpty = false,
+							isSmallEmpty = false,
+							isInventory = false;
 						params.gifts.map(re => {
 							delete re.gift_name
 							delete re.gift_photo
 							delete re.gift_diamond
 							delete re.status
 							delete re.time_limit
-							if(re.activity_type_id){
+							if (re.probability > maxBigNum) {
+								maxBigNum = parseFloat(re.probability);
+							}
+							if (re.type == 1) { // 大礼物
+								if (re.probability == 0) {
+									isBigEmpty = true;
+								}
+								bigSum += parseFloat(re.probability);
+							}
+
+							if (re.type == 0) { // 小礼物
+								smallSum += parseFloat(re.probability);
+							}
+							if (re.activity_type_id) {
 								re.id = re.activity_type_id;
 								delete re.activity_type_id
 							}
 							re.probability = re.probability * 100000
-							if (re.type == 2 && re.probability == 0) {
+							if (re.type == 0 && re.probability == 0) {
 								isSmallEmpty = true
 							}
+
+							if (re.inventory == 0) {
+								isInventory = true;
+							}
 						})
+						bigSmallSum = smallSum + maxBigNum;
+						if (isBigEmpty == true) {
+							this.$message.error("大礼物概率不能为0");
+							return
+						}
+						if (bigSum > 100) {
+							this.$message.error("大礼物概率之和最大为100%");
+							return
+						}
+						if (isSmallEmpty == false) {
+							this.$message.error("小礼物概率至少保留一个概率为0");
+							return
+						}
+						if (bigSmallSum > 99) {
+							this.$message.error("大礼物最大概率与小礼物之和最大为99%");
+							return
+						}
+						if (isInventory == true) {
+							this.$message.error("礼物数量不能为0");
+							return
+						}
 						getGiftEdit(params).then(res => {
 							this.loading = false
 							this.editPop = false
+							this.$message.success("修改成功");
 							this.activetyGiftList()
 						}).catch(err => {
 							this.$message.error(err);
@@ -577,7 +675,7 @@
 					this.activetyHasGiftList(row.id);
 				}
 			},
-			giftSelectSource(){
+			giftSelectSource() {
 				this.giftListArr.map(re => {
 					re.isSelect = false; // 默认当前礼物未被选中
 					if (this.popForm.gifts.length > 0) {
