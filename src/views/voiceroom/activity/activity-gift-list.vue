@@ -381,9 +381,11 @@
 					"gifts": [],
 					'typeName': 'Add'
 				}
-				this.giftListArr.map(res => {
-					res.isSelect = true;
+				let giftListArr = JSON.parse(JSON.stringify(this.giftListArr));
+				giftListArr.map(res => {
+					res.isSelect = false;
 				})
+				this.giftListArr = giftListArr;
 				if (this.$refs['popForm']) {
 					this.$refs['popForm'].resetFields()
 				}
@@ -403,13 +405,15 @@
 					'end_timeText': moment(end_time).format('YYYY-MM-DD HH:mm:ss'),
 					'id': row.id,
 					'cost': row.cost,
-					'gifts': row.gifts,
+					'gifts': this.popForm.gifts,
 					'typeName': 'Edit'
 				}
+				
 				this.editTitle = '修改'
 				if (this.$refs['popForm']) {
 					this.$refs['popForm'].resetFields()
 				}
+				this.giftSelectSource();
 				this.editPop = true
 			},
 			handleChange() {
@@ -695,6 +699,7 @@
 					if (res.id == row.id) {
 						res.isSelect = true; // 默认当前礼物未被选中
 						currentGift.activity_type_id = row.id;
+						currentGift.activity_id = row.id;
 						currentGift.gift_name = row.gift_name;
 						currentGift.gift_photo = row.gift_photo;
 						currentGift.gift_diamond = row.gift_diamond;

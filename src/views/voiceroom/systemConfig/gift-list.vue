@@ -223,7 +223,6 @@
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
-							console.log(this.popForm.gift_genre)
 							if (!this.popForm.gift_genre) {
 								return cb(new Error('请选择礼物类型!'))
 							}
@@ -595,6 +594,7 @@
 								})
 							} else {
 								this.$message.error("请输入正确的密码")
+								this.loading = false
 							}
 						}).catch(() => {
 							this.loading = false
