@@ -118,9 +118,7 @@
 		getActivetyList,
 		getActivetyGiftSource,
 		getActivetyGiftList,
-		getActivetyDel,
-		getActivetyAdd,
-		getGiftEdit,
+		getActivetyGiftSave,
 		getActivetyHasGiftList,
 		getActivetyGiftADelete
 	} from '@/api/videoRoom'
@@ -488,9 +486,7 @@
 								smallSum += parseFloat(re.probability);
 							}
 
-							if (re.type == 0 && re.probability > 0) {
-								isSmallEmpty = false
-							} else if (re.type == 0 && re.probability == 0) {
+							if (re.type == 0 && re.probability == 0) {
 								isSmallEmpty = true
 							}
 							if (re.inventory == 0) {
@@ -524,7 +520,7 @@
 							this.loading = false
 							return
 						}
-						getGiftEdit(params).then(res => {
+						getActivetyGiftSave(params).then(res => {
 							this.loading = false
 							this.editPop = false
 							this.activetyGiftList()
@@ -613,7 +609,7 @@
 							this.loading = false
 							return
 						}
-						getGiftEdit(params).then(res => {
+						getActivetyGiftSave(params).then(res => {
 							this.loading = false
 							this.editPop = false
 							this.$message.success("修改成功");

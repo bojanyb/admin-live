@@ -19,7 +19,7 @@
 			<div class="giftBox fl">
 				<div class="giftTitle fl">概率：</div>
 				<el-input v-model="popGiftForm.probability" style="width: 120px;" v-input-limit="5" max="100"
-					placeholder="请输入概率" clearable autocomplete="off" @input="handleProbability(popGiftForm)"
+					placeholder="请输入概率" clearable autocomplete="off"
 					@change="handleProbability2(popGiftForm)" :disabled="typeName == 'Detail' ? true : false " /> %
 			</div>
 			<div class="giftBox fl">
@@ -144,18 +144,8 @@
 					}
 				})
 			},
-			handleProbability(e) {
-				let probability = e.probability !== "" ? parseInt(e.probability) : 0;
-				if (probability > 100) {
-					this.popGiftForm.probability = 100;
-				} else if (probability < 0) {
-					this.popGiftForm.probability = 0;
-				} else {
-					this.popGiftForm.probability = probability;
-				}
-			},
 			handleProbability2(e) {
-				let probability = parseFloat(e.probability).toFixed(5);
+				let probability = parseFloat(e.probability) > 100 ? 100 : parseFloat(e.probability).toFixed(5);
 				this.popGiftForm.probability = probability
 			},
 			// handleProbability(e) { // 概率
