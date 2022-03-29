@@ -212,7 +212,7 @@
 			handleGiftSave(id) {
 				const formData = new FormData()
 				formData.append('activity_id', this.activity_id);
-				formData.append('gift_id', this.popGiftForm.activity_type_id);
+				formData.append('gift_id', this.popGiftForm.id);
 				formData.append('inventory', this.inventory);
 				getActivetyGiftAddInventory(formData).then(res => {
 					this.$message.success("添加库存成功")

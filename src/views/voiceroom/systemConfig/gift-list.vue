@@ -550,11 +550,13 @@
 						this.loading = true
 						getGiftAdd(formData).then(res => {
 							this.$message.success("添加成功")
+							this.imageFile = "";
+							this.imageSvgFile = "";
 							this.loading = false
 							this.handleEditClose()
 							this.giftlist()
 						}).catch(err => {
-							this.$message.error("添加成功")
+							this.$message.error(err)
 							this.handleEditClose()
 							this.loading = false
 						})
@@ -593,6 +595,8 @@
 						}).then(res => {
 							if (res.value == "888888") {
 								getGiftEdit(formData).then(res => {
+									this.imageFile = "";
+									this.imageSvgFile = "";
 									this.loading = false
 									this.$message.success("修改成功")
 									this.handleEditClose()
@@ -728,27 +732,26 @@
 		justify-content: center; */
 	}
 
-	.avatar-uploader {
+	::v-deep.avatar-uploader {
 		width: 178px;
 		height: 178px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		border: 1px dashed #eeeeee;
-	}
-
-	.avatar-uploader .el-upload {
-		border: 1px dashed #d9d9d9;
-		border-radius: 6px;
-		cursor: pointer;
-		position: relative;
-		overflow: hidden;
-		width: 100%;
-		height: 100%;
-
-		img {
+		.el-upload {
+			border: 1px dashed #d9d9d9;
+			border-radius: 6px;
+			cursor: pointer;
+			position: relative;
+			overflow: hidden;
 			width: 100%;
 			height: 100%;
+		
+			img {
+				width: 100%;
+				height: 100%;
+			}
 		}
 	}
 
