@@ -186,7 +186,7 @@ export function getGiftAdd(data) {
 // 礼物修改
 export function getGiftEdit(data) {
   return request({
-    url: 'activity/saveGift',
+    url: 'Gift/saveGift',
     method: 'post',
     data
   })
@@ -367,6 +367,15 @@ export function getActivetyGiftSave(data) {
 export function getActivetyGiftDetail(data) {
   return request({
     url: '/Activity/detail',
+    method: 'post',
+    data
+  })
+}
+
+// 活动礼物删除
+export function getActivetyGiftADelete(data) {
+  return request({
+    url: '/activity/aDelete',
     method: 'post',
     data
   })

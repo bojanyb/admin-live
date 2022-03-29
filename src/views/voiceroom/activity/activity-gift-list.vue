@@ -21,10 +21,11 @@
 			<el-table-column label="活动状态" prop="statusText" align="center" />
 			<el-table-column label="开启时间" prop="start_timeText" align="center" />
 			<el-table-column label="结束时间" prop="end_timeText" align="center" />
-			<el-table-column label="操作" align="center" width="180">
+			<el-table-column label="操作" align="center" width="260">
 				<template slot-scope="scope">
 					<el-button type="primary" @click="handleEdit(scope.row,scope.$index)">修改</el-button>
 					<el-button type="primary" @click="handleDetails(scope.row)">查看</el-button>
+					<el-button type="danger" @click="handleDl(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -95,12 +96,7 @@
 								:src="scope.row.gift_photo ? scope.row.gift_photo : ''" />
 						</template>
 					</el-table-column>
-					<el-table-column label="礼物类型" prop="gift_count" align="center">
-						<template slot-scope="scope">
-							<div v-if="scope.row.gift_genre == 1">基本礼物</div>
-							<div v-else-if="scope.row.gift_genre == 2">抽奖礼物</div>
-						</template>
-					</el-table-column>
+					<el-table-column label="礼物类型" prop="gift_genreText" align="center" />
 					<el-table-column label="钻石价格" prop="gift_diamond" align="center" />
 					<el-table-column label="操作" align="center">
 						<template slot-scope="scope">
@@ -125,7 +121,8 @@
 		getActivetyDel,
 		getActivetyAdd,
 		getGiftEdit,
-		getActivetyHasGiftList
+		getActivetyHasGiftList,
+		getActivetyGiftADelete
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
@@ -286,6 +283,31 @@
 				this.giftListArr = [];
 				getActivetyGiftSource(params).then(res => {
 					this.giftTotal = res.data.count;
+					res.data.list.map(re=>{
+						switch (re.gift_genre) {
+							case 1:
+							re.gift_genreText = '基本礼物'
+								break;
+							case 2:
+							re.gift_genreText = '抽奖礼物'
+								break;
+							case 3:
+							re.gift_genreText = '抽奖包裹内礼物'
+								break;
+							case 4:
+							re.gift_genreText = '普通礼物'
+								break;
+							case 5:
+							re.gift_genreText = '免费礼物'
+								break;
+							case 6:
+							re.gift_genreText = '动效礼物'
+								break;
+							case 7:
+							re.gift_genreText = '全屏礼物'
+								break;
+						}
+					})
 					this.giftListArr = res.data.list;
 					this.giftSelectSource();
 				}).catch(err => {})
@@ -475,22 +497,27 @@
 						bigSmallSum = smallSum + maxBigNum;
 						if (isBigEmpty == true) {
 							this.$message.error("大礼物概率不能为0");
+							this.loading = false
 							return
 						}
 						if (bigSum > 100) {
 							this.$message.error("大礼物概率之和最大为100%");
+							this.loading = false
 							return
 						}
 						if (isSmallEmpty == false) {
 							this.$message.error("小礼物概率至少保留一个概率为0");
+							this.loading = false
 							return
 						}
 						if (bigSmallSum > 99) {
 							this.$message.error("大礼物最大概率与小礼物之和最大为99%");
+							this.loading = false
 							return
 						}
 						if (isInventory == true) {
 							this.$message.error("礼物数量不能为0");
+							this.loading = false
 							return
 						}
 						getGiftEdit(params).then(res => {
@@ -559,22 +586,27 @@
 						bigSmallSum = smallSum + maxBigNum;
 						if (isBigEmpty == true) {
 							this.$message.error("大礼物概率不能为0");
+							this.loading = false
 							return
 						}
 						if (bigSum > 100) {
 							this.$message.error("大礼物概率之和最大为100%");
+							this.loading = false
 							return
 						}
 						if (isSmallEmpty == false) {
 							this.$message.error("小礼物概率至少保留一个概率为0");
+							this.loading = false
 							return
 						}
 						if (bigSmallSum > 99) {
 							this.$message.error("大礼物最大概率与小礼物之和最大为99%");
+							this.loading = false
 							return
 						}
 						if (isInventory == true) {
 							this.$message.error("礼物数量不能为0");
+							this.loading = false
 							return
 						}
 						getGiftEdit(params).then(res => {
@@ -608,6 +640,26 @@
 					this.$refs['popForm'].resetFields()
 				}
 				this.editPop = true
+			},
+			handleDl(row) {
+				let currentTime = this.timest();
+				if (row.status !== 1 || currentTime < row.start_time || currentTime > row.end_time){
+					this.$confirm('确认删除当前活动？')
+					.then(_ => {
+						var params = { "id" : row.id}
+						getActivetyGiftADelete(params).then(res=>{
+							this.$message.success("删除成功");
+							this.page.page = 1;
+							this.activetyGiftList();
+						}).catch(err=>{
+							this.$message.error(err)
+						})
+					})
+					.catch(_ => {});
+				}
+				else {
+					this.$message.error("请先关闭活动！")
+				}
 			},
 			numberChange(val, maxNum, name) {
 				// 转换数字类型
@@ -687,6 +739,11 @@
 					}
 				})
 			},
+			timest() {
+				var tmp = Date.parse(new Date()).toString();
+				tmp = parseInt(tmp.substr(0, 10));
+				return tmp;
+			}
 		}
 	}
 </script>

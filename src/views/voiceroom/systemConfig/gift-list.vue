@@ -68,6 +68,24 @@
 							autocomplete="off" />
 					</el-col>
 				</el-form-item>
+				<el-form-item label="礼物类型" prop="gift_genre" :label-width="formLabelWidth">
+					<el-col :span="17">
+						<el-radio-group v-model="popForm.gift_genre">
+							<el-radio v-for="it in giftGenreList" :label="it.value">
+								{{it.label}}
+							</el-radio>
+						</el-radio-group>
+					</el-col>
+				</el-form-item>
+				<el-form-item label="礼物播放类型" prop="play_type" :label-width="formLabelWidth">
+					<el-col :span="17">
+						<el-radio-group v-model="popForm.play_type">
+							<el-radio v-for="it in giftPlayList" :label="it.value">
+								{{it.label}}
+							</el-radio>
+						</el-radio-group>
+					</el-col>
+				</el-form-item>
 				<el-form-item label="礼物图片" prop="imgPreview" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgPreview"
@@ -82,6 +100,7 @@
 						:auto-upload="false">
 						<svgaplayer v-if="imageSvgUrl.indexOf('.svga') > -1" :data-title="imageSvgUrl" :height="178"
 							:width="178" :show-img="imageSvgUrl" />
+						<div v-else-if="(imageSvgUrl.indexOf('blob:http:') > -1 || popForm.gift_gif.indexOf('.zip') > -1 )">已选择</div>
 						<i v-else class="el-icon-plus avatar-uploader-icon" />
 					</el-upload>
 				</el-form-item>
@@ -185,6 +204,8 @@
 					'status': '',
 					'sort': '',
 					'gift_desc': '',
+					'gift_genre': '',
+					'play_type': '',
 					'type': 'Add'
 				},
 				popFormRules: {
@@ -194,6 +215,27 @@
 						validator: (rules, value, cb) => {
 							if (!this.popForm.gift_name) {
 								return cb(new Error('礼物名不能为空!'))
+							}
+							return cb()
+						}
+					}],
+					gift_genre: [{
+						required: true,
+						trigger: 'blur',
+						validator: (rules, value, cb) => {
+							console.log(this.popForm.gift_genre)
+							if (!this.popForm.gift_genre) {
+								return cb(new Error('请选择礼物类型!'))
+							}
+							return cb()
+						}
+					}],
+					play_type: [{
+						required: true,
+						trigger: 'blur',
+						validator: (rules, value, cb) => {
+							if (!this.popForm.play_type) {
+								return cb(new Error('请选择礼物播放类型!'))
 							}
 							return cb()
 						}
@@ -240,7 +282,7 @@
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.start_time) {
+							if (!this.popForm.start_timeText) {
 								return cb(new Error('礼物生效时间不能为空!'))
 							}
 							return cb()
@@ -250,7 +292,7 @@
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.end_time) {
+							if (!this.popForm.end_timeText) {
 								return cb(new Error('礼物过期时间不能为空!'))
 							}
 							return cb()
@@ -260,7 +302,7 @@
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.gift_rate) {
+							if (!this.popForm.sort) {
 								return cb(new Error('排序不能为空!'))
 							}
 							return cb()
@@ -270,7 +312,7 @@
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.gift_rate) {
+							if (!this.popForm.gift_desc) {
 								return cb(new Error('礼物说明不能为空!'))
 							}
 							return cb()
@@ -297,6 +339,29 @@
 						'value': 2
 					}
 				],
+				giftGenreList: [{
+						'label': '普通礼物',
+						'value': 4
+					}, {
+						'label': '免费礼物',
+						'value': 5
+					},
+					{
+						'label': '动效礼物',
+						'value': 6
+					},
+					{
+						'label': '全屏礼物',
+						'value': 7
+					}
+				],
+				giftPlayList: [{
+					'label': 'Lottie',
+					'value': 1
+				}, {
+					'label': 'SVGA',
+					'value': 2
+				}],
 				imageFile: '',
 				imageSvgFile: '',
 				diamondNum: 0,
@@ -326,10 +391,28 @@
 						res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
 						res.gain_priceText = res.gain_price + '喵粮'
 						res.gift_rateText = res.gift_rate / 100 + '%'
-						if (res.gift_genre == 1) {
-							res.gift_genreText = '基本礼物'
-						} else if (res.gift_genre == 2) {
-							res.gift_genreText = '抽奖礼物'
+						switch (res.gift_genre) {
+							case 1:
+								res.gift_genreText = '基本礼物'
+								break;
+							case 2:
+								res.gift_genreText = '抽奖礼物'
+								break;
+							case 3:
+								res.gift_genreText = '抽奖包裹内礼物'
+								break;
+							case 4:
+								res.gift_genreText = '普通礼物'
+								break;
+							case 5:
+								res.gift_genreText = '免费礼物'
+								break;
+							case 6:
+								res.gift_genreText = '动效礼物'
+								break;
+							case 7:
+								res.gift_genreText = '全屏礼物'
+								break;
 						}
 						if (res.status == 1) {
 							res.statusText = '正常'
@@ -379,6 +462,8 @@
 					'status': '',
 					'sort': '',
 					'gift_desc': '',
+					'gift_genre': 4,
+					'play_type': 1,
 					'type': 'Add'
 				}
 				if (this.$refs['popForm']) {
@@ -402,6 +487,8 @@
 					'statusText': row.statusText,
 					'sort': row.sort,
 					'gift_desc': row.gift_desc,
+					'gift_genre': row.gift_genre,
+					'play_type': row.play_type,
 					'type': 'Edit'
 				}
 				this.imageUrl = row.gift_photo
@@ -440,6 +527,8 @@
 						formData.append('start_time', this.popForm.start_time / 1000)
 						formData.append('end_time', this.popForm.end_time / 1000)
 						formData.append('sort', this.popForm.sort)
+						formData.append('gift_genre', this.popForm.gift_genre)
+						formData.append('play_type', this.popForm.play_type)
 						formData.append('gift_desc', this.popForm.gift_desc)
 						if (this.imageFile !== '') {
 							formData.append('gift_photo', this.imageFile.raw)
@@ -477,12 +566,16 @@
 						if (this.imageSvgFile !== '') {
 							formData.append('gift_gif', this.imageSvgFile.raw)
 						}
+						formData.append('gift_photo', this.popForm.gift_photo)
+						formData.append('gift_gif', this.popForm.gift_gif)
 						formData.append('gift_diamond', this.popForm.gift_diamond)
 						formData.append('gift_rate', this.popForm.gift_rate)
 						formData.append('start_time', this.popForm.start_time / 1000)
 						formData.append('end_time', this.popForm.end_time / 1000)
 						formData.append('sort', this.popForm.sort)
 						formData.append('gift_desc', this.popForm.gift_desc)
+						formData.append('gift_genre', this.popForm.gift_genre)
+						formData.append('play_type', this.popForm.play_type)
 						formData.append('status', this.popForm.status)
 						this.loading = true
 						this.$prompt('请输入二级密码', '提示', {
@@ -497,7 +590,7 @@
 									this.giftlist()
 								}).catch(err => {
 									this.loading = false
-									this.$message.error("修改成功")
+									this.$message.error(err)
 									this.handleEditClose()
 								})
 							} else {
@@ -546,13 +639,13 @@
 			imgSvgPreview(file, fileList) {
 				const fileName = file.name
 				this.imageSvgFile = file
-				const regex = /(.svg|.svga)$/
+				const regex = /(.svg|.svga|.zip)$/
 				this.imageSvgUrl = ''
 				if (regex.test(fileName.toLowerCase())) {
 					this.imageSvgUrl = file.url
 					this.imageSvgUrl = URL.createObjectURL(file.raw)
 				} else {
-					this.$message.error('请选择特效svga格式图片文件')
+					this.$message.error('请选择特效svga或zip格式文件')
 				}
 			},
 			numberChange(val, maxNum, name) {
@@ -632,6 +725,12 @@
 		position: relative;
 		overflow: hidden;
 		width: 100%;
+		height: 100%;
+
+		img {
+			width: 100%;
+			height: 100%;
+		}
 	}
 
 	.avatar-uploader .el-upload:hover {

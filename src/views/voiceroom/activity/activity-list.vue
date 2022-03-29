@@ -19,7 +19,7 @@
 			</el-table-column>
 			<el-table-column label="活动图标" prop="icon" align="center">
 				<template slot-scope="scope">
-					<el-image style="width: 50px; " :lazy="true" :src="scope.row.icon ? scope.row.icon : ''"
+					<el-image style="width: 50px; height: 50px;" :lazy="true" :src="scope.row.icon ? scope.row.icon : ''"
 						@click="showImg(scope.row)" />
 				</template>
 			</el-table-column>
@@ -342,7 +342,7 @@
 					this.delVisible = false
 					this.activetyList()
 				}).catch(err => {
-					this.$message.error("删除失败")
+					this.$message.error(err);
 					this.delVisible = false
 				})
 			},
