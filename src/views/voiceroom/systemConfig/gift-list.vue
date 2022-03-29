@@ -100,7 +100,9 @@
 						:auto-upload="false">
 						<svgaplayer v-if="imageSvgUrl.indexOf('.svga') > -1" :data-title="imageSvgUrl" :height="178"
 							:width="178" :show-img="imageSvgUrl" />
-						<div v-else-if="(imageSvgUrl.indexOf('blob:http:') > -1 || popForm.gift_gif.indexOf('.zip') > -1 )">已选择</div>
+						<div
+							v-else-if="(imageSvgUrl.indexOf('blob:http:') > -1 || popForm.gift_gif.indexOf('.zip') > -1 )">
+							已选择</div>
 						<i v-else class="el-icon-plus avatar-uploader-icon" />
 					</el-upload>
 				</el-form-item>
@@ -371,6 +373,14 @@
 		created() {
 			this.giftlist()
 		},
+		watch: {
+			"popForm.play_type": {
+				handler(newValue) {
+					this.imageSvgUrl = "";
+				},
+				deep: true
+			}
+		},
 		methods: {
 			giftlist() {
 				this.listLoading = true
@@ -639,13 +649,22 @@
 			imgSvgPreview(file, fileList) {
 				const fileName = file.name
 				this.imageSvgFile = file
-				const regex = /(.svg|.svga|.zip)$/
+				let regex = ''
+				if (this.popForm.play_type == 1) { //Lottie
+					regex = /(.zip)$/
+				} else if (this.popForm.play_type == 2) {
+					regex = /(.svg|.svga)$/
+				}
 				this.imageSvgUrl = ''
 				if (regex.test(fileName.toLowerCase())) {
 					this.imageSvgUrl = file.url
 					this.imageSvgUrl = URL.createObjectURL(file.raw)
 				} else {
-					this.$message.error('请选择特效svga或zip格式文件')
+					if (this.popForm.play_type == 1) { //Lottie
+						this.$message.error('请选择zip格式文件')
+					} else if (this.popForm.play_type == 2) {
+						this.$message.error('请选择特效svga格式文件')
+					}
 				}
 			},
 			numberChange(val, maxNum, name) {
