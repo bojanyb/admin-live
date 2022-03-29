@@ -55,6 +55,9 @@
 						:auto-upload="false">
 						<svgaplayer v-if="imageSvgUrl.indexOf('.svga') > -1" :data-title="imageSvgUrl" :height="178"
 							:width="178" :show-img="imageSvgUrl" />
+							<div
+								v-else-if="imageSvgUrl.indexOf('blob:http:') > -1">
+								已选择文件</div>
 						<i v-else class="el-icon-plus avatar-uploader-icon" />
 					</el-upload>
 				</el-form-item>

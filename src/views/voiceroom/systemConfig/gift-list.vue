@@ -102,7 +102,7 @@
 							:width="178" :show-img="imageSvgUrl" />
 						<div
 							v-else-if="(imageSvgUrl.indexOf('blob:http:') > -1 || popForm.gift_gif.indexOf('.zip') > -1 )">
-							已选择</div>
+							已选择文件</div>
 						<i v-else class="el-icon-plus avatar-uploader-icon" />
 					</el-upload>
 				</el-form-item>
@@ -747,7 +747,9 @@
 			overflow: hidden;
 			width: 100%;
 			height: 100%;
-		
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			img {
 				width: 100%;
 				height: 100%;
