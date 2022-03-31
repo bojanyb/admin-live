@@ -38,6 +38,9 @@
 				</template>
 			</el-table-column>
 		</el-table>
+		<!--工具条-->
+		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
+			@pagination="activetyList" />
 
 		<el-dialog :title="editTitle" :visible.sync="editPop" @close="handleCancel">
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
@@ -107,7 +110,7 @@
 	import moment from 'moment'
 	import svgaplayer from '../components/svgaplayer.vue'
 	export default {
-		name: 'GiftList',
+		name: 'activityList',
 		components: {
 			Pagination,
 			svgaplayer
@@ -118,7 +121,8 @@
 				listLoading: true,
 				total: 0,
 				page: {
-					page: 1
+					page: 1,
+					limit: 10
 				},
 				showImgUrl: '',
 				editTitle: '',
@@ -140,6 +144,9 @@
 						validator: (rules, value, cb) => {
 							if (!this.popForm.name || this.popForm.name == "") {
 								return cb(new Error('活动名称不能为空!'))
+							}
+							if (this.popForm.name.length > 4) {
+								return cb(new Error('活动名称必须是四个字以内!'))
 							}
 							return cb()
 						}
@@ -216,6 +223,7 @@
 					'pagesize': this.page.limit
 				}
 				getActivetyList(params).then(response => {
+					this.total = response.data.count
 					this.list = response.data.list
 					this.listLoading = false
 				}).catch(err => {
@@ -265,7 +273,6 @@
 				} else if (this.popForm.type == 'Add') {
 					delete this.popForm.type
 					delete this.popForm.id
-					this.popForm.status = 1;
 					this.activityAdd()
 				}
 			},
@@ -287,10 +294,10 @@
 				} else {
 					// formData.append('gif', '')
 				}
-
 				this.loading = true
 				getActivetyAdd(formData).then(res => {
 					this.loading = false
+					this.$message.success(res.msg);
 					this.handleEditClose()
 					this.activetyList()
 				}).catch(err => {
