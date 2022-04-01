@@ -23,7 +23,7 @@
 			<el-table-column label="结束时间" prop="end_timeText" align="center" />
 			<el-table-column label="操作" align="center" width="260">
 				<template slot-scope="scope">
-					<el-button type="primary" @click="handleEdit(scope.row,scope.$index)">修改</el-button>
+					<el-button type="primary" @click="handleEdit(scope.row,scope.$index)">修改</el-button> 
 					<el-button type="primary" @click="handleDetails(scope.row)">查看</el-button>
 					<el-button type="danger" @click="handleDl(scope.row)">删除</el-button>
 				</template>
@@ -34,6 +34,11 @@
 			@pagination="activetyGiftList" />
 
 		<el-dialog :title="editTitle" :visible.sync="editPop" :before-close="handleCancel">
+			<div slot="title" class="header-title" style="height: 40px;">
+			        <div class="fl">{{editTitle}}</div>
+					<!-- <div style="float: right;margin-right: 50px;">单个大礼物概率<span style="color:red;"> {{probabilityMaxNum}}% </span> + 所有小礼物概率<span style="color:red;"> {{smallSumNum}}% </span>总和 {{maxSamllSum}}% <span style="color:red;" v-if="maxSamllSum > 99"> (不超过 99%) </span></div> -->
+					<div style="float: right;margin-right: 50px;">单个大礼物概率 + 所有小礼物概率总和 不超过 99%</div>
+				</div>
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
 				<el-form-item label="活动名称" prop="activity_type_id" :label-width="formLabelWidth">
 					<el-col :span="17">
@@ -153,7 +158,7 @@
 				formLabelWidth: '120px',
 				imageUrl: '',
 				popForm: {
-					'activity_type_id': '',
+					'activity_type_id': 0,
 					'type': '',
 					'start_time': 0,
 					'end_time': 0,
@@ -253,6 +258,9 @@
 				],
 				drawer: false,
 				direction: 'rtl',
+				probabilityMaxNum : 0,
+				smallSumNum : 0,
+				maxSamllSum : 0,
 			}
 		},
 		created() {
@@ -371,7 +379,7 @@
 				this.editTitle = '新增'
 				this.imageUrl = ''
 				this.popForm = {
-					'activity_type_id': '',
+					'activity_type_id': 0,
 					'type': '',
 					"cost": 0,
 					'start_time': 0,
@@ -694,8 +702,8 @@
 				this.giftListArr.map(res => {
 					if (res.id == row.id) {
 						res.isSelect = true; // 默认当前礼物未被选中
-						currentGift.activity_type_id = row.id;
-						currentGift.activity_id = row.id;
+						// currentGift.activity_type_id = parseInt(row.id);
+						currentGift.activity_id = parseInt(row.id);
 						currentGift.gift_name = row.gift_name;
 						currentGift.gift_photo = row.gift_photo;
 						currentGift.gift_diamond = row.gift_diamond;
@@ -707,7 +715,9 @@
 						this.popForm.gifts.push(currentGift)
 					}
 				})
+				
 				this.popForm.gifts = JSON.parse(JSON.stringify(this.popForm.gifts));
+				
 				/* 多条勾选打印结算单会出现重复的结算单号 去重处理 */
 				this.popForm.gifts = new Set(this.popForm.gifts);
 				this.popForm.gifts = Array.from(this.popForm.gifts);
@@ -726,6 +736,10 @@
 					})
 				} else if (row.typeName == "inventoryAdd") { // 更新礼物库存
 					this.activetyHasGiftList(row.id);
+				} else if(row.typeName == "Probability"){ // 监听概率
+					this.probabilityMaxNum = row.probabilityMaxNum;
+					this.smallSumNum = row.smallSumNum;
+					this.maxSamllSum = row.maxSamllSum;
 				}
 			},
 			giftSelectSource() {
@@ -733,7 +747,7 @@
 					re.isSelect = false; // 默认当前礼物未被选中
 					if (this.popForm.gifts.length > 0) {
 						this.popForm.gifts.map(item => {
-							if (item.id == re.id) {
+							if (item.id == re.id || item.activity_id == re.id) {
 								re.isSelect = true;
 							}
 						})
