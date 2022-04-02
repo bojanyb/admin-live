@@ -401,15 +401,16 @@
 						res.gain_priceText = res.gain_price + '喵粮'
 						res.gift_rateText = res.gift_rate / 100 + '%'
 						switch (res.gift_genre) {
-							case 1:
-								res.gift_genreText = '基本礼物'
-								break;
+							// case 1:
+							// 	res.gift_genreText = '基本礼物'
+							// 	break;
 							case 2:
 								res.gift_genreText = '抽奖礼物'
 								break;
 							case 3:
 								res.gift_genreText = '抽奖包裹内礼物'
 								break;
+							case 1:
 							case 4:
 								res.gift_genreText = '普通礼物'
 								break;
