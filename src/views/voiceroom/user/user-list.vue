@@ -46,15 +46,15 @@
 
 		<el-dialog title="操作" :visible.sync="editPop">
 			<el-form :model="popForm">
+				<el-form-item v-if="popForm.status == 2" label="封禁说明" :label-width="formLabelWidth">
+					<el-input v-model="popForm.remark" style="width: 335px;" type="textarea" :rows="5"
+						placeholder="正常状态可不填" clearable autocomplete="off" />
+				</el-form-item>
 				<el-form-item label="状态" :label-width="formLabelWidth">
 					<el-radio-group v-model="popForm.status">
 						<el-radio :label="1">正常</el-radio>
 						<el-radio :label="2">封禁</el-radio>
 					</el-radio-group>
-				</el-form-item>
-				<el-form-item v-if="popForm.status == 2" label="封禁说明" :label-width="formLabelWidth">
-					<el-input v-model="popForm.remark" style="width: 335px;" type="textarea" :rows="5"
-						placeholder="正常状态可不填" clearable autocomplete="off" />
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">

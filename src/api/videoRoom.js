@@ -470,3 +470,86 @@ export function getLiveDelete(data) {
     data
   })
 }
+
+
+// 用户举报信息列表
+export function getUserReportList(data) {
+  return request({
+    url: '/Report/index',
+    method: 'post',
+    data
+  })
+}
+
+// 用户举报信息列表 处理举报
+export function getUserReportDeal(data) {
+  return request({
+    url: '/report/deal',
+    method: 'post',
+    data
+  })
+}
+
+// 用户举报信息列表 处理忽略
+export function getUserReportPass(data) {
+  return request({
+    url: '/report/pass',
+    method: 'post',
+    data
+  })
+}
+
+// 注销管理 未处理
+export function getUserCancellationList(data) {
+  return request({
+    url: '/Cancellation/index',
+    method: 'post',
+    data
+  })
+}
+
+// 注销管理 已处理
+export function getUserCancellationHasDeal(data) {
+  return request({
+    url: '/Cancellation/hasDeal',
+    method: 'post',
+    data
+  })
+}
+
+// 注销管理 处理 操作
+export function getUserCancellationDeal(data) {
+  return request({
+    url: '/Cancellation/deal',
+    method: 'post',
+    data
+  })
+}
+
+// 背景图列表
+export function getRoomBgList(data) {
+  return request({
+    url: '/room/roomBg',
+    method: 'post',
+    data
+  })
+}
+
+// 上传背景图
+export function getRoomBgAdd(data) {
+  return request({
+    url: '/room/addRoomBg',
+    method: 'post',
+    data
+  })
+}
+
+// 删除房间背景图
+export function getRoomBgDel(data) {
+  return request({
+    url: '/room/deleteBg',
+    method: 'post',
+    data
+  })
+}
+

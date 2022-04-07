@@ -1,7 +1,6 @@
 /** When your routing table is too long, you can split it into small modules**/
 
 import Layout from '@/layout'
-
 const userRouter = {
 	path: '/user',
 	component: Layout,
@@ -53,6 +52,42 @@ const userRouter = {
 			name: 'user-audit-list',
 			meta: {
 				title: '用户资料审核列表',
+				noCache: true
+			}
+		},
+		{
+			path: 'user-not-reportList',
+			component: () => import('@/views/voiceroom/user/user-not-reportList'),
+			name: 'user-not-reportList',
+			meta: {
+				title: '用户举报信息未处理列表',
+				noCache: true
+			}
+		},
+		{
+			path: 'user-old-reportList',
+			component: () => import('@/views/voiceroom/user/user-old-reportList'),
+			name: 'user-old-reportList',
+			meta: {
+				title: '用户举报信息已处理列表',
+				noCache: true
+			}
+		},
+		{
+			path: 'user-not-logOut-list',
+			component: () => import('@/views/voiceroom/user/user-not-logOut-list'),
+			name: 'user-not-logOut-list',
+			meta: {
+				title: '用户注销审核未处理列表',
+				noCache: true
+			}
+		},
+		{
+			path: 'user-old-logOut-list',
+			component: () => import('@/views/voiceroom/user/user-old-logOut-list'),
+			name: 'user-old-logOut-list',
+			meta: {
+				title: '用户注销审核已处理列表',
 				noCache: true
 			}
 		},

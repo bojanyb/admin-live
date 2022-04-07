@@ -19,15 +19,15 @@
 
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
-			<el-table-column label="排序" prop="sort" align="center" width="85" />
-			<el-table-column label="礼物名称" prop="gift_name" align="center" width="100" show-overflow-tooltip />
+			<el-table-column label="排序" prop="sort" align="center" />
+			<el-table-column label="礼物名称" prop="gift_name" align="center" show-overflow-tooltip />
 			<el-table-column label="礼物图片" prop="gift_genre" align="center">
 				<template slot-scope="scope">
-					<el-image style="width: 50px; " :lazy="true" :src="scope.row.gift_photo ? scope.row.gift_photo : ''"
+					<el-image style="width: 50px;max-height: 50px;border-radius: 5px;" :lazy="true" :src="scope.row.gift_photo ? scope.row.gift_photo : ''"
 						@click="showImg(scope.row)" />
 				</template>
 			</el-table-column>
-			<el-table-column label="礼物类型" prop="gift_genreText" align="center" width="95" />
+			<el-table-column label="礼物类型" prop="gift_genreText" align="center"/>
 			<el-table-column label="钻石价格" prop="gift_diamond" align="center" />
 			<el-table-column label="礼物价值" prop="gain_priceText" align="center" />
 			<el-table-column label="平台礼物抽成" prop="gift_rateText" align="center" />
@@ -37,11 +37,12 @@
 					<div v-if="scope.row.status == 2" class="colorDel">{{ scope.row.statusText }}</div>
 				</template>
 			</el-table-column>
-			<el-table-column label="礼物说明" prop="gift_desc" align="center" width="100" show-overflow-tooltip />
+			<el-table-column label="礼物说明" prop="gift_desc" align="center" show-overflow-tooltip />
 			<el-table-column label="礼物生效时间" prop="start_timeText" align="center" width="155" />
 			<el-table-column label="礼物失效时间" prop="end_timeText" align="center" width="155" />
 			<el-table-column label="礼物添加时间" prop="create_timeText" align="center" width="155" />
 			<el-table-column label="礼物修改时间" prop="create_timeText" align="center" width="155" />
+			<el-table-column label="礼物版本号" prop="gift_version" align="center"/>
 			<el-table-column label="操作" align="center" width="120">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.status == '1'" type="primary" @click="handleEdit(scope.row)">修改
@@ -105,6 +106,10 @@
 							已选择文件</div>
 						<i v-else class="el-icon-plus avatar-uploader-icon" />
 					</el-upload>
+				</el-form-item>
+				<el-form-item label="礼物版本号" v-if="popForm.type == 'Edit' " prop="gift_version" :label-width="formLabelWidth"  :rules="popForm.type == 'Edit' ? popFormRules.gift_version:[{ required: false}]">
+					<el-input v-model="popForm.gift_version" style="width: 335px;" oninput="value=value.replace(/[^\d.]/g,'')"
+						placeholder="请输入礼物版本号" clearable autocomplete="off"  />
 				</el-form-item>
 				<el-form-item label="钻石价格" prop="gift_diamond" :label-width="formLabelWidth">
 					<el-input v-model="popForm.gift_diamond" v-input-limit="0" style="width: 335px;"
@@ -197,6 +202,7 @@
 					'gift_name': '',
 					'gift_photo': '',
 					'gift_gif': '',
+					'gift_version': '',
 					'gift_diamond': '',
 					'gift_rate': '',
 					'gift_rateText': '',
@@ -247,6 +253,16 @@
 						validator: (rules, value, cb) => {
 							if (!this.imgPreview) {
 								return cb(new Error('礼物图片不能为空!'))
+							}
+							return cb()
+						}
+					}],
+					gift_version: [{
+						required: true,
+						trigger: 'blur',
+						validator: (rules, value, cb) => {
+							if (!this.popForm.gift_version) {
+								return cb(new Error('版本号不能为空!'))
 							}
 							return cb()
 						}
@@ -459,6 +475,7 @@
 				this.editTitle = '新增'
 				this.imageSvgUrl = ''
 				this.imageUrl = ''
+				this.diamondNum = 1;
 				this.popForm = {
 					'gift_name': '',
 					'gift_photo': '',
@@ -499,6 +516,7 @@
 					'gift_desc': row.gift_desc,
 					'gift_genre': row.gift_genre,
 					'play_type': row.play_type,
+					'gift_version' : row.gift_version,
 					'type': 'Edit'
 				}
 				this.imageUrl = row.gift_photo
@@ -589,6 +607,7 @@
 						formData.append('gift_genre', this.popForm.gift_genre)
 						formData.append('play_type', this.popForm.play_type)
 						formData.append('status', this.popForm.status)
+						formData.append('gift_version', this.popForm.gift_version)
 						this.loading = true
 						this.$prompt('请输入二级密码', '提示', {
 							confirmButtonText: '确定',
@@ -753,7 +772,7 @@
 			justify-content: center;
 			img {
 				width: 100%;
-				height: 100%;
+				max-height: 178px;
 			}
 		}
 	}
@@ -772,8 +791,7 @@
 	}
 
 	.avatar {
-		width: auto;
-		height: 178px;
+		max-height: 178px;
 	}
 
 	::v-deep .el-dialog {

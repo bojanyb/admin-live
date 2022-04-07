@@ -64,6 +64,15 @@ const voiceroomRouter = {
 				title: '语音房单聊记录',
 				noCache: true
 			}
+		}, 
+		{
+			path: 'room-background-list',
+			component: () => import('@/views/voiceroom/room/room-background-list'),
+			name: 'room-background-list',
+			meta: {
+				title: '房间背景图配置列表',
+				noCache: true
+			}
 		},
 	]
 }
