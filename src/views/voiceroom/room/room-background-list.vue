@@ -174,6 +174,10 @@
 				})
 			},
 			handleAdd() {
+				if (this.$refs['popForm']) {
+					this.imageUrl = "";
+					this.$refs['popForm'].resetFields()
+				}
 				this.editPop = true;
 			},
 			imgPreviewFun(file, fileList) {
