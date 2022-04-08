@@ -552,4 +552,3 @@ export function getRoomBgDel(data) {
     data
   })
 }
-

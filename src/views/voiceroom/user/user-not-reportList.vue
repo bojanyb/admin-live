@@ -3,11 +3,11 @@
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
 			<el-table-column label="举报时间" prop="create_timeText" align="center" />
-			<el-table-column label="被举报ID" prop="talk_user_id" align="center" />
-			<el-table-column label="被举报状态" prop="talk_user_statusText" align="center" />
+			<el-table-column label="被举报ID" prop="feedback_user_id" align="center" />
+			<el-table-column label="被举报状态" prop="feedback_user_statusText" align="center" />
 			<el-table-column label="举报用户ID" prop="user_id" align="center" />
-			<el-table-column label="举报原因" prop="talk_genre" align="center" />
-			<el-table-column label="举报证据" prop="talk_content" align="center" show-overflow-tooltip />
+			<el-table-column label="举报原因" prop="genre" align="center" />
+			<el-table-column label="举报证据" prop="content" align="center" show-overflow-tooltip />
 			<el-table-column label="操作" prop="gift_str" align="center">
 				<template slot-scope="scope">
 					<el-button type="primary" @click="handleTreat(scope.row.id,1)">处理</el-button>
@@ -129,22 +129,22 @@
 			userReportList() {
 				var params = {
 					"status": 1, // 处理状态： 1未处理 2已处理 3忽略
-					"talk_user_id": "",
+					"feedback_user_id": "",
 					"user_id": ""
 				}
 				getUserReportList(params).then(res => {
 					this.total = res.data.count;
 					res.data.list.map(re => {
 						re.create_timeText = moment(re.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-						switch (re.talk_user_status) {
+						switch (re.feedback_user_status) {
 							case 1:
-								re.talk_user_statusText = "正常";
+								re.feedback_user_statusText = "正常";
 								break;
 							case 2:
-								re.talk_user_statusText = "封禁";
+								re.feedback_user_statusText = "封禁";
 								break;
 							case 3:
-								re.talk_user_statusText = "注销";
+								re.feedback_user_statusText = "注销";
 								break;
 						}
 					})

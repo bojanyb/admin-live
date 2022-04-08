@@ -4,7 +4,7 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters" @keyup.enter.native="userOldReportList()">
 				<el-form-item label="被举报用户ID">
-					<el-input v-model="filters.talk_user_id" v-input-limit="0" placeholder="请输入被举报用户ID" clearable />
+					<el-input v-model="filters.feedback_user_id" v-input-limit="0" placeholder="请输入被举报用户ID" clearable />
 				</el-form-item>
 				<el-form-item label="举报用户ID">
 					<el-input v-model="filters.user_id" v-input-limit="0" placeholder="请输入举报用户ID" clearable />
@@ -18,7 +18,7 @@
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
 			<el-table-column label="举报时间" prop="create_timeText" align="center"/>
-			<el-table-column label="被举报用户ID" prop="talk_user_id" align="center" />
+			<el-table-column label="被举报用户ID" prop="feedback_user_id" align="center" />
 			<el-table-column label="举报用户ID" prop="user_id" align="center" />
 			<el-table-column label="举报原因" prop="talk_genre" align="center" />
 			<el-table-column label="举报证据" prop="talk_content" align="center" />
@@ -54,7 +54,7 @@
 					limit: 10
 				},
 				filters: {
-					talk_user_id: "",
+					feedback_user_id: "",
 					user_id: "",
 					status: 2  // 处理状态 1未处理 2已处理 3忽略
 				},
@@ -73,15 +73,15 @@
 						re.create_timeText = moment(re.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
 						re.update_timeText = moment(re.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
 						re.ban_durationText = re.ban_duration == -1 ? '永久封禁' : parseInt(re.ban_duration / (24 * 3600)) + '天'
-						switch (re.talk_user_status) {
+						switch (re.feedback_user_status) {
 							case 1:
-								re.talk_user_statusText = "正常";
+								re.feedback_user_statusText = "正常";
 								break;
 							case 2:
-								re.talk_user_statusText = "封禁";
+								re.feedback_user_statusText = "封禁";
 								break;
 							case 3:
-								re.talk_user_statusText = "注销";
+								re.feedback_user_statusText = "注销";
 								break;
 						}
 					})
