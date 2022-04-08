@@ -61,10 +61,13 @@
 				},
 				statusList: [{
 					value: 1,
-					label: "已注销"
+					label: "已通过"
 				}, {
 					value: 2,
-					label: "未注销"
+					label: "未通过"
+				}, {
+					value: 3,
+					label: "已注销"
 				}, ],
 				popForm: {
 					user_id: "",
@@ -92,10 +95,13 @@
 						re.update_timeText = moment(re.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
 						switch (re.status) {
 							case 1:
-								re.statusText = "已注销";
+								re.statusText = "已通过";
 								break;
 							case 2:
-								re.statusText = "未注销";
+								re.statusText = "未通过";
+								break;
+							case 3:
+								re.statusText = "已注销";
 								break;
 						}
 

@@ -16,7 +16,7 @@
 
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
-			<el-table-column label="用户昵称" prop="deal_user_name" align="center" />
+			<el-table-column label="用户昵称" prop="nickname" align="center" />
 			<el-table-column label="用户ID" prop="user_id" align="center" />
 			<el-table-column label="手机号" prop="phone" align="center" />
 			<el-table-column label="申请注销时间" prop="create_timeText" align="center" />
