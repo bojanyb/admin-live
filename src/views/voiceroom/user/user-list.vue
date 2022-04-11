@@ -5,7 +5,7 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters" @keyup.enter.native="getUser()">
 				<el-form-item label="用户ID">
-					<el-input v-model="filters.id" v-input-limit="0" placeholder="请输入用户ID" clearable />
+					<el-input v-model="filters.user_number" v-input-limit="0" placeholder="请输入用户ID" clearable />
 				</el-form-item>
 				<el-form-item label="手机号">
 					<el-input v-model="filters.phone" v-input-limit="0" placeholder="请输入手机号" clearable />
@@ -18,7 +18,7 @@
 
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
-			<el-table-column label="用户ID" align="center" prop="id" width="95" />
+			<el-table-column label="用户ID" align="center" prop="user_number" width="95" />
 			<el-table-column label="昵称" prop="nickname" align="center" />
 			<el-table-column label="头像" prop="face" align="center" width="95">
 				<template slot-scope="scope">
@@ -90,7 +90,7 @@
 					limit: 10
 				},
 				filters: {
-					'id': '',
+					'user_number': '',
 					'nickname': '',
 					'phone': ''
 				},
@@ -110,7 +110,7 @@
 				this.listLoading = true
 				this.userImglist = []
 				var params = {
-					'id': this.filters.id,
+					'user_number': this.filters.user_number,
 					'nickname': this.filters.nickname,
 					'phone': this.filters.phone,
 					'page': this.page.page,
