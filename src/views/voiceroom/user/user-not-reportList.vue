@@ -130,7 +130,9 @@
 				var params = {
 					"status": 1, // 处理状态： 1未处理 2已处理 3忽略
 					"feedback_user_id": "",
-					"user_id": ""
+					"user_id": "",
+					'page': this.page.page,
+					'pagesize': this.page.limit
 				}
 				getUserReportList(params).then(res => {
 					this.total = res.data.count;

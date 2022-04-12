@@ -99,7 +99,13 @@
 		methods: {
 			userCancellationList() {
 				this.listLoading = true;
-				getUserCancellationList(this.filters).then(res => {
+				var params = {
+					'status' : this.filters.status,
+					'sort' : this.filters.sort,
+					'page': this.page.page,
+					'pagesize': this.page.limit
+				}
+				getUserCancellationList(params).then(res => {
 					this.total = res.data.count;
 					res.data.list.map(re => {
 						re.create_timeText = moment(re.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')

@@ -67,7 +67,14 @@
 		methods: {
 			userOldReportList() {
 				this.listLoading = true;
-				getUserReportList(this.filters).then(res=>{
+				var params = {
+					'feedback_user_id' : this.filters.feedback_user_id,
+					'user_id' : this.filters.user_id,
+					'status' : this.filters.status,
+					'page': this.page.page,
+					'pagesize': this.page.limit
+				}
+				getUserReportList(params).then(res=>{
 					this.total = res.data.count;
 					res.data.list.map(re => {
 						re.create_timeText = moment(re.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')

@@ -86,7 +86,9 @@
 				var params = {
 					"status": this.filters.status,
 					"sort": this.popForm.sort,
-					"user_id": this.filters.user_id
+					"user_id": this.filters.user_id,
+					'page': this.page.page,
+					'pagesize': this.page.limit
 				}
 				getUserCancellationHasDeal(params).then(res => {
 					this.total = res.data.count;
