@@ -91,6 +91,16 @@ const userRouter = {
 				noCache: true
 			}
 		},
+		{
+			path: 'usermusic-list',
+			component: () => import('@/views/voiceroom/user/usermusic-list'),
+			name: 'usermusic-list',
+			meta: {
+				title: '用户音乐上传列表',
+				noCache: true
+			}
+		},
+		
 	]
 }
 

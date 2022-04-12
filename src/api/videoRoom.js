@@ -99,6 +99,16 @@ export function getUserSave(data) {
   })
 }
 
+// 用户列表  统计页面显示和隐藏
+export function getUserStatisticalShow(data) {
+  return request({
+    url: '/user/statisticalShow',
+    method: 'post',
+    data
+  })
+}
+
+
 // 用户信息列表
 export function getUserInfoList(data) {
   return request({
@@ -552,3 +562,32 @@ export function getRoomBgDel(data) {
     data
   })
 }
+
+// 音乐列表 
+export function getUserMusicList(data) {
+  return request({
+    url: '/music/index',
+    method: 'post',
+    data
+  })
+}
+
+// 音乐列表 编辑
+export function getUserMusicUpdate(data) {
+  return request({
+    url: '/music/update',
+    method: 'post',
+    data
+  })
+}
+
+// 音乐列表  下架
+export function getUserMusicBack(data) {
+  return request({
+    url: '/music/back',
+    method: 'post',
+    data
+  })
+}
+
+

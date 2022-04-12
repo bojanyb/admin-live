@@ -32,10 +32,15 @@
 			<el-table-column label="创建时间" prop="create_timeText" align="center" />
 			<el-table-column label="封禁时间" prop="update_timeText" align="center" />
 			<el-table-column label="封禁备注" prop="remark" align="center" width="280" show-overflow-tooltip />
-			<el-table-column label="操作" prop="gift_str" align="center">
+			<el-table-column label="操作" prop="gift_str" align="center" width="230">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.status == 1" type="danger" @click="handleUser(scope.row)">封禁</el-button>
 					<el-button v-if="scope.row.status == 2" type="success" @click="handleUser(scope.row)">启用</el-button>
+
+					<el-button v-if="scope.row.statistical_show == 0" type="success" @click="handleStatistics(scope.row)">开启房间统计
+					</el-button>
+					<el-button v-if="scope.row.statistical_show == 1" type="danger" @click="handleStatistics(scope.row)">关闭房间统计
+					</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -68,7 +73,8 @@
 <script>
 	import {
 		getUserList,
-		getUserSave
+		getUserSave,
+		getUserStatisticalShow
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
@@ -165,15 +171,37 @@
 				getUserSave(this.popForm).then(res => {
 					this.$message.success('操作成功')
 					this.getUser()
-					setTimeout(it=>{
+					setTimeout(it => {
 						this.editPop = false
 						this.loading = false
-					},300)
+					}, 300)
 				}).catch(err => {
 					this.editPop = false
 					this.loading = false
 				})
-			}
+			},
+			handleStatistics(row) {
+				let tipsText = row.statistical_show == 1 ? "确认关闭该用户房间统计页面？" : "确认为该用户开启房间统计页面？";
+				let tipsSuccessText = row.statistical_show == 1 ? "成功关闭该用户房间统计页面" : "成功开启该用户房间统计页面";
+				this.$alert(tipsText, '提示', {
+					confirmButtonText: '确定',
+					callback: action => {
+						if (action == 'confirm') {
+							var params = {
+								"id" : row.id,
+								"statistical_show" : row.statistical_show == 1 ? 0 : 1
+							}
+							getUserStatisticalShow(params).then(res=>{
+								console.log(res)
+								this.getUser();
+								this.$message.success(tipsSuccessText);
+							}).catch(err=>{
+								this.$message.error(err);
+							})
+						}
+					}
+				})
+			},
 		}
 	}
 </script>
