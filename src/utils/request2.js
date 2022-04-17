@@ -17,7 +17,7 @@ switch (process.env.NODE_ENV) {
     baseUrlApi = 'http://test.api.live.huida.ink'
     break
   case 'production':
-    baseUrlApi = 'http://admin.aiyi.live'
+    baseUrlApi = 'http://api.aiyi.live'
     break
   default:
     break
