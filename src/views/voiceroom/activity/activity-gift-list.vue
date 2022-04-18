@@ -480,6 +480,7 @@
 							delete re.status
 							delete re.time_limit
 							delete re.activity_type_id
+							re.id = re.activity_id;
 							if (re.probability > maxBigNum) {
 								maxBigNum = parseFloat(re.probability);
 							}
@@ -565,6 +566,7 @@
 							delete re.gift_diamond
 							delete re.status
 							delete re.time_limit
+							re.id = re.activity_id;
 							if (re.probability > maxBigNum) {
 								maxBigNum = parseFloat(re.probability);
 							}
