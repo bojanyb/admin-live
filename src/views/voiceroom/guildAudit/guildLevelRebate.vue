@@ -17,19 +17,19 @@
 						<div class="levelSourceCenter">
 							<div class="levelSourceCenterItem" v-for="it in item.configSource">
 								<div class="flowInterval fl">
-									<el-input v-model="it.minNum" style="width:45%" placeholder="" /> ~
-									<el-input v-model="it.maxNum" style="width:45%" placeholder="" />
+									<el-input v-model="it.start" style="width:45%" v-input-limit="0" /> ~
+									<el-input v-model="it.end" style="width:45%" v-input-limit="0" />
 								</div>
 								<div class="fixedRebate fl">
-									<el-input v-model="it.fixedRebate" style="width:90%" placeholder="固定返点" />
+									<el-input v-model="it.rebate" style="width:90%" placeholder="固定返点" v-input-limit="0" />
 								</div>
 								<div class="weeklyRebate fl">
-									<el-input v-model="it.weeklyRebate" style="width:90%" placeholder="周返点" />
+									<el-input v-model="it.week_rebate" style="width:90%" placeholder="周返点" v-input-limit="0" />
 								</div>
 							</div>
 						</div>
 						<div class="levelSourceFooter">
-							<el-button class="fr" type="primary">修改</el-button>
+							<el-button class="fr" type="primary" @click="handleChange(item)">修改</el-button>
 						</div>
 					</div>
 				</div>
@@ -40,7 +40,8 @@
 
 <script>
 	import {
-		getUserAddMoney
+		getUserRebateConfig,
+		getUserConfigRebate
 	} from '@/api/videoRoom'
 	export default {
 		name: 'guildLevelRebate',
@@ -50,69 +51,63 @@
 						"id": 1,
 						"name": "A",
 						"configSource": [{
-								"minNum": 0,
-								"maxNum": 0,
-								"fixedRebate": 0,
-								"weeklyRebate": 0,
+								"start": 0,
+								"end": 0,
+								"rebate": 0,
+								"week_rebate": 0,
 							},
 							{
-								"minNum": 0,
-								"maxNum": 0,
-								"fixedRebate": 0,
-								"weeklyRebate": 0,
+								"start": 0,
+								"end": 0,
+								"rebate": 0,
+								"week_rebate": 0,
 							},
-							{
-								"minNum": 0,
-								"maxNum": 0,
-								"fixedRebate": 0,
-								"weeklyRebate": 0,
-							}
 						]
 					},
 					{
 						"id": 2,
 						"name": "AA",
 						"configSource": [{
-								"minNum": 0,
-								"maxNum": 0,
-								"fixedRebate": 0,
-								"weeklyRebate": 0,
+								"start": 0,
+								"end": 0,
+								"rebate": 0,
+								"week_rebate": 0,
 							},
 							{
-								"minNum": 0,
-								"maxNum": 0,
-								"fixedRebate": 0,
-								"weeklyRebate": 0,
+								"start": 0,
+								"end": 0,
+								"rebate": 0,
+								"week_rebate": 0,
 							},
 							{
-								"minNum": 0,
-								"maxNum": 0,
-								"fixedRebate": 0,
-								"weeklyRebate": 0,
-							}
+								"start": 0,
+								"end": 0,
+								"rebate": 0,
+								"week_rebate": 0,
+							},
 						]
 					},
 					{
 						"id": 3,
 						"name": "AAA",
 						"configSource": [{
-								"minNum": 0,
-								"maxNum": 0,
-								"fixedRebate": 0,
-								"weeklyRebate": 0,
+								"start": 0,
+								"end": 0,
+								"rebate": 0,
+								"week_rebate": 0,
 							},
 							{
-								"minNum": 0,
-								"maxNum": 0,
-								"fixedRebate": 0,
-								"weeklyRebate": 0,
+								"start": 0,
+								"end": 0,
+								"rebate": 0,
+								"week_rebate": 0,
 							},
 							{
-								"minNum": 0,
-								"maxNum": 0,
-								"fixedRebate": 0,
-								"weeklyRebate": 0,
-							}
+								"start": 0,
+								"end": 0,
+								"rebate": 0,
+								"week_rebate": 0,
+							},
 						]
 					}
 				],
@@ -121,10 +116,57 @@
 				popFormRules: {}
 			}
 		},
-		created() {},
+		created() {
+			this.getUserRebateConfigSource();
+		},
 		mounted() {},
 		methods: {
-			handleGive() {}
+			getUserRebateConfigSource() {
+				this.configList = [];
+				getUserRebateConfig().then(res => {
+					for (let i in res.data) {
+						if (res.data[i]) {
+							let source = {
+								"name": i,
+								"configSource": res.data[i]
+							}
+							this.configList.push(source);
+						}
+					}
+				}).catch(err => {
+					console.log(err);
+				})
+			},
+			handleChange(row) {
+				
+				let isReturn = false;
+				row.configSource.map(res=>{
+					if(res.rebate > 100){
+						this.$message.error("固定返点 取值范围为1~100");
+						isReturn = true;
+						return
+					}
+					if(res.week_rebate > 100){
+						this.$message.error("周返点 取值范围为1~100");
+						isReturn = true;
+						return
+					}
+				})
+				
+				if(isReturn == true){
+					return
+				}
+				var params = {
+					config: row.configSource
+				}
+				getUserConfigRebate(params).then(res => {
+					this.$message.success("等级 " + row.name + " 修改成功");
+					this.getUserRebateConfigSource();
+				}).catch(err => {
+					this.$message.error(err);
+				})
+
+			},
 		}
 	}
 </script>
@@ -159,11 +201,12 @@
 				text-align: center;
 				width: 100%;
 				border-bottom: solid 1px #DCDCDC;
-				
+
 				.levelName,
 				.levelSource {
 					width: 70%;
 					border-left: solid 1px #DCDCDC;
+
 					.levelSourceHead {
 						height: 45px;
 						line-height: 45px;
@@ -203,14 +246,16 @@
 						margin: 10px;
 					}
 				}
-				.levelName{
+
+				.levelName {
 					font-size: 25px;
 					font-weight: bold;
 					width: 30%;
 					border: none;
 				}
 			}
-			.levelCenterItem:last-child{
+
+			.levelCenterItem:last-child {
 				border-bottom: none;
 			}
 		}

@@ -27,7 +27,7 @@
 					<div>({{scope.row.guild_owner.user_number}})</div>
 				</template>
 			</el-table-column>
-			<el-table-column label="公会等级" prop="guild_number" align="center" />
+			<el-table-column label="公会等级" prop="rankText" align="center" />
 			<el-table-column label="公会长昵称(ID)" align="center">
 				<template slot-scope="scope">
 					<div>{{scope.row.guild_owner.nickname}}</div>
@@ -142,6 +142,17 @@
 								break;
 							case 3:
 								re.statusText = "已拒绝";
+								break;
+						}
+						switch (re.rank){
+							case 1:
+							re.rankText = "A";
+								break;
+							case 2:
+							re.rankText = "AA";
+								break;
+							case 3:
+							re.rankText = "AAA";
 								break;
 						}
 						re.typeText = re.type == 1 ? "绑定" : "解绑";

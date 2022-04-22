@@ -663,5 +663,23 @@ export function getUserPlatformTopUp(data) {
   })
 }
 
+// 获取周返点
+export function getUserRebateConfig(data) {
+  return request({
+    url: '/guild/rebateConfig',
+    method: 'post',
+    data
+  })
+}
+
+// 配置周返点
+export function getUserConfigRebate(data) {
+  return request({
+    url: '/guild/configRebate',
+    method: 'post',
+    data
+  })
+}
+
 
 

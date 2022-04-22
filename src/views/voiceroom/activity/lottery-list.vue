@@ -5,16 +5,16 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" @keyup.enter.native="getActivetyDrawLogList()">
 				<el-form-item label="抽奖人ID">
-					<el-input v-model="filters.user_id" v-input-limit="0" placeholder="抽奖人ID" clearable />
+					<el-input v-model="filters.user_number" v-input-limit="0" placeholder="抽奖人ID" clearable />
 				</el-form-item>
 				<el-form-item label="宝箱类型">
-					<el-select v-model="filters.type" placeholder="请选择" @change="getActivetyDrawLogList">
+					<el-select v-model="filters.activity_type_id" placeholder="请选择" @change="getActivetyDrawLogList">
 						<el-option v-for="item in lotteryType" :key="item.id" :label="item.name" :value="item.id" />
 					</el-select>
 				</el-form-item>
 				<el-form-item label="活动类型">
-					<el-select v-model="filters.type" placeholder="请选择" @change="getActivetyDrawLogList">
-						<el-option v-for="item in ativeType" :key="item.value" :label="item.label"
+					<el-select v-model="filters.activity_type" placeholder="请选择" @change="getActivetyDrawLogList">
+						<el-option v-for="item in activityTypeList" :key="item.value" :label="item.label"
 							:value="item.value" />
 					</el-select>
 				</el-form-item>
@@ -31,10 +31,10 @@
 
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-card class="sumBox">
-				<div class="sumBoxItem fl">宝箱开箱次数：0</div>
-				<div class="sumBoxItem fl">宝箱收入：0</div>
-				<div class="sumBoxItem fl">宝箱产出：0</div>
-				<div class="sumBoxItem fl">宝箱投入产出比：0</div>
+				<div class="sumBoxItem fl">宝箱开箱次数：{{baoxiang.baoxiang_open_count}}</div>
+				<div class="sumBoxItem fl">宝箱投入：{{baoxiang.baoxiang_in}}</div>
+				<div class="sumBoxItem fl">宝箱产出：{{baoxiang.baoxiang_out}}</div>
+				<div class="sumBoxItem fl">宝箱投入产出比：{{baoxiang.proportion}}</div>
 			</el-card>
 		</el-col>
 
@@ -45,13 +45,12 @@
 					{{ scope.$index + 1 }}
 				</template>
 			</el-table-column>
-			<el-table-column label="用户ID" prop="gift_id" align="center" />
-			<el-table-column label="时间" prop="create_timeText" align="center" />
-			<el-table-column label="活动类型" prop="gift_name" align="center" />
-			<el-table-column label="宝箱类型" prop="gift_diamond" align="center" />
-			<el-table-column label="开箱次数" prop="user_id" align="center" />
-			<el-table-column label="投入(RMB)" prop="activity_name" align="center" />
-			<el-table-column label="产出(RMB)" prop="activity_name" align="center" />
+			<el-table-column label="用户ID" prop="user_number" align="center" />
+			<el-table-column label="活动类型" prop="activeTypeText" align="center" />
+			<el-table-column label="宝箱类型" prop="boxTypeText" align="center" />
+			<el-table-column label="开箱次数" prop="user_open_count" align="center" />
+			<el-table-column label="投入" prop="user_in" align="center" />
+			<el-table-column label="产出" prop="user_out" align="center" />
 		</el-table>
 		<!--工具条-->
 		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
@@ -81,17 +80,14 @@
 					limit: 10
 				},
 				filters: {
-					"user_id": "",
-					"gift_name": "",
+					"user_number": "",
 					"start_time": "",
 					"end_time": "",
-					"type": ""
+					"activity_type": 1,
+					"activity_type_id" : ""
 				},
 				lotteryType: [],
-				ativeType: [{
-					"value": '',
-					"label": "全部",
-				}, {
+				activityTypeList: [{
 					"value": 1,
 					"label": "背包",
 				}, {
@@ -99,21 +95,25 @@
 					"label": "派对",
 				}],
 				timer: "",
+				baoxiang: {},
 			}
 		},
 		created() {
 			this.getActivetyListSource();
-			this.getActivetyDrawLogList()
 		},
 		methods: {
 			getActivetyListSource() {
 				this.srcList = []
 				var params = {
 					'page': this.page.page,
-					'pagesize': this.page.limit
+					'pagesize': this.page.limit,
 				}
 				getActivetyList(params).then(response => {
-					this.lotteryType = response.data.list
+					response.data.list.map(re=>{
+						this.filters.activity_type_id = re.id;
+					})
+					this.lotteryType = response.data.list;
+					this.getActivetyDrawLogList();
 				}).catch(err => {
 					console.log(err);
 				})
@@ -124,27 +124,36 @@
 				var params = {
 					'page': this.page.page,
 					'pagesize': this.page.limit,
-					"user_id": this.filters.user_id,
-					"gift_name": this.filters.gift_name,
+					"user_number": this.filters.user_number,
 					"start_time": this.timer ? (new Date(this.timer[0]).getTime() / 1000) : "",
 					"end_time": this.timer ? (new Date(this.timer[1]).getTime() / 1000) : "",
-					"type": this.filters.type
-				}
-
-				// 过滤传递参数为空的参数
-				for (let i in params) {
-					if (params[i] == "") {
-						delete params[i];
-					}
+					'activity_type' : this.filters.activity_type,
+					'activity_type_id' : this.filters.activity_type_id
 				}
 				getActivetyDrawLog(params).then(response => {
 					this.total = response.data.count
-					this.list = response.data.list
-					this.list.map(res => {
-						res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+					response.data.baoxiang.proportion = ((response.data.baoxiang.baoxiang_in /  response.data.baoxiang.baoxiang_out) * 100).toFixed(1) + '%'
+					this.baoxiang = response.data.baoxiang;
+					let activeTypeText = "";
+					let boxTypeText = "";
+					this.lotteryType.map(res=>{
+						if(res.id == this.filters.activity_type_id){
+							activeTypeText = res.name;
+						}
 					})
+					this.activityTypeList.map(res=>{
+						if(res.value == this.filters.activity_type){
+							boxTypeText = res.label;
+						}
+					})
+					response.data.list.map(re=>{
+						re.activeTypeText = activeTypeText;
+						re.boxTypeText = boxTypeText;
+					})
+					this.list = response.data.list
 					this.listLoading = false
 				}).catch(err => {
+					this.$message.error(err);
 					this.listLoading = false
 				})
 			},

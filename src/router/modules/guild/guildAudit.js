@@ -27,15 +27,15 @@ const guildAuditRouter = {
 				noCache: true
 			}
 		},
-		{
-			path: 'guildAudit-list',
-			component: () => import('@/views/voiceroom/guildAudit/guildAudit-list'),
-			name: 'guildAudit-list',
-			meta: {
-				title: '公会待审核列表',
-				noCache: true
-			}
-		},
+		// {
+		// 	path: 'guildAudit-list',
+		// 	component: () => import('@/views/voiceroom/guildAudit/guildAudit-list'),
+		// 	name: 'guildAudit-list',
+		// 	meta: {
+		// 		title: '公会待审核列表',
+		// 		noCache: true
+		// 	}
+		// },
 		{
 			path: 'guildReport-list',
 			component: () => import('@/views/voiceroom/guildAudit/guildReport-list'),

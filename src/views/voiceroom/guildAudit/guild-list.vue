@@ -17,7 +17,7 @@
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
 			<el-table-column label="公会ID" prop="id" align="center" />
-			<el-table-column label="公会等级" prop="id" align="center" />
+			<el-table-column label="公会等级" prop="rankText" align="center" />
 			<el-table-column label="公会长ID" prop="user_number" align="center" />
 			<el-table-column label="公会昵称" prop="nickname" align="center" />
 			<el-table-column label="公会图像" prop="face" align="center" width="95">
@@ -27,12 +27,13 @@
 				</template>
 			</el-table-column>
 			<el-table-column label="公会简介" prop="remark" align="center" show-overflow-tooltip />
-			<el-table-column label="创建时间" prop="create_timeText" align="center" />
+			<el-table-column label="创建时间" prop="create_timeText" align="center"  width="160"/>
 			<el-table-column label="公会成员" prop="user_count" align="center" />
 			<el-table-column label="已绑定厅" prop="room_count" align="center" />
 			<el-table-column label="开厅数量" prop="guild_user_id" align="center" />
 			<el-table-column label="总流水" prop="total_flow" align="center" />
 			<el-table-column label="当日流水" prop="today_flow" align="center" />
+			<el-table-column label="上一周结算" prop="last_week_back" align="center" />
 			<el-table-column label="操作" prop="gift_str" align="center" width="230">
 				<template slot-scope="scope">
 					<el-button type="primary" @click="handleChange(scope.row)">修改信息</el-button>
@@ -67,10 +68,10 @@
 							placeholder="请输入需要绑定的会长ID" clearable autocomplete="off" />
 					</el-col>
 				</el-form-item>
-				<el-form-item label="公会等级" prop="user_number" :label-width="formLabelWidth">
+				<el-form-item label="公会等级" prop="rank" :label-width="formLabelWidth">
 					<el-col :span="17">
-					<el-select v-model="addPopForm.grade" placeholder="请选择">
-						<el-option v-for="item in gradeList" :key="item.id" :label="item.name" :value="item.id" />
+					<el-select v-model="addPopForm.rank" placeholder="请选择">
+						<el-option v-for="item in rankList" :key="item.id" :label="item.name" :value="item.id" />
 					</el-select>
 					</el-col>
 				</el-form-item>
@@ -109,6 +110,12 @@
 							autocomplete="off" />
 					</el-col>
 				</el-form-item>
+				<el-form-item label="固定返点配置" prop="rebate" :label-width="formLabelWidth">
+					<el-input v-model="editPopForm.rebate" style="width: 335px;" clearable
+						autocomplete="off" disabled>
+						<template slot="append">%</template>
+					</el-input>
+				</el-form-item> 
 				<!-- <el-form-item label="周返点配置" prop="week_rebate" :label-width="formLabelWidth">
 					<el-input v-model="editPopForm.week_rebate" v-input-limit="0" style="width: 335px;"
 						placeholder="请输入周返点配置" clearable autocomplete="off">
@@ -121,10 +128,10 @@
 							placeholder="请输入需要更换的会长ID" clearable autocomplete="off" />
 					</el-col>
 				</el-form-item>
-				<el-form-item label="公会等级" prop="user_number" :label-width="formLabelWidth">
+				<el-form-item label="公会等级" prop="rank" :label-width="formLabelWidth">
 					<el-col :span="17">
-					<el-select v-model="editPopForm.grade" placeholder="请选择">
-						<el-option v-for="item in gradeList" :key="item.id" :label="item.name" :value="item.id" />
+					<el-select v-model="editPopForm.rank" placeholder="请选择">
+						<el-option v-for="item in rankList" :key="item.id" :label="item.name" :value="item.id" />
 					</el-select>
 					</el-col>
 				</el-form-item>
@@ -149,7 +156,8 @@
 	import {
 		getGuildList,
 		getGuildCreate,
-		getGuildUpdate
+		getGuildUpdate,
+		getUserRebateConfig
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
@@ -178,14 +186,24 @@
 				editPop: false,
 				formLabelWidth: '120px',
 				imageUrl: "",
-				gradeList:[],
+				rankList:[{
+					"id" : 1,
+					"name" : "A"
+				},
+				{
+					"id" : 2,
+					"name" : "AA"
+				},
+				{
+					"id" : 3,
+					"name" : "AAA"
+				}],
 				addPopForm: {
 					'face': '',
 					'nickname': '',
 					'user_number': '',
-					'week_rebate': '',
+					'rank': '',
 					'rebate': '',
-					'grade' : ''
 				},
 				addPopFormRules: {
 					face: [{
@@ -208,11 +226,11 @@
 							return cb()
 						}
 					}],
-					grade: [{
+					rank: [{
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (!this.addPopForm.grade || this.addPopForm.grade == "") {
+							if (!this.addPopForm.rank || this.addPopForm.rank == "") {
 								return cb(new Error('公会等级不能为空!'))
 							}
 							return cb()
@@ -228,25 +246,15 @@
 							return cb()
 						}
 					}],
-					week_rebate: [{
-						required: true,
-						trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!this.addPopForm.week_rebate || this.addPopForm.week_rebate == "") {
-								return cb(new Error('周返点配置不能为空!'))
-							}
-							return cb()
-						}
-					}],
 				},
 				editPopForm: {
 					'id': '',
 					'face': '',
 					'nickname': '',
 					'user_number': '',
-					'week_rebate': '',
+					'rank': '',
 					'remark': '',
-					'grade' : ''
+					'rebate' : 10
 				},
 				editPopFormRules: {
 					face: [{
@@ -279,16 +287,6 @@
 							return cb()
 						}
 					}],
-					week_rebate: [{
-						required: true,
-						trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!this.editPopForm.week_rebate || this.editPopForm.week_rebate == "") {
-								return cb(new Error('周返点配置不能为空!'))
-							}
-							return cb()
-						}
-					}],
 					remark: [{
 						required: true,
 						trigger: 'blur',
@@ -302,11 +300,11 @@
 							return cb()
 						}
 					}],
-					grade: [{
+					rank: [{
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (!this.editPopForm.grade || this.editPopForm.grade == "") {
+							if (!this.editPopForm.rank || this.editPopForm.rank == "") {
 								return cb(new Error('公会等级不能为空!'))
 							}
 							return cb()
@@ -336,6 +334,19 @@
 						if(re.face !== ""){
 							this.guildImglist.push(re.face)
 						}
+						
+						switch (re.rank){
+							case 1:
+							re.rankText = "A";
+								break;
+							case 2:
+							re.rankText = "AA";
+								break;
+							case 3:
+							re.rankText = "AAA";
+								break;
+						}
+						
 					})
 					this.list = res.data.list
 					this.listLoading = false
@@ -347,6 +358,7 @@
 				if (this.$refs['addPopForm']) {
 					this.$refs['addPopForm'].resetFields()
 				}
+				this.imageUrl = "";
 				this.addPop = true;
 			},
 			imgPreview(file, fileList) {
@@ -370,6 +382,7 @@
 						formData.append('nickname', this.addPopForm.nickname)
 						formData.append('user_number', this.addPopForm.user_number)
 						formData.append('week_rebate', this.addPopForm.week_rebate)
+						formData.append('rank', this.addPopForm.rank)
 						if (this.imageFile !== '') {
 							formData.append('face', this.imageFile.raw)
 						}
@@ -389,7 +402,7 @@
 					'face':  row.face,
 					'nickname':  row.nickname,
 					'user_number':  row.user_number,
-					'week_rebate':  row.week_rebate,
+					'rebate' : 10,
 					'remark':  row.remark,
 				}
 				this.imageUrl = row.face;
@@ -408,6 +421,7 @@
 						formData.append('week_rebate', this.editPopForm.week_rebate)
 						formData.append('remark', this.editPopForm.remark)
 						formData.append('face', this.editPopForm.face)
+						formData.append('rank', this.editPopForm.rank)
 						if (this.imageFile && this.imageFile !== '') {
 							formData.append('face', this.imageFile.raw)
 						}
@@ -440,7 +454,7 @@
 		width: 178px;
 		height: 178px;
 		display: flex;
-		border-radius: 50%;
+		// border-radius: 50%;
 		align-items: center;
 		justify-content: center;
 		border: 1px dashed #eeeeee;
@@ -449,10 +463,9 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-
+			margin: auto;
 			img {
 				width: 100%;
-				border-radius: 50%;
 			}
 		}
 	}
