@@ -3,28 +3,39 @@
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" @keyup.enter.native="activetyList()">
+			<el-form :inline="true" @keyup.enter.native="getActivetyDrawLogList()">
 				<el-form-item label="抽奖人ID">
 					<el-input v-model="filters.user_id" v-input-limit="0" placeholder="抽奖人ID" clearable />
 				</el-form-item>
-				<el-form-item label="礼物名称">
-					<el-input v-model="filters.gift_name" placeholder="礼物名称" clearable />
-				</el-form-item>
-				<el-form-item label="时间选择">
-					<el-date-picker v-model="timer" type="datetimerange" range-separator="至" start-placeholder="开始日期"
-						end-placeholder="结束日期" @change="activetyList">
-					</el-date-picker>
+				<el-form-item label="宝箱类型">
+					<el-select v-model="filters.type" placeholder="请选择" @change="getActivetyDrawLogList">
+						<el-option v-for="item in lotteryType" :key="item.id" :label="item.name" :value="item.id" />
+					</el-select>
 				</el-form-item>
 				<el-form-item label="活动类型">
-					<el-select v-model="filters.type" placeholder="请选择" @change="handleChangeType">
-						<el-option v-for="item in lotteryType" :key="item.value" :label="item.label"
+					<el-select v-model="filters.type" placeholder="请选择" @change="getActivetyDrawLogList">
+						<el-option v-for="item in ativeType" :key="item.value" :label="item.label"
 							:value="item.value" />
 					</el-select>
 				</el-form-item>
+				<el-form-item label="时间选择">
+					<el-date-picker v-model="timer" type="datetimerange" range-separator="至" start-placeholder="开始日期"
+						end-placeholder="结束日期" @change="getActivetyDrawLogList">
+					</el-date-picker>
+				</el-form-item>
 				<el-form-item>
-					<el-button type="success" @click="activetyList">查询</el-button>
+					<el-button type="primary" @click="getActivetyDrawLogList">查询</el-button>
 				</el-form-item>
 			</el-form>
+		</el-col>
+
+		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+			<el-card class="sumBox">
+				<div class="sumBoxItem fl">宝箱开箱次数：0</div>
+				<div class="sumBoxItem fl">宝箱收入：0</div>
+				<div class="sumBoxItem fl">宝箱产出：0</div>
+				<div class="sumBoxItem fl">宝箱投入产出比：0</div>
+			</el-card>
 		</el-col>
 
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
@@ -34,33 +45,23 @@
 					{{ scope.$index + 1 }}
 				</template>
 			</el-table-column>
+			<el-table-column label="用户ID" prop="gift_id" align="center" />
 			<el-table-column label="时间" prop="create_timeText" align="center" />
-			<el-table-column label="礼物图标" prop="gift_photo" align="center">
-				<template slot-scope="scope">
-					<el-image style="width: 50px; " :lazy="true" :src="scope.row.gift_photo ? scope.row.gift_photo : ''"
-						@click="showImg(scope.row)" />
-				</template>
-			</el-table-column>
-			<el-table-column label="礼物名称" prop="gift_name" align="center" show-overflow-tooltip />
-			<el-table-column label="礼物ID" prop="gift_id" align="center" />
-			<el-table-column label="礼物价值" prop="gift_diamond" align="center" />
-			<el-table-column label="抽奖人ID" prop="user_id" align="center" />
-			<el-table-column label="活动名称" prop="activity_name" align="center" />
-			<el-table-column label="活动类型" prop="activity_type" align="center">
-				<template slot-scope="scope">
-					<div v-if="scope.row.activity_type == 1">背包</div>
-					<div v-else-if="scope.row.activity_type == 2">派对</div>
-				</template>
-			</el-table-column>
+			<el-table-column label="活动类型" prop="gift_name" align="center" />
+			<el-table-column label="宝箱类型" prop="gift_diamond" align="center" />
+			<el-table-column label="开箱次数" prop="user_id" align="center" />
+			<el-table-column label="投入(RMB)" prop="activity_name" align="center" />
+			<el-table-column label="产出(RMB)" prop="activity_name" align="center" />
 		</el-table>
 		<!--工具条-->
 		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="activetyList" />
+			@pagination="getActivetyDrawLogList" />
 	</div>
 </template>
 
 <script>
 	import {
+		getActivetyList,
 		getActivetyDrawLog
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
@@ -86,10 +87,11 @@
 					"end_time": "",
 					"type": ""
 				},
-				lotteryType: [{
+				lotteryType: [],
+				ativeType: [{
 					"value": '',
 					"label": "全部",
-				},{
+				}, {
 					"value": 1,
 					"label": "背包",
 				}, {
@@ -100,10 +102,23 @@
 			}
 		},
 		created() {
-			this.activetyList()
+			this.getActivetyListSource();
+			this.getActivetyDrawLogList()
 		},
 		methods: {
-			activetyList() {
+			getActivetyListSource() {
+				this.srcList = []
+				var params = {
+					'page': this.page.page,
+					'pagesize': this.page.limit
+				}
+				getActivetyList(params).then(response => {
+					this.lotteryType = response.data.list
+				}).catch(err => {
+					console.log(err);
+				})
+			},
+			getActivetyDrawLogList() {
 				this.listLoading = true
 				this.srcList = []
 				var params = {
@@ -133,14 +148,23 @@
 					this.listLoading = false
 				})
 			},
-			handleChangeType(e){
-				if(e == ""){
-					this.page.page = 1;
-				}
-				this.activetyList()
-			}
 		}
 	}
 </script>
 <style scoped="scoped" lang="scss">
+	::v-deep.sumBox {
+		margin-bottom: 20px;
+		display: flex;
+		.el-card__body{
+			width: 100%;
+			.sumBoxItem{
+				width: 25%;
+				text-align: center;
+				border-right: solid 1px #DCDCDC;
+			}
+			.sumBoxItem:last-child{
+				border-right: none;
+			}
+		}
+	}
 </style>

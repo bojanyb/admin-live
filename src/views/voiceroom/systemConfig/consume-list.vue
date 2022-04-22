@@ -100,7 +100,7 @@
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.sort) {
+							if (!this.popForm.user_rank) {
 								return cb(new Error('等级不能为空!'))
 							}
 							return cb()

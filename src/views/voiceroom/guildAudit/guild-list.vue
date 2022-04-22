@@ -1,171 +1,431 @@
 <template>
-  <div class="app-container">
+	<div class="app-container">
 
-    <!--工具条-->
-    <el-col :span="24" class="toolbar" style="padding-bottom: 0px; display: none;">
-      <el-form :inline="true" :model="filters" @keyup.enter.native="getGuildListInfo()">
-        <el-form-item label="类型">
-          <el-select v-model="filters.guild_self" placeholder="请选择">
-            <el-option label="全部" value="" />
-            <el-option key="1" label="非自营" value="1" />
-            <el-option key="2" label="自营" value="2" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="结算类型">
-          <el-select v-model="filters.guild_genre" placeholder="请选择">
-            <el-option label="全部" value="" />
-            <el-option key="1" label="对私结算" value="1" />
-            <el-option key="2" label="对公结算" value="2" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="getGuildListInfo">查询</el-button>
-        </el-form-item>
-      </el-form>
-    </el-col>
+		<!--工具条-->
+		<el-col :span="24" class="toolbar">
+			<el-form :inline="true" :model="filters" @keyup.enter.native="getGuildListInfo()">
+				<el-form-item label="公会ID">
+					<el-input v-model="filters.guild_number" v-input-limit="0" placeholder="请输入公会ID" clearable />
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="getGuildListInfo">查询</el-button>
+					<el-button type="success" @click="getGuildAdd">新增</el-button>
+				</el-form-item>
+			</el-form>
+		</el-col>
 
-    <el-table
-      ref="multipleTable"
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="拼命加载中"
-      border
-      fit
-      highlight-current-row
-    >
-      <el-table-column label="手机号" prop="phone" align="center" />
-      <el-table-column label="账号" prop="account" align="center" />
-      <el-table-column label="公会ID" prop="id" align="center" />
-      <el-table-column label="公会名" prop="guild_name" align="center" />
-      <el-table-column label="公会所有人ID" prop="guild_user_id" align="center" />
-      <el-table-column label="公会号" prop="guild_number" align="center" />
-     <el-table-column label="类型" align="center" width="95">
-       <template slot-scope="scope">
-         <div v-if="scope.row.guild_self == 1">非自营</div>
-         <div v-else-if="scope.row.guild_self == 2">自营</div>
-       </template>
-     </el-table-column>
-	 <el-table-column label="结算类型" align="center" width="95">
-	   <template slot-scope="scope">
-	     <div v-if="scope.row.guild_genre == 1">对私结算</div>
-	     <div v-else-if="scope.row.guild_genre == 2">对公结算</div>
-	   </template>
-	 </el-table-column>
-      <el-table-column label="账户喵粮余额" prop="gain" align="center" />
-      <el-table-column label="账户冻结喵粮" prop="freeze_gain" align="center" />
-      <el-table-column label="状态" prop="status" align="center" width="95">
-        <template slot-scope="scope">
-          <div class="color1" v-if="scope.row.status == 1">账户正常</div>
-          <div class="color4" v-if="scope.row.status == 2">账户冻结</div>
-        </template>
-      </el-table-column>
-    </el-table>
+		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
+			highlight-current-row>
+			<el-table-column label="公会ID" prop="id" align="center" />
+			<el-table-column label="公会等级" prop="id" align="center" />
+			<el-table-column label="公会长ID" prop="user_number" align="center" />
+			<el-table-column label="公会昵称" prop="nickname" align="center" />
+			<el-table-column label="公会图像" prop="face" align="center" width="95">
+				<template slot-scope="scope">
+					<el-image style="width: 45px; height: 45px" :lazy="true" v-if="scope.row.face.length > 0"
+						:src="scope.row.face ? scope.row.face : ''" :preview-src-list="guildImglist" />
+				</template>
+			</el-table-column>
+			<el-table-column label="公会简介" prop="remark" align="center" show-overflow-tooltip />
+			<el-table-column label="创建时间" prop="create_timeText" align="center" />
+			<el-table-column label="公会成员" prop="user_count" align="center" />
+			<el-table-column label="已绑定厅" prop="room_count" align="center" />
+			<el-table-column label="开厅数量" prop="guild_user_id" align="center" />
+			<el-table-column label="总流水" prop="total_flow" align="center" />
+			<el-table-column label="当日流水" prop="today_flow" align="center" />
+			<el-table-column label="操作" prop="gift_str" align="center" width="230">
+				<template slot-scope="scope">
+					<el-button type="primary" @click="handleChange(scope.row)">修改信息</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
 
-    <!--工具条-->
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="page.page"
-      :limit.sync="page.limit"
-      @pagination="getGuildListInfo"
-    />
-	
-  </div>
+		<!--工具条-->
+		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
+			@pagination="getGuildListInfo" />
+
+		<el-dialog title="新增公会" :visible.sync="addPop" :before-close="handleAddCancel">
+			<el-form :model="addPopForm" ref="addPopForm" :rules="addPopFormRules">
+				<el-form-item label="公会头像" prop="face" :label-width="formLabelWidth">
+					<el-col :span="17">
+						<el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgPreview"
+							:auto-upload="false">
+							<img v-if="imageUrl" :src="imageUrl" class="avatar">
+							<i v-else class="el-icon-plus avatar-uploader-icon" />
+						</el-upload>
+					</el-col>
+				</el-form-item>
+				<el-form-item label="公会昵称" prop="nickname" :label-width="formLabelWidth">
+					<el-col :span="17">
+						<el-input v-model="addPopForm.nickname" style="width: 335px;" placeholder="请输入公会名字" clearable
+							autocomplete="off" />
+					</el-col>
+				</el-form-item>
+				<el-form-item label="绑定会长ID" prop="user_number" :label-width="formLabelWidth">
+					<el-col :span="17">
+						<el-input v-model="addPopForm.user_number" v-input-limit="0" style="width: 335px;"
+							placeholder="请输入需要绑定的会长ID" clearable autocomplete="off" />
+					</el-col>
+				</el-form-item>
+				<el-form-item label="公会等级" prop="user_number" :label-width="formLabelWidth">
+					<el-col :span="17">
+					<el-select v-model="addPopForm.grade" placeholder="请选择">
+						<el-option v-for="item in gradeList" :key="item.id" :label="item.name" :value="item.id" />
+					</el-select>
+					</el-col>
+				</el-form-item>
+				<!-- <el-form-item label="周返点配置" prop="week_rebate" :label-width="formLabelWidth">
+					<el-input v-model="addPopForm.week_rebate" v-input-limit="0" style="width: 335px;"
+						placeholder="请输入周返点配置" clearable autocomplete="off">
+						<template slot="append">%</template>
+					</el-input>
+				</el-form-item>
+				<el-form-item label="固定返点配置" prop="rebate" :label-width="formLabelWidth">
+					<el-input v-model="addPopForm.rebate" style="width: 335px;" placeholder="" clearable
+						autocomplete="off" disabled>
+						<template slot="append">%</template>
+					</el-input>
+				</el-form-item> -->
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button :loading="loading" type="primary" @click="handleAdd">创 建</el-button>
+				<el-button @click="handleAddCancel">取 消</el-button>
+			</div>
+		</el-dialog>
+		<el-dialog title="修改信息" :visible.sync="editPop" :before-close="handleEditCancel">
+			<el-form :model="editPopForm" ref="editPopForm" :rules="editPopFormRules">
+				<el-form-item label="公会头像" prop="face" :label-width="formLabelWidth">
+					<el-col :span="17">
+						<el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgPreview"
+							:auto-upload="false">
+							<img v-if="imageUrl" :src="imageUrl" class="avatar">
+							<i v-else class="el-icon-plus avatar-uploader-icon" />
+						</el-upload>
+					</el-col>
+				</el-form-item>
+				<el-form-item label="公会昵称" prop="nickname" :label-width="formLabelWidth">
+					<el-col :span="17">
+						<el-input v-model="editPopForm.nickname" style="width: 335px;" placeholder="请输入公会名字" clearable
+							autocomplete="off" />
+					</el-col>
+				</el-form-item>
+				<!-- <el-form-item label="周返点配置" prop="week_rebate" :label-width="formLabelWidth">
+					<el-input v-model="editPopForm.week_rebate" v-input-limit="0" style="width: 335px;"
+						placeholder="请输入周返点配置" clearable autocomplete="off">
+						<template slot="append">%</template>
+					</el-input>
+				</el-form-item> -->
+				<el-form-item label="更换会长ID" prop="user_number" :label-width="formLabelWidth">
+					<el-col :span="17">
+						<el-input v-model="editPopForm.user_number" v-input-limit="0" style="width: 335px;"
+							placeholder="请输入需要更换的会长ID" clearable autocomplete="off" />
+					</el-col>
+				</el-form-item>
+				<el-form-item label="公会等级" prop="user_number" :label-width="formLabelWidth">
+					<el-col :span="17">
+					<el-select v-model="editPopForm.grade" placeholder="请选择">
+						<el-option v-for="item in gradeList" :key="item.id" :label="item.name" :value="item.id" />
+					</el-select>
+					</el-col>
+				</el-form-item>
+				<el-form-item label="公会简介" prop="remark" :label-width="formLabelWidth">
+					<el-col :span="17">
+						<el-input v-model="editPopForm.remark" type="textarea" style="width: 335px;" rows="9"
+							placeholder="请输入公会简介" minlength="10" maxlength="150" show-word-limit clearable
+							autocomplete="off" />
+					</el-col>
+				</el-form-item>
+
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button :loading="loading" type="primary" @click="handleEdit">确认修改</el-button>
+				<el-button @click="handleEditCancel">取 消</el-button>
+			</div>
+		</el-dialog>
+	</div>
 </template>
 
 <script>
-import {
-  getGuildList
-} from '@/api/videoRoom'
-import Pagination from '@/components/Pagination'
-import moment from 'moment'
-export default {
-  name: 'guild-list',
-  components: {
-    Pagination
-  },
-  data() {
-    return {
-      list: [],
-      loading: false,
-      listLoading: true,
-      total: 0,
-      multipleSelection: [],
-      filters: {
-        'guild_self': '',
-        'guild_genre': '',
-      },
-      page: {
-        page: 1,
-        limit: 10
-      },
-      audioPop: false,
-      formLabelWidth: '120px',
-      audioForm: {
-        'id': '',
-        'status': 2,
-        'reject': '',
-        'remark': ''
-      },
-      audioFormRules: {
-        status: [{
-          required: true,
-          trigger: 'change',
-          validator: (rules, value, cb) => {
-            if (!this.audioForm.status) {
-              return cb(new Error('请选择状态!'))
-            }
-            return cb()
-          }
-        }],
-        reject: [{
-          required: true,
-          trigger: 'change',
-          validator: (rules, value, cb) => {
-            if (this.checkList.length == 0 && this.audioForm.status == 3) {
-              return cb(new Error('请选择驳回字段!'))
-            }
-            return cb()
-          }
-        }],
-        remark: [{
-          required: true,
-          trigger: 'blur',
-          validator: (rules, value, cb) => {
-            if (!this.audioForm.remark && this.audioForm.status == 3) {
-              return cb(new Error('驳回原因不能为空!'))
-            }
-            return cb()
-          }
-        }]
-      },
-      rejectList: [],
-      checkList: []
-    }
-  },
-  created() {
-    this.getGuildListInfo()
-  },
-  methods: {
-    getGuildListInfo() {
-      this.listLoading = true
-      var params = {
-        'page': this.page.page,
-		'pagesize' : this.page.limit,
-        'guild_self': this.filters.guild_self,
-        'guild_genre': this.filters.guild_genre
-      }
-      getGuildList(params).then(response => {
-        this.total = response.data.count
-        this.list = response.data.list
-        for (const i in this.list) {}
-        this.listLoading = false
-      }).catch(err => {
-        this.listLoading = false
-      })
-    },
-  }
-}
+	import {
+		getGuildList,
+		getGuildCreate,
+		getGuildUpdate
+	} from '@/api/videoRoom'
+	import Pagination from '@/components/Pagination'
+	import moment from 'moment'
+	export default {
+		name: 'guild-list',
+		components: {
+			Pagination
+		},
+		data() {
+			return {
+				timer: "",
+				list: [],
+				loading: false,
+				listLoading: true,
+				total: 0,
+				guildImglist: [],
+				filters: {
+					'guild_number': '',
+					'status': '',
+				},
+				page: {
+					page: 1,
+					limit: 10
+				},
+				addPop: false,
+				editPop: false,
+				formLabelWidth: '120px',
+				imageUrl: "",
+				gradeList:[],
+				addPopForm: {
+					'face': '',
+					'nickname': '',
+					'user_number': '',
+					'week_rebate': '',
+					'rebate': '',
+					'grade' : ''
+				},
+				addPopFormRules: {
+					face: [{
+						required: true,
+						trigger: 'change',
+						validator: (rules, value, cb) => {
+							if (!this.imageUrl || this.imageUrl == "") {
+								return cb(new Error('活动图标不能为空!'))
+							}
+							return cb()
+						}
+					}],
+					nickname: [{
+						required: true,
+						trigger: 'blur',
+						validator: (rules, value, cb) => {
+							if (!this.addPopForm.nickname || this.addPopForm.nickname == "") {
+								return cb(new Error('公会昵称不能为空!'))
+							}
+							return cb()
+						}
+					}],
+					grade: [{
+						required: true,
+						trigger: 'change',
+						validator: (rules, value, cb) => {
+							if (!this.addPopForm.grade || this.addPopForm.grade == "") {
+								return cb(new Error('公会等级不能为空!'))
+							}
+							return cb()
+						}
+					}],
+					user_number: [{
+						required: true,
+						trigger: 'blur',
+						validator: (rules, value, cb) => {
+							if (!this.addPopForm.user_number || this.addPopForm.user_number == "") {
+								return cb(new Error('绑定会长ID不能为空!'))
+							}
+							return cb()
+						}
+					}],
+					week_rebate: [{
+						required: true,
+						trigger: 'blur',
+						validator: (rules, value, cb) => {
+							if (!this.addPopForm.week_rebate || this.addPopForm.week_rebate == "") {
+								return cb(new Error('周返点配置不能为空!'))
+							}
+							return cb()
+						}
+					}],
+				},
+				editPopForm: {
+					'id': '',
+					'face': '',
+					'nickname': '',
+					'user_number': '',
+					'week_rebate': '',
+					'remark': '',
+					'grade' : ''
+				},
+				editPopFormRules: {
+					face: [{
+						required: true,
+						trigger: 'change',
+						validator: (rules, value, cb) => {
+							if (!this.imageUrl || this.imageUrl == "") {
+								return cb(new Error('活动图标不能为空!'))
+							}
+							return cb()
+						}
+					}],
+					nickname: [{
+						required: true,
+						trigger: 'blur',
+						validator: (rules, value, cb) => {
+							if (!this.editPopForm.nickname || this.editPopForm.nickname == "") {
+								return cb(new Error('公会昵称不能为空!'))
+							}
+							return cb()
+						}
+					}],
+					user_number: [{
+						required: true,
+						trigger: 'blur',
+						validator: (rules, value, cb) => {
+							if (!this.editPopForm.user_number || this.editPopForm.user_number == "") {
+								return cb(new Error('更换会长ID不能为空!'))
+							}
+							return cb()
+						}
+					}],
+					week_rebate: [{
+						required: true,
+						trigger: 'blur',
+						validator: (rules, value, cb) => {
+							if (!this.editPopForm.week_rebate || this.editPopForm.week_rebate == "") {
+								return cb(new Error('周返点配置不能为空!'))
+							}
+							return cb()
+						}
+					}],
+					remark: [{
+						required: true,
+						trigger: 'blur',
+						validator: (rules, value, cb) => {
+							if (!this.editPopForm.remark || this.editPopForm.remark == "") {
+								return cb(new Error('公会简介不能为空!'))
+							}
+							if (this.editPopForm.remark.length < 10 || this.editPopForm.remark.length > 150) {
+								return cb(new Error('公会简介字数范围为10~150!'))
+							}
+							return cb()
+						}
+					}],
+					grade: [{
+						required: true,
+						trigger: 'change',
+						validator: (rules, value, cb) => {
+							if (!this.editPopForm.grade || this.editPopForm.grade == "") {
+								return cb(new Error('公会等级不能为空!'))
+							}
+							return cb()
+						}
+					}],
+				},
+			}
+		},
+		created() {
+			this.getGuildListInfo()
+		},
+		methods: {
+			getGuildListInfo() {
+				this.listLoading = true
+				var params = {
+					'page': this.page.page,
+					'pagesize': this.page.limit,
+					'status': this.filters.status,
+					'guild_number': this.filters.guild_number
+				}
+				this.guildImglist = [];
+				getGuildList(params).then(res => {
+					this.total = res.data.count
+					res.data.list.map(re => {
+						this.addPopForm.rebate = re.rebate;
+						re.create_timeText = moment(re.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+						if(re.face !== ""){
+							this.guildImglist.push(re.face)
+						}
+					})
+					this.list = res.data.list
+					this.listLoading = false
+				}).catch(err => {
+					this.listLoading = false
+				})
+			},
+			getGuildAdd() {
+				if (this.$refs['addPopForm']) {
+					this.$refs['addPopForm'].resetFields()
+				}
+				this.addPop = true;
+			},
+			imgPreview(file, fileList) {
+				const fileName = file.name
+				this.imageFile = file
+				const regex = /(.jpg|.jpeg|.gif|.png|.bmp)$/
+				if (regex.test(fileName.toLowerCase())) {
+					this.imageUrl = file.url
+					this.imageUrl = URL.createObjectURL(file.raw)
+				} else {
+					this.$message.error('请选择图片文件')
+				}
+			},
+			handleAddCancel() {
+				this.addPop = false
+			},
+			handleAdd() {
+				this.$refs.addPopForm.validate(valid => {
+					if (valid) {
+						const formData = new FormData()
+						formData.append('nickname', this.addPopForm.nickname)
+						formData.append('user_number', this.addPopForm.user_number)
+						formData.append('week_rebate', this.addPopForm.week_rebate)
+						if (this.imageFile !== '') {
+							formData.append('face', this.imageFile.raw)
+						}
+						getGuildCreate(formData).then(res=>{
+							this.$message.success("新增成功");
+							this.getGuildListInfo();
+							this.handleAddCancel();
+						}).catch(err=>{
+							this.$message.error(err)
+						})
+					}
+				})
+			},
+			handleChange(row) {
+				this.editPopForm = {
+					'id': row.id,
+					'face':  row.face,
+					'nickname':  row.nickname,
+					'user_number':  row.user_number,
+					'week_rebate':  row.week_rebate,
+					'remark':  row.remark,
+				}
+				this.imageUrl = row.face;
+				if (this.$refs['editPopForm']) {
+					this.$refs['editPopForm'].resetFields()
+				}
+				this.editPop = true
+			},
+			handleEdit(){
+				this.$refs.editPopForm.validate(valid => {
+					if (valid) {
+						const formData = new FormData()
+						formData.append('id', this.editPopForm.id)
+						formData.append('nickname', this.editPopForm.nickname)
+						formData.append('user_number', this.editPopForm.user_number)
+						formData.append('week_rebate', this.editPopForm.week_rebate)
+						formData.append('remark', this.editPopForm.remark)
+						formData.append('face', this.editPopForm.face)
+						if (this.imageFile && this.imageFile !== '') {
+							formData.append('face', this.imageFile.raw)
+						}
+						getGuildUpdate(formData).then(res=>{
+							this.$message.success("修改成功");
+							this.getGuildListInfo();
+							this.handleEditCancel();
+						}).catch(err=>{
+							this.$message.error(err);
+						})
+					}
+				})
+			},
+			handleEditCancel() {
+				this.editPop = false
+			}
+		}
+	}
 </script>
 <style lang="scss" scoped="scoped">
 	.el-form-item {
@@ -175,20 +435,53 @@ export default {
 	.pagination-container {
 		margin-top: initial;
 	}
-	
-	.color1{
-		color: #67C23A;
+
+	.avatar-uploader {
+		width: 178px;
+		height: 178px;
+		display: flex;
+		border-radius: 50%;
+		align-items: center;
+		justify-content: center;
+		border: 1px dashed #eeeeee;
+
+		.el-upload {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			img {
+				width: 100%;
+				border-radius: 50%;
+			}
+		}
 	}
-	.color2{
-		color: #E6A23C;
+
+	.avatar-uploader .el-upload {
+		border: 1px dashed #d9d9d9;
+		border-radius: 6px;
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+		width: 100%;
 	}
-	.color3{
-		color: #409EFF;
+
+	.avatar-uploader .el-upload:hover {
+		border-color: #409EFF;
 	}
-	.color4{
-		color: #F56C6C;
+
+	.avatar-uploader-icon {
+		font-size: 28px;
+		color: #8c939d;
+		width: 178px;
+		height: 178px;
+		line-height: 178px;
+		text-align: center;
+		border-radius: 50%;
 	}
-	.color5{
-		color: #909399;
+	.el-table .cell{
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 </style>

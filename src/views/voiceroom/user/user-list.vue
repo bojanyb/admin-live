@@ -27,20 +27,28 @@
 				</template>
 			</el-table-column>
 			<el-table-column label="性别" prop="sexText" align="center" width="95" />
+			
+			<el-table-column label="所属公会" prop="phone" align="center" >
+				<template slot-scope="scope">
+					<div>造梦家族</div>
+					<div>(100800888)</div>
+				</template>
+			</el-table-column>
+			<el-table-column label="是否为厅主" prop="statusText" align="center" />
 			<el-table-column label="手机号" prop="phone" align="center" />
 			<el-table-column label="状态" prop="statusText" align="center" width="95" />
 			<el-table-column label="创建时间" prop="create_timeText" align="center" />
 			<el-table-column label="封禁时间" prop="update_timeText" align="center" />
-			<el-table-column label="封禁备注" prop="remark" align="center" width="280" show-overflow-tooltip />
+			<el-table-column label="封禁备注" prop="remark" align="center" width="200" show-overflow-tooltip />
 			<el-table-column label="操作" prop="gift_str" align="center" width="230">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.status == 1" type="danger" @click="handleUser(scope.row)">封禁</el-button>
 					<el-button v-if="scope.row.status == 2" type="success" @click="handleUser(scope.row)">启用</el-button>
 
-					<el-button v-if="scope.row.statistical_show == 0" type="success" @click="handleStatistics(scope.row)">开启房间统计
+					<!-- <el-button v-if="scope.row.statistical_show == 0" type="success" @click="handleStatistics(scope.row)">开启房间统计
 					</el-button>
 					<el-button v-if="scope.row.statistical_show == 1" type="danger" @click="handleStatistics(scope.row)">关闭房间统计
-					</el-button>
+					</el-button> -->
 				</template>
 			</el-table-column>
 		</el-table>

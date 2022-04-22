@@ -20,6 +20,7 @@
 			<el-table-column label="举报时间" prop="create_timeText" align="center"/>
 			<el-table-column label="被举报用户ID" prop="feedback_user_id" align="center" />
 			<el-table-column label="举报用户ID" prop="user_id" align="center" />
+			<el-table-column label="举报来源" prop="" align="center" />
 			<el-table-column label="举报原因" prop="talk_genre" align="center" />
 			<el-table-column label="举报证据" prop="talk_content" align="center" />
 			<el-table-column label="处理人" prop="deal_user_name" align="center" />

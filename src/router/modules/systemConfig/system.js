@@ -47,6 +47,16 @@ const systemConfigRouter = {
 	    noCache: true
 	  }
 	},
+	{
+	  path: 'platform-rebate',
+	  component: () => import('@/views/voiceroom/systemConfig/platform-rebate'),
+	  name: 'platform-rebate',
+	  meta: {
+	    title: '平台返点配置',
+	    noCache: true
+	  }
+	},
+	
   ]
 }
 

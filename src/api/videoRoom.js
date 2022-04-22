@@ -256,6 +256,42 @@ export function getGuildList(data) {
   })
 }
 
+// 新增公会
+export function getGuildCreate(data) {
+  return request({
+    url: 'guild/create',
+    method: 'post',
+    data
+  })
+}
+
+// 修改公会
+export function getGuildUpdate(data) {
+  return request({
+    url: '/guild/update',
+    method: 'post',
+    data
+  })
+}
+
+// 公会厅申请信息处理	
+export function getGuildJoinApply(data) {
+  return request({
+    url: 'Guild/joinApply',
+    method: 'post',
+    data
+  })
+}
+// 公会厅申请处理
+export function getGuildCheck(data) {
+  return request({
+    url: 'Guild/check',
+    method: 'post',
+    data
+  })
+}
+
+
 // 公会待审核列表
 export function getGuildCheckList(data) {
   return request({
@@ -266,13 +302,13 @@ export function getGuildCheckList(data) {
 }
 
 // 公会审核/驳回
-export function getGuildCheck(data) {
-  return request({
-    url: 'Guild/check',
-    method: 'post',
-    data
-  })
-}
+// export function getGuildCheck(data) {
+//   return request({
+//     url: 'Guild/check',
+//     method: 'post',
+//     data
+//   })
+// }
 
 // 公会待审核列表
 export function getGuildWithdrawList(data) {
@@ -445,6 +481,25 @@ export function getDesignateDelete(data) {
   })
 }
 
+// 系统参数读取
+export function getSyetermConfig(data) {
+  return request({
+    url: '/System/getSyetermConfig',
+    method: 'post',
+    data
+  })
+}
+
+// 打招呼常用语 删除 
+export function getSyetermConfigSave(data) {
+  return request({
+    url: '/system/save',
+    method: 'post',
+    data
+  })
+}
+
+
 //  房间名称列表
 export function getLiveRoomList(data) {
   return request({
@@ -589,5 +644,24 @@ export function getUserMusicBack(data) {
     data
   })
 }
+
+// 赠送 （平台充值）
+export function getUserAddMoney(data) {
+  return request({
+    url: '/Wallet/addMoney',
+    method: 'post',
+    data
+  })
+}
+
+// 赠送列表 (充值记录)
+export function getUserPlatformTopUp(data) {
+  return request({
+    url: '/wallet/platformTopUp',
+    method: 'post',
+    data
+  })
+}
+
 
 

@@ -4,7 +4,7 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true">
-				<el-form-item>
+				<el-form-item v-if="list.length < 3">
 					<el-button type="success" @click="handleActivityAdd">新增</el-button>
 				</el-form-item>
 			</el-form>
@@ -38,6 +38,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
+		
 		<!--工具条-->
 		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
 			@pagination="activetyList" />
