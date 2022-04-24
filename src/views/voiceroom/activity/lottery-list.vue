@@ -7,12 +7,12 @@
 				<el-form-item label="抽奖人ID">
 					<el-input v-model="filters.user_number" v-input-limit="0" placeholder="抽奖人ID" clearable />
 				</el-form-item>
-				<el-form-item label="宝箱类型">
+				<el-form-item label="活动类型">
 					<el-select v-model="filters.activity_type_id" placeholder="请选择" @change="getActivetyDrawLogList">
 						<el-option v-for="item in lotteryType" :key="item.id" :label="item.name" :value="item.id" />
 					</el-select>
 				</el-form-item>
-				<el-form-item label="活动类型">
+				<el-form-item label="活动类别">
 					<el-select v-model="filters.activity_type" placeholder="请选择" @change="getActivetyDrawLogList">
 						<el-option v-for="item in activityTypeList" :key="item.value" :label="item.label"
 							:value="item.value" />
@@ -31,10 +31,10 @@
 
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-card class="sumBox">
-				<div class="sumBoxItem fl">宝箱开箱次数：{{baoxiang.baoxiang_open_count}}</div>
-				<div class="sumBoxItem fl">宝箱投入：{{baoxiang.baoxiang_out}}</div>
-				<div class="sumBoxItem fl">宝箱产出：{{baoxiang.baoxiang_in}}</div>
-				<div class="sumBoxItem fl">宝箱投入产出比：{{baoxiang.proportion}}</div>
+				<div class="sumBoxItem fl">活动开箱次数：{{baoxiang.baoxiang_open_count}}</div>
+				<div class="sumBoxItem fl">活动投入：{{baoxiang.baoxiang_out}}</div>
+				<div class="sumBoxItem fl">活动产出：{{baoxiang.baoxiang_in}}</div>
+				<div class="sumBoxItem fl">活动投入产出比：{{baoxiang.proportion}}</div>
 			</el-card>
 		</el-col>
 
@@ -47,7 +47,7 @@
 			</el-table-column>
 			<el-table-column label="用户ID" prop="user_number" align="center" />
 			<el-table-column label="活动类型" prop="activeTypeText" align="center" />
-			<el-table-column label="宝箱类型" prop="boxTypeText" align="center" />
+			<el-table-column label="活动类别" prop="boxTypeText" align="center" />
 			<el-table-column label="开箱次数" prop="user_open_count" align="center" />
 			<el-table-column label="投入" prop="user_out" align="center" />
 			<el-table-column label="产出" prop="user_in" align="center" />
@@ -134,8 +134,8 @@
 				}
 				getActivetyDrawLog(params).then(response => {
 					this.total = response.data.count
-					response.data.baoxiang.proportion = ((response.data.baoxiang.baoxiang_in / response.data
-						.baoxiang.baoxiang_out) * 100).toFixed(1) + '%'
+					response.data.baoxiang.proportion = (response.data.baoxiang.baoxiang_in !==0 && response.data.baoxiang.baoxiang_out !== 0) ? ((response.data.baoxiang.baoxiang_in / response.data
+						.baoxiang.baoxiang_out) * 100).toFixed(1) + '%' : "0%";
 					this.baoxiang = response.data.baoxiang;
 					let activeTypeText = "";
 					let boxTypeText = "";
