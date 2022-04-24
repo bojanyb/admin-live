@@ -32,8 +32,8 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-card class="sumBox">
 				<div class="sumBoxItem fl">宝箱开箱次数：{{baoxiang.baoxiang_open_count}}</div>
-				<div class="sumBoxItem fl">宝箱投入：{{baoxiang.baoxiang_in}}</div>
-				<div class="sumBoxItem fl">宝箱产出：{{baoxiang.baoxiang_out}}</div>
+				<div class="sumBoxItem fl">宝箱投入：{{baoxiang.baoxiang_out}}</div>
+				<div class="sumBoxItem fl">宝箱产出：{{baoxiang.baoxiang_in}}</div>
 				<div class="sumBoxItem fl">宝箱投入产出比：{{baoxiang.proportion}}</div>
 			</el-card>
 		</el-col>
@@ -84,7 +84,7 @@
 					"start_time": "",
 					"end_time": "",
 					"activity_type": 1,
-					"activity_type_id" : ""
+					"activity_type_id": ""
 				},
 				lotteryType: [],
 				activityTypeList: [{
@@ -109,8 +109,8 @@
 					'pagesize': this.page.limit,
 				}
 				getActivetyList(params).then(response => {
-					response.data.list.map((re,i)=>{
-						if(i == 0){
+					response.data.list.map((re, i) => {
+						if (i == 0) {
 							this.filters.activity_type_id = re.id;
 						}
 					})
@@ -129,26 +129,27 @@
 					"user_number": this.filters.user_number,
 					"start_time": this.timer ? (new Date(this.timer[0]).getTime() / 1000) : "",
 					"end_time": this.timer ? (new Date(this.timer[1]).getTime() / 1000) : "",
-					'activity_type' : this.filters.activity_type,
-					'activity_type_id' : this.filters.activity_type_id
+					'activity_type': this.filters.activity_type,
+					'activity_type_id': this.filters.activity_type_id
 				}
 				getActivetyDrawLog(params).then(response => {
 					this.total = response.data.count
-					response.data.baoxiang.proportion = ((response.data.baoxiang.baoxiang_in /  response.data.baoxiang.baoxiang_out) * 100).toFixed(1) + '%'
+					response.data.baoxiang.proportion = ((response.data.baoxiang.baoxiang_in / response.data
+						.baoxiang.baoxiang_out) * 100).toFixed(1) + '%'
 					this.baoxiang = response.data.baoxiang;
 					let activeTypeText = "";
 					let boxTypeText = "";
-					this.lotteryType.map(res=>{
-						if(res.id == this.filters.activity_type_id){
+					this.lotteryType.map(res => {
+						if (res.id == this.filters.activity_type_id) {
 							activeTypeText = res.name;
 						}
 					})
-					this.activityTypeList.map(res=>{
-						if(res.value == this.filters.activity_type){
+					this.activityTypeList.map(res => {
+						if (res.value == this.filters.activity_type) {
 							boxTypeText = res.label;
 						}
 					})
-					response.data.list.map(re=>{
+					response.data.list.map(re => {
 						re.activeTypeText = activeTypeText;
 						re.boxTypeText = boxTypeText;
 					})
@@ -166,14 +167,17 @@
 	::v-deep.sumBox {
 		margin-bottom: 20px;
 		display: flex;
-		.el-card__body{
+
+		.el-card__body {
 			width: 100%;
-			.sumBoxItem{
+
+			.sumBoxItem {
 				width: 25%;
 				text-align: center;
 				border-right: solid 1px #DCDCDC;
 			}
-			.sumBoxItem:last-child{
+
+			.sumBoxItem:last-child {
 				border-right: none;
 			}
 		}
