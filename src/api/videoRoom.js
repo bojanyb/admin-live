@@ -681,5 +681,30 @@ export function getUserConfigRebate(data) {
   })
 }
 
+// 公会举报处理列表
+export function getGuildUserReport(data) {
+  return request({
+    url: '/guild/guildUserReport',
+    method: 'post',
+    data
+  })
+}
 
+// 公会举报 处理
+export function getGuildDealReport(data) {
+  return request({
+    url: '/guild/dealReport',
+    method: 'post',
+    data
+  })
+}
+
+// 公会举报 72小时非公会厅收入查询
+export function getNotGuildFree(data) {
+  return request({
+    url: '/guild/getNotGuildFree',
+    method: 'post',
+    data
+  })
+}
 

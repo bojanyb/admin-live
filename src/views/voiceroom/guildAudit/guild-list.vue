@@ -16,7 +16,7 @@
 
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
-			<el-table-column label="公会ID" prop="id" align="center" />
+			<el-table-column label="公会ID" prop="guild_number" align="center" />
 			<el-table-column label="公会等级" prop="rankText" align="center" />
 			<el-table-column label="公会长ID" prop="user_number" align="center" />
 			<el-table-column label="公会昵称" prop="nickname" align="center" />

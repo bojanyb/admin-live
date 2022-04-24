@@ -27,11 +27,10 @@
 				</template>
 			</el-table-column>
 			<el-table-column label="性别" prop="sexText" align="center" width="95" />
-			
 			<el-table-column label="所属公会" prop="guild_name" align="center" >
 				<template slot-scope="scope">
-					<div>{{guild_name}}</div>
-					<div>(100800888)</div>
+					<div>{{scope.row.guild_name}}</div>
+					<div v-if="scope.row.guild_number">({{scope.row.guild_number}})</div>
 				</template>
 			</el-table-column>
 			<el-table-column label="是否为厅主" prop="is_guild_roomText" align="center" />

@@ -6,7 +6,6 @@
 			<el-table-column label="被举报ID" prop="feedback_user_id" align="center" />
 			<el-table-column label="被举报状态" prop="feedback_user_statusText" align="center" />
 			<el-table-column label="举报用户ID" prop="user_id" align="center" />
-			<el-table-column label="举报来源" prop="" align="center" />
 			<el-table-column label="举报原因" prop="genre" align="center" />
 			<el-table-column label="举报证据" prop="content" align="center" show-overflow-tooltip />
 			<el-table-column label="操作" prop="gift_str" align="center">
