@@ -21,7 +21,7 @@
 									<el-input v-model="it.end" style="width:45%" v-input-limit="0" />
 								</div>
 								<div class="fixedRebate fl">
-									<el-input v-model="it.rebate" style="width:90%" placeholder="固定返点" v-input-limit="0" />
+									<el-input v-model="it.rebate" disabled style="width:90%" placeholder="固定返点" v-input-limit="0" />
 								</div>
 								<div class="weeklyRebate fl">
 									<el-input v-model="it.week_rebate" style="width:90%" placeholder="周返点" v-input-limit="0" />

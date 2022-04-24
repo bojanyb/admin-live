@@ -28,13 +28,13 @@
 			</el-table-column>
 			<el-table-column label="性别" prop="sexText" align="center" width="95" />
 			
-			<el-table-column label="所属公会" prop="phone" align="center" >
+			<el-table-column label="所属公会" prop="guild_name" align="center" >
 				<template slot-scope="scope">
-					<div>造梦家族</div>
+					<div>{{guild_name}}</div>
 					<div>(100800888)</div>
 				</template>
 			</el-table-column>
-			<el-table-column label="是否为厅主" prop="statusText" align="center" />
+			<el-table-column label="是否为厅主" prop="is_guild_roomText" align="center" />
 			<el-table-column label="手机号" prop="phone" align="center" />
 			<el-table-column label="状态" prop="statusText" align="center" width="95" />
 			<el-table-column label="创建时间" prop="create_timeText" align="center" />
@@ -154,6 +154,7 @@
 						} else if (res.status == 2) {
 							res.statusText = '封禁'
 						}
+						res.is_guild_roomText = res.is_guild_room == 0 ? "否" : "是";
 						this.userImglist.push(res.face)
 					})
 					this.listLoading = false
