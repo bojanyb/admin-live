@@ -49,8 +49,8 @@
 			<el-table-column label="活动类型" prop="activeTypeText" align="center" />
 			<el-table-column label="宝箱类型" prop="boxTypeText" align="center" />
 			<el-table-column label="开箱次数" prop="user_open_count" align="center" />
-			<el-table-column label="投入" prop="user_in" align="center" />
-			<el-table-column label="产出" prop="user_out" align="center" />
+			<el-table-column label="投入" prop="user_out" align="center" />
+			<el-table-column label="产出" prop="user_in" align="center" />
 		</el-table>
 		<!--工具条-->
 		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
