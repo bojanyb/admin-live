@@ -109,8 +109,10 @@
 					'pagesize': this.page.limit,
 				}
 				getActivetyList(params).then(response => {
-					response.data.list.map(re=>{
-						this.filters.activity_type_id = re.id;
+					response.data.list.map((re,i)=>{
+						if(i == 0){
+							this.filters.activity_type_id = re.id;
+						}
 					})
 					this.lotteryType = response.data.list;
 					this.getActivetyDrawLogList();
