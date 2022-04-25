@@ -17,7 +17,7 @@
 				<el-form-item label="充值数量" prop="amount" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.amount" style="width: 335px;" v-input-limit="0"
-							placeholder="1~100000" clearable autocomplete="off" /> <span style="margin-left: 5px;">人民币</span>
+							placeholder="1~100000" clearable autocomplete="off" />
 					</el-col>
 				</el-form-item>
 				<el-form-item label="充值原因" prop="remark" :label-width="formLabelWidth">
