@@ -34,7 +34,7 @@
 				<div class="sumBoxItem fl">活动开箱次数：{{baoxiang.baoxiang_open_count}}</div>
 				<div class="sumBoxItem fl">活动投入：{{baoxiang.baoxiang_in}}</div>
 				<div class="sumBoxItem fl">活动产出：{{baoxiang.baoxiang_out}}</div>
-				<div class="sumBoxItem fl">活动投入产出比：{{baoxiang.proportion}}</div>
+				<div class="sumBoxItem fl">活动投入产出比：{{baoxiang.output_proportion}}</div>
 			</el-card>
 		</el-col>
 
@@ -134,8 +134,6 @@
 				}
 				getActivetyDrawLog(params).then(response => {
 					this.total = response.data.count
-					response.data.baoxiang.proportion = (response.data.baoxiang.baoxiang_in !==0 && response.data.baoxiang.baoxiang_out !== 0) ? ((response.data.baoxiang.baoxiang_in / response.data
-						.baoxiang.baoxiang_out) * 100).toFixed(1) + '%' : "0%";
 					this.baoxiang = response.data.baoxiang;
 					let activeTypeText = "";
 					let boxTypeText = "";
