@@ -17,7 +17,7 @@
 				<el-form-item label="充值数量" prop="amount" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.amount" style="width: 335px;" v-input-limit="0"
-							placeholder="1~100000" clearable autocomplete="off" />
+							placeholder="1~10000000" clearable autocomplete="off" />
 					</el-col>
 				</el-form-item>
 				<el-form-item label="充值原因" prop="remark" :label-width="formLabelWidth">
@@ -76,8 +76,8 @@
 							if (!this.popForm.amount || this.popForm.amount == "") {
 								return cb(new Error('充值数量不能为空!'))
 							}
-							if (this.popForm.amount < 1 || this.popForm.amount > 100000) {
-								return cb(new Error('充值数量范围1~100000!'))
+							if (this.popForm.amount < 1 || this.popForm.amount > 10000000) {
+								return cb(new Error('充值数量范围1~10000000!'))
 							}
 							return cb()
 						}
