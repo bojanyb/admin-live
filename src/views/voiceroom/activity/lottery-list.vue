@@ -32,8 +32,8 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-card class="sumBox">
 				<div class="sumBoxItem fl">活动开箱次数：{{baoxiang.baoxiang_open_count}}</div>
-				<div class="sumBoxItem fl">活动投入：{{baoxiang.baoxiang_out}}</div>
-				<div class="sumBoxItem fl">活动产出：{{baoxiang.baoxiang_in}}</div>
+				<div class="sumBoxItem fl">活动投入：{{baoxiang.baoxiang_in}}</div>
+				<div class="sumBoxItem fl">活动产出：{{baoxiang.baoxiang_out}}</div>
 				<div class="sumBoxItem fl">活动投入产出比：{{baoxiang.proportion}}</div>
 			</el-card>
 		</el-col>

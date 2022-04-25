@@ -17,12 +17,12 @@
 				<el-form-item label="充值数量" prop="amount" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.amount" style="width: 335px;" v-input-limit="0"
-							placeholder="1~100000" clearable autocomplete="off" />
+							placeholder="1~100000" clearable autocomplete="off" /> <span style="margin-left: 5px;">人民币</span>
 					</el-col>
 				</el-form-item>
 				<el-form-item label="充值原因" prop="remark" :label-width="formLabelWidth">
 					<el-col :span="17">
-						<el-input type="textarea" maxlength="100" minlength="20" show-word-limit
+						<el-input type="textarea" maxlength="100" minlength="1" show-word-limit
 							:autosize="{ minRows: 2, maxRows: 6}" v-model="popForm.remark" style="width: 335px;"
 							placeholder="请输入充值原因" clearable autocomplete="off" />
 					</el-col>
@@ -89,8 +89,8 @@
 							if (!this.popForm.remark || this.popForm.remark == "") {
 								return cb(new Error('充值原因不能为空!'))
 							}
-							if (this.popForm.remark.length < 20 || this.popForm.remark > 100) {
-								return cb(new Error('充值原因字符范围20~100!'))
+							if (this.popForm.remark.length < 1 || this.popForm.remark > 100) {
+								return cb(new Error('充值原因字符范围1~100!'))
 							}
 							return cb()
 						}
