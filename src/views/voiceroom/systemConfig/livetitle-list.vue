@@ -168,7 +168,10 @@
 			},
 			getLiveRank() {
 				this.listLoading = true
-				getLiveRanklist().then(response => {
+				var params = {
+					page : this.page.page
+				}
+				getLiveRanklist(params).then(response => {
 					this.total = response.data.count
 					this.list = response.data.list
 					this.list.map(res => {
