@@ -13,10 +13,8 @@
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
 			<!-- <el-table-column label="ID" align="center" prop="id" width="95" /> -->
-			<el-table-column label="头衔" prop="live_rank" align="center" width="95" />
-			<el-table-column label="头衔名称" prop="live_rank_name" align="center" />
-			<el-table-column label="收入喵粮总数" prop="gain_total" align="center" />
-			<el-table-column label="礼物总价值" prop="income" align="center" />
+			<el-table-column label="等级" prop="live_rank" align="center" width="95" />
+			<el-table-column label="总魅力" prop="gain_total" align="center" />
 			<el-table-column label="修改时间" prop="update_timeText" align="center" />
 			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
@@ -31,30 +29,30 @@
 
 		<el-dialog :title="editTitle" :visible.sync="editPop">
 			<el-form ref="popForm" :model="popForm" :rules="popFormRules">
-				<el-form-item label="头衔" prop="live_rank" :label-width="formLabelWidth">
+				<el-form-item label="等级" prop="live_rank" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.live_rank" v-input-limit="0" style="width: 335px;"
-							placeholder="请输入头衔数值" clearable autocomplete="off" />
+							placeholder="请输入等级数值" clearable autocomplete="off" />
 					</el-col>
 				</el-form-item>
-				<el-form-item label="头衔名称" prop="live_rank_name" :label-width="formLabelWidth">
+				<!-- <el-form-item label="头衔名称" prop="live_rank_name" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.live_rank_name" style="width: 335px;" placeholder="请输入头衔名称" clearable
 							autocomplete="off" />
 					</el-col>
-				</el-form-item>
-				<el-form-item label="收入喵粮总数" prop="gain_total" :label-width="formLabelWidth">
+				</el-form-item> -->
+				<el-form-item label="总魅力" prop="gain_total" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.gain_total" v-input-limit="0" style="width: 335px;"
-							placeholder="请输入收入喵粮总数" clearable autocomplete="off" />
+							placeholder="请输入总魅力" clearable autocomplete="off" />
 					</el-col>
 				</el-form-item>
-				<el-form-item label="礼物总价值" prop="income" :label-width="formLabelWidth">
+				<!-- <el-form-item label="礼物总价值" prop="income" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.income" v-input-limit="0" style="width: 335px;"
 							placeholder="请输入礼物总价值" clearable autocomplete="off" />
 					</el-col>
-				</el-form-item>
+				</el-form-item> -->
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="editPop = false">取 消</el-button>
@@ -96,9 +94,9 @@
 				editPop: false,
 				popForm: {
 					'live_rank': '',
-					'live_rank_name': '',
+					// 'live_rank_name': '',
 					'gain_total': '',
-					'income': ''
+					// 'income': ''
 				},
 				popFormRules: {
 					live_rank: [{
@@ -111,16 +109,16 @@
 							return cb()
 						}
 					}],
-					live_rank_name: [{
-						required: true,
-						trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!this.popForm.live_rank_name) {
-								return cb(new Error('头衔名称不能为空!'))
-							}
-							return cb()
-						}
-					}],
+					// live_rank_name: [{
+					// 	required: true,
+					// 	trigger: 'blur',
+					// 	validator: (rules, value, cb) => {
+					// 		if (!this.popForm.live_rank_name) {
+					// 			return cb(new Error('头衔名称不能为空!'))
+					// 		}
+					// 		return cb()
+					// 	}
+					// }],
 					gain_total: [{
 						required: true,
 						trigger: 'blur',
@@ -131,16 +129,16 @@
 							return cb()
 						}
 					}],
-					income: [{
-						required: true,
-						trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!this.popForm.income) {
-								return cb(new Error('礼物总价值不能为空!'))
-							}
-							return cb()
-						}
-					}]
+					// income: [{
+					// 	required: true,
+					// 	trigger: 'blur',
+					// 	validator: (rules, value, cb) => {
+					// 		if (!this.popForm.income) {
+					// 			return cb(new Error('礼物总价值不能为空!'))
+					// 		}
+					// 		return cb()
+					// 	}
+					// }]
 				}
 			}
 		},
@@ -184,9 +182,9 @@
 				this.editTitle = '添加'
 				this.popForm = {
 					'live_rank': '',
-					'live_rank_name': '',
+					// 'live_rank_name': '',
 					'gain_total': '',
-					'income': ''
+					// 'income': ''
 				}
 				this.editPop = true
 			},
@@ -194,9 +192,9 @@
 				this.editTitle = '修改'
 				this.popForm = {
 					'live_rank': row.live_rank,
-					'live_rank_name': row.live_rank_name,
+					// 'live_rank_name': row.live_rank_name,
 					'gain_total': row.gain_total,
-					'income': row.income,
+					// 'income': row.income,
 					'id': row.id
 				}
 				this.editPop = true

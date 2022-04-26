@@ -16,7 +16,7 @@ const systemConfigRouter = {
     component: () => import('@/views/voiceroom/systemConfig/consume-list'),
     name: 'consume-list',
     meta: {
-      title: '用户消费等级列表',
+      title: '财富等级设置',
       noCache: true
     }
   },
@@ -25,7 +25,7 @@ const systemConfigRouter = {
     component: () => import('@/views/voiceroom/systemConfig/livetitle-list'),
     name: 'livetitle-list',
     meta: {
-      title: '直播头衔列表',
+      title: '魅力等级设置',
       noCache: true
     }
   },

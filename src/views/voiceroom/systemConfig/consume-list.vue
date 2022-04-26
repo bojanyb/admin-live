@@ -13,10 +13,10 @@
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
 			<!-- <el-table-column label="ID" align="center" prop="id" width="95" /> -->
-			<el-table-column label="等级" prop="user_rank" align="center" width="95" />
-			<el-table-column label="等级名称" prop="rank_name" align="center" />
-			<el-table-column label="消费钻石总数" prop="diamond_total" align="center" />
-			<el-table-column label="总支出(个)" prop="spending" align="center" />
+			<el-table-column label="等级" prop="user_rank" align="center"/>
+			<!-- <el-table-column label="等级名称" prop="rank_name" align="center" /> -->
+			<el-table-column label="总财富贡献" prop="diamond_total" align="center" />
+			<!-- <el-table-column label="总支出(个)" prop="spending" align="center" /> -->
 			<el-table-column label="修改时间" prop="update_timeText" align="center" />
 			<el-table-column label="操作" prop="gift_str" align="center">
 				<template slot-scope="scope">
@@ -37,24 +37,24 @@
 							placeholder="请输入等级数值" clearable autocomplete="off" />
 					</el-col>
 				</el-form-item>
-				<el-form-item label="等级名称" prop="rank_name" :label-width="formLabelWidth">
+				<!-- <el-form-item label="等级名称" prop="rank_name" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.rank_name" style="width: 335px;" placeholder="请输入等级名称" clearable
 							autocomplete="off" />
 					</el-col>
-				</el-form-item>
-				<el-form-item label="消费钻石总数" prop="diamond_total" :label-width="formLabelWidth">
+				</el-form-item> -->
+				<el-form-item label="总财富贡献" prop="diamond_total" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.diamond_total" v-input-limit="0" style="width: 335px;"
-							placeholder="请输入收入消费钻石总数" clearable autocomplete="off" />
+							placeholder="请输入收入总财富贡献" clearable autocomplete="off" />
 					</el-col>
 				</el-form-item>
-				<el-form-item label="总支出" prop="spending" :label-width="formLabelWidth">
+			<!-- 	<el-form-item label="总支出" prop="spending" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.spending" v-input-limit="0" style="width: 335px;"
 							placeholder="请输入总支出" clearable autocomplete="off" />
 					</el-col>
-				</el-form-item>
+				</el-form-item> -->
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="editPop = false">取 消</el-button>
@@ -91,9 +91,9 @@
 				editPop: false,
 				popForm: {
 					'user_rank': '',
-					'rank_name': '',
+					// 'rank_name': '',
 					'diamond_total': '',
-					'spending': ''
+					// 'spending': ''
 				},
 				popFormRules: {
 					user_rank: [{
@@ -106,36 +106,36 @@
 							return cb()
 						}
 					}],
-					rank_name: [{
-						required: true,
-						trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!this.popForm.rank_name) {
-								return cb(new Error('等级名称不能为空!'))
-							}
-							return cb()
-						}
-					}],
+					// rank_name: [{
+					// 	required: true,
+					// 	trigger: 'blur',
+					// 	validator: (rules, value, cb) => {
+					// 		if (!this.popForm.rank_name) {
+					// 			return cb(new Error('等级名称不能为空!'))
+					// 		}
+					// 		return cb()
+					// 	}
+					// }],
 					diamond_total: [{
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
 							if (!this.popForm.diamond_total) {
-								return cb(new Error('消费钻石总数不能为空!'))
+								return cb(new Error('消费钻石总财富贡献!'))
 							}
 							return cb()
 						}
 					}],
-					spending: [{
-						required: true,
-						trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!this.popForm.spending) {
-								return cb(new Error('总支出不能为空!'))
-							}
-							return cb()
-						}
-					}]
+					// spending: [{
+					// 	required: true,
+					// 	trigger: 'blur',
+					// 	validator: (rules, value, cb) => {
+					// 		if (!this.popForm.spending) {
+					// 			return cb(new Error('总支出不能为空!'))
+					// 		}
+					// 		return cb()
+					// 	}
+					// }]
 				}
 			}
 		},
@@ -164,9 +164,9 @@
 				this.editTitle = '添加'
 				this.popForm = {
 					'user_rank': '',
-					'rank_name': '',
+					// 'rank_name': '',
 					'diamond_total': '',
-					'spending': ''
+					// 'spending': ''
 				}
 				if(this.$refs["popForm"]){
 					this.$refs["popForm"].resetFields();
@@ -177,9 +177,9 @@
 				this.editTitle = '修改'
 				this.popForm = {
 					'user_rank': row.user_rank,
-					'rank_name': row.rank_name,
+					// 'rank_name': row.rank_name,
 					'diamond_total': row.diamond_total,
-					'spending': row.spending
+					// 'spending': row.spending
 				}
 				if(this.$refs["popForm"]){
 					this.$refs["popForm"].resetFields();

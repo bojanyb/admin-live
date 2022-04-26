@@ -381,7 +381,6 @@
 						const formData = new FormData()
 						formData.append('nickname', this.addPopForm.nickname)
 						formData.append('user_number', this.addPopForm.user_number)
-						formData.append('week_rebate', this.addPopForm.week_rebate)
 						formData.append('rank', this.addPopForm.rank)
 						if (this.imageFile !== '') {
 							formData.append('face', this.imageFile.raw)
@@ -418,7 +417,6 @@
 						formData.append('id', this.editPopForm.id)
 						formData.append('nickname', this.editPopForm.nickname)
 						formData.append('user_number', this.editPopForm.user_number)
-						formData.append('week_rebate', this.editPopForm.week_rebate)
 						formData.append('remark', this.editPopForm.remark)
 						formData.append('face', this.editPopForm.face)
 						formData.append('rank', this.editPopForm.rank)
