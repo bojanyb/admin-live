@@ -31,7 +31,7 @@
 
 		<el-dialog :title="editTitle" :visible.sync="editPop">
 			<el-form ref="popForm" :model="popForm" :rules="popFormRules">
-				<el-form-item label="等级" prop="user_rank" :label-width="formLabelWidth">
+				<el-form-item label="等级" v-if="editTitle == '添加'" prop="user_rank" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.user_rank" v-input-limit="0" style="width: 335px;"
 							placeholder="请输入等级数值" clearable autocomplete="off" />
@@ -100,8 +100,12 @@
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.user_rank) {
+							if (!this.popForm.user_rank && this.editTitle == '添加') {
 								return cb(new Error('等级不能为空!'))
+							}
+							if(this.popForm.user_rank  && parseInt(this.popForm.user_rank) > 100){
+								
+								return cb(new Error('等级最大值为100!'))
 							}
 							return cb()
 						}
@@ -121,7 +125,7 @@
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
 							if (!this.popForm.diamond_total) {
-								return cb(new Error('消费钻石总财富贡献!'))
+								return cb(new Error('总财富贡献不能为空!'))
 							}
 							return cb()
 						}

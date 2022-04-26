@@ -29,7 +29,7 @@
 
 		<el-dialog :title="editTitle" :visible.sync="editPop">
 			<el-form ref="popForm" :model="popForm" :rules="popFormRules">
-				<el-form-item label="等级" prop="live_rank" :label-width="formLabelWidth">
+				<el-form-item label="等级" v-if="editTitle == '添加'" prop="live_rank" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.live_rank" v-input-limit="0" style="width: 335px;"
 							placeholder="请输入等级数值" clearable autocomplete="off" />
@@ -103,9 +103,14 @@
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.live_rank) {
-								return cb(new Error('头衔不能为空!'))
+							if (!this.popForm.live_rank && this.editTitle == '添加') {
+								return cb(new Error('请输入等级数值!'))
 							}
+							if(this.popForm.live_rank  && parseInt(this.popForm.live_rank) > 100){
+								
+								return cb(new Error('等级最大值为100!'))
+							}
+							
 							return cb()
 						}
 					}],
@@ -124,7 +129,7 @@
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
 							if (!this.popForm.gain_total) {
-								return cb(new Error('收入喵粮总数不能为空!'))
+								return cb(new Error('总魅力不能为空!'))
 							}
 							return cb()
 						}
