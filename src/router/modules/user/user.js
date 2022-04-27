@@ -60,7 +60,7 @@ const userRouter = {
 			component: () => import('@/views/voiceroom/user/userbg-list'),
 			name: 'userbg-list',
 			meta: {
-				title: '用户图片审核列表',
+				title: '用户图片资料审核列表',
 				noCache: true
 			}
 		},

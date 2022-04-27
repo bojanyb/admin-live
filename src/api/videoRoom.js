@@ -755,3 +755,22 @@ export function getBannerDel(data) {
   })
 }
 
+
+// 获取用户背景图审核列表
+export function getUserBgi(data) {
+  return request({
+    url: '/user/getUserBgi',
+    method: 'post',
+    data
+  })
+}
+
+// 处理背景图审核结果
+export function getUserBgiAudit(data) {
+  return request({
+    url: '/user/setUserBgi',
+    method: 'post',
+    data
+  })
+}
+

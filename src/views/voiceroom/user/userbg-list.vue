@@ -3,52 +3,55 @@
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="getUserInfo()">
+			<el-form :inline="true" :model="filters" @keyup.enter.native="getUserBgiList()">
 				<el-form-item label="用户ID">
 					<el-input v-model="filters.user_id" v-input-limit="0" placeholder="请输入用户ID" clearable />
 				</el-form-item>
+				<el-form-item label="状态">
+				  <el-select v-model="filters.status" placeholder="请选择" @change="getUserBgiList">
+				    <el-option label="全部" value="" />
+				    <el-option key="2" label="未处理" value="2" />
+				    <el-option key="1" label="已处理" value="1" />
+				  </el-select>
+				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="getUserInfo">查询</el-button>
-					<el-button type="success" @click="getAllPs">批量通过</el-button>
+					<el-button type="primary" @click="getUserBgiList">查询</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row @selection-change="handleSelectionChange">
-			<el-table-column type="selection" width="55">
-			</el-table-column>
+			highlight-current-row>
+			<el-table-column label="上传用户昵称" prop="nickname" align="center" />
 			<el-table-column label="用户ID" prop="user_id" align="center" />
-			<el-table-column label="昵称" prop="live_rank_name" align="center" />
-			<el-table-column label="图像" prop="pic" align="center">
-				<template slot-scope="scope">
-					<el-image style="width: 30px; height: 30px" :lazy="true" :src="scope.row.pic ? scope.row.pic : ''"
-						:preview-src-list="userImglist" />
-				</template>
-			</el-table-column>
-			<el-table-column label="背景图" prop="bgImg" align="center">
+			<el-table-column label="上传时间" prop="create_timeText" align="center" />
+			<el-table-column label="图片" prop="pic" align="center">
 				<template slot-scope="scope">
 					<el-image style="width: 30px; height: 30px" :lazy="true"
-						:src="scope.row.bgImg ? scope.row.bgImg : ''" :preview-src-list="userBglist" />
+						:src="scope.row.pic ? scope.row.pic : ''" :preview-src-list="userBglist" />
 				</template>
 			</el-table-column>
+			<el-table-column label="状态" prop="statusText" align="center" />
+			<el-table-column label="处理人" prop="make_userid" align="center" />
+			<el-table-column label="处理时间" prop="update_timeText" align="center" />
 			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button type="primary" @click="handlePs(scope.row)">通过</el-button>
-					<el-button type="danger" @click="handleBack(scope.row)">驳回</el-button>
+					<el-button type="primary" v-if="scope.row.status == 0" @click="handleChange(scope.row,1)">通过</el-button>
+					<el-button type="danger" v-if="scope.row.status == 0" @click="handleChange(scope.row,2)">驳回</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 
 		<!--工具条-->
 		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="getUserInfo" />
+			@pagination="getUserBgiList" />
 	</div>
 </template>
 
 <script>
 	import {
-		getUserInfoList
+		getUserBgi,
+		getUserBgiAudit
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
@@ -69,7 +72,8 @@
 					limit: 10
 				},
 				filters: {
-					'user_id': ''
+					'user_id': '',
+					'status' : ''
 				},
 				userImglist: [],
 				userBglist: [],
@@ -77,50 +81,44 @@
 			}
 		},
 		created() {
-			this.getUserInfo()
+			this.getUserBgiList()
 		},
 		methods: {
-			getUserInfo() {
+			getUserBgiList() {
 				this.listLoading = true
 				var params = {
 					'user_id': this.filters.user_id,
-					'order': this.filters.order,
-					'sort': this.filters.sort,
+					'status' : this.filters.status,
 					'page': this.page.page,
 					'pagesize': this.page.limit
 				}
-				getUserInfoList(params).then(response => {
-					this.total = response.data.count
-					this.list = response.data.list
-					this.list.map(res => {
-						res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+				getUserBgi(params).then(response => {
+					this.total = response.data.count;
+					response.data.row.map(res => {
+						res.create_timeText = res.create_time > 0 ?moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
+						res.update_timeText = res.update_time > 0 ? moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
+						res.statusText = res.status == 1 ? "已处理" : "未处理";
+						this.userBglist.push(res.pic);
+						res.nickname = res.userinfo.nickname;
 					})
+					this.list = response.data.row;
 					this.listLoading = false
 				}).catch(err => {
 					this.listLoading = false
 				})
 			},
-			getAllPs(){
-				if(this.multipleSelection.length == 0 ){
-					this.$message.error("至少选择一条数据");
-					return
+			handleChange(row,status){
+				var params = {
+					id : row.id,
+					status : status,
+					make_userid: row.make_userid
 				}
-				console.log("批量通过",this.multipleSelection)
-			},
-			handlePs() {
-				console.log("通过")
-			},
-			handleBack() {
-				console.log("驳回");
-			},
-			handleSelectionChange(row){
-				if(row.length > 0){
-					row.map(res=>{
-						this.multipleSelection.push(res.id);
-					})
-				}else{
-					this.multipleSelection = [];
-				}
+				getUserBgiAudit(params).then(res=>{
+					this.$message.success("处理成功");
+					this.getUserBgiList();
+				}).catch(err=>{
+					this.$message.error(err);
+				})
 			}
 		}
 	}
