@@ -56,6 +56,15 @@ const userRouter = {
 			}
 		},
 		{
+			path: 'userbg-list',
+			component: () => import('@/views/voiceroom/user/userbg-list'),
+			name: 'userbg-list',
+			meta: {
+				title: '用户图片审核列表',
+				noCache: true
+			}
+		},
+		{
 			path: 'user-not-reportList',
 			component: () => import('@/views/voiceroom/user/user-not-reportList'),
 			name: 'user-not-reportList',
@@ -100,7 +109,15 @@ const userRouter = {
 				noCache: true
 			}
 		},
-		
+		{
+			path: 'dynamic-list',
+			component: () => import('@/views/voiceroom/user/dynamic-list'),
+			name: 'dynamic-list',
+			meta: {
+				title: '动态审核列表',
+				noCache: true
+			}
+		},
 	]
 }
 

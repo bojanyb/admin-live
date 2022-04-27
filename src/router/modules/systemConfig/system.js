@@ -56,6 +56,16 @@ const systemConfigRouter = {
 	    noCache: true
 	  }
 	},
+	{
+	  path: 'banner-list',
+	  component: () => import('@/views/voiceroom/systemConfig/banner-list'),
+	  name: 'banner-list',
+	  meta: {
+	    title: 'banner管理',
+	    noCache: true
+	  }
+	},
+	
 	
   ]
 }

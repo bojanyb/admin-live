@@ -27,7 +27,7 @@
 				</template>
 			</el-table-column>
 			<el-table-column label="性别" prop="sexText" align="center" width="95" />
-			<el-table-column label="所属公会" prop="guild_name" align="center" >
+			<el-table-column label="所属公会" prop="guild_name" align="center">
 				<template slot-scope="scope">
 					<div>{{scope.row.guild_name}}</div>
 					<div v-if="scope.row.guild_number">({{scope.row.guild_number}})</div>
@@ -36,14 +36,13 @@
 			<el-table-column label="是否为厅主" prop="is_guild_roomText" align="center" />
 			<el-table-column label="手机号" prop="phone" align="center" />
 			<el-table-column label="状态" prop="statusText" align="center" width="95" />
-			<el-table-column label="创建时间" prop="create_timeText" align="center" />
-			<el-table-column label="封禁时间" prop="update_timeText" align="center" />
+			<el-table-column label="创建时间" prop="create_timeText" align="center" width="180" />
+			<el-table-column label="封禁时间" prop="update_timeText" align="center" width="180" />
 			<el-table-column label="封禁备注" prop="remark" align="center" width="200" show-overflow-tooltip />
 			<el-table-column label="操作" prop="gift_str" align="center" width="230">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.status == 1" type="danger" @click="handleUser(scope.row)">封禁</el-button>
 					<el-button v-if="scope.row.status == 2" type="success" @click="handleUser(scope.row)">启用</el-button>
-
 					<!-- <el-button v-if="scope.row.statistical_show == 0" type="success" @click="handleStatistics(scope.row)">开启房间统计
 					</el-button>
 					<el-button v-if="scope.row.statistical_show == 1" type="danger" @click="handleStatistics(scope.row)">关闭房间统计
@@ -58,15 +57,22 @@
 
 		<el-dialog title="操作" :visible.sync="editPop">
 			<el-form :model="popForm">
-				<el-form-item v-if="popForm.status == 2" label="封禁说明" :label-width="formLabelWidth">
-					<el-input v-model="popForm.remark" style="width: 335px;" type="textarea" :rows="5"
-						placeholder="正常状态可不填" clearable autocomplete="off" />
-				</el-form-item>
+
 				<el-form-item label="状态" :label-width="formLabelWidth">
 					<el-radio-group v-model="popForm.status">
 						<el-radio :label="1">正常</el-radio>
 						<el-radio :label="2">封禁</el-radio>
 					</el-radio-group>
+				</el-form-item>
+				<el-form-item v-if="popForm.status == 2" label="封禁时间" prop="kill_time" :label-width="formLabelWidth">
+					<el-select v-model="popForm.kill_time" placeholder="请选择">
+						<el-option v-for="item in timerList" :key="item.value" :label="item.label"
+							:value="item.value" />
+					</el-select>
+				</el-form-item>
+				<el-form-item v-if="popForm.status == 2" label="封禁说明" :label-width="formLabelWidth">
+					<el-input v-model="popForm.remark" style="width: 335px;" type="textarea" :rows="5"
+						placeholder="正常状态可不填" clearable autocomplete="off" />
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -110,9 +116,35 @@
 				popForm: {
 					'id': '',
 					'status': 1,
+					'kill_time': '',
 					'remark': ''
 				},
-				userImglist: []
+				userImglist: [],
+				timerList: [{
+						"value": 1,
+						"label": "1天"
+					},
+					{
+						"value": 3,
+						"label": "3天"
+					},
+					{
+						"value": 7,
+						"label": "7天"
+					},
+					{
+						"value": 15,
+						"label": "15天"
+					},
+					{
+						"value": 30,
+						"label": "30天"
+					},
+					{
+						"value": -1,
+						"label": "永久"
+					}
+				],
 			}
 		},
 		created() {
@@ -164,6 +196,7 @@
 			handleUser(row) {
 				this.$set(this.popForm, 'status', row.status)
 				this.$set(this.popForm, 'remark', row.remark)
+				this.$set(this.popForm, 'kill_time', row.kill_time)
 				this.$set(this.popForm, 'id', row.id)
 				this.editPop = true
 			},
@@ -196,14 +229,14 @@
 					callback: action => {
 						if (action == 'confirm') {
 							var params = {
-								"id" : row.id,
-								"statistical_show" : row.statistical_show == 1 ? 0 : 1
+								"id": row.id,
+								"statistical_show": row.statistical_show == 1 ? 0 : 1
 							}
-							getUserStatisticalShow(params).then(res=>{
+							getUserStatisticalShow(params).then(res => {
 								console.log(res)
 								this.getUser();
 								this.$message.success(tipsSuccessText);
-							}).catch(err=>{
+							}).catch(err => {
 								this.$message.error(err);
 							})
 						}

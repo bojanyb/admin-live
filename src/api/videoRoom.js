@@ -220,7 +220,7 @@ export function getLiveRanklist(data) {
   })
 }
 
-// 直播头衔配置
+// 魅力等级配置
 export function getLiveRankConfig(data) {
   return request({
     url: 'User/liveRankConfig',
@@ -238,7 +238,7 @@ export function getUserRankList(data) {
   })
 }
 
-// 用户消费等级配置
+// 财富等级配置
 export function getUserRankConfig(data) {
   return request({
     url: 'User/userRankConfig',
@@ -703,6 +703,53 @@ export function getGuildDealReport(data) {
 export function getNotGuildFree(data) {
   return request({
     url: '/guild/getNotGuildFree',
+    method: 'post',
+    data
+  })
+}
+
+// 动态管理 
+export function getMoments(data) {
+  return request({
+    url: '/moments/getMoments',
+    method: 'post',
+    data
+  })
+}
+
+// 动态管理  下架
+export function getMomentsDown(data) {
+  return request({
+    url: '/moments/setMoments',
+    method: 'post',
+    data
+  })
+}
+
+
+// 获取banner列表 
+export function getBanner(data) {
+  return request({
+    url: '/moments/getBanner',
+    method: 'post',
+    data
+  })
+}
+
+// 修改或新增banner 
+export function getBannerChange(data) {
+  return request({
+    url: '/moments/setBanner',
+    method: 'post',
+    data
+  })
+}
+
+
+// 删除banner 
+export function getBannerDel(data) {
+  return request({
+    url: '/moments/delBanner',
     method: 'post',
     data
   })
