@@ -1,7 +1,7 @@
 const OSS = require('ali-oss')
 
 const OSSConfig = {
-  uploadHost: 'https://oss-cn-shenzhen.aliyuncs.com', //OSS上传地址
+  uploadHost: 'https://oss-cn-shenzhen.aliyuncs.com/user_cover', //OSS上传地址
   ossParams: {
     region: 'oss-cn-shenzhen',
     success_action_status: '200', // 默认200
@@ -24,7 +24,7 @@ function random_string(len) {
 
 function uploadOSS(file) {
   return new Promise(async (resolve, reject) => {
-    const fileName = `${random_string(6)}_${file.name}`
+    const fileName = `/${random_string(6)}_${file.name}`
     let client = new OSS({
       region: OSSConfig.ossParams.region,
       accessKeyId: OSSConfig.ossParams.accessKeyId,
