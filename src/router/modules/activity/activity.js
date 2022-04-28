@@ -36,6 +36,14 @@ const activityRouter = {
 			}
 		},
 		{
+			path: '/lotteryDetails-list',
+			component: () => import('@/views/voiceroom/activity/lotteryDetails-list'),
+			meta: {
+				title: '抽奖明细',
+				noCache: true
+			}
+		},
+		{
 			path: '/giftHistory',
 			component: () => import('@/views/voiceroom/activity/giftHistory/index'),
 			meta: {

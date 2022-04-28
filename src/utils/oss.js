@@ -6,9 +6,9 @@ const OSSConfig = {
     region: 'oss-cn-shenzhen',
     success_action_status: '200', // 默认200
     // accessKeyId: 'STS.NTqDFHaxw9e9nJ1CzWfNFsGoy',
-	 accessKeyId: 'STS.LTAI5tE2XCgmxzoieUVxf71U',
+	accessKeyId: 'LTAI5tE2XCgmxzoieUVxf71U',
     accessKeySecret: '3uTd6gEmNX6VrhdTbjEq2rFUr9ynsMUBGvG4KxNVbXot',
-    bucket: 'live-huidapay-net',
+    bucket: 'live-huidapay-net'
   },
 }
 
@@ -25,6 +25,7 @@ function random_string(len) {
 }
 
 function uploadOSS(file) {
+	
   return new Promise(async (resolve, reject) => {
     const fileName = `/${random_string(6)}_${file.name}`
     let client = new OSS({
@@ -33,7 +34,9 @@ function uploadOSS(file) {
       accessKeySecret: OSSConfig.ossParams.accessKeySecret,
       bucket: OSSConfig.ossParams.bucket,
     })
+	
     const res = await client.multipartUpload(fileName, file)
+
     // resolve(res)
     // 或者返回如下：
     resolve({

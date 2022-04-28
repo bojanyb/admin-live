@@ -774,3 +774,39 @@ export function getUserBgiAudit(data) {
   })
 }
 
+// 用户交易记录
+export function getUserStatistical(data) {
+  return request({
+    url: '/Statistical/userFlow2',
+    method: 'post',
+    data
+  })
+}
+
+// 用户流水记录
+export function getUserTurnover(data) {
+  return request({
+    url: '/Statistical/userFlow1',
+    method: 'post',
+    data
+  })
+}
+
+// 余额日志
+export function getUserDiamondLog(data) {
+  return request({
+    url: '/Statistical/diamondLog',
+    method: 'post',
+    data
+  })
+}
+
+// 抽奖明细
+export function getUserDrawLog(data) {
+  return request({
+    url: '/Statistical/drawLog',
+    method: 'post',
+    data
+  })
+}
+

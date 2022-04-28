@@ -19,15 +19,15 @@ const userRouter = {
 				noCache: true
 			}
 		},
-		{
-			path: 'userinfo-list',
-			component: () => import('@/views/voiceroom/user/userinfo-list'),
-			name: 'userinfo-list',
-			meta: {
-				title: '用户信息列表',
-				noCache: true
-			}
-		},
+		// {
+		// 	path: 'userinfo-list',
+		// 	component: () => import('@/views/voiceroom/user/userinfo-list'),
+		// 	name: 'userinfo-list',
+		// 	meta: {
+		// 		title: '用户信息列表',
+		// 		noCache: true
+		// 	}
+		// },
 		{
 			path: 'verified-list',
 			component: () => import('@/views/voiceroom/user/verified-list'),
@@ -37,12 +37,21 @@ const userRouter = {
 				noCache: true
 			}
 		},
+		// {
+		// 	path: 'account-list',
+		// 	component: () => import('@/views/voiceroom/user/account-list'),
+		// 	name: 'account-list',
+		// 	meta: {
+		// 		title: '用户账户列表',
+		// 		noCache: true
+		// 	}
+		// },
 		{
-			path: 'account-list',
-			component: () => import('@/views/voiceroom/user/account-list'),
-			name: 'account-list',
+			path: 'userBalance-list',
+			component: () => import('@/views/voiceroom/user/userBalance-list'),
+			name: 'userBalance-list',
 			meta: {
-				title: '用户账户列表',
+				title: '用户余额明细',
 				noCache: true
 			}
 		},
@@ -118,6 +127,25 @@ const userRouter = {
 				noCache: true
 			}
 		},
+		{
+			path: 'userGift-list',
+			component: () => import('@/views/voiceroom/user/userGift-list'),
+			name: 'userGift-list',
+			meta: {
+				title: '用户交易记录',
+				noCache: true
+			}
+		},
+		{
+			path: 'userTurnover-list',
+			component: () => import('@/views/voiceroom/user/userTurnover-list'),
+			name: 'userTurnover-list',
+			meta: {
+				title: '用户流水记录',
+				noCache: true
+			}
+		},
+		
 	]
 }
 

@@ -1,116 +1,87 @@
 <template>
-    <el-upload
-	  class="avatar-uploader"
-      ref="fileUpload"
-      action=""
-      list-type="picture-card"
-      :show-file-list="false"
-      :http-request="fnUploadRequest"
-      :on-success="handleSuccess"
-      :on-error="handleError"
-      :before-upload="handleUpload"
-    >
-    </el-upload>
+	<!-- <div class="aliUpload avatar-uploader">
+		<div class="oss_file el-upload el-upload--text">
+			<img v-if="imageUrl" :src="imageUrl" class="avatar" />
+			<i v-else class="el-icon-plus avatar-uploader-icon" />
+			<input type="file" name="file" class="el-upload__input"  @change="doUpload($event)"/>
+		</div>
+	</div> -->
+	
+	<el-upload class="aliUpload avatar-uploader" action="#" :show-file-list="false" :on-change="doUpload"
+		:auto-upload="false">
+		<img v-if="imageUrl" :src="imageUrl" class="avatar">
+		<i v-else class="el-icon-plus avatar-uploader-icon" />
+	</el-upload>
+	
 </template>
 
 <script>
-import { uploadOSS } from '@/utils/oss';
+	import OSS from "ali-oss"
+	import md5 from 'js-md5';
+	export default {
+		name: 'aliUpload',
+		data() {
+			return {
+				imageUrl: "",
+				videoName: '',
+				videoUrl: '',
+				size: '',
+			}
+		},
+		mounted() {
+			this.client = new OSS({
+				region: 'oss-cn-shenzhen',
+				success_action_status: '200', // 默认200
+				accessKeyId: 'LTAI5tFTcRH7h3RXKoYmnWMk',
+				accessKeySecret: 'qdx4B8jIh2VjBgBDG5fNfG0Oj21GSP',
+				bucket: 'live-huidapay-net'
+			})
+		},
+		methods: {
+			doUpload(event) {
+				this.$emit('getProgress', 0)
+				let file = event.raw
+				this.size = file.size
+				let tmpArr = file.name.split('.')
+				let tmpName = md5(Date.now() + tmpArr[0])
+				tmpName = tmpName + '.' + tmpArr[1]
+				this.multipartUpload(tmpName, file)
+			},
+			multipartUpload(upName, upFile) {
+				//Vue中封装的分片上传方法（详见官方文档）
+				let _this = this
+				const progress = async function(p) {
+					//项目中需获取进度条，故调用进度回调函数（详见官方文档）
+					_this.$emit('getProgress', Math.round(p * 100))
+				}
+				try {
+					let result = _this.client.multipartUpload(upName, upFile, {
+						progress
+					}).then(res => {
+						_this.videoUrl = res.res.requestUrls[0].split('?')[0]
+						let info = {}
+						info.name = res.name
+						info.size = _this.size
+						info.videoUrl = _this.videoUrl
+						this.imageUrl = "http://photo.aiyi.live/" + info.name;
+						this.$emit("getUpLoadImg", this.imageUrl);
+						let head = _this.client.head(upName);
+					}).catch(err => {
+						console.log(err)
+					});
 
-export default {
-  name: "index",
-  data() {
-    return {};
-  },
-  computed: {
-    uploadProps() {
-      return {
-        // action: `${process.env.VUE_APP_BASE_API}/api/file/upload`,
-        headers: {
-        },
-        data: {},
-      };
-    },
-  },
-  methods: {
-    handleExceed(file, fileList){
-      // console.log(file, fileList);
-      this.$message.error('上传失败，限制上传数量10个文件以内！');
-    },
-    handleUpload(file, fileList){
-      // console.log(file, fileList);
-      var testmsg = file.name.substring(file.name.lastIndexOf('.') + 1)
-      const extension = testmsg === 'xlsx' || testmsg === 'xls' || testmsg === 'docx' || testmsg === 'doc'
-        || testmsg === 'pdf' || testmsg === 'zip' || testmsg === 'rar' || testmsg === 'ppt' || testmsg === 'txt' || testmsg === 'jpg'
-      const isLimit10M = file.size / 1024 / 1024 < 1
-      var bool = false;
-      if(extension && isLimit10M){
-        bool = true;
-      } else {
-        bool = false;
-      }
-      if(!extension) {
-        this.$message.error('请选择附件文件类型！');
-        return bool;
-      }
-      if(!isLimit10M) {
-        this.$message.error('上传失败，不能超过10M！');
-        return bool;
-      }
-      return bool;
-    },
-    handleSuccess(res) {
-      // console.log(res);
-      if (res) {
-        this.$emit('fileData', res)
-        this.$message.success("上传附件成功！");
-      }
-    },
-    handleError(err){
-      this.$message.error('上传附件失败！');
-    },
-    // 上传图片
-    async fnUploadRequest(options) {
-      try {
-        // console.log(options);
-        let file = options.file; // 拿到 file
-        let res = await uploadOSS(file)
-        console.log(res);
-        // 返回数据
-        this.$emit("fileData", res);
-        this.$message.success("上传附件成功！");
-      } catch (e) {
-        this.$message.error('上传附件失败！');
-      }
-    },
-  },
-};
+				} catch (e) {
+					// 捕获超时异常
+					if (e.code === 'ConnectionTimeoutError') {
+						console.log("Woops,超时啦!");
+					}
+					console.log(e)
+				}
+			},
+
+		}
+	}
 </script>
 
-<style  lang="scss" scoped>
-::v-deep .el-upload,
-.el-upload--picture-card {
-  // width: 50px;
-  height: 0px;
-  border: none;
-  line-height: 0;
-  display: block;
-  background: #f5f6fb;
-}
-.el-upload {
-  width: 50px;
-}
-.img-cont {
-  width: 50px;
-  height: 24px;
-  background: #f5f6fb;
-  .img-icon {
-    color: #ccc;
-  }
-  .img-text {
-    font-size: 12px;
-    height: 24px;
-    color: #000;
-  }
-}
+<style lang="scss" scoped>
 </style>
-

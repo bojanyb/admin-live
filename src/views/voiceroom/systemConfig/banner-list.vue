@@ -48,14 +48,9 @@
 							autocomplete="off" />
 					</el-col>
 				</el-form-item>
-				<el-form-item label="banner图片" prop="imgPreview" :label-width="formLabelWidth">
+				<el-form-item label="banner图片" prop="pic" :label-width="formLabelWidth">
 					<el-col :span="17">
-						<ossFile/>
-						<!-- <el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgPreview"
-							:auto-upload="false">
-							<img v-if="imageUrl" :src="imageUrl" class="avatar">
-							<i v-else class="el-icon-plus avatar-uploader-icon" />
-						</el-upload> -->
+						<ossFile @getUpLoadImg="getUpLoadImg"/>
 					</el-col>
 				</el-form-item>
 				<el-form-item label="轮播顺序" prop="sort" :label-width="formLabelWidth">
@@ -134,12 +129,12 @@
 							return cb()
 						}
 					}],
-					imgPreview: [{
+					pic: [{
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (!this.imgPreview) {
-								return cb(new Error('礼物图片不能为空!'))
+							if (!this.popForm.pic) {
+								return cb(new Error('banner图片不能为空!'))
 							}
 							return cb()
 						}
@@ -232,7 +227,6 @@
 				this.editPop = true
 			},
 			handleChange() {
-				this.popForm.pic = this.imageUrl
 				if (this.popForm.type == 'Edit') {
 					this.giftEdit()
 				} else if (this.popForm.type == 'Add') {
@@ -252,11 +246,7 @@
 						formData.append('ps', this.popForm.ps)
 						formData.append('sort', this.popForm.sort)
 						formData.append('url', this.popForm.url)
-						if (this.imageFile !== '') {
-							formData.append('pic', this.imageFile.raw)
-						} else {
-							formData.append('pic', '')
-						}
+						formData.append('pic', this.popForm.pic)
 						this.loading = true
 						getBannerChange(formData).then(res => {
 							this.$message.success("添加成功")
@@ -278,11 +268,12 @@
 						const formData = new FormData()
 						formData.append('id', this.popForm.id)
 						formData.append('title', this.popForm.title)
-						formData.append('type', this.popForm.type)
+						// formData.append('type', this.popForm.type)
 						formData.append('status', this.popForm.status)
 						formData.append('ps', this.popForm.ps)
 						formData.append('sort', this.popForm.sort)
 						formData.append('url', this.popForm.url)
+						formData.append('pic', this.popForm.pic)
 						this.loading = true
 						getBannerChange(formData).then(res => {
 							this.imageFile = "";
@@ -302,17 +293,6 @@
 			},
 			handleEditClose() {
 				this.editPop = false
-			},
-			imgPreview(file, fileList) {
-				const fileName = file.name
-				this.imageFile = file
-				const regex = /(.jpg|.jpeg|.gif|.png|.bmp)$/
-				if (regex.test(fileName.toLowerCase())) {
-					this.imageUrl = file.url
-					this.imageUrl = URL.createObjectURL(file.raw)
-				} else {
-					this.$message.error('请选择图片文件')
-				}
 			},
 			numberChange(val, maxNum, name) {
 				// 转换数字类型
@@ -341,6 +321,10 @@
 				}).catch(err=>{
 					this.$message.error(err);
 				})
+			},
+			getUpLoadImg(imgUrl){
+				console.log("上传成功后返回的图片地址",imgUrl);
+				this.popForm.pic = imgUrl;
 			},
 		}
 	}
