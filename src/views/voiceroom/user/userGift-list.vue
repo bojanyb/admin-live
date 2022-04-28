@@ -29,7 +29,7 @@
 			<el-table-column label="送礼人ID" prop="user_number" align="center" />
 			<el-table-column label="礼物来源" prop="fromText" align="center" />
 			<el-table-column label="礼物名称" prop="gift_name" align="center" />
-			<el-table-column label="数量" prop="rank_name" align="center" />
+			<el-table-column label="数量" prop="gift_num" align="center" />
 			<el-table-column label="金额" prop="amount" align="center" />
 			<el-table-column label="交易流水好" prop="relation_trade_no" align="center" />
 		</el-table>
