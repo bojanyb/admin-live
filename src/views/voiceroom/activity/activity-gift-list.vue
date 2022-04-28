@@ -15,8 +15,8 @@
 			<el-table-column label="活动名称" prop="name" align="center" show-overflow-tooltip />
 			<el-table-column label="活动类别" prop="typeText" align="center" />
 			<el-table-column label="礼物种类数量" prop="gift_count" align="center" />
-			<el-table-column label="收入" prop="in" align="center" />
-			<el-table-column label="支出" prop="out" align="center" />
+			<el-table-column label="投入" prop="in" align="center" />
+			<el-table-column label="产出" prop="out" align="center" />
 			<el-table-column label="单次消耗钻石数" prop="cost" align="center" />
 			<el-table-column label="活动状态" prop="statusText" align="center" />
 			<el-table-column label="开启时间" prop="start_timeText" align="center" />
@@ -37,7 +37,7 @@
 			<div slot="title" class="header-title" style="height: 40px;">
 			        <div class="fl">{{editTitle}}</div>
 					<!-- <div style="float: right;margin-right: 50px;">单个大礼物概率<span style="color:red;"> {{probabilityMaxNum}}% </span> + 所有小礼物概率<span style="color:red;"> {{smallSumNum}}% </span>总和 {{maxSamllSum}}% <span style="color:red;" v-if="maxSamllSum > 99"> (不超过 99%) </span></div> -->
-					<div style="float: right;margin-right: 50px;">单个大礼物概率 + 所有小礼物概率总和 不超过 99%</div>
+					<!-- <div style="float: right;margin-right: 50px;">单个大礼物概率 + 所有小礼物概率总和 不超过 99%</div> -->
 				</div>
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
 				<el-form-item label="活动名称" prop="activity_type_id" :label-width="formLabelWidth">
@@ -158,7 +158,7 @@
 				formLabelWidth: '120px',
 				imageUrl: '',
 				popForm: {
-					'activity_type_id': 0,
+					'activity_type_id': "",
 					'type': '',
 					'start_time': 0,
 					'end_time': 0,
@@ -379,7 +379,7 @@
 				this.editTitle = '新增'
 				this.imageUrl = ''
 				this.popForm = {
-					'activity_type_id': 0,
+					'activity_type_id': 1,
 					'type': '',
 					"cost": 0,
 					'start_time': 0,
@@ -414,7 +414,6 @@
 					'gifts': this.popForm.gifts,
 					'typeName': 'Edit'
 				}
-				
 				this.editTitle = '修改'
 				if (this.$refs['popForm']) {
 					this.$refs['popForm'].resetFields()
@@ -470,13 +469,15 @@
 							smallSum = 0,
 							bigSmallSum = 0,
 							isBigEmpty = false,
-							isSmallEmpty = false,
-							isInventory = false;
+							bigGiftDiamond = 0,
+							bigGiftProbability = 0,
+							isBigConsistent = false,
+							isSmallEmpty = false;
 						params.gifts.map(re => {
 							re.id = re.activity_type_id;
 							delete re.gift_name
 							delete re.gift_photo
-							delete re.gift_diamond
+							// delete re.gift_diamond
 							delete re.status
 							delete re.time_limit
 							delete re.activity_type_id
@@ -487,19 +488,27 @@
 							if (re.type == 1) { // 大礼物
 								if (re.probability == 0) {
 									isBigEmpty = true;
+								}else{
+									if(bigGiftProbability == 0){ // 大礼物概率
+										bigGiftProbability = parseFloat(re.probability)
+									}else{
+										if(bigGiftProbability !== parseFloat(re.probability)){
+											isBigConsistent = true
+										}
+									}
+									if (bigGiftDiamond == 0) {
+										bigGiftDiamond = parseInt(re.gift_diamond)
+									}else{
+										if(bigGiftDiamond !== parseInt(re.gift_diamond)){
+											isBigConsistent = true
+										}
+									}
 								}
 								bigSum += parseFloat(re.probability);
 							}
 
 							if (re.type == 0) { // 小礼物
 								smallSum += parseFloat(re.probability);
-							}
-
-							if (re.type == 0 && re.probability == 0) {
-								isSmallEmpty = true
-							}
-							if (re.inventory == 0) {
-								isInventory = true;
 							}
 							re.probability = re.probability * 100000
 						})
@@ -509,13 +518,13 @@
 							this.loading = false
 							return
 						}
-						if (bigSum > 100) {
-							this.$message.error("大礼物概率之和最大为100%");
+						if(isBigConsistent == true){
+							this.$message.error("所有大礼物价格和概率必须一致");
 							this.loading = false
 							return
 						}
-						if (isSmallEmpty == false) {
-							this.$message.error("小礼物概率至少保留一个概率为0");
+						if (bigSum > 100) {
+							this.$message.error("大礼物概率之和最大为100%");
 							this.loading = false
 							return
 						}
@@ -524,11 +533,8 @@
 							this.loading = false
 							return
 						}
-						if (isInventory == true) {
-							this.$message.error("礼物数量不能为0");
-							this.loading = false
-							return
-						}
+						
+						return
 						getActivetyGiftSave(params).then(res => {
 							this.loading = false
 							this.editPop = false
@@ -558,12 +564,14 @@
 							smallSum = 0,
 							bigSmallSum = 0,
 							isBigEmpty = false,
-							isSmallEmpty = false,
-							isInventory = false;
+							bigGiftDiamond = 0,
+							bigGiftProbability = 0,
+							isBigConsistent = false,
+							isSmallEmpty = false;
 						params.gifts.map(re => {
 							delete re.gift_name
 							delete re.gift_photo
-							delete re.gift_diamond
+							// delete re.gift_diamond
 							delete re.status
 							delete re.time_limit
 							re.id = re.activity_id ? re.activity_id : re.id;
@@ -573,6 +581,21 @@
 							if (re.type == 1) { // 大礼物
 								if (re.probability == 0) {
 									isBigEmpty = true;
+								}else{
+									if(bigGiftProbability == 0){ // 大礼物概率
+										bigGiftProbability = parseFloat(re.probability)
+									}else{
+										if(bigGiftProbability !== parseFloat(re.probability)){
+											isBigConsistent = true
+										}
+									}
+									if (bigGiftDiamond == 0) {
+										bigGiftDiamond = parseInt(re.gift_diamond)
+									}else{
+										if(bigGiftDiamond !== parseInt(re.gift_diamond)){
+											isBigConsistent = true
+										}
+									}
 								}
 								bigSum += parseFloat(re.probability);
 							}
@@ -588,14 +611,15 @@
 							if (re.type == 0 && re.probability == 0) {
 								isSmallEmpty = true
 							}
-
-							if (re.inventory == 0) {
-								isInventory = true;
-							}
 						})
 						bigSmallSum = smallSum + maxBigNum;
 						if (isBigEmpty == true) {
 							this.$message.error("大礼物概率不能为0");
+							this.loading = false
+							return
+						}
+						if(isBigConsistent == true){
+							this.$message.error("所有大礼物价格和概率必须一致");
 							this.loading = false
 							return
 						}
@@ -604,18 +628,8 @@
 							this.loading = false
 							return
 						}
-						if (isSmallEmpty == false) {
-							this.$message.error("小礼物概率至少保留一个概率为0");
-							this.loading = false
-							return
-						}
 						if (bigSmallSum > 99) {
 							this.$message.error("大礼物最大概率与小礼物之和最大为99%");
-							this.loading = false
-							return
-						}
-						if (isInventory == true) {
-							this.$message.error("礼物数量不能为0");
 							this.loading = false
 							return
 						}
@@ -705,7 +719,7 @@
 					if (res.id == row.id) {
 						res.isSelect = true; // 默认当前礼物未被选中
 						// currentGift.activity_type_id = parseInt(row.id);
-						currentGift.activity_id = parseInt(row.id);
+						currentGift.activity_id = row.id;
 						currentGift.gift_name = row.gift_name;
 						currentGift.gift_photo = row.gift_photo;
 						currentGift.gift_diamond = row.gift_diamond;
@@ -727,17 +741,21 @@
 			handleDelSelect(row) {
 				if (row.typeName == "Del") { // 删除礼物库中选中的礼物
 					this.popForm.gifts.map((res, i) => {
-						if (res.id == row.id) {
-							this.popForm.gifts.splice(i, 1)
+						if (res.activity_id == row.activity_id) {
+							console.log(this.popForm.gifts);
+							this.popForm.gifts.splice(i, 1);
+							console.log(this.popForm.gifts);
 						}
 					})
+					
 					this.giftListArr.map(res => {
-						if (res.id == row.id) {
+						if (res.activity_id == row.activity_id) {
 							res.isSelect = false;
 						}
 					})
+					
 				} else if (row.typeName == "inventoryAdd") { // 更新礼物库存
-					this.activetyHasGiftList(row.id);
+					this.activetyHasGiftList(row.activity_id);
 				} else if(row.typeName == "Probability"){ // 监听概率
 					this.probabilityMaxNum = row.probabilityMaxNum;
 					this.smallSumNum = row.smallSumNum;
@@ -749,7 +767,7 @@
 					re.isSelect = false; // 默认当前礼物未被选中
 					if (this.popForm.gifts.length > 0) {
 						this.popForm.gifts.map(item => {
-							if (item.id == re.id || item.activity_id == re.id) {
+							if (item.id == re.id || item.id == re.id) {
 								re.isSelect = true;
 							}
 						})

@@ -22,14 +22,14 @@
 					placeholder="请输入概率" clearable autocomplete="off" @input="getChangeProbability2(popGiftForm.id)"
 					@change="handleProbability2(popGiftForm)" :disabled="typeName == 'Detail' ? true : false " /> %
 			</div>
-			<div class="giftBox fl">
+			<!-- <div class="giftBox fl">
 				<div class="giftTitle fl" v-if="typeName == 'Detail'">库存：</div>
 				<div class="giftTitle fl" v-else>数量：</div>
 				<el-input v-model="popGiftForm.inventory" style="width: 120px;" v-input-limit="0" placeholder="请输入数量"
 					clearable autocomplete="off" @change="numberChange(arguments[0],9999,'inventory')"
 					@input="numberChange(arguments[0],9999,'inventoryNum')"
 					:disabled="typeName == 'Detail' ? true : false " />
-			</div>
+			</div> -->
 			<div class="giftBox fl" v-if="typeName !== 'Detail'">
 				<div class="giftTitle fl">礼物有效期：</div>
 				<div class="giftInfo fl">永久</div>
@@ -38,14 +38,14 @@
 				<el-button type="danger" v-if="typeName !== 'Detail'" @click="handleSelectGiftDel(popGiftForm)">删除
 				</el-button>
 			</div>
-			<div class="giftBox fl" v-if="typeName == 'Detail'">
+			<!-- <div class="giftBox fl" v-if="typeName == 'Detail'">
 				<div class="giftTitle fl">添加库存：</div>
 				<el-input v-model="inventory" style="width: 120px;" v-input-limit="0" placeholder="请添加库存" clearable
 					autocomplete="off" @change="numberChange(arguments[0],9999,'inventoryNum')"
 					@input="numberChange(arguments[0],9999,'inventoryNum')" />
 			</div>
 			<el-button type="success" v-if="typeName == 'Detail'" @click="handleGiftSave(popGiftForm.id)">保 存
-			</el-button>
+			</el-button> -->
 		</el-form-item>
 		<el-form-item label="礼物属性" :label-width="formLabelWidth" style="float: left;">
 			<el-radio-group v-model="popGiftForm.type" @change="handleType(popGiftForm)"
@@ -92,10 +92,10 @@
 					"id": this.activity_id,
 					"type": this.type,
 					"probability": 0,
-					"inventory": 1,
+					// "inventory": 1,
 					"time_limit": 0, // 0永久有效1限时
 				},
-				inventory: 1,
+				// inventory: 1,
 				probability: 0,
 				probabilityBig: 0, // 大礼物最大值
 				probabilityBig_last: 0, // 大礼物剩余分配概率数
@@ -201,7 +201,6 @@
 				this.gifts.map(res => {
 					let probability = res.probability;
 					if (res.type == 1) {
-						console.log(probability , this.probabilityBig)
 						if (probability > this.probabilityBig) { // 获取大礼物最大值
 							this.probabilityBig = probability
 						}
@@ -230,7 +229,7 @@
 	}
 
 	.giftConfigItem {
-		display: inline-block;
+		display: flow-root;
 	}
 
 	.giftBox {

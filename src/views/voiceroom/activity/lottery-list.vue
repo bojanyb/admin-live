@@ -49,6 +49,7 @@
 			<el-table-column label="活动类型" prop="activeTypeText" align="center" />
 			<el-table-column label="活动类别" prop="boxTypeText" align="center" />
 			<el-table-column label="开箱次数" prop="user_open_count" align="center" />
+			<el-table-column label="幸运礼物" prop="big_gift_count" align="center" />
 			<el-table-column label="投入" prop="user_out" align="center" />
 			<el-table-column label="产出" prop="user_in" align="center" />
 		</el-table>
