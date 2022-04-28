@@ -31,7 +31,7 @@
 			<el-table-column label="礼物名称" prop="gift_name" align="center" />
 			<el-table-column label="数量" prop="gift_num" align="center" />
 			<el-table-column label="金额" prop="amount" align="center" />
-			<el-table-column label="交易流水好" prop="relation_trade_no" align="center" />
+			<el-table-column label="交易流水号" prop="relation_trade_no" align="center" />
 		</el-table>
 
 		<!--工具条-->
@@ -90,7 +90,7 @@
 					this.list = response.data.list
 					this.list.map(res => {
 						res.create_timeText = res.create_time > 0 ? moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : ""
-						res.fromText = res.room_number !== "" ? "派对" : "私聊"
+						res.fromText = res.room_number !== 0 ? "派对" : "私聊"
 					})
 					this.listLoading = false
 				}).catch(err => {

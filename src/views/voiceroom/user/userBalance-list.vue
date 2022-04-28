@@ -84,9 +84,9 @@ export default {
         this.list = response.data.list
         this.list.map(res => {
           res.create_timeText = res.create_time > 0 ? moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : ""
-		  res.trade_noText = res.genre == 1 ? res.relation_trade_no : res.trade_no
-		  res.genreText = res.genre == 1 ? "收入" : "支出"
-		  
+		res.trade_noText = res.genre == 1 ? res.relation_trade_no : res.trade_no
+		res.genreText = res.genre == 1 ? "收入" : "支出"
+		res.balance = res.genre == 1 ? res.balance : "- "+ res.balance
         })
         this.listLoading = false
       }).catch(err => {

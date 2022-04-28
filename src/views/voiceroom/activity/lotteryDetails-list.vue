@@ -34,8 +34,8 @@
 
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
-			<el-table-column label="获得用户ID" prop="user_number" align="center" />
-			<el-table-column label="获得用户昵称" prop="nickname" align="center" show-overflow-tooltip />
+			<el-table-column label="抽奖人ID" prop="user_number" align="center" />
+			<el-table-column label="抽奖人昵称" prop="nickname" align="center" show-overflow-tooltip />
 			<el-table-column label="宝箱类型" prop="activity_name" align="center" />
 			<el-table-column label="交易时间" prop="create_timeText" align="center" />
 			<el-table-column label="交易类型" prop="activity_typeText" align="center" />
