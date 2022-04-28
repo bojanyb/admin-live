@@ -5,11 +5,13 @@ const OSSConfig = {
   ossParams: {
     region: 'oss-cn-shenzhen',
     success_action_status: '200', // 默认200
-    accessKeyId: 'STS.NTqDFHaxw9e9nJ1CzWfNFsGoy',
+    // accessKeyId: 'STS.NTqDFHaxw9e9nJ1CzWfNFsGoy',
+	 accessKeyId: 'STS.LTAI5tE2XCgmxzoieUVxf71U',
     accessKeySecret: '3uTd6gEmNX6VrhdTbjEq2rFUr9ynsMUBGvG4KxNVbXot',
     bucket: 'live-huidapay-net',
   },
 }
+
 
 function random_string(len) {
   len = len || 32
