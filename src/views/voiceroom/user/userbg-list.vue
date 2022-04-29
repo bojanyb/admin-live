@@ -10,8 +10,8 @@
 				<el-form-item label="状态">
 				  <el-select v-model="filters.status" placeholder="请选择" @change="getUserBgiList">
 				    <el-option label="全部" value="" />
-				    <el-option key="2" label="未处理" value="2" />
-				    <el-option key="1" label="已处理" value="1" />
+				    <el-option key="1" label="通过" value="1" />
+					 <el-option key="2" label="待审核" value="2" />
 				  </el-select>
 				</el-form-item>
 				<el-form-item>
@@ -97,7 +97,17 @@
 					response.data.row.map(res => {
 						res.create_timeText = res.create_time > 0 ?moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
 						res.update_timeText = res.update_time > 0 ? moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
-						res.statusText = res.status == 1 ? "已处理" : "未处理";
+						switch (res.status){
+							case 1:
+							res.statusText = "通过";
+								break;
+							case 2:
+							res.statusText = "驳回";
+								break;
+							case 0:
+							res.statusText = "待审核";
+								break;
+						}
 						this.userBglist.push(res.pic);
 						res.nickname = res.userinfo.nickname;
 					})

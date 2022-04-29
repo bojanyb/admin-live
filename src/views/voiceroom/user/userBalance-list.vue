@@ -127,8 +127,7 @@ export default {
 				break;
 				
 		}
-		
-		res.balance = res.genre == 1 ? res.balance : "- "+ res.balance
+		res.diamond = res.genre == 1 ? res.diamond : "- "+ res.diamond
         })
         this.listLoading = false
       }).catch(err => {
