@@ -87,7 +87,7 @@ export default {
 		res.trade_noText = res.genre == 1 ? res.relation_trade_no : res.trade_no
 		switch (res.relation_type){
 			case 10:
-			res.genreText = "充值"
+			res.genreText = res.channel + "充值"
 				break;
 			case 11:
 			res.genreText = "平台充值" // 后台赠送
