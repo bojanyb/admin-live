@@ -81,6 +81,15 @@ export function getFeedBackSave(data) {
   })
 }
 
+// 用户信息
+export function getUserWallet(data) {
+  return request({
+    url: '/Wallet/getUserWallet',
+    method: 'post',
+    data
+  })
+}
+
 // 用户列表
 export function getUserList(data) {
   return request({
