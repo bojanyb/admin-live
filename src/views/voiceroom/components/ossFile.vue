@@ -1,18 +1,9 @@
 <template>
-	<!-- <div class="aliUpload avatar-uploader">
-		<div class="oss_file el-upload el-upload--text">
-			<img v-if="imageUrl" :src="imageUrl" class="avatar" />
-			<i v-else class="el-icon-plus avatar-uploader-icon" />
-			<input type="file" name="file" class="el-upload__input"  @change="doUpload($event)"/>
-		</div>
-	</div> -->
-	
 	<el-upload class="aliUpload avatar-uploader" action="#" :show-file-list="false" :on-change="doUpload"
 		:auto-upload="false">
 		<img v-if="imageUrl" :src="imageUrl" class="avatar">
 		<i v-else class="el-icon-plus avatar-uploader-icon" />
 	</el-upload>
-	
 </template>
 
 <script>
@@ -23,9 +14,19 @@
 		data() {
 			return {
 				imageUrl: "",
-				videoName: '',
 				videoUrl: '',
 				size: '',
+			}
+		},
+		props: {
+			picImg: {
+				type: String,
+				default: ''
+			},
+		},
+		watch: {
+			picImg(val) {
+				this.imageUrl = val;
 			}
 		},
 		mounted() {
@@ -39,7 +40,7 @@
 		},
 		methods: {
 			doUpload(event) {
-				this.$emit('getProgress', 0)
+				// this.$emit('getProgress', 0)
 				let file = event.raw
 				this.size = file.size
 				let tmpArr = file.name.split('.')
@@ -52,7 +53,7 @@
 				let _this = this
 				const progress = async function(p) {
 					//项目中需获取进度条，故调用进度回调函数（详见官方文档）
-					_this.$emit('getProgress', Math.round(p * 100))
+					// _this.$emit('getProgress', Math.round(p * 100))
 				}
 				try {
 					let result = _this.client.multipartUpload(upName, upFile, {

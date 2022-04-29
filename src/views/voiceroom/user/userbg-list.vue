@@ -11,7 +11,8 @@
 				  <el-select v-model="filters.status" placeholder="请选择" @change="getUserBgiList">
 				    <el-option label="全部" value="" />
 				    <el-option key="1" label="通过" value="1" />
-					 <el-option key="2" label="待审核" value="2" />
+					 <el-option key="3" label="待审核" value="3" />
+					 <el-option key="2" label="驳回" value="2" />
 				  </el-select>
 				</el-form-item>
 				<el-form-item>

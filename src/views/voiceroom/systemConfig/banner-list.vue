@@ -50,7 +50,7 @@
 				</el-form-item>
 				<el-form-item label="banner图片" prop="pic" :label-width="formLabelWidth">
 					<el-col :span="17">
-						<ossFile @getUpLoadImg="getUpLoadImg"/>
+						<ossFile :picImg="imageUrl" @getUpLoadImg="getUpLoadImg"/>
 					</el-col>
 				</el-form-item>
 				<el-form-item label="轮播顺序" prop="sort" :label-width="formLabelWidth">
