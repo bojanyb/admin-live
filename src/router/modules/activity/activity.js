@@ -47,21 +47,21 @@ const activityRouter = {
 			path: '/giftHistory',
 			component: () => import('@/views/voiceroom/activity/giftHistory/index'),
 			meta: {
-				title: '充值'
+				title: '财务管理'
 			},
 			children: [
 				{
 					path: 'giveAway',
 					component: () => import('@/views/voiceroom/activity/giftHistory/giveAway'),
 					meta: {
-						title: '充值',
+						title: '用户充值',
 					}
 				}, 
 				{
 					path: 'giftHistory-list',
 					component: () => import('@/views/voiceroom/activity/giftHistory/giftHistory-list'),
 					meta: {
-						title: '充值历史记录',
+						title: '充值记录',
 					}
 				}, 
 			]

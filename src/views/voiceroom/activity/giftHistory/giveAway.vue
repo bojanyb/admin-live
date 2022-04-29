@@ -2,7 +2,7 @@
 	<div class="app-container">
 		<el-card>
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
-				<el-form-item label="被充值用户ID" prop="user_number" :label-width="formLabelWidth">
+				<el-form-item label="用户ID" prop="user_number" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-input v-model="popForm.user_number" style="width: 335px;" v-input-limit="0"
 							placeholder="请输入被充值用户ID" clearable autocomplete="off" @blur="handleUserInfo" />

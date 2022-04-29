@@ -8,7 +8,7 @@ const voiceroomRouter = {
 	redirect: 'noRedirect',
 	name: 'Charts',
 	meta: {
-		title: '语音房管理',
+		title: '派对管理',
 		icon: 'chart'
 	},
 	children: [{

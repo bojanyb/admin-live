@@ -12,8 +12,7 @@ import voiceroomRouter from './modules/room/voiceroom'
 import systemConfigRouter from './modules/systemConfig/system'
 import userRouter from './modules/user/user'
 import guildAuditRouter from './modules/guild/guildAudit'
-import recordRouter from './modules/record/record'
-import guildFinanceRouter from './modules/finance/finance.js'
+import giveAwayRouter from './modules/giveAway/giveAway'
 import activityRouter from "./modules/activity/activity.js"
 
 
@@ -88,12 +87,11 @@ export const constantRoutes = [{
 export const asyncRoutes = [
 	// chartsRouter,
 	userRouter,
-	systemConfigRouter,
 	voiceroomRouter,
 	guildAuditRouter,
-	recordRouter,
-	guildFinanceRouter,
+	giveAwayRouter,
   	activityRouter,
+	systemConfigRouter,
 	// 404 page must be placed at the end !!!
 	{
 		path: '*',
