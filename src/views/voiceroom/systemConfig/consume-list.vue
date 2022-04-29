@@ -93,7 +93,7 @@
 					'user_rank': '',
 					// 'rank_name': '',
 					'spending': '',
-					// 'spending': ''
+					'diamond_total': ''
 				},
 				popFormRules: {
 					user_rank: [{
@@ -170,7 +170,7 @@
 					'user_rank': '',
 					// 'rank_name': '',
 					'spending': '',
-					// 'spending': ''
+					'diamond_total': ''
 				}
 				if(this.$refs["popForm"]){
 					this.$refs["popForm"].resetFields();
@@ -183,7 +183,7 @@
 					'user_rank': row.user_rank,
 					// 'rank_name': row.rank_name,
 					'spending': row.spending,
-					// 'spending': row.spending
+					'diamond_total': row.diamond_total
 				}
 				if(this.$refs["popForm"]){
 					this.$refs["popForm"].resetFields();
@@ -193,6 +193,9 @@
 			handleChange() {
 				this.$refs.popForm.validate(valid => {
 					if (valid) {
+						if(this.editTitle == "添加"){
+							this.popForm.diamond_total = this.popForm.spending
+						}
 						getUserRankConfig(this.popForm).then(res => {
 							this.getUserRank()
 							this.editPop = false
