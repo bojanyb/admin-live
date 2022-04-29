@@ -90,22 +90,22 @@ export default {
 			res.genreText = "充值"
 				break;
 			case 11:
-			res.genreText = "后台赠送"
+			res.genreText = "平台充值" // 后台赠送
 				break;
 			case 20:
-			res.genreText = "送礼（支付）"
+			res.genreText = "打赏" // 送礼（支付）
 				break;
 			case 30:
-			res.genreText = "背包抽奖"
+			res.genreText = "赠送" // 背包抽奖
 				break;
 			case 40:
-			res.genreText = "派对抽奖"
+			res.genreText = "赠送" // 派对抽奖
 				break;
 			case 12:
-			res.genreText = "礼物赠送"
+			res.genreText = "赠送" // 礼物赠送
 				break;
 			case 13:
-			res.genreText = "派对内抽奖"
+			res.genreText = "赠送" //派对内抽奖
 				break;
 			case 14:
 			res.genreText = "公会固定返点"
@@ -127,7 +127,7 @@ export default {
 				break;
 				
 		}
-		res.diamond = res.genre == 1 ? res.diamond : "- "+ res.diamond
+		res.diamond = res.genre == 1 ? "+ "+res.diamond : "- "+res.diamond
         })
         this.listLoading = false
       }).catch(err => {
