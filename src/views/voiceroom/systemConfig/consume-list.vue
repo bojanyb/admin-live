@@ -15,7 +15,7 @@
 			<!-- <el-table-column label="ID" align="center" prop="id" width="95" /> -->
 			<el-table-column label="等级" prop="user_rank" align="center"/>
 			<!-- <el-table-column label="等级名称" prop="rank_name" align="center" /> -->
-			<el-table-column label="总财富贡献" prop="diamond_total" align="center" />
+			<el-table-column label="总财富贡献" prop="spending" align="center" />
 			<!-- <el-table-column label="总支出(个)" prop="spending" align="center" /> -->
 			<el-table-column label="修改时间" prop="update_timeText" align="center" />
 			<el-table-column label="操作" prop="gift_str" align="center">
@@ -43,9 +43,9 @@
 							autocomplete="off" />
 					</el-col>
 				</el-form-item> -->
-				<el-form-item label="总财富贡献" prop="diamond_total" :label-width="formLabelWidth">
+				<el-form-item label="总财富贡献" prop="spending" :label-width="formLabelWidth">
 					<el-col :span="17">
-						<el-input v-model="popForm.diamond_total" v-input-limit="0" style="width: 335px;"
+						<el-input v-model="popForm.spending" v-input-limit="0" style="width: 335px;"
 							placeholder="请输入收入总财富贡献" clearable autocomplete="off" />
 					</el-col>
 				</el-form-item>
@@ -92,7 +92,7 @@
 				popForm: {
 					'user_rank': '',
 					// 'rank_name': '',
-					'diamond_total': '',
+					'spending': '',
 					// 'spending': ''
 				},
 				popFormRules: {
@@ -120,11 +120,11 @@
 					// 		return cb()
 					// 	}
 					// }],
-					diamond_total: [{
+					spending: [{
 						required: true,
 						trigger: 'blur',
 						validator: (rules, value, cb) => {
-							if (!this.popForm.diamond_total) {
+							if (!this.popForm.spending) {
 								return cb(new Error('总财富贡献不能为空!'))
 							}
 							return cb()
@@ -169,7 +169,7 @@
 				this.popForm = {
 					'user_rank': '',
 					// 'rank_name': '',
-					'diamond_total': '',
+					'spending': '',
 					// 'spending': ''
 				}
 				if(this.$refs["popForm"]){
@@ -182,7 +182,7 @@
 				this.popForm = {
 					'user_rank': row.user_rank,
 					// 'rank_name': row.rank_name,
-					'diamond_total': row.diamond_total,
+					'spending': row.spending,
 					// 'spending': row.spending
 				}
 				if(this.$refs["popForm"]){
