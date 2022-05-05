@@ -10,10 +10,10 @@ import {
 var baseUrlApi = '';
 switch (process.env.NODE_ENV) {
 	case 'development':
-		baseUrlApi = 'http://test.api.live.huida.ink'
+		baseUrlApi = 'http://api.huida.vip'
 		break
 	case 'test':
-		baseUrlApi = 'http://test.api.live.huida.ink'
+		baseUrlApi = 'http://api.huida.vip'
 		break
 	case 'production':
 		baseUrlApi = 'http://api.aiyi.live'

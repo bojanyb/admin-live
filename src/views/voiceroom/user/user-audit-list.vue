@@ -5,7 +5,7 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters" @keyup.enter.native="getUserAuditSource()">
 				<el-form-item label="用户ID">
-					<el-input v-model="filters.user_id" v-input-limit="0" placeholder="请输入用户ID" clearable />
+					<el-input v-model="filters.user_number" v-input-limit="0" placeholder="请输入用户ID" clearable />
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="getUserAuditSource">查询</el-button>
@@ -20,7 +20,7 @@
 			@selection-change="handleSelectionChange" highlight-current-row>
 			<el-table-column type="selection" width="55">
 			</el-table-column>
-			<el-table-column label="用户ID" prop="user_id" align="center" width="120">
+			<el-table-column label="用户ID" prop="user_number" align="center" width="120">
 			</el-table-column>
 			<el-table-column label="昵称" prop="nickname" align="center">
 				<template slot-scope="scope">
@@ -97,7 +97,7 @@
 					limit: 10
 				},
 				filters: {
-					'user_id': '',
+					'user_number': '',
 					'status': '',
 				},
 				popForm: {
@@ -140,7 +140,7 @@
 				this.listLoading = true
 				this.userImglist = []
 				var params = {
-					'user_id': this.filters.user_id,
+					'user_id': this.filters.user_number,
 					'status': this.filters.status,
 					'page': this.page.page,
 					'pagesize': this.page.limit
@@ -276,15 +276,15 @@
 			background: red;
 			color: #FFFFFF;
 		}
-		
-		.showText{
+
+		.showText {
 			overflow: hidden;
-			text-overflow:ellipsis;
+			text-overflow: ellipsis;
 			white-space: nowrap;
 		}
 	}
-	
-	::v-deep .el-table .cell.el-tooltip{
+
+	::v-deep .el-table .cell.el-tooltip {
 		padding: 0 30px;
 	}
 </style>
