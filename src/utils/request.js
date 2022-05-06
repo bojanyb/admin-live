@@ -72,8 +72,6 @@ service.interceptors.response.use(
 				})
 			}
 			
-			
-			
 			if(res.code == 3000 && res.msg == "请重新登录"){
 				Message({
 					message: res.msg,
@@ -81,7 +79,9 @@ service.interceptors.response.use(
 					duration: 5 * 1000
 				})
 				setTimeout(res=>{
-					store.dispatch('user/logout')
+					store.dispatch('user/resetToken').then(() => {
+						location.reload()
+					})
 				},2000)
 				return
 			}

@@ -59,7 +59,7 @@
 		<el-dialog title="特效图预览" class="showImgDialog" :visible.sync="dialogVisible" width="50%"
 			:before-close="handleClose">
 			<el-image v-if="showImgUrl.indexOf('.png') > -1" :lazy="true" :src="showImgUrl ? showImgUrl : ''" />
-			<svgaplayer v-if="showImgUrl.indexOf('.svga') > -1" :height="667" :width="375" :show-img="showImgUrl" />
+			<svgaplayer v-else :height="667" :width="375" :show-img="showImgUrl" />
 		</el-dialog>
 		<el-dialog :title="editTitle" :visible.sync="editPop" @close="handleCancel">
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
@@ -87,17 +87,18 @@
 						</el-radio-group>
 					</el-col>
 				</el-form-item>
-				<el-form-item label="礼物图片" prop="imgPreview" :label-width="formLabelWidth">
+				<el-form-item label="礼物图片" prop="imageUrl" :label-width="formLabelWidth">
 					<el-col :span="17">
-						<el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgPreview"
+						<!-- <el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgPreview"
 							:auto-upload="false">
 							<img v-if="imageUrl" :src="imageUrl" class="avatar">
 							<i v-else class="el-icon-plus avatar-uploader-icon" />
-						</el-upload>
+						</el-upload> -->
+						<ossFile :picImg="imageUrl" :type="'img'" :play_type="popForm.play_type" @getUpLoadImg="getUpLoadImg"/>
 					</el-col>
 				</el-form-item>
-				<el-form-item label="礼物特效" :label-width="formLabelWidth">
-					<el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgSvgPreview"
+				<el-form-item label="礼物特效" prop="imageSvgUrl" :label-width="formLabelWidth">
+					<!-- <el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgSvgPreview"
 						:auto-upload="false">
 						<svgaplayer v-if="imageSvgUrl.indexOf('.svga') > -1" :data-title="imageSvgUrl" :height="178"
 							:width="178" :show-img="imageSvgUrl" />
@@ -105,7 +106,8 @@
 							v-else-if="(imageSvgUrl.indexOf('blob:http:') > -1 || popForm.gift_gif.indexOf('.zip') > -1 )">
 							已选择文件</div>
 						<i v-else class="el-icon-plus avatar-uploader-icon" />
-					</el-upload>
+					</el-upload> -->
+					<ossFile :picImg="imageSvgUrl" :type="'animation'" :play_type="popForm.play_type" @getUpLoadImg="getUpLoadImg"/>
 				</el-form-item>
 				<el-form-item label="礼物版本号" v-if="popForm.type == 'Edit' " prop="gift_version" :label-width="formLabelWidth"  :rules="popForm.type == 'Edit' ? popFormRules.gift_version:[{ required: false}]">
 					<el-input v-model="popForm.gift_version" style="width: 335px;" oninput="value=value.replace(/[^\d.]/g,'')"
@@ -126,12 +128,12 @@
 				<el-form-item label="礼物生效时间" prop="start_time" :label-width="formLabelWidth">
 					<el-date-picker v-model="popForm.start_timeText" style="width: 335px;" type="datetime"
 						placeholder="选择时间" :picker-options="pickerBeginDateBefore" value-format="yyyy-MM-dd HH:mm:ss"
-						format="yyyy-MM-dd HH:mm:ss" clearable />
+						format="yyyy-MM-dd HH:mm:ss" clearable @change="handleChangeTime"/>
 				</el-form-item>
 				<el-form-item label="礼物过期时间" prop="end_time" :label-width="formLabelWidth">
 					<el-date-picker v-model="popForm.end_timeText" style="width: 335px;" type="datetime"
 						placeholder="选择时间" :picker-options="pickerBeginDateBefore" value-format="yyyy-MM-dd HH:mm:ss"
-						format="yyyy-MM-dd HH:mm:ss" clearable />
+						format="yyyy-MM-dd HH:mm:ss" clearable @change="handleChangeTime"/>
 				</el-form-item>
 				<el-form-item v-if="popForm.type == 'Edit'" label="状态" prop="status" :label-width="formLabelWidth">
 					<el-select v-model="popForm.status" placeholder="请选择">
@@ -153,13 +155,6 @@
 				<el-button :loading="loading" type="primary" @click="handleChange">确 定</el-button>
 			</div>
 		</el-dialog>
-		<!-- <el-dialog class="popDel" title="删除" :visible.sync="delVisible" width="30%">
-			<span>确定删除该礼物吗</span>
-			<span slot="footer" class="dialog-footer">
-				<el-button @click="delVisible = false">取 消</el-button>
-				<el-button type="primary" @click="handleDelSubmit">确 定</el-button>
-			</span>
-		</el-dialog> -->
 	</div>
 </template>
 
@@ -173,11 +168,13 @@
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
 	import svgaplayer from '../components/svgaplayer.vue'
+	import ossFile from '../components/ossFile.vue'
 	export default {
 		name: 'GiftList',
 		components: {
 			Pagination,
-			svgaplayer
+			svgaplayer,
+			ossFile
 		},
 		data() {
 			return {
@@ -198,6 +195,7 @@
 				formLabelWidth: '120px',
 				imageUrl: '',
 				imageSvgUrl: '',
+				imageSvgInfo: "",
 				popForm: {
 					'gift_name': '',
 					'gift_photo': '',
@@ -247,11 +245,12 @@
 							return cb()
 						}
 					}],
-					imgPreview: [{
+					imageUrl: [{
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							if (!this.imgPreview) {
+							console.log(this.imageUrl)
+							if (!this.imageUrl) {
 								return cb(new Error('礼物图片不能为空!'))
 							}
 							return cb()
@@ -379,8 +378,6 @@
 					'label': 'SVGA',
 					'value': 2
 				}],
-				imageFile: '',
-				imageSvgFile: '',
 				diamondNum: 0,
 				delSource: {},
 				delVisible: false
@@ -459,7 +456,7 @@
 				this.showImgUrl = ''
 				this.$nextTick(res => {
 					this.showImgUrl = e.gift_gif
-					if (this.showImgUrl.indexOf('.svga') > -1) {
+					if (this.showImgUrl.indexOf('.svga') > -1 || this.showImgUrl.indexOf('.png') == -1 ) {
 						this.dialogVisible = true
 					} else {
 						this.$message.warning('暂无特效图')
@@ -558,19 +555,17 @@
 						formData.append('gift_genre', this.popForm.gift_genre)
 						formData.append('play_type', this.popForm.play_type)
 						formData.append('gift_desc', this.popForm.gift_desc)
-						if (this.imageFile !== '') {
-							formData.append('gift_photo', this.imageFile.raw)
+						if (this.imageUrl !== '') {
+							formData.append('gift_photo', this.imageUrl)
 						} else {
 							formData.append('gift_photo', '')
 						}
-						if (this.imageSvgFile !== '') {
-							formData.append('gift_gif', this.imageSvgFile.raw)
+						if (this.imageSvgUrl !== '') {
+							formData.append('gift_gif', this.imageSvgUrl)
 						}
 						this.loading = true
 						getGiftAdd(formData).then(res => {
 							this.$message.success("添加成功")
-							this.imageFile = "";
-							this.imageSvgFile = "";
 							this.loading = false
 							this.handleEditClose()
 							this.giftlist()
@@ -588,13 +583,13 @@
 						const formData = new FormData()
 						formData.append('id', this.popForm.id)
 						formData.append('gift_name', this.popForm.gift_name)
-						if (this.imageFile !== '') {
-							formData.append('gift_photo', this.imageFile.raw)
+						if (this.imageUrl !== '') {
+							formData.append('gift_photo', this.imageUrl)
 						} else {
 							formData.append('gift_photo', '')
 						}
-						if (this.imageSvgFile !== '') {
-							formData.append('gift_gif', this.imageSvgFile.raw)
+						if (this.imageSvgUrl !== '') {
+							formData.append('gift_gif', this.imageSvgUrl)
 						}
 						formData.append('gift_photo', this.popForm.gift_photo)
 						formData.append('gift_gif', this.popForm.gift_gif)
@@ -615,8 +610,6 @@
 						}).then(res => {
 							if (res.value == "888888") {
 								getGiftEdit(formData).then(res => {
-									this.imageFile = "";
-									this.imageSvgFile = "";
 									this.loading = false
 									this.$message.success("修改成功")
 									this.handleEditClose()
@@ -639,56 +632,13 @@
 			handleEditClose() {
 				this.editPop = false
 			},
-			// handleDel(row) {
-			// 	this.delSource = row
-			// 	this.delVisible = true
-			// },
-			// handleDelSubmit() {
-			// 	this.delSource.status = '2'
-			// 	for (const item in this.delSource) {
-			// 		if (item.indexOf('Text') > -1) {
-			// 			delete this.delSource[item]
-			// 		}
-			// 	}
-			// 	getGiftEdit(this.delSource).then(res => {
-			// 		this.$message.success('删除成功')
-			// 		this.giftlist()
-			// 		this.delVisible = false
-			// 	}).catch(err => {
-			// 		this.$message.error('删除失败')
-			// 		this.delVisible = false
-			// 	})
-			// },
-			imgPreview(file, fileList) {
-				const fileName = file.name
-				this.imageFile = file
-				const regex = /(.jpg|.jpeg|.gif|.png|.bmp)$/
-				if (regex.test(fileName.toLowerCase())) {
-					this.imageUrl = file.url
-					this.imageUrl = URL.createObjectURL(file.raw)
-				} else {
-					this.$message.error('请选择图片文件')
-				}
-			},
-			imgSvgPreview(file, fileList) {
-				const fileName = file.name
-				this.imageSvgFile = file
-				let regex = ''
-				if (this.popForm.play_type == 1) { //Lottie
-					regex = /(.zip)$/
-				} else if (this.popForm.play_type == 2) {
-					regex = /(.svg|.svga)$/
-				}
-				this.imageSvgUrl = ''
-				if (regex.test(fileName.toLowerCase())) {
-					this.imageSvgUrl = file.url
-					this.imageSvgUrl = URL.createObjectURL(file.raw)
-				} else {
-					if (this.popForm.play_type == 1) { //Lottie
-						this.$message.error('请选择zip格式文件')
-					} else if (this.popForm.play_type == 2) {
-						this.$message.error('请选择特效svga格式文件')
-					}
+			getUpLoadImg(source){
+				console.log("上传成功后返回的图片地址",source);
+				if(source.type == "img"){
+					this.imageUrl = source.url;
+				}else if(source.type == "animation"){
+					this.imageSvgUrl = source.url;
+					this.imageSvgInfo = source;
 				}
 			},
 			numberChange(val, maxNum, name) {
@@ -735,6 +685,9 @@
 						this.$message.error("请输入正确的密码")
 					}
 				}).catch(() => {});
+			},
+			handleChangeTime(){ // 时间选择后 动态图被置空 重新赋值
+				this.imageSvgUrl = JSON.parse(JSON.stringify(this.imageSvgInfo)).url
 			}
 		}
 	}
@@ -750,48 +703,6 @@
 		/* display: flex;
 		align-items: center;
 		justify-content: center; */
-	}
-
-	::v-deep.avatar-uploader {
-		width: 178px;
-		height: 178px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border: 1px dashed #eeeeee;
-		.el-upload {
-			border: 1px dashed #d9d9d9;
-			border-radius: 6px;
-			cursor: pointer;
-			position: relative;
-			overflow: hidden;
-			width: 100%;
-			height: 100%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			img {
-				width: 100%;
-				max-height: 178px;
-			}
-		}
-	}
-
-	.avatar-uploader .el-upload:hover {
-		border-color: #409EFF;
-	}
-
-	.avatar-uploader-icon {
-		font-size: 28px;
-		color: #8c939d;
-		width: 178px;
-		height: 178px;
-		line-height: 178px;
-		text-align: center;
-	}
-
-	.avatar {
-		max-height: 178px;
 	}
 
 	::v-deep .el-dialog {

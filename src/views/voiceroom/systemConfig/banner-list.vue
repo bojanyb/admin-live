@@ -322,9 +322,9 @@
 					this.$message.error(err);
 				})
 			},
-			getUpLoadImg(imgUrl){
-				console.log("上传成功后返回的图片地址",imgUrl);
-				this.popForm.pic = imgUrl;
+			getUpLoadImg(source){
+				console.log("上传成功后返回的图片地址",source);
+				this.popForm.pic = source.url;
 			},
 		}
 	}

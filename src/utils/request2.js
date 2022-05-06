@@ -4,9 +4,6 @@ import {
 	Message
 } from 'element-ui'
 import store from '@/store'
-import {
-	// getToken
-} from '@/utils/auth'
 var baseUrlApi = '';
 switch (process.env.NODE_ENV) {
 	case 'development':
@@ -71,16 +68,16 @@ service.interceptors.response.use(
 						location.reload()
 					})
 				})
-			}
-			
-			if(res.code == 3000 && res.msg == "请重新登录"){
+			}else if(res.code == 3000 && res.msg == "请重新登录"){
 				Message({
 					message: res.msg,
 					type: 'error',
 					duration: 5 * 1000
 				})
 				setTimeout(res=>{
-					store.dispatch('user/logout')
+					store.dispatch('user/resetToken').then(() => {
+						location.reload()
+					})
 				},2000)
 				return
 			}

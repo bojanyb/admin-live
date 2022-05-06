@@ -118,8 +118,8 @@
 					this.total = response.data.count
 					this.list = response.data.list
 					this.list.map(function(item) {
-						item.start_timeText = moment(item.start_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-						item.end_timeText = moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+						item.start_timeText = item.start_time >0 ? moment(item.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : ""
+						item.end_timeText = item.end_time > 0 ? moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : ""
 						if (item.live_time > 60) {
 							item.live_timeText = parseInt(item.live_time / 60) + '小时 ' + (item.live_time %
 								60) + '分钟'

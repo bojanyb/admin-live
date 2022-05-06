@@ -483,7 +483,6 @@
 							re.id = re.activity_type_id;
 							delete re.gift_name
 							delete re.gift_photo
-							// delete re.gift_diamond
 							delete re.status
 							delete re.time_limit
 							delete re.activity_type_id
@@ -529,17 +528,6 @@
 							this.loading = false
 							return
 						}
-						// if (bigSum > 100) {
-						// 	this.$message.error("大礼物概率之和最大为100%");
-						// 	this.loading = false
-						// 	return
-						// }
-						// if (bigSmallSum !== 100) {
-						// 	this.$message.error("大礼物最大概率与小礼物之和最大为100%");
-						// 	this.loading = false
-						// 	return
-						// }
-
 						getActivetyGiftSave(params).then(res => {
 							this.loading = false
 							this.editPop = false

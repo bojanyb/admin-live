@@ -21,22 +21,22 @@
 
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row @cell-mouse-enter="handleCellEnter">
-			<el-table-column label="举报公会名称(ID)" align="center">
+			<el-table-column label="举报公会名称(ID)" align="center" show-overflow-tooltip>
 				<template slot-scope="scope">
-					<div>{{scope.row.guild_nickname}}</div>
+					<div style="display: contents;">{{scope.row.guild_nickname}}</div>
 					<div>({{scope.row.guild_number}})</div>
 				</template>
 			</el-table-column>
 			<el-table-column label="公会等级" prop="rankText" align="center" />
-			<el-table-column label="公会长昵称(ID)" align="center">
+			<el-table-column label="公会长昵称(ID)" align="center" show-overflow-tooltip>
 				<template slot-scope="scope">
-					<div>{{scope.row.guild_owner.nickname}}</div>
+					<div style="display: contents;">{{scope.row.guild_owner.nickname}}</div>
 					<div>({{scope.row.guild_owner.user_number}})</div>
 				</template>
 			</el-table-column>
-			<el-table-column label="被举报成员昵称(ID)" align="center">
+			<el-table-column label="被举报成员昵称(ID)" align="center" show-overflow-tooltip>
 				<template slot-scope="scope">
-					<div v-if="scope.row.reported_user">{{scope.row.reported_user.nickname}}</div>
+					<div v-if="scope.row.reported_user" style="display: contents;">{{scope.row.reported_user.nickname}}</div>
 					<div v-if="scope.row.reported_user">({{scope.row.reported_user.user_number}})</div>
 				</template>
 			</el-table-column>

@@ -45,25 +45,13 @@
 
 		<el-dialog :title="editTitle" :visible.sync="editPop" @close="handleCancel">
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
-				<el-form-item label="活动图标" prop="icon" :label-width="formLabelWidth">
+				<el-form-item label="活动图标" prop="imageUrl" :label-width="formLabelWidth">
 					<el-col :span="17">
-						<el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgPreview"
-							:auto-upload="false">
-							<img v-if="imageUrl" :src="imageUrl" class="avatar">
-							<i v-else class="el-icon-plus avatar-uploader-icon" />
-						</el-upload>
+						<ossFile :picImg="imageUrl" :type="'img'" :play_type="1" @getUpLoadImg="getUpLoadImg"/>
 					</el-col>
 				</el-form-item>
-				<el-form-item label="活动图标特效" :label-width="formLabelWidth">
-					<el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgSvgPreview"
-						:auto-upload="false">
-						<svgaplayer v-if="imageSvgUrl.indexOf('.svga') > -1" :data-title="imageSvgUrl" :height="178"
-							:width="178" :show-img="imageSvgUrl" />
-							<div
-								v-else-if="imageSvgUrl.indexOf('blob:http:') > -1">
-								已选择文件</div>
-						<i v-else class="el-icon-plus avatar-uploader-icon" />
-					</el-upload>
+				<el-form-item label="活动图标特效" prop="imageSvgUrl" :label-width="formLabelWidth">
+					<ossFile :picImg="imageSvgUrl" :type="'animation'" :play_type="3" @getUpLoadImg="getUpLoadImg"/>
 				</el-form-item>
 				<el-form-item label="活动名称" prop="name" :label-width="formLabelWidth">
 					<el-col :span="17">
@@ -95,7 +83,7 @@
 		<el-dialog title="特效图预览" class="showImgDialog" :visible.sync="dialogVisible" width="50%"
 			:before-close="handleClose">
 			<el-image v-if="showImgUrl.indexOf('.png') > -1" :lazy="true" :src="showImgUrl ? showImgUrl : ''" />
-			<svgaplayer v-if="showImgUrl.indexOf('.svga') > -1" :height="667" :width="375" :show-img="showImgUrl" />
+			<svgaplayer v-else-if="showImgUrl.indexOf('.png') == -1 || showImgUrl.indexOf('.zip') == -1" :height="667" :width="375" :show-img="showImgUrl" />
 		</el-dialog>
 	</div>
 </template>
@@ -110,11 +98,13 @@
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
 	import svgaplayer from '../components/svgaplayer.vue'
+	import ossFile from '../components/ossFile.vue'
 	export default {
 		name: 'activityList',
 		components: {
 			Pagination,
-			svgaplayer
+			svgaplayer,
+			ossFile
 		},
 		data() {
 			return {
@@ -152,7 +142,7 @@
 							return cb()
 						}
 					}],
-					icon: [{
+					imageUrl: [{
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
@@ -162,7 +152,7 @@
 							return cb()
 						}
 					}],
-					gif: [{
+					imageSvgUrl: [{
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
@@ -203,8 +193,6 @@
 				},
 				imageUrl: '',
 				imageSvgUrl: '',
-				imageFile: '',
-				imageSvgFile: '',
 				diamondNum: 0,
 				delSource: {},
 				delVisible: false,
@@ -285,13 +273,13 @@
 				const formData = new FormData()
 				formData.append('name', this.popForm.name)
 				formData.append('status', this.popForm.status)
-				if (this.imageFile !== '') {
-					formData.append('icon', this.imageFile.raw)
+				if (this.imageUrl !== '') {
+					formData.append('icon', this.imageUrl)
 				} else {
 					// formData.append('icon', '')
 				}
-				if (this.imageSvgFile !== '') {
-					formData.append('gif', this.imageSvgFile.raw)
+				if (this.imageSvgUrl !== '') {
+					formData.append('gif', this.imageSvgUrl)
 				} else {
 					// formData.append('gif', '')
 				}
@@ -313,13 +301,13 @@
 				formData.append('name', this.popForm.name)
 				formData.append('icon', this.popForm.icon)
 				formData.append('gif', this.popForm.gif)
-				if (this.imageFile !== '') {
-					formData.append('icon', this.imageFile.raw)
+				if (this.imageUrl !== '') {
+					formData.append('icon', this.imageUrl)
 				} else {
 					// formData.append('icon', '')
 				}
-				if (this.imageSvgFile !== '') {
-					formData.append('gif', this.imageSvgFile.raw)
+				if (this.imageSvgUrl !== '') {
+					formData.append('gif', this.imageSvgUrl)
 				} else {
 					// formData.append('gif', '')
 				}
@@ -357,27 +345,11 @@
 					this.delVisible = false
 				})
 			},
-			imgPreview(file, fileList) {
-				const fileName = file.name
-				this.imageFile = file
-				const regex = /(.jpg|.jpeg|.gif|.png|.bmp)$/
-				if (regex.test(fileName.toLowerCase())) {
-					this.imageUrl = file.url
-					this.imageUrl = URL.createObjectURL(file.raw)
-				} else {
-					this.$message.error('请选择图片文件')
-				}
-			},
-			imgSvgPreview(file, fileList) {
-				const fileName = file.name
-				this.imageSvgFile = file
-				const regex = /(.svg|.svga)$/
-				this.imageSvgUrl = ''
-				if (regex.test(fileName.toLowerCase())) {
-					this.imageSvgUrl = file.url
-					this.imageSvgUrl = URL.createObjectURL(file.raw)
-				} else {
-					this.$message.error('请选择特效svga格式图片文件')
+			getUpLoadImg(source){
+				if(source.type == "img"){
+					this.imageUrl = source.url;
+				}else if(source.type == "animation"){
+					this.imageSvgUrl = source.url;
 				}
 			},
 			numberChange(val, maxNum, name) {
@@ -401,7 +373,7 @@
 				this.showImgUrl = ''
 				this.$nextTick(res => {
 					this.showImgUrl = e.gif
-					if (this.showImgUrl.indexOf('.svga') > -1) {
+					if (this.showImgUrl.indexOf('.svga') > -1 || this.showImgUrl.indexOf('.png') == -1) {
 						this.dialogVisible = true
 					} else {
 						this.$message.warning('暂无特效图')
