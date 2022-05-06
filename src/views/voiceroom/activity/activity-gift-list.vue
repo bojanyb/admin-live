@@ -329,6 +329,7 @@
 					this.total = response.data.count
 					this.list = response.data.list
 					this.list.map(res => {
+						let currentTime = moment().unix();
 						switch (res.type) {
 							case 1:
 								res.typeText = '背包';
@@ -336,6 +337,10 @@
 							case 2:
 								res.typeText = '派对';
 								break;
+						}
+						
+						if(currentTime > res.end_time){ // 当前时间大于结束时间 为活动结束状态
+							res.status = 2;
 						}
 						switch (res.status) {
 							case 0:
@@ -351,6 +356,7 @@
 								res.statusText = "特殊停止";
 								break;
 						}
+						
 						let start_time = JSON.stringify(res.start_time).length > 10 ? res.start_time : (res
 							.start_time * 1000);
 						let end_time = JSON.stringify(res.end_time).length > 10 ? res.end_time : (res
@@ -523,18 +529,17 @@
 							this.loading = false
 							return
 						}
-						if (bigSum > 100) {
-							this.$message.error("大礼物概率之和最大为100%");
-							this.loading = false
-							return
-						}
-						if (bigSmallSum > 99) {
-							this.$message.error("大礼物最大概率与小礼物之和最大为99%");
-							this.loading = false
-							return
-						}
-						
-						return
+						// if (bigSum > 100) {
+						// 	this.$message.error("大礼物概率之和最大为100%");
+						// 	this.loading = false
+						// 	return
+						// }
+						// if (bigSmallSum !== 100) {
+						// 	this.$message.error("大礼物最大概率与小礼物之和最大为100%");
+						// 	this.loading = false
+						// 	return
+						// }
+
 						getActivetyGiftSave(params).then(res => {
 							this.loading = false
 							this.editPop = false
