@@ -330,7 +330,7 @@
 					this.total = res.data.count
 					res.data.list.map(re => {
 						this.addPopForm.rebate = re.rebate;
-						re.create_timeText = moment(re.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+						re.create_timeText = re.create_time > 0 ? moment(re.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : ""
 						if(re.face !== ""){
 							this.guildImglist.push(re.face)
 						}

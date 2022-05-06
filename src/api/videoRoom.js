@@ -819,3 +819,30 @@ export function getUserDrawLog(data) {
   })
 }
 
+// 公会返点列表
+export function getGuildWeekList(data) {
+  return request({
+    url: '/Guild/guildWeekList',
+    method: 'post',
+    data
+  })
+}
+
+// 手动周返点 
+export function getWeekRebate(data) {
+  return request({
+    url: '/guild/weekRebate',
+    method: 'post',
+    data
+  })
+}
+
+
+// 返点操作日志 
+export function getSettlementLog(data) {
+  return request({
+    url: '/Guild/settlementLog',
+    method: 'post',
+    data
+  })
+}

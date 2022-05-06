@@ -54,6 +54,24 @@ const guildAuditRouter = {
 				noCache: true
 			}
 		},
+		{
+			path: 'guildRebate-list',
+			component: () => import('@/views/voiceroom/guildAudit/guildRebate-list'),
+			name: 'guildRebate-list',
+			meta: {
+				title: '公会返佣列表',
+				noCache: true
+			}
+		},
+		{
+			path: 'guildRebateRecord-list',
+			component: () => import('@/views/voiceroom/guildAudit/guildRebateRecord-list'),
+			name: 'guildRebateRecord-list',
+			meta: {
+				title: '公会返佣历史历史记录',
+				noCache: true
+			}
+		},
 		
 	]
 }
