@@ -78,8 +78,6 @@
 						<el-button type="primary" @click="handleAddGiftShow" v-if="popForm.typeName !== 'Detail'">添 加
 						</el-button>
 					</div>
-					<div class="fl" style="margin-left: 10px; color: red;font-size: 12px; display: none;">
-						1、所有大礼物概率之和为100%; 2、大礼物单个最大概率与所有小礼物概率之和不超过99%; 3、至少保留一个小礼物概率为0%。 </div>
 				</el-form-item>
 				<giftConfig v-if="popForm.gifts.length > 0" v-for="item in popForm.gifts" v-model="popForm.gifts"
 					:source="item" :activity_id="popForm.activity_type_id" :typeName="popForm.typeName"
@@ -509,22 +507,30 @@
 										}
 									}
 								}
-								bigSum += parseFloat(re.probability);
 							}
 
 							if (re.type == 0) { // 小礼物
 								smallSum += parseFloat(re.probability);
+								if (re.probability == 0) {
+									isBigEmpty = true;
+								}
 							}
+							bigSum += parseFloat(re.probability);
 							re.probability = re.probability * 100000
 						})
 						bigSmallSum = smallSum + maxBigNum;
 						if (isBigEmpty == true) {
-							this.$message.error("大礼物概率不能为0");
+							this.$message.error("礼物概率不能为0");
 							this.loading = false
 							return
 						}
 						if(isBigConsistent == true){
 							this.$message.error("所有大礼物价格和概率必须一致");
+							this.loading = false
+							return
+						}
+						if (bigSum > 100) {
+							this.$message.error("一个大礼物和所有小礼物概率之和最大为100%");
 							this.loading = false
 							return
 						}
@@ -590,12 +596,14 @@
 										}
 									}
 								}
-								bigSum += parseFloat(re.probability);
 							}
-
 							if (re.type == 0) { // 小礼物
 								smallSum += parseFloat(re.probability);
+								if (re.probability == 0) {
+									isBigEmpty = true;
+								}
 							}
+							bigSum += parseFloat(re.probability);
 							if (re.activity_type_id) {
 								re.id = re.activity_type_id;
 								delete re.activity_type_id
@@ -607,7 +615,7 @@
 						})
 						bigSmallSum = smallSum + maxBigNum;
 						if (isBigEmpty == true) {
-							this.$message.error("大礼物概率不能为0");
+							this.$message.error("礼物概率不能为0");
 							this.loading = false
 							return
 						}
@@ -617,15 +625,11 @@
 							return
 						}
 						if (bigSum > 100) {
-							this.$message.error("大礼物概率之和最大为100%");
+							this.$message.error("一个大礼物和所有小礼物概率之和最大为100%");
 							this.loading = false
 							return
 						}
-						if (bigSmallSum > 99) {
-							this.$message.error("大礼物最大概率与小礼物之和最大为99%");
-							this.loading = false
-							return
-						}
+						
 						getActivetyGiftSave(params).then(res => {
 							this.loading = false
 							this.editPop = false
