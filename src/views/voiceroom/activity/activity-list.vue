@@ -83,7 +83,7 @@
 		<el-dialog title="特效图预览" class="showImgDialog" :visible.sync="dialogVisible" width="50%"
 			:before-close="handleClose">
 			<el-image v-if="showImgUrl.indexOf('.png') > -1" :lazy="true" :src="showImgUrl ? showImgUrl : ''" />
-			<svgaplayer v-else-if="showImgUrl.indexOf('.png') == -1 || showImgUrl.indexOf('.zip') == -1" :height="667" :width="375" :show-img="showImgUrl" />
+			<svgaplayer v-else-if="showImgUrl.indexOf('.svga') > -1" :height="667" :width="375" :show-img="showImgUrl" />
 		</el-dialog>
 	</div>
 </template>

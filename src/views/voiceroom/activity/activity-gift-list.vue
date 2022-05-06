@@ -494,6 +494,7 @@
 								}else{
 									if(bigGiftProbability == 0){ // 大礼物概率
 										bigGiftProbability = parseFloat(re.probability)
+										bigSum += parseFloat(re.probability);
 									}else{
 										if(bigGiftProbability !== parseFloat(re.probability)){
 											isBigConsistent = true
@@ -514,8 +515,9 @@
 								if (re.probability == 0) {
 									isBigEmpty = true;
 								}
+								bigSum += parseFloat(re.probability);
 							}
-							bigSum += parseFloat(re.probability);
+							
 							re.probability = re.probability * 100000
 						})
 						bigSmallSum = smallSum + maxBigNum;
@@ -583,6 +585,7 @@
 								}else{
 									if(bigGiftProbability == 0){ // 大礼物概率
 										bigGiftProbability = parseFloat(re.probability)
+										bigSum += parseFloat(re.probability);
 									}else{
 										if(bigGiftProbability !== parseFloat(re.probability)){
 											isBigConsistent = true
@@ -602,8 +605,8 @@
 								if (re.probability == 0) {
 									isBigEmpty = true;
 								}
+								bigSum += parseFloat(re.probability);
 							}
-							bigSum += parseFloat(re.probability);
 							if (re.activity_type_id) {
 								re.id = re.activity_type_id;
 								delete re.activity_type_id
@@ -716,6 +719,7 @@
 					if (res.id == row.id) {
 						res.isSelect = true; // 默认当前礼物未被选中
 						// currentGift.activity_type_id = parseInt(row.id);
+						currentGift.id = row.id;
 						currentGift.activity_id = row.id;
 						currentGift.gift_name = row.gift_name;
 						currentGift.gift_photo = row.gift_photo;
@@ -739,9 +743,7 @@
 				if (row.typeName == "Del") { // 删除礼物库中选中的礼物
 					this.popForm.gifts.map((res, i) => {
 						if (res.activity_id == row.activity_id) {
-							console.log(this.popForm.gifts);
 							this.popForm.gifts.splice(i, 1);
-							console.log(this.popForm.gifts);
 						}
 					})
 					

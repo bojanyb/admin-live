@@ -59,7 +59,7 @@
 		<el-dialog title="特效图预览" class="showImgDialog" :visible.sync="dialogVisible" width="50%"
 			:before-close="handleClose">
 			<el-image v-if="showImgUrl.indexOf('.png') > -1" :lazy="true" :src="showImgUrl ? showImgUrl : ''" />
-			<svgaplayer v-else :height="667" :width="375" :show-img="showImgUrl" />
+			<svgaplayer v-if="showImgUrl.indexOf('.svga') > -1" :height="667" :width="375" :show-img="showImgUrl" />
 		</el-dialog>
 		<el-dialog :title="editTitle" :visible.sync="editPop" @close="handleCancel">
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
@@ -89,25 +89,11 @@
 				</el-form-item>
 				<el-form-item label="礼物图片" prop="imageUrl" :label-width="formLabelWidth">
 					<el-col :span="17">
-						<!-- <el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgPreview"
-							:auto-upload="false">
-							<img v-if="imageUrl" :src="imageUrl" class="avatar">
-							<i v-else class="el-icon-plus avatar-uploader-icon" />
-						</el-upload> -->
 						<ossFile :picImg="imageUrl" :type="'img'" :play_type="popForm.play_type" @getUpLoadImg="getUpLoadImg"/>
 					</el-col>
 				</el-form-item>
 				<el-form-item label="礼物特效" prop="imageSvgUrl" :label-width="formLabelWidth">
-					<!-- <el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgSvgPreview"
-						:auto-upload="false">
-						<svgaplayer v-if="imageSvgUrl.indexOf('.svga') > -1" :data-title="imageSvgUrl" :height="178"
-							:width="178" :show-img="imageSvgUrl" />
-						<div
-							v-else-if="(imageSvgUrl.indexOf('blob:http:') > -1 || popForm.gift_gif.indexOf('.zip') > -1 )">
-							已选择文件</div>
-						<i v-else class="el-icon-plus avatar-uploader-icon" />
-					</el-upload> -->
-					<ossFile :picImg="imageSvgUrl" :type="'animation'" :play_type="popForm.play_type" @getUpLoadImg="getUpLoadImg"/>
+					<ossFile :animationImg="imageSvgUrl" :type="'animation'" :play_type="popForm.play_type" @getUpLoadImg="getUpLoadImg"/>
 				</el-form-item>
 				<el-form-item label="礼物版本号" v-if="popForm.type == 'Edit' " prop="gift_version" :label-width="formLabelWidth"  :rules="popForm.type == 'Edit' ? popFormRules.gift_version:[{ required: false}]">
 					<el-input v-model="popForm.gift_version" style="width: 335px;" oninput="value=value.replace(/[^\d.]/g,'')"
@@ -249,7 +235,6 @@
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							console.log(this.imageUrl)
 							if (!this.imageUrl) {
 								return cb(new Error('礼物图片不能为空!'))
 							}
@@ -389,7 +374,7 @@
 		watch: {
 			"popForm.play_type": {
 				handler(newValue) {
-					this.imageSvgUrl = "";
+					// this.imageSvgUrl = "";
 				},
 				deep: true
 			}
@@ -517,7 +502,6 @@
 					'type': 'Edit'
 				}
 				this.imageUrl = row.gift_photo
-				this.imageSvgUrl = ''
 				this.imageSvgUrl = row.gift_gif
 				this.editTitle = '修改'
 				if (this.$refs['popForm']) {
@@ -633,7 +617,6 @@
 				this.editPop = false
 			},
 			getUpLoadImg(source){
-				console.log("上传成功后返回的图片地址",source);
 				if(source.type == "img"){
 					this.imageUrl = source.url;
 				}else if(source.type == "animation"){

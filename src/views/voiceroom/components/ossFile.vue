@@ -6,10 +6,11 @@
 			<i v-else class="el-icon-plus avatar-uploader-icon" />
 		</el-upload>
 
-		<el-upload v-if="type == 'animation'" class="aliUpload avatar-uploader" action="#" :show-file-list="false" :on-change="doUpload" :auto-upload="false">
+		<el-upload v-if="type == 'animation'" class="aliUpload avatar-uploader" action="#" :show-file-list="false"
+			:on-change="doUpload" :auto-upload="false">
 			<i v-if="imageSvgUrl !== '' && imageSvgUrl.indexOf('.zip') > -1">已选择</i>
-			<svgaplayer v-else-if="imageSvgUrl !== ''" :data-title="imageSvgUrl" :height="178" :width="178"
-				:show-img="imageSvgUrl" />
+			<svgaplayer v-else-if="imageSvgUrl.indexOf('svga') > - 1" :data-title="imageSvgUrl" :height="178"
+				:width="178" :show-img="imageSvgUrl" />
 			<i v-if="imageSvgUrl == ''" class="el-icon-plus avatar-uploader-icon" />
 		</el-upload>
 	</div>
@@ -34,6 +35,10 @@
 				type: String,
 				default: ''
 			},
+			animationImg: {
+				type: String,
+				default: ''
+			},
 			type: {
 				type: String,
 				default: 'img'
@@ -44,22 +49,34 @@
 			},
 		},
 		watch: {
-			picImg(val) {
-				if (this.type == 'img') {
-					this.imageUrl = val;
-				} else if (this.type == 'animation') {
-					this.imageSvgUrl = val;
-				}
-				this.$forceUpdate();
-			},
 			play_type(val) {
 				this.play_type = val;
 			},
+			"picImg": {
+				handler(newValue) {
+					this.imageUrl = newValue;
+				},
+				deep: true
+			},
+			"animationImg": {
+				handler(newValue) {
+					this.imageSvgUrl = newValue;
+				},
+				deep: true
+			},
+
 		},
 		components: {
 			svgaplayer
 		},
 		mounted() {
+			if (this.type == 'img') {
+				this.imageUrl = this.picImg;
+			}
+			if (this.type == 'animation') {
+				this.imageSvgUrl = this.animationImg;
+
+			}
 			this.client = new OSS({
 				region: 'oss-cn-shenzhen',
 				success_action_status: '200', // 默认200
@@ -79,11 +96,10 @@
 				} else {
 					isUpLoad = true // 静态图 默认为true
 				}
-
 				if (isUpLoad == true) {
 					let tmpArr = file.name.split('.')
 					let tmpName = md5(Date.now() + tmpArr[0])
-					tmpName = tmpName + '.' + tmpArr[1]
+					tmpName = tmpName + '.' + tmpArr[tmpArr.length - 1]
 					this.multipartUpload(tmpName, file)
 				}
 			},
@@ -115,7 +131,6 @@
 							this.imageSvgUrl = ""
 							this.imageUrl = imgUrl
 						}
-						console.log(this.imageUrl)
 						this.$emit("getUpLoadImg", params);
 						let head = _this.client.head(upName);
 					}).catch(err => {
@@ -133,32 +148,32 @@
 			handleFileType(fileName) {
 				let regex = '',
 					isUpLoad = false;
-					switch (this.play_type){
-						case 1:
+				switch (this.play_type) {
+					case 1:
 						regex = /(.zip)$/
-							break;
-						case 2:
+						break;
+					case 2:
 						regex = /(.svg|.svga)$/
-							break;
-						case 3:
+						break;
+					case 3:
 						regex = /(.svg|.svga|.zip)$/
-							break;
-						default:
-							break;
+						break;
+					default:
+						break;
+				}
+
+				if (regex.test(fileName.toLowerCase())) {
+					isUpLoad = true
+				} else {
+					if (this.play_type == 1) { //Lottie
+						this.$message.error('请选择zip格式文件')
+						isUpLoad = false
+					} else if (this.play_type == 2) {
+						this.$message.error('请选择特效svga格式文件')
+						isUpLoad = false
 					}
-					
-					if (regex.test(fileName.toLowerCase())) {
-						isUpLoad = true
-					} else {
-						if (this.play_type == 1) { //Lottie
-							this.$message.error('请选择zip格式文件')
-							isUpLoad = false
-						} else if (this.play_type == 2) {
-							this.$message.error('请选择特效svga格式文件')
-							isUpLoad = false
-						}
-					}
-				
+				}
+
 				return isUpLoad;
 			},
 		}
