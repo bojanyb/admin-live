@@ -49,11 +49,7 @@
 			<el-form :model="addPopForm" ref="addPopForm" :rules="addPopFormRules">
 				<el-form-item label="公会头像" prop="face" :label-width="formLabelWidth">
 					<el-col :span="17">
-						<el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgPreview"
-							:auto-upload="false">
-							<img v-if="imageUrl" :src="imageUrl" class="avatar">
-							<i v-else class="el-icon-plus avatar-uploader-icon" />
-						</el-upload>
+						<ossFile :picImg="imageUrl" :type="'img'" :play_type="1" @getUpLoadImg="getUpLoadImg"/>
 					</el-col>
 				</el-form-item>
 				<el-form-item label="公会昵称" prop="nickname" :label-width="formLabelWidth">
@@ -97,11 +93,7 @@
 			<el-form :model="editPopForm" ref="editPopForm" :rules="editPopFormRules">
 				<el-form-item label="公会头像" prop="face" :label-width="formLabelWidth">
 					<el-col :span="17">
-						<el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgPreview"
-							:auto-upload="false">
-							<img v-if="imageUrl" :src="imageUrl" class="avatar">
-							<i v-else class="el-icon-plus avatar-uploader-icon" />
-						</el-upload>
+						<ossFile :picImg="imageUrl" :type="'img'" :play_type="1" @getUpLoadImg="getUpLoadImg"/>
 					</el-col>
 				</el-form-item>
 				<el-form-item label="公会昵称" prop="nickname" :label-width="formLabelWidth">
@@ -161,10 +153,12 @@
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
+	import ossFile from '../components/ossFile.vue'
 	export default {
 		name: 'guild-list',
 		components: {
-			Pagination
+			Pagination,
+			ossFile
 		},
 		data() {
 			return {
@@ -361,15 +355,10 @@
 				this.imageUrl = "";
 				this.addPop = true;
 			},
-			imgPreview(file, fileList) {
-				const fileName = file.name
-				this.imageFile = file
-				const regex = /(.jpg|.jpeg|.gif|.png|.bmp)$/
-				if (regex.test(fileName.toLowerCase())) {
-					this.imageUrl = file.url
-					this.imageUrl = URL.createObjectURL(file.raw)
-				} else {
-					this.$message.error('请选择图片文件')
+			getUpLoadImg(source){
+				if(source.type == "img"){
+					console.log(source.url)
+					this.imageUrl = source.url;
 				}
 			},
 			handleAddCancel() {
@@ -382,8 +371,8 @@
 						formData.append('nickname', this.addPopForm.nickname)
 						formData.append('user_number', this.addPopForm.user_number)
 						formData.append('rank', this.addPopForm.rank)
-						if (this.imageFile !== '') {
-							formData.append('face', this.imageFile.raw)
+						if (this.imageUrl !== '') {
+							formData.append('face', this.imageUrl)
 						}
 						getGuildCreate(formData).then(res=>{
 							this.$message.success("新增成功");
@@ -418,10 +407,9 @@
 						formData.append('nickname', this.editPopForm.nickname)
 						formData.append('user_number', this.editPopForm.user_number)
 						formData.append('remark', this.editPopForm.remark)
-						formData.append('face', this.editPopForm.face)
 						formData.append('rank', this.editPopForm.rank)
-						if (this.imageFile && this.imageFile !== '') {
-							formData.append('face', this.imageFile.raw)
+						if (this.imageUrl && this.imageUrl !== '') {
+							formData.append('face', this.imageUrl)
 						}
 						getGuildUpdate(formData).then(res=>{
 							this.$message.success("修改成功");

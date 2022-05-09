@@ -95,6 +95,7 @@
 				})
 			},
 			handleSelectionChange(row){
+				this.ids = [];
 				if(row.length > 0){
 					row.map(res=>{
 						this.ids.push(res.id);
