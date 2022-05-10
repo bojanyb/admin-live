@@ -90,8 +90,10 @@
 					this.total = response.data.count
 					this.list = response.data.list
 					this.list.map(res => {
+						res.room_number = res.room_number > 0 ? res.room_number : ""
+						res.guild_number = res.guild_number > 0 ? res.guild_number : ""
 						res.create_timeText = res.create_time > 0 ?  moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : ""
-						res.fromText = res.room_number !== "" ? "派对" : "私聊"
+						res.fromText = res.room_number > 0 ? "派对" : "私聊"
 					})
 					this.listLoading = false
 				}).catch(err => {

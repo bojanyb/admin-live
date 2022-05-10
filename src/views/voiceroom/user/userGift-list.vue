@@ -90,7 +90,7 @@
 					this.list = response.data.list
 					this.list.map(res => {
 						res.create_timeText = res.create_time > 0 ? moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : ""
-						res.fromText = res.room_number !== 0 ? "派对" : "私聊"
+						res.fromText = res.room_number > 0 ? "派对" : "私聊"
 					})
 					this.listLoading = false
 				}).catch(err => {

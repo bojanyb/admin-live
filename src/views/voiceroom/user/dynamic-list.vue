@@ -92,6 +92,7 @@
 							re.statusText = "通过";
 								break;
 						}
+						re.make_userid = re.make_userid > 0 ? re.make_userid : "";
 						re.create_timeText = re.create_time > 0 ? moment(re.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
 						re.update_timeText = re.update_time > 0 ? moment(re.update_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
 						if(re.media_list !== "" && re.media_list.indexOf(",") > -1){

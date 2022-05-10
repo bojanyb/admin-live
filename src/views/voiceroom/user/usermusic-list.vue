@@ -19,7 +19,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="用户ID">
-					<el-input v-model="filters.user_id" v-input-limit="0" placeholder="请输入用户ID" clearable />
+					<el-input v-model="filters.user_number" v-input-limit="0" placeholder="请输入用户ID" clearable />
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="getUserMusic">查询</el-button>
@@ -30,7 +30,7 @@
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
 			<el-table-column label="上传用户昵称" prop="nickname" align="center" />
-			<el-table-column label="上传用户ID" prop="user_id" align="center" />
+			<el-table-column label="上传用户ID" prop="user_number" align="center" />
 			<el-table-column label="上传时间" prop="create_timeText" align="center" />
 			<el-table-column label="音频" prop="url" align="center" width="360">
 				<template slot-scope="scope">
@@ -180,7 +180,7 @@
 					'tags': ''
 				},
 				filters: {
-					'user_id': '',
+					'user_number': '',
 					'sort': "0",
 					'status': ""
 				}
@@ -195,7 +195,7 @@
 				var params = {
 					'page': this.page.page,
 					'pagesize': this.page.limit,
-					'user_id': this.filters.user_id,
+					'user_number': this.filters.user_number,
 					'status': this.filters.status,
 					'sort': this.filters.sort
 				}

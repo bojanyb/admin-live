@@ -96,6 +96,7 @@
 				getUserBgi(params).then(response => {
 					this.total = response.data.count;
 					response.data.row.map(res => {
+						res.make_userid = res.make_userid > 0 ? res.make_userid : "";
 						res.create_timeText = res.create_time > 0 ?moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
 						res.update_timeText = res.update_time > 0 ? moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
 						switch (res.status){
