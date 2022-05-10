@@ -12,6 +12,9 @@ switch (process.env.NODE_ENV) {
 	case 'test':
 		baseUrlApi = 'http://api.huida.vip'
 		break
+	case 'pre':
+		baseUrlApi = 'http://api.huidapay.net'
+		break
 	case 'production':
 		baseUrlApi = 'http://api.aiyi.live'
 		break

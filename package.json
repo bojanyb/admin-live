@@ -8,6 +8,7 @@
     "lint": "eslint --ext .js,.vue src",
     "build:prod": "vue-cli-service build",
     "test": "vue-cli-service build --mode test",
+	"pre": "vue-cli-service build --mode pre",
     "build:stage": "vue-cli-service build --mode staging",
     "beta": "vue-cli-service build --mode beta",
     "preview": "node build/index.js --preview",
