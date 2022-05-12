@@ -30,7 +30,7 @@
 			<el-table-column label="创建时间" prop="create_timeText" align="center"  width="160"/>
 			<el-table-column label="公会成员" prop="user_count" align="center" />
 			<el-table-column label="已绑定厅" prop="room_count" align="center" />
-			<el-table-column label="开厅数量" prop="guild_user_id" align="center" />
+			<el-table-column label="开厅数量" prop="is_live_count" align="center" />
 			<el-table-column label="总流水" prop="total_flow" align="center" />
 			<el-table-column label="当日流水" prop="today_flow" align="center" />
 			<el-table-column label="上一周结算" prop="last_week_back" align="center" />
