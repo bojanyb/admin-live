@@ -336,6 +336,9 @@
 								res.typeText = '派对';
 								break;
 						}
+						if(currentTime < res.start_time){ // 当前时间大于结束时间 为活动结束状态
+							res.status = 0;
+						}
 						
 						if(currentTime > res.end_time){ // 当前时间大于结束时间 为活动结束状态
 							res.status = 2;
