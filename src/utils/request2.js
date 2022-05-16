@@ -5,7 +5,7 @@ import {
 } from 'element-ui'
 import store from '@/store'
 var baseUrlApi = '';
-console.log(process.env.NODE_ENV)
+console.log(process.env.NODE_ENV, 'node-----------')
 switch (process.env.NODE_ENV) {
 	case 'development':
 		baseUrlApi = 'http://api.huixin.info'
