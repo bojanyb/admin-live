@@ -475,6 +475,7 @@
 							bigSum = 0,
 							smallSum = 0,
 							bigSmallSum = 0,
+							sumNum = 0,
 							isBigEmpty = false,
 							bigGiftDiamond = 0,
 							bigGiftProbability = 0,
@@ -497,7 +498,7 @@
 								}else{
 									if(bigGiftProbability == 0){ // 大礼物概率
 										bigGiftProbability = parseFloat(re.probability)
-										bigSum += parseFloat(re.probability);
+										bigSum = parseFloat(re.probability);
 									}else{
 										if(bigGiftProbability !== parseFloat(re.probability)){
 											isBigConsistent = true
@@ -512,18 +513,16 @@
 									}
 								}
 							}
-
+							
 							if (re.type == 0) { // 小礼物
 								smallSum += parseFloat(re.probability);
 								if (re.probability == 0) {
 									isBigEmpty = true;
 								}
-								bigSum += parseFloat(re.probability);
 							}
-							
 							re.probability = re.probability * 100000
 						})
-						bigSmallSum = smallSum + maxBigNum;
+						bigSmallSum = parseFloat((bigSum + smallSum).toFixed(5));
 						if (isBigEmpty == true) {
 							this.$message.error("礼物概率不能为0");
 							this.loading = false
@@ -534,7 +533,7 @@
 							this.loading = false
 							return
 						}
-						if (bigSum > 100) {
+						if (bigSmallSum > 100) {
 							this.$message.error("一个大礼物和所有小礼物概率之和最大为100%");
 							this.loading = false
 							return
@@ -588,7 +587,7 @@
 								}else{
 									if(bigGiftProbability == 0){ // 大礼物概率
 										bigGiftProbability = parseFloat(re.probability)
-										bigSum += parseFloat(re.probability);
+										bigSum = parseFloat(re.probability);
 									}else{
 										if(bigGiftProbability !== parseFloat(re.probability)){
 											isBigConsistent = true
@@ -608,7 +607,6 @@
 								if (re.probability == 0) {
 									isBigEmpty = true;
 								}
-								bigSum += parseFloat(re.probability);
 							}
 							if (re.activity_type_id) {
 								re.id = re.activity_type_id;
@@ -619,7 +617,7 @@
 								isSmallEmpty = true
 							}
 						})
-						bigSmallSum = smallSum + maxBigNum;
+						bigSmallSum = parseFloat((bigSum + smallSum).toFixed(5));
 						if (isBigEmpty == true) {
 							this.$message.error("礼物概率不能为0");
 							this.loading = false
@@ -630,12 +628,12 @@
 							this.loading = false
 							return
 						}
-						if (bigSum > 100) {
+						if (bigSmallSum > 100) {
 							this.$message.error("一个大礼物和所有小礼物概率之和最大为100%");
 							this.loading = false
 							return
 						}
-						
+
 						getActivetyGiftSave(params).then(res => {
 							this.loading = false
 							this.editPop = false
