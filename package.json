@@ -4,12 +4,15 @@
 	"description": "A magical vue admin. An out-of-box UI solution for enterprise applications. Newest development stack of vue. Lots of awesome features",
 	"author": "Pan <panfree23@gmail.com>",
 	"scripts": {
-		"dev": "vue-cli-service serve",
-		"dev:pre": "vue-cli-service serve --mode pre",
+		"dev": "vue-cli-service serve --dev",
+		"dev.test": "vue-cli-service serve --test",
+		"dev.pre": "vue-cli-service serve --pre",
+		"dev.prod": "vue-cli-service serve --prod",
 		"lint": "eslint --ext .js,.vue src",
-		"build:prod": "vue-cli-service build",
-		"test": "vue-cli-service build --mode test",
-		"build:pre": "vue-cli-service build --mode pre",
+		"build": "vue-cli-service build --dev",
+		"build.test": "vue-cli-service build --test",
+		"build.pre": "vue-cli-service build --pre",
+		"build.prod": "vue-cli-service build --prod",
 		"build:stage": "vue-cli-service build --mode staging",
 		"beta": "vue-cli-service build --mode beta",
 		"preview": "node build/index.js --preview",
@@ -92,7 +95,7 @@
 		"node": ">=8.9",
 		"npm": ">= 3.0.0"
 	},
-	"keywords": [
+	"keywords": [ 
 		"vue",
 		"admin",
 		"dashboard",

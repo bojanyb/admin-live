@@ -15,6 +15,53 @@ const name = defaultSettings.title || '喵喵星球管理平台' // page title
 // port = 9528 npm run dev OR npm run dev --port = 9528
 const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 
+// 定义多环境
+const option = {
+	// 开发环境
+	'--dev': {
+	  // apiBaseUrl: ''
+	  publicPath: '/',
+	  outputDir: 'dist',
+	  assetsDir: 'static',
+	  mode: 'development',
+	  domainHttps: 'http://api.huixin.info', // https环境地址
+	  domainOss: 'http://music.aiyi.live/', // oss返回域名
+	  payUrl: "http://pay.huida.vip/" // 充值访问域名
+	},
+	// 测试环境
+	'--test': {
+	  publicPath: '/',
+	  outputDir: 'dist',
+	  assetsDir: 'static',
+	  mode: 'production',
+	  domainHttps: 'http://api.huida.vip', // https环境地址
+	  domainOss: 'http://music.aiyi.live/', // oss返回域名
+	  payUrl: "http://pay.huida.vip/" // 充值访问域名
+	},
+	// 预生产环境
+	'--pre': {
+	  publicPath: '/',
+	  outputDir: 'dist',
+	  assetsDir: 'static',
+	  mode: 'production',
+	  domainHttps: 'http://api.huidapay.net', // https环境地址
+	  domainOss: 'http://music.aiyi.live/', // oss返回域名
+	  payUrl: "http://pay.aiyi.live" // 充值访问域名
+	},
+	// 生产环境
+	'--prod': {
+	  publicPath: '/',
+	  outputDir: 'dist',
+	  assetsDir: 'static',
+	  mode: 'production',
+	  domainHttps: 'http://api.aiyi.live', // https环境地址
+	  domainOss: 'http://music.aiyi.live/', // oss返回域名
+	  payUrl: "http://pay.aiyi.live" // 充值访问域名
+	}
+}
+
+const configObj = option[process.argv[3]]
+
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
 	/**
@@ -24,10 +71,10 @@ module.exports = {
 	 * In most cases please use '/' !!!
 	 * Detail: https://cli.vuejs.org/config/#publicpath
 	 */
-	publicPath: '/',
-	outputDir: 'dist',
-	assetsDir: 'static',
-	// lintOnSave: process.env.NODE_ENV === 'development',
+	publicPath: configObj.publicPath,
+	outputDir: configObj.outputDir,
+	assetsDir: configObj.assetsDir,
+	lintOnSave: process.env.NODE_ENV === 'development',
 	lintOnSave: false,
 	productionSourceMap: false,
 	devServer: {
@@ -130,5 +177,18 @@ module.exports = {
 					config.optimization.runtimeChunk('single')
 				}
 			)
+		config.plugin('define')
+		.tap(() => [
+			{
+			// 全局常量
+			'ENV_DOMAINHTTPS': JSON.stringify(configObj.domainHttps),
+			'ENV_UPLOADOSS': JSON.stringify(configObj.domainOss),
+			'ENV_PAYURL': JSON.stringify(configObj.payUrl),
+			'process.env': {
+				NODE_ENV: JSON.stringify(configObj.mode),
+				BASE_URL: JSON.stringify(configObj.publicPath)
+			}
+			}
+		])
 	}
 }
