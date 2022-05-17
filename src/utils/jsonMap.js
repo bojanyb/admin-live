@@ -2,8 +2,8 @@
 
 /*
 -用户拉新记录页面
--select下拉框map数据
 */
+// 派对
 const USERINVITE = [
     {
         value: 1,
@@ -15,6 +15,19 @@ const USERINVITE = [
     }
 ]
 
+// 下载渠道
+const DOWNLOADSOURCE = [
+    {
+        value: 'ios',
+        name: 'IOS'
+    },
+    {
+        value: 'android',
+        name: '安卓'
+    }
+]
+
 export default {
-    USERINVITE
+    USERINVITE,
+    DOWNLOADSOURCE
 }
