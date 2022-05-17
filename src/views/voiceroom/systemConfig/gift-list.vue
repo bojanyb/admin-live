@@ -72,7 +72,7 @@
 				<el-form-item label="礼物类型" prop="gift_genre" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-radio-group v-model="popForm.gift_genre">
-							<el-radio v-for="it in giftGenreList" :label="it.value">
+							<el-radio v-for="(it,x) in giftGenreList" :key="x" :label="it.value">
 								{{it.label}}
 							</el-radio>
 						</el-radio-group>
@@ -81,7 +81,7 @@
 				<el-form-item label="礼物播放类型" prop="play_type" :label-width="formLabelWidth">
 					<el-col :span="17">
 						<el-radio-group v-model="popForm.play_type">
-							<el-radio v-for="it in giftPlayList" :label="it.value">
+							<el-radio v-for="(it,Index) in giftPlayList" :key="Index" :label="it.value">
 								{{it.label}}
 							</el-radio>
 						</el-radio-group>

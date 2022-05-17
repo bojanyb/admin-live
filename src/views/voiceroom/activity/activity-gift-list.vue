@@ -79,7 +79,7 @@
 						</el-button>
 					</div>
 				</el-form-item>
-				<giftConfig v-if="popForm.gifts.length > 0" v-for="item in popForm.gifts" v-model="popForm.gifts"
+				<giftConfig v-if="popForm.gifts.length > 0" v-for="(item,index) in popForm.gifts" :key="index" v-model="popForm.gifts"
 					:source="item" :activity_id="popForm.activity_type_id" :typeName="popForm.typeName"
 					:gifts="popForm.gifts" @handleDelSelect="handleDelSelect"></giftConfig>
 			</el-form>

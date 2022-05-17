@@ -145,6 +145,15 @@ const userRouter = {
 				noCache: true
 			}
 		},
+		{
+			path: 'invite-list',
+			component: () => import('@/views/voiceroom/user/inviteList'),
+			name: 'invite-list',
+			meta: {
+				title: '用户拉新记录',
+				noCache: true
+			}
+		},
 		
 	]
 }

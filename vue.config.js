@@ -25,8 +25,6 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'development',
 	  domainHttps: 'http://api.huixin.info', // https环境地址
-	  domainOss: 'http://music.aiyi.live/', // oss返回域名
-	  payUrl: "http://pay.huida.vip/" // 充值访问域名
 	},
 	// 测试环境
 	'--test': {
@@ -35,8 +33,6 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'production',
 	  domainHttps: 'http://api.huida.vip', // https环境地址
-	  domainOss: 'http://music.aiyi.live/', // oss返回域名
-	  payUrl: "http://pay.huida.vip/" // 充值访问域名
 	},
 	// 预生产环境
 	'--pre': {
@@ -45,8 +41,6 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'production',
 	  domainHttps: 'http://api.huidapay.net', // https环境地址
-	  domainOss: 'http://music.aiyi.live/', // oss返回域名
-	  payUrl: "http://pay.aiyi.live" // 充值访问域名
 	},
 	// 生产环境
 	'--prod': {
@@ -55,8 +49,6 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'production',
 	  domainHttps: 'http://api.aiyi.live', // https环境地址
-	  domainOss: 'http://music.aiyi.live/', // oss返回域名
-	  payUrl: "http://pay.aiyi.live" // 充值访问域名
 	}
 }
 
@@ -182,8 +174,6 @@ module.exports = {
 			{
 			// 全局常量
 			'ENV_DOMAINHTTPS': JSON.stringify(configObj.domainHttps),
-			'ENV_UPLOADOSS': JSON.stringify(configObj.domainOss),
-			'ENV_PAYURL': JSON.stringify(configObj.payUrl),
 			'process.env': {
 				NODE_ENV: JSON.stringify(configObj.mode),
 				BASE_URL: JSON.stringify(configObj.publicPath)

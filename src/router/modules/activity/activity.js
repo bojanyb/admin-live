@@ -43,29 +43,29 @@ const activityRouter = {
 				noCache: true
 			}
 		},
-		{
-			path: '/giftHistory',
-			component: () => import('@/views/voiceroom/activity/giftHistory/index'),
-			meta: {
-				title: '财务管理'
-			},
-			children: [
-				{
-					path: 'giveAway',
-					component: () => import('@/views/voiceroom/activity/giftHistory/giveAway'),
-					meta: {
-						title: '用户充值',
-					}
-				}, 
-				{
-					path: 'giftHistory-list',
-					component: () => import('@/views/voiceroom/activity/giftHistory/giftHistory-list'),
-					meta: {
-						title: '充值记录',
-					}
-				}, 
-			]
-		},
+		// {
+		// 	path: '/giftHistory',
+		// 	component: () => import('@/views/voiceroom/activity/giftHistory/index'),
+		// 	meta: {
+		// 		title: '财务管理'
+		// 	},
+		// 	children: [
+		// 		{
+		// 			path: 'giveAway',
+		// 			component: () => import('@/views/voiceroom/activity/giftHistory/giveAway'),
+		// 			meta: {
+		// 				title: '用户充值',
+		// 			}
+		// 		}, 
+		// 		{
+		// 			path: 'giftHistory-list',
+		// 			component: () => import('@/views/voiceroom/activity/giftHistory/giftHistory-list'),
+		// 			meta: {
+		// 				title: '充值记录',
+		// 			}
+		// 		}, 
+		// 	]
+		// },
 	]
 }
 

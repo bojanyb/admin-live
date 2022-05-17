@@ -15,14 +15,14 @@ const giveAwayRouter = {
 			path: 'giveAway',
 			component: () => import('@/views/voiceroom/activity/giftHistory/giveAway'),
 			meta: {
-				title: '用户充值',
+				title: '平台赠送',
 			}
 		},
 		{
 			path: 'giftHistory-list',
 			component: () => import('@/views/voiceroom/activity/giftHistory/giftHistory-list'),
 			meta: {
-				title: '充值记录',
+				title: '赠送记录',
 			}
 		},
 		{
@@ -30,7 +30,16 @@ const giveAwayRouter = {
 			component: () => import('@/views/voiceroom/finance/guildWithdraw-list'),
 			name: 'guildWithdraw-list',
 			meta: {
-				title: '提现记录',
+				title: '用户充值记录',
+				noCache: true
+			}
+		},
+		{
+			path: 'guildWithdraw-list',
+			component: () => import('@/views/voiceroom/finance/guildWithdraw-list'),
+			name: 'guildWithdraw-list',
+			meta: {
+				title: '用户体现记录',
 				noCache: true
 			}
 		}
