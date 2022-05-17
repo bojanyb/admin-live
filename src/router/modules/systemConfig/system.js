@@ -9,7 +9,7 @@ const systemConfigRouter = {
   name: 'systemConfig',
   meta: {
     title: '系统配置',
-    icon: 'tree'
+    icon: 'el-icon-setting'
   },
   children: [{
     path: 'consume-list',
@@ -65,7 +65,15 @@ const systemConfigRouter = {
 	    noCache: true
 	  }
 	},
-	
+	{
+	  path: 'merchants-list',
+	  component: () => import('@/views/voiceroom/systemConfig/merchants'),
+	  name: 'merchants-list',
+	  meta: {
+	    title: '商户管理',
+	    noCache: true
+	  }
+	}
 	
   ]
 }

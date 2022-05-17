@@ -7,6 +7,19 @@
         <el-form-item label="用户ID">
           <el-input v-model="filters.user_number" v-input-limit="0" placeholder="请输入用户ID" clearable />
         </el-form-item>
+        <!-- <el-form-item label="交易流水号">
+          <el-input v-model="filters.user_number" v-input-limit="0" placeholder="请输入交易流水号" clearable />
+        </el-form-item>
+        <el-form-item label="">
+          <el-select v-model="select" placeholder="请选择">
+            <el-option
+              v-for="item in selectList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" @click="getBannerInfo">查询</el-button>
         </el-form-item>
@@ -65,7 +78,18 @@ export default {
       },
       filters: {
         'user_number': '',
-      }
+      },
+      select: '',
+      selectList: [
+        {
+          value: '1',
+          name: '微信充值'
+        },
+        {
+          value: '2',
+          name: '支付宝充值'
+        }
+      ]
     }
   },
   created() {

@@ -9,20 +9,20 @@ const giveAwayRouter = {
 	name: 'Charts',
 	meta: {
 		title: '财务管理',
-		icon: 'chart'
+		icon: 'el-icon-goods'
 	},
 	children: [{
 			path: 'giveAway',
 			component: () => import('@/views/voiceroom/activity/giftHistory/giveAway'),
 			meta: {
-				title: '用户充值',
+				title: '平台赠送',
 			}
 		},
 		{
 			path: 'giftHistory-list',
 			component: () => import('@/views/voiceroom/activity/giftHistory/giftHistory-list'),
 			meta: {
-				title: '充值记录',
+				title: '赠送记录',
 			}
 		},
 		{
@@ -30,9 +30,20 @@ const giveAwayRouter = {
 			component: () => import('@/views/voiceroom/finance/guildWithdraw-list'),
 			name: 'guildWithdraw-list',
 			meta: {
-				title: '提现记录',
+				title: '用户充值记录',
 				noCache: true
-			}
+			},
+			disabled: true
+		},
+		{
+			path: 'embodyHistory-list',
+			component: () => import('@/views/voiceroom/finance/embodyHistory'),
+			name: 'embodyHistory-list',
+			meta: {
+				title: '用户体现记录',
+				noCache: true,
+			},
+			disabled: true
 		}
 	]
 }

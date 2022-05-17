@@ -14,6 +14,7 @@ import userRouter from './modules/user/user'
 import guildAuditRouter from './modules/guild/guildAudit'
 import giveAwayRouter from './modules/giveAway/giveAway'
 import activityRouter from "./modules/activity/activity.js"
+import paySystemRouter from './modules/paySystem/paySystem.js'
 
 
 /**
@@ -89,6 +90,7 @@ export const asyncRoutes = [
 	userRouter,
 	voiceroomRouter,
 	guildAuditRouter,
+	paySystemRouter,
 	giveAwayRouter,
   	activityRouter,
 	systemConfigRouter,
