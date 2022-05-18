@@ -1,3 +1,4 @@
+// 幸運轉盤設置
 <template>
     <div class="invite-join-us">
         <div class="searchParams">
@@ -90,6 +91,14 @@ export default {
     created(){
     },
     methods:{
+        //传递参数
+        beforeSearch(params) {
+            return {
+                size: params.size,
+                page: params.page,
+                code : "xyzp"
+            };
+        },
         handleAdd(){
             console.log("新增");
         },

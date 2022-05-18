@@ -1,3 +1,4 @@
+// 幸運轉盤統計
 <template>
     <div class="invite-join-us">
         <div class="searchParams">
@@ -24,10 +25,11 @@
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
+import mixins from '@/utils/mixins'
 export default {
+    mixins: [mixins],
    data() {
 		return {
-            searchParams : {},
             baoxiang: {
                 baoxiang_open_count: 0,
                 baoxiang_in: 0,

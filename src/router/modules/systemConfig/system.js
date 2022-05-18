@@ -73,7 +73,8 @@ const systemConfigRouter = {
 				title: 'App版本',
 				noCache: true
 			},
-			hidden: true,
+			// hidden: true,
+			disabled: true,
 		},
 		{
 			path: 'merchants-list',

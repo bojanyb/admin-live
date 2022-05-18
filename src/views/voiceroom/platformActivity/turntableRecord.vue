@@ -1,3 +1,4 @@
+// 幸運轉盤記錄
 <template>
     <div class="invite-join-us">
         <div class="searchParams">
@@ -14,15 +15,16 @@
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
+import mixins  from '@/utils/mixins'
 export default {
+    mixins: [mixins],
     data() {
 		return {
-            searchParams : {},
         }
 	},
     components: {
         tableList,
-        SearchPanel
+        SearchPanel,
     },
     computed: {
         forms() {
