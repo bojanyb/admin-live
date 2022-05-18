@@ -1,10 +1,10 @@
 <template>
     <div class="share-gift-box">
         <div class="giftAllocation">
-            <zItem ref="zItem" :gifts="gifts" @deleteData="deleteData"></zItem>
+            <zItem ref="zItem" :isShowLocation="isShowLocation" :gifts="gifts" @deleteData="deleteData"></zItem>
         </div>
 
-        <drawer ref="drawer" :list="gifts"></drawer>
+        <drawer ref="drawer" :activityType="activityType" :list="gifts" @giftList="giftList"></drawer>
     </div>
 </template>
 
@@ -24,9 +24,17 @@ export default {
         drawer
     },
     props: {
-        list: {
+        list: { // 返回礼物数据列表
             type: Array,
             default: []
+        },
+        isShowLocation: { // 是否需要展示指定地址
+            type: Boolean,
+            default: false
+        },
+        activityType: { // 活动类型
+            type: String,
+            default: ''
         }
     },
     data() {

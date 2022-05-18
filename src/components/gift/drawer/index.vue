@@ -1,6 +1,6 @@
 <template>
     <div class="share-gift-drawer-Box">
-        <el-drawer title="礼物库" :visible="drawer" :direction="direction" :before-close="handleClose">
+        <el-drawer title="礼物库" :visible.sync="drawer" :direction="direction" :before-close="handleClose">
 			<div class="giftListBox">
 				<el-table ref="giftTable" v-loading="giftLoading" :data="giftListArr" element-loading-text="拼命加载中"
 					border fit highlight-current-row>
@@ -31,6 +31,8 @@
 <script>
 // 分页
 import Pagination from '@/components/Pagination'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 
 export default {
     components: {
@@ -40,6 +42,10 @@ export default {
         list: {
             type: Array,
             default: []
+        },
+        activityType: { // 活动类型
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -54,7 +60,8 @@ export default {
             },
             giftTotal: 0,
             isDestroyComp: false, // 是否销毁组件
-            status: 'add' // 当前是新增/修改
+            status: 'add', // 当前是新增/修改
+            activityList: MAPDATA.ACTIVITYLIST // 活动列表
         };
     },
     computed: {
@@ -72,13 +79,18 @@ export default {
         handleClose(done) {
             this.$confirm('确认关闭礼物库？')
                 .then(_ => {
-                    // done();
-                    this.drawer = false
+                    done();
                 })
                 .catch(_ => {});
         },
         // 选中礼物
         handleSelect(row) {
+            let params = this.activityList.find(item => { return item.name === this.activityType })
+            let num = this.gifts.length
+            if((num + 1) > params.max) {
+                this.$message.error('当前活动已超过添加最大礼物数量')
+                return false
+            }
             this.giftListArr.map(res => {
                 if (res.id == row.id) {
                     res.isSelect = true; // 默认当前礼物未被选中
@@ -90,15 +102,19 @@ export default {
         giftSelectSource() {
             this.giftListArr.map(re => {
                 re.isSelect = false; // 默认当前礼物未被选中
-                if (this.gifts.length > 0) {
-                    this.gifts.map(item => {
-                        if (item.id == re.id || item.id == re.id) {
-                            re.isSelect = true;
-                        }
-                    })
-                }
+                // if (this.gifts.length > 0) {
+                //     this.gifts.map(item => {
+                //         if (item.id == re.id || item.id == re.id) {
+                //             re.isSelect = true;
+                //         }
+                //     })
+                // }
             })
         },
+        // 获取数据
+        giftList() {
+            this.$emit('giftList')
+        }
     },
     
 }

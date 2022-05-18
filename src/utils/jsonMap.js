@@ -27,7 +27,64 @@ const DOWNLOADSOURCE = [
     }
 ]
 
+/*
+-礼物库组件 - 指定位置
+*/
+const LOCATIONLIST = [
+    {
+        value: 1
+    },
+    {
+        value: 2
+    },
+    {
+        value: 3
+    },
+    {
+        value: 4
+    },
+    {
+        value: 5
+    },
+    {
+        value: 6
+    },
+    {
+        value: 7
+    },
+    {
+        value: 8
+    },
+    {
+        value: 9
+    },
+    {
+        value: 10
+    }
+]
+
+// 活动类型
+const ACTIVITYLIST = [
+    {
+        name: 'mmly',
+        min: 9,
+        max: 100000000000000
+    },
+    {
+        name: 'xydzp',
+        min: 0,
+        max: 10
+    },
+    {
+        name: 'zzbx',
+        min: 0,
+        max: 100000000000000
+    }
+]
+
 export default {
     USERINVITE,
-    DOWNLOADSOURCE
+    DOWNLOADSOURCE,
+    LOCATIONLIST,
+    ACTIVITYLIST
 }

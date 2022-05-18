@@ -5,7 +5,7 @@
             <span>礼物图标：<img :src="item.gift_photo" alt=""></span>
             <span>砖石价格：<span>{{ item.gift_diamond }}砖石</span></span>
             <span>概率：<el-input v-model="item.probability"></el-input><span>%</span></span>
-            <span>礼物位置：<el-select v-model="item.sort" placeholder="请选择">
+            <span v-if="isShowLocation">礼物位置：<el-select v-model="item.sort" placeholder="请选择">
                 <el-option
                     v-for="item in locationFunc"
                     :key="item.value"
@@ -22,48 +22,24 @@
 </template>
 
 <script>
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
+
 export default {
     props: {
         gifts: { // 选中礼物列表
             type: Array,
             default: []
+        },
+        isShowLocation: { // 是否需要展示指定地址
+            type: Boolean,
+            default: false
         }
     },
     data() {
         return {
             input: '',
-            locationList: [
-                {
-                    value: 1
-                },
-                {
-                    value: 2
-                },
-                {
-                    value: 3
-                },
-                {
-                    value: 4
-                },
-                {
-                    value: 5
-                },
-                {
-                    value: 6
-                },
-                {
-                    value: 7
-                },
-                {
-                    value: 8
-                },
-                {
-                    value: 9
-                },
-                {
-                    value: 10
-                }
-            ]
+            locationList: MAPDATA.LOCATIONLIST
         };
     },
     computed: {
@@ -93,6 +69,7 @@ export default {
     .giftBox {
         display: flex;
         align-items: center;
+        margin-bottom: 20px;
         >span {
             display: flex;
             align-items: center;
