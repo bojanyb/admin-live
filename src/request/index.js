@@ -8,7 +8,11 @@ const request = {
 
     // 平台活动  
     platformActivity : {
-        Activityins: `${HTTPHEADER}/Activityins/index` // 幸运转盘设置
+        Activityins: `${HTTPHEADER}/Activityins/index`, // 幸运转盘设置
+        configMMLY: `${HTTPHEADER}/activityins/configMMLY`, // 配置喵喵乐园
+        configXYZP: `${HTTPHEADER}/activityins/configXYZP`, // 配置大转盘
+        getHasAddGift: `${HTTPHEADER}/Activityins/getHasAddGift`, // 获取已配置礼物
+        stop: `${HTTPHEADER}Activityins/stop`, // 停止和开启
     },
 }
 

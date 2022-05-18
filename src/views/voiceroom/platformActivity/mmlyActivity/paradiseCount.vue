@@ -1,9 +1,19 @@
-// 幸運轉盤記錄
+// 幸运转盘统计
 <template>
     <div class="invite-join-us">
         <div class="searchParams">
             <SearchPanel :search-params="searchParams" :forms="forms" :show-search-btn="true" @onSearch="onSearch"></SearchPanel>
         </div>
+        
+        <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+			<el-card class="sumBox">
+				<div class="sumBoxItem fl">活动参与人数：{{baoxiang.baoxiang_open_count}}</div>
+				<div class="sumBoxItem fl">活动投入：{{baoxiang.baoxiang_in}}</div>
+				<div class="sumBoxItem fl">活动产出：{{baoxiang.baoxiang_out}}</div>
+				<div class="sumBoxItem fl">活动投入产出比：{{baoxiang.output_proportion}}</div>
+			</el-card>
+		</el-col>
+
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList"></tableList>
         </div>
@@ -15,51 +25,31 @@
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
-import mixins  from '@/utils/mixins'
+import mixins from '@/utils/mixins'
 export default {
     mixins: [mixins],
-    data() {
+   data() {
 		return {
+            baoxiang: {
+                baoxiang_open_count: 0,
+                baoxiang_in: 0,
+                baoxiang_out: 0,
+                output_proportion:0
+            }
         }
 	},
     components: {
         tableList,
-        SearchPanel,
+        SearchPanel
     },
     computed: {
         forms() {
-             return [
+            return [
                 {
                     name: 'user_number',
                     type: 'input',
                     value: '',
                     label: '用户ID',
-                    placeholder: '',
-                    handler: {
-                        enter: (v) => {
-                            // this.searchParams.user_number = v.user_number.trim()
-                            // this.getList()
-                        }
-                    }
-                },
-                {
-                    name: 'user_number',
-                    type: 'input',
-                    value: '',
-                    label: '礼物ID',
-                    placeholder: '',
-                    handler: {
-                        enter: (v) => {
-                            // this.searchParams.user_number = v.user_number.trim()
-                            // this.getList()
-                        }
-                    }
-                },
-                {
-                    name: 'user_number',
-                    type: 'input',
-                    value: '',
-                    label: '交易流水号',
                     placeholder: '',
                     handler: {
                         enter: (v) => {
@@ -101,37 +91,19 @@ export default {
                         }
                     },
                     {
-                        label: '参与时间',
+                        label: '参与次数',
                         render: (h, row) => {
                             return '111'
                         }
                     },
                     {
-                        label: '礼物ID',
+                        label: '投入',
                         render: (h, row) => {
                             return '111'
                         }
                     },
                     {
-                        label: '礼物名称',
-                        render: (h, row) => {
-                            return '111'
-                        }
-                    },
-                    {
-                        label: '礼物数量',
-                        render: (h, row) => {
-                            return '111'
-                        }
-                    },
-                    {
-                        label: '礼物价值',
-                        render: (h, row) => {
-                            return '111'
-                        }
-                    },
-                    {
-                        label: '交易流水',
+                        label: '产出',
                         render: (h, row) => {
                             return '111'
                         }
@@ -139,8 +111,6 @@ export default {
                 ]
             }
         }
-    },
-    created(){
     },
     methods:{
         onSearch(){
@@ -154,5 +124,23 @@ export default {
 .invite-join-us {
     padding: 20px;
     box-sizing: border-box;
+}
+.sumBox {
+    display: flex;
+    width: 80%;
+    margin-bottom: 20px;
+    .el-card__body {
+        width: 100%;
+
+        .sumBoxItem {
+            width: 25%;
+            text-align: center;
+            border-right: solid 1px #DCDCDC;
+        }
+
+        .sumBoxItem:last-child {
+            border-right: none;
+        }
+    }
 }
 </style>
