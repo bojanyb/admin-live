@@ -41,7 +41,36 @@ const platformActivityRouter = {
 				},
 			]
 		},
-		
+		{
+			path: '/zzbx',
+			component: () => import('@/views/voiceroom/platformActivity/index'),
+			meta: {
+				title: '转转宝箱'
+			},
+			children: [
+				{
+					path: 'allocation',
+					component: () => import('@/views/voiceroom/platformActivity/zzbxActivity/allocation'),
+					meta: {
+						title: '转转宝箱设置',
+					}
+				},
+				{
+					path: 'statistics',
+					component: () => import('@/views/voiceroom/platformActivity/zzbxActivity/statistics'),
+					meta: {
+						title: '转转宝箱统计',
+					}
+				},
+				{
+					path: 'history',
+					component: () => import('@/views/voiceroom/platformActivity/zzbxActivity/history'),
+					meta: {
+						title: '转转宝箱记录',
+					}
+				},
+			]
+		},
 	]
 }
 

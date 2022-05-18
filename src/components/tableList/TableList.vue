@@ -112,7 +112,7 @@
           request({
             url: this.cfgs.url,
             method: this.cfgs.method || 'post',
-            params
+            data: params
           }).then(res => {
             this.loading = false;
             if (res.data.content === null) {
@@ -244,7 +244,7 @@
     .el-table {
       thead th {
         padding: 0;
-        height: 50px;
+        height: 60px;
         background: rgba(250, 250, 250, 1);
         >.cell {
           font-size: 14px;
@@ -254,7 +254,7 @@
       }
       tbody td {
         padding: 0;
-        height: 60px;
+        height: 45px;
         >.cell {
           font-size: 14px;
           font-weight: 400;
@@ -281,8 +281,8 @@
     margin: 0;
   }
 
-  // .share-table-list-box .el-table__body-wrapper {
-  //   max-height: 5.882352rem !important;
-  //   overflow-y: auto;
-  // }
+  .share-table-list-box .el-table__body-wrapper {
+    max-height: 40rem !important;
+    overflow-y: auto;
+  }
 </style>
