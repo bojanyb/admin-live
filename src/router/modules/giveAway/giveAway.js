@@ -34,15 +34,15 @@ const giveAwayRouter = {
 				noCache: true
 			}
 		},
-		{
-			path: 'guildWithdraw-list',
-			component: () => import('@/views/voiceroom/finance/guildWithdraw-list'),
-			name: 'guildWithdraw-list',
-			meta: {
-				title: '用户体现记录',
-				noCache: true
-			}
-		}
+		// {
+		// 	path: 'guildWithdraw-list',
+		// 	component: () => import('@/views/voiceroom/finance/guildWithdraw-list'),
+		// 	name: 'guildWithdraw-list',
+		// 	meta: {
+		// 		title: '用户体现记录',
+		// 		noCache: true
+		// 	}
+		// }
 	]
 }
 

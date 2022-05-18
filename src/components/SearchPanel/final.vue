@@ -153,7 +153,6 @@
             <el-input
               v-else
               v-model="form[item.name]"
-              v-input-limited:[item.inputType]
               :maxlength="item.maxlength|| '--'"
               :placeholder="item.placeholder"
               :disabled="cDisabled(item)"
