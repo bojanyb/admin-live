@@ -64,7 +64,7 @@ import request from '@/utils/request2'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入时间插件
-import moment, { months } from 'moment'
+import moment from 'moment'
 // 新增修改、修改礼物配置
 import gift from '@/components/gift/index.vue'
 // 引入上传文件组价
