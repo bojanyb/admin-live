@@ -9,7 +9,7 @@ const giveAwayRouter = {
 	name: 'Charts',
 	meta: {
 		title: '财务管理',
-		icon: 'chart'
+		icon: 'el-icon-goods'
 	},
 	children: [{
 			path: 'giveAway',
@@ -32,17 +32,19 @@ const giveAwayRouter = {
 			meta: {
 				title: '用户充值记录',
 				noCache: true
-			}
+			},
+			disabled: true
 		},
-		// {
-		// 	path: 'guildWithdraw-list',
-		// 	component: () => import('@/views/voiceroom/finance/guildWithdraw-list'),
-		// 	name: 'guildWithdraw-list',
-		// 	meta: {
-		// 		title: '用户体现记录',
-		// 		noCache: true
-		// 	}
-		// }
+		{
+			path: 'embodyHistory-list',
+			component: () => import('@/views/voiceroom/finance/embodyHistory'),
+			name: 'embodyHistory-list',
+			meta: {
+				title: '用户体现记录',
+				noCache: true,
+			},
+			disabled: true
+		}
 	]
 }
 

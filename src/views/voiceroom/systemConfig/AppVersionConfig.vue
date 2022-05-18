@@ -29,13 +29,13 @@
 			<el-table-column align="center" prop="versionContent" label="更新内容" />
 			<el-table-column align="center" prop="fileUri" label="文件下载链接" />
 			<el-table-column align="center" prop="forceUpdate" label="是否强制更新">
-				<template scope="scope">
+				<template slot-scope="scope">
 					{{scope.row.forceUpdate?'是':'否'}}
 				</template>
 			</el-table-column>
 			<el-table-column align="center" prop="createTime" label="创建时间" min-width="100" />
 			<el-table-column align="right" label="操作" width="150">
-				<template scope="scope">
+				<template slot-scope="scope">
 					<el-button size="small" v-if="scope.row.isEdit" @click="handleEdit(scope.row)">编辑</el-button>
 					<el-button size="small" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
 				</template>

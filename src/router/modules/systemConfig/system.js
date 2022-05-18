@@ -65,15 +65,25 @@ const systemConfigRouter = {
 				noCache: true
 			},
 		},
-		// {
-		// 	path: 'AppVersionConfig',
-		// 	component: () => import('@/views/voiceroom/systemConfig/AppVersionConfig'),
-		// 	name: 'AppVersionConfig',
-		// 	meta: {
-		// 		title: 'App版本',
-		// 		noCache: true
-		// 	},
-		// },
+		{
+			path: 'AppVersionConfig',
+			component: () => import('@/views/voiceroom/systemConfig/AppVersionConfig'),
+			name: 'AppVersionConfig',
+			meta: {
+				title: 'App版本',
+				noCache: true
+			},
+			hidden: true,
+		},
+		{
+			path: 'merchants-list',
+			component: () => import('@/views/voiceroom/systemConfig/merchants'),
+			name: 'merchants-list',
+			meta: {
+			  title: '商户管理',
+			  noCache: true
+			}
+		  }
 
 	]
 }

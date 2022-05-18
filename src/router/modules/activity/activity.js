@@ -9,7 +9,7 @@ const activityRouter = {
 	name: 'Charts',
 	meta: {
 		title: '活动管理',
-		icon: 'chart'
+		icon: 'tree'
 	},
 	children: [{
 			path: '/activity-list',

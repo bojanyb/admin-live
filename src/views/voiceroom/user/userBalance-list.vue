@@ -7,7 +7,7 @@
         <el-form-item label="用户ID">
           <el-input v-model="filters.user_number" v-input-limit="0" placeholder="请输入用户ID" clearable />
         </el-form-item>
-        <el-form-item label="交易流水号">
+        <!-- <el-form-item label="交易流水号">
           <el-input v-model="filters.user_number" v-input-limit="0" placeholder="请输入交易流水号" clearable />
         </el-form-item>
         <el-form-item label="">
@@ -19,7 +19,7 @@
               :value="item.value">
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" @click="getBannerInfo">查询</el-button>
         </el-form-item>

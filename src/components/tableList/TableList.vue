@@ -30,10 +30,9 @@
   </article>
 </template>
 <script>
-  // import {
-  //   communicate
-  // } from '../../js/communication.js';
+
   import WeTableCustomColumn from './WeTableCustomColumn.vue';
+  import request from '@/utils/request2'
 
   // 获得元素的top位置
   function getTop(e) {
@@ -114,23 +113,21 @@
         }
 
         if (this.cfgs.url) {
-          communicate.call(this, {
-            method: this.cfgs.method || 'get',
+          request({
             url: this.cfgs.url,
-            params,
-            sucFn: (res) => {
-              this.loading = false;
-              if (res.data.content === null) {
-                res.data.content = [];
-              }
-              // 标准数据处理
-              this.dataProcessing(res);
-            },
-            errFn: (data) => {
-              this.loading = false;
-              this.$message.error(data.msg || '获取数据失败');
+            method: this.cfgs.method || 'post',
+            params
+          }).then(res => {
+            this.loading = false;
+            if (res.data.content === null) {
+              res.data.content = [];
             }
-          });
+            // 标准数据处理
+            this.dataProcessing(res);
+          }).catch(err => {
+            this.loading = false;
+            this.$message.error(data.msg || '获取数据失败');
+          })
         } else {
           this.loading = false;
         }
@@ -149,11 +146,11 @@
           if (res.data && res.data.length !== 0) {
             for (const i in res.data) {
               if (typeof res.data[i] === 'object') {
-                stData.data = res.data.content || res.data;
-                stData.total = res.data.totalSizes;
+                stData.data = res.data.data || res.data;
+                stData.total = res.data.count;
               } else {
                 // stData.data = [res.data];
-                stData.total = res.data.totalSizes || 1;
+                stData.total = res.data.count || 1;
               }
             }
           }

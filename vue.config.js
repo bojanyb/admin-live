@@ -24,7 +24,9 @@ const option = {
 	  outputDir: 'dist',
 	  assetsDir: 'static',
 	  mode: 'development',
-	  domainHttps: 'http://api.huixin.info', // https环境地址
+	//   domainHttps: 'http://api.huixin.info', // https环境地址
+	  domainHttps: 'http://192.168.0.114', // https环境地址
+	  httpHeader: '/admin', // 后台本地携带
 	},
 	// 测试环境
 	'--test': {
@@ -33,6 +35,7 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'production',
 	  domainHttps: 'http://api.huida.vip', // https环境地址
+	  httpHeader: '', // 后台本地携带
 	},
 	// 预生产环境
 	'--pre': {
@@ -41,6 +44,7 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'production',
 	  domainHttps: 'http://api.huidapay.net', // https环境地址
+	  httpHeader: '', // 后台本地携带
 	},
 	// 生产环境
 	'--prod': {
@@ -49,6 +53,7 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'production',
 	  domainHttps: 'http://api.aiyi.live', // https环境地址
+	  httpHeader: '', // 后台本地携带
 	}
 }
 
@@ -78,16 +83,16 @@ module.exports = {
 		},
 		before: require('./mock/mock-server.js'),
 		// 开发环境代理配置 解决跨域问题
-		proxy: {
-			[process.env.VUE_APP_BASE_API]: { // 是.env.development 文件的 /dev-api
-				target: 'http://admin.live.huida.ink',
-				chargeOrigin: true, // 开启代理服务器
-				pathRewrite: {
-					// '^/dev-api': '',
-					['^' + process.env.VUE_APP_BASE_API]: '' // /dev-api 替换为空  https://www.easy-mock.com/mock/5f97da2747e82c655543228e/test-admin/dev-api
-				}
-			}
-		}
+		// proxy: {
+		// 	[process.env.VUE_APP_BASE_API]: { // 是.env.development 文件的 /dev-api
+		// 		target: 'http://admin.live.huida.ink',
+		// 		chargeOrigin: true, // 开启代理服务器
+		// 		pathRewrite: {
+		// 			// '^/dev-api': '',
+		// 			['^' + process.env.VUE_APP_BASE_API]: '' // /dev-api 替换为空  https://www.easy-mock.com/mock/5f97da2747e82c655543228e/test-admin/dev-api
+		// 		}
+		// 	}
+		// }
 	},
 	configureWebpack: {
 		// provide the app's title in webpack's name field, so that
@@ -173,6 +178,7 @@ module.exports = {
 		.tap(() => [
 			{
 			// 全局常量
+			'HTTPHEADER': JSON.stringify(configObj.httpHeader),
 			'ENV_DOMAINHTTPS': JSON.stringify(configObj.domainHttps),
 			'process.env': {
 				NODE_ENV: JSON.stringify(configObj.mode),
