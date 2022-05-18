@@ -12,6 +12,7 @@ const request = {
         configMMLY: `${HTTPHEADER}/activityins/configMMLY`, // 配置喵喵乐园
         configXYZP: `${HTTPHEADER}/activityins/configXYZP`, // 配置大转盘
         getHasAddGift: `${HTTPHEADER}/Activityins/getHasAddGift`, // 获取已配置礼物
+        drawFlow: `${HTTPHEADER}/activityins/drawFlow`, // 乐园记录
         stop: `${HTTPHEADER}Activityins/stop`, // 停止和开启
     },
 }

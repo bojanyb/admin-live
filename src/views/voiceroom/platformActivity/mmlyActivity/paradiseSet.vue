@@ -2,7 +2,7 @@
 <template>
     <div class="invite-join-us">
         <div class="searchParams">
-            <el-button class="add" v-if="count === 0" type="success" @click="handleAdd">新增</el-button>
+            <el-button class="add" v-if="count === 1" type="success" @click="handleAdd">新增</el-button>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" @saleAmunt="saleAmunt" ref="tableList"></tableList>
@@ -46,7 +46,7 @@
 						</el-button>
 					</div>
 				</el-form-item>
-				<gift ref="gift" :list="popForm.gifts"></gift>
+				<gift ref="gift" :activeityType="popForm.code" :list="popForm.gifts"></gift>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="handleCancel" v-if="popForm.typeName !== 'Detail'">取 消</el-button>
@@ -69,7 +69,6 @@ import moment, { months } from 'moment'
 import gift from '@/components/gift/index.vue'
 // 引入上传文件组价
 import ossFile from './../../components/ossFile.vue'
-import { param } from '@/utils'
 
 export default {
     components: {
@@ -91,6 +90,7 @@ export default {
                 icon : "",
                 animation: "",
                 cost: "",
+                typeName: "",
                 start_time: "",
                 end_time:"",
                 gifts : [],
@@ -268,6 +268,21 @@ export default {
         },
         // 新增
         handleAdd(){
+            this.popForm= {
+                id : "",
+                code : "mmly",
+                name : "喵喵乐园",
+                icon : "",
+                animation: "",
+                cost: "",
+                start_time: "",
+                end_time:"",
+                gifts : [],
+            }
+            this.imageUrl = "";
+            if (this.$refs['popForm']) {
+                this.$refs['popForm'].resetFields()
+            }
             this.editPop = true
         },
         saleAmunt(row) {
@@ -275,11 +290,20 @@ export default {
         },
         // 修改
         hanldeEdit(row){
-            console.log("修改",row);
+            this.popForm.id = row.id;
+            this.popForm.name = row.name;
+            this.imageUrl = row.icon;
+            this.popForm.cost =row.cost;
+            this.popForm.start_time = row.start_time > 0 ? moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
+            this.popForm.end_time = row.end_time > 0 ? moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
+            this.handleGetGift(row.id);
+            this.editPop = true;
         },
         // 查看
         hanldeShow(row){
-            console.log("查看",row);
+            this.popForm.typeName = "Detail";
+            this.imageUrl = row.icon;
+            this.editPop = true;
         },
         // 开始 暂停
         handleChange(row){
@@ -306,6 +330,8 @@ export default {
                 this.imageSvgUrl = source.url;
             }
         },
+
+        // 弹框确认
         handleConfirm(){
             let gifts = [];
             this.popForm.gifts.map(res=>{
@@ -316,6 +342,12 @@ export default {
                 }
                 gifts.push(item);
             })
+
+            if(gifts.length < 9){
+                this.$message.error("最少配置9个礼物！");
+                return
+            }
+
             let params = {
                 id : this.popForm.id,
                 code : this.popForm.code,
@@ -327,7 +359,6 @@ export default {
                 end_time : moment(this.popForm.end_time, 'YYYY-MM-DD HH:mm:ss').valueOf() / 1000,
                 gifts : gifts
             }
-
             request({
                 url: REQUEST.platformActivity.configXYZP,
                 method: "post",
@@ -343,6 +374,20 @@ export default {
         // 弹出框关闭
         handleCancel(){
             this.editPop = false;
+        },
+        // 获取当前活动礼物数据
+        handleGetGift(activity_id){
+            let params = {
+                activity_id: activity_id
+            }
+            request({
+                url: REQUEST.platformActivity.getHasAddGift,
+                method: "post",
+                data: params
+            }).then(res => {
+                this.popForm.gifts = res.data.list;
+            }).catch(err=>{
+            })
         },
     }
 }
