@@ -12,9 +12,8 @@
 <script>
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
-import {
-    getActivityinsList
-} from "@/api/videoRoom"
+// 引入api
+import REQUEST from '@/request/index.js'
 export default {
     components: {
         tableList
@@ -27,7 +26,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: getActivityinsList,
+                url: REQUEST.platformActivity.Activityins,
                 method: "post",
                 columns: [
                     {

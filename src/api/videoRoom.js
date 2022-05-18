@@ -846,13 +846,3 @@ export function getSettlementLog(data) {
     data
   })
 }
-
-// 定制活动 
-// 活动列表
-export function getActivityinsList(data) {
-  return request({
-    url: '/Activityins/index',
-    method: 'post',
-    data
-  })
-}

@@ -57,11 +57,9 @@
         dialogVisible: false,
         data: [],
         search: {
-          keyword: '',
           size: 20,
           page: 1,
           total: 0,
-          sort: '',
           sizes: [20, 30, 50]
         },
         isShowSearchMore: false,
@@ -104,9 +102,7 @@
           acstatus = this.cfgs.activistatus;
         let params = {
           size: search.size,
-          page: search.page,
-          key: search.keyword,
-          sort: search.sort
+          page: search.page
         };
         if (typeof vm.beforeSearch === 'function') {
           params = vm.beforeSearch(params);
