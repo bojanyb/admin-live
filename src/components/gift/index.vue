@@ -5,7 +5,7 @@
             
         </div>
 
-        <el-drawer title="礼物库" :visible.sync="drawer" :direction="direction" :before-close="handleClose" @closed="isDestroyComp = false">
+        <el-drawer :append-to-body="true" title="礼物库" :visible.sync="drawer" :direction="direction" :before-close="handleClose" @closed="isDestroyComp = false">
 			<div class="giftListBox">
 				<el-table ref="giftTable" v-loading="giftLoading" :data="giftListArr" element-loading-text="拼命加载中"
 					border fit highlight-current-row>
