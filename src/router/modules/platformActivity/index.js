@@ -20,23 +20,53 @@ const platformActivityRouter = {
 			children: [
 				{
 					path: 'turntableSet',
-					component: () => import('@/views/voiceroom/platformActivity/turntableSet'),
+					component: () => import('@/views/voiceroom/platformActivity/xyzpActivity/turntableSet'),
 					meta: {
 						title: '幸运转盘设置',
 					}
 				},
 				{
 					path: 'turntableCount',
-					component: () => import('@/views/voiceroom/platformActivity/turntableCount'),
+					component: () => import('@/views/voiceroom/platformActivity/xyzpActivity/turntableCount'),
 					meta: {
 						title: '幸运转盘统计',
 					}
 				},
 				{
 					path: 'turntableRecord',
-					component: () => import('@/views/voiceroom/platformActivity/turntableRecord'),
+					component: () => import('@/views/voiceroom/platformActivity/xyzpActivity/turntableRecord'),
 					meta: {
 						title: '幸运转盘记录',
+					}
+				},
+			]
+		},
+		{
+			path: '/mmly',
+			component: () => import('@/views/voiceroom/platformActivity/index'),
+			meta: {
+				title: '喵喵乐园'
+			},
+			children: [
+				{
+					path: 'paradiseSet',
+					component: () => import('@/views/voiceroom/platformActivity/mmlyActivity/paradiseSet'),
+					meta: {
+						title: '喵喵乐园设置',
+					}
+				},
+				{
+					path: 'paradiseCount',
+					component: () => import('@/views/voiceroom/platformActivity/mmlyActivity/paradiseCount'),
+					meta: {
+						title: '喵喵乐园统计',
+					}
+				},
+				{
+					path: 'paradiseRecord',
+					component: () => import('@/views/voiceroom/platformActivity/mmlyActivity/paradiseRecord'),
+					meta: {
+						title: '喵喵乐园记录',
 					}
 				},
 			]

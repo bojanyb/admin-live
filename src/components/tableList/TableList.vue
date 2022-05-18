@@ -139,10 +139,10 @@
         if (typeof vm.onSearchSuccess === 'function') {
           stData = vm.onSearchSuccess(res);
         } else {
-          if (res.data && res.data.length !== 0) {
-            for (const i in res.data) {
-              if (typeof res.data[i] === 'object') {
-                stData.data = res.data.data || res.data;
+          if (res.data && res.data.list.length !== 0) {
+            for (const i in res.data.list) {
+              if (typeof res.data.list[i] === 'object') {
+                stData.data = res.data.list || res.data;
                 stData.total = res.data.count;
               } else {
                 // stData.data = [res.data];

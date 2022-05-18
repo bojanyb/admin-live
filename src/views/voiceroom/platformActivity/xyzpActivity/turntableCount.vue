@@ -1,4 +1,4 @@
-// 幸運轉盤統計
+// 幸运转盘统计
 <template>
     <div class="invite-join-us">
         <div class="searchParams">
