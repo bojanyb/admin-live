@@ -64,11 +64,12 @@ import request from '@/utils/request2'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入时间插件
-import moment from 'moment'
+import moment, { months } from 'moment'
 // 新增修改、修改礼物配置
 import gift from '@/components/gift/index.vue'
 // 引入上传文件组价
 import ossFile from './../../components/ossFile.vue'
+import { param } from '@/utils'
 
 export default {
     components: {
@@ -132,12 +133,15 @@ export default {
 						required: true,
 						trigger: 'change',
 						validator: (rules, value, cb) => {
-							// if (!this.popForm.start_time || this.popForm.start_time == "") {
-							// 	return cb(new Error('活动生效时间不能为空!'))
-							// }
-							// if (this.popForm.start_time > this.popForm.end_time) {
-							// 	return cb(new Error('开始时间不能大于结束时间!'))
-							// }
+
+                            let start_time = moment(this.popForm.start_time, 'YYYY-MM-DD HH:mm:ss').valueOf()
+                            let end_time = moment(this.popForm.end_time, 'YYYY-MM-DD HH:mm:ss').valueOf()
+							if (!this.popForm.start_time || this.popForm.start_time == "") {
+								return cb(new Error('活动生效时间不能为空!'))
+							}
+							if (start_time > end_time) {
+								return cb(new Error('开始时间不能大于结束时间!'))
+							}
 							return cb()
 						}
                 }],
@@ -145,12 +149,14 @@ export default {
                     required: true,
                     trigger: 'change',
                     validator: (rules, value, cb) => {
-                        // if (!this.popForm.end_time || this.popForm.end_time == "") {
-                        //     return cb(new Error('活动结束时间不能为空!'))
-                        // }
-                        // if (this.popForm.start_time > this.popForm.end_time) {
-                        //     return cb(new Error('开始时间不能大于结束时间!'))
-                        // }
+                        let start_time = moment(this.popForm.start_time, 'YYYY-MM-DD HH:mm:ss').valueOf()
+                            let end_time = moment(this.popForm.end_time, 'YYYY-MM-DD HH:mm:ss').valueOf()
+                        if (!this.popForm.end_time || this.popForm.end_time == "") {
+                            return cb(new Error('活动结束时间不能为空!'))
+                        }
+                        if (start_time > end_time) {
+                            return cb(new Error('开始时间不能大于结束时间!'))
+                        }
                         return cb()
                     }
                 }],
@@ -306,7 +312,7 @@ export default {
                 let item = {
                     id : res.id,
                     sort: res.sort,
-                    probability: res.probability,
+                    probability: res.probability * 100000,
                 }
                 gifts.push(item);
             })
@@ -317,17 +323,19 @@ export default {
                 icon : this.imageUrl,
                 animation : this.popForm.animation,
                 cost : this.popForm.cost,
-                start_time : this.popForm.start_time,
-                end_time : this.popForm.end_time,
+                start_time : moment(this.popForm.start_time, 'YYYY-MM-DD HH:mm:ss').valueOf() / 1000,
+                end_time : moment(this.popForm.end_time, 'YYYY-MM-DD HH:mm:ss').valueOf() / 1000,
                 gifts : gifts
             }
+
             request({
                 url: REQUEST.platformActivity.configXYZP,
                 method: "post",
                 data: params
             }).then(res => {
                 this.$message.success("操作成功");
-                this.$refs.tableList.getData()
+                this.handleCancel();
+                this.$refs.tableList.getData();
             }).catch(err=>{
                 this.$message.error(err.msg);
             })
