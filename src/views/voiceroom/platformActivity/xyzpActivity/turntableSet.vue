@@ -225,8 +225,17 @@ export default {
                         props : 'status',
                         width : '80',
                         render: (h, params) => {
+                            let newDate = parseInt(new Date().getTime() / 1000);
+                            let start_time = params.row.start_time;
+                            let end_time = params.row.end_time;
+
+                            if(newDate < start_time || newDate > end_time){
+                                params.row.status = 2;
+                            }
+
                             if(params.row.status === 1) {
                                 return h('span',{style: {color: 'green'},}, '开始')
+
                             }
                             return h('span',{style: {color: 'red'},}, '暂停')
                         }
