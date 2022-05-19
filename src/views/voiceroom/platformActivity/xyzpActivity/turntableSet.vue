@@ -2,7 +2,7 @@
 <template>
     <div class="invite-join-us">
         <div class="searchParams">
-            <el-button class="add" v-if="count === 0" type="success" @click="handleAdd">新增</el-button>
+            <el-button class="add"  type="success" @click="handleAdd">新增</el-button>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" @saleAmunt="saleAmunt" ref="tableList"></tableList>
@@ -42,11 +42,11 @@
 				</el-form-item>
 				<el-form-item label="添加礼物" :label-width="formLabelWidth">
 					<div class="fl">
-						<el-button type="primary" @click="$refs.gift.drawer = true" v-if="popForm.typeName !== 'Detail'">添 加
+						<el-button type="primary" @click="$refs.gift.handleAddGiftShow()" v-if="popForm.typeName !== 'Detail'">添 加
 						</el-button>
 					</div>
 				</el-form-item>
-				<gift ref="gift" :activeityType="popForm.code" :list="popForm.gifts"></gift>
+				<gift ref="gift" :status="status" :isShowLocation="true" :activityType="popForm.code" :list="popForm.gifts"></gift>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="handleCancel" v-if="popForm.typeName !== 'Detail'">取 消</el-button>
@@ -69,7 +69,6 @@ import moment, { months } from 'moment'
 import gift from '@/components/gift/index.vue'
 // 引入上传文件组价
 import ossFile from './../../components/ossFile.vue'
-import { param } from '@/utils'
 
 export default {
     components: {
@@ -79,6 +78,7 @@ export default {
     },
     data() {
         return {
+            status: 'add',
             count: 0,
             editTitle: "新增",
             editPop: false,
@@ -268,6 +268,7 @@ export default {
         },
         // 新增
         handleAdd(){
+            this.status = 'add' // 当前状态为新增
             this.popForm= {
                 id : "",
                 code : "dzp",
@@ -290,6 +291,7 @@ export default {
         },
         // 修改
         hanldeEdit(row){
+            this.status = 'update' // 当前状态为修改
             this.popForm.id = row.id;
             this.popForm.name = row.name;
             this.imageUrl = row.icon;
@@ -303,6 +305,7 @@ export default {
         },
         // 查看
         hanldeShow(row){
+            this.status = 'see' // 当前状态为查看
             console.log("查看",row);
         },
         // 开始 暂停

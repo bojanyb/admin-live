@@ -2,7 +2,7 @@
 <template>
     <div class="invite-join-us">
         <div class="searchParams">
-            <el-button class="add" v-if="count === 1" type="success" @click="handleAdd">新增</el-button>
+            <el-button class="add" v-if="count === 0" type="success" @click="handleAdd">新增</el-button>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" @saleAmunt="saleAmunt" ref="tableList"></tableList>
@@ -42,11 +42,11 @@
 				</el-form-item>
 				<el-form-item label="添加礼物" :label-width="formLabelWidth">
 					<div class="fl">
-						<el-button type="primary" @click="$refs.gift.drawer = true" v-if="popForm.typeName !== 'Detail'">添 加
+						<el-button type="primary" @click="$refs.gift.handleAddGiftShow()" v-if="popForm.typeName !== 'Detail'">添 加
 						</el-button>
 					</div>
 				</el-form-item>
-				<gift ref="gift" :activeityType="popForm.code" :list="popForm.gifts"></gift>
+				<gift ref="gift" :activityType="popForm.code" :list="popForm.gifts"></gift>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="handleCancel" v-if="popForm.typeName !== 'Detail'">取 消</el-button>
@@ -393,7 +393,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .invite-join-us {
     padding: 20px;
     box-sizing: border-box;

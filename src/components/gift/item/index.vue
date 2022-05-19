@@ -4,8 +4,8 @@
             <span>礼物名称：<span>{{ item.gift_name }}</span></span>
             <span>礼物图标：<img :src="item.gift_photo" alt=""></span>
             <span>砖石价格：<span>{{ item.gift_diamond }}砖石</span></span>
-            <span>概率：<el-input v-model="item.probability"></el-input><span>%</span></span>
-            <span v-if="isShowLocation">礼物位置：<el-select v-model="item.sort" placeholder="请选择">
+            <span>概率：<el-input :disabled="disabled" v-model="item.probability"></el-input><span>%</span></span>
+            <span v-if="isShowLocation">礼物位置：<el-select v-model="item.sort" :disabled="disabled" placeholder="请选择">
                 <el-option
                     v-for="item in locationFunc"
                     :key="item.value"
@@ -34,6 +34,10 @@ export default {
         isShowLocation: { // 是否需要展示指定地址
             type: Boolean,
             default: false
+        },
+        status: { // 当前状态
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -53,6 +57,12 @@ export default {
                 })
             })
             return array
+        },
+        disabled() {
+            if(this.status === 'see') {
+                return true
+            }
+            return false
         }
     },
     methods: {

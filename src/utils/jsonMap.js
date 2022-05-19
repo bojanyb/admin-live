@@ -71,7 +71,7 @@ const ACTIVITYLIST = [
         max: 100000000000000
     },
     {
-        name: 'xydzp',
+        name: 'dzp',
         min: 0,
         max: 10
     },

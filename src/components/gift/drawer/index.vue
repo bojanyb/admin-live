@@ -1,13 +1,13 @@
 <template>
     <div class="share-gift-drawer-Box">
-        <el-drawer title="礼物库" :visible.sync="drawer" :direction="direction" :before-close="handleClose">
+        <el-drawer :append-to-body="true" title="礼物库" :visible.sync="drawer" :direction="direction" :before-close="handleClose" @closed="closed">
 			<div class="giftListBox">
 				<el-table ref="giftTable" v-loading="giftLoading" :data="giftListArr" element-loading-text="拼命加载中"
 					border fit highlight-current-row>
 					<el-table-column label="礼物名称" prop="gift_name" align="center" show-overflow-tooltip />
 					<el-table-column label="礼物图片" prop="gift_genre" align="center">
 						<template slot-scope="scope">
-							<el-image style="width: 50px; " :lazy="true"
+							<el-image style="width: 50px; " 
 								:src="scope.row.gift_photo ? scope.row.gift_photo : ''" />
 						</template>
 					</el-table-column>
@@ -33,6 +33,8 @@
 import Pagination from '@/components/Pagination'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
+// 引入api
+import { getActivetyGiftSource } from '@/api/videoRoom'
 
 export default {
     components: {
@@ -44,6 +46,10 @@ export default {
             default: []
         },
         activityType: { // 活动类型
+            type: String,
+            default: ''
+        },
+        status: { // 当前状态
             type: String,
             default: ''
         }
@@ -60,7 +66,6 @@ export default {
             },
             giftTotal: 0,
             isDestroyComp: false, // 是否销毁组件
-            status: 'add', // 当前是新增/修改
             activityList: MAPDATA.ACTIVITYLIST // 活动列表
         };
     },
@@ -74,7 +79,63 @@ export default {
             }
         }
     },
+    watch: {
+        status: {
+            handler(newVal, oldVal) {
+                this.giftPage.page = 1
+                this.giftList()
+            },
+            deep: true
+        }
+    },
     methods: {
+        // 获取所有礼物
+        giftList() {
+            var params = {
+                'page': this.giftPage.page,
+                'pagesize': this.giftPage.limit
+            }
+            this.giftListArr = [];
+            getActivetyGiftSource(params).then(res => {
+                this.giftTotal = res.data.count;
+
+                res.data.list.map(re=>{
+                    switch (re.gift_genre) {
+                        case 1:
+                        re.gift_genreText = '基本礼物'
+                            break;
+                        case 2:
+                        re.gift_genreText = '抽奖礼物'
+                            break;
+                        case 3:
+                        re.gift_genreText = '抽奖包裹内礼物'
+                            break;
+                        case 4:
+                        re.gift_genreText = '普通礼物'
+                            break;
+                        case 5:
+                        re.gift_genreText = '免费礼物'
+                            break;
+                        case 6:
+                        re.gift_genreText = '动效礼物'
+                            break;
+                        case 7:
+                        re.gift_genreText = '全屏礼物'
+                            break;
+                    }
+                })
+                this.giftListArr = res.data.list;
+                this.giftSelectSource();
+            }).catch(err => {})
+        },
+        // 删除礼物
+        deleteData({ row, index }) {
+            this.giftListArr.forEach(item => {
+                if(item.id === row.id) {
+                    item.isSelect = false
+                }
+            })
+        },
         // 关闭礼物库 - 需确认
         handleClose(done) {
             this.$confirm('确认关闭礼物库？')
@@ -102,21 +163,21 @@ export default {
         giftSelectSource() {
             this.giftListArr.map(re => {
                 re.isSelect = false; // 默认当前礼物未被选中
-                // if (this.gifts.length > 0) {
-                //     this.gifts.map(item => {
-                //         if (item.id == re.id || item.id == re.id) {
-                //             re.isSelect = true;
-                //         }
-                //     })
-                // }
+                if (this.gifts.length > 0) {
+                    this.gifts.map(item => {
+                        if (item.id == re.id || item.id == re.id) {
+                            re.isSelect = true;
+                        }
+                    })
+                }
             })
+            this.$forceUpdate()
         },
-        // 获取数据
-        giftList() {
-            this.$emit('giftList')
+        // 销毁组件
+        closed() {
+            this.$emit('distoryComp')
         }
-    },
-    
+    }
 }
 </script>
 

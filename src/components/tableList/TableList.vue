@@ -115,8 +115,8 @@
             data: params
           }).then(res => {
             this.loading = false;
-            if (res.data.content === null) {
-              res.data.content = [];
+            if (res.data.list === null) {
+              res.data.list = [];
             }
             // 标准数据处理
             this.dataProcessing(res);
@@ -142,7 +142,7 @@
           if (res.data && res.data.list.length !== 0) {
             for (const i in res.data.list) {
               if (typeof res.data.list[i] === 'object') {
-                stData.data = res.data.list || res.data;
+                stData.data = res.data.list || res.data.data;
                 stData.total = res.data.count;
               } else {
                 // stData.data = [res.data];
