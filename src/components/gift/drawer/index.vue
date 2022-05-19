@@ -16,7 +16,7 @@
 					<el-table-column label="操作" align="center">
 						<template slot-scope="scope">
 							<el-button type="primary" v-if="scope.row.isSelect == false"
-								@click="handleSelect(scope.row)">使用</el-button>
+								@click.once="handleSelect(scope.row)">使用</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -152,9 +152,11 @@ export default {
                 this.$message.error('当前活动已超过添加最大礼物数量')
                 return false
             }
+
+            this.$set(row, 'type', 1)
             this.giftListArr.map(res => {
                 if (res.id == row.id) {
-                    res.isSelect = true; // 默认当前礼物未被选中
+                    res.isSelect = true; // 当前礼物被选中
                     this.gifts.push(row)
                 }
             })

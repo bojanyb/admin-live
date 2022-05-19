@@ -50,6 +50,7 @@ export default {
                 {
                     name: 'user_number',
                     type: 'input',
+                    isNum: true,
                     value: '',
                     label: '用户ID',
                     placeholder: '',

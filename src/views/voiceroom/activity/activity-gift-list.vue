@@ -104,7 +104,7 @@
 					<el-table-column label="操作" align="center">
 						<template slot-scope="scope">
 							<el-button type="primary" v-if="scope.row.isSelect == false"
-								@click="handleSelect(scope.row)">使用</el-button>
+								@click.once="handleSelect(scope.row)">使用</el-button>
 						</template>
 					</el-table-column>
 				</el-table>

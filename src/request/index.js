@@ -16,6 +16,11 @@ const request = {
         drawRecord: `${HTTPHEADER}/activityins/drawRecord`, // 统计
         stop: `${HTTPHEADER}Activityins/stop`, // 停止和开启
     },
+
+    // 转转宝箱
+    zzbxActivity: {
+        list: `${HTTPHEADER}/Activity/aclist`
+    }
 }
 
 export default request

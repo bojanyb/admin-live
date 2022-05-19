@@ -154,6 +154,7 @@
               v-else
               v-model="form[item.name]"
               :maxlength="item.maxlength|| '--'"
+              v-input-num="item.isNum"
               :placeholder="item.placeholder"
               :disabled="cDisabled(item)"
               :clearable="item.clearable || false"

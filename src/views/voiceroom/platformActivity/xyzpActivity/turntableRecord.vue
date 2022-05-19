@@ -37,6 +37,7 @@ export default {
                     name: 'user_number',
                     type: 'input',
                     value: '',
+                    isNum: true,
                     label: '用户ID',
                     placeholder: '',
                     handler: {

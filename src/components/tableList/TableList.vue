@@ -18,6 +18,7 @@
               <img :src="$store.state.loadingError" />
             </div>
           </el-image>
+          
         </template>
       </el-table-column>
     </el-table>
