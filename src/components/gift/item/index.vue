@@ -16,7 +16,7 @@
                 </el-select>
             </span>
             <span>礼物有效期：<span>永久</span></span>
-            <el-button type="danger" @click="deleteData(item, index)">删 除</el-button>
+            <el-button type="danger" v-if="!disabled" @click="deleteData(item, index)">删 除</el-button>
         </div>
     </div>
 </template>
@@ -58,6 +58,7 @@ export default {
             })
             return array
         },
+        // 显示隐藏
         disabled() {
             if(this.status === 'see') {
                 return true

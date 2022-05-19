@@ -5,7 +5,7 @@
       <!-- checkbox -->
       <el-table-column type="selection" width="55" align="center" v-if="cfgs.isShowCheckbox"></el-table-column>
       <!-- 表格序号 -->
-      <el-table-column type="index" v-if="cfgs.isShowIndex" label="序号" width="80"></el-table-column>
+      <el-table-column type="index" v-if="cfgs.isShowIndex" label="序号" width="80" align="center"></el-table-column>
       <!-- 自定义渲染列 -->
       <el-table-column v-for="item in cfgs.columns" :prop="item.prop" :sortable="item.sortable ? item.sortable : false"
         align="center" :header-align="item.headerAlign" :label="item.label" :fixed="item.fixed" :width="item.width"

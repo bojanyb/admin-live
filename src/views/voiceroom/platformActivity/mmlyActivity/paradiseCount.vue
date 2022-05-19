@@ -1,4 +1,4 @@
-// 幸运转盘统计
+// 喵喵乐园统计
 <template>
     <div class="invite-join-us">
         <div class="searchParams">
@@ -7,15 +7,15 @@
         
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-card class="sumBox">
-				<div class="sumBoxItem fl">活动参与人数：{{baoxiang.baoxiang_open_count}}</div>
-				<div class="sumBoxItem fl">活动投入：{{baoxiang.baoxiang_in}}</div>
-				<div class="sumBoxItem fl">活动产出：{{baoxiang.baoxiang_out}}</div>
-				<div class="sumBoxItem fl">活动投入产出比：{{baoxiang.output_proportion}}</div>
+				<div class="sumBoxItem fl">活动参与人数：{{activity.count}}</div>
+				<div class="sumBoxItem fl">活动投入：{{activity.baoxiang_in}}</div>
+				<div class="sumBoxItem fl">活动产出：{{activity.baoxiang_out}}</div>
+				<div class="sumBoxItem fl">活动投入产出比：{{activity.output_proportion}}</div>
 			</el-card>
 		</el-col>
 
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
     </div>
 </template>
@@ -25,13 +25,15 @@
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
+// 引入api
+import REQUEST from '@/request/index.js'
 import mixins from '@/utils/mixins'
 export default {
     mixins: [mixins],
    data() {
 		return {
-            baoxiang: {
-                baoxiang_open_count: 0,
+            activity: {
+                count: 0,
                 baoxiang_in: 0,
                 baoxiang_out: 0,
                 output_proportion:0
@@ -53,8 +55,8 @@ export default {
                     placeholder: '',
                     handler: {
                         enter: (v) => {
-                            // this.searchParams.user_number = v.user_number.trim()
-                            // this.getList()
+                            this.searchParams.user_number = v.user_number.trim()
+                            this.$refs.tableList.getData();
                         }
                     }
                 },
@@ -67,14 +69,11 @@ export default {
                     value: '',
                     handler: {
                         change: v => {
-                            // this.emptyDateTime()
-                            // this.setDateTime(v)
-                            // this.getList()
+                            this.searchParams.start_time = v ? v[0] / 1000 : "";
+                            this.searchParams.end_time = v ? v[1] / 1000 : "";
+                            this.$refs.tableList.getData();
                         },
-                        selectChange: (v, key) => {
-                            // this.emptyDateTime()
-                            // this.getList()
-                        }
+                        selectChange: (v, key) => {}
                     }
                 }
             ]
@@ -82,39 +81,63 @@ export default {
         cfgs() {
             return {
                 vm: this,
+                url: REQUEST.platformActivity.drawRecord,
+                method: "post",
                 isShowIndex: true,
                 columns: [
                     {
                         label: '用户ID',
-                        render: (h, row) => {
-                            return '111'
+                        props: "user_number",
+                        render: (h, params) => {
+                            return h('span', params.row.user_number)
                         }
                     },
                     {
                         label: '参与次数',
-                        render: (h, row) => {
-                            return '111'
+                        props: "user_open_count",
+                        render: (h, params) => {
+                            return h('span', params.row.user_open_count)
                         }
                     },
                     {
                         label: '投入',
-                        render: (h, row) => {
-                            return '111'
+                        props: "user_out",
+                        render: (h, params) => {
+                            return h('span', params.row.user_out)
                         }
                     },
                     {
                         label: '产出',
-                        render: (h, row) => {
-                            return '111'
+                        props: "user_in",
+                        render: (h, params) => {
+                            return h('span', params.row.user_in)
                         }
-                    }
+                    },
                 ]
             }
         }
     },
     methods:{
-        onSearch(){
-            console.log("记录搜索");
+        //传递参数
+        beforeSearch(params) {
+            return {
+                size: params.size,
+                page: params.page,
+                code : "mmly",
+                user_number: this.searchParams.user_number,
+                start_time: this.searchParams.start_time,
+                end_time: this.searchParams.end_time,
+            };
+        },
+        onSearch(val){
+            this.searchParams.user_number = val.user_number;
+            this.searchParams.start_time = val.dateTimeParams ? val.dateTimeParams[0] / 1000 : "";
+            this.searchParams.end_time = val.dateTimeParams ? val.dateTimeParams[1] / 1000 : "";
+            this.$refs.tableList.getData();
+        },
+        saleAmunt(row){
+            row.activity.count = row.count;
+            this.activity = row.activity;
         }
     }
 }

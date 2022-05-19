@@ -158,6 +158,7 @@
               :disabled="cDisabled(item)"
               :clearable="item.clearable || false"
               @focus="onFocus"
+              clearable
               @change="mergeEvent(arguments, item)"
             >
               <template v-if="item.append" slot="append">{{ item.append }}</template>
