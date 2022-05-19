@@ -23,10 +23,10 @@
 						<ossFile :picImg="imageUrl" :type="'img'" :play_type="1" @getUpLoadImg="getUpLoadImg"/>
 					</el-col>
 				</el-form-item>
-				<el-form-item label="单次消耗喵粮数量" prop="cost" :label-width="formLabelWidth">
+				<el-form-item label="单次消耗" prop="cost" :label-width="formLabelWidth">
 					<el-input v-model="popForm.cost" v-input-limit="0" style="width: 335px;"
 						placeholder="最低100" clearable autocomplete="off"
-						:disabled="popForm.typeName == 'Detail' ? true : false " />
+						:disabled="popForm.typeName == 'Detail' ? true : false " /> <span style="margin-left:5px;">喵粮</span>
 				</el-form-item>
 				<el-form-item label="开始时间" prop="start_time" :label-width="formLabelWidth">
 					<el-date-picker v-model="popForm.start_time" style="width: 335px;" type="datetime"
@@ -42,11 +42,11 @@
 				</el-form-item>
 				<el-form-item label="添加礼物" :label-width="formLabelWidth">
 					<div class="fl">
-						<el-button type="primary" @click="$refs.gift.drawer = true" v-if="popForm.typeName !== 'Detail'">添 加
+						<el-button type="primary" @click="$refs.gift.drawer = true" v-if="popForm.typeName !== 'Detail' && (popForm.gifts.length < 10)">添 加
 						</el-button>
 					</div>
 				</el-form-item>
-				<gift ref="gift" :activeityType="popForm.code" :list="popForm.gifts"></gift>
+				<gift style="margin-left: 30px;" ref="gift" :isShowLocation="true" :activeityType="popForm.code" :list="popForm.gifts"></gift>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="handleCancel" v-if="popForm.typeName !== 'Detail'">取 消</el-button>
@@ -64,13 +64,11 @@ import request from '@/utils/request2'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入时间插件
-import moment, { months } from 'moment'
+import moment from 'moment'
 // 新增修改、修改礼物配置
 import gift from '@/components/gift/index.vue'
 // 引入上传文件组价
 import ossFile from './../../components/ossFile.vue'
-import { param } from '@/utils'
-
 export default {
     components: {
         tableList,
@@ -86,6 +84,7 @@ export default {
             formLabelWidth : "100px",
             popForm: {
                 id : "",
+                typeName: "",
                 code : "dzp",
                 name : "大转盘",
                 icon : "",
@@ -296,14 +295,22 @@ export default {
             this.popForm.cost =row.cost;
             this.popForm.start_time = row.start_time > 0 ? moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
             this.popForm.end_time = row.end_time > 0 ? moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
-
             this.handleGetGift(row.id);
-            console.log("修改",row);
+            this.editTitle = "修改";
             this.editPop = true;
         },
         // 查看
         hanldeShow(row){
-            console.log("查看",row);
+            this.popForm.id = row.id;
+            this.popForm.name = row.name;
+            this.imageUrl = row.icon;
+            this.popForm.cost =row.cost;
+            this.popForm.start_time = row.start_time > 0 ? moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
+            this.popForm.end_time = row.end_time > 0 ? moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
+            this.popForm.typeName = "Detail";
+            this.handleGetGift(row.id);
+            this.editTitle = "查看";
+            this.editPop = true;
         },
         // 开始 暂停
         handleChange(row){
@@ -332,6 +339,16 @@ export default {
         },
         // 弹框确认事件
         handleConfirm(){
+            if(this.editTitle == "查看"){
+                this.handleCancel();
+                return
+            }
+
+            if(this.popForm.gifts.length !== 10){
+                this.$message.error("固定配置10个礼物！");
+                return
+            }
+
             let gifts = [];
             this.popForm.gifts.map(res=>{
                 let item = {
@@ -341,11 +358,6 @@ export default {
                 }
                 gifts.push(item);
             })
-
-            if(gifts.length !== 10){
-                this.$message.error("固定配置10个礼物！");
-                return
-            }
 
             let params = {
                 id : this.popForm.id,
@@ -368,7 +380,7 @@ export default {
                 this.handleCancel();
                 this.$refs.tableList.getData();
             }).catch(err=>{
-                this.$message.error(err.msg);
+                this.$message.error(err);
             })
         },
         // 弹出框关闭
@@ -385,6 +397,9 @@ export default {
                 method: "post",
                 data: params
             }).then(res => {
+                res.data.list.map(re=>{
+                    re.probability = re.probability / 100000;
+                })
                 this.popForm.gifts = res.data.list;
             }).catch(err=>{
             })
@@ -393,7 +408,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .invite-join-us {
     padding: 20px;
     box-sizing: border-box;
@@ -401,7 +416,10 @@ export default {
 .add{
     margin-bottom: 22px;
 }
-::v-deep.el-dialog{
-    width: 80% !important;
+::v-deep.el-dialog__wrapper{
+    .el-dialog{
+        width: 75% !important;
+        margin-top: 5vh !important;
+    }
 }
 </style>

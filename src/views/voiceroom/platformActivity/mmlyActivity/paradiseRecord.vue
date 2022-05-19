@@ -89,16 +89,12 @@ export default {
                     value: '',
                     handler: {
                         change: v => {
-                            console.log(v);
-                            // this.emptyDateTime()
-                            // this.setDateTime(v)
-                            // this.getList()
+                            console.log(v)
+                            this.searchParams.start_time = v ? v[0] / 1000 : "";
+                            this.searchParams.end_time = v ? v[1] / 1000 : "";
+                            this.$refs.tableList.getData();
                         },
-                        selectChange: (v, key) => {
-                            console.log("---98---",v);
-                            // this.emptyDateTime()
-                            // this.getList()
-                        }
+                        selectChange: (v, key) => { }
                     }
                 }
             ]
@@ -171,11 +167,21 @@ export default {
             return {
                 size: params.size,
                 page: params.page,
-                code : "mmly"
+                code : "mmly",
+                user_number: this.searchParams.user_number,
+                gift_id: this.searchParams.gift_id,
+                relation_trade_no: this.searchParams.relation_trade_no,
+                start_time: this.searchParams.start_time,
+                end_time: this.searchParams.end_time,
             };
         },
-        onSearch(){
-            console.log("记录搜索");
+        onSearch(val){
+            this.searchParams.user_number = val.user_number;
+            this.searchParams.gift_id = val.gift_id;
+            this.searchParams.relation_trade_no = val.relation_trade_no;
+            this.searchParams.start_time = val.dateTimeParams ? val.dateTimeParams[0] / 1000 : "";
+            this.searchParams.end_time = val.dateTimeParams ? val.dateTimeParams[1] / 1000 : "";
+            this.$refs.tableList.getData();
         }
     }
 }

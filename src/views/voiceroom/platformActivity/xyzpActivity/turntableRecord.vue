@@ -15,6 +15,10 @@
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
+// 引入api
+import REQUEST from '@/request/index.js'
+// 引入时间插件
+import moment from 'moment'
 import mixins  from '@/utils/mixins'
 export default {
     mixins: [mixins],
@@ -37,34 +41,34 @@ export default {
                     placeholder: '',
                     handler: {
                         enter: (v) => {
-                            // this.searchParams.user_number = v.user_number.trim()
-                            // this.getList()
+                            this.searchParams.user_number = v.user_number.trim()
+                            this.$refs.tableList.getData();
                         }
                     }
                 },
                 {
-                    name: 'user_number',
+                    name: 'gift_id',
                     type: 'input',
                     value: '',
                     label: '礼物ID',
                     placeholder: '',
                     handler: {
                         enter: (v) => {
-                            // this.searchParams.user_number = v.user_number.trim()
-                            // this.getList()
+                            this.searchParams.gift_id = v.gift_id.trim()
+                            this.$refs.tableList.getData();
                         }
                     }
                 },
                 {
-                    name: 'user_number',
+                    name: 'relation_trade_no',
                     type: 'input',
                     value: '',
                     label: '交易流水号',
                     placeholder: '',
                     handler: {
                         enter: (v) => {
-                            // this.searchParams.user_number = v.user_number.trim()
-                            // this.getList()
+                            this.searchParams.relation_trade_no = v.relation_trade_no.trim()
+                            this.$refs.tableList.getData();
                         }
                     }
                 },
@@ -72,19 +76,16 @@ export default {
                     name: 'dateTimeParams',
                     type: 'datePicker',
                     dateType: 'daterange',
-                    format: "yyyy-MM-dd",
+                    format: "yyyy-MM-dd hh:mm:ss",
                     label: '时间选择',
                     value: '',
                     handler: {
-                        change: v => {
-                            // this.emptyDateTime()
-                            // this.setDateTime(v)
-                            // this.getList()
+                        change: v => { 
+                            this.searchParams.start_time = v ? v[0] / 1000 : "";
+                            this.searchParams.end_time = v ? v[1] / 1000 : "";
+                            this.$refs.tableList.getData();
                         },
-                        selectChange: (v, key) => {
-                            // this.emptyDateTime()
-                            // this.getList()
-                        }
+                        selectChange: (v, key) => { }
                     }
                 }
             ]
@@ -92,48 +93,57 @@ export default {
         cfgs() {
             return {
                 vm: this,
+                url: REQUEST.platformActivity.drawFlow,
+                method: "post",
                 isShowIndex: true,
                 columns: [
                     {
                         label: '用户ID',
-                        render: (h, row) => {
-                            return '111'
+                        props: "user_number",
+                        render: (h, params) => {
+                            return h('span', params.row.user_number)
                         }
                     },
                     {
                         label: '参与时间',
-                        render: (h, row) => {
-                            return '111'
+                        props: "create_time",
+                        render: (h, params) => {
+                            return h('span', params.row.create_time > 0 ? moment(params.row.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "")
                         }
                     },
                     {
                         label: '礼物ID',
-                        render: (h, row) => {
-                            return '111'
+                        props: "gift_id",
+                        render: (h, params) => {
+                            return h('span', params.row.gift_id)
                         }
                     },
                     {
                         label: '礼物名称',
-                        render: (h, row) => {
-                            return '111'
+                        props: "gift_name",
+                        render: (h, params) => {
+                            return h('span', params.row.gift_name)
                         }
                     },
                     {
                         label: '礼物数量',
-                        render: (h, row) => {
-                            return '111'
+                        props: "number",
+                        render: (h, params) => {
+                            return h('span', params.row.number)
                         }
                     },
                     {
                         label: '礼物价值',
-                        render: (h, row) => {
-                            return '111'
+                        props: "gift_diamond",
+                        render: (h, params) => {
+                            return h('span', params.row.gift_diamond)
                         }
                     },
                     {
                         label: '交易流水',
-                        render: (h, row) => {
-                            return '111'
+                        props: "relation_trade_no",
+                        render: (h, params) => {
+                            return h('span', params.row.relation_trade_no)
                         }
                     }
                 ]
@@ -143,8 +153,26 @@ export default {
     created(){
     },
     methods:{
-        onSearch(){
-            console.log("记录搜索");
+        //传递参数
+        beforeSearch(params) {
+            return {
+                size: params.size,
+                page: params.page,
+                code : "dzp",
+                user_number: this.searchParams.user_number,
+                gift_id: this.searchParams.gift_id,
+                relation_trade_no: this.searchParams.relation_trade_no,
+                start_time: this.searchParams.start_time,
+                end_time: this.searchParams.end_time,
+            };
+        },
+        onSearch(val){
+            this.searchParams.user_number = val.user_number;
+            this.searchParams.gift_id = val.gift_id;
+            this.searchParams.relation_trade_no = val.relation_trade_no;
+            this.searchParams.start_time = val.dateTimeParams ? val.dateTimeParams[0] / 1000 : "";
+            this.searchParams.end_time = val.dateTimeParams ? val.dateTimeParams[1] / 1000 : "";
+            this.$refs.tableList.getData();
         }
     }
 }
