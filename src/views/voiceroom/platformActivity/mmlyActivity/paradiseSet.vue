@@ -342,7 +342,7 @@ export default {
             }
         },
 
-        // 弹框确认
+        // 弹框确认事件
         handleConfirm(){
             if(this.editTitle == "查看"){
                 this.handleCancel();
@@ -350,20 +350,26 @@ export default {
             }
 
             if(this.popForm.gifts.length < 9){
-                this.$message.error("最少配置9个礼物！");
+                this.$message.error("至少配置9个礼物！");
                 return
             }
-
             let gifts = [];
+            let sumProbability = 0;
             this.popForm.gifts.map(res=>{
+                let probability =  res.probability ? res.probability * 100000 : 0;
                 let item = {
                     id : res.id,
                     sort: res.sort,
-                    probability: res.probability * 100000,
+                    probability: probability,
                 }
+                sumProbability += probability;
                 gifts.push(item);
             })
-
+            sumProbability = sumProbability / 100000;
+            if(sumProbability !== 100){
+                this.$message.error("所有礼物概率只为只能为100%！");
+                return
+            }
             let params = {
                 id : this.popForm.id,
                 code : this.popForm.code,
@@ -375,14 +381,15 @@ export default {
                 end_time : moment(this.popForm.end_time, 'YYYY-MM-DD HH:mm:ss').valueOf() / 1000,
                 gifts : gifts
             }
+
             request({
-                url: REQUEST.platformActivity.configXYZP,
+                url: REQUEST.platformActivity.configMMLY,
                 method: "post",
                 data: params
             }).then(res => {
                 this.$message.success("操作成功");
                 this.handleCancel();
-                this.$refs.tableList.getData()
+                this.$refs.tableList.getData();
             }).catch(err=>{
                 this.$message.error(err);
             })

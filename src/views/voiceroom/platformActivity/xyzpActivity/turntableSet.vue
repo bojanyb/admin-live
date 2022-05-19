@@ -42,7 +42,9 @@
 				</el-form-item>
 				<el-form-item label="添加礼物" :label-width="formLabelWidth">
 					<div class="fl">
-						<el-button type="primary" @click="$refs.gift.handleAddGiftShow()" v-if="popForm.typeName !== 'Detail'">添 加
+						<el-button type="primary" @click="$refs.gift.handleAddGiftShow()" 
+                        :disabled="(popForm.gifts.length < 10 && popForm.typeName !== 'Detail') ? false : true"
+                        >添 加
 						</el-button>
 					</div>
 				</el-form-item>
@@ -69,6 +71,7 @@ import moment from 'moment'
 import gift from '@/components/gift/index.vue'
 // 引入上传文件组价
 import ossFile from './../../components/ossFile.vue'
+import { off } from 'process'
 export default {
     components: {
         tableList,
@@ -281,6 +284,7 @@ export default {
                 gifts : [],
             }
             this.imageUrl = "";
+            this.popForm.typeName = "";
             if (this.$refs['popForm']) {
                 this.$refs['popForm'].resetFields()
 			}
@@ -299,6 +303,7 @@ export default {
             this.popForm.start_time = row.start_time > 0 ? moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
             this.popForm.end_time = row.end_time > 0 ? moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
             this.handleGetGift(row.id);
+            this.popForm.typeName = "";
             this.editTitle = "修改";
             this.editPop = true;
         },
@@ -352,17 +357,31 @@ export default {
                 this.$message.error("固定配置10个礼物！");
                 return
             }
-
             let gifts = [];
+            let sumProbability = 0;
+            let isShowIndex = true;
             this.popForm.gifts.map(res=>{
+                let probability =  res.probability ? res.probability * 100000 : 0;
                 let item = {
                     id : res.id,
                     sort: res.sort,
-                    probability: res.probability * 100000,
+                    probability: probability,
                 }
+                sumProbability += probability;
                 gifts.push(item);
+                if(!res.sort){
+                    isShowIndex = false;
+                }
             })
-
+            sumProbability = sumProbability / 100000;
+            if(sumProbability !== 100){
+                this.$message.error("所有礼物概率只为只能为100%！");
+                return
+            }
+            if(isShowIndex == false){
+                this.$message.error("请选择有效的礼物位置");
+                return
+            }
             let params = {
                 id : this.popForm.id,
                 code : this.popForm.code,
