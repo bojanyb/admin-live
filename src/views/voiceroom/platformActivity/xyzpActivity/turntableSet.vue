@@ -332,6 +332,13 @@ export default {
         },
         // 开始 暂停
         handleChange(row){
+            let newDate = parseInt(new Date().getTime() / 1000);
+            let start_time = row.start_time;
+            let end_time = row.end_time;
+            if(newDate < start_time || end_time < newDate){
+                this.$message.error("未在活动时间范围内");
+                return
+            }
             let params = {
                 id : row.id,
                 status: row.status == 1 ? 2 : 1
