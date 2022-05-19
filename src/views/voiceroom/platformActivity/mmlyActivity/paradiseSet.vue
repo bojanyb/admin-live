@@ -2,7 +2,7 @@
 <template>
     <div class="invite-join-us">
         <div class="searchParams">
-            <el-button class="add"  type="success" @click="handleAdd">新增</el-button>
+            <el-button class="add" v-if="count === 0" type="success" @click="handleAdd">新增</el-button>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" @saleAmunt="saleAmunt" ref="tableList"></tableList>
