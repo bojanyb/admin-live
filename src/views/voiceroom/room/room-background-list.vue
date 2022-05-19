@@ -35,11 +35,7 @@
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
 				<el-form-item label="图片" prop="imgPreview" :label-width="formLabelWidth">
 					<el-col :span="17">
-						<el-upload class="avatar-uploader" action="#" :show-file-list="false" :on-change="imgPreviewFun"
-							:auto-upload="false">
-							<img v-if="imageUrl" :src="imageUrl" class="avatar">
-							<i v-else class="el-icon-plus avatar-uploader-icon" />
-						</el-upload>
+						<ossFile :picImg="imageUrl" :type="'img'" :play_type="1" @getUpLoadImg="getUpLoadImg"/>
 					</el-col>
 				</el-form-item>
 				<el-form-item label="默认配置房间类型" prop="room_genre" :label-width="formLabelWidth">
@@ -66,10 +62,12 @@
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
+	import ossFile from '../components/ossFile.vue'
 	export default {
 		name: 'room-background-list',
 		components: {
-			Pagination
+			Pagination,
+			ossFile
 		},
 		data() {
 			return {
@@ -180,17 +178,6 @@
 				}
 				this.editPop = true;
 			},
-			imgPreviewFun(file, fileList) {
-				const fileName = file.name
-				this.imageFile = file
-				const regex = /(.jpg|.jpeg|.gif|.png|.bmp)$/
-				if (regex.test(fileName.toLowerCase())) {
-					this.imageUrl = file.url
-					this.imageUrl = URL.createObjectURL(file.raw)
-				} else {
-					this.$message.error('请选择图片文件')
-				}
-			},
 			handleDel(id) {
 				this.$alert("是否确定删除该房间背景图?", '提示', {
 					confirmButtonText: '是',
@@ -217,11 +204,7 @@
 					if (valid) {
 						const formData = new FormData()
 						formData.append('room_genre', this.popForm.room_genre)
-						if (this.imageFile !== '') {
-							formData.append('url', this.imageFile.raw)
-						} else {
-							formData.append('url', '')
-						}
+						formData.append('url', this.imageUrl)
 						getRoomBgAdd(formData).then(res => {
 							this.editPop = false;
 							this.roomBgList();
@@ -233,7 +216,12 @@
 						})
 					}
 				})
-			}
+			},
+			getUpLoadImg(source){
+				if(source.type == "img"){
+					this.imageUrl = source.url;
+				}
+			},
 		},
 	}
 </script>
