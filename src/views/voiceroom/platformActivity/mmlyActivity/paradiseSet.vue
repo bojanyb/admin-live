@@ -226,9 +226,6 @@ export default {
                             let newDate = parseInt(new Date().getTime() / 1000);
                             let start_time = params.row.start_time;
                             let end_time = params.row.end_time;
-                            console.log("newDate",newDate)
-                            console.log("start_time",start_time)
-                            console.log("end_time",end_time)
 
                             if(newDate < start_time || newDate > end_time){
                                 params.row.status = 2;
