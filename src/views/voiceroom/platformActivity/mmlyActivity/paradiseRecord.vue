@@ -31,7 +31,6 @@ export default {
                 start_time: "",
                 end_time: "",
             },
-
         }
 	},
     components: {
