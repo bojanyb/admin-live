@@ -11,6 +11,7 @@ const userActivity = {
 		title: '用户活动',
 		icon: 'people'
 	},
+    hidden: true,
 	children: [
 		{
 			path: '/wzbx',
