@@ -19,7 +19,8 @@ const request = {
 
     // 转转宝箱
     zzbxActivity: {
-        list: `${HTTPHEADER}/Activity/aclist`
+        list: `${HTTPHEADER}/Activity/aclist`,
+        history: `${HTTPHEADER}/Activity/drawLog`
     }
 }
 

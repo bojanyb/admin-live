@@ -19,6 +19,7 @@ import REQUEST from '@/request/index.js'
 import { timeFormat } from '@/utils/common.js'
 // 引入新增/修改
 import addComp from './add/index.vue'
+
 import { getActivetyGiftADelete, getActivetyGiftSave, getActivetyHasGiftList } from '@/api/videoRoom'
 
 export default {
@@ -49,7 +50,7 @@ export default {
                     {
                         label: '活动类别',
                         render: (h, params) => {
-                            return h('span', '背包')
+                            return h('span', '派对')
                         }
                     },
                     {
@@ -132,7 +133,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                type: 1
+                type: 0
             }
         },
         // 刷新列表

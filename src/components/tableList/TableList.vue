@@ -123,7 +123,7 @@
             this.dataProcessing(res);
           }).catch(err => {
             this.loading = false;
-            this.$message.error(data.msg || '获取数据失败');
+            this.$message.error(err || '获取数据失败');
           })
         } else {
           this.loading = false;

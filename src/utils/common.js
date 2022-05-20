@@ -44,7 +44,11 @@ export function errStatus(list) {
             num += Number(item.probability)
         })
 
-        if(num >= 100) {
+        console.log(num, 'num----------')
+        console.log(num.toFixed(5), 'num----------')
+        console.log(Number(num.toFixed(5)), 'num----------')
+
+        if(Number(num.toFixed(5)) != 100) {
             allProbability = true
         }
     }

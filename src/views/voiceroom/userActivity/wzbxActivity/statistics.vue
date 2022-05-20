@@ -35,6 +35,8 @@ import MAPDATA from '@/utils/jsonMap.js'
 import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
 
 export default {
     components: {
@@ -45,14 +47,6 @@ export default {
     computed: {
         forms() {
             return [
-                {
-                    name: 'user_number',
-                    type: 'input',
-                    value: '',
-                    label: '用户ID',
-                    isNum: true,
-                    placeholder: '请输入用户ID'
-                },
                 {
                     name: 'activity_type_id',
                     type: 'select',
@@ -67,6 +61,22 @@ export default {
                             this.getList()
                         }
                     }
+                },
+                {
+                    name: 'user_number',
+                    type: 'input',
+                    value: '',
+                    label: '用户ID',
+                    isNum: true,
+                    placeholder: '请输入用户ID'
+                },
+                {
+                    name: 'relation_trade_no',
+                    type: 'input',
+                    value: '',
+                    label: '交易流水ID',
+                    isNum: true,
+                    placeholder: '请输入交易流水ID'
                 },
                 {
                     name: 'dateTimeParams',
@@ -96,37 +106,51 @@ export default {
                 isShowIndex: true,
                 columns: [
                     {
-                        label: '用户ID',
+                        label: '抽奖人ID',
                         prop: 'user_number'
                     },
                     {
-                        label: '活动类型',
+                        label: '抽奖人昵称',
+                        prop: 'nickname'
+                    },
+                    {
+                        label: '宝箱类型',
                         render: (h, params) => {
                             let data = this.activityList.filter(item => { item.activity_type_id === params.row.activity_type_id })
                             return h('span', data ? data[0].name : '--')
                         }
                     },
                     {
-                        label: '活动类别',
+                        label: '交易时间',
                         render: (h, params) => {
-                            return h('span', '背包')
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
-                        label: '开箱次数',
-                        prop: 'user_open_count'
+                        label: '交易类型',
+                        render: (h, params) => {
+                            return h('span', params.row.activity_type)
+                        }
                     },
                     {
-                        label: '幸运礼物',
-                        prop: 'big_gift_count'
+                        label: '礼物ID',
+                        prop: 'gift_id'
                     },
                     {
-                        label: '投入',
-                        prop: 'user_out'
+                        label: '礼物名称',
+                        prop: 'gift_name'
                     },
                     {
-                        label: '产出',
-                        prop: 'user_in'
+                        label: '礼物数量',
+                        prop: 'number'
+                    },
+                    {
+                        label: '礼物价值',
+                        prop: 'gift_diamond'
+                    },
+                    {
+                        label: '交易流水',
+                        prop: 'relation_trade_no'
                     }
                 ]
             }
@@ -157,7 +181,7 @@ export default {
                 user_number: s.user_number,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
-                activity_type: 1,
+                activity_type: 0,
                 activity_type_id: s.activity_type_id ? s.activity_type_id : 1
             }
         },
