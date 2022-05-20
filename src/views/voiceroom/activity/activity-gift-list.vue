@@ -310,6 +310,9 @@
 							case 7:
 							re.gift_genreText = '全屏礼物'
 								break;
+							case 8:
+							re.gift_genreText = '活动礼物'
+								break;
 						}
 					})
 					this.giftListArr = res.data.list;

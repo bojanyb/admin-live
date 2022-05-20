@@ -92,10 +92,10 @@ export default {
 
 <style lang="scss">
 .share-gift-zItem-Box {
-    .giftBox {
+    >.giftBox {
         display: flex;
         margin-bottom: 20px;
-        .sunBox {
+        >.sunBox {
             .Box,.property {
                 display: flex;
                 align-items: center;
