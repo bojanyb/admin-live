@@ -155,13 +155,13 @@ export default {
                     value: '',
                     handler: {
                         change: v => {
-                            // this.emptyDateTime()
-                            // this.setDateTime(v)
-                            // this.getList()
+                            this.emptyDateTime()
+                            this.setDateTime(v)
+                            this.onSearch()
                         },
                         selectChange: (v, key) => {
-                            // this.emptyDateTime()
-                            // this.getList()
+                            this.emptyDateTime()
+                            this.onSearch()
                         }
                     }
                 }
@@ -182,7 +182,7 @@ export default {
                     },
                     {
                         label: '新注册用户ID',
-                        prop: 'user_id'
+                        prop: 'user_number'
                     },
                     {
                         label: '新用户注册时间',
@@ -206,7 +206,7 @@ export default {
                     {
                         label: '是否进入过派对',
                         render: (h, params) => {
-                            return h('span', params.row.inroom === 1 ? '是' : '否')
+                            return h('span', params.row.inroom === 1 ? '否' : '是')
                         }
                     },
                     {
@@ -232,6 +232,8 @@ export default {
     methods: {
         // 配置参数
         beforeSearch(params) {
+            console.log(this.dateTimeParams, 'dateTimeParams-----')
+            console.log(this.searchParams, 'searchParams-----')
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
                 page: params.page,
@@ -251,14 +253,27 @@ export default {
             this.searchParams = {}
             this.onSearch()
         },
+        // 设置时间段
+        setDateTime(arr) {
+            const date = arr ? {
+                start_time: arr[0],
+                end_time: arr[1]
+            } : {}
+            this.$set(this, 'dateTimeParams', date)
+        },
+        // 清空日期选择
+        emptyDateTime() {
+            this.dateTimeParams = {}
+        },
         // 刷新列表
         onSearch() {
+            this.$refs.tableList.page = 1
             this.$refs.tableList.getData()
         },
         // 获取列表数据
         saleAmunt(data) {
             this.$set(this.searchParams, 'count', data.count)
-            this.$set(this.searchParams, 'diamond_recharge', data.diamond_recharge)
+            this.$set(this.searchParams, 'diamond_recharge', data.diamond_recharge / 100)
         }
     }
 }
