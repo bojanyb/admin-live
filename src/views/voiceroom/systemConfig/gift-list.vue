@@ -354,6 +354,10 @@
 					{
 						'label': '全屏礼物',
 						'value': 7
+					},
+					{
+						'label': '活动礼物',
+						'value': 8
 					}
 				],
 				giftPlayList: [{
