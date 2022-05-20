@@ -156,7 +156,7 @@
               :maxlength="item.maxlength|| '--'"
               v-input-num="item.isNum"
               :placeholder="item.placeholder"
-              :disabled="cDisabled(item)"
+              :disabled="item.disabled"
               :clearable="item.clearable || false"
               @focus="onFocus"
               clearable

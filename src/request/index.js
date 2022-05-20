@@ -21,6 +21,11 @@ const request = {
     zzbxActivity: {
         list: `${HTTPHEADER}/Activity/aclist`,
         history: `${HTTPHEADER}/Activity/drawLog`
+    },
+
+    // 用户拉新记录
+    userHistory: {
+        list: `${HTTPHEADER}/Statistical/userInvite`
     }
 }
 

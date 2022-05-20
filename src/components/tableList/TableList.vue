@@ -24,7 +24,7 @@
     </el-table>
     <div class="pagination" v-if="data.length != 0">
       <el-pagination background @size-change="handleSizeChange" @current-change="handlePageChange" :page-size="search.size"
-        :current-page="search.page" layout="total, sizes, prev, pager, next, jumper" :page-sizes="cfgs.search ? cfgs.search.sizes:search.sizes"
+        :current-page="search.page" layout="total, prev, pager, next, jumper" :page-sizes="cfgs.search ? cfgs.search.sizes:search.sizes"
         :total="search.total" class="fr">
       </el-pagination>
     </div>
@@ -58,10 +58,10 @@
         dialogVisible: false,
         data: [],
         search: {
-          size: 20,
+          size: 10,
           page: 1,
           total: 0,
-          sizes: [20, 30, 50]
+          sizes: [10, 20, 30]
         },
         isShowSearchMore: false,
         headerTopPoint: 0,

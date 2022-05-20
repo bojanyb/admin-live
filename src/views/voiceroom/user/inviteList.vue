@@ -2,10 +2,10 @@
 <template>
     <div class="invite-join-us">
         <div class="searchParams">
-            <SearchPanel :search-params="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
     </div>
 </template>
@@ -17,20 +17,28 @@ import tableList from '@/components/tableList/TableList.vue'
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入map参数
 import MAPDATA from '@/utils/jsonMap.js'
+// 引入api
+import REQUEST from '@/request/index.js'
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
+// 引入公共参数
+import mixins from '@/utils/mixins.js'
 
 export default {
     components: {
         tableList,
         SearchPanel
     },
+    mixins: [mixins],
     computed: {
         forms() {
             return [
                 {
-                    name: 'parentCardName',
+                    name: 'p_user_number',
                     type: 'input',
                     value: '',
                     label: '拉新人ID',
+                    isNum: true,
                     placeholder: '',
                     handler: {
                         enter: (v) => {
@@ -40,7 +48,7 @@ export default {
                     }
                 },
                 {
-                    name: 'parentCardName',
+                    name: 'reg_ip',
                     type: 'input',
                     value: '',
                     label: 'IP地址',
@@ -53,7 +61,7 @@ export default {
                     }
                 },
                 {
-                    name: 'parentCardName',
+                    name: 'user_number',
                     type: 'input',
                     value: '',
                     label: '新注册用户ID',
@@ -66,7 +74,7 @@ export default {
                     }
                 },
                 {
-                    name: 'virtual',
+                    name: 'inroom',
                     type: 'select',
                     value: '',
                     keyName: 'value',
@@ -82,11 +90,12 @@ export default {
                     }
                 },
                 {
-                    name: 'parentCardName',
+                    name: 'diamond_recharge',
                     type: 'input',
                     value: '',
                     label: '筛选日期内总新用户充值金额',
                     placeholder: '',
+                    disabled: true,
                     handler: {
                         enter: (v) => {
                             // this.searchParams.parentCardName = v.parentCardName.trim()
@@ -95,11 +104,12 @@ export default {
                     }
                 },
                 {
-                    name: 'parentCardName',
+                    name: 'count',
                     type: 'input',
                     value: '',
                     label: '筛选日期内总新用户注册人数',
                     placeholder: '',
+                    disabled: true,
                     handler: {
                         enter: (v) => {
                             // this.searchParams.parentCardName = v.parentCardName.trim()
@@ -108,7 +118,7 @@ export default {
                     }
                 },
                 {
-                    name: 'parentCardName',
+                    name: 'reg_device',
                     type: 'input',
                     value: '',
                     label: '设备识别码',
@@ -121,7 +131,7 @@ export default {
                     }
                 },
                 {
-                    name: 'virtual',
+                    name: 'platform',
                     type: 'select',
                     value: '',
                     keyName: 'value',
@@ -160,69 +170,95 @@ export default {
         cfgs() {
             return {
                 vm: this,
+                url: REQUEST.userHistory.list,
                 columns: [
                     {
                         label: '拉新人ID',
-                        render: (h, row) => {
-                            return '111'
-                        }
+                        prop: 'p_user_number'
                     },
                     {
                         label: '新注册用户昵称',
-                        render: (h, row) => {
-                            return '111'
-                        }
+                        prop: 'user_nickname'
                     },
                     {
                         label: '新注册用户ID',
-                        render: (h, row) => {
-                            return '111'
-                        }
+                        prop: 'user_id'
                     },
                     {
                         label: '新用户注册时间',
-                        render: (h, row) => {
-                            return '111'
+                        render: (h, params) => {
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : "")
                         }
                     },
                     {
                         label: '新用户充值',
-                        render: (h, row) => {
-                            return '111'
-                        }
+                        prop: 'user_diamond_recharge'
                     },
                     {
                         label: '设备识别码',
-                        render: (h, row) => {
-                            return '111'
-                        }
+                        prop: 'reg_device',
+                        width: '200'
                     },
                     {
                         label: '注册IP',
-                        render: (h, row) => {
-                            return '111'
-                        }
+                        prop: 'reg_ip'
                     },
                     {
                         label: '是否进入过派对',
-                        render: (h, row) => {
-                            return '111'
+                        render: (h, params) => {
+                            return h('span', params.row.inroom === 1 ? '是' : '否')
                         }
                     },
                     {
                         label: '下载渠道',
-                        render: (h, row) => {
-                            return '111'
-                        }
+                        prop: 'platform'
                     },
                     {
                         label: '最后登录时间',
-                        render: (h, row) => {
-                            return '111'
+                        render: (h, params) => {
+                            return h('span', params.row.last_login ? timeFormat(params.row.last_login, 'YYYY-MM-DD HH:mm:ss', true) : "")
                         }
                     }
                 ]
             }
+        }
+    },
+    data() {
+        return {
+            diamond_recharge: null,
+            count: null
+        };
+    },
+    methods: {
+        // 配置参数
+        beforeSearch(params) {
+            let s = {...this.searchParams, ...this.dateTimeParams}
+            return {
+                page: params.page,
+                pagesize: params.size,
+                reg_ip: s.reg_ip,
+                user_number: s.user_number,
+                p_user_number: s.p_user_number,
+                inroom: s.inroom,
+                reg_device: s.reg_device,
+                platform: s.platform,
+                start_time: Math.floor(s.start_time / 1000),
+                end_time: Math.floor(s.end_time / 1000)
+            }
+        },
+        // 重置
+        reset() {
+            this.searchParams = {}
+            this.onSearch()
+        },
+        // 刷新列表
+        onSearch() {
+            this.$refs.tableList.getData()
+        },
+        // 获取列表数据
+        saleAmunt(data) {
+            this.$set(this.searchParams, 'count', data.count)
+            this.$set(this.searchParams, 'diamond_recharge', data.diamond_recharge)
         }
     }
 }
