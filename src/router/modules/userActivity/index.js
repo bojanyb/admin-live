@@ -9,9 +9,9 @@ const userActivity = {
 	name: 'userActivity',
 	meta: {
 		title: '用户活动',
-		icon: 'people'
+		icon: 'el-icon-user'
 	},
-    hidden: true,
+    // hidden: true,
 	children: [
 		{
 			path: '/wzbx',

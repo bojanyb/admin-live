@@ -1,36 +1,21 @@
-// 用户拉新记录
+// 转转宝箱记录
 <template>
     <div class="zzbxActivity-history">
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
-        <div class="historyBx">
-            <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-                <el-card class="sumBox">
-                    <div class="sumBoxItem fl">活动开箱次数：{{ruleForm.baoxiang_open_count}}</div>
-                    <div class="sumBoxItem fl">活动投入：{{ruleForm.baoxiang_in}}</div>
-                    <div class="sumBoxItem fl">活动产出：{{ruleForm.baoxiang_out}}</div>
-                    <div class="sumBoxItem fl">活动投入产出比：{{ruleForm.output_proportion}}</div>
-                </el-card>
-            </el-col>
-        </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList"></tableList>
         </div>
     </div>
 </template>
 
 <script>
-import {
-		getActivetyList,
-		getActivetyDrawLog
-	} from '@/api/videoRoom'
+import { getActivetyList } from '@/api/videoRoom'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
-// 引入map参数
-import MAPDATA from '@/utils/jsonMap.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 // 引入api
@@ -55,12 +40,7 @@ export default {
                     optionLabel: 'name',
                     label: '活动类型',
                     placeholder: '请选择',
-                    options: this.activityList,
-                    handler: {
-                        change: (v) => {
-                            this.getList()
-                        }
-                    }
+                    options: this.activityList
                 },
                 {
                     name: 'user_number',
@@ -102,8 +82,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.zzbxActivity.history,
-                isShowIndex: true,
+                url: REQUEST.zzbxActivity.detail,
                 columns: [
                     {
                         label: '抽奖人ID',
@@ -115,10 +94,7 @@ export default {
                     },
                     {
                         label: '宝箱类型',
-                        render: (h, params) => {
-                            let data = this.activityList.filter(item => { item.activity_type_id === params.row.activity_type_id })
-                            return h('span', data ? data[0].name : '--')
-                        }
+                        prop: 'activity_name'
                     },
                     {
                         label: '交易时间',
@@ -129,7 +105,7 @@ export default {
                     {
                         label: '交易类型',
                         render: (h, params) => {
-                            return h('span', params.row.activity_type)
+                            return h('span', '背包')
                         }
                     },
                     {
@@ -150,7 +126,8 @@ export default {
                     },
                     {
                         label: '交易流水',
-                        prop: 'relation_trade_no'
+                        prop: 'relation_trade_no',
+                        width: '200'
                     }
                 ]
             }
@@ -197,10 +174,6 @@ export default {
         emptyDateTime() {
             this.dateTimeParams = {}
         },
-        // 列表返回
-        saleAmunt(data) {
-            this.ruleForm = data.baoxiang;
-        },
         // 查询
         reset() {
             this.searchParams = {}
@@ -224,23 +197,5 @@ export default {
 .zzbxActivity-history {
     padding: 20px;
     box-sizing: border-box;
-    .sumBox {
-        display: flex;
-        width: 100%;
-        margin-bottom: 20px;
-        .el-card__body {
-            width: 100%;
-
-            .sumBoxItem {
-                width: 25%;
-                text-align: center;
-                border-right: solid 1px #DCDCDC;
-            }
-
-            .sumBoxItem:last-child {
-                border-right: none;
-            }
-        }
-    }
 }
 </style>

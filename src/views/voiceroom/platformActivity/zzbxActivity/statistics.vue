@@ -1,4 +1,4 @@
-// 用户拉新记录
+// 转转宝箱统计
 <template>
     <div class="zzbxActivity-history">
         <div class="searchParams">
@@ -21,16 +21,11 @@
 </template>
 
 <script>
-import {
-		getActivetyList,
-		getActivetyDrawLog
-	} from '@/api/videoRoom'
+import { getActivetyList } from '@/api/videoRoom'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
-// 引入map参数
-import MAPDATA from '@/utils/jsonMap.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 // 引入api
@@ -61,12 +56,7 @@ export default {
                     optionLabel: 'name',
                     label: '活动类型',
                     placeholder: '请选择',
-                    options: this.activityList,
-                    handler: {
-                        change: (v) => {
-                            this.getList()
-                        }
-                    }
+                    options: this.activityList
                 },
                 {
                     name: 'dateTimeParams',

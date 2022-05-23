@@ -116,9 +116,9 @@
             data: params
           }).then(res => {
             this.loading = false;
-            if (res.data.list === null) {
-              res.data.list = [];
-            }
+            // if (res.data.list === null) {
+            //   res.data.list = [];
+            // }
             // 标准数据处理
             this.dataProcessing(res);
           }).catch(err => {
@@ -140,10 +140,18 @@
         if (typeof vm.onSearchSuccess === 'function') {
           stData = vm.onSearchSuccess(res);
         } else {
-          if (res.data && res.data.list.length !== 0) {
-            for (const i in res.data.list) {
-              if (typeof res.data.list[i] === 'object') {
-                stData.data = res.data.list || res.data.data;
+          if (res.data) {
+            let list;
+
+            if(res.data.list && res.data.list.length !== 0) {
+              list = res.data.list
+            } else if(res.data.data && res.data.data.length !== 0) {
+              list = res.data.data
+            }
+            
+            for (const i in list) {
+              if (typeof list[i] === 'object') {
+                stData.data = list;
                 stData.total = res.data.count;
               } else {
                 // stData.data = [res.data];

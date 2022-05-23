@@ -1,40 +1,27 @@
-// 用户拉新记录
+// 转转宝箱记录
 <template>
     <div class="zzbxActivity-history">
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
-        <div class="historyBx">
-            <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-                <el-card class="sumBox">
-                    <div class="sumBoxItem fl">活动开箱次数：{{ruleForm.baoxiang_open_count}}</div>
-                    <div class="sumBoxItem fl">活动投入：{{ruleForm.baoxiang_in}}</div>
-                    <div class="sumBoxItem fl">活动产出：{{ruleForm.baoxiang_out}}</div>
-                    <div class="sumBoxItem fl">活动投入产出比：{{ruleForm.output_proportion}}</div>
-                </el-card>
-            </el-col>
-        </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList"></tableList>
         </div>
     </div>
 </template>
 
 <script>
-import {
-		getActivetyList,
-		getActivetyDrawLog
-	} from '@/api/videoRoom'
+import { getActivetyList } from '@/api/videoRoom'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
-// 引入map参数
-import MAPDATA from '@/utils/jsonMap.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
 
 export default {
     components: {
@@ -46,6 +33,16 @@ export default {
         forms() {
             return [
                 {
+                    name: 'activity_type_id',
+                    type: 'select',
+                    value: 1,
+                    keyName: 'id',
+                    optionLabel: 'name',
+                    label: '活动类型',
+                    placeholder: '请选择',
+                    options: this.activityList
+                },
+                {
                     name: 'user_number',
                     type: 'input',
                     value: '',
@@ -54,19 +51,12 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
-                    name: 'activity_type_id',
-                    type: 'select',
-                    value: 1,
-                    keyName: 'id',
-                    optionLabel: 'name',
-                    label: '活动类型',
-                    placeholder: '请选择',
-                    options: this.activityList,
-                    handler: {
-                        change: (v) => {
-                            this.getList()
-                        }
-                    }
+                    name: 'relation_trade_no',
+                    type: 'input',
+                    value: '',
+                    label: '交易流水ID',
+                    isNum: true,
+                    placeholder: '请输入交易流水ID'
                 },
                 {
                     name: 'dateTimeParams',
@@ -92,41 +82,52 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.zzbxActivity.history,
-                isShowIndex: true,
+                url: REQUEST.zzbxActivity.detail,
                 columns: [
                     {
-                        label: '用户ID',
+                        label: '抽奖人ID',
                         prop: 'user_number'
                     },
                     {
-                        label: '活动类型',
+                        label: '抽奖人昵称',
+                        prop: 'nickname'
+                    },
+                    {
+                        label: '宝箱类型',
+                        prop: 'activity_name'
+                    },
+                    {
+                        label: '交易时间',
                         render: (h, params) => {
-                            let data = this.activityList.filter(item => { item.activity_type_id === params.row.activity_type_id })
-                            return h('span', data ? data[0].name : '--')
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
-                        label: '活动类别',
+                        label: '交易类型',
                         render: (h, params) => {
                             return h('span', '背包')
                         }
                     },
                     {
-                        label: '开箱次数',
-                        prop: 'user_open_count'
+                        label: '礼物ID',
+                        prop: 'gift_id'
                     },
                     {
-                        label: '幸运礼物',
-                        prop: 'big_gift_count'
+                        label: '礼物名称',
+                        prop: 'gift_name'
                     },
                     {
-                        label: '投入',
-                        prop: 'user_out'
+                        label: '礼物数量',
+                        prop: 'number'
                     },
                     {
-                        label: '产出',
-                        prop: 'user_in'
+                        label: '礼物价值',
+                        prop: 'gift_diamond'
+                    },
+                    {
+                        label: '交易流水',
+                        prop: 'relation_trade_no',
+                        width: '200'
                     }
                 ]
             }
@@ -157,7 +158,7 @@ export default {
                 user_number: s.user_number,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
-                activity_type: 0,
+                activity_type: 2,
                 activity_type_id: s.activity_type_id ? s.activity_type_id : 1
             }
         },
@@ -172,10 +173,6 @@ export default {
         // 清空日期选择
         emptyDateTime() {
             this.dateTimeParams = {}
-        },
-        // 列表返回
-        saleAmunt(data) {
-            this.ruleForm = data.baoxiang;
         },
         // 查询
         reset() {
@@ -200,23 +197,5 @@ export default {
 .zzbxActivity-history {
     padding: 20px;
     box-sizing: border-box;
-    .sumBox {
-        display: flex;
-        width: 100%;
-        margin-bottom: 20px;
-        .el-card__body {
-            width: 100%;
-
-            .sumBoxItem {
-                width: 25%;
-                text-align: center;
-                border-right: solid 1px #DCDCDC;
-            }
-
-            .sumBoxItem:last-child {
-                border-right: none;
-            }
-        }
-    }
 }
 </style>

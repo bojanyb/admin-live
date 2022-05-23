@@ -1,8 +1,8 @@
 <template>
     <div class="payType-Box">
         <div class="FuncBox" v-for="(item,index) in FuncList" :key="index">
-            <span>{{ item.name }}</span>
-            <el-radio-group v-model="item.value" @change="(v) => setPayFunc(v, index)">
+            <span>{{ item.title }}</span>
+            <el-radio-group v-model="item.mer_id" @change="(v) => setPayFunc(v, index)">
                 <el-radio :label="2">四方</el-radio>
                 <el-radio :label="1">爱意</el-radio>
             </el-radio-group>
@@ -40,15 +40,17 @@ export default {
         // 获取支付方式
         async getPayFunc() {
             let res = await getPayType()
-            let back = res.data.data
-            back.forEach(item => {
-                this.FuncList.forEach(a => {
-                    if(item.title === a.label) {
-                        a.id = item.id
-                        a.value = item.mer_id
-                    }
-                })
-            })
+            // let back = res.data.data
+            // back.forEach(item => {
+            //     this.FuncList.forEach(a => {
+            //         if(item.title === a.label) {
+            //             a.id = item.id
+            //             a.value = item.mer_id
+            //         }
+            //     })
+            // })
+
+            this.FuncList = res.data.data
         },
         // 设置支付方式
         async setPayFunc(v, index) {

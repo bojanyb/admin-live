@@ -1,4 +1,4 @@
-// 用户拉新记录
+// 转转宝箱统计
 <template>
     <div class="zzbxActivity-history">
         <div class="searchParams">
@@ -21,22 +21,15 @@
 </template>
 
 <script>
-import {
-		getActivetyList,
-		getActivetyDrawLog
-	} from '@/api/videoRoom'
+import { getActivetyList } from '@/api/videoRoom'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
-// 引入map参数
-import MAPDATA from '@/utils/jsonMap.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
-// 引入公共方法
-import { timeFormat } from '@/utils/common.js'
 
 export default {
     components: {
@@ -48,21 +41,6 @@ export default {
         forms() {
             return [
                 {
-                    name: 'activity_type_id',
-                    type: 'select',
-                    value: 1,
-                    keyName: 'id',
-                    optionLabel: 'name',
-                    label: '活动类型',
-                    placeholder: '请选择',
-                    options: this.activityList,
-                    handler: {
-                        change: (v) => {
-                            this.getList()
-                        }
-                    }
-                },
-                {
                     name: 'user_number',
                     type: 'input',
                     value: '',
@@ -71,12 +49,14 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
-                    name: 'relation_trade_no',
-                    type: 'input',
-                    value: '',
-                    label: '交易流水ID',
-                    isNum: true,
-                    placeholder: '请输入交易流水ID'
+                    name: 'activity_type_id',
+                    type: 'select',
+                    value: 1,
+                    keyName: 'id',
+                    optionLabel: 'name',
+                    label: '活动类型',
+                    placeholder: '请选择',
+                    options: this.activityList
                 },
                 {
                     name: 'dateTimeParams',
@@ -106,51 +86,42 @@ export default {
                 isShowIndex: true,
                 columns: [
                     {
-                        label: '抽奖人ID',
+                        label: '用户ID',
                         prop: 'user_number'
                     },
                     {
-                        label: '抽奖人昵称',
-                        prop: 'nickname'
-                    },
-                    {
-                        label: '宝箱类型',
+                        label: '活动类型',
                         render: (h, params) => {
-                            let data = this.activityList.filter(item => { item.activity_type_id === params.row.activity_type_id })
-                            return h('span', data ? data[0].name : '--')
+                            let name = ''
+                            if(JSON.stringify(this.searchParams) === '{}') {
+                                name = this.activityList[0].name
+                            } else {
+                                name = this.activityList.find(item => { return item.id === this.searchParams.activity_type_id }).name
+                            }
+                            return h('span', name)
                         }
                     },
                     {
-                        label: '交易时间',
+                        label: '活动类别',
                         render: (h, params) => {
-                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            return h('span', '背包')
                         }
                     },
                     {
-                        label: '交易类型',
-                        render: (h, params) => {
-                            return h('span', params.row.activity_type)
-                        }
+                        label: '开箱次数',
+                        prop: 'user_open_count'
                     },
                     {
-                        label: '礼物ID',
-                        prop: 'gift_id'
+                        label: '幸运礼物',
+                        prop: 'big_gift_count'
                     },
                     {
-                        label: '礼物名称',
-                        prop: 'gift_name'
+                        label: '投入',
+                        prop: 'user_out'
                     },
                     {
-                        label: '礼物数量',
-                        prop: 'number'
-                    },
-                    {
-                        label: '礼物价值',
-                        prop: 'gift_diamond'
-                    },
-                    {
-                        label: '交易流水',
-                        prop: 'relation_trade_no'
+                        label: '产出',
+                        prop: 'user_in'
                     }
                 ]
             }
@@ -181,7 +152,7 @@ export default {
                 user_number: s.user_number,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
-                activity_type: 0,
+                activity_type: 2,
                 activity_type_id: s.activity_type_id ? s.activity_type_id : 1
             }
         },
