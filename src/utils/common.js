@@ -56,3 +56,16 @@ export function errStatus(list) {
     return { isMax, everyGift, allProbability }
 }
 
+// 手机号脱敏
+export function desensitization(value) {
+    if (!value) return '';
+    let str = value;
+            str = str.replace(new RegExp("[^0-9]+","g"),"")
+        if(str.length==11){
+            str = str.toString().replace(/(\d{3})\d*(\d{4})/ , '$1*******$2')
+        }else {
+        str = str.toString().replace(/(\d{3})\d*(\d{4})/ , '$1*********$2')
+    }
+    return str;
+}
+

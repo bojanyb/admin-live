@@ -11,7 +11,7 @@
           <el-input v-model="filters.trade_no" v-input-limit="0" placeholder="请输入交易流水号" clearable />
         </el-form-item>
         <el-form-item label="交易类型">
-          <el-select v-model="filters.relation_type" @change="getBannerInfo" placeholder="请选择交易类型" clearable>
+          <el-select v-model="filters.genre" @change="getBannerInfo" placeholder="请选择交易类型" clearable>
             <el-option
               v-for="item in userBalanceType"
               :key="item.value"
@@ -93,7 +93,8 @@ export default {
       filters: {
         'user_number': '',
         trade_no: '',
-        relation_type: null
+        relation_type: null,
+        genre: null
       },
       select: '',
       selectList: [
