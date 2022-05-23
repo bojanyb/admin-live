@@ -25,15 +25,15 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'development',
 	//   domainHttps: 'http://api.huixin.info', // https环境地址
-	  domainHttps: 'http://192.168.0.114', // https环境地址
-	  httpHeader: '/admin', // 后台本地携带
+	  domainHttps: 'http://api.huida.vip', // https环境地址
+	  httpHeader: '', // 后台本地携带
 	},
 	// 测试环境
 	'--test': {
 	  publicPath: '/',
 	  outputDir: 'dist',
 	  assetsDir: 'static',
-	  mode: 'production',
+	  mode: 'test',
 	  domainHttps: 'http://api.huida.vip', // https环境地址
 	  httpHeader: '', // 后台本地携带
 	},
@@ -42,7 +42,7 @@ const option = {
 	  publicPath: '/',
 	  outputDir: 'dist',
 	  assetsDir: 'static',
-	  mode: 'production',
+	  mode: 'pre',
 	  domainHttps: 'http://api.huidapay.net', // https环境地址
 	  httpHeader: '', // 后台本地携带
 	},
@@ -51,7 +51,7 @@ const option = {
 	  publicPath: '/',
 	  outputDir: 'dist',
 	  assetsDir: 'static',
-	  mode: 'production',
+	  mode: 'prod',
 	  domainHttps: 'http://api.aiyi.live', // https环境地址
 	  httpHeader: '', // 后台本地携带
 	}

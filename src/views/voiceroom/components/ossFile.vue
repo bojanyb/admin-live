@@ -13,6 +13,13 @@
 				:width="178" :show-img="imageSvgUrl" />
 			<i v-if="imageSvgUrl == ''" class="el-icon-plus avatar-uploader-icon" />
 		</el-upload>
+
+		<el-upload v-if="type == 'file'" class="aliUpload avatar-uploader" action="#" :show-file-list="false"
+			:on-change="doUpload" :auto-upload="false">
+			<i v-if="fileUrl == '' && progressNum < 100 && progressNum > 0">上传进度: {{progressNum}} %</i>
+			<i v-else-if="fileUrl !== '' && progressNum == 100">上传完成</i>
+			<i v-else class="el-icon-plus avatar-uploader-icon" />
+		</el-upload>
 	</div>
 </template>
 
@@ -27,7 +34,10 @@
 				imageUrl: "",
 				imageSvgUrl: "",
 				videoUrl: '',
+				fileUrl: '',
+				fileNme: '',
 				size: '',
+				progressNum : 0,
 			}
 		},
 		props: {
@@ -97,9 +107,14 @@
 					isUpLoad = true // 静态图 默认为true
 				}
 				if (isUpLoad == true) {
+					
+					if(file.name.indexOf(".apk") > -1){
+						this.fileNme = file.name.split('.apk')[0];
+					}
 					let tmpArr = file.name.split('.')
 					let tmpName = md5(Date.now() + tmpArr[0])
 					tmpName = tmpName + '.' + tmpArr[tmpArr.length - 1]
+
 					this.multipartUpload(tmpName, file)
 				}
 			},
@@ -108,6 +123,7 @@
 				let _this = this
 				const progress = async function(p) {
 					//项目中需获取进度条，故调用进度回调函数（详见官方文档）
+					_this.progressNum = Math.round(p * 100)
 					// _this.$emit('getProgress', Math.round(p * 100))
 				}
 				try {
@@ -122,14 +138,22 @@
 						let imgUrl = "http://photo.aiyi.live/" + info.name;
 						let params = {
 							"type": this.type,
-							"url": imgUrl
+							"url": imgUrl,
+							"fileName" : this.fileNme
 						}
-						if (this.type == "animation") {
-							this.imageSvgUrl = imgUrl
-							this.imageUrl = ""
-						} else if (this.type == "img") {
-							this.imageSvgUrl = ""
-							this.imageUrl = imgUrl
+						this.imageUrl = "";
+						this.imageSvgUrl = "";
+						this.fileUrl = "";
+						switch(this.type){
+							case "animation":
+								this.imageSvgUrl = imgUrl
+							break;
+							case "img":
+								this.imageUrl = imgUrl
+							break;
+							case "file":
+								this.fileUrl = imgUrl
+							break;
 						}
 						this.$emit("getUpLoadImg", params);
 						let head = _this.client.head(upName);

@@ -74,7 +74,7 @@ const systemConfigRouter = {
 				noCache: true
 			},
 			// hidden: true,
-			disabled: true,
+			// disabled: true,
 		},
 		{
 			path: 'merchants-list',

@@ -14,7 +14,12 @@ const request = {
         getHasAddGift: `${HTTPHEADER}/Activityins/getHasAddGift`, // 获取已配置礼物
         drawFlow: `${HTTPHEADER}/activityins/drawFlow`, // 乐园记录
         drawRecord: `${HTTPHEADER}/activityins/drawRecord`, // 统计
-        stop: `${HTTPHEADER}Activityins/stop`, // 停止和开启
+        stop: `${HTTPHEADER}/Activityins/stop`, // 停止和开启
+    },
+    system : {
+        Appversion : `${HTTPHEADER}/Appversion`, // 版本列表
+        AppversionAChange : `${HTTPHEADER}/appversion/add`, // 新增或者修改
+        AppversionDel : `${HTTPHEADER}/appversion/del`, // 删除
     },
 }
 
