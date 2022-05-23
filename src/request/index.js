@@ -1,9 +1,9 @@
 const request = {
     // 支付管理API
     pay: {
-        operateHistory: `${HTTPHEADER}/Payconfig/getPayOptLog`, // 操作记录
-        getConfigType: `${HTTPHEADER}/PayConfig/getConfigType`, // 获取支付渠道
-        setConfigType: `${HTTPHEADER}/Payconfig/setConfigType` // 设置支付渠道
+        operateHistory: `${HTTPHEADER}/payconfig/getPayOptLog`, // 操作记录
+        getConfigType: `${HTTPHEADER}/payconfig/getConfigType`, // 获取支付渠道
+        setConfigType: `${HTTPHEADER}/payconfig/setConfigType` // 设置支付渠道
     },
 
     // 平台活动  
@@ -21,6 +21,18 @@ const request = {
         AppversionAChange : `${HTTPHEADER}/appversion/add`, // 新增或者修改
         AppversionDel : `${HTTPHEADER}/appversion/del`, // 删除
     },
+
+    // 转转宝箱
+    zzbxActivity: {
+        list: `${HTTPHEADER}/Activity/aclist`,
+        history: `${HTTPHEADER}/Activity/drawLog`,
+        detail: `${HTTPHEADER}Statistical/drawLog`
+    },
+
+    // 用户拉新记录
+    userHistory: {
+        list: `${HTTPHEADER}/Statistical/userInvite`
+    }
 }
 
 export default request

@@ -1,7 +1,7 @@
 <template>
     <div class="share-gift-box">
         <div class="giftAllocation">
-            <zItem ref="zItem" :status="status" :isShowLocation="isShowLocation" :gifts="gifts" @deleteData="deleteData"></zItem>
+            <zItem ref="zItem" :isShowProperty="isShowProperty" :status="status" :isShowLocation="isShowLocation" :gifts="gifts" @deleteData="deleteData"></zItem>
         </div>
 
         <drawer ref="drawer" v-if="isDestoryComp" :status="status" @distoryComp="distoryComp" :activityType="activityType" :list="gifts"></drawer>
@@ -36,6 +36,10 @@ export default {
         status: {
             type: String,
             default: ''
+        },
+        isShowProperty: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

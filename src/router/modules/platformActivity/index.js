@@ -77,6 +77,7 @@ const platformActivityRouter = {
 			meta: {
 				title: '转转宝箱'
 			},
+			// hidden: true,
 			children: [
 				{
 					path: 'allocation',

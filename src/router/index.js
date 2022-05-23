@@ -15,6 +15,7 @@ import guildAuditRouter from './modules/guild/guildAudit'
 import giveAwayRouter from './modules/giveAway/giveAway'
 import activityRouter from "./modules/activity/activity.js"
 import platformActivityRouter from "./modules/platformActivity/index.js"
+import userActivity from "./modules/userActivity/index.js"
 
 import paySystemRouter from './modules/paySystem/paySystem.js'
 
@@ -97,6 +98,7 @@ export const asyncRoutes = [
   	activityRouter,
 	systemConfigRouter,
 	platformActivityRouter,
+	userActivity,
 	// 404 page must be placed at the end !!!
 	{
 		path: '*',

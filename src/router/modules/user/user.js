@@ -153,7 +153,7 @@ const userRouter = {
 				title: '用户拉新记录',
 				noCache: true
 			},
-			hidden: true
+			// hidden: true
 		},
 		
 	]

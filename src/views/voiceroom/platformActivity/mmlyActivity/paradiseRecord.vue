@@ -45,6 +45,7 @@ export default {
                     type: 'input',
                     value: '',
                     label: '用户ID',
+                    isNum: true,
                     placeholder: '',
                     handler: {
                         enter: (v) => {

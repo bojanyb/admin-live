@@ -18,12 +18,13 @@
               <img :src="$store.state.loadingError" />
             </div>
           </el-image>
+          
         </template>
       </el-table-column>
     </el-table>
     <div class="pagination" v-if="data.length != 0">
       <el-pagination background @size-change="handleSizeChange" @current-change="handlePageChange" :page-size="search.size"
-        :current-page="search.page" layout="total, sizes, prev, pager, next, jumper" :page-sizes="cfgs.search ? cfgs.search.sizes:search.sizes"
+        :current-page="search.page" layout="total, prev, pager, next, jumper" :page-sizes="cfgs.search ? cfgs.search.sizes:search.sizes"
         :total="search.total" class="fr">
       </el-pagination>
     </div>
@@ -57,10 +58,10 @@
         dialogVisible: false,
         data: [],
         search: {
-          size: 20,
+          size: 10,
           page: 1,
           total: 0,
-          sizes: [20, 30, 50]
+          sizes: [10, 20, 30]
         },
         isShowSearchMore: false,
         headerTopPoint: 0,
@@ -115,14 +116,16 @@
             data: params
           }).then(res => {
             this.loading = false;
-            if (res.data.list === null) {
-              res.data.list = [];
-            }
+            // if (res.data.list === null) {
+            //   res.data.list = [];
+            // }
             // 标准数据处理
             this.dataProcessing(res);
           }).catch(err => {
+            this.data = []
+            this.$emit('saleAmunt', { list: [], baoxiang: {}});
             this.loading = false;
-            this.$message.error(data.msg || '获取数据失败');
+            this.$message.error(err || '获取数据失败');
           })
         } else {
           this.loading = false;
@@ -139,13 +142,21 @@
         if (typeof vm.onSearchSuccess === 'function') {
           stData = vm.onSearchSuccess(res);
         } else {
-          if (res.data && res.data.list.length !== 0) {
-            for (const i in res.data.list) {
-              if (typeof res.data.list[i] === 'object') {
-                stData.data = res.data.list || res.data.data;
+          if (res.data) {
+            let list;
+
+            if(res.data.list && res.data.list.length !== 0) {
+              list = res.data.list
+            } else if(res.data.data && res.data.data.length !== 0) {
+              list = res.data.data
+            }
+            
+            for (const i in list) {
+              if (typeof list[i] === 'object') {
+                stData.data = list;
                 stData.total = res.data.count;
               } else {
-                // stData.data = [res.data];
+                stData.data = [];
                 stData.total = res.data.count || 1;
               }
             }

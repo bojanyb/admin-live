@@ -16,7 +16,7 @@
 					<el-table-column label="操作" align="center">
 						<template slot-scope="scope">
 							<el-button type="primary" v-if="scope.row.isSelect == false"
-								@click="handleSelect(scope.row)">使用</el-button>
+								@click.once="handleSelect(scope.row)">使用</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -65,6 +65,7 @@ export default {
                 limit: 10
             },
             giftTotal: 0,
+            giftTypeList: MAPDATA.GIFTTYPE, // 礼物列表
             isDestroyComp: false, // 是否销毁组件
             activityList: MAPDATA.ACTIVITYLIST // 活动列表
         };
@@ -98,31 +99,10 @@ export default {
             this.giftListArr = [];
             getActivetyGiftSource(params).then(res => {
                 this.giftTotal = res.data.count;
-
+            
                 res.data.list.map(re=>{
-                    switch (re.gift_genre) {
-                        case 1:
-                        re.gift_genreText = '基本礼物'
-                            break;
-                        case 2:
-                        re.gift_genreText = '抽奖礼物'
-                            break;
-                        case 3:
-                        re.gift_genreText = '抽奖包裹内礼物'
-                            break;
-                        case 4:
-                        re.gift_genreText = '普通礼物'
-                            break;
-                        case 5:
-                        re.gift_genreText = '免费礼物'
-                            break;
-                        case 6:
-                        re.gift_genreText = '动效礼物'
-                            break;
-                        case 7:
-                        re.gift_genreText = '全屏礼物'
-                            break;
-                    }
+                    let params = this.giftTypeList.find(item => { return re.gift_genre === item.value })
+                    re.gift_genreText = params.name
                 })
                 this.giftListArr = res.data.list;
                 this.giftSelectSource();
@@ -152,9 +132,11 @@ export default {
                 this.$message.error('当前活动已超过添加最大礼物数量')
                 return false
             }
+
+            this.$set(row, 'type', 1)
             this.giftListArr.map(res => {
                 if (res.id == row.id) {
-                    res.isSelect = true; // 默认当前礼物未被选中
+                    res.isSelect = true; // 当前礼物被选中
                     this.gifts.push(row)
                 }
             })

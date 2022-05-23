@@ -846,3 +846,12 @@ export function getSettlementLog(data) {
     data
   })
 }
+
+// 获取交易类型 
+export function getRelationType(data) {
+  return request({
+    url: '/Statistical/getRelationType',
+    method: 'post',
+    data
+  })
+}

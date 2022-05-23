@@ -82,9 +82,61 @@ const ACTIVITYLIST = [
     }
 ]
 
+// 礼物类型
+const GIFTTYPE = [
+    {
+        name: '基本礼物',
+        value: 1
+    },
+    {
+        name: '抽奖礼物',
+        value: 2
+    },
+    {
+        name: '抽奖包裹内礼物',
+        value: 3
+    },
+    {
+        name: '普通礼物',
+        value: 4
+    },
+    {
+        name: '免费礼物',
+        value: 5
+    },
+    {
+        name: '动效礼物',
+        value: 6
+    },
+    {
+        name: '全屏礼物',
+        value: 7
+    },
+    {
+        name: '活动礼物',
+        value: 8
+    }
+]
+
+/*
+*用户余额明细 - 交易类型
+*/
+const USERBALANCETYPE = [
+    {
+        name: '收入',
+        value: 1
+    },
+    {
+        name: '支出',
+        value: 2
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
     LOCATIONLIST,
-    ACTIVITYLIST
+    ACTIVITYLIST,
+    GIFTTYPE,
+    USERBALANCETYPE
 }
