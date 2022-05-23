@@ -49,7 +49,7 @@ export default {
                     {
                         label: '活动类别',
                         render: (h, params) => {
-                            return h('span', '背包')
+                            return h('span', params.row.type === 1 ? '背包' : '派对')
                         }
                     },
                     {
@@ -132,7 +132,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                type: 1
+                type: 2
             }
         },
         // 刷新列表

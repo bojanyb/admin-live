@@ -13,6 +13,16 @@
         <el-form-item label="交易类型">
           <el-select v-model="filters.relation_type" @change="getBannerInfo" placeholder="请选择交易类型" clearable>
             <el-option
+              v-for="item in userBalanceType"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="交易渠道">
+          <el-select v-model="filters.relation_type" @change="getBannerInfo" placeholder="请选择交易类型" clearable>
+            <el-option
               v-for="item in jsonMapList"
               :key="item.code"
               :label="item.name"
@@ -61,6 +71,9 @@ import {
 } from '@/api/videoRoom'
 import Pagination from '@/components/Pagination'
 import moment from 'moment'
+// 引入map参数
+import MAPDATA from '@/utils/jsonMap.js'
+
 export default {
   name: 'userBalance-list',
   components: {
@@ -93,7 +106,8 @@ export default {
           name: '支付宝充值'
         }
       ],
-      jsonMapList: []
+      jsonMapList: [],
+      userBalanceType: MAPDATA.USERBALANCETYPE
     }
   },
   created() {

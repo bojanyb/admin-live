@@ -122,6 +122,8 @@
             // 标准数据处理
             this.dataProcessing(res);
           }).catch(err => {
+            this.data = []
+            this.$emit('saleAmunt', { list: [], baoxiang: {}});
             this.loading = false;
             this.$message.error(err || '获取数据失败');
           })
@@ -154,7 +156,7 @@
                 stData.data = list;
                 stData.total = res.data.count;
               } else {
-                // stData.data = [res.data];
+                stData.data = [];
                 stData.total = res.data.count || 1;
               }
             }

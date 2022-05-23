@@ -118,10 +118,25 @@ const GIFTTYPE = [
     }
 ]
 
+/*
+*用户余额明细 - 交易类型
+*/
+const USERBALANCETYPE = [
+    {
+        name: '收入',
+        value: 1
+    },
+    {
+        name: '支出',
+        value: 2
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
     LOCATIONLIST,
     ACTIVITYLIST,
-    GIFTTYPE
+    GIFTTYPE,
+    USERBALANCETYPE
 }
