@@ -57,6 +57,10 @@
 				type: Number,
 				default: 0
 			},
+			progress: {
+				type: Number,
+				default: 0
+			},
 		},
 		watch: {
 			play_type(val) {
@@ -80,12 +84,19 @@
 			svgaplayer
 		},
 		mounted() {
+			// 静态图文件
 			if (this.type == 'img') {
 				this.imageUrl = this.picImg;
 			}
+			// 动效图文件
 			if (this.type == 'animation') {
 				this.imageSvgUrl = this.animationImg;
 
+			}
+			// apk文件方式
+			if(this.progress > 0){
+				this.progressNum = this.progress;
+				this.fileUrl = this.picImg;
 			}
 			this.client = new OSS({
 				region: 'oss-cn-shenzhen',

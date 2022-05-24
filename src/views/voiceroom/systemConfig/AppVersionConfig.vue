@@ -18,7 +18,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item v-if="platform=='2'">
-					<ossFile :type="'file'" :play_type="3" @getUpLoadImg="getUpLoadFile"/>
+					<ossFile :type="'file'" :play_type="3" :picImg="fileUrl" :progress="progress" @getUpLoadImg="getUpLoadFile"/>
 					<div v-if="isUping" class="c-reddd">正在上传 {{persent}}%</div>
 					<div v-if="isUped" class="c-green">上传完成！</div>
 					
@@ -69,19 +69,12 @@ import ossFile from './../components/ossFile.vue'
 				isUping:false,
 				isUped:false,
 				persent:0,
-				imageUrl: '',
-				actionApi: '',
 				title: '新增',
 				btnTip: '提交',
 				page: {
 					current: 1,
 					size: 10,
-					version: '',
-					platform: '',
 				},
-				total: 0,
-				listLoading: false,
-				listArr: [],
 				isAdd: true, //弹窗是否新增
 				FormVisible: false, //新增界面是否显示
 				addLoading: false,
@@ -112,21 +105,21 @@ import ossFile from './../components/ossFile.vue'
 					}]
 				},
 				platformArr: [{
-					"name" : "苹果",
-					"value" : 1,
+					"label" : "苹果",
+					"key" : "1",
 				},
 				{
-					"name" : "安卓",
-					"value" : 2,
+					"label" : "安卓",
+					"key" : "2",
+				}],
+				searchParams: {
+					version: "",
+					platform: "",
 				},
-				]
+				fileUrl: "",
+				progress: 0,
 
 			}
-		},
-		watch:{
-			FormVisible:function(){
-				// this.$refs.Form.clearValidate();
-			},
 		},
 		components: {
 			tableList,
@@ -134,37 +127,37 @@ import ossFile from './../components/ossFile.vue'
 			ossFile
 		},
 		computed: {
-        forms() {
-            return [
-				{
-                    name: 'version',
-                    type: 'input',
-                    value: '',
-                    label: '版本号',
-                    placeholder: '',
-                    handler: {
-                        enter: (v) => {
-                            this.searchParams.version = v.version
-                            this.$refs.tableList.getData();
-                        }
-                    }
-                },
-				{
-                    name: 'platform',
-                    type: 'select',
-                    value: this.platformArr,
-                    label: '版本号',
-                    placeholder: '',
-                    handler: {
-                        enter: (v) => {
-                            this.searchParams.version = v.version
-                            this.$refs.tableList.getData();
-                        }
-                    }
-                },
-            ]
-        },
-        cfgs() {
+			forms() {
+				return [
+					{
+						name: 'version',
+						type: 'input',
+						value: '',
+						label: '版本号',
+						placeholder: '',
+						handler: {
+							enter: (v) => {
+								this.searchParams.version = v.version
+								this.$refs.tableList.getData();
+							}
+						}
+					},
+					{
+						name: 'platform',
+						type: 'select',
+						options: this.platformArr,
+						label: '按平台查询',
+						placeholder: '',
+						handler: {
+							enter: (v) => {
+								this.searchParams.platform = v.platform
+								this.$refs.tableList.getData();
+							}
+						}
+					},
+				]
+			},
+       		cfgs() {
             return {
 					vm: this,
 					url: REQUEST.system.Appversion,
@@ -270,10 +263,12 @@ import ossFile from './../components/ossFile.vue'
 			handleEdit(item) {
 				this.Form = JSON.parse(JSON.stringify(item));
 				this.isAdd = false;
-				this.title = '编辑';
+				this.title = '修改';
 				this.btnTip = '修改';
 				this.Form.id = item.id;
 				this.is_mandatory = item.is_mandatory;
+				this.fileUrl = item.download_url;
+				this.progress = 100;
 				this.platform = JSON.stringify(item.platform);
 				this.addLoading = false;
 				this.FormVisible = true;
@@ -316,18 +311,33 @@ import ossFile from './../components/ossFile.vue'
 								data: this.Form
 							}).then(res => {
 								this.$message.success(this.title + "成功");
+								this.addLoading = false;
 								this.$refs.tableList.getData();
 								this.FormVisible = false;
 							}).catch(err=>{
+								this.addLoading = false;
 								this.$message.error(err);
 							})
 						});
 					}
 				});
 			},
-			onSearch(){
-				console.log("查询字段");
+			//传递参数
+			beforeSearch(params) {
+				return {
+					size: params.size,
+					page: params.page,
+					version: this.searchParams.version,
+					platform: this.searchParams.platform,
+				};
 			},
+			// 查询
+			onSearch(val){
+				this.searchParams.version = val.version;
+				this.searchParams.platform = val.platform;
+				this.$refs.tableList.getData();
+			},
+			// 上传文件反馈信息
 			getUpLoadFile(fileRow){
 				this.Form.version = fileRow.fileName;
 				this.Form.download_url = fileRow.url;
@@ -340,6 +350,12 @@ import ossFile from './../components/ossFile.vue'
 	:v-deep .el-upload--text{
 		width: 178px!important;
 		position: relative;
+	}
+	.invite-join-us{
+		padding: 20px;
+	}
+	.share-filter-grid-box{
+		float: left;
 	}
 	.tips{
 		position: absolute;
