@@ -15,7 +15,7 @@ const userRouter = {
 			component: () => import('@/views/voiceroom/paySystem/payType'),
 			name: 'payType',
 			meta: {
-				title: '支付渠道修改',
+				title: '支付配置',
 				noCache: true
 			}
 		},

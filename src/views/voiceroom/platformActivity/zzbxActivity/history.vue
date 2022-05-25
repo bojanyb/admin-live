@@ -105,7 +105,7 @@ export default {
                     {
                         label: '交易类型',
                         render: (h, params) => {
-                            return h('span', '背包')
+                            return h('span', params.row.type === 1 ? '背包' : '派对')
                         }
                     },
                     {

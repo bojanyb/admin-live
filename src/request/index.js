@@ -27,7 +27,18 @@ const request = {
     // 用户拉新记录
     userHistory: {
         list: `${HTTPHEADER}/Statistical/userInvite`
+    },
+
+    // 充值记录
+    diamondRecharge: {
+        list: `${HTTPHEADER}/Recharge/diamondRecharge`
+    },
+
+    // 体现记录
+    CashHisity: {
+        list: `${HTTPHEADER}/cash/getCashHisity`
     }
+    
 }
 
 export default request

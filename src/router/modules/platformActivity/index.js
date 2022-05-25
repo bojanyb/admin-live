@@ -8,7 +8,7 @@ const platformActivityRouter = {
 	name: 'platformActivity',
 	meta: {
 		title: '平台活动',
-		icon: 'people'
+		icon: 'el-icon-takeaway-box'
 	},
 	children: [
 		{

@@ -132,11 +132,53 @@ const USERBALANCETYPE = [
     }
 ]
 
+/*
+*充值记录 - 排序类型
+*/
+const SORTLIST = [
+    {
+        value: 1,
+        name: '正序'
+    },
+    {
+        value: 2,
+        name: '倒序'
+    }
+]
+
+/*
+*体现记录 - 体现状态
+*/
+const STATUSLIST = [
+    {
+        value: 1,
+        name: '申请中'
+    },
+    {
+        value: 2,
+        name: '提现中'
+    },
+    {
+        value: 2,
+        name: '驳回'
+    },
+    {
+        value: 2,
+        name: '提现完成'
+    },
+    {
+        value: 2,
+        name: '提现失败'
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
     LOCATIONLIST,
     ACTIVITYLIST,
     GIFTTYPE,
-    USERBALANCETYPE
+    USERBALANCETYPE,
+    SORTLIST,
+    STATUSLIST
 }

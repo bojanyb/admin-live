@@ -1,19 +1,20 @@
-// 充值记录
+// 提现申请
 <template>
-    <div class="finance-guildWithdraw-list">
+    <div class="finance-embodyApply">
         <div class="model">
-            <span>选择时间内用户充值金额统计：{{ ruleForm.allMoney || 0 }}元</span>
+            <span>未处理申请：{{ ruleForm.untreated || 0 }}条</span>
         </div>
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList"></tableList>
         </div>
     </div>
 </template>
 
 <script>
+import { getActivetyList } from '@/api/videoRoom'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -24,8 +25,6 @@ import mixins from '@/utils/mixins.js'
 import REQUEST from '@/request/index.js'
 // 引入公共方法
 import { timeFormat } from '@/utils/common.js'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
 
 export default {
     components: {
@@ -37,77 +36,62 @@ export default {
         forms() {
             return [
                 {
-                    name: 'sort',
+                    name: 'activity_type_id',
                     type: 'select',
-                    value: '',
-                    keyName: 'value',
+                    value: 1,
+                    keyName: 'id',
                     optionLabel: 'name',
                     label: '排序',
                     placeholder: '请选择',
-                    options: MAPDATA.SORTLIST
-                },
-                {
-                    name: 'user_number',
-                    type: 'input',
-                    value: '',
-                    label: '用户ID',
-                    isNum: true,
-                    placeholder: '请输入用户ID'
-                },
-                {
-                    name: 'dateTimeParams',
-                    type: 'datePicker',
-                    dateType: 'daterange',
-                    format: "yyyy-MM-dd",
-                    label: '时间选择',
-                    value: '',
-                    handler: {
-                        change: v => {
-                            this.emptyDateTime()
-                            this.setDateTime(v)
-                            this.getList()
-                        },
-                        selectChange: (v, key) => {
-                            this.emptyDateTime()
-                            this.getList()
-                        }
-                    }
+                    options: this.activityList
                 }
             ]
         },
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.diamondRecharge.list,
+                // url: REQUEST.zzbxActivity.detail,
                 columns: [
                     {
                         label: '用户ID',
                         prop: 'user_number'
                     },
                     {
-                        label: '充值时间',
-                        prop: 'create_time',
+                        label: '申请提现时间',
+                        prop: 'nickname'
+                    },
+                    {
+                        label: '喵粮',
+                        prop: 'activity_name'
+                    },
+                    {
+                        label: '手续费',
+                        prop: 'activity_name'
+                    },
+                    {
+                        label: '提现金额',
+                        prop: 'activity_name'
+                    },
+                    {
+                        label: '提现卡号',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
-                        label: '充值金额',
-                        prop: 'amount'
-                    },
-                    {
-                        label: '收单机构',
-                        prop: 'receive'
-                    },
-                    {
-                        label: '充值方式',
+                        label: '状态',
                         render: (h, params) => {
-                            return h('span', params.row.channel + '充值')
+                            return h('span', '背包')
                         }
                     },
                     {
-                        label: '交易流水号',
-                        prop: 'trade_no'
+                        label: '操作',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('span', '通过'),
+                                h('span', '驳回')
+                            ])
+                        }
                     }
                 ]
             }
@@ -116,11 +100,17 @@ export default {
     data() {
         return {
             ruleForm: {
-                allMoney: null
-            }
+                untreated: null
+            },
+            activityList: []
         };
     },
     methods: {
+        // 获取活动类型
+        async getActivityList() {
+            let res = await getActivetyList()
+            this.activityList = res.data.list
+        },
         // 刷新列表
         getList() {
             this.$refs.tableList.getData()
@@ -130,10 +120,12 @@ export default {
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
                 page: params.page,
+                pagesize: params.size,
                 user_number: s.user_number,
-                sort: s.sort,
                 start_time: Math.floor(s.start_time / 1000),
-                end_time: Math.floor(s.end_time / 1000)
+                end_time: Math.floor(s.end_time / 1000),
+                activity_type: 2,
+                activity_type_id: s.activity_type_id ? s.activity_type_id : 1
             }
         },
         // 设置时间段
@@ -159,17 +151,16 @@ export default {
         // 重置
         onSearch() {
             this.getList()
-        },
-        // 列表返回数据
-        saleAmunt(data) {
-            this.ruleForm.allMoney = data.total_money || 0
         }
+    },
+    created() {
+        this.getActivityList()
     }
 }
 </script>
 
 <style lang="scss">
-.finance-guildWithdraw-list {
+.finance-embodyApply {
     padding: 20px;
     box-sizing: border-box;
     .model {

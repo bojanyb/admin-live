@@ -30,21 +30,46 @@ const giveAwayRouter = {
 			component: () => import('@/views/voiceroom/finance/guildWithdraw-list'),
 			name: 'guildWithdraw-list',
 			meta: {
-				title: '用户充值记录',
+				title: '充值记录',
 				noCache: true
 			},
-			disabled: true
+		},
+		{
+			path: 'embodyApply-list',
+			component: () => import('@/views/voiceroom/finance/embodyApply'),
+			name: 'embodyApply-list',
+			meta: {
+				title: '提现申请',
+				noCache: true,
+			},
 		},
 		{
 			path: 'embodyHistory-list',
 			component: () => import('@/views/voiceroom/finance/embodyHistory'),
 			name: 'embodyHistory-list',
 			meta: {
-				title: '用户体现记录',
+				title: '提现记录',
 				noCache: true,
 			},
-			disabled: true
-		}
+		},
+		{
+			path: 'payType',
+			component: () => import('@/views/voiceroom/paySystem/payType'),
+			name: 'payType',
+			meta: {
+				title: '支付配置',
+				noCache: true
+			}
+		},
+		{
+			path: 'operateHistory-list',
+			component: () => import('@/views/voiceroom/paySystem/operateHistory'),
+			name: 'operateHistory-list',
+			meta: {
+				title: '操作记录',
+				noCache: true
+			}
+		},
 	]
 }
 
