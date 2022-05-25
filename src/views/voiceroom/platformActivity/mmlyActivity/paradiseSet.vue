@@ -67,7 +67,7 @@ import REQUEST from '@/request/index.js'
 import moment from 'moment'
 // 新增修改、修改礼物配置
 import gift from '@/components/gift/index.vue'
-// 引入上传文件组价
+// 引入上传文件组件
 import ossFile from './../../components/ossFile.vue'
 
 export default {
@@ -81,6 +81,7 @@ export default {
             status: 'add',
             count: 0,
             editTitle: "新增",
+            loading: false,
             editPop: false,
             imageUrl : "",
             formLabelWidth : "100px",
