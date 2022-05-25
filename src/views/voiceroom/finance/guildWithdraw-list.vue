@@ -93,7 +93,10 @@ export default {
                     },
                     {
                         label: '充值金额',
-                        prop: 'amount'
+                        prop: 'amount',
+                        render: (h, params) => {
+                            return h('span', params.row.amount / 100)
+                        }
                     },
                     {
                         label: '收单机构',
@@ -162,7 +165,7 @@ export default {
         },
         // 列表返回数据
         saleAmunt(data) {
-            this.ruleForm.allMoney = data.total_money || 0
+            this.ruleForm.allMoney = data.total_money ? data.total_money / 100 : 0
         }
     }
 }

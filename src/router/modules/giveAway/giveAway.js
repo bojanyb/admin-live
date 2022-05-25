@@ -42,6 +42,7 @@ const giveAwayRouter = {
 				title: '提现申请',
 				noCache: true,
 			},
+			hidden: true
 		},
 		{
 			path: 'embodyHistory-list',
@@ -51,6 +52,7 @@ const giveAwayRouter = {
 				title: '提现记录',
 				noCache: true,
 			},
+			hidden: true
 		},
 		{
 			path: 'payType',
