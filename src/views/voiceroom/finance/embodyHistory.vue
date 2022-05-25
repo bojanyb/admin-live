@@ -80,6 +80,49 @@ export default {
                     format: "yyyy-MM-dd",
                     label: '时间选择',
                     value: '',
+                    pickerOptions: {
+                        shortcuts: [{
+                            text: '今天',
+                            onClick(picker) {
+                                let data = new Date()
+                                let y = data.getFullYear()
+                                let m = data.getMonth()
+                                let day = data.getDate()
+                                if(m + 1 <= 12) {
+                                    m = m + 1
+                                } else {
+                                    m = 1
+                                }
+                                let start = new Date(y + '-' + m + '-' + day + ' 00:00:00')
+                                let end = new Date(y + '-' + m + '-' + day + ' 23:59:59')
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '最近三天',
+                            onClick(picker) {
+                                const end = new Date();
+                                const start = new Date();
+                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '最近七天',
+                            onClick(picker) {
+                                const end = new Date();
+                                const start = new Date();
+                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '最近十五天',
+                            onClick(picker) {
+                                const end = new Date();
+                                const start = new Date();
+                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 15);
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }]
+                    },
                     handler: {
                         change: v => {
                             this.emptyDateTime()

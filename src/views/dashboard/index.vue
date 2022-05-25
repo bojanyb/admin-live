@@ -8,7 +8,7 @@
 						用户钻石总数:
 					</div>
 					<div class="userContent fl">
-						{{accountInfo.user_diamond}}
+						{{accountInfo.total_diamond || 0}}
 					</div>
 				</div>
 				<div class="userInfoItem text item">
@@ -16,7 +16,7 @@
 						用户喵粮总数:
 					</div>
 					<div class="userContent fl">
-						{{accountInfo.user_gain}}
+						{{accountInfo.total_gain || 0}}
 					</div>
 				</div>
 				<div class="userInfoItem text item">
@@ -24,21 +24,21 @@
 						提现中数量:
 					</div>
 					<div class="userContent fl">
-						{{accountInfo.gift / 100}} <span class="unitText">喵粮</span> 
+						{{accountInfo.cashing || 0}} <span class="unitText">喵粮</span> 
 					</div>
 				</div>
 				<div style="border-top: solid 1px #dcdcdc;display: inline-block;padding-top: 30px;margin-top: 30px;width: 100%;">
 					<span>选择时间: </span>
 					<el-date-picker class="selectTime" v-model="timer" type="datetimerange" range-separator="至"
-						start-placeholder="开始日期" end-placeholder="结束日期" @change="getRoomWalletInfo" />
+						start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" @change="getRoomWalletInfo" />
 				</div>
 				<div style="margin-top: 30px;">
-					<div class="userInfoItem text item">
+					<div class="userInfoItem text item">            
 						<div class="userTitle fl">
 							充值总数:
 						</div>
 						<div class="userContent fl">
-							{{accountInfo.gain_income}} <span class="unitText">钻石</span>
+							{{accountInfo.total_in || 0}} <span class="unitText">钻石</span>
 						</div>
 					</div>
 					<div class="userInfoItem text item">
@@ -46,7 +46,7 @@
 							提现总数:
 						</div>
 						<div class="userContent fl">
-							{{accountInfo.gain_pay}} <span class="unitText">喵粮</span>
+							{{accountInfo.total_cash || 0}} <span class="unitText">喵粮</span>
 						</div>
 					</div>
 						<div class="userInfoItem text item">
@@ -54,7 +54,7 @@
 							手续费:
 						</div>
 						<div class="userContent fl">
-							{{accountInfo.guild_gain_pay}} <span class="unitText">喵粮</span>
+							{{accountInfo.commission || 0}} <span class="unitText">喵粮</span>
 						</div>
 					</div>
 					<div class="userInfoItem text item">
@@ -62,7 +62,7 @@
 							平台抽成:
 						</div>
 						<div class="userContent fl">
-							{{accountInfo.guild_gain_income}} <span class="unitText">钻石</span>
+							{{accountInfo.commission || 0}} <span class="unitText">钻石</span>
 						</div>
 					</div>
 					<div class="userInfoItem text item">
@@ -70,7 +70,7 @@
 							平台赠送钻石:
 						</div>
 						<div class="userContent fl">
-							{{accountInfo.diamond_income}}
+							{{accountInfo.incDiamond || 0}} <span class="unitText">钻石</span>
 						</div>
 					</div>
 					<div class="userInfoItem text item">
@@ -78,7 +78,23 @@
 							平台赠送喵粮:
 						</div>
 						<div class="userContent fl">
-							{{accountInfo.diamond_pay}}
+							{{accountInfo.incGain || 0}} <span class="unitText">喵粮</span>
+						</div>
+					</div>
+					<div class="userInfoItem text item">
+						<div class="userTitle fl">
+							平台扣除砖石:
+						</div>
+						<div class="userContent fl">
+							{{accountInfo.decDiamond || 0}} <span class="unitText">钻石</span>
+						</div>
+					</div>
+					<div class="userInfoItem text item">
+						<div class="userTitle fl">
+							平台扣除喵粮:
+						</div>
+						<div class="userContent fl">
+							{{accountInfo.decGain || 0}} <span class="unitText">喵粮</span>
 						</div>
 					</div>
 				</div>
@@ -112,7 +128,50 @@
 					"loan_gain": "", //平台时间段内喵粮欠额
 					"profit": "" //平台时间段内盈利
 				},
-				timer: ""
+				timer: "",
+				pickerOptions: {
+					shortcuts: [{
+						text: '今天',
+						onClick(picker) {
+						let data = new Date()
+						let y = data.getFullYear()
+						let m = data.getMonth()
+						let day = data.getDate()
+						if(m + 1 <= 12) {
+							m = m + 1
+						} else {
+							m = 1
+						}
+						let start = y + '-' + m + '-' + day + ' 00:00:00'
+						let end = y + '-' + m + '-' + day + ' 23:59:59'
+						picker.$emit('pick', [start, end]);
+						}
+					}, {
+						text: '最近三天',
+						onClick(picker) {
+						const end = new Date();
+						const start = new Date();
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
+						picker.$emit('pick', [start, end]);
+						}
+					}, {
+						text: '最近七天',
+						onClick(picker) {
+						const end = new Date();
+						const start = new Date();
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+						picker.$emit('pick', [start, end]);
+						}
+					}, {
+						text: '最近十五天',
+						onClick(picker) {
+						const end = new Date();
+						const start = new Date();
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 15);
+						picker.$emit('pick', [start, end]);
+						}
+					}]
+				},
 			}
 		},
 		created() {},

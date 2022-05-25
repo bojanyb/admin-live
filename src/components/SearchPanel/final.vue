@@ -84,7 +84,7 @@
                   v-model="form[item.name]"
                   :disabled="cDisabled(item)"
                   :type="item.dateType || dateParams.dateType"
-                  :picker-options="dateParams.pickerOptions"
+                  :picker-options="item.pickerOptions || dateParams.pickerOptions"
                   range-separator="-"
                   :start-placeholder="item.startPlaceholder || '开始时间'"
                   :end-placeholder="item.endPlaceholder || '结束时间'"
