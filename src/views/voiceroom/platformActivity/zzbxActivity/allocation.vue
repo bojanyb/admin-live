@@ -84,7 +84,9 @@ export default {
                         label: '活动状态',
                         props : 'status',
                         render: (h, params) => {
-                            if(params.row.status === 1) {
+                            if(!params.row.status) {
+                                return h('span',{style: {color: 'green'},}, '未开始')
+                            } if(params.row.status === 1) {
                                 return h('span',{style: {color: 'green'},}, '开始中')
                             }
                             return h('span',{style: {color: 'red'},}, '暂停')

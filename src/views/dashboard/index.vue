@@ -1,159 +1,83 @@
+<!-- 总览 -->
 <template>
 	<div class="app-container">
 		<el-card class="financeInfoTimer">
-			<div slot="header" class="clearfix">
-				<div class="fl" style="height: 36px;line-height: 36px;"><span>账户信息 </span></div>
-				<div class="fr">
-					<span>选择时间: </span>
-					<el-date-picker class="selectTime" v-model="timer" type="datetimerange" range-separator="至"
-						start-placeholder="开始日期" end-placeholder="结束日期" @change="getRoomWalletInfo" />
-				</div>
-			</div>
 			<div class="userInfoBox" v-loading.fullscreen.lock="fullscreenLoading">
-				<div class="userInfoItem text item">
-					<div class="userTitle">
-						钻石总数:
+				<div class="userInfoItem text item" >
+					<div class="userTitle fl">
+						用户钻石总数:
 					</div>
-					<div class="userContent">
+					<div class="userContent fl">
 						{{accountInfo.user_diamond}}
 					</div>
 				</div>
 				<div class="userInfoItem text item">
-					<div class="userTitle">
-						喵粮总数:
+					<div class="userTitle fl">
+						用户喵粮总数:
 					</div>
-					<div class="userContent">
+					<div class="userContent fl">
 						{{accountInfo.user_gain}}
 					</div>
 				</div>
 				<div class="userInfoItem text item">
-					<div class="userTitle">
-						平台礼物抽成:
+					<div class="userTitle fl">
+						提现中数量:
 					</div>
-					<div class="userContent">
-						{{accountInfo.gift / 100}}
-					</div>
-				</div>
-				<div
-					style="border-top: solid 1px #dcdcdc;display: inline-block;padding-top: 30px;margin-top: 30px;width: 100%;">
-					<div class="userInfoItem text item">
-						<div class="userTitle">
-							用户总充值:
-						</div>
-						<div class="userContent" style="position: relative;">
-							{{accountInfo.recharge / 100}}
-							<span style="position: absolute;left: 60%;"> — </span>
-						</div>
-					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle">
-							公会总提取:
-						</div>
-						<div class="userContent" style="position: relative;">
-							{{accountInfo.guild_gain / 100}}
-							<span style="position: absolute;left: 60%;"> — </span>
-						</div>
-					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle">
-							平台总提取:
-						</div>
-						<div class="userContent" style="position: relative;">
-							{{accountInfo.gain / 100}}
-							<span style="position: absolute;left: 60%;"> = </span>
-						</div>
-					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle">
-							平台收益:
-						</div>
-						<div class="userContent">
-							{{accountInfo.balance / 100}}
-						</div>
-					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle">
-							平台收益:
-						</div>
-						<div class="userContent" style="position: relative;">
-							{{accountInfo.balance / 100}}
-							<span style="position: absolute;left: 60%;"> — </span>
-						</div>
-					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle">
-							钻石欠额:
-						</div>
-						<div class="userContent color2" style="position: relative;">
-							{{accountInfo.loan_diamond / 100}}
-							<span style="position: absolute;left: 60%;color: initial;"> — </span>
-						</div>
-					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle">
-							喵粮欠额:
-						</div>
-						<div class="userContent color2" style="position: relative;">
-							{{accountInfo.loan_gain / 100}}
-							<span style="position: absolute;left: 60%;color: initial;"> = </span>
-						</div>
-					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle">
-							平台盈利:
-						</div>
-						<div class="userContent color3">
-							{{accountInfo.profit / 100}}
-						</div>
+					<div class="userContent fl">
+						{{accountInfo.gift / 100}} <span class="unitText">喵粮</span> 
 					</div>
 				</div>
-				<div
-					style="border-top: solid 1px #dcdcdc;display: inline-block;padding-top: 30px;margin-top: 30px;width: 100%;">
+				<div style="border-top: solid 1px #dcdcdc;display: inline-block;padding-top: 30px;margin-top: 30px;width: 100%;">
+					<span>选择时间: </span>
+					<el-date-picker class="selectTime" v-model="timer" type="datetimerange" range-separator="至"
+						start-placeholder="开始日期" end-placeholder="结束日期" @change="getRoomWalletInfo" />
+				</div>
+				<div style="margin-top: 30px;">
 					<div class="userInfoItem text item">
-						<div class="userTitle">
-							喵粮总收入:
+						<div class="userTitle fl">
+							充值总数:
 						</div>
-						<div class="userContent">
-							{{accountInfo.gain_income}}
+						<div class="userContent fl">
+							{{accountInfo.gain_income}} <span class="unitText">钻石</span>
 						</div>
 					</div>
 					<div class="userInfoItem text item">
-						<div class="userTitle">
-							喵粮总支出:
+						<div class="userTitle fl">
+							提现总数:
 						</div>
-						<div class="userContent">
-							{{accountInfo.gain_pay}}
+						<div class="userContent fl">
+							{{accountInfo.gain_pay}} <span class="unitText">喵粮</span>
+						</div>
+					</div>
+						<div class="userInfoItem text item">
+						<div class="userTitle fl">
+							手续费:
+						</div>
+						<div class="userContent fl">
+							{{accountInfo.guild_gain_pay}} <span class="unitText">喵粮</span>
 						</div>
 					</div>
 					<div class="userInfoItem text item">
-						<div class="userTitle">
-							公会喵粮总收入:
+						<div class="userTitle fl">
+							平台抽成:
 						</div>
-						<div class="userContent">
-							{{accountInfo.guild_gain_income}}
-						</div>
-					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle">
-							公会喵粮总支出:
-						</div>
-						<div class="userContent">
-							{{accountInfo.guild_gain_pay}}
+						<div class="userContent fl">
+							{{accountInfo.guild_gain_income}} <span class="unitText">钻石</span>
 						</div>
 					</div>
 					<div class="userInfoItem text item">
-						<div class="userTitle">
-							钻石总收入:
+						<div class="userTitle fl">
+							平台赠送钻石:
 						</div>
-						<div class="userContent">
+						<div class="userContent fl">
 							{{accountInfo.diamond_income}}
 						</div>
 					</div>
 					<div class="userInfoItem text item">
-						<div class="userTitle">
-							钻石总支出:
+						<div class="userTitle fl">
+							平台赠送喵粮:
 						</div>
-						<div class="userContent">
+						<div class="userContent fl">
 							{{accountInfo.diamond_pay}}
 						</div>
 					</div>
@@ -167,7 +91,6 @@
 	import {
 		getRoomWallet
 	} from '@/api/videoRoom'
-	import moment from 'moment'
 	export default {
 		name: 'guild-main',
 		components: {},
@@ -175,9 +98,6 @@
 			return {
 				fullscreenLoading: false,
 				accountInfo: {
-					"recharge": "", //时间段内用户总充值，单位分
-					"guild_gain": "", //时间段内公会总提取，单位分
-					"gain": "", //时间段内用户面向平台总提取，单位分
 					"gift": "", //时间段内平台礼物抽成，单位分
 					"user_diamond": "", //用户账户内钻石总数
 					"user_gain": "", //用户账户内喵粮总数
@@ -203,7 +123,6 @@
 			getRoomWalletInfo() {
 				this.fullscreenLoading = true;
 				var params = {
-					'account': 'ling12345',
 					'start_time': this.timer ? JSON.stringify(new Date(this.timer[0]).getTime() / 1000) : "",
 					'end_time': this.timer ? JSON.stringify(new Date(this.timer[1]).getTime() / 1000) : "",
 				}
@@ -241,6 +160,10 @@
 	.color3 {
 		color: #409EFF;
 	}
+	.unitText{
+		font-size: initial;
+		font-weight: initial;
+	}
 
 	.userInfoBox {
 		display: flow-root;
@@ -248,7 +171,7 @@
 
 		.userInfoItem {
 			line-height: 35px;
-			width: 25%;
+			width: 33.33%;
 			float: left;
 
 			.userTitle {
