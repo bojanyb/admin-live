@@ -66,20 +66,20 @@ export default {
                     },
                     {
                         label: '喵粮',
-                        render: (h, params) => {
-                            return h('span', params.row.money * 100)
-                        }
+                        prop: 'money',
                     },
                     {
                         label: '手续费',
                         prop: 'cash_rate',
                         render: (h, params) => {
-                            return h('span', params.row.money / 100 * params.row.cash_rate)
+                            return h('span', params.row.money / 10000 * params.row.cash_rate)
                         }
                     },
                     {
                         label: '提现金额',
-                        prop: 'money'
+                        render: (h, params) => {
+                            return h('span', params.row.money / 100)
+                        }
                     },
                     {
                         label: '提现卡号',
