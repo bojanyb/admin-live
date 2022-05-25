@@ -9,13 +9,12 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
     </div>
 </template>
 
 <script>
-import { getActivetyList } from '@/api/videoRoom'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -47,14 +46,14 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
-                    name: 'activity_type_id',
+                    name: 'sort',
                     type: 'select',
                     value: '',
-                    keyName: 'id',
+                    keyName: 'value',
                     optionLabel: 'name',
                     label: '排序',
                     placeholder: '请选择',
-                    options: MAPDATA.SORTLIST
+                    options: MAPDATA.EMBODYSORT
                 },
                 {
                     name: 'order_id',
@@ -102,47 +101,62 @@ export default {
                 columns: [
                     {
                         label: '用户ID',
-                        prop: 'user_number'
+                        prop: 'user_id'
                     },
                     {
                         label: '申请提现时间',
-                        prop: 'nickname'
+                        prop: 'addtime',
+                        render: (h, params) => {
+                            return h('span', params.row.addtime ? timeFormat(params.row.addtime, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                        }
                     },
                     {
                         label: '喵粮',
-                        prop: 'activity_name'
+                        prop: 'money',
+                        render: (h, params) => {
+                            return h('span', params.row.money * 100)
+                        }
                     },
                     {
                         label: '手续费',
-                        prop: 'activity_name'
+                        prop: 'cash_rate',
+                        render: (h, params) => {
+                            return h('span', params.row.orderDetails.cash_rate ? params.row.money / 100 * params.row.orderDetails.cash_rate : '--')
+                        }
                     },
                     {
                         label: '提现金额',
-                        prop: 'activity_name'
+                        render: (h, params) => {
+                            return h('span', params.row.money)
+                        }
                     },
                     {
                         label: '提现卡号',
                         render: (h, params) => {
-                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            return h('span', params.row.orderDetails.card_id ? params.row.orderDetails.card_id : '--')
                         }
                     },
                     {
                         label: '状态',
                         render: (h, params) => {
-                            return h('span', '背包')
+                            let paramsData = MAPDATA.STATUSLIST.find(item => { return item.value === params.row.status })
+                            return h('span', paramsData ? paramsData.name : '--')
                         }
                     },
                     {
                         label: '到账时间',
-                        prop: 'gift_id'
+                        render: (h, params) => {
+                            return h('span', params.row.pay_time ? timeFormat(params.row.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                        }
                     },
                     {
                         label: '交易流水号',
-                        prop: 'gift_name'
+                        prop: 'order_id',
+                        width: '200'
                     },
                     {
                         label: '操作人',
-                        prop: 'number'
+                        prop: 'admin_id'
                     }
                 ]
             }
@@ -153,16 +167,10 @@ export default {
             ruleForm: {
                 alreadyMoney: null,
                 deductMoney: null
-            },
-            activityList: []
+            }
         };
     },
     methods: {
-        // 获取活动类型
-        async getActivityList() {
-            let res = await getActivetyList()
-            this.activityList = res.data.list
-        },
         // 刷新列表
         getList() {
             this.$refs.tableList.getData()
@@ -177,7 +185,8 @@ export default {
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
                 user_id: s.user_id,
-                order_id: s.order_id
+                order_id: s.order_id,
+                sort: s.sort
             }
         },
         // 设置时间段
@@ -203,10 +212,11 @@ export default {
         // 重置
         onSearch() {
             this.getList()
+        },
+        // 列表返回数据
+        saleAmunt(data) {
+            // this.ruleForm.allMoney = data.total_money ? data.total_money / 100 : 0
         }
-    },
-    created() {
-        this.getActivityList()
     }
 }
 </script>

@@ -85,10 +85,17 @@ export default {
                         label: '活动状态',
                         props : 'status',
                         render: (h, params) => {
-                            if(params.row.status === 1) {
+                            let start = params.row.start_time * 1000
+                            let end = params.row.end_time * 1000
+                            let now = new Date().getTime()
+                            if(start > now && end > now) {
+                                return h('span',{style: {color: 'green'},}, '未开始')
+                            } else if(start < now && end > now) {
                                 return h('span',{style: {color: 'green'},}, '开始中')
                             }
-                            return h('span',{style: {color: 'red'},}, '暂停')
+                            if(end < now) {
+                                return h('span',{style: {color: 'red'},}, '结束')
+                            }
                         }
                     },
                     {

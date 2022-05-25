@@ -8,13 +8,13 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
     </div>
 </template>
 
 <script>
-import { getActivetyList } from '@/api/videoRoom'
+import { doCash } from '@/api/finance'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -25,6 +25,8 @@ import mixins from '@/utils/mixins.js'
 import REQUEST from '@/request/index.js'
 // 引入公共方法
 import { timeFormat } from '@/utils/common.js'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 
 export default {
     components: {
@@ -36,60 +38,66 @@ export default {
         forms() {
             return [
                 {
-                    name: 'activity_type_id',
+                    name: 'sort',
                     type: 'select',
-                    value: 1,
-                    keyName: 'id',
+                    value: '',
+                    keyName: 'value',
                     optionLabel: 'name',
                     label: '排序',
                     placeholder: '请选择',
-                    options: this.activityList
-                }
+                    options: MAPDATA.EMBODYSORT
+                },
             ]
         },
         cfgs() {
             return {
                 vm: this,
-                // url: REQUEST.zzbxActivity.detail,
+                url: REQUEST.CashHisity.apply,
                 columns: [
                     {
                         label: '用户ID',
-                        prop: 'user_number'
+                        prop: 'user_id'
                     },
                     {
                         label: '申请提现时间',
-                        prop: 'nickname'
+                        render: (h, params) => {
+                            return h('span', params.row.addtime ? timeFormat(params.row.addtime, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                        }
                     },
                     {
                         label: '喵粮',
-                        prop: 'activity_name'
+                        render: (h, params) => {
+                            return h('span', params.row.money * 100)
+                        }
                     },
                     {
                         label: '手续费',
-                        prop: 'activity_name'
+                        prop: 'cash_rate',
+                        render: (h, params) => {
+                            return h('span', params.row.money / 100 * params.row.cash_rate)
+                        }
                     },
                     {
                         label: '提现金额',
-                        prop: 'activity_name'
+                        prop: 'money'
                     },
                     {
                         label: '提现卡号',
-                        render: (h, params) => {
-                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
-                        }
+                        prop: 'card_id'
                     },
                     {
                         label: '状态',
                         render: (h, params) => {
-                            return h('span', '背包')
+                            let paramsData = MAPDATA.STATUSLIST.find(item => { return item.value === params.row.status })
+                            return h('span', paramsData ? paramsData.name : '--')
                         }
                     },
                     {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
-                                h('span', '通过'),
-                                h('span', '驳回')
+                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.doCashFunc(params.row, 'success')}}}, '通过'),
+                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.doCashFunc(params.row, 'reject')}}}, '驳回')
                             ])
                         }
                     }
@@ -101,15 +109,22 @@ export default {
         return {
             ruleForm: {
                 untreated: null
-            },
-            activityList: []
+            }
         };
     },
     methods: {
         // 获取活动类型
-        async getActivityList() {
-            let res = await getActivetyList()
-            this.activityList = res.data.list
+        async doCashFunc(row, type) {
+            let params = {
+                id: row.id,
+                status: type === 'success' ? 2 : 3
+            }
+            let res = await doCash(params)
+            if(res.code === 0) {
+                let message = type === 'success' ? '通过审核' : '驳回成功'
+                this.$message.success(message)
+            }
+            this.getList()
         },
         // 刷新列表
         getList() {
@@ -121,11 +136,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                user_number: s.user_number,
-                start_time: Math.floor(s.start_time / 1000),
-                end_time: Math.floor(s.end_time / 1000),
-                activity_type: 2,
-                activity_type_id: s.activity_type_id ? s.activity_type_id : 1
+                sort: s.sort
             }
         },
         // 设置时间段
@@ -151,10 +162,11 @@ export default {
         // 重置
         onSearch() {
             this.getList()
+        },
+        // 列表返回数据
+        saleAmunt(data) {
+            this.ruleForm.untreated = data.count
         }
-    },
-    created() {
-        this.getActivityList()
     }
 }
 </script>

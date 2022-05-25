@@ -159,16 +159,27 @@ const STATUSLIST = [
         name: '提现中'
     },
     {
-        value: 2,
+        value: 3,
         name: '驳回'
     },
     {
-        value: 2,
+        value: 4,
         name: '提现完成'
     },
     {
-        value: 2,
+        value: 5,
         name: '提现失败'
+    }
+]
+
+const EMBODYSORT = [
+    {
+        value: 'asc',
+        name: '正序'
+    },
+    {
+        value: 'desc',
+        name: '倒序'
     }
 ]
 
@@ -180,5 +191,6 @@ export default {
     GIFTTYPE,
     USERBALANCETYPE,
     SORTLIST,
-    STATUSLIST
+    STATUSLIST,
+    EMBODYSORT
 }

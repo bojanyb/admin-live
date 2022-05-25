@@ -36,12 +36,14 @@ const request = {
 
     // 充值记录
     diamondRecharge: {
-        list: `${HTTPHEADER}/Recharge/diamondRecharge`
+        list: `${HTTPHEADER}/Recharge/diamondRecharge`,
     },
 
     // 体现记录
     CashHisity: {
-        list: `${HTTPHEADER}/cash/getCashHisity`
+        list: `${HTTPHEADER}/cash/getcashHisity`,
+        apply: `${HTTPHEADER}/cash/getCash`,
+        doCash: `${HTTPHEADER}/cash/doCash`
     }
     
 }
