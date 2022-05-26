@@ -83,7 +83,7 @@
 					</div>
 					<div class="userInfoItem text item">
 						<div class="userTitle fl">
-							平台扣除砖石:
+							平台扣除钻石:
 						</div>
 						<div class="userContent fl">
 							{{accountInfo.decDiamond || 0}} <span class="unitText">钻石</span>
