@@ -27,6 +27,15 @@ export function getRoomWallet(data) {
   })
 }
 
+// 总览
+export function overview(data) {
+  return request({
+    url: '/Statistical/overview',
+    method: 'post',
+    data
+  })
+}
+
 // 房间类型列表
 export function getRoomGenre(data) {
   return request({

@@ -105,7 +105,7 @@
 
 <script>
 	import {
-		getRoomWallet
+		overview
 	} from '@/api/videoRoom'
 	export default {
 		name: 'guild-main',
@@ -185,7 +185,7 @@
 					'start_time': this.timer ? JSON.stringify(new Date(this.timer[0]).getTime() / 1000) : "",
 					'end_time': this.timer ? JSON.stringify(new Date(this.timer[1]).getTime() / 1000) : "",
 				}
-				getRoomWallet(params).then(res => {
+				overview(params).then(res => {
 					if (res.code == 2000) {
 						this.accountInfo = res.data;
 						setTimeout(() => {
