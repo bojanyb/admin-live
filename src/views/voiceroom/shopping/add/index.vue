@@ -29,8 +29,22 @@
                     <el-input v-model="ruleForm.goods_name"></el-input>
                 </el-form-item>
                 <el-form-item label="商品简介" prop="goods_describe">
-                    <el-input v-model="ruleForm.goods_describe"></el-input>
+                    <el-input
+                    type="textarea"
+                    :autosize="{ minRows: 2, maxRows: 4}"
+                    placeholder="请输入商品简介"
+                    v-model="ruleForm.goods_describe">
+                    </el-input>
                 </el-form-item>
+                <el-form-item label="不可购买原因" prop="goods_describe">
+                    <el-input
+                    type="textarea"
+                    :autosize="{ minRows: 2, maxRows: 4}"
+                    placeholder="请输入商品简介"
+                    v-model="ruleForm.goods_describe">
+                    </el-input>
+                </el-form-item>
+                
 
                 
 
