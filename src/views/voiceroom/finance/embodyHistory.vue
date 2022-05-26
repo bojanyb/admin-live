@@ -164,13 +164,13 @@ export default {
                         label: '手续费',
                         prop: 'cash_rate',
                         render: (h, params) => {
-                            return h('span', params.row.orderDetails.cash_rate ? params.row.money / 100 * params.row.orderDetails.cash_rate : '--')
+                            return h('span', params.row.money / 10000 * params.row.cash_rate)
                         }
                     },
                     {
                         label: '提现金额',
                         render: (h, params) => {
-                            return h('span', params.row.money)
+                            return h('span', params.row.money / 100)
                         }
                     },
                     {

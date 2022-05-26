@@ -6,15 +6,41 @@
         width="30%"
         :before-close="handleClose">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="商品类型" prop="goods_type">
+                    <el-select v-model="ruleForm.goods_type" placeholder="请选择商品类型">
+                        <el-option v-for="item in goodsTypeList" :label="item.name" :key="item.value" :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="商品分类" prop="category_id">
+                    <el-select v-model="ruleForm.category_id" placeholder="请选择商品分类">
+                        <el-option v-for="item in goodsTypeList" :label="item.name" :key="item.value" :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="商品名称" prop="goods_name">
+                    <el-input v-model="ruleForm.goods_name"></el-input>
+                </el-form-item>
+                <el-form-item label="是否可以购买" prop="resource">
+                    <el-radio-group v-model="ruleForm.resource">
+                        <el-radio :label="true">是</el-radio>
+                        <el-radio :label="false">否</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="商品名称" prop="goods_name">
+                    <el-input v-model="ruleForm.goods_name"></el-input>
+                </el-form-item>
+                <el-form-item label="商品简介" prop="goods_describe">
+                    <el-input v-model="ruleForm.goods_describe"></el-input>
+                </el-form-item>
+
+                
+
+
+
+
                 <el-form-item label="活动名称" prop="name">
                     <el-input v-model="ruleForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="活动区域" prop="region">
-                    <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                </el-form-item>
+                
                 <el-form-item label="活动时间" required>
                     <el-col :span="11">
                     <el-form-item prop="date1">
@@ -62,10 +88,22 @@
 </template>
 
 <script>
+
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 export default {
     data() {
         return {
-            dialogVisible: false
+            dialogVisible: true,
+            goodsTypeList: MAPDATA.SHOPPING,
+            goodsClassifyList: MAPDATA.CLASSIFY,
+            ruleForm: {
+                goods_type: '',
+                category_id: '',
+                goods_name: '',
+                goods_describe: ''
+            },
+            rules: {}
         };
     },
     methods: {

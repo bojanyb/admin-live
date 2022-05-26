@@ -186,6 +186,7 @@ const EMBODYSORT = [
 /*
 *商城管理 - 商品列表
 */
+// 商品类型
 const SHOPPING = [
     {
         value: 1,
@@ -209,6 +210,22 @@ const SHOPPING = [
     }
 ]
 
+// 商品分类
+const CLASSIFY = [
+    {
+        value: 1,
+        name: '流行'
+    },
+    {
+        value: 2,
+        name: '趣味'
+    },
+    {
+        value: 3,
+        name: '活动'
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -219,5 +236,6 @@ export default {
     SORTLIST,
     STATUSLIST,
     EMBODYSORT,
-    SHOPPING
+    SHOPPING,
+    CLASSIFY
 }
