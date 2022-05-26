@@ -23,6 +23,7 @@ import logOutRouter from './modules/logOut/index.js'
 import auditRouter from './modules/audit/index.js'
 import dealRouter from './modules/deal/index.js'
 import promoteRouter from './modules/promote/index.js'
+import shoppingRouter from './modules/shopping/index.js'
 
 
 /**
@@ -108,6 +109,7 @@ export const asyncRoutes = [
 	auditRouter,
 	promoteRouter,
 	// activityRouter,
+	shoppingRouter,
 	systemConfigRouter,
 	// 404 page must be placed at the end !!!
 	{

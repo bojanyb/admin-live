@@ -54,7 +54,7 @@
 							手续费:
 						</div>
 						<div class="userContent fl">
-							{{accountInfo.commission || 0}} <span class="unitText">喵粮</span>
+							{{accountInfo.total_rate || 0}} <span class="unitText">喵粮</span>
 						</div>
 					</div>
 					<div class="userInfoItem text item">

@@ -44,6 +44,13 @@ const request = {
         list: `${HTTPHEADER}/cash/getcashHisity`,
         apply: `${HTTPHEADER}/cash/getCash`,
         doCash: `${HTTPHEADER}/cash/doCash`
+    },
+
+    // 商城管理
+    shopping: {
+        list: `${HTTPHEADER}/goods`,
+        add: `${HTTPHEADER}/goods/save`,
+        down: `${HTTPHEADER}/goods/down`
     }
     
 }

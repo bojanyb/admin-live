@@ -183,6 +183,32 @@ const EMBODYSORT = [
     }
 ]
 
+/*
+*商城管理 - 商品列表
+*/
+const SHOPPING = [
+    {
+        value: 1,
+        name: '头像框'
+    },
+    {
+        value: 2,
+        name: '入场横幅'
+    },
+    {
+        value: 3,
+        name: '聊天气泡'
+    },
+    {
+        value: 4,
+        name: '入场座驾'
+    },
+    {
+        value: 5,
+        name: '麦上光圈'
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -192,5 +218,6 @@ export default {
     USERBALANCETYPE,
     SORTLIST,
     STATUSLIST,
-    EMBODYSORT
+    EMBODYSORT,
+    SHOPPING
 }
