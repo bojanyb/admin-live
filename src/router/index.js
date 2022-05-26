@@ -109,7 +109,7 @@ export const asyncRoutes = [
 	auditRouter,
 	promoteRouter,
 	// activityRouter,
-	shoppingRouter,
+	// shoppingRouter,
 	systemConfigRouter,
 	// 404 page must be placed at the end !!!
 	{

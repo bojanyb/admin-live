@@ -1,33 +1,28 @@
 const OSS = require('ali-oss')
+import md5 from 'js-md5'
 
 const OSSConfig = {
-  uploadHost: 'https://oss-cn-shenzhen.aliyuncs.com/user_cover', //OSS上传地址
+  // uploadHost: 'https://oss-cn-shenzhen.aliyuncs.com/user_cover', //OSS上传地址
   ossParams: {
     region: 'oss-cn-shenzhen',
     success_action_status: '200', // 默认200
-    // accessKeyId: 'STS.NTqDFHaxw9e9nJ1CzWfNFsGoy',
-	accessKeyId: 'LTAI5tE2XCgmxzoieUVxf71U',
-    accessKeySecret: '3uTd6gEmNX6VrhdTbjEq2rFUr9ynsMUBGvG4KxNVbXot',
-    bucket: 'live-huidapay-net'
+    accessKeyId: 'LTAI5tFTcRH7h3RXKoYmnWMk',
+	  // accessKeyId: 'LTAI5tE2XCgmxzoieUVxf71U',
+    accessKeySecret: 'qdx4B8jIh2VjBgBDG5fNfG0Oj21GSP',
+    bucket: 'music-aiyi'
   },
 }
 
-
-function random_string(len) {
-  len = len || 32
-  var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
-  var maxPos = chars.length
-  var pwd = ''
-  for (let i = 0; i < len; i++) {
-    pwd += chars.charAt(Math.floor(Math.random() * maxPos))
-  }
-  return pwd
+function random_string(file) {
+  let tmpArr = file.name.split('.')
+  let tmpName = md5(Date.now() + tmpArr[0])
+  tmpName = tmpName + '.' + tmpArr[tmpArr.length - 1]
+  return tmpName
 }
 
 function uploadOSS(file) {
-	
   return new Promise(async (resolve, reject) => {
-    const fileName = `/${random_string(6)}_${file.name}`
+    const fileName = random_string(file)
     let client = new OSS({
       region: OSSConfig.ossParams.region,
       accessKeyId: OSSConfig.ossParams.accessKeyId,
@@ -40,8 +35,7 @@ function uploadOSS(file) {
     // resolve(res)
     // 或者返回如下：
     resolve({
-        fileUrl: `${OSSConfig.uploadHost}/${fileName}`,
-        fileName: file.name
+        url: ENV_UPLOADOSS + fileName
     })
   })
 }

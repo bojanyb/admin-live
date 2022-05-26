@@ -1,7 +1,7 @@
 <template>
     <div class="shopping-add-box">
         <el-dialog
-        title="提示"
+        :title="title"
         :visible.sync="dialogVisible"
         width="30%"
         :before-close="handleClose">
@@ -17,16 +17,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商品名称" prop="goods_name">
-                    <el-input v-model="ruleForm.goods_name"></el-input>
-                </el-form-item>
-                <el-form-item label="是否可以购买" prop="resource">
-                    <el-radio-group v-model="ruleForm.resource">
-                        <el-radio :label="true">是</el-radio>
-                        <el-radio :label="false">否</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="商品名称" prop="goods_name">
-                    <el-input v-model="ruleForm.goods_name"></el-input>
+                    <el-input v-model="ruleForm.goods_name" placeholder="请输入商品名称"></el-input>
                 </el-form-item>
                 <el-form-item label="商品简介" prop="goods_describe">
                     <el-input
@@ -36,57 +27,63 @@
                     v-model="ruleForm.goods_describe">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="不可购买原因" prop="goods_describe">
+                <el-form-item label="是否可以购买" prop="can_buy">
+                    <el-radio-group v-model="ruleForm.can_buy">
+                        <el-radio :label="1">是</el-radio>
+                        <el-radio :label="2">否</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="不可购买原因" prop="reason" v-if="ruleForm.can_buy === 2">
                     <el-input
                     type="textarea"
                     :autosize="{ minRows: 2, maxRows: 4}"
-                    placeholder="请输入商品简介"
-                    v-model="ruleForm.goods_describe">
+                    placeholder="请输入不可购买原因"
+                    v-model="ruleForm.reason">
                     </el-input>
                 </el-form-item>
-                
-
-                
-
-
-
-
-                <el-form-item label="活动名称" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
+                <el-form-item label="商品出售期限" prop="goods_describe"  v-if="ruleForm.can_buy === 1">
+                    <div class="limit" v-for="(item,index) in ruleForm.time_limit" :key="index">
+                        <el-input v-model="item.day" placeholder="请输入天数"></el-input>
+                        <el-input v-model="item.money" placeholder="请输入价格（喵粮）"></el-input>
+                    </div>
                 </el-form-item>
-                
-                <el-form-item label="活动时间" required>
-                    <el-col :span="11">
-                    <el-form-item prop="date1">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
-                    </el-form-item>
-                    </el-col>
-                    <el-col class="line" :span="2">-</el-col>
-                    <el-col :span="11">
-                    <el-form-item prop="date2">
-                        <el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
-                    </el-form-item>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="即时配送" prop="delivery">
-                    <el-switch v-model="ruleForm.delivery"></el-switch>
-                </el-form-item>
-                <el-form-item label="活动性质" prop="type">
-                    <el-checkbox-group v-model="ruleForm.type">
-                    <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-                    <el-checkbox label="地推活动" name="type"></el-checkbox>
-                    <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-                    <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="特殊资源" prop="resource">
-                    <el-radio-group v-model="ruleForm.resource">
-                    <el-radio label="线上品牌商赞助"></el-radio>
-                    <el-radio label="线下场地免费"></el-radio>
+                <el-form-item label="商品播放类型" prop="play_type">
+                    <el-radio-group v-model="ruleForm.play_type">
+                        <el-radio :label="1">Lottie</el-radio>
+                        <el-radio :label="2">SVGA</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="活动形式" prop="desc">
-                    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+                <el-form-item label="商品列表图片" prop="resource">
+                    <upload ref="upload"></upload>
+                </el-form-item>
+                <el-form-item label="商品背景图" prop="resource">
+                    <upload ref="upload"></upload>
+                </el-form-item>
+                <el-form-item label="商品播放类型" prop="play_type">
+                    <el-radio-group v-model="goodsType">
+                        <el-radio :label="1">商品特效</el-radio>
+                        <el-radio :label="2">商品静态图</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="商品特效" prop="goods_animation_path" v-if="goodsType === 1">
+                    <upload v-model="ruleForm.goods_animation_path" ref="upload"></upload>
+                </el-form-item>
+                <el-form-item label="商品静态图" prop="goods_image" v-if="goodsType === 2">
+                    <upload v-model="ruleForm.goods_image" ref="upload"></upload>
+                </el-form-item>
+                <el-form-item label="商品生效时间" prop="start_time">
+                    <el-date-picker
+                    v-model="ruleForm.start_time"
+                    type="datetime"
+                    placeholder="选择商品生效时间">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="商品过期时间" prop="end_time">
+                    <el-date-picker
+                    v-model="ruleForm.end_time"
+                    type="datetime"
+                    placeholder="选择商品过期时间">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -105,17 +102,57 @@
 
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
+// 引入图片上传组件
+import upload from '@/components/uploadImg/index.vue'
+
 export default {
+    components: {
+        upload
+    },
+    computed: {
+        title() {
+            if(this.status === 'add') {
+                return '新增商品'
+            } else if(this.status === 'update') {
+                return '修改商品'
+            } else {
+                return '查看商品'
+            }
+        }
+    },
     data() {
         return {
             dialogVisible: true,
             goodsTypeList: MAPDATA.SHOPPING,
             goodsClassifyList: MAPDATA.CLASSIFY,
+            goodsType: 1,
+            status: 'add',
             ruleForm: {
                 goods_type: '',
                 category_id: '',
                 goods_name: '',
-                goods_describe: ''
+                can_buy: 2,
+                goods_describe: '',
+                reason: '',
+                time_limit: [
+                    {
+                        day: '',
+                        money: ''
+                    },
+                    {
+                        day: '',
+                        money: ''
+                    },
+                    {
+                        day: '',
+                        money: ''
+                    }
+                ],
+                play_type: null,
+                goods_animation_path: '',
+                goods_image: '',
+                start_time: '',
+                end_time: ''
             },
             rules: {}
         };
@@ -132,8 +169,19 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .shopping-add-box {
-
+    .el-form {
+        .el-input {
+            width: 300px;
+        }
+        .limit {
+            display: flex;
+            align-items: center;
+            .el-input {
+                width: 150px;
+            }
+        }
+    }
 }
 </style>

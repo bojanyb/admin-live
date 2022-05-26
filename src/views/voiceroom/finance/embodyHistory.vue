@@ -35,6 +35,10 @@ export default {
     },
     mixins: [mixins],
     computed: {
+        statusComputed() {
+            let array = MAPDATA.STATUSLIST
+            return array.filter(item => { return item.value !== 1 })
+        },
         forms() {
             return [
                 {
@@ -71,7 +75,7 @@ export default {
                     optionLabel: 'name',
                     label: '状态筛选',
                     placeholder: '请选择',
-                    options: MAPDATA.STATUSLIST
+                    options: this.statusComputed
                 },
                 {
                     name: 'dateTimeParams',
