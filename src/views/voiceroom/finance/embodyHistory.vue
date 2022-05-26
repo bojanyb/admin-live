@@ -157,21 +157,22 @@ export default {
                         label: '喵粮',
                         prop: 'money',
                         render: (h, params) => {
-                            return h('span', params.row.money)
+                            return h('span', params.row.orderDetails.money)
                         }
                     },
                     {
                         label: '手续费',
                         prop: 'cash_rate',
                         render: (h, params) => {
-                            let money = Math.floor((params.row.money / 10000 * params.row.orderDetails.cash_rate).toFixed(5) * 100) / 100
-                            return h('span', money)
+                            // let money = Math.floor((params.row.money / 10000 * params.row.orderDetails.cash_rate).toFixed(5) * 100) / 100
+                            // return h('span', money)
+                            return h('span', params.row.rate_money)
                         }
                     },
                     {
                         label: '提现金额',
                         render: (h, params) => {
-                            return h('span', params.row.money / 100)
+                            return h('span', params.row.orderDetails.money / 100)
                         }
                     },
                     {
