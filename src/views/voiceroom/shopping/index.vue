@@ -19,6 +19,8 @@ import tableList from '@/components/tableList/TableList.vue'
 import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
+// 引入api
+import { down } from '@/api/shopping.js'
 // 引入公共方法
 import { timeFormat } from '@/utils/common.js'
 // 引入公共map
@@ -83,7 +85,17 @@ export default {
                     },
                     {
                         label: '操作',
-                        prop: 'admin_id'
+                        render: (h, params) => {
+                            return h('div', [
+                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),
+                                h('el-button', { props : { type: 'danger'}, style: {
+                                    display: params.row.status === 1 ? 'none' : 'unset'
+                                }, on: {click:()=>{this.down(params.row, 1)}}},'上架'),
+                                h('el-button', { props : { type: 'danger'}, style: {
+                                    display: params.row.status === 2 ? 'none' : 'unset'
+                                }, on: {click:()=>{this.down(params.row, 2)}}},'下架')
+                            ])
+                        }
                     }
                 ]
             }
@@ -147,9 +159,27 @@ export default {
         },
         // 新增
         add() {
+            this.load('add')
+        },
+        update(row) {
+            this.load('update', row)
+        },
+        down(row, status) {
+            let params = {
+                id: row.id,
+                status: status
+            }
+            down(params).then(res => {
+                if(res.code === 2000) {
+                    this.onSearch()
+                }
+            })
+        },
+        load(status,row) {
             this.isDestoryComp = true
             setTimeout(() => {
                 this.$refs.add.dialogVisible = true
+                this.$refs.add.load(status, row)
             }, 100);
         },
         // 销毁组件

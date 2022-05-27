@@ -12,7 +12,6 @@ export function timeFormat(val, format = 'YYYY-MM-DD HH:mm:ss', boolean) {
 
 // 礼物 - 错误提示
 export function errStatus(list) {
-    console.log(list, 'list-------------------')
     let s = list
 
     let maxGift = s.gifts.filter(item => { return item.type === 1 })
@@ -44,10 +43,6 @@ export function errStatus(list) {
             num += Number(item.probability)
         })
 
-        console.log(num, 'num----------')
-        console.log(num.toFixed(5), 'num----------')
-        console.log(Number(num.toFixed(5)), 'num----------')
-
         if(Number(num.toFixed(5)) != 100) {
             allProbability = true
         }
@@ -67,5 +62,13 @@ export function desensitization(value) {
         str = str.toString().replace(/(\d{3})\d*(\d{4})/ , '$1*********$2')
     }
     return str;
+}
+
+// 判断图片是否为同比例
+export function isProportion(w, h, width, height) {
+    if ((Math.floor(w / h * 100) / 100) === (Math.floor(width / height * 100) / 100) && width >= w && height >= h) {
+      return true
+    }
+    return false
 }
 

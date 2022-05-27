@@ -3,10 +3,13 @@
         <el-upload
         class="avatar-uploader"
         action=""
+        :accept="accept"
         :show-file-list="false"
-        :on-success="handleAvatarSuccess"
+        :before-upload="beforeUpload"
+        :before-remove="beforeRemove"
         :http-request="upLoad">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <img v-if="url && !isSpecial" :src="url" class="avatar">
+            <span class="fileName" v-if="url && isSpecial">已上传文件</span>
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
     </div>
@@ -18,36 +21,60 @@
 import { uploadOSS } from '@/utils/oss.js'
 
 export default {
+    props: {
+        name: { // 字段名
+            type: String,
+            default: ''
+        },
+        isSpecial: { // 是否为特效商品
+            type: Boolean,
+            default: false
+        },
+        accept: { // 限制上传文件格式
+            type: String,
+            default: ''
+        },
+        imgUrl: { // 图片地址
+            type: String,
+            default: ''
+        },
+        beforeUpload: { // 上传之前
+            type: Function,
+            default: function () {
+                return true
+            }
+        },
+        beforeRemove: { // 删除文件
+            type: Function,
+            default: function() {
+                return true
+            }
+        }
+    },
+    computed: {
+        url() {
+            if(this.imgUrl) {
+                return this.imgUrl
+            }
+            return this.imageUrl
+        }
+    },
     data() {
         return {
-            imageUrl: ''
+            imageUrl: '',
         };
     },
     methods: {
-        handleAvatarSuccess(res, file) {
-            this.imageUrl = URL.createObjectURL(file.raw);
-        },
-        beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
-            const isLt2M = file.size / 1024 / 1024 < 2;
-
-            if (!isJPG) {
-            this.$message.error('上传头像图片只能是 JPG 格式!');
-            }
-            if (!isLt2M) {
-            this.$message.error('上传头像图片大小不能超过 2MB!');
-            }
-            return isJPG && isLt2M;
-        },
         // 上传
         upLoad(file) {
             uploadOSS(file.file).then(res => {
                 if(res.url) {
                     this.$emit('input', res.url)
+                    this.$emit('validateField', this.name)
                     this.imageUrl = res.url
                 }
             }).catch(err => {
-
+                this.$message.error(err)
             })
         }
     }
@@ -61,6 +88,9 @@ export default {
     border-radius: 5px;
     border: 1px dashed #ccc;
     overflow: hidden;
+    .el-form-item__content {
+        width: 178px;
+    }
     .avatar-uploader .el-upload {
         border: 1px dashed #d9d9d9;
         border-radius: 6px;
@@ -81,8 +111,19 @@ export default {
     }
     .avatar {
         width: 178px;
-        height: 178px;
+        // height: 178px;
         display: block;
+    }
+    .el-upload--text {
+        width: 178px;
+        position: relative;
+    }
+    span.fileName {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        padding-left: 50px;
+        box-sizing: border-box;
     }
 }
 </style>
