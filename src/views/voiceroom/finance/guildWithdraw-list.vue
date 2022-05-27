@@ -105,7 +105,7 @@ export default {
                     {
                         label: '充值方式',
                         render: (h, params) => {
-                            return h('span', params.row.channel + '充值')
+                            return h('span', params.row.channel)
                         }
                     },
                     {

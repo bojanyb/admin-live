@@ -2,13 +2,13 @@
 <template>
     <div class="shopping-box">
         <div class="model">
-            <el-button type="success">新增</el-button>
+            <el-button type="success" @click="add">新增</el-button>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
 
-        <add ref="add"></add>
+        <add ref="add" v-if="isDestoryComp" @onSearch="onSearch" @destoryComp="destoryComp"></add>
     </div>
 </template>
 
@@ -94,7 +94,8 @@ export default {
             ruleForm: {
                 alreadyMoney: null,
                 deductMoney: null
-            }
+            },
+            isDestoryComp: false // 销毁组件
         };
     },
     methods: {
@@ -143,6 +144,17 @@ export default {
         // 列表返回数据
         saleAmunt(data) {
             // this.ruleForm.allMoney = data.total_money ? data.total_money / 100 : 0
+        },
+        // 新增
+        add() {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.add.dialogVisible = true
+            }, 100);
+        },
+        // 销毁组件
+        destoryComp() {
+            this.isDestoryComp = false
         }
     }
 }

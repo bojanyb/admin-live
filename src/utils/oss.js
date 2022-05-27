@@ -9,7 +9,7 @@ const OSSConfig = {
     accessKeyId: 'LTAI5tFTcRH7h3RXKoYmnWMk',
 	  // accessKeyId: 'LTAI5tE2XCgmxzoieUVxf71U',
     accessKeySecret: 'qdx4B8jIh2VjBgBDG5fNfG0Oj21GSP',
-    bucket: 'music-aiyi'
+    bucket: 'live-huidapay-net'
   },
 }
 
@@ -35,7 +35,7 @@ function uploadOSS(file) {
     // resolve(res)
     // 或者返回如下：
     resolve({
-        url: ENV_UPLOADOSS + fileName
+        url: 'http://photo.aiyi.live/' + fileName
     })
   })
 }

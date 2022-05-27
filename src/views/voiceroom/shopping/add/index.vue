@@ -4,8 +4,9 @@
         :title="title"
         :visible.sync="dialogVisible"
         width="30%"
-        :before-close="handleClose">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        :before-close="handleClose"
+        @closed="destoryComp">
+            <el-form :model="ruleForm" :rules="rules" label-suffix=":" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <el-form-item label="商品类型" prop="goods_type">
                     <el-select v-model="ruleForm.goods_type" placeholder="请选择商品类型">
                         <el-option v-for="item in goodsTypeList" :label="item.name" :key="item.value" :value="item.value"></el-option>
@@ -13,7 +14,7 @@
                 </el-form-item>
                 <el-form-item label="商品分类" prop="category_id">
                     <el-select v-model="ruleForm.category_id" placeholder="请选择商品分类">
-                        <el-option v-for="item in goodsTypeList" :label="item.name" :key="item.value" :value="item.value"></el-option>
+                        <el-option v-for="item in goodsClassifyList" :label="item.name" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="商品名称" prop="goods_name">
@@ -54,10 +55,10 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="商品列表图片" prop="resource">
-                    <upload ref="upload"></upload>
+                    <upload v-model="ruleForm.goods_bg_small" ref="upload"></upload>
                 </el-form-item>
                 <el-form-item label="商品背景图" prop="resource">
-                    <upload ref="upload"></upload>
+                    <upload v-model="ruleForm.goods_bg_big" ref="upload"></upload>
                 </el-form-item>
                 <el-form-item label="商品播放类型" prop="play_type">
                     <el-radio-group v-model="goodsType">
@@ -74,6 +75,7 @@
                 <el-form-item label="商品生效时间" prop="start_time">
                     <el-date-picker
                     v-model="ruleForm.start_time"
+                    value-format="timestamp"
                     type="datetime"
                     placeholder="选择商品生效时间">
                     </el-date-picker>
@@ -81,18 +83,15 @@
                 <el-form-item label="商品过期时间" prop="end_time">
                     <el-date-picker
                     v-model="ruleForm.end_time"
+                    value-format="timestamp"
                     type="datetime"
                     placeholder="选择商品过期时间">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-                    <el-button @click="resetForm('ruleForm')">重置</el-button>
-                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                <el-button @click="resetForm('ruleForm')">取 消</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -104,6 +103,8 @@
 import MAPDATA from '@/utils/jsonMap.js'
 // 引入图片上传组件
 import upload from '@/components/uploadImg/index.vue'
+// 引入api
+import { add, down } from '@/api/shopping.js'
 
 export default {
     components: {
@@ -122,7 +123,7 @@ export default {
     },
     data() {
         return {
-            dialogVisible: true,
+            dialogVisible: false,
             goodsTypeList: MAPDATA.SHOPPING,
             goodsClassifyList: MAPDATA.CLASSIFY,
             goodsType: 1,
@@ -152,9 +153,34 @@ export default {
                 goods_animation_path: '',
                 goods_image: '',
                 start_time: '',
-                end_time: ''
+                end_time: '',
+                goods_bg_big: '',
+                goods_bg_small: ''
             },
-            rules: {}
+            rules: {
+                // name: [
+                //     { required: true, message: '请输入活动名称', trigger: 'blur' },
+                //     { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                // ],
+                // region: [
+                //     { required: true, message: '请选择活动区域', trigger: 'change' }
+                // ],
+                // date1: [
+                //     { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+                // ],
+                // date2: [
+                //     { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+                // ],
+                // type: [
+                //     { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+                // ],
+                // resource: [
+                //     { required: true, message: '请选择活动资源', trigger: 'change' }
+                // ],
+                // desc: [
+                //     { required: true, message: '请填写活动形式', trigger: 'blur' }
+                // ]
+            }
         };
     },
     methods: {
@@ -164,6 +190,42 @@ export default {
                 done();
             })
             .catch(_ => {});
+        },
+        // 提交
+        submitForm(formName) {
+            // this.$refs[formName].validate((valid) => {
+            //     if (valid) {
+            //         alert('submit!');
+            //     } else {
+            //         console.log('error submit!!');
+            //         return false;
+            //     }
+            // });
+            let params = { ...this.ruleForm }
+            params.start_time = Math.floor(params.start_time / 1000)
+            params.end_time = Math.floor(params.end_time / 1000)
+            params.price = '111'
+            add(params).then(res => {
+                console.log(res, 'res--------')
+                if(res.code === 2000) {
+                    this.close()
+                }
+            }).catch(err => {
+                console.log(err, 'err----------')
+            })
+        },
+        // 重置
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+        },
+        // 关闭弹窗
+        close() {
+            this.dialogVisible = false
+            this.$emit('onSearch')
+        },
+        // 销毁组件
+        destoryComp() {
+            this.$emit('destoryComp')
         }
     }
 }
@@ -173,6 +235,9 @@ export default {
 .shopping-add-box {
     .el-form {
         .el-input {
+            width: 300px;
+        }
+        .el-textarea {
             width: 300px;
         }
         .limit {
