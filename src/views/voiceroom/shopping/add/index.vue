@@ -305,7 +305,7 @@ export default {
         // 商品类型切换 - 删除图片
         goodsChange(v) {
             let s = this.oldParams
-            if(v === 1) {
+            if(v === 1) { // 这里用来做记忆用户操作
                 if(JSON.stringify(s) === '{}' || !s.goods_animation_path) {
                     this.$refs.goods_animation_path.imageUrl = ''
                     this.ruleForm.goods_animation_path = ''
@@ -339,6 +339,11 @@ export default {
                     let params = { ...this.ruleForm }
                     params.start_time = Math.floor(params.start_time / 1000)
                     params.end_time = Math.floor(params.end_time / 1000)
+                    if(this.goodsType === 1) { // 最终选择
+                        params.goods_image = ''
+                    } else if(this.goodsType === 2) {
+                        params.goods_animation_path = ''
+                    }
                     add(params).then(res => {
                         if(res.code === 2000) {
                             this.close()

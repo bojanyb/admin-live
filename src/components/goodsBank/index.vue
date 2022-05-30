@@ -82,7 +82,8 @@ export default {
             set(v) {
                 return this.$emit('update: list', v)
             }
-        }
+        },
+        
     },
     watch: {
         status: {
@@ -108,7 +109,7 @@ export default {
                 //     re.gift_genreText = params.name
                 // })
                 this.giftListArr = res.data.list;
-                // this.giftSelectSource();
+                this.giftSelectSource();
                 console.log(res, 'res------------')
             }).catch(err => {})
         },
@@ -130,14 +131,14 @@ export default {
         },
         // 选中礼物
         handleSelect(row) {
-            let params = this.activityList.find(item => { return item.name === this.activityType })
-            let num = this.gifts.length
-            if((num + 1) > params.max) {
-                this.$message.error('当前活动已超过添加最大礼物数量')
-                return false
-            }
+            // let params = this.activityList.find(item => { return item.name === this.activityType })
+            // let num = this.gifts.length
+            // if((num + 1) > params.max) {
+            //     this.$message.error('当前活动已超过添加最大礼物数量')
+            //     return false
+            // }
 
-            this.$set(row, 'type', 1)
+            // this.$set(row, 'type', 1)
             this.giftListArr.map(res => {
                 if (res.id == row.id) {
                     res.isSelect = true; // 当前礼物被选中
