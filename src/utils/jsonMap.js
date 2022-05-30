@@ -289,6 +289,24 @@ const GIFTSTATISTICS = [
     }
 ]
 
+/*
+*公会管理 - 公会返佣列表
+*/
+// 公会等级
+const CLASSLIST = [
+    {
+        name: 'A',
+        value: 1
+    },
+    {
+        name: 'AA',
+        value: 2
+    },
+    {
+        name: 'AAA',
+        value: 3
+    }
+]
 
 export default {
     USERINVITE,
@@ -304,5 +322,6 @@ export default {
     CLASSIFY,
     GIFTLIST,
     GIFTSTATISTICS,
-    DURATION
+    DURATION,
+    CLASSLIST
 }

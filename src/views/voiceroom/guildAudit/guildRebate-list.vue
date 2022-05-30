@@ -20,8 +20,12 @@
 			</el-table-column>
 			<el-table-column label="序号" prop="num" align="center" width="95" />
 			<el-table-column label="公会ID" prop="guild_number" align="center" width="150"/>
-			<el-table-column label="公会等级" prop="rank" align="center" width="150"/>
-			<el-table-column label="公会长ID" prop="user_id" align="center" width="150"/>
+			<el-table-column label="公会等级" prop="rank" align="center" width="150">
+				<template slot-scope="scope">
+					{{ scope.row.rank | classFunc }}
+				</template>
+			</el-table-column>
+			<el-table-column label="公会长ID" prop="user_number" align="center" width="150"/>
 			<el-table-column label="时间区间" align="center" width="305">
 				<template slot-scope="scope">
 					<div class="fl">{{scope.row.last_week_startText}} </div>
@@ -48,10 +52,19 @@
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
+
 	export default {
 		name: 'guildRebate-list',
 		components: {
 			Pagination
+		},
+		filters: {
+			classFunc(val) {
+				let params = MAPDATA.CLASSLIST.find(item => { return item.value === val })
+				return params ? params.name : '--'
+			}
 		},
 		data() {
 			return {
@@ -83,10 +96,10 @@
 					this.total = res.data.count;
 					res.data.list.map((re,i)=> {
 						re.num = i + 1;
-						re.last_week_startText = re.last_week_start > 0 ? moment(re.last_week_start * 1000)
-							.format('YYYY-MM-DD HH:mm:ss') : ""
-						re.last_week_endText = re.last_week_end > 0 ? moment(re.last_week_end * 1000)
-							.format('YYYY-MM-DD HH:mm:ss') : ""
+						let start = re.last_week_start ? re.last_week_start * 1000 - 1000 : ''
+						let end = re.last_week_end ? re.last_week_end * 1000 - 1000 : ''
+						re.last_week_startText = start > 0 ? moment(start).format('YYYY-MM-DD HH:mm:ss') : ""
+						re.last_week_endText = end > 0 ? moment(end).format('YYYY-MM-DD HH:mm:ss') : ""
 					})
 					this.list = res.data.list
 					this.listLoading = false

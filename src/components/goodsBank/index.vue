@@ -5,11 +5,13 @@
 				<el-table ref="giftTable" v-loading="giftLoading" :data="giftListArr" element-loading-text="拼命加载中"
 					border fit highlight-current-row>
 					<el-table-column label="商品名称" prop="goods_name" align="center" show-overflow-tooltip />
-					<el-table-column label="商品图片" prop="gift_genre" align="center">
+					<el-table-column label="商品图片" prop="gift_genre" align="center" style="display:flex;justify-content: center;">
 						<template slot-scope="scope">
-							<el-image style="width: 50px; " v-if="scope.row.goods_image"
+							<div class="imgStyle" style="display:flex;justify-content:center;">
+                                <el-image style="height: 50px; " v-if="scope.row.goods_image"
 								:src="scope.row.goods_image" />
-                            <svgComp v-if="scope.row.goods_animation_path" ref="svgComp" :src="scope.row.goods_animation_path" :styleObj="{ width: '50px' }"></svgComp>
+                                <svgComp v-if="scope.row.goods_animation_path" ref="svgComp" :src="scope.row.goods_animation_path" :styleObj="{ height: '50px' }"></svgComp>
+                            </div>
 						</template>
 					</el-table-column>
 					<el-table-column label="操作" align="center">
@@ -167,10 +169,14 @@ export default {
 
 <style lang="scss">
 .share-goodsBank-box {
+    .imgStyle {
+        display: flex !important;
+        justify-content: center !important;
+    }
     ::v-deep .el-drawer {
 		width: 35% !important;
         padding-bottom: 100px;
-            box-sizing: border-box;
+        box-sizing: border-box;
 		.giftListBox {
 			width: 100%;
             
