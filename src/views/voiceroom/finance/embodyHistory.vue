@@ -2,8 +2,8 @@
 <template>
     <div class="finance-embodyHistory">
         <div class="model">
-            <span>选择时间内已放款金额：{{ ruleForm.alreadyMoney || 0 }}元</span>
-            <span>选择时间内平台扣除金额：{{ ruleForm.deductMoney || 0 }}元</span>
+            <span>选择时间内的已放款金额：{{ ruleForm.alreadyMoney || 0 }}元</span>
+            <span>选择时间内的手续费：{{ ruleForm.deductMoney || 0 }}元</span>
         </div>
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
@@ -264,7 +264,8 @@ export default {
         },
         // 列表返回数据
         saleAmunt(data) {
-            // this.ruleForm.allMoney = data.total_money ? data.total_money / 100 : 0
+            this.ruleForm.alreadyMoney = data.totalmoney ? data.totalmoney : 0
+            this.ruleForm.deductMoney = data.rate_money ? data.rate_money : 0
         }
     }
 }

@@ -379,12 +379,12 @@ export default {
                 let item = {
                     id : res.id,
                     sort: res.sort,
-                    probability: probability,
+                    probability: probability.toFixed(0),
                 }
                 sumProbability += probability;
                 gifts.push(item);
             })
-            sumProbability = sumProbability / 100000;
+            sumProbability = Number((sumProbability / 100000).toFixed(5));
             if(sumProbability !== 100){
                 this.$message.error("所有礼物概率只为只能为100%！");
                 return
