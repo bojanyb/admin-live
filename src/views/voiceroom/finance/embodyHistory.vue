@@ -2,7 +2,7 @@
 <template>
     <div class="finance-embodyHistory">
         <div class="model">
-            <span>选择时间内已放款金额：{{ ruleForm.alreadyMoney || 0 }}元</span>
+            <span>选择时间内的已放款金额：{{ ruleForm.alreadyMoney || 0 }}元</span>
             <span>选择时间内的手续费：{{ ruleForm.deductMoney || 0 }}元</span>
         </div>
         <div class="searchParams">
