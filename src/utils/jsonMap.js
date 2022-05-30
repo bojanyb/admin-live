@@ -123,6 +123,10 @@ const GIFTTYPE = [
 */
 const USERBALANCETYPE = [
     {
+        name: '全部',
+        value: ''
+    },
+    {
         name: '收入',
         value: 1
     },
@@ -226,6 +230,66 @@ const CLASSIFY = [
     }
 ]
 
+// 赠送时长
+const DURATION = [
+    {
+        value: 1,
+        name: '1天'
+    },
+    {
+        value: 3,
+        name: '3天'
+    },
+    {
+        value: 7,
+        name: '7天'
+    },
+    {
+        value: 15,
+        name: '15天'
+    },
+    {
+        value: 30,
+        name: '30天'
+    },
+    {
+        value: 0,
+        name: '永久'
+    }
+]
+
+/*
+*用户活动 - 端午活动统计
+*/
+// 礼物类型
+const GIFTLIST = [
+    {
+        value: 1,
+        name: '粽子'
+    },
+    {
+        value: 2,
+        name: '香囊'
+    },
+    {
+        value: 3,
+        name: '龙舟'
+    }
+]
+
+// 查看 - 礼物统计
+const GIFTSTATISTICS = [
+    {
+        value: 1,
+        name: '收到最多'
+    },
+    {
+        value: 2,
+        name: '送出最多'
+    }
+]
+
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -237,5 +301,8 @@ export default {
     STATUSLIST,
     EMBODYSORT,
     SHOPPING,
-    CLASSIFY
+    CLASSIFY,
+    GIFTLIST,
+    GIFTSTATISTICS,
+    DURATION
 }

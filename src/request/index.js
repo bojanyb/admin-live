@@ -22,11 +22,17 @@ const request = {
         AppversionDel : `${HTTPHEADER}/appversion/del`, // 删除
     },
 
-    // 转转宝箱
-    zzbxActivity: {
-        list: `${HTTPHEADER}/Activity/aclist`,
-        history: `${HTTPHEADER}/Activity/drawLog`,
-        detail: `${HTTPHEADER}Statistical/drawLog`
+    // 用户活动
+    
+    userActivity: {
+        zzbxActivity: { // 转转宝箱
+            list: `${HTTPHEADER}/Activity/aclist`,
+            history: `${HTTPHEADER}/Activity/drawLog`,
+            detail: `${HTTPHEADER}Statistical/drawLog`
+        },
+        dwActivity: {
+            list: `${HTTPHEADER}/Activity/aclist`,
+        }
     },
 
     // 用户拉新记录
@@ -50,7 +56,7 @@ const request = {
     shopping: {
         list: `${HTTPHEADER}/goods`,
         add: `${HTTPHEADER}/goods/save`,
-        down: `${HTTPHEADER}/goods/down`
+        down: `${HTTPHEADER}/goods/down`,
     }
     
 }

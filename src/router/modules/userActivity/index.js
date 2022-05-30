@@ -43,6 +43,22 @@ const userActivity = {
 				},
 			]
 		},
+		{
+			path: '/dw',
+			component: () => import('@/views/voiceroom/userActivity/index'),
+			meta: {
+				title: '端午节活动'
+			},
+			children: [
+				{
+					path: 'index',
+					component: () => import('@/views/voiceroom/userActivity/dwActivity/index'),
+					meta: {
+						title: '端午活动统计',
+					}
+				}
+			]
+		},
 	]
 }
 

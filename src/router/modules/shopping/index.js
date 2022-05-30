@@ -19,6 +19,15 @@ const userRouter = {
 				title: '商品列表',
 				noCache: true
 			}
+		},
+		{
+			path: 'give-list',
+			component: () => import('@/views/voiceroom/shopping/givegoods/index'),
+			name: 'give-list',
+			meta: {
+				title: '赠送商品',
+				noCache: true
+			}
 		}
 		
 	]

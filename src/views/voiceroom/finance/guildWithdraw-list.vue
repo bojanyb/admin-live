@@ -109,6 +109,14 @@ export default {
                         }
                     },
                     {
+                        label: '交易单号',
+                        // prop: 'trade_no'
+                    },
+                    {
+                        label: '商户单号',
+                        // prop: 'trade_no'
+                    },
+                    {
                         label: '交易流水号',
                         prop: 'trade_no'
                     }

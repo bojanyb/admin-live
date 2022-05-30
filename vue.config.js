@@ -178,13 +178,13 @@ module.exports = {
 		config.plugin('define')
 		.tap(() => [
 			{
-			// 全局常量
-			'HTTPHEADER': JSON.stringify(configObj.httpHeader),
-			'ENV_DOMAINHTTPS': JSON.stringify(configObj.domainHttps),
-			'process.env': {
-				NODE_ENV: JSON.stringify(configObj.mode),
-				BASE_URL: JSON.stringify(configObj.publicPath)
-			}
+				// 全局常量
+				'HTTPHEADER': JSON.stringify(configObj.httpHeader),
+				'ENV_DOMAINHTTPS': JSON.stringify(configObj.domainHttps),
+				'process.env': {
+					NODE_ENV: JSON.stringify(configObj.mode),
+					BASE_URL: JSON.stringify(configObj.publicPath)
+				}
 			}
 		])
 	}
