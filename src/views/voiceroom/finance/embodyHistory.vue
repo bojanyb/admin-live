@@ -180,6 +180,12 @@ export default {
                         }
                     },
                     {
+                        label: '到账金额',
+                        render: (h, params) => {
+                            return h('span', params.row.orderDetails.money / 100)
+                        }
+                    },
+                    {
                         label: '提现卡号',
                         render: (h, params) => {
                             return h('span', params.row.orderDetails.card_id ? params.row.orderDetails.card_id : '--')

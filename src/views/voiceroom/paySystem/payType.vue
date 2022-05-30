@@ -1,39 +1,44 @@
 <template>
     <div class="payType-Box">
-        <div class="FuncBox" v-for="(item,index) in FuncList" :key="index">
-            <span>{{ item.title }}</span>
-            <el-radio-group v-model="item.mer_id" @change="(v) => setPayFunc(v, index)">
-                <el-radio :label="2">四方</el-radio>
-                <el-radio :label="1">爱意</el-radio>
-            </el-radio-group>
+        <div class="payType">
+            <div class="FuncBox" v-for="(item,index) in FuncList" :key="index">
+                <span>{{ item.title }}</span>
+                <el-radio-group v-model="item.mer_id" @change="(v) => setPayFunc(v, index)">
+                    <el-radio :label="2"><span class="tit">汇付</span> <el-button type="primary" v-if="item.title !== '微信h5'" @click="editFunc(item.id)">编辑</el-button></el-radio>
+                    <el-radio :label="1"><span class="tit">{{ item.title | titFilter }}</span></el-radio>
+                </el-radio-group>
+            </div>
         </div>
+
+        <editComp ref="editComp" v-if="isDestoryComp" @destoryComp="destoryComp"></editComp>
     </div>
 </template>
 
 <script>
 // 引入api
 import { getPayType, setPayType } from '@/api/pay.js'
+// 引入编辑组件
+import editComp from './edit/index.vue'
 
 export default {
+    components: {
+        editComp
+    },
+    filters: {
+        titFilter(val) {
+            if(val) {
+                if(val.indexOf('微信') !== -1) {
+                    return '微信支付'
+                }
+                return '蚂蚁金服'
+            }
+            return '--'
+        }
+    },
     data() {
         return {
-            FuncList: [
-                {
-                    label: '安卓',
-                    name: '安卓',
-                    value: 1
-                },
-                {
-                    label: '公众号h5',
-                    name: 'H5',
-                    value: 1
-                },
-                {
-                    label: '小程序',
-                    name: '小程序',
-                    value: 1
-                }
-            ]
+            FuncList: [],
+            isDestoryComp: false // 是否销毁组件
         };
     },
     methods: {
@@ -65,6 +70,18 @@ export default {
             } else {
                 this.$message.error('修改失败')
             }
+        },
+        // 打开编辑
+        editFunc(id) {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.editComp.dialogVisible = true
+                this.$refs.editComp.getAdaPayConfigFunc(id)
+            }, 100);
+        },
+        // 销毁组件
+        destoryComp() {
+            this.isDestoryComp = false
         }
     },
     created() {
@@ -77,20 +94,41 @@ export default {
 .payType-Box {
     padding: 20px;
     box-sizing: border-box;
-    .FuncBox {
+    .payType {
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
+        padding: 30px;
+        box-sizing: border-box;
         display: flex;
-        align-items: center;
-        margin-bottom: 30px;
-        >span {
+        justify-content: space-between;
+        .FuncBox {
             display: flex;
-            width: 100px;
-            font-weight: 600;
-        }
-
-        .el-radio-group {
-            .el-radio {
-                margin-right: 80px;
-                .el-radio__label {
+            flex-direction: column;
+            // align-items: center;
+            margin-bottom: 30px;
+            >span {
+                display: flex;
+                width: 100px;
+                font-weight: 600;
+            }
+            .el-radio-group {
+                display: flex;
+                flex-direction: column;
+                margin-top: 50px;
+                .el-radio {
+                    // margin-right: 80px;
+                    width: 200px;
+                    height: 50px;
+                    margin-bottom: 30px;
+                    display: flex;
+                    align-items: center;
+                    .el-radio__label {
+                        display: flex;
+                        align-items: center;
+                        >span.tit {
+                            display: flex;
+                            width: 100px;
+                        }
+                    }
 
                 }
             }

@@ -36,15 +36,23 @@ export default {
     computed: {
         forms() {
             return [
+                // {
+                //     name: 'sort',
+                //     type: 'select',
+                //     value: '',
+                //     keyName: 'value',
+                //     optionLabel: 'name',
+                //     label: '排序',
+                //     placeholder: '请选择',
+                //     options: MAPDATA.SORTLIST
+                // },
                 {
-                    name: 'sort',
-                    type: 'select',
+                    name: 'user_number',
+                    type: 'input',
                     value: '',
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '排序',
-                    placeholder: '请选择',
-                    options: MAPDATA.SORTLIST
+                    label: '收单机构',
+                    isNum: true,
+                    placeholder: '请输入收单机构'
                 },
                 {
                     name: 'user_number',

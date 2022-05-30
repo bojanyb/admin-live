@@ -125,7 +125,7 @@
             this.data = []
             this.$emit('saleAmunt', { list: [], baoxiang: {}});
             this.loading = false;
-            this.$message.error(err || '获取数据失败');
+            this.$message.error(err.msg || '获取数据失败');
           })
         } else {
           this.loading = false;
