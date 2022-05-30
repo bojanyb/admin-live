@@ -96,10 +96,11 @@
 					this.total = res.data.count;
 					res.data.list.map((re,i)=> {
 						re.num = i + 1;
+						// let start = re.last_week_start ? re.last_week_start * 1000 - 1000 : ''
+						let end = re.last_week_end ? re.last_week_end * 1000 - 1000 : ''
 						re.last_week_startText = re.last_week_start > 0 ? moment(re.last_week_start * 1000)
 							.format('YYYY-MM-DD HH:mm:ss') : ""
-						re.last_week_endText = re.last_week_end > 0 ? moment(re.last_week_end * 1000)
-							.format('YYYY-MM-DD HH:mm:ss') : ""
+						re.last_week_endText = end > 0 ? moment(end).format('YYYY-MM-DD HH:mm:ss') : ""
 					})
 					this.list = res.data.list
 					this.listLoading = false
