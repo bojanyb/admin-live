@@ -10,8 +10,8 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
                 <div class="oldDeploy">
                     <div class="title">旧配置</div>
-                    <el-form-item label="商户号" class="must">
-                        <el-input :disabled="true" v-model="oldParams.title" placeholder="请输入商户号"></el-input>
+                    <el-form-item label="应用名称" class="must">
+                        <el-input :disabled="true" v-model="oldParams.title" placeholder="请输入应用名称"></el-input>
                     </el-form-item>
                     <el-form-item label="APPID" class="must">
                         <el-input v-model="oldParams.appid" :disabled="true" placeholder="请输入APPID"></el-input>
@@ -34,8 +34,8 @@
                 </div>
                 <div class="oldDeploy">
                     <div class="title">新配置</div>
-                    <el-form-item label="商户号" prop="title">
-                        <el-input v-model="ruleForm.title" placeholder="请输入商户号"></el-input>
+                    <el-form-item label="应用名称" prop="title">
+                        <el-input v-model="ruleForm.title" placeholder="请输入应用名称"></el-input>
                     </el-form-item>
                     <el-form-item label="APPID" prop="appid">
                         <el-input v-model="ruleForm.appid" placeholder="请输入APPID"></el-input>
