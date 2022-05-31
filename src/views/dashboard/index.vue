@@ -45,27 +45,7 @@
 					</div>
 				</div> -->
 				
-				
 				<div class="all-water-box">
-					<div style="clear: both;">
-						<div class="userInfoItem text item">
-							<div class="userTitle fl">
-								礼物总流水:
-							</div>
-							<div class="userContent fl">
-								0
-								<!-- {{accountInfo.cashing || 0}} <span class="unitText">喵粮</span>  -->
-							</div>
-						</div>
-						<div class="userInfoItem text item">
-							<div class="userTitle fl">
-								平台总分成:
-							</div>
-							<div class="userContent fl">
-								{{accountInfo.commission || 0}}
-							</div>
-						</div>
-					</div>
 					<div style="clear: both;">
 						<div class="userInfoItem text item">
 							<div class="userTitle fl">
@@ -86,6 +66,28 @@
 							</div>
 						</div>
 					</div>
+				</div>
+				<div class="all-recharge-box" style="padding-bottom: 30px;">
+					<div style="clear: both;">
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								礼物总流水:
+							</div>
+							<div class="userContent fl">
+								0
+								<!-- {{accountInfo.cashing || 0}} <span class="unitText">喵粮</span>  -->
+							</div>
+						</div>
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								平台总分成:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.commission || 0}}
+							</div>
+						</div>
+					</div>
+					
 				</div>
 				
 				<div class="all-recharge-box">
