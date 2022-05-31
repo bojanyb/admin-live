@@ -3,7 +3,7 @@
         <div class="payType">
             <div class="FuncBox" v-for="(item,index) in FuncList" :key="index">
                 <span>{{ item.title }}</span>
-                <el-radio-group v-model="item.mer_id" @change="(v) => setPayFunc(v, index)">
+                <el-radio-group v-model="item.mer_id" @change="(v) => setPayFunc(item, v, index)">
                     <el-radio :label="2"><span class="tit">汇付</span> <el-button type="primary" @click="editFunc(item.id, 2)">编辑</el-button></el-radio>
                     <el-radio :label="1"><span class="tit">{{ item.title | titFilter }}</span> <el-button type="primary" @click="editFunc(item.id, 1)">编辑</el-button></el-radio>
                 </el-radio-group>
@@ -62,18 +62,25 @@ export default {
             this.FuncList = res.data.data
         },
         // 设置支付方式
-        async setPayFunc(v, index) {
-            let data = this.FuncList[index]
-            let params = {
-                id: data.id,
-                mer_id: v
-            }
-            let res = await setPayType(params)
-            if(res.code === 2000) {
-                this.$message.success('修改成功')
-            } else {
-                this.$message.error('修改失败')
-            }
+        async setPayFunc(item, v, index) {
+            let id = v === 2 ? 1 : 2
+            this.$set(item, 'mer_id', id)
+            this.$confirm('是否切换？')
+            .then(async _ => {
+                let data = this.FuncList[index]
+                let params = {
+                    id: data.id,
+                    mer_id: v
+                }
+                let res = await setPayType(params)
+                if(res.code === 2000) {
+                    this.$message.success('修改成功')
+                    this.getPayFunc()
+                } else {
+                    this.$message.error('修改失败')
+                }
+            })
+            .catch(_ => {});
         },
         // 打开编辑
         editFunc(id, mer_id) {
