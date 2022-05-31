@@ -3,10 +3,11 @@
         <el-dialog
         title="修改配置"
         :visible.sync="dialogVisible"
-        width="50%"
+        width="1030px"
+        top="5vh"
         :before-close="handleClose"
         @closed="destoryComp">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
                 <div class="oldDeploy">
                     <div class="title">旧配置</div>
                     <el-form-item label="商户号" class="must">
@@ -18,14 +19,17 @@
                     <!-- <el-form-item label="密钥" prop="name">
                         <el-input v-model="ruleForm.name"></el-input>
                     </el-form-item> -->
-                    <el-form-item label="api_key密钥" class="must">
-                        <el-input v-model="oldParams.api_key_live" :disabled="true" placeholder="请输入api_key密钥"></el-input>
+                    <el-form-item label="prod模式API_KEY" class="must">
+                        <el-input type="textarea" :rows="2" v-model="oldParams.api_key_live" :disabled="true" placeholder="请输入prod模式API_KEY"></el-input>
                     </el-form-item>
-                    <el-form-item label="RSA公钥" prop="rsa_public_key">
-                        <el-input v-model="oldParams.rsa_public_key" :disabled="true" placeholder="请输入RSA公钥"></el-input>
+                    <el-form-item label="商户RSA公钥" prop="rsa_public_key">
+                        <el-input type="textarea" :rows="4" v-model="oldParams.rsa_public_key" :disabled="true" placeholder="请输入商户RSA公钥"></el-input>
                     </el-form-item>
-                    <el-form-item label="AdaPay公钥" prop="api_key_test">
-                        <el-input v-model="oldParams.api_key_test" :disabled="true" placeholder="请输入AdaPay公钥"></el-input>
+                    <el-form-item label="mock模式API_KEY" prop="api_key_test">
+                        <el-input type="textarea" :rows="2" v-model="oldParams.api_key_test" :disabled="true" placeholder="请输入mock模式API_KEY"></el-input>
+                    </el-form-item>
+                    <el-form-item label="汇付的私钥rsa_private_key" prop="rsa_private_key" class="cellBox">
+                        <el-input type="textarea" :rows="4" v-model="oldParams.rsa_private_key" :disabled="true" placeholder="请输入汇付的私钥rsa_private_key"></el-input>
                     </el-form-item>
                 </div>
                 <div class="oldDeploy">
@@ -39,14 +43,17 @@
                     <!-- <el-form-item label="密钥" prop="name">
                         <el-input v-model="ruleForm.name"></el-input>
                     </el-form-item> -->
-                    <el-form-item label="api_key密钥" prop="api_key_live">
-                        <el-input v-model="ruleForm.api_key_live" placeholder="请输入api_key密钥"></el-input>
+                    <el-form-item label="prod模式API_KEY" prop="api_key_live">
+                        <el-input type="textarea" :rows="2" v-model="ruleForm.api_key_live" placeholder="请输入prod模式API_KEY"></el-input>
                     </el-form-item>
-                    <el-form-item label="RSA公钥" prop="rsa_public_key">
-                        <el-input v-model="ruleForm.rsa_public_key" placeholder="请输入RSA公钥"></el-input>
+                    <el-form-item label="商户RSA公钥" prop="rsa_public_key">
+                        <el-input type="textarea" :rows="4" v-model="ruleForm.rsa_public_key" placeholder="请输入商户RSA公钥"></el-input>
                     </el-form-item>
-                    <el-form-item label="AdaPay公钥" prop="api_key_test">
-                        <el-input v-model="ruleForm.api_key_test" placeholder="请输入AdaPay公钥"></el-input>
+                    <el-form-item label="mock模式API_KEY" prop="api_key_test">
+                        <el-input type="textarea" :rows="2" v-model="ruleForm.api_key_test" placeholder="请输入mock模式API_KEY"></el-input>
+                    </el-form-item>
+                    <el-form-item label="汇付的私钥rsa_private_key" prop="rsa_private_key" class="cellBox">
+                        <el-input type="textarea" :rows="4" v-model="ruleForm.rsa_private_key" placeholder="请输入汇付的私钥rsa_private_key"></el-input>
                     </el-form-item>
                 </div>
             </el-form>
@@ -81,13 +88,16 @@ export default {
                     { required: true, message: '请输入APPID', trigger: 'blur' },
                 ],
                 api_key_live: [
-                    { required: true, message: '请输入api_key密钥', trigger: 'blur' },
+                    { required: true, message: '请输入prod模式API_KEY', trigger: 'blur' },
                 ],
                 rsa_public_key: [
-                    { required: true, message: '请输入RSA公钥', trigger: 'blur' },
+                    { required: true, message: '请输入商户RSA公钥', trigger: 'blur' },
                 ],
                 api_key_test: [
-                    { required: true, message: '请输入AdaPay公钥', trigger: 'blur' },
+                    { required: true, message: '请输入mock模式API_KEY', trigger: 'blur' },
+                ],
+                rsa_private_key: [
+                    { required: true, message: '请输入汇付的私钥rsa_private_key', trigger: 'blur' },
                 ],
             }
         };
@@ -181,6 +191,11 @@ export default {
                     content: '*';
                     color: #ff4949;
                     margin-right: 4px;
+                }
+            }
+            .cellBox {
+                .el-form-item__label {
+                    line-height: 18px;
                 }
             }
         }

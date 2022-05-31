@@ -4,7 +4,7 @@
             <div class="FuncBox" v-for="(item,index) in FuncList" :key="index">
                 <span>{{ item.title }}</span>
                 <el-radio-group v-model="item.mer_id" @change="(v) => setPayFunc(v, index)">
-                    <el-radio :label="2"><span class="tit">汇付</span> <el-button type="primary" v-if="item.title !== '微信h5'" @click="editFunc(item.id)">编辑</el-button></el-radio>
+                    <el-radio :label="2"><span class="tit">汇付</span> <el-button type="primary" v-if="item.title !== '微信h5' && item.mer_id === 2" @click="editFunc(item.id)">编辑</el-button></el-radio>
                     <el-radio :label="1"><span class="tit">{{ item.title | titFilter }}</span></el-radio>
                 </el-radio-group>
             </div>
