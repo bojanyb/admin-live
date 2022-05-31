@@ -21,12 +21,12 @@
                     <el-form-item label="api_key密钥" class="must">
                         <el-input v-model="oldParams.api_key_live" :disabled="true" placeholder="请输入api_key密钥"></el-input>
                     </el-form-item>
-                    <!-- <el-form-item label="RSA公钥" prop="rsa_public_key">
+                    <el-form-item label="RSA公钥" prop="rsa_public_key">
                         <el-input v-model="oldParams.rsa_public_key" :disabled="true" placeholder="请输入RSA公钥"></el-input>
                     </el-form-item>
                     <el-form-item label="AdaPay公钥" prop="api_key_test">
                         <el-input v-model="oldParams.api_key_test" :disabled="true" placeholder="请输入AdaPay公钥"></el-input>
-                    </el-form-item> -->
+                    </el-form-item>
                 </div>
                 <div class="oldDeploy">
                     <div class="title">新配置</div>
@@ -42,12 +42,12 @@
                     <el-form-item label="api_key密钥" prop="api_key_live">
                         <el-input v-model="ruleForm.api_key_live" placeholder="请输入api_key密钥"></el-input>
                     </el-form-item>
-                    <!-- <el-form-item label="RSA公钥" prop="rsa_public_key">
+                    <el-form-item label="RSA公钥" prop="rsa_public_key">
                         <el-input v-model="ruleForm.rsa_public_key" placeholder="请输入RSA公钥"></el-input>
                     </el-form-item>
                     <el-form-item label="AdaPay公钥" prop="api_key_test">
                         <el-input v-model="ruleForm.api_key_test" placeholder="请输入AdaPay公钥"></el-input>
-                    </el-form-item> -->
+                    </el-form-item>
                 </div>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -108,9 +108,9 @@ export default {
                 appid: s.appid,
                 api_key_live: s.api_key_live,
                 title: s.title,
-                rsa_public_key: a.rsa_public_key,
-                api_key_test: a.api_key_test,
-                rsa_private_key: a.rsa_private_key
+                rsa_public_key: s.rsa_public_key,
+                api_key_test: s.api_key_test,
+                rsa_private_key: s.rsa_private_key
             }
             setAdaPayConfig(params).then(res => {
                 if(res.code === 2000) {
