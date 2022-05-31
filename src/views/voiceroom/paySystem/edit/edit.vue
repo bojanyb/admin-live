@@ -1,5 +1,5 @@
 <template>
-    <div class="paySystem-index-box">
+    <div class="paySystem-edit-box">
         <el-dialog
         title="修改配置"
         :visible.sync="dialogVisible"
@@ -10,44 +10,32 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
                 <div class="oldDeploy">
                     <div class="title">旧配置</div>
-                    <el-form-item label="应用名称" class="must">
-                        <el-input :disabled="true" v-model="oldParams.title" placeholder="请输入应用名称"></el-input>
+                    <el-form-item label="商户号" class="must">
+                        <el-input :disabled="true" v-model="oldParams.title" placeholder="请输入商户号"></el-input>
                     </el-form-item>
                     <el-form-item label="APPID" class="must">
                         <el-input v-model="oldParams.appid" :disabled="true" placeholder="请输入APPID"></el-input>
                     </el-form-item>
-                    <el-form-item label="prod模式API_KEY" class="must">
-                        <el-input type="textarea" :rows="2" v-model="oldParams.api_key_live" :disabled="true" placeholder="请输入prod模式API_KEY"></el-input>
+                    <el-form-item label="秘钥" class="must">
+                        <el-input v-model="oldParams.secret" :disabled="true" placeholder="请输入秘钥"></el-input>
                     </el-form-item>
-                    <el-form-item label="商户RSA公钥" class="must">
-                        <el-input type="textarea" :rows="4" v-model="oldParams.rsa_public_key" :disabled="true" placeholder="请输入商户RSA公钥"></el-input>
-                    </el-form-item>
-                    <el-form-item label="mock模式API_KEY" class="must">
-                        <el-input type="textarea" :rows="2" v-model="oldParams.api_key_test" :disabled="true" placeholder="请输入mock模式API_KEY"></el-input>
-                    </el-form-item>
-                    <el-form-item label="汇付的私钥rsa_private_key" class="cellBox must">
-                        <el-input type="textarea" :rows="4" v-model="oldParams.rsa_private_key" :disabled="true" placeholder="请输入汇付的私钥rsa_private_key"></el-input>
+                    <el-form-item label="支付key" class="must">
+                        <el-input type="textarea" :rows="2" v-model="oldParams.key" :disabled="true" placeholder="请输入支付key"></el-input>
                     </el-form-item>
                 </div>
                 <div class="oldDeploy">
                     <div class="title">新配置</div>
-                    <el-form-item label="应用名称" prop="title">
-                        <el-input v-model="ruleForm.title" placeholder="请输入应用名称"></el-input>
+                    <el-form-item label="商户号" prop="title">
+                        <el-input v-model="ruleForm.title" placeholder="请输入商户号"></el-input>
                     </el-form-item>
                     <el-form-item label="APPID" prop="appid">
                         <el-input v-model="ruleForm.appid" placeholder="请输入APPID"></el-input>
                     </el-form-item>
-                    <el-form-item label="prod模式API_KEY" prop="api_key_live">
-                        <el-input type="textarea" :rows="2" v-model="ruleForm.api_key_live" placeholder="请输入prod模式API_KEY"></el-input>
+                    <el-form-item label="秘钥" prop="secret">
+                        <el-input v-model="ruleForm.secret" placeholder="请输入秘钥"></el-input>
                     </el-form-item>
-                    <el-form-item label="商户RSA公钥" prop="rsa_public_key">
-                        <el-input type="textarea" :rows="4" v-model="ruleForm.rsa_public_key" placeholder="请输入商户RSA公钥"></el-input>
-                    </el-form-item>
-                    <el-form-item label="mock模式API_KEY" prop="api_key_test">
-                        <el-input type="textarea" :rows="2" v-model="ruleForm.api_key_test" placeholder="请输入mock模式API_KEY"></el-input>
-                    </el-form-item>
-                    <el-form-item label="汇付的私钥rsa_private_key" prop="rsa_private_key" class="cellBox">
-                        <el-input type="textarea" :rows="4" v-model="ruleForm.rsa_private_key" placeholder="请输入汇付的私钥rsa_private_key"></el-input>
+                    <el-form-item label="支付key" prop="key">
+                        <el-input type="textarea" :rows="2" v-model="ruleForm.key" placeholder="请输入支付key"></el-input>
                     </el-form-item>
                 </div>
             </el-form>
@@ -62,7 +50,7 @@
 
 <script>
 // 引入api
-import { getAdaPayConfig, setAdaPayConfig } from '@/api/pay.js'
+import { getWxPay, setWxpay } from '@/api/pay.js'
 
 export default {
     data() {
@@ -72,54 +60,44 @@ export default {
             ruleForm: {
                 title: '',
                 appid: '',
-                api_key_live: '',
-                rsa_public_key: '',
-                api_key_test: '',
-                rsa_private_key: ''
+                secret: '',
+                key: ''
             },
             rules: {
                 title: [
-                    { required: true, message: '请输入应用名称', trigger: 'blur' },
+                    { required: true, message: '请输入商户号', trigger: 'blur' },
                 ],
                 appid: [
                     { required: true, message: '请输入APPID', trigger: 'blur' },
                 ],
-                api_key_live: [
-                    { required: true, message: '请输入prod模式API_KEY', trigger: 'blur' },
+                secret: [
+                    { required: true, message: '请输入秘钥', trigger: 'blur' },
                 ],
-                rsa_public_key: [
-                    { required: true, message: '请输入商户RSA公钥', trigger: 'blur' },
-                ],
-                api_key_test: [
-                    { required: true, message: '请输入mock模式API_KEY', trigger: 'blur' },
-                ],
-                rsa_private_key: [
-                    { required: true, message: '请输入汇付的私钥rsa_private_key', trigger: 'blur' },
-                ],
+                key: [
+                    { required: true, message: '请输入支付key', trigger: 'blur' },
+                ]
             }
         };
     },
     methods: {
         // 获取四方支付
-        getAdaPayConfigFunc(id) {
-            getAdaPayConfig({id: id}).then(res => {
+        getWxPayFunc(id) {
+            getWxPay({id: id}).then(res => {
                 this.oldParams = res.data.row || {}
             })
         },
         // 设置四方支付
-        setAdaPayConfigFunc() {
+        setWxpayFunc() {
             let s = this.ruleForm
             let a = this.oldParams
             let params = {
-                pid: a.id,
+                id: a.id,
                 appid: s.appid,
-                api_key_live: s.api_key_live,
+                secret: s.secret,
                 title: s.title,
-                rsa_public_key: s.rsa_public_key,
-                api_key_test: s.api_key_test,
-                rsa_private_key: s.rsa_private_key
+                key: s.key
             }
-            setAdaPayConfig(params).then(res => {
+            setWxpay(params).then(res => {
                 if(res.code === 2000) {
                     this.dialogVisible = false
                     this.$emit('getPayFunc')
@@ -135,7 +113,7 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.setAdaPayConfigFunc()
+                    this.setWxpayFunc()
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -159,7 +137,7 @@ export default {
 </script>
 
 <style lang="scss">
-.paySystem-index-box {
+.paySystem-edit-box {
     .el-form {
         display: flex;
         .oldDeploy {

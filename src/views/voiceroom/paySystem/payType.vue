@@ -4,13 +4,15 @@
             <div class="FuncBox" v-for="(item,index) in FuncList" :key="index">
                 <span>{{ item.title }}</span>
                 <el-radio-group v-model="item.mer_id" @change="(v) => setPayFunc(v, index)">
-                    <el-radio :label="2"><span class="tit">汇付</span> <el-button type="primary" v-if="item.title !== '微信h5' && item.mer_id === 2" @click="editFunc(item.id)">编辑</el-button></el-radio>
-                    <el-radio :label="1"><span class="tit">{{ item.title | titFilter }}</span></el-radio>
+                    <el-radio :label="2"><span class="tit">汇付</span> <el-button type="primary" @click="editFunc(item.id, 2)">编辑</el-button></el-radio>
+                    <el-radio :label="1"><span class="tit">{{ item.title | titFilter }}</span> <el-button type="primary" @click="editFunc(item.id, 1)">编辑</el-button></el-radio>
                 </el-radio-group>
             </div>
         </div>
 
-        <editComp ref="editComp" v-if="isDestoryComp" @destoryComp="destoryComp"></editComp>
+        <indexComp ref="indexComp" v-if="isDestoryComp" @getPayFunc="getPayFunc" @destoryComp="destoryComp"></indexComp>
+
+        <editComp ref="editComp" v-if="isDestoryComp" @getPayFunc="getPayFunc" @destoryComp="destoryComp"></editComp>
     </div>
 </template>
 
@@ -18,10 +20,12 @@
 // 引入api
 import { getPayType, setPayType } from '@/api/pay.js'
 // 引入编辑组件
-import editComp from './edit/index.vue'
+import indexComp from './edit/index.vue'
+import editComp from './edit/edit.vue'
 
 export default {
     components: {
+        indexComp,
         editComp
     },
     filters: {
@@ -72,11 +76,17 @@ export default {
             }
         },
         // 打开编辑
-        editFunc(id) {
+        editFunc(id, mer_id) {
+            console.log(mer_id, 'mer_id----------')
             this.isDestoryComp = true
             setTimeout(() => {
-                this.$refs.editComp.dialogVisible = true
-                this.$refs.editComp.getAdaPayConfigFunc(id)
+                if(mer_id === 2) {
+                    this.$refs.indexComp.dialogVisible = true
+                    this.$refs.indexComp.getAdaPayConfigFunc(id)
+                } else {
+                    this.$refs.editComp.dialogVisible = true
+                    this.$refs.editComp.getWxPayFunc(id)
+                }
             }, 100);
         },
         // 销毁组件
