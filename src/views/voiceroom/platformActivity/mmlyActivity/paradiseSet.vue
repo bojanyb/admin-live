@@ -102,6 +102,7 @@ export default {
                 icon : "",
                 animation: "",
                 cost: "",
+                type: "",
                 typeName: "",
                 start_time: "",
                 end_time:"",
@@ -294,6 +295,7 @@ export default {
                 name : "喵喵乐园",
                 icon : "",
                 animation: "",
+                type: "",
                 cost: "",
                 start_time: "",
                 end_time:"",
@@ -314,6 +316,7 @@ export default {
             this.popForm.id = row.id;
             this.popForm.name = row.name;
             this.imageUrl = row.icon;
+            this.type = row.type;
             this.popForm.cost =row.cost;
             this.popForm.start_time = row.start_time > 0 ? moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
             this.popForm.end_time = row.end_time > 0 ? moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
@@ -326,6 +329,7 @@ export default {
             this.popForm.id = row.id;
             this.popForm.name = row.name;
             this.imageUrl = row.icon;
+            this.type = row.type;
             this.popForm.cost =row.cost;
             this.popForm.start_time = row.start_time > 0 ? moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
             this.popForm.end_time = row.end_time > 0 ? moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
@@ -405,6 +409,7 @@ export default {
                 code : this.popForm.code,
                 name : this.popForm.name,
                 icon : this.imageUrl,
+                type : this.popForm.type,
                 animation : this.popForm.animation,
                 cost : this.popForm.cost,
                 start_time : moment(this.popForm.start_time, 'YYYY-MM-DD HH:mm:ss').valueOf() / 1000,

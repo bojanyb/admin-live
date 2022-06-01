@@ -104,6 +104,7 @@ export default {
                 name : "大转盘",
                 icon : "",
                 animation: "",
+                type: "",
                 cost: "",
                 start_time: "",
                 end_time:"",
