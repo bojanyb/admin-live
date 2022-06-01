@@ -1,7 +1,7 @@
-// 转转宝箱(背包内) 活动配置
+// 端午活动配置
 <template>
     <div class="zzbxActivity-allocation">
-        <el-button class="add" v-if="list.length < 3" type="success" @click="handleAdd">新增</el-button>
+        <el-button class="add" v-if="list.length < 1" type="success" @click="handleAdd">新增</el-button>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
@@ -20,7 +20,8 @@ import { timeFormat } from '@/utils/common.js'
 // 引入新增/修改
 import addComp from './add/index.vue'
 
-import { getActivetyGiftADelete, getActivetyGiftSave, getActivetyHasGiftList } from '@/api/videoRoom'
+import { getActivetyGiftADelete } from '@/api/videoRoom'
+import { configDW } from '@/api/userActivity'
 
 export default {
     components: {
@@ -38,52 +39,17 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.userActivity.zzbxActivity.list,
+                url: REQUEST.platformActivity.Activityins,
                 columns: [
                     {
                         label: '活动名称',
-                        props : 'name',
+                        prop: 'name',
                         render: (h, params) => {
                             return h('span', params.row.name)
                         }
                     },
                     {
                         label: '活动状态',
-                        render: (h, params) => {
-                            return h('span', params.row.type === 1 ? '背包' : '派对')
-                        }
-                    },
-                    {
-                        label: '礼物种类数量',
-                        props : 'gift_count',
-                        render: (h, params) => {
-                            return h('span', params.row.gift_count)
-                        }
-                    },
-                    {
-                        label: '投入',
-                        props : 'in',
-                        render: (h, params) => {
-                            return h('span', params.row.in)
-                        }
-                    },
-                    {
-                        label: '产出',
-                        props : 'out',
-                        render: (h, params) => {
-                            return h('span', params.row.out)
-                        }
-                    },
-                    {
-                        label: '单次消耗喵粮数',
-                        props : 'cost',
-                        render: (h, params) => {
-                            return h('span', params.row.cost)
-                        }
-                    },
-                    {
-                        label: '活动状态',
-                        props : 'status',
                         render: (h, params) => {
                             let start = params.row.start_time * 1000
                             let end = params.row.end_time * 1000
@@ -99,24 +65,35 @@ export default {
                         }
                     },
                     {
+                        label: '活动图',
+                        prop: 'icon',
+                        isimg: true,
+                        imgWidth: '50px'
+                    },
+                    {
+                        label: '外部链接',
+                        prop: 'url',
+                        width: '200'
+                    },
+                    {
                         label: '开始时间',
-                        props : 'start_time',
-                        width : '160',
+                        prop: 'start_time',
+                        width: '160',
                         render: (h, params) => {
                             return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : "")
                         }
                     },
                     {
                         label: '结束时间',
-                        props : 'end_time',
-                        width : '160',
+                        prop: 'end_time',
+                        width: '160',
                         render: (h, params) => {
                             return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : "")
                         }
                     },
                     {
                         label: '操作',
-                        width : '350',
+                        width: '350',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),
@@ -140,7 +117,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                type: 1
+                code: 'dw'
             }
         },
         // 刷新列表
@@ -174,14 +151,12 @@ export default {
             this.$confirm('确认冻结当前活动？')
             .then(_ => {
                 row.end_time = Math.floor(new Date().getTime() / 1000)
-                getActivetyHasGiftList({ activity_id: row.id }).then(data => {
+                configDW(row).then(data => {
                     row.gifts = data.data.list
-                    getActivetyGiftSave(row).then(res => {
-                        this.$message.success('冻结成功!')
-                        this.getList()
-                    }).catch(err => {
-                        this.$message.error('冻结失败!')
-                    })
+                    this.$message.success('冻结成功!')
+                    this.getList()
+                }).catch(err => {
+                    this.$message.error('冻结失败!')
                 })
             })
             .catch(_ => {});

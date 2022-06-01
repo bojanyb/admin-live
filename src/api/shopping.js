@@ -28,3 +28,12 @@ export function goodsList(data) {
         data
     })
 }
+
+// 商品库
+export function goodsSend(data) {
+    return request({
+        url: REQUEST.shopping.send,
+        method: 'post',
+        data
+    })
+}

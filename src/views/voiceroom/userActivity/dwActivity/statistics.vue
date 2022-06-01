@@ -1,3 +1,4 @@
+// 端午活动统计
 <template>
     <div class="dwActivity-index-box">
         <div class="searchParams">
@@ -39,10 +40,10 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
-                    name: 'activity_type_id',
+                    name: 'gift_name',
                     type: 'select',
-                    value: 1,
-                    keyName: 'value',
+                    value: '粽子',
+                    keyName: 'name',
                     optionLabel: 'name',
                     label: '礼物类型',
                     placeholder: '请选择',
@@ -57,9 +58,9 @@ export default {
                     disabled: true
                 },
                 {
-                    name: 'activity_type_id',
+                    name: 'order',
                     type: 'select',
-                    value: 1,
+                    value: 'live_user_id',
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '查看',
@@ -71,7 +72,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                // url: REQUEST.userActivity.dwActivity.list,
+                url: REQUEST.userActivity.dwActivity.dragonBoatFestival,
                 isShowIndex: true,
                 columns: [
                     {
@@ -80,12 +81,15 @@ export default {
                     },
                     {
                         label: '用户昵称',
+                        prop: 'nickname'
                     },
                     {
                         label: '收到（喵粮）',
+                        prop: 'receive_amount'
                     },
                     {
                         label: '送出（喵粮）',
+                        prop: 'send_amout'
                     },
                 ]
             }
@@ -93,17 +97,28 @@ export default {
     },
     data() {
         return {
-            property: 'value',
+            allStatistics: null
         };
     },
     methods: {
-        saleAmunt() {},
-        // 使用
-        use(row) {
-            
+        // 配置参数
+        beforeSearch(params) {
+            let s = this.searchParams
+            return {
+                page: params.page,
+                gift_name: s.gift_name ? s.gift_name : '粽子',
+                order: s.order ? s.order : 'live_user_id',
+                user_number: s.user_number
+            }
         },
-        onSearch() {},
-        reset() {}
+        saleAmunt() {},
+        onSearch() {
+            this.$refs.tableList.getData()
+        },
+        reset() {
+            this.searchParams = {}
+            this.onSearch()
+        }
     }
 }
 </script>

@@ -3,26 +3,27 @@
         <el-dialog
             :title="title"
             :visible.sync="dialogVisible"
-            width="50%"
+            width="500px"
             :before-close="handleClose"
             @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="108px" class="demo-ruleForm">
-                <el-form-item label="活动名称" prop="activity_type_id">
-                    <el-select v-model="ruleForm.activity_type_id" :disabled="disabeld" placeholder="请选择活动名称">
-                        <el-option v-for="item in activetyList" :disabled="item.disabeld" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                <el-form-item label="活动名称" prop="name">
+                    <el-input :disabled="true" v-model="ruleForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="活动图片" prop="icon">
+                    <Upload v-model="ruleForm.icon" :imgUrl="ruleForm.icon"  @validateField="validateField" :disabled="disabled" ref="Upload"></Upload>
+                </el-form-item>
+                <el-form-item label="活动类型" prop="type">
+                    <el-select v-model="ruleForm.type" :disabled="disabled" placeholder="请选择活动类别">
+                        <el-option v-for="(item,index) in dwActivityList" :key="index" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="活动类别" prop="type">
-                    <el-select v-model="ruleForm.type" :disabled="disabeld" placeholder="请选择活动类别">
-                        <el-option label="背包" :value="1"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="单次抽奖砖石" prop="cost">
-                    <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" onkeyup="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabeld" v-model="ruleForm.cost"></el-input>
+                <el-form-item label="活动链接" prop="url">
+                    <el-input :disabled="disabled" v-model="ruleForm.url"></el-input>
                 </el-form-item>
                 <el-form-item label="开始时间" prop="start_time">
                     <el-date-picker
-                    :disabled="disabeld"
+                    :disabled="disabled"
                     v-model="ruleForm.start_time"
                     value-format="timestamp"
                     type="datetime"
@@ -32,7 +33,7 @@
                 </el-form-item>
                 <el-form-item label="结束时间" prop="end_time" :rules="EndRules">
                     <el-date-picker
-                    :disabled="disabeld"
+                    :disabled="disabled"
                     v-model="ruleForm.end_time"
                     :picker-options="EndPicker"
                     value-format="timestamp"
@@ -40,13 +41,9 @@
                     placeholder="请选择结束时间">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="添加礼物">
-                    <el-button type="primary" :disabled="disabeld" @click="$refs.gift.handleAddGiftShow()">添 加</el-button>
-                </el-form-item>
-                <gift ref="gift" :isShowProperty="true" :status="status" :isShowLocation="false" :activityType="code" :list="ruleForm.gifts"></gift>
                 <el-form-item class="footer">
                     <el-button @click="resetForm">取 消</el-button>
-                    <el-button :disabled="disabeld" type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+                    <el-button :disabled="disabled" type="primary" @click="submitForm('ruleForm')">确 定</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -54,25 +51,21 @@
 </template>
 
 <script>
-import {
-		getActivetyList,
-		getActivetyGiftSave,
-		getActivetyHasGiftList,
-	} from '@/api/videoRoom'
-// 礼物组件
-import gift from '@/components/gift/index.vue'
-// 引入公共方法
-import { errStatus } from '@/utils/common.js'
+import { configDW } from '@/api/userActivity'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
+// 引入上传图片组件
+import Upload from '@/components/uploadImg/index.vue'
 
 export default {
+    components: {
+        Upload
+    },
     props: {
         list: {
             type: Array,
             default: []
         }
-    },
-    components: {
-        gift
     },
     computed: {
         title() {
@@ -89,7 +82,7 @@ export default {
             params = {
                 required: true,
                 validator: (rules, val, cb) => {
-                    if(start < new Date().getTime()) {
+                    if(start < new Date().getTime() && this.status !== 'update') {
                         cb(new Error('开始时间不能小于当前时间!'))
                     } else {
                         cb()
@@ -105,9 +98,9 @@ export default {
             params = {
                 required: true,
                 validator: (rules, val, cb) => {
-                    if(end < new Date().getTime()) {
+                    if(end < new Date().getTime() && this.status !== 'update') {
                         cb(new Error('结束时间不能小于当前时间!'))
-                    } if(start && end <= start) {
+                    } if(start && end <= start && this.status !== 'update') {
                         cb(new Error('结束时间不能小于开始时间!'))
                     } else {
                         cb()
@@ -133,7 +126,7 @@ export default {
                 }
             }
         },
-        disabeld() {
+        disabled() {
             if(this.status === 'see') {
                 return true
             }
@@ -143,27 +136,31 @@ export default {
     data() {
         return {
             status: 'add',
-            code: 'zzbx',
+            code: 'dw',
             dialogVisible: false,
-            activetyList: [],
+            dwActivityList: MAPDATA.DWACTIVITYTYPE,
             ruleForm: {
                 id: null,
-                activity_type_id: null,
-                type: 1,
-                cost: null,
+                name: '2022端午活动',
+                icon: '',
+                type: '',
+                url: '',
                 start_time: null,
                 end_time: null,
-                gifts: []
+                animation: '11'
             },
             rules: {
-                activity_type_id: [
-                    { required: true, message: '请选择活动名称', trigger: 'change' }
+                name: [
+                    { required: true, message: '请输入活动名称', trigger: 'blur' }
+                ],
+                icon: [
+                    { required: true, message: '请输入活动图片', trigger: 'change' }
                 ],
                 type: [
-                    { required: true, message: '请选择活动类别', trigger: 'change' }
+                    { required: true, message: '请选择活动类型', trigger: 'change' }
                 ],
-                cost: [
-                    { required: true, message: '请输入单次抽奖砖石', trigger: 'blur' }
+                url: [
+                    { required: true, message: '请输入活动链接', trigger: 'blur' }
                 ],
                 start_time: [
                     { type: 'date', required: true, message: '请选择开始时间', trigger: 'change' }
@@ -178,35 +175,12 @@ export default {
         handleClose() {
             this.resetForm()
         },
-        // 获取活动名称
-        activetyListFunc() {
-            getActivetyList().then(res => {
-                if(res.data.list && res.data.list.length > 0) {
-                    res.data.list.forEach(item => {
-                        item.disabeld = false
-                        this.list.forEach(a => {
-                            if(item.name === a.name) {
-                                item.disabeld = true
-                            }
-                        })
-                    })
-                }
-                this.activetyList = res.data.list;
-            })
-        },
         async loadParams(status, row) {
             this.status = status
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
                 params.start_time = params.start_time * 1000
                 params.end_time = params.end_time * 1000
-                let res = await getActivetyHasGiftList({ activity_id: params.id })
-                if(res.data.list && res.data.list.length > 0) {
-                    res.data.list.forEach(item => {
-                        item.probability = item.probability / 100000
-                    })
-                }
-                this.$set(params, 'gifts', res.data.list)
                 this.ruleForm = params
             }
             this.dialogVisible = true
@@ -215,37 +189,11 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    let s = this.ruleForm
-
-                    let { isMax, everyGift, allProbability } = errStatus(s)
-
-                    if(isMax) {
-                        this.$message.error('所有大礼物价格和概率必须一致')
-                        return false
-                    }
-
-                    if(everyGift) {
-                        this.$message.error('礼物概率不能为0')
-                        return false
-                    }
-
-                    if(allProbability) {
-                        this.$message.error('一个大礼物和所有小礼物概率之和必须是100%')
-                        return false
-                    }
-
-                    let params = {...this.ruleForm}
+                    let params = { ...this.ruleForm }
+                    params.code = 'dw'
                     params.start_time = Math.floor(params.start_time / 1000)
                     params.end_time = Math.floor(params.end_time / 1000)
-                    params.gifts = []
-                    s.gifts.forEach(item => {
-                        params.gifts.push({
-                            id: item.id,
-                            type: item.type,
-                            probability: (item.probability * 100000).toFixed(0)
-                        })
-                    })
-                    getActivetyGiftSave(params).then(res => {
+                    configDW(params).then(res => {
                         this.dialogVisible = false
                         this.$message.success('创建成功!')
                         this.$emit('getList')
@@ -272,10 +220,11 @@ export default {
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
+        },
+        // 重置字段验证
+        validateField(name) {
+            this.$refs.ruleForm.validateField([name])
         }
-    },
-    created() {
-        this.activetyListFunc()
     }
 }
 </script>

@@ -1,121 +1,191 @@
+// 赠送商品统计
 <template>
-    <div class="givegoods-box">
-        <div class="goods">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="用户ID" prop="name">
-                    <el-input v-model="ruleForm.name" placeholder="被赠送用户ID"></el-input>
-                </el-form-item>
-                <el-form-item label="赠送商品" prop="name">
-                    <el-button type="primary" @click="selectClick">选择商品</el-button>
-                </el-form-item>
-                <el-form-item label="赠送时长" prop="region">
-                    <el-select v-model="ruleForm.region" placeholder="请选择赠送时长">
-                    <el-option v-for="(item,index) in durationList" :key="index" :label="item.name" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="活动形式" prop="desc">
-                    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-                </el-form-item>
-
-                <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
-                </el-form-item>
-            </el-form>
+    <div class="shopping-givegoods-box">
+        <el-button class="add" type="success" @click="handleAdd">新增</el-button>
+        <div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
+        <div class="tableList">
+            <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
 
-        <goodsBank ref="goodsBank" :list="list"></goodsBank>
+        <addComp ref="addComp" :list="list" v-if="isDestoryComp" @getList="getList" @destoryComp="destoryComp"></addComp>
     </div>
 </template>
 
 <script>
-// 引入商品库组件
-import goodsBank from '@/components/goodsBank/index.vue'
+// 引入列表组件
+import tableList from '@/components/tableList/TableList.vue'
+// 引入菜单组件
+import SearchPanel from '@/components/SearchPanel/final.vue'
+// 引入api
+import REQUEST from '@/request/index.js'
+// 引入公共参数
+import mixins from '@/utils/mixins.js'
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
+// 引入新增/修改
+import addComp from './add/index.vue'
+import { getActivetyGiftADelete, getActivetyGiftSave, getActivetyHasGiftList } from '@/api/videoRoom'
 
 export default {
     components: {
-        goodsBank
+        tableList,
+        SearchPanel,
+        addComp
     },
+    mixins: [mixins],
     data() {
         return {
-            list: [],
-            durationList: MAPDATA.DURATION, // 时长列表
-            ruleForm: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
-            },
-            rules: {
-                name: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-                ],
-                region: [
-                    { required: true, message: '请选择活动区域', trigger: 'change' }
-                ],
-                date1: [
-                    { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-                ],
-                date2: [
-                    { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-                ],
-                type: [
-                    { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-                ],
-                resource: [
-                    { required: true, message: '请选择活动资源', trigger: 'change' }
-                ],
-                desc: [
-                    { required: true, message: '请填写活动形式', trigger: 'blur' }
+            status: 'add',
+            isDestoryComp: false,
+            list: []
+        }
+    },
+    computed: {
+        cfgs() {
+            return {
+                vm: this,
+                url: REQUEST.shopping.sendlog,
+                columns: [
+                    {
+                        label: '被赠送用户ID',
+                        prop: 'user_number'
+                    },
+                    {
+                        label: '商品名称',
+                        prop: 'goods_name'
+                    },
+                    {
+                        label: '赠送时长',
+                        prop: 'day'
+                    },
+                    {
+                        label: '赠送时间',
+                        render: (h, params) => {
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : "")
+                        }
+                    },
+                    {
+                        label: '赠送原因',
+                        prop: 'remark'
+                    },
+                    {
+                        label: '操作人',
+                        prop: 'op_user'
+                    }
                 ]
             }
-        };
-    },
-    methods: {
-        // 选择商品
-        selectClick() {
-            this.$refs.goodsBank.drawer = true
-            this.$refs.goodsBank.giftList()
         },
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    alert('submit!');
-                } else {
-                    console.log('error submit!!');
-                    return false;
+        forms() {
+            return [
+                {
+                    name: 'user_number',
+                    type: 'input',
+                    value: '',
+                    label: '用户ID',
+                    isNum: true,
+                    placeholder: '请输入用户ID'
                 }
-            });
+            ]
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
+    },
+    methods:{
+        // 配置参数
+        beforeSearch(params) {
+            let s = this.searchParams
+            return {
+                page: params.page,
+                user_number: s.user_number
+            }
+        },
+        // 刷新列表
+        getList() {
+            this.$refs.tableList.getData()
+        },
+        // 新增
+        handleAdd() {
+            this.load('add')
+        },
+        // 修改
+        update(row) {
+            this.load('update', row)
+        },
+        // 查看
+        see(row) {
+            this.load('see', row)
+        },
+        load(status, row) {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.addComp.loadParams(status, row)
+            }, 100);
+        },
+        // 销毁组件
+        destoryComp() {
+            this.isDestoryComp = false
+            this.onSearch()
+        },
+        // 冻结
+        freeze(row) {
+            this.$confirm('确认冻结当前活动？')
+            .then(_ => {
+                row.end_time = Math.floor(new Date().getTime() / 1000)
+                getActivetyHasGiftList({ activity_id: row.id }).then(data => {
+                    row.gifts = data.data.list
+                    getActivetyGiftSave(row).then(res => {
+                        this.$message.success('冻结成功!')
+                        this.getList()
+                    }).catch(err => {
+                        this.$message.error('冻结失败!')
+                    })
+                })
+            })
+            .catch(_ => {});
+        },
+        // 删除
+        deleteFunc(row) {
+            this.$confirm('确认删除当前活动？')
+            .then(_ => {
+                getActivetyGiftADelete({id: row.id}).then(res => {
+                    this.$message.success('删除成功!')
+                    this.getList()
+                }).catch(err => {
+                    this.$message.error('删除失败!')
+                })
+            })
+        },
+        // 获取列表数据
+        saleAmunt(data) {
+            this.list = data.list
+        },
+        onSearch() {
+            this.$refs.tableList.getData()
+        },
+        reset() {
+            this.searchParams = {}
+            this.onSearch()
         }
     }
 }
 </script>
 
 <style lang="scss">
-.givegoods-box {
+.shopping-givegoods-box {
     padding: 20px;
     box-sizing: border-box;
-    .goods {
-        padding: 30px;
-        box-sizing: border-box;
-        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
-        .el-form {
-            .el-input {
-                width: 400px;
-            }
-            .el-textarea {
-                width: 400px;
-            }
+    .add {
+        margin-bottom: 20px;
+    }
+    >.el-form {
+        .el-input {
+            width: 300px;
         }
+    }
+    .tableList {
+        // margin-top: 22px;
     }
 }
 </style>

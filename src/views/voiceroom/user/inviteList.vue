@@ -221,7 +221,7 @@ export default {
                     },
                     {
                         label: '最后一次登录设备',
-                        prop: 'reg_device'
+                        prop: 'last_login_device_id'
                     },
                 ]
             }

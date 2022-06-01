@@ -137,14 +137,19 @@ export default {
             //     this.$message.error('当前活动已超过添加最大礼物数量')
             //     return false
             // }
-
+            if(this.gifts.length < 1) {
+                this.giftListArr.map(res => {
+                    if (res.id == row.id) {
+                        res.isSelect = true; // 当前礼物被选中
+                        this.gifts.push(row)
+                    }
+                })
+            } else {
+                this.$message.error('最多只能赠送一个商品')
+            }
             // this.$set(row, 'type', 1)
-            this.giftListArr.map(res => {
-                if (res.id == row.id) {
-                    res.isSelect = true; // 当前礼物被选中
-                    this.gifts.push(row)
-                }
-            })
+            this.$emit('validateField')
+            
         },
         // 数据初始化 - 未选中
         giftSelectSource() {

@@ -65,6 +65,15 @@
 								<!-- {{accountInfo.cashing || 0}} <span class="unitText">喵粮</span>  -->
 							</div>
 						</div>
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								消费总流水:
+							</div>
+							<div class="userContent fl">
+								0
+								<!-- {{accountInfo.cashing || 0}} <span class="unitText">喵粮</span>  -->
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="all-recharge-box" style="padding-bottom: 30px;">

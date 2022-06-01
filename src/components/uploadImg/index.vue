@@ -3,6 +3,7 @@
         <el-upload
         class="avatar-uploader"
         action=""
+        :disabled="disabled"
         :accept="accept"
         :show-file-list="false"
         :before-upload="beforeUpload"
@@ -27,6 +28,10 @@ export default {
             default: ''
         },
         isSpecial: { // 是否为特效商品
+            type: Boolean,
+            default: false
+        },
+        disabled: { // 是否只能查看
             type: Boolean,
             default: false
         },

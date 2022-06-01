@@ -23,6 +23,13 @@
 						<ossFile :picImg="imageUrl" :type="'img'" :play_type="1" @getUpLoadImg="getUpLoadImg"/>
 					</el-col>
 				</el-form-item>
+                <el-form-item label="活动类型" prop="type" :label-width="formLabelWidth">
+                    <el-col :span="17">
+                        <el-select v-model="popForm.type" :disabled="popForm.typeName == 'Detail' ? true : false " placeholder="请选择活动类别" style="width: 335px;">
+                            <el-option v-for="(item,index) in dwActivityList" :key="index" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-col>
+                </el-form-item>
 				<el-form-item label="单次消耗" prop="cost" :label-width="formLabelWidth">
 					<el-input v-model="popForm.cost" v-input-limit="0" style="width: 335px;"
 						placeholder="最低100" clearable autocomplete="off"
@@ -72,6 +79,8 @@ import gift from '@/components/gift/index.vue'
 // 引入上传文件组价
 import ossFile from './../../components/ossFile.vue'
 import { off } from 'process'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
         tableList,
@@ -87,6 +96,7 @@ export default {
             imageUrl : "",
             formLabelWidth : "100px",
             loading: false,
+            dwActivityList: MAPDATA.DWACTIVITYTYPE,
             popForm: {
                 id : "",
                 typeName: "",
@@ -100,6 +110,7 @@ export default {
                 gifts : [],
             },
             popFormRules: {
+                type: [{ required: true, message: '请选择活动类型', trigger: 'change' }],
                 name: [{
 						required: true,
 						trigger: 'blur',
@@ -291,6 +302,7 @@ export default {
                 cost: "",
                 start_time: "",
                 end_time:"",
+                type: '',
                 gifts : [],
             }
             this.imageUrl = "";
@@ -310,6 +322,7 @@ export default {
             this.popForm.name = row.name;
             this.imageUrl = row.icon;
             this.popForm.cost =row.cost;
+            this.popForm.type = row.type;
             this.popForm.start_time = row.start_time > 0 ? moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
             this.popForm.end_time = row.end_time > 0 ? moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
             this.handleGetGift(row.id);
@@ -324,6 +337,7 @@ export default {
             this.popForm.name = row.name;
             this.imageUrl = row.icon;
             this.popForm.cost =row.cost;
+            this.popForm.type = row.type;
             this.popForm.start_time = row.start_time > 0 ? moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
             this.popForm.end_time = row.end_time > 0 ? moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
             this.popForm.typeName = "Detail";
@@ -406,6 +420,7 @@ export default {
                 icon : this.imageUrl,
                 animation : this.popForm.animation,
                 cost : this.popForm.cost,
+                type : this.popForm.type,
                 start_time : moment(this.popForm.start_time, 'YYYY-MM-DD HH:mm:ss').valueOf() / 1000,
                 end_time : moment(this.popForm.end_time, 'YYYY-MM-DD HH:mm:ss').valueOf() / 1000,
                 gifts : gifts

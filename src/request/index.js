@@ -36,6 +36,8 @@ const request = {
         },
         dwActivity: {
             list: `${HTTPHEADER}/Activity/aclist`,
+            configDW: `${HTTPHEADER}/Activityins/configDW`,
+            dragonBoatFestival: `${HTTPHEADER}/Statistical/dragonBoatFestival`,
         }
     },
 
@@ -61,6 +63,8 @@ const request = {
         list: `${HTTPHEADER}/goods`,
         add: `${HTTPHEADER}/goods/save`,
         down: `${HTTPHEADER}/goods/down`,
+        send: `${HTTPHEADER}/goods/send`,
+        sendlog: `${HTTPHEADER}/goods/sendlog`,
     }
     
 }

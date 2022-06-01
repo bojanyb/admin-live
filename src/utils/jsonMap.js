@@ -253,7 +253,7 @@ const DURATION = [
         name: '30天'
     },
     {
-        value: 0,
+        value: -1,
         name: '永久'
     }
 ]
@@ -280,12 +280,24 @@ const GIFTLIST = [
 // 查看 - 礼物统计
 const GIFTSTATISTICS = [
     {
-        value: 1,
+        value: 'live_user_id',
         name: '收到最多'
     },
     {
-        value: 2,
+        value: 'user_id',
         name: '送出最多'
+    }
+]
+
+// 端午活动类型
+const DWACTIVITYTYPE = [
+    {
+        name: '原生',
+        value: 1
+    },
+    {
+        name: 'H5',
+        value: 2
     }
 ]
 
@@ -323,5 +335,6 @@ export default {
     GIFTLIST,
     GIFTSTATISTICS,
     DURATION,
-    CLASSLIST
+    CLASSLIST,
+    DWACTIVITYTYPE
 }
