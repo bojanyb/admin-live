@@ -36,7 +36,11 @@
 			<el-table-column label="是否为厅主" prop="is_guild_roomText" align="center" width="110" />
 			<el-table-column label="手机号" prop="phone" align="center" width="110" />
 			<el-table-column label="状态" prop="statusText" align="center" width="95" />
-			<el-table-column label="是否已绑卡" prop="statusText" align="center" width="95" />
+			<el-table-column label="是否已绑卡" prop="is_bindcard" align="center" width="95">
+				<template slot-scope="scope">
+					<div style="cursor: pointer;" @click="bindcardFunc(scope.row)">{{ scope.row.is_bindcard ? '是' : '否' }}</div>
+				</template>
+			</el-table-column>
 			<el-table-column label="创建时间" prop="create_timeText" align="center" width="180" />
 			<el-table-column label="封禁时间" prop="update_timeText" align="center" width="180" />
 			<el-table-column label="封禁备注" prop="remark" align="center" width="200" show-overflow-tooltip />
@@ -83,6 +87,8 @@
 				<el-button :loading="loading" type="primary" @click="handleChange">确 定</el-button>
 			</div>
 		</el-dialog>
+
+		<bindStuck ref="bindStuck"></bindStuck>
 	</div>
 </template>
 
@@ -94,10 +100,12 @@
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
+	import bindStuck from './components/bindStuck.vue'
 	export default {
 		name: 'UserList',
 		components: {
-			Pagination
+			Pagination,
+			bindStuck
 		},
 		data() {
 			return {
@@ -246,6 +254,12 @@
 					}
 				})
 			},
+			bindcardFunc(row) {
+				if(row.is_bindcard) {
+					this.$refs.bindStuck.dialogVisible = true
+					this.$refs.bindStuck.getList(row.id)
+				}
+			}
 		}
 	}
 </script>

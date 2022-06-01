@@ -60,7 +60,11 @@ export default {
                     },
                     {
                         label: '赠送时长',
-                        prop: 'day'
+                        prop: 'day',
+                        render: (h, params) => {
+                            let data = MAPDATA.DURATION.find(item => { return item.value == params.row.day })
+                            return h('span', data ? data.name : '--')
+                        }
                     },
                     {
                         label: '赠送时间',

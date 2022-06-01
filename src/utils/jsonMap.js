@@ -320,6 +320,134 @@ const CLASSLIST = [
     }
 ]
 
+const BANKLIST = [
+    {
+        url: require('@/assets/img/img_01020000.png'),
+        code: '01020000',
+        name: '工商银行'
+    },
+    {
+        url: require('@/assets/img/img_01030000.png'),
+        code: '01030000',
+        name: '农业银行'
+    },
+    {
+        url: require('@/assets/img/img_03130011.png'),
+        name: '03130011',
+        name: '北京银行'
+    },
+    {
+        url: require('@/assets/img/img_03030000.png'),
+        code: '03030000',
+        name: '光大银行'
+    },
+    {
+        url: require('@/assets/img/img_03060000.png'),
+        code: '03060000',
+        name: '广发银行'
+    },
+    {
+        url: require('@/assets/img/img_01050000.png'),
+        code: '01050000',
+        name: '建设银行'
+    },
+    {
+        url: require('@/assets/img/img_03010000.png'),
+        code: '03010000',
+        name: '交通银行'
+    },
+    {
+        url: require('@/assets/img/img_03050000.png'),
+        code: '03050000',
+        name: '民生银行'
+    },
+    {
+        url: require('@/assets/img/img_03133201.png'),
+        code: '03133201',
+        name: '南京银行'
+    },
+    {
+        url: require('@/assets/img/img_03134402.png'),
+        code: '03134402',
+        name: '平安银行'
+    },
+    {
+        url: require('@/assets/img/img_77777781.png'),
+        code: '77777781',
+        name: '浦发银行'
+    },
+    {
+        url: require('@/assets/img/img_03130031.png'),
+        code: '03130031',
+        name: '上海银行'
+    },
+    {
+        url: require('@/assets/img/img_03090000.png'),
+        code: '03090000',
+        name: '兴业银行'
+    },
+    {
+        url: require('@/assets/img/img_03080000.png'),
+        code: '03080000',
+        name: '招商银行'
+    },
+    {
+        url: require('@/assets/img/img_01040000.png'),
+        code: '01040000',
+        name: '中国银行'
+    },
+    {
+        url: require('@/assets/img/img_03020000.png'),
+        code: '03020000',
+        name: '中信银行'
+    },
+    {
+        url: require('@/assets/img/img_03040000.png'),
+        code: '03040000',
+        name: '华夏银行'
+    },
+    {
+        url: require('@/assets/img/img_03180000.png'),
+        code: '03180000',
+        name: '渤海银行'
+    },
+    {
+        url: require('@/assets/img/img_05818200.png'),
+        code: '05818200',
+        name: '甘肃银行'
+    },
+    {
+        url: require('@/assets/img/img_03133301.png'),
+        code: '03133301',
+        name: '杭州银行'
+    },
+    {
+        url: require('@/assets/img/img_03160000.png'),
+        code: '03160000',
+        name: '浙商银行'
+    },
+    {
+        url: require('@/assets/img/img_04478210.png'),
+        code: '04478210',
+        name: '兰州银行'
+    },
+    {
+        url: require('@/assets/img/img_05847000.png'),
+        code: '05847000',
+        name: '贵州银行'
+    },
+    {
+        url: require('@/assets/img/img_04030000.png'),
+        code: '04030000',
+        name: '中国邮政储蓄银行'
+    },
+    {
+        url: require('@/assets/img/img_03150000.png'),
+        code: '03150000',
+        name: '恒丰银行'
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -336,5 +464,6 @@ export default {
     GIFTSTATISTICS,
     DURATION,
     CLASSLIST,
-    DWACTIVITYTYPE
+    DWACTIVITYTYPE,
+    BANKLIST
 }
