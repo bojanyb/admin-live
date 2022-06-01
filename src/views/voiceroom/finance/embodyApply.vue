@@ -69,17 +69,17 @@ export default {
                         prop: 'money',
                     },
                     {
+                        label: '提现金额',
+                        render: (h, params) => {
+                            return h('span', params.row.money / 100)
+                        }
+                    },
+                    {
                         label: '手续费',
                         prop: 'cash_rate',
                         render: (h, params) => {
                             let money = Math.floor((params.row.money / 10000 * params.row.cash_rate).toFixed(5) * 100) / 100
                             return h('span', money)
-                        }
-                    },
-                    {
-                        label: '提现金额',
-                        render: (h, params) => {
-                            return h('span', params.row.money / 100)
                         }
                     },
                     {

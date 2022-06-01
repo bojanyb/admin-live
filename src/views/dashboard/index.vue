@@ -31,8 +31,7 @@
 							总数:
 						</div>
 						<div class="userContent fl">
-							0
-							<!-- {{accountInfo.total_gain || 0}} -->
+							{{Number(accountInfo.total_gain) + Number(accountInfo.total_diamond) || 0}}
 						</div>
 					</div>
 				</div>
@@ -52,8 +51,7 @@
 								活动总流水:
 							</div>
 							<div class="userContent fl">
-								0
-								<!-- {{accountInfo.cashing || 0}} <span class="unitText">喵粮</span>  -->
+								{{accountInfo.ac_in || 0}}
 							</div>
 						</div>
 						<div class="userInfoItem text item">
@@ -61,8 +59,7 @@
 								背包总价值:
 							</div>
 							<div class="userContent fl">
-								0
-								<!-- {{accountInfo.cashing || 0}} <span class="unitText">喵粮</span>  -->
+								{{accountInfo.ac_out || 0}}
 							</div>
 						</div>
 						<div class="userInfoItem text item">
@@ -83,8 +80,7 @@
 								礼物总流水:
 							</div>
 							<div class="userContent fl">
-								0
-								<!-- {{accountInfo.cashing || 0}} <span class="unitText">喵粮</span>  -->
+								{{accountInfo.gift_total || 0}} 
 							</div>
 						</div>
 						<div class="userInfoItem text item">
