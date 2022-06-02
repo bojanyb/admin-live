@@ -10,3 +10,12 @@ export function doCash(data) {
     data
   })
 }
+
+// 
+export function diamondRecharge(data) {
+  return request({
+    url: REQUEST.CashHisity.diamondRecharge,
+    method: 'post',
+    data
+  })
+}

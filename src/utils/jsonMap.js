@@ -187,6 +187,29 @@ const EMBODYSORT = [
     }
 ]
 
+const INSTITUTION = [
+    {
+        value: 1,
+        name: '苹果支付'
+    },
+    {
+        value: 2,
+        name: '财付通'
+    },
+    {
+        value: 3,
+        name: '蚂蚁金服'
+    },
+    {
+        value: 4,
+        name: '银联'
+    },
+    {
+        value: 8,
+        name: '上海汇付'
+    },
+]
+
 /*
 *商城管理 - 商品列表
 */
@@ -465,5 +488,6 @@ export default {
     DURATION,
     CLASSLIST,
     DWACTIVITYTYPE,
-    BANKLIST
+    BANKLIST,
+    INSTITUTION
 }

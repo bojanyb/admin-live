@@ -46,13 +46,23 @@ export default {
                 //     placeholder: '请选择',
                 //     options: MAPDATA.SORTLIST
                 // },
+                // {
+                //     name: 'user_number',
+                //     type: 'input',
+                //     value: '',
+                //     label: '收单机构',
+                //     isNum: true,
+                //     placeholder: '请输入收单机构'
+                // },
                 {
-                    name: 'user_number',
-                    type: 'input',
+                    name: 'channel',
+                    type: 'select',
                     value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
                     label: '收单机构',
-                    isNum: true,
-                    placeholder: '请输入收单机构'
+                    placeholder: '请选择',
+                    options: MAPDATA.INSTITUTION
                 },
                 {
                     name: 'user_number',
@@ -147,6 +157,7 @@ export default {
                 page: params.page,
                 user_number: s.user_number,
                 sort: s.sort,
+                channel: s.channel,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000)
             }

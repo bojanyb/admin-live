@@ -55,7 +55,8 @@ const request = {
     CashHisity: {
         list: `${HTTPHEADER}/cash/getcashHisity`,
         apply: `${HTTPHEADER}/cash/getCash`,
-        doCash: `${HTTPHEADER}/cash/doCash`
+        doCash: `${HTTPHEADER}/cash/doCash`,
+        diamondRecharge: `${HTTPHEADER}/Recharge/diamondRecharge`,
     },
 
     // 商城管理
