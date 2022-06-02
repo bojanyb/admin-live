@@ -123,7 +123,7 @@ export default {
                     let params = { ...this.ruleForm }
                     params.goods_id = this.list[0].id
                     goodsSend(params).then(res => {
-                        
+                        this.handleClose()
                     })
                 } else {
                     console.log('error submit!!');
