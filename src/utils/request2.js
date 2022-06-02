@@ -85,6 +85,10 @@ service.interceptors.response.use(
 				},2000)
 				return
 			}
+			Message({
+				message: res.msg,
+				type: 'error'
+			})
 			return Promise.reject(res.msg || new Error('Error'))
 		} else {
 			return res
