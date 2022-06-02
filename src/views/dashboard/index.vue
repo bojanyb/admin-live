@@ -67,8 +67,7 @@
 								消费总流水:
 							</div>
 							<div class="userContent fl">
-								0
-								<!-- {{accountInfo.cashing || 0}} <span class="unitText">喵粮</span>  -->
+								{{accountInfo.buy_goods || 0}}
 							</div>
 						</div>
 					</div>

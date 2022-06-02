@@ -20,7 +20,7 @@
                 <el-form-item label="商品名称" prop="goods_name">
                     <el-input v-model="ruleForm.goods_name" placeholder="请输入商品名称"></el-input>
                 </el-form-item>
-                <el-form-item label="商品简介" prop="goods_describe">
+                <el-form-item label="商品简介">
                     <el-input
                     type="textarea"
                     :autosize="{ minRows: 2, maxRows: 4}"
