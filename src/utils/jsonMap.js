@@ -200,13 +200,13 @@ const INSTITUTION = [
         value: 3,
         name: '蚂蚁金服'
     },
-    {
-        value: 4,
-        name: '银联'
-    },
+    // {
+    //     value: 4,
+    //     name: '银联'
+    // },
     {
         value: 8,
-        name: '上海汇付'
+        name: '上海汇付支付有限公司'
     },
 ]
 
