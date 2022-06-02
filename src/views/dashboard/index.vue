@@ -156,8 +156,7 @@
 								赠送总数:
 							</div>
 							<div class="userContent fl">
-								0
-								<!-- {{accountInfo.incGain || 0}} <span class="unitText">喵粮</span> -->
+								{{Number(accountInfo.incGain) + Number(accountInfo.incDiamond) || 0}}
 							</div>
 						</div>
 					</div>
@@ -183,8 +182,7 @@
 								扣除总数:
 							</div>
 							<div class="userContent fl">
-								0
-								<!-- {{accountInfo.decGain || 0}} <span class="unitText">喵粮</span> -->
+								{{Number(accountInfo.decGain) + Number(accountInfo.decDiamond) || 0}}
 							</div>
 						</div>
 					</div>
