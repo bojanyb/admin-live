@@ -101,6 +101,7 @@ export default {
                     },
                     {
                         label: '操作',
+                        width: '200',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.doCashFunc(params.row, 'success')}}}, '通过'),
