@@ -133,7 +133,11 @@ export default {
             let res = await doCash(params)
             if(res.code === 2000) {
                 let message = type === 'success' ? '通过审核' : '驳回成功'
-                this.$message.success(message)
+                if(type === 'success') {
+                    this.$message.success(message)
+                } else {
+                    this.$message.error(message)
+                }
             }
             this.getList()
         },
