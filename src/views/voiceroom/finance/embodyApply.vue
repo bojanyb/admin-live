@@ -56,10 +56,12 @@ export default {
                 columns: [
                     {
                         label: '用户ID',
+                        width: '100px',
                         prop: 'user_id'
                     },
                     {
                         label: '申请提现时间',
+                        width: '200px',
                         render: (h, params) => {
                             return h('span', params.row.addtime ? timeFormat(params.row.addtime, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
@@ -90,6 +92,7 @@ export default {
                     },
                     {
                         label: '提现卡号',
+                        width: '200px',
                         prop: 'card_id'
                     },
                     {
@@ -101,7 +104,7 @@ export default {
                     },
                     {
                         label: '操作',
-                        width: '200',
+                        width: '200px',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.doCashFunc(params.row, 'success')}}}, '通过'),
@@ -128,7 +131,7 @@ export default {
                 status: type === 'success' ? 2 : 3
             }
             let res = await doCash(params)
-            if(res.code === 0) {
+            if(res.code === 2000) {
                 let message = type === 'success' ? '通过审核' : '驳回成功'
                 this.$message.success(message)
             }
