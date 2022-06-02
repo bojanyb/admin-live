@@ -12,8 +12,8 @@
         :min-width="item.minWidth" :key="item.label" :show-overflow-tooltip="item.showOverFlow" v-if="heckoutGoodsField(item.label)">
         <template slot-scope="scope">
           <WeTableCustomColumn :renderContent="item.render" v-if="!item.isimg" :scope="scope" :prop="item.prop"></WeTableCustomColumn>
-          <el-image v-if="item.isimg" :src="scope.row.img || $store.state.defaultImg" :style="{width:item.imgWidth,height:item.imgHeight}"
-            :preview-src-list="[scope.row.img||$store.state.defaultImg]">
+          <el-image v-if="item.isimg" :src="scope.row[item.prop] || $store.state.defaultImg" :style="{width:item.imgWidth,height:item.imgHeight}"
+            :preview-src-list="[scope.row[item.prop]||$store.state.defaultImg]">
             <div slot="error" class="image-slot">
               <img :src="$store.state.loadingError" />
             </div>
@@ -125,7 +125,7 @@
             this.data = []
             this.$emit('saleAmunt', { list: [], baoxiang: {}});
             this.loading = false;
-            this.$message.error(err || '获取数据失败');
+            this.$message.error(err.msg || '获取数据失败');
           })
         } else {
           this.loading = false;

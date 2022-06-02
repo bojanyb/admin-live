@@ -49,6 +49,7 @@
 	  <el-table-column label="用户ID" prop="user_number" align="center" />
       <el-table-column label="金额" prop="diamond" align="center"/>
       <el-table-column label="余额" prop="balance" align="center"/>
+      <el-table-column label="渠道" prop="genreText" align="center" />
       <el-table-column label="类型" prop="genreText" align="center" />
       <el-table-column label="交易流水号" prop="trade_noText" align="center" />
     </el-table>
@@ -93,8 +94,8 @@ export default {
       filters: {
         'user_number': '',
         trade_no: '',
-        relation_type: null,
-        genre: null
+        relation_type: '',
+        genre: ''
       },
       select: '',
       selectList: [
@@ -117,6 +118,12 @@ export default {
   methods: {
     async getRelationTypeFunc() {
       let res = await getRelationType()
+      if(res.data.list && res.data.list.length > 0) {
+        res.data.list.unshift({
+          code: '',
+          name: '全部'
+        })
+      }
       this.jsonMapList = res.data.list
       this.getBannerInfo()
     },

@@ -82,12 +82,16 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.zzbxActivity.history,
+                url: REQUEST.userActivity.zzbxActivity.history,
                 isShowIndex: true,
                 columns: [
                     {
                         label: '用户ID',
                         prop: 'user_number'
+                    },
+                    {
+                        label: '用户昵称',
+                        prop: 'nickname'
                     },
                     {
                         label: '活动类型',

@@ -17,7 +17,7 @@ import activityRouter from "./modules/activity/activity.js"
 import platformActivityRouter from "./modules/platformActivity/index.js"
 import userActivity from "./modules/userActivity/index.js"
 
-// import paySystemRouter from './modules/paySystem/paySystem.js'
+import paySystemRouter from './modules/paySystem/paySystem.js'
 import reportRouter from './modules/report/index.js'
 import logOutRouter from './modules/logOut/index.js'
 import auditRouter from './modules/audit/index.js'
@@ -99,7 +99,7 @@ export const asyncRoutes = [
 	userRouter,
 	voiceroomRouter,
 	guildAuditRouter,
-	// paySystemRouter,
+	paySystemRouter,
 	giveAwayRouter,
 	dealRouter,
 	platformActivityRouter,
@@ -109,7 +109,7 @@ export const asyncRoutes = [
 	auditRouter,
 	promoteRouter,
 	// activityRouter,
-	// shoppingRouter,
+	shoppingRouter,
 	systemConfigRouter,
 	// 404 page must be placed at the end !!!
 	{

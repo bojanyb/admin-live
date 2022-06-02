@@ -23,6 +23,13 @@
 						<ossFile :picImg="imageUrl" :type="'img'" :play_type="1" @getUpLoadImg="getUpLoadImg"/>
 					</el-col>
 				</el-form-item>
+                <el-form-item label="活动类型" prop="type" :label-width="formLabelWidth">
+                    <el-col :span="17">
+                        <el-select v-model="popForm.type" :disabled="popForm.typeName == 'Detail' ? true : false " placeholder="请选择活动类别" style="width: 335px;">
+                            <el-option v-for="(item,index) in dwActivityList" :key="index" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-col>
+                </el-form-item>
 				<el-form-item label="单次消耗" prop="cost" :label-width="formLabelWidth">
 					<el-input v-model="popForm.cost" v-input-limit="0" style="width: 335px;"
 						placeholder="最低100" clearable autocomplete="off"
@@ -69,6 +76,8 @@ import moment from 'moment'
 import gift from '@/components/gift/index.vue'
 // 引入上传文件组件
 import ossFile from './../../components/ossFile.vue'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 
 export default {
     components: {
@@ -85,6 +94,7 @@ export default {
             editPop: false,
             imageUrl : "",
             formLabelWidth : "100px",
+            dwActivityList: MAPDATA.DWACTIVITYTYPE,
             popForm: {
                 id : "",
                 code : "mmly",
@@ -92,12 +102,14 @@ export default {
                 icon : "",
                 animation: "",
                 cost: "",
+                type: "",
                 typeName: "",
                 start_time: "",
                 end_time:"",
                 gifts : [],
             },
             popFormRules: {
+                type: [{ required: true, message: '请选择活动类型', trigger: 'change' }],
                 name: [{
 						required: true,
 						trigger: 'blur',
@@ -283,6 +295,7 @@ export default {
                 name : "喵喵乐园",
                 icon : "",
                 animation: "",
+                type: "",
                 cost: "",
                 start_time: "",
                 end_time:"",
@@ -303,6 +316,7 @@ export default {
             this.popForm.id = row.id;
             this.popForm.name = row.name;
             this.imageUrl = row.icon;
+            this.type = row.type;
             this.popForm.cost =row.cost;
             this.popForm.start_time = row.start_time > 0 ? moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
             this.popForm.end_time = row.end_time > 0 ? moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
@@ -315,6 +329,7 @@ export default {
             this.popForm.id = row.id;
             this.popForm.name = row.name;
             this.imageUrl = row.icon;
+            this.type = row.type;
             this.popForm.cost =row.cost;
             this.popForm.start_time = row.start_time > 0 ? moment(row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
             this.popForm.end_time = row.end_time > 0 ? moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
@@ -394,6 +409,7 @@ export default {
                 code : this.popForm.code,
                 name : this.popForm.name,
                 icon : this.imageUrl,
+                type : this.popForm.type,
                 animation : this.popForm.animation,
                 cost : this.popForm.cost,
                 start_time : moment(this.popForm.start_time, 'YYYY-MM-DD HH:mm:ss').valueOf() / 1000,

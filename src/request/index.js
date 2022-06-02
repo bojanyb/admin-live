@@ -3,7 +3,11 @@ const request = {
     pay: {
         operateHistory: `${HTTPHEADER}/payconfig/getPayOptLog`, // 操作记录
         getConfigType: `${HTTPHEADER}/payconfig/getConfigType`, // 获取支付渠道
-        setConfigType: `${HTTPHEADER}/payconfig/setConfigType` // 设置支付渠道
+        setConfigType: `${HTTPHEADER}/payconfig/setConfigType`, // 设置支付渠道
+        getAdaPayConfig: `${HTTPHEADER}/payconfig/getAdaPayConfig`, // 获取支付渠道
+        setAdaPayConfig: `${HTTPHEADER}/payconfig/setAdaPayConfig`, // 设置支付渠道
+        getWxPay: `${HTTPHEADER}/payconfig/getWxPay`, // 设置支付渠道
+        setWxpay: `${HTTPHEADER}/payconfig/setWxpay`, // 设置支付渠道
     },
 
     // 平台活动  
@@ -22,11 +26,19 @@ const request = {
         AppversionDel : `${HTTPHEADER}/appversion/del`, // 删除
     },
 
-    // 转转宝箱
-    zzbxActivity: {
-        list: `${HTTPHEADER}/Activity/aclist`,
-        history: `${HTTPHEADER}/Activity/drawLog`,
-        detail: `${HTTPHEADER}Statistical/drawLog`
+    // 用户活动
+    
+    userActivity: {
+        zzbxActivity: { // 转转宝箱
+            list: `${HTTPHEADER}/Activity/aclist`,
+            history: `${HTTPHEADER}/Activity/drawLog`,
+            detail: `${HTTPHEADER}Statistical/drawLog`
+        },
+        dwActivity: {
+            list: `${HTTPHEADER}/Activity/aclist`,
+            configDW: `${HTTPHEADER}/Activityins/configDW`,
+            dragonBoatFestival: `${HTTPHEADER}/Statistical/dragonBoatFestival`,
+        }
     },
 
     // 用户拉新记录
@@ -50,7 +62,9 @@ const request = {
     shopping: {
         list: `${HTTPHEADER}/goods`,
         add: `${HTTPHEADER}/goods/save`,
-        down: `${HTTPHEADER}/goods/down`
+        down: `${HTTPHEADER}/goods/down`,
+        send: `${HTTPHEADER}/goods/send`,
+        sendlog: `${HTTPHEADER}/goods/sendlog`,
     }
     
 }

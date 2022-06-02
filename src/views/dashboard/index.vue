@@ -3,98 +3,189 @@
 	<div class="app-container">
 		<el-card class="financeInfoTimer">
 			<div class="userInfoBox" v-loading.fullscreen.lock="fullscreenLoading">
-				<div class="userInfoItem text item" >
-					<div class="userTitle fl">
-						用户钻石总数:
+				<div class="dataBox">
+					<span>选择时间: </span>
+					<el-date-picker class="selectTime" v-model="timer" type="datetimerange" range-separator="至"
+						start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" @change="getRoomWalletInfo" />
+				</div>
+
+				<div class="all-box" style="clear: both;">
+					<div class="userInfoItem text item" >
+						<div class="userTitle fl">
+							钻石总数:
+						</div>
+						<div class="userContent fl">
+							{{accountInfo.total_diamond || 0}} <span class="unitText">钻石</span>
+						</div>
 					</div>
-					<div class="userContent fl">
-						{{accountInfo.total_diamond || 0}}
+					<div class="userInfoItem text item">
+						<div class="userTitle fl">
+							喵粮总数:
+						</div>
+						<div class="userContent fl">
+							{{accountInfo.total_gain || 0}} <span class="unitText">喵粮</span>
+						</div>
+					</div>
+					<div class="userInfoItem text item">
+						<div class="userTitle fl">
+							总数:
+						</div>
+						<div class="userContent fl">
+							{{Number(accountInfo.total_gain) + Number(accountInfo.total_diamond) || 0}}
+						</div>
 					</div>
 				</div>
-				<div class="userInfoItem text item">
-					<div class="userTitle fl">
-						用户喵粮总数:
-					</div>
-					<div class="userContent fl">
-						{{accountInfo.total_gain || 0}}
-					</div>
-				</div>
-				<div class="userInfoItem text item">
+				<!-- <div class="userInfoItem text item">
 					<div class="userTitle fl">
 						提现中数量:
 					</div>
 					<div class="userContent fl">
 						{{accountInfo.cashing || 0}} <span class="unitText">喵粮</span> 
 					</div>
-				</div>
-				<div style="border-top: solid 1px #dcdcdc;display: inline-block;padding-top: 30px;margin-top: 30px;width: 100%;">
-					<span>选择时间: </span>
-					<el-date-picker class="selectTime" v-model="timer" type="datetimerange" range-separator="至"
-						start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" @change="getRoomWalletInfo" />
-				</div>
-				<div style="margin-top: 30px;">
-					<div class="userInfoItem text item">            
-						<div class="userTitle fl">
-							充值总数:
-						</div>
-						<div class="userContent fl">
-							{{accountInfo.total_in || 0}} <span class="unitText">钻石</span>
-						</div>
-					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle fl">
-							提现总数:
-						</div>
-						<div class="userContent fl">
-							{{accountInfo.total_cash || 0}} <span class="unitText">喵粮</span>
-						</div>
-					</div>
+				</div> -->
+				
+				<div class="all-water-box">
+					<div style="clear: both;">
 						<div class="userInfoItem text item">
-						<div class="userTitle fl">
-							手续费:
+							<div class="userTitle fl">
+								活动总流水:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.ac_in || 0}}
+							</div>
 						</div>
-						<div class="userContent fl">
-							{{accountInfo.total_rate || 0}} <span class="unitText">喵粮</span>
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								背包总价值:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.ac_out || 0}}
+							</div>
 						</div>
-					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle fl">
-							平台抽成:
-						</div>
-						<div class="userContent fl">
-							{{accountInfo.commission || 0}} <span class="unitText">钻石</span>
-						</div>
-					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle fl">
-							平台赠送钻石:
-						</div>
-						<div class="userContent fl">
-							{{accountInfo.incDiamond || 0}} <span class="unitText">钻石</span>
-						</div>
-					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle fl">
-							平台赠送喵粮:
-						</div>
-						<div class="userContent fl">
-							{{accountInfo.incGain || 0}} <span class="unitText">喵粮</span>
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								消费总流水:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.buy_goods || 0}}
+							</div>
 						</div>
 					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle fl">
-							平台扣除钻石:
+				</div>
+				<div class="all-recharge-box" style="padding-bottom: 30px;">
+					<div style="clear: both;">
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								礼物总流水:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.gift_total || 0}} 
+							</div>
 						</div>
-						<div class="userContent fl">
-							{{accountInfo.decDiamond || 0}} <span class="unitText">钻石</span>
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								平台总分成:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.commission || 0}}
+							</div>
 						</div>
 					</div>
-					<div class="userInfoItem text item">
-						<div class="userTitle fl">
-							平台扣除喵粮:
+					
+				</div>
+				
+				<div class="all-recharge-box">
+					<div style="clear:both;">
+						<div class="userInfoItem text item">            
+							<div class="userTitle fl">
+								充值总数:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.total_in || 0}} <span class="unitText">钻石</span>
+							</div>
 						</div>
-						<div class="userContent fl">
-							{{accountInfo.decGain || 0}} <span class="unitText">喵粮</span>
+					</div>
+					<div style="clear:both;">
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								提现中数量:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.cashing || 0}} <span class="unitText">喵粮</span> 
+							</div>
+						</div>
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								提现总数:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.total_cash || 0}} <span class="unitText">喵粮</span>
+							</div>
+						</div>
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								手续费:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.total_rate || 0}} <span class="unitText">喵粮</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="give-box">
+					<div style="clear:both;">
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								赠送钻石:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.incDiamond || 0}} <span class="unitText">钻石</span>
+							</div>
+						</div>
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								赠送喵粮:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.incGain || 0}} <span class="unitText">喵粮</span>
+							</div>
+						</div>
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								赠送总数:
+							</div>
+							<div class="userContent fl">
+								0
+								<!-- {{accountInfo.incGain || 0}} <span class="unitText">喵粮</span> -->
+							</div>
+						</div>
+					</div>
+					<div style="clear:both;">
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								扣除钻石:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.decDiamond || 0}} <span class="unitText">钻石</span>
+							</div>
+						</div>
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								扣除喵粮:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.decGain || 0}} <span class="unitText">喵粮</span>
+							</div>
+						</div>
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								扣除总数:
+							</div>
+							<div class="userContent fl">
+								0
+								<!-- {{accountInfo.decGain || 0}} <span class="unitText">喵粮</span> -->
+							</div>
 						</div>
 					</div>
 				</div>
@@ -224,6 +315,14 @@
 		font-weight: initial;
 	}
 
+	.give-box {
+		border-top: 1px solid #DCDCDC;
+		padding-top: 40px;
+		box-sizing: border-box;
+		height: 100px;
+		clear: both;
+	}
+
 	.userInfoBox {
 		display: flow-root;
 		padding: 15px 0;
@@ -257,6 +356,40 @@
 					// text-align: center;
 				}
 			}
+		}
+	}
+
+	.all-box {
+		border-bottom: 1px solid #dcdcdc;
+		height: 70px;
+		// box-shadow: 0px 0px 3px 0px rgba(0,0,0,1);
+	}
+
+	.all-water-box {
+		// margin-top: 30px;
+		// border-top: solid 1px #dcdcdc;
+		padding: 30px 0px;
+		box-sizing: border-box;
+	}
+
+	.all-recharge-box {
+		margin-top: 30px;
+		border-top: solid 1px #dcdcdc;
+		padding-top: 30px;
+		box-sizing: border-box;
+	}
+
+	.dataBox {
+		width: 100%;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		border-bottom: solid 1px #dcdcdc;
+		padding-bottom: 30px;
+		margin-bottom: 30px;
+		box-sizing: border-box;
+		>span {
+			margin-right: 10px;
 		}
 	}
 </style>

@@ -864,3 +864,12 @@ export function getRelationType(data) {
     data
   })
 }
+
+// 获取交易类型 
+export function getStuck(data) {
+  return request({
+    url: '/user/getUserCardList',
+    method: 'post',
+    data
+  })
+}

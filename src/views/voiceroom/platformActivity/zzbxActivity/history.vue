@@ -82,7 +82,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.zzbxActivity.detail,
+                url: REQUEST.userActivity.zzbxActivity.detail,
                 columns: [
                     {
                         label: '抽奖人ID',

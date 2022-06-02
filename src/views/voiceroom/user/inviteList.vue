@@ -218,7 +218,11 @@ export default {
                         render: (h, params) => {
                             return h('span', params.row.last_login ? timeFormat(params.row.last_login, 'YYYY-MM-DD HH:mm:ss', true) : "")
                         }
-                    }
+                    },
+                    {
+                        label: '最后一次登录设备',
+                        prop: 'last_login_device_id'
+                    },
                 ]
             }
         }

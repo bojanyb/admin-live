@@ -33,11 +33,12 @@
 				</template>
 			</el-table-column>
 			<el-table-column label="房间名称" prop="room_name" align="center" width="180" show-overflow-tooltip />
-			<el-table-column label="房主昵称" prop="live_user_name" align="center" width="180" show-overflow-tooltip />
+			<el-table-column label="房主ID" prop="room_number" align="center" width="180" show-overflow-tooltip />
 			<el-table-column label="房间类型" prop="room_genre_name" align="center" width="100" />
 			<el-table-column label="在线时长" prop="live_timeText" align="center" />
 			<el-table-column label="开播时间" prop="start_timeText" align="center" />
 			<el-table-column label="结束时间" prop="end_timeText" align="center" />
+			<el-table-column label="所属公会" prop="" align="center" />
 			<el-table-column label="在线人数" align="center" prop="people" width="95" />
 			<el-table-column label="被举报次数" align="center" prop="report" width="95" />
 			<el-table-column label="直播状态" align="center" width="95">

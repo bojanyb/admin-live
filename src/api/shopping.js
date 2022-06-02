@@ -20,3 +20,20 @@ export function down(data) {
     })
 }
 
+// 商品库
+export function goodsList(data) {
+    return request({
+        url: REQUEST.shopping.list,
+        method: 'post',
+        data
+    })
+}
+
+// 商品库
+export function goodsSend(data) {
+    return request({
+        url: REQUEST.shopping.send,
+        method: 'post',
+        data
+    })
+}

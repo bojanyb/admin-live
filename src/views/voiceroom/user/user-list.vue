@@ -19,7 +19,7 @@
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
 			<el-table-column label="用户ID" align="center" prop="user_number" width="95" />
-			<el-table-column label="昵称" prop="nickname" align="center" />
+			<el-table-column label="昵称" prop="nickname" align="center" width="110" />
 			<el-table-column label="头像" prop="face" align="center" width="95">
 				<template slot-scope="scope">
 					<el-image style="width: 30px; height: 30px" :lazy="true" :src="scope.row.face ? scope.row.face : ''"
@@ -33,13 +33,20 @@
 					<div v-if="scope.row.guild_number">({{scope.row.guild_number}})</div>
 				</template>
 			</el-table-column>
-			<el-table-column label="是否为厅主" prop="is_guild_roomText" align="center" />
-			<el-table-column label="手机号" prop="phone" align="center" />
+			<el-table-column label="是否为厅主" prop="is_guild_roomText" align="center" width="110" />
+			<el-table-column label="手机号" prop="phone" align="center" width="110" />
 			<el-table-column label="状态" prop="statusText" align="center" width="95" />
+			<el-table-column label="是否已绑卡" prop="is_bindcard" align="center" width="95">
+				<template slot-scope="scope">
+					<div style="cursor: pointer;" @click="bindcardFunc(scope.row)">{{ scope.row.is_bindcard ? '是' : '否' }}</div>
+				</template>
+			</el-table-column>
 			<el-table-column label="创建时间" prop="create_timeText" align="center" width="180" />
 			<el-table-column label="封禁时间" prop="update_timeText" align="center" width="180" />
 			<el-table-column label="封禁备注" prop="remark" align="center" width="200" show-overflow-tooltip />
-			<el-table-column label="操作" prop="gift_str" align="center" width="230">
+			<el-table-column label="注册设备" prop="reg_device_id" align="center" width="200" show-overflow-tooltip />
+			<el-table-column label="最后一次登录设备" prop="last_login_device_id" align="center" width="200" show-overflow-tooltip />
+			<el-table-column label="操作" prop="gift_str" fixed="right" align="center" width="230">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.status == 1" type="danger" @click="handleUser(scope.row)">封禁</el-button>
 					<el-button v-if="scope.row.status == 2" type="success" @click="handleUser(scope.row)">启用</el-button>
@@ -80,6 +87,8 @@
 				<el-button :loading="loading" type="primary" @click="handleChange">确 定</el-button>
 			</div>
 		</el-dialog>
+
+		<bindStuck ref="bindStuck"></bindStuck>
 	</div>
 </template>
 
@@ -91,10 +100,12 @@
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
+	import bindStuck from './components/bindStuck.vue'
 	export default {
 		name: 'UserList',
 		components: {
-			Pagination
+			Pagination,
+			bindStuck
 		},
 		data() {
 			return {
@@ -243,6 +254,12 @@
 					}
 				})
 			},
+			bindcardFunc(row) {
+				if(row.is_bindcard) {
+					this.$refs.bindStuck.dialogVisible = true
+					this.$refs.bindStuck.getList(row.id)
+				}
+			}
 		}
 	}
 </script>

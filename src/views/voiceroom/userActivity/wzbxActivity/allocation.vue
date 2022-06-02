@@ -38,7 +38,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.zzbxActivity.list,
+                url: REQUEST.userActivity.zzbxActivity.list,
                 columns: [
                     {
                         label: '活动名称',

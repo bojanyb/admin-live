@@ -8,21 +8,21 @@
             @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="108px" class="demo-ruleForm">
                 <el-form-item label="活动名称" prop="activity_type_id">
-                    <el-select v-model="ruleForm.activity_type_id" :disabled="disabeld" placeholder="请选择活动名称">
-                        <el-option v-for="item in activetyList" :disabled="item.disabeld" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    <el-select v-model="ruleForm.activity_type_id" :disabled="disabled" placeholder="请选择活动名称">
+                        <el-option v-for="item in activetyList" :disabled="item.disabled" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="活动类别" prop="type">
-                    <el-select v-model="ruleForm.type" :disabled="disabeld" placeholder="请选择活动类别">
+                    <el-select v-model="ruleForm.type" :disabled="disabled" placeholder="请选择活动类别">
                         <el-option label="背包" :value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="单次抽奖砖石" prop="cost">
-                    <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" onkeyup="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabeld" v-model="ruleForm.cost"></el-input>
+                    <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" onkeyup="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled" v-model="ruleForm.cost"></el-input>
                 </el-form-item>
                 <el-form-item label="开始时间" prop="start_time">
                     <el-date-picker
-                    :disabled="disabeld"
+                    :disabled="disabled"
                     v-model="ruleForm.start_time"
                     value-format="timestamp"
                     type="datetime"
@@ -32,7 +32,7 @@
                 </el-form-item>
                 <el-form-item label="结束时间" prop="end_time" :rules="EndRules">
                     <el-date-picker
-                    :disabled="disabeld"
+                    :disabled="disabled"
                     v-model="ruleForm.end_time"
                     :picker-options="EndPicker"
                     value-format="timestamp"
@@ -41,12 +41,12 @@
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="添加礼物">
-                    <el-button type="primary" :disabled="disabeld" @click="$refs.gift.handleAddGiftShow()">添 加</el-button>
+                    <el-button type="primary" :disabled="disabled" @click="$refs.gift.handleAddGiftShow()">添 加</el-button>
                 </el-form-item>
                 <gift ref="gift" :isShowProperty="true" :status="status" :isShowLocation="false" :activityType="code" :list="ruleForm.gifts"></gift>
                 <el-form-item class="footer">
                     <el-button @click="resetForm">取 消</el-button>
-                    <el-button :disabled="disabeld" type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+                    <el-button :disabled="disabled" type="primary" @click="submitForm('ruleForm')">确 定</el-button>
                 </el-form-item>
             </el-form>
         </el-dialog>
@@ -133,7 +133,7 @@ export default {
                 }
             }
         },
-        disabeld() {
+        disabled() {
             if(this.status === 'see') {
                 return true
             }
@@ -183,10 +183,10 @@ export default {
             getActivetyList().then(res => {
                 if(res.data.list && res.data.list.length > 0) {
                     res.data.list.forEach(item => {
-                        item.disabeld = false
+                        item.disabled = false
                         this.list.forEach(a => {
                             if(item.name === a.name) {
-                                item.disabeld = true
+                                item.disabled = true
                             }
                         })
                     })
