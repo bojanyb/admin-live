@@ -206,7 +206,7 @@ const INSTITUTION = [
     // },
     {
         value: 8,
-        name: '上海汇付支付有限公司'
+        name: '汇付支付'
     },
 ]
 
