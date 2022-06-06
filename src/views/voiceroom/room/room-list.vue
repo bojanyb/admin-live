@@ -36,7 +36,7 @@
 				</template>
 			</el-table-column>
 			<el-table-column label="房间名称" prop="room_name" align="center" width="180" show-overflow-tooltip />
-			<el-table-column label="房主ID" prop="live_user_number" align="center" show-overflow-tooltip />
+			<el-table-column label="房主ID" prop="live_user_number" align="center" width="100" />
 			<el-table-column label="房间类型" prop="room_genre_name" align="center" width="100" />
 			<el-table-column label="在线时长" prop="live_timeText" align="center" width="120" />
 			<el-table-column label="开播时间" prop="start_timeText" align="center" width="180" />
