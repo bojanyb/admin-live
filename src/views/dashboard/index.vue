@@ -64,10 +64,10 @@
 						</div>
 						<div class="userInfoItem text item">
 							<div class="userTitle fl">
-								消费总流水:
+								背包余价值:
 							</div>
 							<div class="userContent fl">
-								{{accountInfo.buy_goods || 0}}
+								{{accountInfo.gift_bag_value || 0}}
 							</div>
 						</div>
 					</div>
@@ -88,6 +88,14 @@
 							</div>
 							<div class="userContent fl">
 								{{accountInfo.commission || 0}}
+							</div>
+						</div>
+						<div class="userInfoItem text item">
+							<div class="userTitle fl">
+								消费总流水:
+							</div>
+							<div class="userContent fl">
+								{{accountInfo.buy_goods || 0}}
 							</div>
 						</div>
 					</div>
