@@ -2,7 +2,7 @@
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
       <keep-alive :include="cachedViews">
-        <router-view :key="key" />
+        <router-view :key="key" v-if="isRouterAlive" />
       </keep-alive>
     </transition>
   </section>
@@ -17,6 +17,31 @@ export default {
     },
     key() {
       return this.$route.path
+    },
+    status() {
+      return this.$store.state.app.isRouterReload
+    }
+  },
+  data() {
+    return {
+      isRouterAlive: true
+    };
+  },
+  watch: {
+    status: {
+      handler(v) {
+        console.log(v, 'v--------------')
+        this.reload()
+      },
+      deep: true
+    }
+  },
+  methods: {
+    reload() {
+      this.isRouterAlive = false
+      this.$nextTick(() => {
+        this.isRouterAlive = true
+      });
     }
   }
 }

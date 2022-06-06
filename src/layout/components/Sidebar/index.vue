@@ -11,6 +11,7 @@
         :active-text-color="variables.menuActiveText"
         :collapse-transition="false"
         mode="vertical"
+        @select="selectMenuItem"
       >
         <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
@@ -48,6 +49,17 @@ export default {
     },
     isCollapse() {
       return !this.sidebar.opened
+    },
+    status() {
+      return this.$store.state.app.isRouterReload
+    }
+  },
+  methods: {
+    selectMenuItem(url, indexPath) {
+      console.log(url, 'url--------------')
+      console.log(indexPath, 'indexPath---------------')
+      console.log(this.status, 'status-----------')
+      this.$store.commit('app/SET_ROUTER_RELOAD', !this.status)
     }
   }
 }

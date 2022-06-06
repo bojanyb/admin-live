@@ -148,11 +148,13 @@ export default {
                 columns: [
                     {
                         label: '用户ID',
+                        width: '100px',
                         prop: 'user_id'
                     },
                     {
                         label: '申请提现时间',
                         prop: 'addtime',
+                        width: '160px',
                         render: (h, params) => {
                             return h('span', params.row.addtime ? timeFormat(params.row.addtime, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
@@ -182,11 +184,16 @@ export default {
                     {
                         label: '到账金额',
                         render: (h, params) => {
-                            return h('span', params.row.orderDetails.money / 100)
+                            if(params.row.orderDetails.status != 3) {
+                                return h('span', params.row.orderDetails.real_money / 100)
+                            } else {
+                                return h('span', params.row.orderDetails.money / 100)
+                            }
                         }
                     },
                     {
                         label: '提现卡号',
+                        width: '180px',
                         render: (h, params) => {
                             return h('span', params.row.orderDetails.card_id ? params.row.orderDetails.card_id : '--')
                         }
@@ -200,6 +207,7 @@ export default {
                     },
                     {
                         label: '到账时间',
+                        width: '160px',
                         render: (h, params) => {
                             return h('span', params.row.pay_time ? timeFormat(params.row.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }

@@ -6,7 +6,8 @@ const state = {
     withoutAnimation: false
   },
   device: 'desktop',
-  size: Cookies.get('size') || 'medium'
+  size: Cookies.get('size') || 'medium',
+  isRouterReload: false // 路由重置
 }
 
 const mutations = {
@@ -30,6 +31,9 @@ const mutations = {
   SET_SIZE: (state, size) => {
     state.size = size
     Cookies.set('size', size)
+  },
+  SET_ROUTER_RELOAD: (state, status) => {
+    state.isRouterReload = status
   }
 }
 

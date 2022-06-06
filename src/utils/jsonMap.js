@@ -189,6 +189,10 @@ const EMBODYSORT = [
 
 const INSTITUTION = [
     {
+        value: 8,
+        name: '汇付支付'
+    },
+    {
         value: 1,
         name: '苹果支付'
     },
@@ -204,10 +208,6 @@ const INSTITUTION = [
     //     value: 4,
     //     name: '银联'
     // },
-    {
-        value: 8,
-        name: '汇付支付'
-    },
 ]
 
 /*
