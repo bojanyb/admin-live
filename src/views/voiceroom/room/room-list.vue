@@ -14,6 +14,9 @@
 						<el-option key="2" label="已结束" value="2" />
 					</el-select>
 				</el-form-item>
+				<el-form-item label="工会">
+					<el-input v-model="filters.guild_number" v-input-limit="0" placeholder="请输入工会ID" clearable />
+				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="roomList">查询</el-button>
 				</el-form-item>
@@ -35,10 +38,14 @@
 			<el-table-column label="房间名称" prop="room_name" align="center" width="180" show-overflow-tooltip />
 			<el-table-column label="房主ID" prop="room_number" align="center" width="180" show-overflow-tooltip />
 			<el-table-column label="房间类型" prop="room_genre_name" align="center" width="100" />
-			<el-table-column label="在线时长" prop="live_timeText" align="center" />
-			<el-table-column label="开播时间" prop="start_timeText" align="center" />
-			<el-table-column label="结束时间" prop="end_timeText" align="center" />
-			<el-table-column label="所属公会" prop="" align="center" />
+			<el-table-column label="在线时长" prop="live_timeText" align="center" width="120" />
+			<el-table-column label="开播时间" prop="start_timeText" align="center" width="180" />
+			<el-table-column label="结束时间" prop="end_timeText" align="center" width="180" />
+			<el-table-column label="所属公会" prop="guild_number" align="center">
+				<template slot-scope="scope">
+					{{ scope.row.guild_number || '无' }}
+				</template>
+			</el-table-column>
 			<el-table-column label="在线人数" align="center" prop="people" width="95" />
 			<el-table-column label="被举报次数" align="center" prop="report" width="95" />
 			<el-table-column label="直播状态" align="center" width="95">
@@ -56,6 +63,10 @@
 					<div v-if="scope.row.status == 4">过期</div>
 				</template>
 			</el-table-column>
+			<el-table-column label="总流水" prop="total_flow" align="center" />
+			<el-table-column label="当日流水" prop="today_flow" align="center" />
+			<el-table-column label="本周流水" prop="now_week_flow" align="center" />
+			<el-table-column label="上一周流水" prop="last_week_back" align="center" width="100" />
 			<el-table-column align="center" label="操作" width="95">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.status == 1" type="danger" @click="handleRoom(scope.row)">冻结</el-button>
@@ -94,7 +105,8 @@
 				multipleSelection: [],
 				filters: {
 					'room_number': '',
-					'is_live': ''
+					'is_live': '',
+					guild_number: null
 				},
 				page: {
 					page: 1,
@@ -113,7 +125,8 @@
 					'page': this.page.page,
 					'pagesize': this.page.limit,
 					'room_number': this.filters.room_number,
-					'is_live': this.filters.is_live
+					'is_live': this.filters.is_live,
+					guild_number: this.filters.guild_number
 				}
 				getRoomList(params).then(response => {
 					this.total = response.data.count

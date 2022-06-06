@@ -33,6 +33,7 @@
 			<el-table-column label="开厅数量" prop="is_live_count" align="center" />
 			<el-table-column label="总流水" prop="total_flow" align="center" />
 			<el-table-column label="当日流水" prop="today_flow" align="center" />
+			<el-table-column label="本周流水" prop="now_week_flow" align="center" />
 			<el-table-column label="上一周流水" prop="last_week_back" align="center" />
 			<el-table-column label="操作" prop="gift_str" align="center" width="230">
 				<template slot-scope="scope">
