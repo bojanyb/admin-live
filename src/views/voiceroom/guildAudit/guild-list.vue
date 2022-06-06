@@ -26,7 +26,11 @@
 						:src="scope.row.face ? scope.row.face : ''" :preview-src-list="guildImglist" />
 				</template>
 			</el-table-column>
-			<el-table-column label="公会简介" prop="remark" align="center" show-overflow-tooltip />
+			<el-table-column label="公会简介" prop="remark" align="center" show-overflow-tooltip>
+				<template slot-scope="scope">
+					{{ scope.row.remark || '无' }}
+				</template>
+			</el-table-column>
 			<el-table-column label="创建时间" prop="create_timeText" align="center"  width="160"/>
 			<el-table-column label="公会成员" prop="user_count" align="center" />
 			<el-table-column label="已绑定厅" prop="room_count" align="center" />
