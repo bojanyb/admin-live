@@ -66,7 +66,7 @@
 			<el-table-column label="总流水" prop="total_flow" align="center" />
 			<el-table-column label="当日流水" prop="today_flow" align="center" />
 			<el-table-column label="本周流水" prop="now_week_flow" align="center" />
-			<el-table-column label="上一周流水" prop="last_week_back" align="center" width="100" />
+			<el-table-column label="上一周流水" prop="last_week_flow" align="center" width="100" />
 			<el-table-column align="center" label="操作" width="95">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.status == 1" type="danger" @click="handleRoom(scope.row)">冻结</el-button>
