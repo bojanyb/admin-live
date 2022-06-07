@@ -17,7 +17,7 @@
 <script>
 
 // 引入api
-import { overview } from '@/api/videoRoom'
+import { overview, overviewDayData } from '@/api/videoRoom'
 // 引入数据
 import DATA from './index.js'
 
@@ -44,6 +44,21 @@ export default {
 				}
 			})
 		},
+        // 日终数据
+        overviewDayDataFunc(time) {
+            var params = {
+				time
+			}
+			overviewDayData(params).then(res => {
+				if (res.code == 2000) {
+                    let s = res.data
+                    s.total_num = Number(s.total_diamond) + Number(s.total_gain)
+                    s.total_incGain = Number(s.incDiamond) + Number(s.incGain)
+                    s.total_decGain = Number(s.decDiamond) + Number(s.decGain)
+					this.ruleForm = res.data;
+				}
+			})
+        }
     },
     mounted() {
         this.getRoomWalletInfo(null, null)

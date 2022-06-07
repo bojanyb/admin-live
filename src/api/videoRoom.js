@@ -27,10 +27,19 @@ export function getRoomWallet(data) {
   })
 }
 
-// 总览
+// 总览数据
 export function overview(data) {
   return request({
     url: '/Statistical/overview',
+    method: 'post',
+    data
+  })
+}
+
+// 日终数据
+export function overviewDayData(data) {
+  return request({
+    url: '/Statistical/overviewDayData',
     method: 'post',
     data
   })

@@ -101,12 +101,14 @@ export default {
 			let start_time,end_time;
 			this.timer = null
 			if(index === 1) {
-				let date = timeFormat(new Date(), 'YYYY-MM-DD', false)
+				let date = timeFormat(new Date().getTime() - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
 				this.timer = new Date(date)
 				start_time = Math.floor(new Date(date + ' 00:00:00').getTime() / 1000)
 				end_time = Math.floor(new Date(date + ' 23:59:59').getTime() / 1000)
+				this.overviewDayDataFunc(start_time,end_time)
+			} else {
+				this.getRoomWalletInfo(start_time,end_time)
 			}
-			this.getRoomWalletInfo(start_time,end_time)
 		},
 		// 切换时间 - 总切换
 		dateChange(v) {
@@ -122,11 +124,15 @@ export default {
 			let start_time,end_time;
 			start_time = v ? Math.floor(new Date(v + ' 00:00:00') / 1000) : ''
 			end_time = v ? Math.floor(new Date(v + ' 23:59:59') / 1000) : ''
-			this.getRoomWalletInfo(start_time,end_time)
+			this.overviewDayDataFunc(start_time,end_time)
 		},
 		// 切换时间
 		getRoomWalletInfo(start_time = '', end_time = '') {
 			this.$refs.item.getRoomWalletInfo(start_time, end_time)
+		},
+		// 日终数据
+		overviewDayDataFunc(start_time, end_time) {
+			this.$refs.item.overviewDayDataFunc(start_time, end_time)
 		}
 	}
 }
