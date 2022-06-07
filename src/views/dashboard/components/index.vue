@@ -29,39 +29,30 @@ export default {
         };
     },
     methods: {
-        getRoomWalletInfo(start_time,end_time) {
+        async getRoomWalletInfo(start_time = '',end_time = '') {
 			var params = {
 				start_time,
                 end_time
 			}
-			overview(params).then(res => {
-				if (res.code == 2000) {
-                    let s = res.data
-                    s.total_num = Number(s.total_diamond) + Number(s.total_gain)
-                    s.total_incGain = Number(s.incDiamond) + Number(s.incGain)
-                    s.total_decGain = Number(s.decDiamond) + Number(s.decGain)
-					this.ruleForm = res.data;
-				}
-			})
+			let res = await overview(params)
+            this.dataHandle(res.data)
 		},
         // 日终数据
-        overviewDayDataFunc(time) {
-            var params = {
-				time
-			}
-			overviewDayData(params).then(res => {
-				if (res.code == 2000) {
-                    let s = res.data
-                    s.total_num = Number(s.total_diamond) + Number(s.total_gain)
-                    s.total_incGain = Number(s.incDiamond) + Number(s.incGain)
-                    s.total_decGain = Number(s.decDiamond) + Number(s.decGain)
-					this.ruleForm = res.data;
-				}
-			})
+        async overviewDayDataFunc(time) {
+			let res = await overviewDayData({ time })
+            this.dataHandle(res.data)
+        },
+        // 数据处理
+        dataHandle(row) {
+            let s = row
+            s.total_num = Number(s.total_diamond) + Number(s.total_gain)
+            s.total_incGain = Number(s.incDiamond) + Number(s.incGain)
+            s.total_decGain = Number(s.decDiamond) + Number(s.decGain)
+            this.ruleForm = row;
         }
     },
     mounted() {
-        this.getRoomWalletInfo(null, null)
+        this.getRoomWalletInfo()
     }
 }
 </script>

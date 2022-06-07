@@ -104,8 +104,7 @@ export default {
 				let date = timeFormat(new Date().getTime() - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
 				this.timer = new Date(date)
 				start_time = Math.floor(new Date(date + ' 00:00:00').getTime() / 1000)
-				end_time = Math.floor(new Date(date + ' 23:59:59').getTime() / 1000)
-				this.overviewDayDataFunc(start_time,end_time)
+				this.overviewDayDataFunc(start_time)
 			} else {
 				this.getRoomWalletInfo(start_time,end_time)
 			}
@@ -121,10 +120,9 @@ export default {
 		},
 		// 切换时间 - 日切换
 		timeChange(v) {
-			let start_time,end_time;
+			let start_time;
 			start_time = v ? Math.floor(new Date(v + ' 00:00:00') / 1000) : ''
-			end_time = v ? Math.floor(new Date(v + ' 23:59:59') / 1000) : ''
-			this.overviewDayDataFunc(start_time,end_time)
+			this.overviewDayDataFunc(start_time)
 		},
 		// 切换时间
 		getRoomWalletInfo(start_time = '', end_time = '') {
