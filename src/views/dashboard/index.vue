@@ -108,7 +108,7 @@ export default {
 			}
 			this.getRoomWalletInfo(start_time,end_time)
 		},
-		// 切换时间
+		// 切换时间 - 总切换
 		dateChange(v) {
 			let start_time,end_time;
 			let start = v ? timeFormat(v[0], 'YYYY-MM-DD HH:mm:ss', false) : ''
@@ -117,6 +117,7 @@ export default {
 			end_time = end ? Math.floor(new Date(end).getTime() / 1000) : ''
 			this.getRoomWalletInfo(start_time,end_time)
 		},
+		// 切换时间 - 日切换
 		timeChange(v) {
 			let start_time,end_time;
 			start_time = v ? Math.floor(new Date(v + ' 00:00:00') / 1000) : ''
