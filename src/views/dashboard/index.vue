@@ -7,7 +7,7 @@
 			<div class="date" v-show="selectIndex === 0">
 				<span>选择时间: </span>
 				<el-date-picker class="selectTime" v-model="timer" type="datetimerange" range-separator="至"
-					start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" value-format="timestamp" @change="dateChange" />
+					start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" @change="dateChange" />
 			</div>
 			<div class="date" v-show="selectIndex === 1">
 				<span>选择时间: </span>
@@ -61,8 +61,8 @@ export default {
 					} else {
 						m = 1
 					}
-					let start = y + '-' + m + '-' + day + ' 00:00:00'
-					let end = y + '-' + m + '-' + day + ' 23:59:59'
+					let start = new Date(y + '-' + m + '-' + day + ' 00:00:00')
+					let end = new Date(y + '-' + m + '-' + day + ' 23:59:59')
 					picker.$emit('pick', [start, end]);
 					}
 				}, {
@@ -111,8 +111,10 @@ export default {
 		// 切换时间
 		dateChange(v) {
 			let start_time,end_time;
-			start_time = v ? Math.floor(v[0] / 1000) : ''
-			end_time = v ? Math.floor(v[1] / 1000) : ''
+			let start = v ? timeFormat(v[0], 'YYYY-MM-DD HH:mm:ss', false) : ''
+			let end = v ? timeFormat(v[1], 'YYYY-MM-DD HH:mm:ss', false) : ''
+			start_time = start ? Math.floor(new Date(start).getTime() / 1000) : ''
+			end_time = end ? Math.floor(new Date(end).getTime() / 1000) : ''
 			this.getRoomWalletInfo(start_time,end_time)
 		},
 		timeChange(v) {
