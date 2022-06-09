@@ -14,7 +14,7 @@
                 </el-form-item>
                 <el-form-item label="活动类别" prop="type">
                     <el-select v-model="ruleForm.type" :disabled="disabled" placeholder="请选择活动类别">
-                        <el-option label="派对" :value="2"></el-option>
+                        <el-option label="背包" :value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="单次抽奖砖石" prop="cost">
@@ -149,7 +149,7 @@ export default {
             ruleForm: {
                 id: null,
                 activity_type_id: null,
-                type: 2,
+                type: 1,
                 cost: null,
                 start_time: null,
                 end_time: null,

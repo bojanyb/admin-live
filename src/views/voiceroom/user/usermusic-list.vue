@@ -15,7 +15,7 @@
 					<el-select v-model="filters.status" placeholder="请选择" @change="getUserMusic">
 						<el-option label="全部" value="" />
 						<el-option key="1" label="未处理" value="1" />
-						<el-option key="3" label="未通过" value="3" />
+						<el-option key="3" label="已下架" value="2" />
 					</el-select>
 				</el-form-item>
 				<el-form-item label="用户ID">
@@ -46,15 +46,12 @@
 			<el-table-column label="处理人" prop="deal_user_name" align="center" />
 			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
-					<div v-if="scope.row.status == 1">
-						<el-button type="primary" @click="handleEdit(scope.row)">修改
-						</el-button>
-						<el-button type="danger" @click="handleTakeDown(scope.row)">下架
-						</el-button>
-					</div>
-					<div v-else-if="scope.row.status == 2" style="color: red;">
-						已下架
-					</div>
+					<el-button type="primary" @click="handleEdit(scope.row)">修改
+					</el-button>
+					<el-button type="primary" @click="handleTakeUp(scope.row)" v-if="scope.row.status == 2">上架
+					</el-button>
+					<el-button type="danger" @click="handleTakeDown(scope.row)" v-else>下架
+					</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -107,7 +104,8 @@
 	import {
 		getUserMusicList,
 		getUserMusicUpdate,
-		getUserMusicBack
+		getUserMusicBack,
+		putaway
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
@@ -237,6 +235,12 @@
 							this.$message.error(err);
 						})
 					}).catch(err => {});
+			},
+			// 上架音乐
+			async handleTakeUp(row) {
+				let res = await putaway({ id: row.id })
+				this.$message.success('上架成功')
+				this.getUserMusic();
 			},
 			handleChange() {
 				this.loading = true

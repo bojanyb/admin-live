@@ -108,7 +108,7 @@ export default {
                     {
                         label: '活动类别',
                         render: (h, params) => {
-                            return h('span', '背包')
+                            return h('span', params.row.type === 1 ? '背包' : '派对')
                         }
                     },
                     {
@@ -156,7 +156,7 @@ export default {
                 user_number: s.user_number,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
-                activity_type: 1,
+                activity_type: 2,
                 activity_type_id: s.activity_type_id ? s.activity_type_id : 1
             }
         },

@@ -19,7 +19,6 @@ import REQUEST from '@/request/index.js'
 import { timeFormat } from '@/utils/common.js'
 // 引入新增/修改
 import addComp from './add/index.vue'
-
 import { getActivetyGiftADelete, getActivetyGiftSave, getActivetyHasGiftList } from '@/api/videoRoom'
 
 export default {
@@ -140,7 +139,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                type: 1
+                type: 2
             }
         },
         // 刷新列表

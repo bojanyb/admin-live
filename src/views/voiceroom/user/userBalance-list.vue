@@ -1,6 +1,9 @@
 <template>
   <div class="app-container">
-
+    <div class="model">
+      <span>用户收入统计：{{ ruleForm.total_income_sum || 0 }}元</span>
+      <span>用户支出统计：{{ ruleForm.meow_expenditure_sum || 0 }}元</span>
+    </div>
     <!--工具条-->
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters" @keyup.enter.native="getBannerInfo()">
@@ -109,7 +112,8 @@ export default {
         }
       ],
       jsonMapList: [],
-      userBalanceType: MAPDATA.USERBALANCETYPE
+      userBalanceType: MAPDATA.USERBALANCETYPE,
+      ruleForm: {}
     }
   },
   created() {
@@ -137,6 +141,8 @@ export default {
       }
       getUserDiamondLog(params).then(response => {
         this.total = response.data.count
+        this.ruleForm.total_income_sum = response.data.total_income_sum || 0
+        this.ruleForm.meow_expenditure_sum = response.data.meow_expenditure_sum || 0
         this.list = response.data.list
         this.list.map(res => {
           res.create_timeText = res.create_time > 0 ? moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : ""
@@ -208,3 +214,22 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .model {
+        width: 100%;
+        height: 40px;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        padding: 0px 30px;
+        box-sizing: border-box;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+        margin-bottom: 20px;
+        >span {
+            font-size: 15px;
+            color: #fff;
+            margin-right: 100px;
+        }
+    }
+</style>

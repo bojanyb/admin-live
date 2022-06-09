@@ -20,22 +20,6 @@ const dashboardList = [
     {
         children: [
             {
-                tit: '活动总流水:',
-                val: 'ac_in'
-            },
-            {
-                tit: '背包总价值:',
-                val: 'ac_out'
-            },
-            {
-                tit: '背包余价值:',
-                val: 'gift_bag_value'
-            }
-        ]
-    },
-    {
-        children: [
-            {
                 tit: '礼物总流水:',
                 val: 'gift_total'
             },
@@ -46,6 +30,22 @@ const dashboardList = [
             {
                 tit: '消费总流水:',
                 val: 'buy_goods'
+            }
+        ]
+    },
+    {
+        children: [
+            {
+                tit: '活动总流水:',
+                val: 'ac_in'
+            },
+            {
+                tit: '背包总价值:',
+                val: 'ac_out'
+            },
+            {
+                tit: '背包余价值:',
+                val: 'gift_bag_value'
             }
         ]
     },

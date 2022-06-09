@@ -305,6 +305,7 @@ import ossFile from './../components/ossFile.vue'
 							this.addLoading = true;
 							this.Form.platform = this.platform;
 							this.Form.is_mandatory = this.is_mandatory;
+							this.Form.download_url = this.Form.download_url.trim()
 							request({
 								url: REQUEST.system.AppversionAChange,
 								method: "post",

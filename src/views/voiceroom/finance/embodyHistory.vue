@@ -152,7 +152,7 @@ export default {
                         prop: 'user_id'
                     },
                     {
-                        label: '申请提现时间',
+                        label: '申请时间',
                         prop: 'addtime',
                         width: '160px',
                         render: (h, params) => {
@@ -160,14 +160,14 @@ export default {
                         }
                     },
                     {
-                        label: '喵粮',
+                        label: '扣除喵粮',
                         prop: 'money',
                         render: (h, params) => {
                             return h('span', params.row.orderDetails.money)
                         }
                     },
                     {
-                        label: '提现金额',
+                        label: '申请金额',
                         render: (h, params) => {
                             return h('span', params.row.orderDetails.money / 100)
                         }
@@ -181,6 +181,28 @@ export default {
                             return h('span', params.row.rate_money)
                         }
                     },
+                    // {
+                    //     label: '提现卡号',
+                    //     width: '180px',
+                    //     render: (h, params) => {
+                    //         return h('span', params.row.orderDetails.card_id ? params.row.orderDetails.card_id : '--')
+                    //     }
+                    // },
+                    {
+                        label: '处理时间',
+                        prop: 'operate_time',
+                        width: '160px',
+                        render: (h, params) => {
+                            return h('span', params.row.operate_time ? timeFormat(params.row.operate_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                        }
+                    },
+                    {
+                        label: '处理状态',
+                        render: (h, params) => {
+                            let paramsData = MAPDATA.STATUSLIST.find(item => { return item.value === params.row.status })
+                            return h('span', paramsData ? paramsData.name : '--')
+                        }
+                    },
                     {
                         label: '到账金额',
                         render: (h, params) => {
@@ -192,20 +214,6 @@ export default {
                         }
                     },
                     {
-                        label: '提现卡号',
-                        width: '180px',
-                        render: (h, params) => {
-                            return h('span', params.row.orderDetails.card_id ? params.row.orderDetails.card_id : '--')
-                        }
-                    },
-                    {
-                        label: '状态',
-                        render: (h, params) => {
-                            let paramsData = MAPDATA.STATUSLIST.find(item => { return item.value === params.row.status })
-                            return h('span', paramsData ? paramsData.name : '--')
-                        }
-                    },
-                    {
                         label: '到账时间',
                         width: '160px',
                         render: (h, params) => {
@@ -213,7 +221,7 @@ export default {
                         }
                     },
                     {
-                        label: '交易流水号',
+                        label: '交易单号',
                         prop: 'order_id',
                         width: '200'
                     },

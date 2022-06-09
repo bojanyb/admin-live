@@ -672,6 +672,15 @@ export function getUserMusicBack(data) {
   })
 }
 
+// 音乐列表  上架
+export function putaway(data) {
+  return request({
+    url: '/music/putaway',
+    method: 'post',
+    data
+  })
+}
+
 // 赠送 （平台充值）
 export function getUserAddMoney(data) {
   return request({
