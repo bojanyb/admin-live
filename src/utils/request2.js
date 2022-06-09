@@ -36,7 +36,7 @@ service.interceptors.request.use(
 	config => {
 		// do something before request is sent
 		const hasToken = getToken()
-		config.headers['token'] = hasToken
+		config.headers['Admin-Token'] = hasToken
 		return config
 	},
 	error => {
