@@ -52,7 +52,6 @@ export default {
                     let params = { ...this.ruleForm }
                     refresh(params).then(res => {
                         if(res.code === 2000) {
-                            this.$message.success('修改成功')
                             removeToken()
                             this.$router.replace({ path: '/login' })
                         }
