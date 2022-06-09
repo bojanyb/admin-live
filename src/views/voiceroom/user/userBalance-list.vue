@@ -58,7 +58,11 @@
         </template>
       </el-table-column>
       <el-table-column label="渠道" prop="relation_type_name" align="center" />
-      <el-table-column label="交易流水号" prop="trade_noText" align="center" />
+      <el-table-column label="交易流水号" prop="trade_noText" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.trade_noText || '无' }}
+        </template>
+      </el-table-column>
     </el-table>
 
     <!--工具条-->
