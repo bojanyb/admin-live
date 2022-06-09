@@ -152,8 +152,7 @@ export default {
       }
       getUserDiamondLog(params).then(response => {
         this.total = response.data.count
-        this.ruleForm.total_income_sum = response.data.total_income_sum || 0
-        this.ruleForm.meow_expenditure_sum = response.data.meow_expenditure_sum || 0
+        this.ruleForm = { ...response.data.total_sum }
         this.list = response.data.list
         this.list.map(res => {
           res.create_timeText = res.create_time > 0 ? moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : ""
