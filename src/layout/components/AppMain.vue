@@ -30,7 +30,6 @@ export default {
   watch: {
     status: {
       handler(v) {
-        console.log(v, 'v--------------')
         this.reload()
       },
       deep: true

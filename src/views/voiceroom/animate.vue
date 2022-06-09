@@ -31,7 +31,6 @@ export default {
         },
     },
     mounted() {
-        console.log(animationData.default, 'animationData--------')
     }
 }
 </script>

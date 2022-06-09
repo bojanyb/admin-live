@@ -56,9 +56,6 @@ export default {
   },
   methods: {
     selectMenuItem(url, indexPath) {
-      console.log(url, 'url--------------')
-      console.log(indexPath, 'indexPath---------------')
-      console.log(this.status, 'status-----------')
       this.$store.commit('app/SET_ROUTER_RELOAD', !this.status)
     }
   }

@@ -110,7 +110,6 @@ export default {
                 // })
                 this.giftListArr = res.data.list;
                 this.giftSelectSource();
-                console.log(res, 'res------------')
             }).catch(err => {})
         },
         // 删除礼物

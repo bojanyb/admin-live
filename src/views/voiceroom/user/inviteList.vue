@@ -236,8 +236,6 @@ export default {
     methods: {
         // 配置参数
         beforeSearch(params) {
-            console.log(this.dateTimeParams, 'dateTimeParams-----')
-            console.log(this.searchParams, 'searchParams-----')
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
                 page: params.page,

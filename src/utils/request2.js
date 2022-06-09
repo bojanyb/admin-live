@@ -6,7 +6,6 @@ import {
 import store from '@/store'
 import { getToken } from '@/utils/auth' // get token from cookie
 var baseUrlApi = ENV_DOMAINHTTPS;
-console.log(process.env.NODE_ENV, 'node-----------')
 // switch (process.env.NODE_ENV) {
 // 	case 'development':
 // 		baseUrlApi = 'http://api.huixin.info'

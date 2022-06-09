@@ -59,8 +59,6 @@ const actions = {
 				const {
 					data
 				} = response
-				console.log(response, 'response-------------')
-				console.log(data, 'data-------------')
 				commit('SET_TOKEN', data.token)
 				setToken(data.token)
 				resolve()

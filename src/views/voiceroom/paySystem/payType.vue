@@ -84,7 +84,6 @@ export default {
         },
         // 打开编辑
         editFunc(id, mer_id) {
-            console.log(mer_id, 'mer_id----------')
             this.isDestoryComp = true
             setTimeout(() => {
                 if(mer_id === 2) {
