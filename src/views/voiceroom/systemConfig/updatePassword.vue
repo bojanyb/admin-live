@@ -1,6 +1,6 @@
 <template>
     <div class="system-updatePassword">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
             <el-form-item label="原密码" prop="old_password">
                 <el-input v-model="ruleForm.old_password" type="password" placeholder="请输入原密码"></el-input>
             </el-form-item>
@@ -20,6 +20,10 @@
 <script>
 // 引入api
 import { refresh } from '@/api/videoRoom'
+// 删除token
+import { removeToken } from '@/utils/auth'
+// 去登录
+import router, { resetRouter } from '@/router'
 export default {
     data() {
         return {
@@ -47,7 +51,11 @@ export default {
                 if (valid) {
                     let params = { ...this.ruleForm }
                     refresh(params).then(res => {
-                        console.log(res, 'res-----------')
+                        if(res.code === 2000) {
+                            this.$message.success('修改成功')
+                            removeToken()
+                            this.$router.replace({ path: '/login' })
+                        }
                     })
                 } else {
                     console.log('error submit!!');

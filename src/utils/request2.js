@@ -4,6 +4,7 @@ import {
 	Message
 } from 'element-ui'
 import store from '@/store'
+import { getToken } from '@/utils/auth' // get token from cookie
 var baseUrlApi = ENV_DOMAINHTTPS;
 console.log(process.env.NODE_ENV, 'node-----------')
 // switch (process.env.NODE_ENV) {
@@ -35,6 +36,8 @@ const service = axios.create({
 service.interceptors.request.use(
 	config => {
 		// do something before request is sent
+		const hasToken = getToken()
+		config.headers['token'] = hasToken
 		return config
 	},
 	error => {
