@@ -18,6 +18,15 @@ export function getRoomLogout(data) {
   })
 }
 
+// 修改密码
+export function refresh(data) {
+  return request({
+    url: '/Login/refresh',
+    method: 'post',
+    data
+  })
+}
+
 // 主页
 export function getRoomWallet(data) {
   return request({
@@ -878,6 +887,15 @@ export function getSettlementLog(data) {
 export function getRelationType(data) {
   return request({
     url: '/Statistical/getRelationType',
+    method: 'post',
+    data
+  })
+}
+
+// 获取交易类型 
+export function getAdminRelationType(data) {
+  return request({
+    url: '/Statistical/getAdminRelationType',
     method: 'post',
     data
   })

@@ -52,8 +52,12 @@
 	  <el-table-column label="用户ID" prop="user_number" align="center" />
       <el-table-column label="金额" prop="diamond" align="center"/>
       <el-table-column label="余额" prop="balance" align="center"/>
-      <el-table-column label="渠道" prop="genreText" align="center" />
-      <el-table-column label="类型" prop="genreText" align="center" />
+      <el-table-column label="类型" prop="genre" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.genre | userBalanceTypeFilter }}
+        </template>
+      </el-table-column>
+      <el-table-column label="渠道" prop="relation_type_name" align="center" />
       <el-table-column label="交易流水号" prop="trade_noText" align="center" />
     </el-table>
 
@@ -71,7 +75,8 @@
 <script>
 import {
   getUserDiamondLog,
-  getRelationType
+  getRelationType,
+  getAdminRelationType
 } from '@/api/videoRoom'
 import Pagination from '@/components/Pagination'
 import moment from 'moment'
@@ -80,6 +85,12 @@ import MAPDATA from '@/utils/jsonMap.js'
 
 export default {
   name: 'userBalance-list',
+  filters: {
+    userBalanceTypeFilter(val) {
+      let params = MAPDATA.USERBALANCETYPE.find(item => { return item.value === val })
+      return params ? params.name : '无'
+    }
+  },
   components: {
     Pagination
   },
@@ -121,7 +132,7 @@ export default {
   },
   methods: {
     async getRelationTypeFunc() {
-      let res = await getRelationType()
+      let res = await getAdminRelationType()
       if(res.data.list && res.data.list.length > 0) {
         res.data.list.unshift({
           code: '',
@@ -201,8 +212,8 @@ export default {
 		// 		break;
 		// }
 
-    let params = this.jsonMapList.filter(item => { return Number(item.code) === res.relation_type })
-    res.genreText = params && params.length > 0 ? params[0].name : '--'
+    // let params = this.jsonMapList.filter(item => { return item.code.indexOf(res.relation_type) != -1 })
+    // res.genreText = params && params.length > 0 ? params[0].name : '--'
     // res.trade_noText = this.jsonMapList.filter(item => { return item.value === res.relation_type })[0].name
 		res.diamond = res.genre == 1 ? "+ "+res.diamond : "- "+res.diamond
         })

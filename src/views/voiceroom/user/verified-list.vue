@@ -15,7 +15,11 @@
     >
       <el-table-column label="用户ID" prop="user_id" align="center" width="95" />
       <el-table-column label="姓名" prop="name" align="center" width="160" show-overflow-tooltip />
-      <el-table-column label="昵称" prop="nickname" align="center"  show-overflow-tooltip />
+      <el-table-column label="昵称" prop="nickname" align="center"  show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.nickname || '无' }}
+        </template>
+      </el-table-column>
       <el-table-column label="手机号" prop="phone" align="center" />
       <el-table-column label="身份证号" prop="id_card" align="center" />
       <el-table-column label="认证时间" prop="create_timeText" align="center" />
