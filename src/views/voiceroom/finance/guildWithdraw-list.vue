@@ -137,6 +137,13 @@ export default {
                         }
                     },
                     {
+                        label: '订单状态',
+                        render: (h, params) => {
+                            let data = MAPDATA.ORDERSTATUS.find(item => { return item.value.indexOf(params.row.status) !== -1 })
+                            return h('span', data ? data.name : '无')
+                        }
+                    },
+                    {
                         label: '交易单号',
                         prop: 'trade_no'
                     },
