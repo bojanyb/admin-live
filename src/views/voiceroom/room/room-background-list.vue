@@ -108,10 +108,10 @@
 						"value": 3,
 						"label": "情感",
 					},
-					{
-						"value": 4,
-						"label": "闲聊",
-					}
+					// {
+					// 	"value": 4,
+					// 	"label": "闲聊",
+					// }
 				],
 				popFormRules: {
 					imgPreview: [{
