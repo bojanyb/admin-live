@@ -9,7 +9,7 @@
     "dev.pre": "vue-cli-service serve --pre",
     "dev.prod": "vue-cli-service serve --prod",
     "lint": "eslint --ext .js,.vue src",
-    "build.dev": "vue-cli-service build --dev",
+    "build.info": "vue-cli-service build --dev",
     "build.test": "vue-cli-service build --test",
     "build.pre": "vue-cli-service build --pre",
     "build.prod": "vue-cli-service build --prod",
