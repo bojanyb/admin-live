@@ -57,6 +57,20 @@ const dashboardList = [
                 unit: '（钻石）'
             },
             {
+                tit: '充值笔数:',
+                val: 'cashing',
+                unit: '（笔）'
+            },
+            {
+                tit: '成功笔数:',
+                val: 'total_cash',
+                unit: '（笔）'
+            }
+        ]
+    },
+    {
+        children: [
+            {
                 tit: '提现中数量:',
                 val: 'cashing',
                 unit: '（喵粮）'
