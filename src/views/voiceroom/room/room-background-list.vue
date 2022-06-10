@@ -11,7 +11,11 @@
 
 		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
 			highlight-current-row>
-			<el-table-column label="编号" prop="id" align="center" />
+			<el-table-column label="编号" align="center">
+				<template slot-scope="scope">
+					{{ scope.$index + 1 }}
+				</template>
+			</el-table-column>
 			<el-table-column label="房间背景图" prop="url" align="center">
 				<template slot-scope="scope">
 					<el-image style="width: 30px; height: 30px" :lazy="true" :src="scope.row.url ? scope.row.url : ''"
