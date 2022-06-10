@@ -2,7 +2,7 @@
 	<div class="invite-join-us">
         <div class="searchParams">
 			<el-button class="add" type="success" @click="handleAdd">新增</el-button>
-            <SearchPanel :search-params="searchParams" :forms="forms" :show-search-btn="true" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" @onSearch="onSearch"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList"></tableList>
@@ -241,6 +241,20 @@ import ossFile from './../components/ossFile.vue'
                     },
 					]
 				}
+			}
+		},
+		watch: {
+			'searchParams.version': {
+				handler(v) {
+					this.$set(this.searchParams, 'version', v.trim())
+				},
+				deep: true
+			},
+			'Form.download_url': {
+				handler(v) {
+					this.$set(this.Form, 'download_url', v.trim())
+				},
+				deep: true
 			}
 		},
 		methods: {
