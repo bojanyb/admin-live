@@ -27,7 +27,7 @@ const option = {
 	  domainHttps: 'http://api.huixin.info', // https环境地址
 	//   domainHttps: 'http://api.huida.vip', // https环境地址
 	//   domainHttps: 'http://192.168.0.114', // https环境地址
-	//   httpHeader: '/admin', // 后台本地携带
+	  httpHeader: '', // 后台本地携带
 	},
 	// 测试环境
 	'--test': {
