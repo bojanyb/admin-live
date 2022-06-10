@@ -150,6 +150,22 @@ const SORTLIST = [
     }
 ]
 
+// 订单状态
+const ORDERSTATUS = [
+    {
+        value: '',
+        name: '全部'
+    },
+    {
+        value: '0,2',
+        name: '未支付'
+    },
+    {
+        value: '1',
+        name: '已支付'
+    }
+]
+
 /*
 *体现记录 - 体现状态
 */
@@ -489,5 +505,6 @@ export default {
     CLASSLIST,
     DWACTIVITYTYPE,
     BANKLIST,
-    INSTITUTION
+    INSTITUTION,
+    ORDERSTATUS
 }

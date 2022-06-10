@@ -58,12 +58,12 @@ const dashboardList = [
             },
             {
                 tit: '充值笔数:',
-                val: 'cashing',
+                val: 'recharge_num',
                 unit: '（笔）'
             },
             {
                 tit: '成功笔数:',
-                val: 'total_cash',
+                val: 'recharge_succeed_num',
                 unit: '（笔）'
             }
         ]

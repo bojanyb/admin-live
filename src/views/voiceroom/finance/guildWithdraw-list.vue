@@ -73,6 +73,16 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
+                    name: 'status',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '订单状态',
+                    placeholder: '请选择',
+                    options: MAPDATA.ORDERSTATUS
+                },
+                {
                     name: 'dateTimeParams',
                     type: 'datePicker',
                     dateType: 'daterange',
@@ -158,6 +168,7 @@ export default {
                 user_number: s.user_number,
                 sort: s.sort,
                 channel: s.channel,
+                status: s.status,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000)
             }
