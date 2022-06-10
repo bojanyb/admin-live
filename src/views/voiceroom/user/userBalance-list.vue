@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="model">
-      <span>用户收入统计：{{ ruleForm.total_income_sum || 0 }}元</span>
-      <span>用户支出统计：{{ ruleForm.meow_expenditure_sum || 0 }}元</span>
+      <span>用户收入统计：{{ ruleForm.total_income_sum || 0 }}</span>
+      <span>用户支出统计：{{ ruleForm.meow_expenditure_sum || 0 }}</span>
     </div>
     <!--工具条-->
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
