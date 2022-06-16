@@ -1,7 +1,7 @@
 <template>
     <div class="payType-Box">
         <div class="payType">
-            <div class="FuncBox" v-for="(item,index) in FuncList" :key="index">
+            <div class="FuncBox" v-for="(item,index) in FuncListComputed" :key="index">
                 <span>{{ index }}</span>
                 <div v-for="(a, b) in item" :key="b">
                     <!-- <el-checkbox-group v-model="checkList" @change="(v) => setPayFunc(item, v, index)">
@@ -57,7 +57,24 @@ export default {
             isDestoryComp: false // 是否销毁组件
         };
     },
-    computed: {},
+    computed: {
+        FuncListComputed() {
+            let params = JSON.parse(JSON.stringify(this.FuncList))
+            if(params) {
+                for (const key in params) {
+                    params[key].forEach((item,index) => {
+                        if(item.title.indexOf('汇付') !== -1 && item.is_check === 1 && key !== 'pc') {
+                            params[key][index + 1].disabled = true
+                        }
+                        if(item.title.indexOf('微信') !== -1 && item.is_check === 1) {
+                            params[key][index - 1].disabled = true
+                        }
+                    })
+                }
+            }
+            return params
+        }
+    },
     methods: {
         // 获取支付方式
         async getPayFunc() {
@@ -65,13 +82,14 @@ export default {
             if(res.data) {
                 for (const key in res.data) {
                     if(res.data[key] && res.data[key].length > 0) {
-                        res.data[key].forEach(item => {
+                        res.data[key].forEach((item,index) => {
                             item.checked = item.is_check === 1
-                            // if(item.title.indexOf('微信') !== -1) {
-                            //     item.disabled = true
-                            // } else {
-                            //     item.disabled = false
-                            // }
+                            if(item.title.indexOf('汇付') !== -1 && key == 'pc') {
+                                item.disabled = true
+                            }
+                            if(key == 'xcx' && item.title.indexOf('支付宝') !== -1) {
+                                item.disabled = true
+                            }
                         })
                     }
                 }
@@ -103,6 +121,7 @@ export default {
                 is_check: v ? 1 : 0,
                 pay_way: item.pay_way
             }
+            console.log(item, 'item---------')
             let res = await setPayType(params)
             if(res.code === 2000) {
                 // this.$set(item, 'checked', !val)
