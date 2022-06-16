@@ -24,6 +24,8 @@
         <indexComp ref="indexComp" v-if="isDestoryComp" @getPayFunc="getPayFunc" @destoryComp="destoryComp"></indexComp>
 
         <editComp ref="editComp" v-if="isDestoryComp" @getPayFunc="getPayFunc" @destoryComp="destoryComp"></editComp>
+
+        <zfbComp ref="zfbComp" v-if="isDestoryComp" @getPayFunc="getPayFunc" @destoryComp="destoryComp"></zfbComp>
     </div>
 </template>
 
@@ -33,11 +35,13 @@ import { getChannelTypeList, setPayType } from '@/api/pay.js'
 // 引入编辑组件
 import indexComp from './edit/index.vue'
 import editComp from './edit/edit.vue'
+import zfbComp from './edit/zfb.vue'
 
 export default {
     components: {
         indexComp,
-        editComp
+        editComp,
+        zfbComp
     },
     filters: {
         titFilter(val) {
@@ -148,9 +152,12 @@ export default {
                 if(row.title.indexOf('汇付') !== -1) {
                     this.$refs.indexComp.dialogVisible = true
                     this.$refs.indexComp.getAdaPayConfigFunc(row.mer_id)
-                } else {
+                } else if(row.title.indexOf('微信') !== -1) {
                     this.$refs.editComp.dialogVisible = true
                     this.$refs.editComp.getWxPayFunc(row.mer_id)
+                } else {
+                    this.$refs.zfbComp.dialogVisible = true
+                    this.$refs.zfbComp.getWxPayFunc(row.mer_id)
                 }
             }, 100);
         },

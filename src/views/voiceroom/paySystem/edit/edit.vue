@@ -63,6 +63,7 @@ export default {
                 secret: '',
                 key: ''
             },
+            mer_id: null,
             rules: {
                 title: [
                     { required: true, message: '请输入商户号', trigger: 'blur' },
@@ -82,6 +83,7 @@ export default {
     methods: {
         // 获取四方支付
         getWxPayFunc(id) {
+            this.mer_id = id
             getWxPay({id: id}).then(res => {
                 this.oldParams = res.data.row || {}
             })
@@ -91,7 +93,7 @@ export default {
             let s = this.ruleForm
             let a = this.oldParams
             let params = {
-                id: a.mer_id,
+                id: this.mer_id,
                 // mer_id: a.mer_id,
                 appid: s.appid,
                 secret: s.secret,
