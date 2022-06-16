@@ -111,7 +111,7 @@ export default {
             let s = this.ruleForm
             let a = this.oldParams
             let params = {
-                pid: a.id,
+                pid: a.mer_id,
                 appid: s.appid,
                 api_key_live: s.api_key_live,
                 title: s.title,
