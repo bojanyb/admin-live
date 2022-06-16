@@ -1,7 +1,7 @@
 <template>
     <div class="payType-Box">
         <div class="payType">
-            <div class="FuncBox" v-for="(item,index) in FuncListComputed" :key="index">
+            <div class="FuncBox" v-for="(item,index) in FuncList" :key="index">
                 <span>{{ index }}</span>
                 <div v-for="(a, b) in item" :key="b">
                     <!-- <el-checkbox-group v-model="checkList" @change="(v) => setPayFunc(item, v, index)">
@@ -10,7 +10,7 @@
                     </el-checkbox>
                     </el-checkbox-group> -->
                     <el-checkbox v-model="a.checked" :disabled="a.disabled" @change="(v) => setPayFunc(index, a, b, v)"><span class="tit">{{ a.title }}</span>
-                        <el-button type="primary" :disabled="a.disabled" @click="editFunc(a.id, 2)">编辑</el-button>
+                        <el-button type="primary" :disabled="a.disabled" @click="editFunc(a.id, a)">编辑</el-button>
                     </el-checkbox>
                     <!-- <el-radio-group v-model="item.mer_id" @change="(v) => setPayFunc(item, v, index)">
                         <el-radio :label="2"><span class="tit">{{ a.title }}</span> 
@@ -103,39 +103,50 @@ export default {
             this.$set(item, 'checked', val)
             this.$confirm('是否切换？')
             .then(async _ => {
-                await this.updatePayType(item, v)
-                // if(key === 'h5') {
-                //     let data = this.FuncList['gzh'][index]
-                //     await this.updatePayType(data, v)
-                // } else if(key === 'gzh') {
-                //     let data = this.FuncList['h5'][index]
-                //     await this.updatePayType(data, v)
-                // }
+                await this.updatePayType(key,item,index, v)
+                let data
+                if(item.title.indexOf('微信') !== -1) {
+                    data = this.FuncList[key][index - 1]
+                } else if(item.title.indexOf('汇付') !== -1) {
+                    data = this.FuncList[key][index + 1]
+                }
+                this.$forceUpdate()
+                await this.updateFunc(data, 0)
             })
             .catch(_ => {});
         },
         // 修改支付设置
-        async updatePayType(item, v) {
+        async updatePayType(key, item,index, v) {
             let params = {
                 id: item.id,
                 is_check: v ? 1 : 0,
                 pay_way: item.pay_way
             }
-            console.log(item, 'item---------')
             let res = await setPayType(params)
             if(res.code === 2000) {
-                // this.$set(item, 'checked', !val)
                 this.$message.success('修改成功')
-                this.getPayFunc()
+                
             } else {
                 this.$message.error('修改失败')
             }
         },
+        async updateFunc(item, v) {
+            let params = {
+                id: item.id,
+                is_check: v,
+                pay_way: item.pay_way
+            }
+            console.log(item, 'item---------')
+            let res = await setPayType(params)
+            setTimeout(() => {
+                this.getPayFunc()
+            }, 0);
+        },
         // 打开编辑
-        editFunc(id, mer_id) {
+        editFunc(id, row) {
             this.isDestoryComp = true
             setTimeout(() => {
-                if(mer_id === 2) {
+                if(row.title.indexOf('微信') !== -1) {
                     this.$refs.indexComp.dialogVisible = true
                     this.$refs.indexComp.getAdaPayConfigFunc(id)
                 } else {
