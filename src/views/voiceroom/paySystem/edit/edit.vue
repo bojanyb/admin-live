@@ -91,7 +91,8 @@ export default {
             let s = this.ruleForm
             let a = this.oldParams
             let params = {
-                id: a.id,
+                id: a.mer_id,
+                // mer_id: a.mer_id,
                 appid: s.appid,
                 secret: s.secret,
                 title: s.title,

@@ -145,12 +145,12 @@ export default {
         editFunc(id, row) {
             this.isDestoryComp = true
             setTimeout(() => {
-                if(row.title.indexOf('微信') !== -1) {
+                if(row.title.indexOf('汇付') !== -1) {
                     this.$refs.indexComp.dialogVisible = true
-                    this.$refs.indexComp.getAdaPayConfigFunc(id)
+                    this.$refs.indexComp.getAdaPayConfigFunc(row.mer_id)
                 } else {
                     this.$refs.editComp.dialogVisible = true
-                    this.$refs.editComp.getWxPayFunc(id)
+                    this.$refs.editComp.getWxPayFunc(row.mer_id)
                 }
             }, 100);
         },
