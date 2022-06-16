@@ -136,7 +136,6 @@ export default {
                 is_check: v,
                 pay_way: item.pay_way
             }
-            console.log(item, 'item---------')
             let res = await setPayType(params)
             setTimeout(() => {
                 this.getPayFunc()
