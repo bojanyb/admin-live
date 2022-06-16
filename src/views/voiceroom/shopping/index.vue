@@ -4,6 +4,9 @@
         <div class="model">
             <el-button type="success" @click="add">新增</el-button>
         </div>
+        <div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
@@ -15,6 +18,8 @@
 <script>
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
+// 引入菜单组件
+import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 // 引入api
@@ -31,6 +36,7 @@ import add from './add/index.vue'
 export default {
     components: {
         tableList,
+        SearchPanel,
         add
     },
     mixins: [mixins],
@@ -44,7 +50,12 @@ export default {
                         label: '商品类型',
                         render: (h, params) => {
                             let data = MAPDATA.SHOPPING.find(item => { return item.value === params.row.goods_type })
-                            return h('span', data ? data.name : '--')
+                            return h('div', { class: { 'bounce_fa': true } }, [
+                                h('span', { class: { 'el-icon-top bounce': true }, style: {
+                                    display: params.row.is_first === 1 ? 'unset' : 'none'
+                                }}),
+                                h('span', data ? data.name : '--')
+                            ])
                         }
                     },
                     {
@@ -99,7 +110,22 @@ export default {
                     }
                 ]
             }
-        }
+        },
+        forms() {
+            return [
+                {
+                    name: 'goods_type',
+                    type: 'select',
+                    value: null,
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '商品类型',
+                    placeholder: '请选择',
+                    clearable: true,
+                    options: MAPDATA.SHOPPING
+                },
+            ]
+        },
     },
     data() {
         return {
@@ -126,7 +152,8 @@ export default {
                 end_time: Math.floor(s.end_time / 1000),
                 user_id: s.user_id,
                 order_id: s.order_id,
-                sort: s.sort
+                sort: s.sort,
+                goods_type: s.goods_type
             }
         },
         // 设置时间段
@@ -196,6 +223,33 @@ export default {
     box-sizing: border-box;
     .model {
         margin-bottom: 20px;
+    }
+    .bounce_fa {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .bounce {
+            position: absolute;
+            left: 0;
+            font-size: 17px;
+            color: #ff4949;
+            font-weight: 600;
+            transform: translateY(5px);
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(5px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+            100% {
+                transform: translateY(5px);
+            }
+        }
     }
 }
 </style>

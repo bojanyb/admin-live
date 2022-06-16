@@ -65,6 +65,24 @@
 							autocomplete="off" />
 					</el-col>
 				</el-form-item>
+				<el-form-item label="开始时间" prop="start_time" :rules="startTime" :label-width="formLabelWidth">
+                    <el-date-picker
+                    v-model="popForm.start_time"
+                    value-format="timestamp"
+                    type="datetime"
+                    :picker-options="StartPicker"
+                    placeholder="选择开始时间">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="结束时间" prop="end_time" :rules="endTime" :label-width="formLabelWidth">
+                    <el-date-picker
+                    v-model="popForm.end_time"
+                    value-format="timestamp"
+                    type="datetime"
+                    :picker-options="EndPicker"
+                    placeholder="选择结束时间">
+                    </el-date-picker>
+                </el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="handleCancel">取 消</el-button>
@@ -116,7 +134,9 @@
 					'ps': '',
 					'sort': '',
 					'url': '',
-					'type': 'Add'
+					'type': 'Add',
+					start_time: '',
+					end_time: ''
 				},
 				popFormRules: {
 					title: [{
@@ -153,6 +173,54 @@
 				imageFile: '',
 				bannerImglist: [],
 			}
+		},
+		computed: {
+			StartPicker() {
+				return {
+					disabledDate: (time) => {
+						return time.getTime() < new Date().getTime() - 24 * 60 * 60 * 1000;
+					}
+				}
+			},
+			EndPicker() {
+				return {
+					disabledDate: (time) => {
+						return time.getTime() < new Date().getTime() - 24 * 60 * 60 * 1000;
+					}
+				}
+			},
+			startTime() {
+				let start = this.popForm.start_time
+				let now = new Date().getTime()
+				let params = {}
+				params = {
+					required: true,
+					validator: (rules, val, cb) => {
+						if(start < now && this.type === 'Add') {
+							cb(new Error('开始时间不可小于当前时间'))
+						} else {
+							cb()
+						}
+					}
+				}
+				return params
+			},
+			endTime() {
+				let start = this.popForm.start_time
+				let now = new Date().getTime()
+				let params = {}
+				params = {
+					required: true,
+					validator: (rules, val, cb) => {
+						if(start < now && this.type === 'Add') {
+							cb(new Error('结束时间不可小于当前时间'))
+						} else {
+							cb()
+						}
+					}
+				}
+				return params
+			},
 		},
 		created() {
 			this.getBannerList()
@@ -199,7 +267,9 @@
 					'ps': '',
 					'sort': '',
 					'url': '',
-					'type': 'Add'
+					'type': 'Add',
+					start_time: '',
+					end_time: ''
 				}
 				this.imageFile = "";
 				if (this.$refs['popForm']) {
@@ -217,7 +287,9 @@
 					'sort': row.sort,
 					'url': row.url,
 					'id': row.id,
-					'type': 'Edit'
+					'type': 'Edit',
+					start_time: row.start_time * 1000,
+					end_time: row.end_time * 1000
 				}
 				this.imageUrl = row.pic
 				this.editTitle = '修改'
@@ -247,6 +319,10 @@
 						formData.append('sort', this.popForm.sort)
 						formData.append('url', this.popForm.url)
 						formData.append('pic', this.popForm.pic)
+						let start_time = Math.floor(this.popForm.start_time / 1000)
+                		let end_time = Math.floor(this.popForm.end_time / 1000)
+						formData.append('start_time', start_time)
+						formData.append('end_time', end_time)
 						this.loading = true
 						getBannerChange(formData).then(res => {
 							this.$message.success("添加成功")
@@ -274,6 +350,10 @@
 						formData.append('sort', this.popForm.sort)
 						formData.append('url', this.popForm.url)
 						formData.append('pic', this.popForm.pic)
+						let start_time = Math.floor(this.popForm.start_time / 1000)
+                		let end_time = Math.floor(this.popForm.end_time / 1000)
+						formData.append('start_time', start_time)
+						formData.append('end_time', end_time)
 						this.loading = true
 						getBannerChange(formData).then(res => {
 							this.imageFile = "";
@@ -330,6 +410,9 @@
 	}
 </script>
 <style scoped="scoped" lang="scss">
+	.el-input {
+		width: 335px;
+	}
 	::v-deep.popDel {
 		.el-dialog__body {
 			height: auto !important;

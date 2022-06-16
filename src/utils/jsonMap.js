@@ -297,6 +297,18 @@ const DURATION = [
     }
 ]
 
+// 优先推荐
+const PRIORITYGIVE = [
+    {
+        name: '是',
+        value: 1
+    },
+    {
+        name: '否',
+        value: 0
+    }
+]
+
 /*
 *用户活动 - 端午活动统计
 */
@@ -506,5 +518,6 @@ export default {
     DWACTIVITYTYPE,
     BANKLIST,
     INSTITUTION,
-    ORDERSTATUS
+    ORDERSTATUS,
+    PRIORITYGIVE
 }

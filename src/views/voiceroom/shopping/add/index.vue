@@ -17,6 +17,11 @@
                         <el-option v-for="item in goodsClassifyList" :label="item.name" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="优先推荐" prop="is_first">
+                    <el-select v-model="ruleForm.is_first" placeholder="优先推荐">
+                        <el-option v-for="item in priorityGiveList" :label="item.name" :key="item.value" :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="商品名称" prop="goods_name">
                     <el-input v-model="ruleForm.goods_name" placeholder="请输入商品名称"></el-input>
                 </el-form-item>
@@ -205,6 +210,7 @@ export default {
             dialogVisible: false,
             goodsTypeList: MAPDATA.SHOPPING,
             goodsClassifyList: MAPDATA.CLASSIFY,
+            priorityGiveList: MAPDATA.PRIORITYGIVE,
             goodsType: 1,
             status: 'add',
             oldParams: {},
@@ -215,6 +221,7 @@ export default {
                 can_buy: 1,
                 goods_describe: '',
                 reason: '',
+                is_first: null,
                 time_limit: [
                     {
                         day: '',
@@ -235,6 +242,9 @@ export default {
                 ],
                 category_id: [
                     { required: true, message: '请选择商品分类', trigger: 'change' }
+                ],
+                is_first: [
+                    { required: true, message: '请选择是否优先推荐', trigger: 'change' }
                 ],
                 goods_name: [
                     { required: true, message: '请输入商品名称', trigger: 'blur' },
