@@ -62,20 +62,20 @@ export default {
         // 获取支付方式
         async getPayFunc() {
             let res = await getChannelTypeList()
-            if(res.data) {
-                for (const key in res.data) {
-                    if(res.data[key] && res.data[key].length > 0) {
-                        res.data[key].forEach(item => {
-                            item.checked = item.is_check === 1
-                            if(item.title.indexOf('微信') !== -1) {
-                                item.disabled = true
-                            } else {
-                                item.disabled = false
-                            }
-                        })
-                    }
-                }
-            }
+            // if(res.data) {
+            //     for (const key in res.data) {
+            //         if(res.data[key] && res.data[key].length > 0) {
+            //             res.data[key].forEach(item => {
+            //                 item.checked = item.is_check === 1
+            //                 if(item.title.indexOf('微信') !== -1) {
+            //                     item.disabled = true
+            //                 } else {
+            //                     item.disabled = false
+            //                 }
+            //             })
+            //         }
+            //     }
+            // }
 
             this.FuncList = res.data
         },
@@ -86,13 +86,13 @@ export default {
             this.$confirm('是否切换？')
             .then(async _ => {
                 await this.updatePayType(item, v)
-                if(key === 'h5') {
-                    let data = this.FuncList['gzh'][index]
-                    await this.updatePayType(data, v)
-                } else if(key === 'gzh') {
-                    let data = this.FuncList['h5'][index]
-                    await this.updatePayType(data, v)
-                }
+                // if(key === 'h5') {
+                //     let data = this.FuncList['gzh'][index]
+                //     await this.updatePayType(data, v)
+                // } else if(key === 'gzh') {
+                //     let data = this.FuncList['h5'][index]
+                //     await this.updatePayType(data, v)
+                // }
             })
             .catch(_ => {});
         },
