@@ -2,11 +2,22 @@
     <div class="payType-Box">
         <div class="payType">
             <div class="FuncBox" v-for="(item,index) in FuncList" :key="index">
-                <span>{{ item.title }}</span>
-                <el-radio-group v-model="item.mer_id" @change="(v) => setPayFunc(item, v, index)">
-                    <el-radio :label="2"><span class="tit">汇付</span> <el-button type="primary" @click="editFunc(item.id, 2)">编辑</el-button></el-radio>
-                    <el-radio :label="1"><span class="tit">{{ item.title | titFilter }}</span> <el-button type="primary" @click="editFunc(item.id, 1)">编辑</el-button></el-radio>
-                </el-radio-group>
+                <span>{{ index }}</span>
+                <div v-for="(a, b) in item" :key="b">
+                    <!-- <el-checkbox-group v-model="checkList" @change="(v) => setPayFunc(item, v, index)">
+                        <el-checkbox :label="a.id"><span class="tit">{{ a.title }}</span> 
+                        <el-button type="primary" @click="editFunc(a.id, 2)">编辑</el-button>
+                    </el-checkbox>
+                    </el-checkbox-group> -->
+                    <el-checkbox v-model="a.checked" :disabled="a.disabled" @change="(v) => setPayFunc(index, a, b, v)"><span class="tit">{{ a.title }}</span>
+                        <el-button type="primary" :disabled="a.disabled" @click="editFunc(a.id, 2)">编辑</el-button>
+                    </el-checkbox>
+                    <!-- <el-radio-group v-model="item.mer_id" @change="(v) => setPayFunc(item, v, index)">
+                        <el-radio :label="2"><span class="tit">{{ a.title }}</span> 
+                            <el-button type="primary" @click="editFunc(a.id, 2)">编辑</el-button>
+                        </el-radio>
+                    </el-radio-group> -->
+                </div>
             </div>
         </div>
 
@@ -18,7 +29,7 @@
 
 <script>
 // 引入api
-import { getPayType, setPayType } from '@/api/pay.js'
+import { getChannelTypeList, setPayType } from '@/api/pay.js'
 // 引入编辑组件
 import indexComp from './edit/index.vue'
 import editComp from './edit/edit.vue'
@@ -41,46 +52,65 @@ export default {
     },
     data() {
         return {
+            checkList: [],
             FuncList: [],
             isDestoryComp: false // 是否销毁组件
         };
     },
+    computed: {},
     methods: {
         // 获取支付方式
         async getPayFunc() {
-            let res = await getPayType()
-            // let back = res.data.data
-            // back.forEach(item => {
-            //     this.FuncList.forEach(a => {
-            //         if(item.title === a.label) {
-            //             a.id = item.id
-            //             a.value = item.mer_id
-            //         }
-            //     })
-            // })
+            let res = await getChannelTypeList()
+            if(res.data) {
+                for (const key in res.data) {
+                    if(res.data[key] && res.data[key].length > 0) {
+                        res.data[key].forEach(item => {
+                            item.checked = item.is_check === 1
+                            if(item.title.indexOf('微信') !== -1) {
+                                item.disabled = true
+                            } else {
+                                item.disabled = false
+                            }
+                        })
+                    }
+                }
+            }
 
-            this.FuncList = res.data.data
+            this.FuncList = res.data
         },
         // 设置支付方式
-        async setPayFunc(item, v, index) {
-            let id = v === 2 ? 1 : 2
-            this.$set(item, 'mer_id', id)
+        async setPayFunc(key, item, index, v) {
+            let val = item.is_check === 1
+            this.$set(item, 'checked', val)
             this.$confirm('是否切换？')
             .then(async _ => {
-                let data = this.FuncList[index]
-                let params = {
-                    id: data.id,
-                    mer_id: v
-                }
-                let res = await setPayType(params)
-                if(res.code === 2000) {
-                    this.$message.success('修改成功')
-                    this.getPayFunc()
-                } else {
-                    this.$message.error('修改失败')
+                await this.updatePayType(item, v)
+                if(key === 'h5') {
+                    let data = this.FuncList['gzh'][index]
+                    await this.updatePayType(data, v)
+                } else if(key === 'gzh') {
+                    let data = this.FuncList['h5'][index]
+                    await this.updatePayType(data, v)
                 }
             })
             .catch(_ => {});
+        },
+        // 修改支付设置
+        async updatePayType(item, v) {
+            let params = {
+                id: item.id,
+                is_check: v ? 1 : 0,
+                pay_way: item.pay_way
+            }
+            let res = await setPayType(params)
+            if(res.code === 2000) {
+                // this.$set(item, 'checked', !val)
+                this.$message.success('修改成功')
+                this.getPayFunc()
+            } else {
+                this.$message.error('修改失败')
+            }
         },
         // 打开编辑
         editFunc(id, mer_id) {
@@ -126,26 +156,22 @@ export default {
                 width: 100px;
                 font-weight: 600;
             }
-            .el-radio-group {
-                display: flex;
-                flex-direction: column;
+            >div {
+                margin-bottom: 30px;
+            }
+            >div:nth-child(2) {
                 margin-top: 50px;
-                .el-radio {
-                    // margin-right: 80px;
-                    width: 200px;
-                    height: 50px;
-                    margin-bottom: 30px;
+            }
+            .el-checkbox {
+                display: flex;
+                align-items: center;
+                .el-checkbox__label {
                     display: flex;
                     align-items: center;
-                    .el-radio__label {
+                    >span.tit {
                         display: flex;
-                        align-items: center;
-                        >span.tit {
-                            display: flex;
-                            width: 100px;
-                        }
+                        width: 100px;
                     }
-
                 }
             }
         }

@@ -95,6 +95,17 @@
 		},
 		created() {
 			// window.addEventListener('storage', this.afterQRScan)
+			let arr1 = [
+				{
+					name: '111'
+				}
+			]
+			let arr2 = [
+				{
+					name: '222'
+				}
+			]
+			console.log(arr1.concat(arr2), 'arr3')
 		},
 		mounted() {
 			if (this.loginForm.account === '') {

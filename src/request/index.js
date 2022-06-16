@@ -3,7 +3,9 @@ const request = {
     pay: {
         operateHistory: `${HTTPHEADER}/payconfig/getPayOptLog`, // 操作记录
         getConfigType: `${HTTPHEADER}/payconfig/getConfigType`, // 获取支付渠道
+        getChannelTypeList: `${HTTPHEADER}/Payconfig/getChannelTypeList`, // 获取支付配置
         setConfigType: `${HTTPHEADER}/payconfig/setConfigType`, // 设置支付渠道
+        editChannelType: `${HTTPHEADER}/Payconfig/editChannelType`, // 设置支付渠道
         getAdaPayConfig: `${HTTPHEADER}/payconfig/getAdaPayConfig`, // 获取支付渠道
         setAdaPayConfig: `${HTTPHEADER}/payconfig/setAdaPayConfig`, // 设置支付渠道
         getWxPay: `${HTTPHEADER}/payconfig/getWxPay`, // 设置支付渠道

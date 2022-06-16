@@ -10,10 +10,19 @@ export function getPayType(params) {
   })
 }
 
+// 获取支付类型 - 新
+export function getChannelTypeList(params) {
+  return request({
+    url: api.pay.getChannelTypeList,
+    method: 'post',
+    params
+  })
+}
+
 // 设置支付类型
 export function setPayType(params) {
   return request({
-    url: api.pay.setConfigType,
+    url: api.pay.editChannelType,
     method: 'post',
     data: params
   })
