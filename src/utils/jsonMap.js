@@ -157,7 +157,7 @@ const ORDERSTATUS = [
         name: '全部'
     },
     {
-        value: '0,2',
+        value: '3,2',
         name: '未支付'
     },
     {
