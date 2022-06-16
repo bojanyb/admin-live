@@ -125,7 +125,7 @@ export default {
             let res = await setPayType(params)
             if(res.code === 2000) {
                 this.$message.success('修改成功')
-                
+                this.getPayFunc()
             } else {
                 this.$message.error('修改失败')
             }
