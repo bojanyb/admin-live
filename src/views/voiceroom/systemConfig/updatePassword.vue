@@ -52,8 +52,16 @@ export default {
                     let params = { ...this.ruleForm }
                     refresh(params).then(res => {
                         if(res.code === 2000) {
-                            removeToken()
-                            this.$router.replace({ path: '/login' })
+                            this.$alert("密码修改成功,前往登录", '提示', {
+                                confirmButtonText: '确定',
+                                callback: action => {
+                                    if (action == 'confirm') {
+                                        removeToken()
+                                        this.$router.replace({ path: '/login' })
+                                    }
+                                }
+                            })
+                           
                         }
                     })
                 } else {
