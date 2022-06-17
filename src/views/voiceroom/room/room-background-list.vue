@@ -27,6 +27,7 @@
 			<el-table-column label="默认配置房间" prop="room_genreText" align="center" />
 			<el-table-column label="操作" prop="gift_str" align="center">
 				<template slot-scope="scope">
+					<el-button type="primary" @click="update(scope.row)">修改</el-button>
 					<el-button type="danger" @click="handleDel(scope.row.id)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -35,7 +36,7 @@
 		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
 			@pagination="roomBgList" />
 
-		<el-dialog title="操作" :visible.sync="editPop">
+		<el-dialog title="操作" :visible.sync="editPop" v-if="isDestoryComp">
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
 				<el-form-item label="图片" prop="imgPreview" :label-width="formLabelWidth">
 					<el-col :span="17">
@@ -113,6 +114,7 @@
 					// 	"label": "闲聊",
 					// }
 				],
+				isDestoryComp: false,
 				popFormRules: {
 					imgPreview: [{
 						required: true,
@@ -180,7 +182,23 @@
 					this.imageUrl = "";
 					this.$refs['popForm'].resetFields()
 				}
-				this.editPop = true;
+				this.popForm.id = null
+				this.isDestoryComp = true
+				setTimeout(() => {
+					this.editPop = true;
+				}, 50);
+			},
+			// 修改背景
+			update(row) {
+				this.isDestoryComp = true
+				setTimeout(() => {
+					this.editPop = true;
+				}, 50);
+				if(row.room_genre == 0) {
+					row.room_genre = String(row.room_genre)
+				}
+				this.imageUrl = row.url
+				this.popForm = row
 			},
 			handleDel(id) {
 				this.$alert("是否确定删除该房间背景图?", '提示', {
@@ -207,6 +225,8 @@
 				this.$refs.popForm.validate(valid => {
 					if (valid) {
 						const formData = new FormData()
+						let id = this.popForm.id ? this.popForm.id : null
+						formData.append('id', id)
 						formData.append('room_genre', this.popForm.room_genre)
 						formData.append('url', this.imageUrl)
 						getRoomBgAdd(formData).then(res => {
