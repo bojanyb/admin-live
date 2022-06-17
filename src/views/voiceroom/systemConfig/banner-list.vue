@@ -37,8 +37,8 @@
 		</el-table>
 
 		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="getBannerList" />
+		<!-- <pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
+			@pagination="getBannerList" /> -->
 
 		<el-dialog :title="editTitle" :visible.sync="editPop" @close="handleCancel">
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
@@ -288,8 +288,8 @@
 					'url': row.url,
 					'id': row.id,
 					'type': 'Edit',
-					start_time: row.start_time * 1000,
-					end_time: row.end_time * 1000
+					start_time: row.start_time ? row.start_time * 1000 : '',
+					end_time: row.end_time ? row.end_time * 1000 : ''
 				}
 				this.imageUrl = row.pic
 				this.editTitle = '修改'
