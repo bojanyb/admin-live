@@ -81,6 +81,15 @@ export function getRoomList(data) {
   })
 }
 
+// 房间置顶
+export function roomTop(data) {
+  return request({
+    url: '/room/top',
+    method: 'post',
+    data
+  })
+}
+
 // 房间冻结/解冻
 export function getRoomSave(data) {
   return request({

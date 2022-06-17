@@ -67,10 +67,12 @@
 			<el-table-column label="当日流水" prop="today_flow" align="center" />
 			<el-table-column label="本周流水" prop="now_week_flow" align="center" />
 			<el-table-column label="上一周流水" prop="last_week_flow" align="center" width="100" />
-			<el-table-column align="center" label="操作" width="95">
+			<el-table-column align="center" label="操作" fixed="right" width="200">
 				<template slot-scope="scope">
 					<el-button v-if="scope.row.status == 1" type="danger" @click="handleRoom(scope.row)">冻结</el-button>
 					<el-button v-if="scope.row.status == 3" type="primary" @click="handleRoom(scope.row)">解冻</el-button>
+					<el-button v-if="scope.row.top == 1 || !scope.row.top" type="primary" @click="roomTopFunc(scope.row.id, 2)">房间置顶</el-button>
+					<el-button v-if="scope.row.top == 2" type="primary" @click="roomTopFunc(scope.row.id, 1)">取消置顶</el-button>
 				</template>
 			</el-table-column>
 			</el-table-column>
@@ -88,7 +90,8 @@
 	import $ from 'jquery'
 	import {
 		getRoomList,
-		getRoomSave
+		getRoomSave,
+		roomTop
 	} from '@/api/videoRoom'
 	import Pagination from '@/components/Pagination'
 	import moment from 'moment'
@@ -167,6 +170,18 @@
 						} else if (action == 'cancel') {}
 					}
 				})
+			},
+
+			// 置顶 - 取消置顶
+			async roomTopFunc(id, top) {
+				let params = {
+					id,
+					top
+				}
+				let res = await roomTop(params)
+				if(res.code === 2000) {
+					this.roomList()
+				}
 			}
 		}
 	}
