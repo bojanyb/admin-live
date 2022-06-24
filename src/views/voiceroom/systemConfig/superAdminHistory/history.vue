@@ -78,7 +78,7 @@ export default {
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.room_username),
-                                h('div', params.row.room_user_id || '无')
+                                h('div', params.row.room_user_number || '无')
                             ])
                         }
                     },

@@ -41,6 +41,8 @@ const request = {
             punishHistory: `${HTTPHEADER}/Room/punishHistory`, // 处理处罚历史
             handlePunish: `${HTTPHEADER}/Room/handlePunish`, // 处理处罚
             punishLog: `${HTTPHEADER}/Room/punishLog`, // 待处理处罚
+            superUserList: `${HTTPHEADER}/User/superUserList`, // 超管列表
+            setSuperUser: `${HTTPHEADER}/User/setSuperUser`, // 设置超管
         }
     },
 

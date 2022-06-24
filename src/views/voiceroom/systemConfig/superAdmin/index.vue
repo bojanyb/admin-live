@@ -1,4 +1,4 @@
-// 转转宝箱(背包内) 活动配置
+// 超管列表
 <template>
     <div class="superAdmin-box">
         <el-button class="add" type="success" @click="handleAdd">新增</el-button>
@@ -6,7 +6,7 @@
             <tableList :cfgs="cfgs" ref="tableList"></tableList>
         </div>
 
-        <addComp ref="addComp" :list="list" v-if="isDestoryComp" @getList="getList" @destoryComp="destoryComp"></addComp>
+        <addComp ref="addComp" v-if="isDestoryComp" @getList="getList" @destoryComp="destoryComp"></addComp>
     </div>
 </template>
 
@@ -21,6 +21,8 @@ import { timeFormat } from '@/utils/common.js'
 import addComp from './add/index.vue'
 
 import { getActivetyGiftADelete, getActivetyGiftSave, getActivetyHasGiftList } from '@/api/videoRoom'
+// 引入api
+import { setSuperUser } from '@/api/super'
 
 export default {
     components: {
@@ -38,38 +40,40 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.userActivity.zzbxActivity.list,
+                url: REQUEST.system.super.superUserList,
                 columns: [
                     {
                         label: '超管ID',
-                        props : 'name',
-                        render: (h, params) => {
-                            return h('span', params.row.name)
-                        }
+                        prop: 'user_number'
                     },
                     {
                         label: '处罚次数',
-                        render: (h, params) => {
-                            return h('span', params.row.type === 1 ? '背包' : '派对')
-                        }
+                        prop: 'punish_count'
                     },
                     {
                         label: '最后一次登录时间',
-                        props : 'start_time',
                         render: (h, params) => {
-                            return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : "")
+                            return h('span', params.row.last_login ? timeFormat(params.row.last_login, 'YYYY-MM-DD HH:mm:ss', true) : "")
                         }
                     },
                     {
                         label: '状态',
-                        // props : 'status',
-                        isSwitch: true
+                        prop: 'status',
+                        isSwitch: true,
+                        isTrueValue: 1,
+                        isFalseValue: 0,
+                        change: (v, row) => {
+                            this.setSuperUserFunc(row.user_number, v)
+                        },
+                        render: (h, params) => {
+                            return h('span', '')
+                        }
                     },
                     {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.deleteFunc(params.row)}}},'删除'),
+                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.setSuperUserFunc(params.row.user_number, 2)}}},'删除'),
                             ])
                         }
                     },
@@ -91,29 +95,36 @@ export default {
         },
         // 新增
         handleAdd() {
-            this.load('add')
-        },
-        load(status, row) {
             this.isDestoryComp = true
             setTimeout(() => {
-                this.$refs.addComp.loadParams(status, row)
+                this.$refs.addComp.dialogVisible = true
             }, 100);
         },
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
         },
+        // 启用 - 关闭
+        async setSuperUserFunc(user_number, status) {
+            if(status === 2) {
+                this.$confirm('是否确认删除？')
+                .then(async _ => {
+                    let res = await setSuperUser({ user_number, status })
+                    if(res.code === 2000) {
+                        this.$message.success('删除成功')
+                    } else {
+                        this.$message.error('删除失败')
+                    }
+                    this.getList()
+                })
+            } else {
+                await setSuperUser({ user_number, status })
+                this.getList()
+            }
+        },
         // 删除
         deleteFunc(row) {
-            this.$confirm('是否确认删除？')
-            .then(_ => {
-                getActivetyGiftADelete({id: row.id}).then(res => {
-                    this.$message.success('删除成功!')
-                    this.getList()
-                }).catch(err => {
-                    this.$message.error('删除失败!')
-                })
-            })
+            
         }
     }
 }

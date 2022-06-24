@@ -103,16 +103,15 @@ const systemConfigRouter = {
 			  noCache: true
 			}
 		},
-		// {
-		// 	path: 'superAdmin',
-		// 	component: () => import('@/views/voiceroom/systemConfig/superAdmin/index'),
-		// 	name: 'superAdmin',
-		// 	meta: {
-		// 	  title: '超管管理',
-		// 	  noCache: true
-		// 	},
-		// 	hidden: true
-		// },
+		{
+			path: 'superAdmin',
+			component: () => import('@/views/voiceroom/systemConfig/superAdmin/index'),
+			name: 'superAdmin',
+			meta: {
+			  title: '超管管理',
+			  noCache: true
+			},
+		},
 		{
 			path: 'superAdminList',
 			component: () => import('@/views/voiceroom/systemConfig/superAdminHistory/index'),

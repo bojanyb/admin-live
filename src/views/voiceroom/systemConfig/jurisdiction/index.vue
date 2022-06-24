@@ -74,7 +74,6 @@ export default {
                         disabledStatus: true,
                         disabledIndex: 0,
                         change: (v, row) => {
-                            console.log(v, 'v----------')
                             this.adminStatusFunc(row.id, v)
                         },
                         render: (h, params) => {

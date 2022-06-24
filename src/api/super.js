@@ -11,3 +11,12 @@ export function handlePunish(data) {
     })
 }
 
+// 设置超管
+export function setSuperUser(data) {
+    return request({
+        url: REQUEST.system.super.setSuperUser,
+        method: 'post',
+        data
+    })
+}
+
