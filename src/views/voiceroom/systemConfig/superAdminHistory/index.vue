@@ -160,7 +160,7 @@ export default {
             if(status === 1) {
                 name = '通过'
             } else {
-                name = '是否确认驳回'
+                name = '驳回'
             }
             this.$confirm(`是否确认${name}？`)
             .then(async _ => {
