@@ -40,7 +40,7 @@ export default {
                     type: 'input',
                     value: '',
                     label: '处置人',
-                    placeholder: '处置人名称或id'
+                    placeholder: '处置人id'
                 },
                 {
                     name: 'room_username',
@@ -54,7 +54,7 @@ export default {
                     type: 'input',
                     value: '',
                     label: '处理人',
-                    placeholder: '处理人名称或id'
+                    placeholder: '处理人名称'
                 },
             ]
         },

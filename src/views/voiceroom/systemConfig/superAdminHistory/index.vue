@@ -40,7 +40,7 @@ export default {
                     type: 'input',
                     value: '',
                     label: '处置人',
-                    placeholder: '处置人名称或id'
+                    placeholder: '处置人id'
                 },
                 {
                     name: 'room_username',
@@ -48,14 +48,7 @@ export default {
                     value: '',
                     label: '被处罚厅主',
                     placeholder: '被处罚厅主名称或id'
-                },
-                {
-                    name: 'admin_username',
-                    type: 'input',
-                    value: '',
-                    label: '处理人',
-                    placeholder: '处理人名称或id'
-                },
+                }
             ]
         },
         cfgs() {
@@ -92,18 +85,6 @@ export default {
                         render: (h, params) => {
                             let data = MAPDATA.SUPERSTATUSLIST.find(item => { return params.row.status === item.value })
                             return h('span', data ? data.name : '无')
-                        }
-                    },
-                    {
-                        label: '处理人',
-                        render: (h, params) => {
-                            return h('span', params.row.admin_nickname || '无')
-                        }
-                    },
-                    {
-                        label: '处理时间',
-                        render: (h, params) => {
-                            return h('span', params.row.handle_time ? timeFormat(params.row.handle_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
                     },
                     {
