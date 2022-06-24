@@ -109,8 +109,8 @@ export default {
                 list.forEach(item => {
                     item.checked = false
                     if(user_pids) {
-                        let data = user_pids.toString()
-                        if(data.indexOf(item.id) !== -1) {
+                        // let data = user_pids.toString()
+                        if(user_pids.indexOf(String(item.id)) !== -1) {
                             item.checked = true
                         }
                     }

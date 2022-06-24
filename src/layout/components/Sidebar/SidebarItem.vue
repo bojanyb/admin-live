@@ -108,18 +108,19 @@ export default {
 
     // 隐藏没有权限的页面
     permissionListFunc(item) {
-      let permissionList = this.permission
-      if(permissionList) {
-        if(item.redirect) {
-          if(item.children) {
-            return permissionList.indexOf(item.children[0].meta.title) !== -1
-          }
-        }
-        if(item.meta) {
-          return permissionList.indexOf(item.meta.title) !== -1
-        }
-      }
-      return false
+      // let permissionList = this.permission
+      // if(permissionList) {
+      //   if(item.redirect) {
+      //     if(item.children) {
+      //       return permissionList.indexOf(item.children[0].meta.title) !== -1
+      //     }
+      //   }
+      //   if(item.meta) {
+      //     return permissionList.indexOf(item.meta.title) !== -1
+      //   }
+      // }
+      // return false
+      return true
     }
   }
 }

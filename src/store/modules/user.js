@@ -157,8 +157,8 @@ const actions = {
 				if(res.data && res.data.list.length > 0) {
 					let prv = (list) => {
 						list.forEach(item => {
-							let user_pids = res.data.user_pids.toString()
-							if(user_pids.indexOf(item.id) !== -1) {
+							let user_pids = res.data.user_pids
+							if(user_pids.indexOf(String(item.id)) !== -1) {
 								array.push(item.title)
 							}
 							if(item.child) {
