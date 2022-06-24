@@ -152,7 +152,6 @@ const actions = {
 	// 获取当前角色路由权限
 	editAdminFunc({ commit }, admin_id) {
 		return new Promise((resolve, reject) => {
-			console.log(admin_id, 'admin_id---------')
 			editAdmin({ admin_id }).then((res) => {
 				let array = []
 				if(res.data && res.data.list.length > 0) {
@@ -170,7 +169,6 @@ const actions = {
 					prv(res.data.list)
 					localStorage.setItem('permissionList', array)
 				}
-				console.log(res, 'res----------')
 				resolve()
 			}).catch(error => {
 				reject(error)

@@ -64,19 +64,19 @@ export default {
             rules: {
                 department: [
                     { required: true, message: '请输入操作员部门', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
                 nickname: [
                     { required: true, message: '请输入操作员名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
                 username: [
                     { required: true, message: '请输入成员账号', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ]
             }
         };
@@ -195,7 +195,15 @@ export default {
         },
         // 参数
         returnParams() {
-            let params = { ... this.ruleForm }
+            let s = this.ruleForm
+            let params = {
+                admin_id: s.id,
+                department: s.department,
+                nickname: s.nickname,
+                username: s.username,
+                password: s.password,
+                permission_ids: []
+            }
             let array = []
             let prv = (list) => {
                 list.forEach(item => {
@@ -209,6 +217,9 @@ export default {
             }
             prv(this.jurisdictionList)
             params.permission_ids = array
+            if(this.status === 'add') {
+                delete params.admin_id
+            }
             return params
         },
         // 关闭弹窗

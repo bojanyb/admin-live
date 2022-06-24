@@ -59,6 +59,16 @@ export default {
   computed: {
     permission() {
       return localStorage.getItem('permissionList')
+    },
+  },
+  watch: {
+    permissionList: {
+      handler(n) {
+        if(n) {
+          this.permissionListFunc(item)
+        }
+      },
+      deep: true
     }
   },
   methods: {
@@ -99,18 +109,17 @@ export default {
     // 隐藏没有权限的页面
     permissionListFunc(item) {
       let permissionList = this.permission
-      console.log(permissionList, 'permissionList------------')
-      // if(item.hidden) {
-      //   return false
-      // } else {
-      //   if(item.meta) {
-      //     return permissionList.indexOf(item.meta.title) !== -1
-      //   }
-      // }
-      // if(item.meta) {
-      //   return permissionList.indexOf(item.meta.title) !== -1
-      // }
-      return true
+      if(permissionList) {
+        if(item.redirect) {
+          if(item.children) {
+            return permissionList.indexOf(item.children[0].meta.title) !== -1
+          }
+        }
+        if(item.meta) {
+          return permissionList.indexOf(item.meta.title) !== -1
+        }
+      }
+      return false
     }
   }
 }
