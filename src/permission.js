@@ -28,6 +28,8 @@ router.beforeEach(async(to, from, next) => {
       // determine whether the user has obtained his permission roles through getInfo
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
       if (hasRoles) {
+        console.log(from, 'form-----------')
+        console.log(to, 'to-------------')
         if(from.path === '/login') {
           setTimeout(() => {
             next()

@@ -169,7 +169,7 @@ const actions = {
 					prv(res.data.list)
 					localStorage.setItem('permissionList', array)
 				}
-				resolve()
+				resolve(res)
 			}).catch(error => {
 				reject(error)
 			})

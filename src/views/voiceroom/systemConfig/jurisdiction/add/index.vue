@@ -11,16 +11,16 @@
                 <div class="formBox">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="操作员部门" prop="department">
-                            <el-input v-model="ruleForm.department" :disabled="disabled"></el-input>
+                            <el-input v-model="ruleForm.department" :disabled="status !== 'add'"></el-input>
                         </el-form-item>
                         <el-form-item label="操作员名称" prop="nickname">
-                            <el-input v-model="ruleForm.nickname" :disabled="disabled"></el-input>
+                            <el-input v-model="ruleForm.nickname" :disabled="status !== 'add'"></el-input>
                         </el-form-item>
                         <el-form-item label="成员账号" prop="username">
-                            <el-input v-model="ruleForm.username" :disabled="disabled"></el-input>
+                            <el-input v-model="ruleForm.username" :disabled="status !== 'add'"></el-input>
                         </el-form-item>
                         <el-form-item label="密码" prop="password">
-                            <el-input v-model="ruleForm.password" :disabled="disabled"></el-input>
+                            <el-input v-model="ruleForm.password" :disabled="status !== 'add'"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>

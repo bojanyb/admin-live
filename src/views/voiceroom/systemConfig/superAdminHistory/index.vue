@@ -156,8 +156,24 @@ export default {
         },
         // 处理操作
         async handlePunishFunc(id, status) {
-            await handlePunish({ id, status })
-            this.getList()
+            let name = ''
+            if(status === 1) {
+                name = '通过'
+            } else {
+                name = '是否确认驳回'
+            }
+            this.$confirm(`是否确认${name}？`)
+            .then(async _ => {
+                let res = await handlePunish({ id, status })
+                if(res.code === 2000) {
+                    this.$message.success(`${name}成功`)
+                } else {
+                    this.$message.error(`${name}失败`)
+                }
+                this.getList()
+            })
+            .catch(_ => {});
+            
         }
     }
 }

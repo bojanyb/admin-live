@@ -105,21 +105,7 @@ export default {
                         render: (h, params) => {
                             return h('span', params.row.handle_time ? timeFormat(params.row.handle_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
-                    },
-                    {
-                        label: '操作',
-                        width : '200',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('el-button', { props : { type: 'primary'}, style: {
-                                    display: params.row.status === 0 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.handlePunishFunc(params.row.id, 1)}}},'通过'),
-                                h('el-button', { props : { type: 'danger'}, style: {
-                                    display: params.row.status === 0 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.handlePunishFunc(params.row.id, 2)}}},'驳回')
-                            ])
-                        }
-                    },
+                    }
                 ]
             }
         }

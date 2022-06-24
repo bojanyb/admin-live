@@ -140,11 +140,54 @@
 						this.loading = true
 						this.$store.dispatch('user/login', this.loginForm)
 							.then((res) => {
-								this.$store.dispatch('user/editAdminFunc', res)
-								this.$router.push({
-									path: this.redirect || '/',
-									query: this.otherQuery
+								this.$store.dispatch('user/editAdminFunc', res).then(res => {
+									let path = this.$route.query.redirect
+									let sId = null
+									let back = res.data
+									
+									let prv = (list) => {
+										list.forEach(item => {
+											if('/' + item.h5_path === path) {
+												sId = item.id
+											}
+											if(item.child) {
+												prv(item.child)
+											}
+										})
+									}
+
+									prv(back.list)
+
+									let num = back.user_pids[0]
+									let num1 = back.user_pids[1]
+									let params = back.list.find(item => { return item.id === Number(num) })
+									
+									
+									let array = JSON.parse(JSON.stringify(back.user_pids))
+									if(typeof array[0] === 'number') {
+										sId = Number(sId)
+									} else {
+										sId = String(sId)
+									}
+									if(array.indexOf(sId) !== -1) {
+										this.$router.push({
+											path: this.redirect || '/',
+											query: this.otherQuery
+										})
+									} else {
+										if(params.child && params.child.length > 0) {
+											let params1 = params.child.find(item => { return item.id === Number(num1) })
+											this.$router.push({
+												path: '/' + params1.h5_path
+											})
+										} else {
+											this.$router.push({
+												path: '/' + params.h5_path
+											})
+										}
+									}
 								})
+								
 								this.loading = false
 							})
 							.catch((err) => {
