@@ -110,7 +110,7 @@ export default {
     permissionListFunc(item) {
       let permissionList = this.permission
       if(permissionList) {
-        if(item.redirect) {
+        if(item.redirect && item.redirect == '/dashboard') {
           if(item.children) {
             return permissionList.indexOf(item.children[0].meta.title) !== -1
           }

@@ -154,19 +154,24 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			editAdmin({ admin_id }).then((res) => {
 				let array = []
+				console.log(res, 'res--------------9696')
 				if(res.data && res.data.list.length > 0) {
 					let user_pids = res.data.user_pids
-					let prv = (list) => {
-						list.forEach(item => {
-							if(user_pids.indexOf(item.id) !== -1) {
-								array.push(item.title)
-							}
-							if(item.child && item.child.length > 0) {
-								prv(item.child)
-							}
-						})
-					}
-					prv(res.data.list)
+					res.data.list.forEach(item => {
+						if(user_pids.indexOf(item.id) !== -1) {
+							array.push(item.title)
+						}
+						if(item.child && item.child.length > 0) {
+							item.child.forEach(a => {
+								if(user_pids.indexOf(a.id) !== -1) {
+									array.push(a.title)
+									if(user_pids.indexOf(item.id) === -1) {
+										array.push(item.title)
+									}
+								}
+							})
+						}
+					})
 					localStorage.setItem('permissionList', array)
 				}
 				resolve(res)
