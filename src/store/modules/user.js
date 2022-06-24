@@ -154,7 +154,6 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			editAdmin({ admin_id }).then((res) => {
 				let array = []
-				console.log(res, 'res--------------9696')
 				if(res.data && res.data.list.length > 0) {
 					let user_pids = res.data.user_pids
 					res.data.list.forEach(item => {
