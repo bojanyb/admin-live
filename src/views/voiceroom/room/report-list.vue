@@ -1,44 +1,7 @@
 <template>
   <div class="app-container">
+    <tableList :cfgs="cfgs" ref="tableList"></tableList>
 
-    <!--工具条-->
-    <el-table
-      ref="multipleTable"
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="拼命加载中"
-      border
-      fit
-      highlight-current-row
-    >
-      <!-- <el-table-column label="ID" prop="id" align="center" width="95" /> -->
-      <el-table-column label="用户ID" prop="user_id" align="center" width="95" />
-      <el-table-column label="直播场次ID" prop="live_room_id" align="center" width="95" />
-      <el-table-column label="房间号码" prop="room_number" align="center" />
-      <el-table-column label="房主昵称" prop="anchor" align="center" />
-      <el-table-column label="房间类型名称" prop="room_genre_name" align="center" />
-      <el-table-column label="举报房主ID" prop="live_user_id" align="center" width="95" />
-      <el-table-column label="举报人昵称" prop="user_name" align="center" />
-      <el-table-column label="举报内容" prop="content" align="center" width="160" show-overflow-tooltip />
-      <el-table-column label="回复" prop="reply" align="center" />
-      <el-table-column label="举报时间" prop="create_timeText" align="center" width="160" />
-      <el-table-column label="状态" prop="statusText" align="center" />
-      <el-table-column label="操作" align="center">
-        <template slot-scope="scope">
-          <el-button v-if="scope.row.status == 1" type="primary" @click="handleFeedBackEdit(scope.row)">审核
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <!--工具条-->
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="page.page"
-      :limit.sync="page.limit"
-      @pagination="getFeedBack"
-    />
     <el-dialog :title="editTitle" :visible.sync="editPop">
       <el-form :model="popForm">
         <el-form-item label="状态" :label-width="formLabelWidth">
@@ -46,7 +9,7 @@
             <el-option
               v-for="item in statusList"
               :key="item.value"
-              :label="item.label"
+              :label="item.name"
               :value="item.value"
             />
           </el-select>
@@ -73,27 +36,27 @@
 
 <script>
 import {
-  getFeedBackList,
   getFeedBackSave
 } from '@/api/videoRoom'
-import Pagination from '@/components/Pagination'
-import moment from 'moment'
+
+// 引入列表组件
+import tableList from '@/components/tableList/TableList.vue'
+// 引入api
+import REQUEST from '@/request/index.js'
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
+
 export default {
   name: 'ReportList',
   components: {
-    Pagination
+    tableList
   },
   data() {
     return {
-      list: [],
       loading: false,
-      listLoading: false,
-      total: 0,
       formLabelWidth: '120px',
-      page: {
-        page: 1,
-        limit: 10
-      },
       editTitle: '',
       editPop: false,
       popForm: {
@@ -101,57 +64,96 @@ export default {
         'status': '',
         'replay': ''
       },
-      statusList: [{
-        'label': '未核实',
-        'value': 1
-      },
-      {
-        'label': '核实通过',
-        'value': 2
-      },
-      {
-        'label': '核实不通过',
-        'value': 3
-      }
-      ]
+      statusList: MAPDATA.REPORTSTATUS
     }
   },
-  created() {
-    this.getFeedBack()
+  computed: {
+    cfgs() {
+      return {
+        vm: this,
+        url: REQUEST.room.report,
+        columns: [
+          {
+            label: '用户ID',
+            prop: 'user_id'
+          },
+          {
+            label: '直播场次ID',
+            prop: 'live_room_id'
+          },
+          {
+            label: '房间号码',
+            prop: 'room_number'
+          },
+          {
+            label: '房主昵称',
+            prop: 'anchor'
+          },
+          {
+            label: '房间类型名称',
+            prop: 'room_genre_name'
+          },
+          {
+            label: '举报房主ID',
+            prop: 'live_user_id'
+          },
+          {
+            label: '举报人昵称',
+            prop: 'user_name'
+          },
+          {
+            label: '举报内容',
+            width: '160px',
+            prop: 'content'
+          },
+          {
+            label: '回复',
+            width: '200px',
+            render: (h, params) => {
+              return h('span', params.row.reply || '无')
+            }
+          },
+          {
+            label: '举报时间',
+            width: '160px',
+            prop: 'create_time',
+            render: (h, params) => {
+              return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+            }
+          },
+          {
+            label: '状态',
+            prop: 'status',
+            render: (h, params) => {
+              let data = MAPDATA.REPORTSTATUS.find(item => { return params.row.status == item.value })
+              return h('span', data ? data.name : '无')
+            }
+          },
+          {
+            label: '操作',
+            render: (h, params) => {
+              return h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.handleFeedBackEdit(params.row)}}},'审核')
+            }
+          }
+        ]
+      }
+    }
   },
   methods: {
-    getFeedBack() {
-      this.listLoading = true
-      var params = {
-        'page': this.page.page,
-        'pagesize': this.page.limit
+    // 配置参数
+    beforeSearch(params) {
+      return {
+        page: params.page,
+        pagesize: params.pagesize,
+        status: '1'
       }
-      getFeedBackList(params).then(response => {
-        this.total = response.data.count
-        this.list = response.data.list
-        this.list.map(res => {
-          res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-          var status = ''
-          switch (res.status) {
-            case 1:
-              status = '未核实'
-              break
-            case 2:
-              status = '核实通过'
-              break
-            case 3:
-              status = '核实不通过'
-              break
-          }
-          res.statusText = status
-        })
-        this.listLoading = false
-      }).catch(err => {
-        this.listLoading = false
-      })
+    },
+    // 刷新列表
+    getList() {
+      this.$refs.tableList.getData()
     },
     handleFeedBackEdit(row) {
-      this.editTitle = '修改'
+      this.editTitle = '审核'
       this.popForm = {
         'id': row.id,
         'status': row.status,
@@ -165,7 +167,7 @@ export default {
         return
       }
       getFeedBackSave(this.popForm).then(res => {
-        this.getFeedBack()
+        this.getList()
         this.editPop = false
       })
     }

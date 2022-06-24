@@ -3,6 +3,9 @@ import {
 	getRoomLogin,
 	getRoomLogout
 } from '@/api/videoRoom.js'
+
+import { editAdmin } from '@/api/admin.js'
+
 import {
 	logout,
 	getInfo
@@ -61,7 +64,7 @@ const actions = {
 				} = response
 				commit('SET_TOKEN', data.token)
 				setToken(data.token)
-				resolve()
+				resolve(data.admin_id)
 			}).catch(error => {
 				reject(error)
 			})
@@ -110,6 +113,7 @@ const actions = {
 				'avatar': 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
 				'introduction': 'I am a super administrator'
 			}
+
 			commit('SET_ROLES', data.roles)
 			commit('SET_NAME', data.name)
 			commit('SET_AVATAR', data.avatar)
@@ -136,6 +140,7 @@ const actions = {
 				dispatch('tagsView/delAllViews', null, {
 					root: true
 				})
+				localStorage.removeItem('permissionList')
 
 				resolve()
 			}).catch(error => {
@@ -143,6 +148,36 @@ const actions = {
 			})
 		})
 	},
+
+	// 获取当前角色路由权限
+	editAdminFunc({ commit }, admin_id) {
+		return new Promise((resolve, reject) => {
+			console.log(admin_id, 'admin_id---------')
+			editAdmin({ admin_id }).then((res) => {
+				let array = []
+				if(res.data && res.data.list.length > 0) {
+					let prv = (list) => {
+						list.forEach(item => {
+							let user_pids = res.data.user_pids.toString()
+							if(user_pids.indexOf(item.id) !== -1) {
+								array.push(item.title)
+							}
+							if(item.child) {
+								prv(item.child)
+							}
+						})
+					}
+					prv(res.data.list)
+					localStorage.setItem('permissionList', array)
+				}
+				console.log(res, 'res----------')
+				resolve()
+			}).catch(error => {
+				reject(error)
+			})
+		})
+	},
+
 
 	// remove token
 	resetToken({

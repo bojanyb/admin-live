@@ -18,6 +18,19 @@
               <img :src="$store.state.loadingError" />
             </div>
           </el-image>
+
+          <el-switch
+            v-if="item.isSwitch"
+            v-model="scope.row[item.prop]"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="item.isTrueValue"
+            :inactive-value="item.isFalseValue"
+            :disabled="disabledFunc(item, scope.$index)"
+            active-text=""
+            inactive-text=""
+            @change="(v) => item.change(v, scope.row)">
+          </el-switch>
           
         </template>
       </el-table-column>
@@ -71,6 +84,13 @@
       };
     },
     methods: {
+      // 是否禁止开关
+      disabledFunc(item, index) {
+        if(item.disabledStatus) {
+          return index === item.disabledIndex
+        }
+        return item.disabled
+      },
       handleSortChange(val) {
         if (!val.order) {
           this.search.sort = '';

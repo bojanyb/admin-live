@@ -4,10 +4,10 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters" @keyup.enter.native="handleSearch">
 				<el-form-item label="用户ID">
-					<el-input v-model="filters.from_id" v-input-limit="0" placeholder="请输入发送消息用户ID" clearable />
+					<el-input v-model="filters.user_number" v-input-limit="0" placeholder="请输入发送消息用户ID" clearable />
 				</el-form-item>
-				<el-form-item label="群ID">
-					<el-input v-model="filters.to_id" v-input-limit="0" placeholder="请输入接收消息群ID" clearable />
+				<el-form-item label="房间ID">
+					<el-input v-model="filters.to_id" v-input-limit="0" placeholder="请输入房间ID" clearable />
 				</el-form-item>
 				<el-form-item label="选择时间">
 					<el-date-picker v-model="timer" type="datetimerange" range-separator="至" start-placeholder="开始日期"
@@ -78,7 +78,7 @@
 					"notice": "52",
 					"start_time": "",
 					"end_time": "",
-					"from_id": "",
+					"user_number": "",
 					"to_id": "",
 				},
 				timer: "",
@@ -99,7 +99,7 @@
 		methods: {
 			getChatRecordList() {
 				var params = {
-					'from_id': this.filters.from_id,
+					'user_number': this.filters.user_number,
 					'to_id': this.filters.to_id,
 					'notice': this.filters.notice,
 					'start_time': this.timer ? JSON.stringify(new Date(this.timer[0]).getTime() / 1000) : "",
@@ -136,7 +136,7 @@
 
 								if ((item.remark.genre == 2 || item.remark.genre == 5 || item.remark
 										.genre == 6) && item.type == 1) {
-									item.content = '( 用户: ' + item.from_id + ' ) ' + item.content;
+									item.content = '( 用户: ' + item.user_number + ' ) ' + item.content;
 								}
 								if (item.remark.genre == 4) { // 权限麦
 									let contentText = "";
@@ -163,7 +163,7 @@
 											contentText = "禁麦";
 											break;
 									}
-									item.content = '( 用户: ' + item.from_id + ' ) ' + contentText;
+									item.content = '( 用户: ' + item.user_number + ' ) ' + contentText;
 								}
 
 								// if (item.remark.genre == 8) { // 升级提示

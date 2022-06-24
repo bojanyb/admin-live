@@ -371,6 +371,7 @@ const CLASSLIST = [
     }
 ]
 
+// 银行信息
 const BANKLIST = [
     {
         url: require('@/assets/img/img_01020000.png'),
@@ -499,6 +500,155 @@ const BANKLIST = [
     }
 ]
 
+/*
+*派对管理 - 举报房间
+*/
+const REPORTSTATUS = [
+    {
+        name: '未核实',
+        value: 1
+    },
+    {
+        name: '核实通过',
+        value: 2
+    },
+    {
+        name: '核实不通过',
+        value: 3
+    }
+]
+
+// 直播状态
+const ROOMSTATUSLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    // {
+    //     name: '未开始',
+    //     value: 0
+    // },
+    {
+        name: '直播中',
+        value: 1
+    },
+    {
+        name: '已结束',
+        value: 2
+    }
+]
+
+// 状态
+const ROOMCARDSTATUSLIST = [
+    {
+        name: '正常绑定',
+        value: 1
+    },
+    {
+        name: '待绑定',
+        value: 2
+    },
+    {
+        name: '冻结',
+        value: 3
+    },
+    {
+        name: '过期',
+        value: 4
+    }
+]
+
+/*
+*用户管理 - 用户列表
+*/
+// 性别
+const SEXLIST = [
+    {
+        name: '男',
+        value: 1
+    },
+    {
+        name: '女',
+        value: 2
+    },
+    {
+        name: '未知',
+        value: 3
+    }
+]
+
+// 状态
+const USERSTATUSLIST = [
+    {
+        name: '正常',
+        value: 1
+    },
+    {
+        name: '封禁',
+        value: 2
+    }
+]
+
+/*
+*审核管理 - 用户图片资料审核列表
+*/
+// 状态
+const AUDITSTATUSLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '待审核',
+        value: 0
+    },
+    {
+        name: '通过',
+        value: 1
+    },
+    {
+        name: '驳回',
+        value: 2
+    },
+    {
+        name: '已删除',
+        value: 3
+    }
+]
+
+/*
+*系统配置 - 权限管理
+*/
+// 状态
+const SYSTEMSTATUSLIST = [
+    {
+        name: '正常',
+        value: 1
+    },
+    {
+        name: '关闭',
+        value: 2
+    }
+]
+
+// 超管管理 - 状态
+const SUPERSTATUSLIST = [
+    {
+        name: '待处理',
+        value: 0
+    },
+    {
+        name: '已处理',
+        value: 1
+    },
+    {
+        name: '已驳回',
+        value: 2
+    }
+]
+
+
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -519,5 +669,13 @@ export default {
     BANKLIST,
     INSTITUTION,
     ORDERSTATUS,
-    PRIORITYGIVE
+    PRIORITYGIVE,
+    REPORTSTATUS,
+    SEXLIST,
+    USERSTATUSLIST,
+    AUDITSTATUSLIST,
+    SYSTEMSTATUSLIST,
+    ROOMSTATUSLIST,
+    ROOMCARDSTATUSLIST,
+    SUPERSTATUSLIST
 }

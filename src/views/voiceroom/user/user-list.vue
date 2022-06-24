@@ -1,66 +1,10 @@
 <template>
 	<div class="app-container">
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
 
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="getUser()">
-				<el-form-item label="用户ID">
-					<el-input v-model="filters.user_number" v-input-limit="0" placeholder="请输入用户ID" clearable />
-				</el-form-item>
-				<el-form-item label="手机号">
-					<el-input v-model="filters.phone" v-input-limit="0" placeholder="请输入手机号" clearable />
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="getUser">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row>
-			<el-table-column label="用户ID" align="center" prop="user_number" width="95" />
-			<el-table-column label="昵称" prop="nickname" align="center" width="110" />
-			<el-table-column label="头像" prop="face" align="center" width="95">
-				<template slot-scope="scope">
-					<el-image style="width: 30px; height: 30px" :lazy="true" :src="scope.row.face ? scope.row.face : ''"
-						:preview-src-list="userImglist" />
-				</template>
-			</el-table-column>
-			<el-table-column label="性别" prop="sexText" align="center" width="95" />
-			<el-table-column label="所属公会" prop="guild_name" align="center">
-				<template slot-scope="scope">
-					<div>{{scope.row.guild_name}}</div>
-					<div v-if="scope.row.guild_number">({{scope.row.guild_number}})</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="是否为厅主" prop="is_guild_roomText" align="center" width="110" />
-			<el-table-column label="手机号" prop="phone" align="center" width="110" />
-			<el-table-column label="状态" prop="statusText" align="center" width="95" />
-			<el-table-column label="是否已绑卡" prop="is_bindcard" align="center" width="95">
-				<template slot-scope="scope">
-					<div style="cursor: pointer;" @click="bindcardFunc(scope.row)">{{ scope.row.is_bindcard ? '是' : '否' }}</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="创建时间" prop="create_timeText" align="center" width="180" />
-			<el-table-column label="封禁时间" prop="update_timeText" align="center" width="180" />
-			<el-table-column label="封禁备注" prop="remark" align="center" width="200" show-overflow-tooltip />
-			<el-table-column label="注册设备" prop="reg_device_id" align="center" width="200" show-overflow-tooltip />
-			<el-table-column label="最后一次登录设备" prop="last_login_device_id" align="center" width="200" show-overflow-tooltip />
-			<el-table-column label="操作" prop="gift_str" fixed="right" align="center" width="230">
-				<template slot-scope="scope">
-					<el-button v-if="scope.row.status == 1" type="danger" @click="handleUser(scope.row)">封禁</el-button>
-					<el-button v-if="scope.row.status == 2" type="success" @click="handleUser(scope.row)">启用</el-button>
-					<!-- <el-button v-if="scope.row.statistical_show == 0" type="success" @click="handleStatistics(scope.row)">开启房间统计
-					</el-button>
-					<el-button v-if="scope.row.statistical_show == 1" type="danger" @click="handleStatistics(scope.row)">关闭房间统计
-					</el-button> -->
-				</template>
-			</el-table-column>
-		</el-table>
-
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="getUser" />
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
 		<el-dialog title="操作" :visible.sync="editPop">
 			<el-form :model="popForm">
@@ -94,115 +38,222 @@
 
 <script>
 	import {
-		getUserList,
+		defaultFace,
 		getUserSave,
 		getUserStatisticalShow
 	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+
 	import bindStuck from './components/bindStuck.vue'
+
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
+
 	export default {
 		name: 'UserList',
+		mixins: [mixins],
 		components: {
-			Pagination,
-			bindStuck
+			bindStuck,
+			tableList,
+			SearchPanel
 		},
 		data() {
 			return {
-				list: [],
 				editPop: false,
 				loading: false,
-				listLoading: false,
-				total: 0,
 				formLabelWidth: '120px',
-				page: {
-					page: 1,
-					limit: 10
-				},
-				filters: {
-					'user_number': '',
-					'nickname': '',
-					'phone': ''
-				},
 				popForm: {
 					'id': '',
 					'status': 1,
 					'kill_time': '',
 					'remark': ''
 				},
-				userImglist: [],
-				timerList: [{
-						"value": 1,
-						"label": "1天"
-					},
-					{
-						"value": 3,
-						"label": "3天"
-					},
-					{
-						"value": 7,
-						"label": "7天"
-					},
-					{
-						"value": 15,
-						"label": "15天"
-					},
-					{
-						"value": 30,
-						"label": "30天"
-					},
-					{
-						"value": -1,
-						"label": "永久"
-					}
-				],
+				timerList: MAPDATA.DURATION
 			}
 		},
-		created() {
-			this.getUser()
+		computed: {
+			forms() {
+				return [
+					{
+						name: 'user_number',
+						type: 'input',
+						value: '',
+						label: '用户ID',
+						isNum: true,
+						placeholder: '请输入用户ID'
+					},
+					{
+						name: 'phone',
+						type: 'input',
+						value: '',
+						label: '手机号',
+						isNum: true,
+						placeholder: '请输入手机号'
+					},
+				]
+			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.user.list,
+					columns: [
+						{
+							label: '用户ID',
+							width: '95px',
+							prop: 'user_number'
+						},
+						{
+							label: '昵称',
+							width: '110px',
+							prop: 'nickname'
+						},
+						{
+							label: '头像',
+							isimg: true,
+							prop: 'face',
+							imgWidth: '50px'
+						},
+						{
+							label: '性别',
+							width: '95px',
+							prop: 'sex',
+							render: (h, params) => {
+								let data = MAPDATA.SEXLIST.find(item => { return item.value === params.row.sex })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '所属公会',
+							render: (h, params) => {
+								return h('div', [
+									h('div', params.row.guild_name || '无'),
+									h('div', params.row.guild_number)
+								])
+							}
+						},
+						{
+							label: '是否为厅主',
+							width: '110px',
+							render: (h, params) => {
+								return h('span', params.row.is_guild_room === 0 ? '否' : '是')
+							}
+						},
+						{
+							label: '手机号',
+							width: '110px',
+							prop: 'phone'
+						},
+						{
+							label: '状态',
+							width: '95px',
+							render: (h, params) => {
+								let data = MAPDATA.USERSTATUSLIST.find(item => { return item.value === params.row.status })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '是否已绑卡',
+							width: '95px',
+							prop: 'is_bindcard',
+							render: (h, params) => {
+								return h('div', { style: { 
+									color: params.row.is_bindcard ? '#ff4949' : '#666666',
+									cursor: params.row.is_bindcard ? 'pointer' : ''
+								 }, on: { click:()=>{this.bindcardFunc(params.row)} } }, params.row.is_bindcard ? '是' : '否')
+							}
+						},
+						{
+							label: '创建时间',
+							width: '180px',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '封禁时间',
+							width: '180px',
+							render: (h, params) => {
+								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '封禁备注',
+							width: '200px',
+							render: (h, params) => {
+								return h('span', params.row.remark || '无')
+							}
+						},
+						{
+							label: '注册设备',
+							width: '200px',
+							prop: 'reg_device_id'
+						},
+						{
+							label: '最后一次登录设备',
+							width: '200px',
+							prop: 'last_login_device_id'
+						},
+						{
+							label: '操作',
+							width : '230px',
+							fixed: 'right',
+							render: (h, params) => {
+								return h('div', [
+									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.defaultFaceFunc(params.row)}}},'一键换图'),
+									h('el-button', { props : { type: 'danger'}, style: {
+										display: params.row.status == 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.handleUser(params.row)}}},'封禁'),
+									h('el-button', { props : { type: 'primary'}, style: {
+										display: params.row.status == 2 ? 'unset' : 'none'
+									}, on: {click:()=>{this.handleUser(params.row)}}}, '启用')
+								])
+							}
+						}
+					]
+				}
+			}
 		},
 		methods: {
-			getUser() {
-				this.listLoading = true
-				this.userImglist = []
-				var params = {
-					'user_number': this.filters.user_number,
-					'nickname': this.filters.nickname,
-					'phone': this.filters.phone,
-					'page': this.page.page,
-					'pagesize': this.page.limit
+			// 配置参数
+			beforeSearch(params) {
+				let s = { ...this.searchParams }
+				return {
+					page: params.page,
+					pagesize: params.size,
+					user_number: s.user_number,
+					nickname: s.nickname,
+					phone: s.phone
 				}
-				getUserList(params).then(response => {
-					this.total = response.data.count
-					this.list = response.data.list
-					this.list.map(res => {
-						res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-						res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-						var sexText = ''
-						switch (res.sex) {
-							case 1:
-								sexText = '男'
-								break
-							case 2:
-								sexText = '女'
-								break
-							case 3:
-								sexText = '未知'
-								break
-						}
-						res.sexText = sexText
-						if (res.status == 1) {
-							res.statusText = '正常'
-						} else if (res.status == 2) {
-							res.statusText = '封禁'
-						}
-						res.is_guild_roomText = res.is_guild_room == 0 ? "否" : "是";
-						this.userImglist.push(res.face)
-					})
-					this.listLoading = false
-				}).catch(err => {
-					this.listLoading = false
-				})
+			},
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
+			},
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.dateTimeParams = {
+					activity_type_id: 1
+				}
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
+			},
+			// 一键换图
+			async defaultFaceFunc(row) {
+				await defaultFace({ user_id: row.id })
+				this.getList()
 			},
 			handleUser(row) {
 				this.$set(this.popForm, 'status', row.status)
@@ -222,7 +273,7 @@
 				this.loading = true
 				getUserSave(this.popForm).then(res => {
 					this.$message.success('操作成功')
-					this.getUser()
+					this.getList()
 					setTimeout(it => {
 						this.editPop = false
 						this.loading = false

@@ -1,104 +1,40 @@
 <template>
 	<div class="app-container">
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
 
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="roomList()">
-				<el-form-item label="房间号码">
-					<el-input v-model="filters.room_number" v-input-limit="0" placeholder="请输入房间号码" clearable />
-				</el-form-item>
-				<el-form-item label="直播状态">
-					<el-select v-model="filters.is_live" placeholder="请选择" @change="roomList">
-						<el-option label="全部" value="" />
-						<el-option key="1" label="直播中" value="1" />
-						<el-option key="2" label="已结束" value="2" />
-					</el-select>
-				</el-form-item>
-				<el-form-item label="工会">
-					<el-input v-model="filters.guild_number" v-input-limit="0" placeholder="请输入工会ID" clearable />
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="roomList">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row>
-			<el-table-column align="center" label="序号" width="95">
-				<template slot-scope="scope">
-					{{ scope.$index + 1 }}
-				</template>
-			</el-table-column>
-			<el-table-column align="center" label="房间号码" width="100">
-				<template slot-scope="scope">
-					{{ scope.row.room_number }}
-				</template>
-			</el-table-column>
-			<el-table-column label="房间名称" prop="room_name" align="center" width="180" show-overflow-tooltip />
-			<el-table-column label="房主ID" prop="live_user_number" align="center" width="100" />
-			<el-table-column label="房间类型" prop="room_genre_name" align="center" width="100" />
-			<el-table-column label="在线时长" prop="live_timeText" align="center" width="120" />
-			<el-table-column label="开播时间" prop="start_timeText" align="center" width="180" />
-			<el-table-column label="结束时间" prop="end_timeText" align="center" width="180" />
-			<el-table-column label="所属公会" prop="guild_number" align="center">
-				<template slot-scope="scope">
-					{{ scope.row.guild_number || '无' }}
-				</template>
-			</el-table-column>
-			<el-table-column label="在线人数" align="center" prop="people" width="95" />
-			<el-table-column label="被举报次数" align="center" prop="report" width="95" />
-			<el-table-column label="直播状态" align="center" width="95">
-				<template slot-scope="scope">
-					<div v-if="scope.row.is_live == 0">未开始</div>
-					<div v-else-if="scope.row.is_live == 1" class="colorNormal">直播中</div>
-					<div v-else-if="scope.row.is_live == 2" class="colorDel">已结束</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="状态" align="center" prop="statusText" width="95">
-				<template slot-scope="scope">
-					<div v-if="scope.row.status == 1">正常绑定</div>
-					<div v-if="scope.row.status == 2">待绑定</div>
-					<div v-if="scope.row.status == 3">冻结</div>
-					<div v-if="scope.row.status == 4">过期</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="总流水" prop="total_flow" align="center" />
-			<el-table-column label="当日流水" prop="today_flow" align="center" />
-			<el-table-column label="本周流水" prop="now_week_flow" align="center" />
-			<el-table-column label="上一周流水" prop="last_week_flow" align="center" width="100" />
-			<el-table-column align="center" label="操作" fixed="right" width="200">
-				<template slot-scope="scope">
-					<el-button v-if="scope.row.status == 1" type="danger" @click="handleRoom(scope.row)">冻结</el-button>
-					<el-button v-if="scope.row.status == 3" type="primary" @click="handleRoom(scope.row)">解冻</el-button>
-					<el-button v-if="scope.row.top == 1 || !scope.row.top" type="primary" @click="roomTopFunc(scope.row.id, 2)">房间置顶</el-button>
-					<el-button v-if="scope.row.top == 2" type="primary" @click="roomTopFunc(scope.row.id, 1)">取消置顶</el-button>
-				</template>
-			</el-table-column>
-			</el-table-column>
-		</el-table>
-
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="roomList" />
-
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 	</div>
 </template>
 
 <script>
-	import axios from 'axios'
-	import $ from 'jquery'
 	import {
-		getRoomList,
+		roomHide,
 		getRoomSave,
 		roomTop
 	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
+	// 引入公共方法
+	import { formatTime } from '@/utils/common.js'
+
 	export default {
 		name: 'RoomList',
+		mixins: [mixins],
 		components: {
-			Pagination
+			SearchPanel,
+			tableList
 		},
 		data() {
 			return {
@@ -117,37 +53,190 @@
 				}
 			}
 		},
-		created() {
-			this.roomList()
+		computed: {
+			forms() {
+				return [
+					{
+						name: 'room_number',
+						type: 'input',
+						value: '',
+						label: '房间号码',
+						isNum: true,
+						placeholder: '请输入房间号码'
+					},
+					{
+						name: 'is_live',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '直播状态',
+						placeholder: '请选择',
+						options: MAPDATA.ROOMSTATUSLIST
+					},
+					{
+						name: 'guild_number',
+						type: 'input',
+						value: '',
+						label: '工会',
+						isNum: true,
+						placeholder: '请输入工会ID'
+					},
+				]
+			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.room.roomList,
+					isShowIndex: true,
+					columns: [
+						{
+							label: '房间号码',
+							width: '100px',
+							prop: 'room_number'
+						},
+						{
+							label: '房间名称',
+							width: '180px',
+							prop: 'room_name'
+						},
+						{
+							label: '房主ID',
+							width: '100px',
+							prop: 'live_user_number'
+						},
+						{
+							label: '房间类型',
+							width: '100px',
+							prop: 'room_genre_name'
+						},
+						{
+							label: '在线时长',
+							width: '120px',
+							render: (h, params) => {
+								let data = formatTime(params.row.live_time)
+								return h('span', data ? data : '无')
+							}
+						},
+						{
+							label: '开播时间',
+							width: '180px',
+							render: (h, params) => {
+								return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '结束时间',
+							width: '180px',
+							render: (h, params) => {
+								return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '所属公会',
+							render: (h, params) => {
+								return h('span', params.row.guild_number || '无')
+							}
+						},
+						{
+							label: '在线人数',
+							width: '95px',
+							prop: 'people'
+						},
+						{
+							label: '被举报次数',
+							width: '95px',
+							prop: 'report'
+						},
+						{
+							label: '直播状态',
+							width: '95px',
+							render: (h, params) => {
+								let data = MAPDATA.ROOMSTATUSLIST.find(item => { return item.value === params.row.is_live })
+								return h('span', {
+									style: {
+										color: params.row.is_live === 1 ? '#85CE61' : '#ff6d6d'
+									}
+								}, data ? data.name : '无')
+							}
+						},
+						{
+							label: '状态',
+							width: '95px',
+							render: (h, params) => {
+								let data = MAPDATA.ROOMCARDSTATUSLIST.find(item => { return item.value === params.row.status })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '总流水',
+							prop: 'total_flow'
+						},
+						{
+							label: '当日流水',
+							prop: 'today_flow'
+						},
+						{
+							label: '本周流水',
+							prop: 'now_week_flow'
+						},
+						{
+							label: '上一周流水',
+							width: '100px',
+							prop: 'last_week_flow'
+						},
+						{
+							label: '操作',
+							width : '230px',
+							fixed: 'right',
+							render: (h, params) => {
+								return h('div', [
+									h('el-button', { props : { type: 'danger'}, style: {
+										display: params.row.status == 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.handleRoom(params.row)}}},'冻结'),
+									h('el-button', { props : { type: 'danger'}, style: {
+										display: params.row.status == 3 ? 'unset' : 'none'
+									}, on: {click:()=>{this.handleRoom(params.row)}}},'解冻'),
+									h('el-button', { props : { type: 'primary'}, style: {
+										display: params.row.is_hide == 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.roomHideFunc(params.row.id, 2)}}}, '房间隐藏'),
+									h('el-button', { props : { type: 'primary'}, style: {
+										display: params.row.is_hide == 2 ? 'unset' : 'none'
+									}, on: {click:()=>{this.roomHideFunc(params.row.id, 1)}}}, '取消隐藏')
+								])
+							}
+						}
+					]
+				}
+			}
 		},
 		methods: {
-			// 房间列表
-			roomList() {
-				this.listLoading = true
-				var params = {
-					'page': this.page.page,
-					'pagesize': this.page.limit,
-					'room_number': this.filters.room_number,
-					'is_live': this.filters.is_live,
-					guild_number: this.filters.guild_number
+			// 配置参数
+			beforeSearch(params) {
+				let s = { ...this.searchParams }
+				return {
+					page: params.page,
+					pagesize: params.size,
+					room_number: s.room_number,
+					is_live: s.is_live,
+					guild_number: s.guild_number
 				}
-				getRoomList(params).then(response => {
-					this.total = response.data.count
-					this.list = response.data.list
-					this.list.map(function(item) {
-						item.start_timeText = item.start_time >0 ? moment(item.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "无"
-						item.end_timeText = item.end_time > 0 ? moment(item.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "无"
-						if (item.live_time > 60) {
-							item.live_timeText = parseInt(item.live_time / 60) + '小时 ' + (item.live_time %
-								60) + '分钟'
-						} else {
-							item.live_timeText = item.live_time + '分钟'
-						}
-					})
-					this.listLoading = false
-				}).catch(err => {
-					this.listLoading = false
-				})
+			},
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
+			},
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.dateTimeParams = {
+					activity_type_id: 1
+				}
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
 			},
 
 			// 冻结/解冻
@@ -163,7 +252,7 @@
 							}
 							getRoomSave(params).then(res => {
 								this.$message.success("操作成功")
-								this.roomList()
+								this.getList()
 							}).catch(err => {
 								this.$message.error("操作失败")
 							})
@@ -172,16 +261,24 @@
 				})
 			},
 
+			// 房间隐藏
+			async roomHideFunc(id, status) {
+				let params = {
+					id: id,
+					is_hide: status
+				}
+				await roomHide(params)
+				this.getList()
+			},
+
 			// 置顶 - 取消置顶
 			async roomTopFunc(id, top) {
 				let params = {
 					id,
 					top
 				}
-				let res = await roomTop(params)
-				if(res.code === 2000) {
-					this.roomList()
-				}
+				await roomTop(params)
+				this.getList()
 			}
 		}
 	}

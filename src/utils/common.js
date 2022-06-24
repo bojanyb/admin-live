@@ -1,13 +1,24 @@
 // 引入格式化时间包
 import moment from 'moment'
 
-// 格式化时间
+// 格式化日期
 export function timeFormat(val, format = 'YYYY-MM-DD HH:mm:ss', boolean) {
     if(boolean) {
         return moment.unix(val).format(format)
     } else {
         return moment(val).format(format)
     }
+}
+
+// 格式化时间
+export function formatTime(time, format) {
+    let data = null
+    if(time > 60) {
+        data = parseInt(time / 60) + '小时 ' + (time % 60) + '分钟'
+    } else {
+        data = time + '分钟'
+    }
+    return data
 }
 
 // 礼物 - 错误提示

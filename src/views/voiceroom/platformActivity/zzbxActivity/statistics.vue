@@ -176,7 +176,7 @@ export default {
         saleAmunt(data) {
             this.ruleForm = data.baoxiang;
         },
-        // 查询
+        // 重置
         reset() {
             this.searchParams = {}
             this.dateTimeParams = {
@@ -184,7 +184,7 @@ export default {
             }
             this.getList()
         },
-        // 重置
+        // 查询
         onSearch() {
             this.getList()
         }

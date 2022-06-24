@@ -43,7 +43,16 @@ const voiceroomRouter = {
 			component: () => import('@/views/voiceroom/room/report-list'),
 			name: 'report-list',
 			meta: {
-				title: '举报列表',
+				title: '举报房间',
+				noCache: true
+			}
+		},
+		{
+			path: 'report-history',
+			component: () => import('@/views/voiceroom/room/report-history'),
+			name: 'report-history',
+			meta: {
+				title: '举报房间记录',
 				noCache: true
 			}
 		},
@@ -54,7 +63,8 @@ const voiceroomRouter = {
 			meta: {
 				title: '语音房聊天记录',
 				noCache: true
-			}
+			},
+			// hidden: true
 		},
 		{
 			path: 'chat-single-record',
@@ -63,7 +73,8 @@ const voiceroomRouter = {
 			meta: {
 				title: '语音房单聊记录',
 				noCache: true
-			}
+			},
+			// hidden: true
 		}, 
 		{
 			path: 'room-background-list',

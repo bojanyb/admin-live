@@ -1,4 +1,5 @@
 import request from '@/utils/request2'
+import api from '@/request/index'
 
 // 登录
 export function getRoomLogin(data) {
@@ -72,10 +73,10 @@ export function getRoomGenreSave(data) {
   })
 }
 
-// 房间列表
-export function getRoomList(data) {
+// 房间隐藏
+export function roomHide(data) {
   return request({
-    url: '/Room/room',
+    url: '/room/hide',
     method: 'post',
     data
   })
@@ -126,10 +127,10 @@ export function getUserWallet(data) {
   })
 }
 
-// 用户列表
-export function getUserList(data) {
+// 一键换图
+export function defaultFace(data) {
   return request({
-    url: 'User',
+    url: api.user.defaultFace,
     method: 'post',
     data
   })

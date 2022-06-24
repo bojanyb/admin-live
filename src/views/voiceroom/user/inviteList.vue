@@ -149,8 +149,8 @@ export default {
                 {
                     name: 'dateTimeParams',
                     type: 'datePicker',
-                    dateType: 'daterange',
-                    format: "yyyy-MM-dd",
+                    dateType: 'datetimerange',
+                    format: "yyyy-MM-dd HH:mm:ss",
                     label: '时间选择',
                     value: '',
                     handler: {
@@ -186,6 +186,7 @@ export default {
                     },
                     {
                         label: '新用户注册时间',
+                        width: '180px',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : "")
                         }
@@ -215,6 +216,7 @@ export default {
                     },
                     {
                         label: '最后登录时间',
+                        width: '180px',
                         render: (h, params) => {
                             return h('span', params.row.last_login ? timeFormat(params.row.last_login, 'YYYY-MM-DD HH:mm:ss', true) : "")
                         }

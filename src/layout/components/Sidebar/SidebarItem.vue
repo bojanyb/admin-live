@@ -1,9 +1,9 @@
 <template>
-  <div v-if="!item.hidden">
+  <div v-if="permissionListFunc(item)">
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="!item.disabled ? resolvePath(onlyOneChild.path) : ''">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :disabled="item.disabled" :class="{'submenu-title-noDropdown':!isNest}">
-          <item v-show="!item.hidden" :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
+          <item v-show="permissionListFunc(item)" :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
@@ -56,6 +56,11 @@ export default {
     this.onlyOneChild = null
     return {}
   },
+  computed: {
+    permission() {
+      return localStorage.getItem('permissionList')
+    }
+  },
   methods: {
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {
@@ -89,6 +94,23 @@ export default {
         return this.basePath
       }
       return path.resolve(this.basePath, routePath)
+    },
+
+    // 隐藏没有权限的页面
+    permissionListFunc(item) {
+      let permissionList = this.permission
+      console.log(permissionList, 'permissionList------------')
+      // if(item.hidden) {
+      //   return false
+      // } else {
+      //   if(item.meta) {
+      //     return permissionList.indexOf(item.meta.title) !== -1
+      //   }
+      // }
+      // if(item.meta) {
+      //   return permissionList.indexOf(item.meta.title) !== -1
+      // }
+      return true
     }
   }
 }

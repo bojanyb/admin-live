@@ -93,6 +93,43 @@ const systemConfigRouter = {
 			  title: '修改密码',
 			  noCache: true
 			}
+		},
+		{
+			path: 'jurisdiction',
+			component: () => import('@/views/voiceroom/systemConfig/jurisdiction/index'),
+			name: 'jurisdiction',
+			meta: {
+			  title: '权限管理',
+			  noCache: true
+			}
+		},
+		{
+			path: 'superAdmin',
+			component: () => import('@/views/voiceroom/systemConfig/superAdmin/index'),
+			name: 'superAdmin',
+			meta: {
+			  title: '超管管理',
+			  noCache: true
+			},
+			hidden: true
+		},
+		{
+			path: 'superAdminList',
+			component: () => import('@/views/voiceroom/systemConfig/superAdminHistory/index'),
+			name: 'superAdminList',
+			meta: {
+			  title: '超管处罚列表',
+			  noCache: true
+			}
+		},
+		{
+			path: 'superAdminHistory',
+			component: () => import('@/views/voiceroom/systemConfig/superAdminHistory/history'),
+			name: 'superAdminHistory',
+			meta: {
+			  title: '超管处罚记录',
+			  noCache: true
+			}
 		}
 	]
 }

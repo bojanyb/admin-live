@@ -16,7 +16,7 @@ const userRouter = {
 			component: () => import('@/views/voiceroom/user/user-not-reportList'),
 			name: 'user-not-reportList',
 			meta: {
-				title: '未处理列表',
+				title: '举报用户',
 				noCache: true
 			}
 		},
@@ -25,7 +25,7 @@ const userRouter = {
 			component: () => import('@/views/voiceroom/user/user-old-reportList'),
 			name: 'user-old-reportList',
 			meta: {
-				title: '已处理列表',
+				title: '举报用户记录',
 				noCache: true
 			}
 		}

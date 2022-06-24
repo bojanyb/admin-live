@@ -1,123 +1,157 @@
 <template>
 	<div class="app-container">
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
 
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="getUserBgiList()">
-				<el-form-item label="用户ID">
-					<el-input v-model="filters.user_id" v-input-limit="0" placeholder="请输入用户ID" clearable />
-				</el-form-item>
-				<el-form-item label="状态">
-				  <el-select v-model="filters.status" placeholder="请选择" @change="getUserBgiList">
-				    <el-option label="全部" value="" />
-				    <el-option key="1" label="通过" value="1" />
-					 <el-option key="3" label="待审核" value="3" />
-					 <el-option key="2" label="驳回" value="2" />
-				  </el-select>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="getUserBgiList">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row>
-			<el-table-column label="上传用户昵称" prop="nickname" align="center" />
-			<el-table-column label="用户ID" prop="user_id" align="center" />
-			<el-table-column label="上传时间" prop="create_timeText" align="center" />
-			<el-table-column label="图片" prop="pic" align="center">
-				<template slot-scope="scope">
-					<el-image style="width: 30px; height: 30px" :lazy="true"
-						:src="scope.row.pic ? scope.row.pic : ''" :preview-src-list="userBglist" />
-				</template>
-			</el-table-column>
-			<el-table-column label="状态" prop="statusText" align="center" />
-			<el-table-column label="处理人" prop="make_userid" align="center" />
-			<el-table-column label="处理时间" prop="update_timeText" align="center" />
-			<el-table-column label="操作" align="center">
-				<template slot-scope="scope">
-					<el-button type="primary" v-if="scope.row.status == 0" @click="handleChange(scope.row,1)">通过</el-button>
-					<el-button type="danger" v-if="scope.row.status == 0" @click="handleChange(scope.row,2)">驳回</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="getUserBgiList" />
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 	</div>
 </template>
 
 <script>
-	import {
-		getUserBgi,
-		getUserBgiAudit
-	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	import { getUserBgiAudit } from '@/api/videoRoom'
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
+
 	export default {
 		name: 'userbg-list',
+		mixins: [mixins],
 		components: {
-			Pagination
+			SearchPanel,
+			tableList
 		},
 		data() {
-			return {
-				list: [],
-				loading: false,
-				listLoading: false,
-				total: 0,
-				formLabelWidth: '120px',
-				page: {
-					page: 1,
-					limit: 10
-				},
-				filters: {
-					'user_id': '',
-					'status' : ''
-				},
-				userImglist: [],
-				userBglist: [],
-				multipleSelection: []
+			return { }
+		},
+		computed: {
+			forms() {
+				return [
+					{
+						name: 'user_id',
+						type: 'input',
+						value: '',
+						label: '用户ID',
+						isNum: true,
+						placeholder: '请输入用户ID'
+					},
+					{
+						name: 'status',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '状态',
+						placeholder: '请选择',
+						options: MAPDATA.AUDITSTATUSLIST
+					}
+				]
+			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.audit.list,
+					columns: [
+						{
+							label: '上传用户昵称',
+							render: (h, params) => {
+								return h('span', params.row.userinfo.nickname || '无')
+							}
+						},
+						{
+							label: '用户ID',
+							prop: 'user_id'
+						},
+						{
+							label: '上传时间',
+							width: '180px',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '图片',
+							isimg: true,
+							prop: 'pic',
+							imgWidth: '50px',
+							imgHeight: '50px'
+						},
+						{
+							label: '状态',
+							render: (h, params) => {
+								let data = MAPDATA.AUDITSTATUSLIST.find(item => { return item.value === params.row.status })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '处理人',
+							render: (h, params) => {
+								return h('span', params.row.make_userid || '无')
+							}
+						},
+						{
+							label: '处理时间',
+							width: '180px',
+							render: (h, params) => {
+								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '操作',
+							width : '230px',
+							render: (h, params) => {
+								return h('div', [
+									h('el-button', { props : { type: 'primary'}, style: {
+										display: params.row.status == 0 ? 'unset' : 'none'
+									}, on: {click:()=>{this.handleChange(params.row, 1)}}}, '通过'),
+									h('el-button', { props : { type: 'danger'}, style: {
+										display: params.row.status == 0 ? 'unset' : 'none'
+									}, on: {click:()=>{this.handleChange(params.row, 2)}}},'驳回'),
+									h('el-button', { props : { type: 'danger'}, style: {
+										display: params.row.status == 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.handleChange(params.row, 3)}}},'删除'),
+								])
+							}
+						}
+					]
+				}
 			}
 		},
-		created() {
-			this.getUserBgiList()
-		},
 		methods: {
-			getUserBgiList() {
-				this.listLoading = true
-				var params = {
-					'user_id': this.filters.user_id,
-					'status' : this.filters.status,
-					'page': this.page.page,
-					'pagesize': this.page.limit
+			// 配置参数
+			beforeSearch(params) {
+				let s = { ...this.searchParams }
+				return {
+					page: params.page,
+					pagesize: params.size,
+					user_id: s.user_id,
+					status: s.status
 				}
-				getUserBgi(params).then(response => {
-					this.total = response.data.count;
-					response.data.row.map(res => {
-						res.make_userid = res.make_userid > 0 ? res.make_userid : "";
-						res.create_timeText = res.create_time > 0 ?moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
-						res.update_timeText = res.update_time > 0 ? moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
-						switch (res.status){
-							case 1:
-							res.statusText = "通过";
-								break;
-							case 2:
-							res.statusText = "驳回";
-								break;
-							case 0:
-							res.statusText = "待审核";
-								break;
-						}
-						this.userBglist.push(res.pic);
-						res.nickname = res.userinfo.nickname;
-					})
-					this.list = response.data.row;
-					this.listLoading = false
-				}).catch(err => {
-					this.listLoading = false
-				})
+			},
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
+			},
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.dateTimeParams = {
+					activity_type_id: 1
+				}
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
 			},
 			handleChange(row,status){
 				var params = {
@@ -127,7 +161,7 @@
 				}
 				getUserBgiAudit(params).then(res=>{
 					this.$message.success("处理成功");
-					this.getUserBgiList();
+					this.getList();
 				}).catch(err=>{
 					this.$message.error(err);
 				})

@@ -13,7 +13,7 @@ const request = {
     },
 
     // 平台活动  
-    platformActivity : {
+    platformActivity: {
         Activityins: `${HTTPHEADER}/Activityins/index`, // 幸运转盘设置
         configMMLY: `${HTTPHEADER}/activityins/configMMLY`, // 配置喵喵乐园
         configXYZP: `${HTTPHEADER}/activityins/configXYZP`, // 配置大转盘
@@ -22,14 +22,29 @@ const request = {
         drawRecord: `${HTTPHEADER}/activityins/drawRecord`, // 统计
         stop: `${HTTPHEADER}/Activityins/stop`, // 停止和开启
     },
-    system : {
-        Appversion : `${HTTPHEADER}/Appversion`, // 版本列表
-        AppversionAChange : `${HTTPHEADER}/appversion/add`, // 新增或者修改
-        AppversionDel : `${HTTPHEADER}/appversion/del`, // 删除
+
+    // 系统设置
+    system: {
+        Appversion: `${HTTPHEADER}/Appversion`, // 版本列表
+        AppversionAChange: `${HTTPHEADER}/appversion/add`, // 新增或者修改
+        AppversionDel: `${HTTPHEADER}/appversion/del`, // 删除
+        getMenuPermissions: `${HTTPHEADER}/admin/getMenuPermissions`, // 菜单列表
+        getAllPermission: `${HTTPHEADER}/admin/getAllPermission`, // 获取所有节点
+        adminMenu: `${HTTPHEADER}/admin/index`, // 管理员列表
+        addUser: `${HTTPHEADER}/admin/addUser`, // 增加管理员
+        editAdmin: `${HTTPHEADER}/admin/editIndex`, // 管理员权限编辑页
+        edit: `${HTTPHEADER}/admin/edit`, // 管理员信息修改
+        view: `${HTTPHEADER}/admin/view`, // 查看管理员信息
+        deleteAdmin: `${HTTPHEADER}/admin/delete`, // 删除用户
+        adminStatus: `${HTTPHEADER}/admin/adminStatus`, // 开关用户
+        super: {
+            punishHistory: `${HTTPHEADER}/Room/punishHistory`, // 处理处罚历史
+            handlePunish: `${HTTPHEADER}/Room/handlePunish`, // 处理处罚
+            punishLog: `${HTTPHEADER}/Room/punishLog`, // 待处理处罚
+        }
     },
 
     // 用户活动
-    
     userActivity: {
         zzbxActivity: { // 转转宝箱
             list: `${HTTPHEADER}/Activity/aclist`,
@@ -68,8 +83,24 @@ const request = {
         down: `${HTTPHEADER}/goods/down`,
         send: `${HTTPHEADER}/goods/send`,
         sendlog: `${HTTPHEADER}/goods/sendlog`,
-    }
+    },
     
+    // 派对管理
+    room: {
+        report: `${HTTPHEADER}/Room/feedback`,
+        roomList: `${HTTPHEADER}/Room/room`,
+    },
+
+    // 用户管理
+    user: {
+        list: `${HTTPHEADER}/User`,
+        defaultFace: `${HTTPHEADER}/user/defaultFace`
+    },
+    
+    // 审核管理
+    audit: {
+        list: `${HTTPHEADER}/user/getUserBgi`
+    }
 }
 
 export default request

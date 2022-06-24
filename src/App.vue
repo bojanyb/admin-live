@@ -6,7 +6,26 @@
 
 <script>
 	export default {
-		name: 'App'
+		name: 'App',
+		methods: {
+			initStore() {
+				let that = this
+				//在页面刷新时将vuex里的信息保存到localStorage里
+				const permissionList = localStorage.getItem("permissionList");
+
+				//在页面加载时读取localStorage里的状态信息
+				permissionList && this.changeOrderData(JSON.parse(permissionList));
+				this.$store.commit('user/SET_PERMISSION', permissionList)
+
+				localStorage.removeItem("permissionList");
+				
+				window.addEventListener("beforeunload",() => {
+					let permissionList = that.$store.state.user.permissionList
+					console.log(permissionList, 'permissionList----------')
+					localStorage.setItem("permissionList", JSON.stringify(permissionList));
+				})
+			}
+		}
 	}
 </script>
 <style>
