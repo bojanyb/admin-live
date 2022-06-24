@@ -75,7 +75,7 @@ export default {
                 {
                     name: 'status',
                     type: 'select',
-                    value: '',
+                    value: '1',
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '订单状态',
@@ -149,7 +149,9 @@ export default {
                     },
                     {
                         label: '商户单号',
-                        prop: 'out_trade_no'
+                        render: (h, params) => {
+                            return h('span', params.row.out_trade_no || '无')
+                        }
                     }
                 ]
             }
@@ -175,7 +177,7 @@ export default {
                 user_number: s.user_number,
                 sort: s.sort,
                 channel: s.channel,
-                status: s.status,
+                status: !s.status ? '1' : '',
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000)
             }
