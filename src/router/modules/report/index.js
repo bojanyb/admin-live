@@ -28,8 +28,25 @@ const userRouter = {
 				title: '举报用户记录',
 				noCache: true
 			}
+		},
+		{
+			path: 'room-name',
+			component: () => import('@/views/voiceroom/room/room-name'),
+			name: 'room-name',
+			meta: {
+				title: '房间名称管理',
+				noCache: true
+			}
+		},
+		{
+			path: 'report-list',
+			component: () => import('@/views/voiceroom/room/report-list'),
+			name: 'report-list',
+			meta: {
+				title: '举报房间',
+				noCache: true
+			}
 		}
-		
 	]
 }
 

@@ -52,15 +52,15 @@ const giveAwayRouter = {
 				noCache: true,
 			},
 		},
-		{
-			path: 'payType',
-			component: () => import('@/views/voiceroom/paySystem/payType'),
-			name: 'payType',
-			meta: {
-				title: '支付配置',
-				noCache: true
-			}
-		},
+		// {
+		// 	path: 'payType',
+		// 	component: () => import('@/views/voiceroom/paySystem/payType'),
+		// 	name: 'payType',
+		// 	meta: {
+		// 		title: '支付配置',
+		// 		noCache: true
+		// 	}
+		// },
 		{
 			path: 'operateHistory-list',
 			component: () => import('@/views/voiceroom/paySystem/operateHistory'),
