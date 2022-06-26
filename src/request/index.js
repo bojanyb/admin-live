@@ -102,6 +102,11 @@ const request = {
     // 审核管理
     audit: {
         list: `${HTTPHEADER}/user/getUserBgi`
+    },
+
+    // 交易管理
+    deal: {
+        userFlow2: `${HTTPHEADER}/Statistical/userFlow2`
     }
 }
 

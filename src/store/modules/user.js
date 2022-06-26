@@ -168,6 +168,16 @@ const actions = {
 										array.push(item.title)
 									}
 								}
+								if(a.child && a.child.length > 0) {
+									a.child.forEach(x => {
+										if(user_pids.indexOf(x.id) !== -1) {
+											array.push(x.title)
+											if(user_pids.indexOf(item.id) === -1) {
+												array.push(item.title)
+											}
+										}
+									})
+								}
 							})
 						}
 					})

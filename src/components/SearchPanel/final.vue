@@ -55,6 +55,7 @@
                 :disabled="cDisabled(item)"
                 :placeholder="item.selectPlaceholder"
                 @change="item.handler.change"
+                :style="{'width': item.selectWidth}"
               >
                 <el-option v-for="option in item.options" :key="option[item.keyName||'key']" :label="option[item.optionLabel||'label']" :value="option[item.keyName||'key']" />
               </el-select>
