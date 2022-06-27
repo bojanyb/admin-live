@@ -75,7 +75,7 @@ export default {
         columns: [
           {
             label: '用户ID',
-            prop: 'user_id'
+            prop: 'user_number'
           },
           {
             label: '直播场次ID',
@@ -95,7 +95,7 @@ export default {
           },
           {
             label: '举报房主ID',
-            prop: 'live_user_id'
+            prop: 'live_user_number'
           },
           {
             label: '举报人昵称',

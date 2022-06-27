@@ -17,7 +17,7 @@
 				</el-form-item>
 				<el-form-item v-if="popForm.status == 2" label="封禁时间" prop="kill_time" :label-width="formLabelWidth">
 					<el-select v-model="popForm.kill_time" placeholder="请选择">
-						<el-option v-for="item in timerList" :key="item.value" :label="item.label"
+						<el-option v-for="item in timerList" :key="item.value" :label="item.name"
 							:value="item.value" />
 					</el-select>
 				</el-form-item>
