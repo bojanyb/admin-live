@@ -48,9 +48,9 @@
 						name: 'room_number',
 						type: 'input',
 						value: '',
-						label: '房间号码',
+						label: '房间ID',
 						isNum: true,
-						placeholder: '请输入房间号码'
+						placeholder: '请输入房间ID'
 					},
 					// {
 					// 	name: 'is_live',
