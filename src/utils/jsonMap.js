@@ -205,6 +205,10 @@ const EMBODYSORT = [
 
 const INSTITUTION = [
     {
+        value: '',
+        name: '全部'
+    },
+    {
         value: 8,
         name: '汇付支付'
     },
