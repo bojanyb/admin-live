@@ -85,8 +85,8 @@ export default {
                 {
                     name: 'dateTimeParams',
                     type: 'datePicker',
-                    dateType: 'daterange',
-                    format: "yyyy-MM-dd",
+                    dateType: 'datetimerange',
+                    format: "yyyy-MM-dd HH:mm:ss",
                     label: '时间选择',
                     value: '',
                     handler: {
