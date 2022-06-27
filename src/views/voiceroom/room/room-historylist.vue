@@ -1,5 +1,5 @@
 <template>
-	<div class="app-container">
+	<div class="room-historylist">
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
@@ -38,7 +38,19 @@
 		},
 		data() {
 			return {
-
+				list: [],
+				listLoading: true,
+				total: 0,
+				multipleSelection: [],
+				filters: {
+					'room_number': '',
+					'is_live': '',
+					guild_number: null
+				},
+				page: {
+					page: 1,
+					limit: 10
+				}
 			}
 		},
 		computed: {
@@ -52,16 +64,16 @@
 						isNum: true,
 						placeholder: '请输入房间号码'
 					},
-					// {
-					// 	name: 'is_live',
-					// 	type: 'select',
-					// 	value: '',
-					// 	keyName: 'value',
-					// 	optionLabel: 'name',
-					// 	label: '直播状态',
-					// 	placeholder: '请选择',
-					// 	options: MAPDATA.ROOMSTATUSLIST
-					// },
+					{
+						name: 'is_live',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '直播状态',
+						placeholder: '请选择',
+						options: MAPDATA.ROOMSTATUSLIST
+					},
 					{
 						name: 'guild_number',
 						type: 'input',
@@ -79,16 +91,46 @@
 					isShowIndex: true,
 					columns: [
 						{
-							label: '房间ID',
+							label: '房间号码',
+							width: '100px',
 							prop: 'room_number'
 						},
 						{
 							label: '房间名称',
+							width: '180px',
 							prop: 'room_name'
 						},
 						{
 							label: '房主ID',
+							width: '100px',
 							prop: 'live_user_number'
+						},
+						{
+							label: '房间类型',
+							width: '100px',
+							prop: 'room_genre_name'
+						},
+						{
+							label: '在线时长',
+							width: '120px',
+							render: (h, params) => {
+								let data = formatTime(params.row.live_time)
+								return h('span', data ? data : '无')
+							}
+						},
+						{
+							label: '开播时间',
+							width: '180px',
+							render: (h, params) => {
+								return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '结束时间',
+							width: '180px',
+							render: (h, params) => {
+								return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
 						},
 						{
 							label: '所属公会',
@@ -97,7 +139,18 @@
 							}
 						},
 						{
+							label: '在线人数',
+							width: '95px',
+							prop: 'people'
+						},
+						{
+							label: '被举报次数',
+							width: '95px',
+							prop: 'report'
+						},
+						{
 							label: '直播状态',
+							width: '95px',
 							render: (h, params) => {
 								let data = MAPDATA.ROOMSTATUSLIST.find(item => { return item.value === params.row.is_live })
 								return h('span', {
@@ -108,11 +161,48 @@
 							}
 						},
 						{
+							label: '状态',
+							width: '95px',
+							render: (h, params) => {
+								let data = MAPDATA.ROOMCARDSTATUSLIST.find(item => { return item.value === params.row.status })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '总流水',
+							prop: 'total_flow'
+						},
+						{
+							label: '当日流水',
+							prop: 'today_flow'
+						},
+						{
+							label: '本周流水',
+							prop: 'now_week_flow'
+						},
+						{
+							label: '上一周流水',
+							width: '100px',
+							prop: 'last_week_flow'
+						},
+						{
 							label: '操作',
+							width : '230px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '编辑')
+									h('el-button', { props : { type: 'danger'}, style: {
+										display: params.row.status == 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.handleRoom(params.row)}}},'冻结'),
+									h('el-button', { props : { type: 'danger'}, style: {
+										display: params.row.status == 3 ? 'unset' : 'none'
+									}, on: {click:()=>{this.handleRoom(params.row)}}},'解冻'),
+									h('el-button', { props : { type: 'primary'}, style: {
+										display: params.row.is_hide == 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.roomHideFunc(params.row.id, 2)}}}, '房间隐藏'),
+									h('el-button', { props : { type: 'primary'}, style: {
+										display: params.row.is_hide == 2 ? 'unset' : 'none'
+									}, on: {click:()=>{this.roomHideFunc(params.row.id, 1)}}}, '取消隐藏')
 								])
 							}
 						}
@@ -139,6 +229,9 @@
 			// 重置
 			reset() {
 				this.searchParams = {}
+				this.dateTimeParams = {
+					activity_type_id: 1
+				}
 				this.getList()
 			},
 			// 查询
@@ -186,17 +279,13 @@
 				}
 				await roomTop(params)
 				this.getList()
-			},
-
-			// 编辑
-			editFunc(row) {
-				
 			}
 		}
 	}
 </script>
-<style lang="scss" scoped="scoped">
-	.el-form-item {
+<style lang="scss">
+.room-historylist {
+    .el-form-item {
 		// margin-bottom: initial;
 	}
 
@@ -211,4 +300,5 @@
 	.colorDel {
 		color: #F56C6C;
 	}
+}
 </style>

@@ -97,15 +97,7 @@
 						label: '用户ID',
 						isNum: true,
 						placeholder: '请输入用户ID'
-					},
-					{
-						name: 'phone',
-						type: 'input',
-						value: '',
-						label: '手机号',
-						isNum: true,
-						placeholder: '请输入手机号'
-					},
+					}
 				]
 			},
 			cfgs() {
@@ -115,123 +107,35 @@
 					columns: [
 						{
 							label: '用户ID',
-							width: '95px',
 							prop: 'user_number'
 						},
 						{
 							label: '昵称',
-							width: '110px',
 							prop: 'nickname'
 						},
 						{
 							label: '头像',
-							isimg: true,
-							prop: 'face',
-							imgWidth: '50px'
-						},
-						{
-							label: '性别',
-							width: '95px',
-							prop: 'sex',
-							render: (h, params) => {
-								let data = MAPDATA.SEXLIST.find(item => { return item.value === params.row.sex })
-								return h('span', data ? data.name : '无')
-							}
+							prop: 'nickname'
 						},
 						{
 							label: '个性签名',
-							width: '110px',
 							prop: 'signature'
 						},
 						{
-							label: '所属公会',
-							render: (h, params) => {
-								return h('div', [
-									h('div', params.row.guild_name || '无'),
-									h('div', params.row.guild_number)
-								])
-							}
-						},
-						{
-							label: '是否为厅主',
-							width: '110px',
-							render: (h, params) => {
-								return h('span', params.row.is_guild_room === 0 ? '否' : '是')
-							}
-						},
-						{
-							label: '手机号',
-							width: '110px',
-							render: (h, params) => {
-								return h('span', params.row.phone || '无')
-							}
-						},
-						{
-							label: '状态',
-							width: '95px',
-							render: (h, params) => {
-								let data = MAPDATA.USERSTATUSLIST.find(item => { return item.value === params.row.status })
-								return h('span', data ? data.name : '无')
-							}
-						},
-						{
-							label: '是否已绑卡',
-							width: '95px',
-							prop: 'is_bindcard',
-							render: (h, params) => {
-								return h('div', { style: { 
-									color: params.row.is_bindcard ? '#ff4949' : '#666666',
-									cursor: params.row.is_bindcard ? 'pointer' : ''
-								 }, on: { click:()=>{this.bindcardFunc(params.row)} } }, params.row.is_bindcard ? '是' : '否')
-							}
-						},
-						{
-							label: '创建时间',
-							width: '180px',
-							render: (h, params) => {
-								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-							}
-						},
-						{
 							label: '封禁时间',
-							width: '180px',
 							render: (h, params) => {
 								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
 						{
-							label: '封禁备注',
-							width: '200px',
+							label: '操作时间',
 							render: (h, params) => {
-								return h('span', params.row.remark || '无')
+								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
 						{
-							label: '注册设备',
-							width: '200px',
+							label: '操作人',
 							prop: 'reg_device_id'
-						},
-						{
-							label: '最后一次登录设备',
-							width: '200px',
-							prop: 'last_login_device_id'
-						},
-						{
-							label: '操作',
-							width : '150px',
-							fixed: 'right',
-							render: (h, params) => {
-								return h('div', [
-									// h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.defaultFaceFunc(params.row)}}},'一键换图'),
-									// h('el-button', { props : { type: 'danger'}, style: {
-									// 	display: params.row.status == 1 ? 'unset' : 'none'
-									// }, on: {click:()=>{this.handleUser(params.row)}}},'封禁'),
-									// h('el-button', { props : { type: 'primary'}, style: {
-									// 	display: params.row.status == 2 ? 'unset' : 'none'
-									// }, on: {click:()=>{this.handleUser(params.row)}}}, '启用'),
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '编辑')
-								])
-							}
 						}
 					]
 				}
