@@ -192,6 +192,7 @@ const STATUSLIST = [
     }
 ]
 
+// 充值记录排序
 const EMBODYSORT = [
     {
         value: 'asc',
@@ -203,6 +204,7 @@ const EMBODYSORT = [
     }
 ]
 
+// 充值页面 - 充值类型
 const INSTITUTION = [
     {
         value: 8,

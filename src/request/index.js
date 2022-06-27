@@ -96,7 +96,8 @@ const request = {
     // 用户管理
     user: {
         list: `${HTTPHEADER}/User`,
-        defaultFace: `${HTTPHEADER}/user/defaultFace`
+        defaultFace: `${HTTPHEADER}/user/defaultFace`,
+        autonymlist: `${HTTPHEADER}/Verify`,
     },
     
     // 审核管理

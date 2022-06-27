@@ -1,5 +1,5 @@
 <template>
-	<div class="app-container">
+	<div class="user_history">
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
@@ -337,8 +337,13 @@
 		}
 	}
 </script>
-<style>
-	.el-icon-circle-close {
+
+<style lang="scss" scoped>
+.user_history {
+	padding: 20px;
+	box-sizing: border-box;
+    .el-icon-circle-close {
 		color: #FFFFFF;
 	}
+}
 </style>

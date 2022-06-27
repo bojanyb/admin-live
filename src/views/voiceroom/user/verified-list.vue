@@ -1,85 +1,126 @@
 <template>
   <div class="app-container">
+    <div class="searchParams">
+      <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+    </div>
 
-    <!--工具条-->
-    <el-col :span="24" class="toolbar" style="padding-bottom: 0px;" />
-
-    <el-table
-      ref="multipleTable"
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="拼命加载中"
-      border
-      fit
-      highlight-current-row
-    >
-      <el-table-column label="用户ID" prop="user_id" align="center" width="95" />
-      <el-table-column label="姓名" prop="name" align="center" width="160" show-overflow-tooltip />
-      <el-table-column label="昵称" prop="nickname" align="center"  show-overflow-tooltip>
-        <template slot-scope="scope">
-          {{ scope.row.nickname || '无' }}
-        </template>
-      </el-table-column>
-      <el-table-column label="手机号" prop="phone" align="center" />
-      <el-table-column label="身份证号" prop="id_card" align="center" />
-      <el-table-column label="认证时间" prop="create_timeText" align="center" />
-    </el-table>
-
-    <!--工具条-->
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="page.page"
-      :limit.sync="page.limit"
-      @pagination="getVerify"
-    />
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
   </div>
 </template>
 
 <script>
-import {
-  getVerifyList
-} from '@/api/videoRoom'
-import Pagination from '@/components/Pagination'
-import moment from 'moment'
+
+// 引入菜单组件
+import SearchPanel from '@/components/SearchPanel/final.vue'
+// 引入列表组件
+import tableList from '@/components/tableList/TableList.vue'
+// 引入api
+import REQUEST from '@/request/index.js'
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
+// 引入公共参数
+import mixins from '@/utils/mixins.js'
+
 export default {
   name: 'VerifiedList',
   components: {
-    Pagination
+    SearchPanel,
+    tableList
   },
+  mixins: [mixins],
   data() {
     return {
-      list: [],
-      listLoading: false,
-      total: 0,
-      formLabelWidth: '120px',
-      page: {
-        page: 1,
-        limit: 10
+      
+    }
+  },
+  computed: {
+    forms() {
+      return [
+        {
+          name: 'user_id',
+          type: 'input',
+          value: '',
+          label: '用户ID',
+          isNum: true,
+          placeholder: '请输入用户ID'
+        },
+        {
+          name: 'phone',
+          type: 'input',
+          value: '',
+          label: '手机号',
+          isNum: true,
+          placeholder: '请输入手机号'
+        },
+      ]
+    },
+    cfgs() {
+      return {
+        vm: this,
+        url: REQUEST.user.autonymlist,
+        columns: [
+          {
+            label: '用户ID',
+            prop: 'user_id'
+          },
+          {
+            label: '姓名',
+            prop: 'name'
+          },
+          {
+            label: '昵称',
+            showOverFlow: true,
+            render: (h, params) => {
+              return h('span', params.row.nickname || '无')
+            }
+          },
+          {
+            label: '手机号',
+            render: (h, params) => {
+              return h('span', params.row.phone || '无')
+            }
+          },
+          {
+            label: '身份证号',
+            prop: 'id_card',
+            render: (h, params) => {
+              let data = params.row.id_card.replace(/^(.{6})(?:\d+)(.{4})$/, "$1****$2")
+              return h('span', data || '无')
+            }
+          },
+          {
+            label: '认证时间',
+            render: (h, params) => {
+              return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+            }
+          }
+        ]
       }
     }
   },
-  created() {
-    this.getVerify()
-  },
   methods: {
-    getVerify() {
-      this.listLoading = true
-      var params = {
-        'page': this.page.page,
-        'pagesize': this.page.limit
+    // 配置参数
+    beforeSearch(params) {
+      let s = { ...this.searchParams }
+      return {
+        page: params.page,
+        pagesize: params.size,
+        user_id: s.user_id,
+        phone: s.phone
       }
-      getVerifyList(params).then(response => {
-        this.total = response.data.count
-        this.list = response.data.list
-        this.list.map(res => {
-		  res.id_card = res.id_card.replace(/^(.{6})(?:\d+)(.{4})$/, "$1****$2")
-          res.create_timeText = moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-        })
-        this.listLoading = false
-      }).catch(err => {
-        this.listLoading = false
-      })
+    },
+    // 刷新列表
+    getList() {
+      this.$refs.tableList.getData()
+    },
+    // 重置
+    reset() {
+      this.searchParams = {}
+      this.getList()
+    },
+    // 查询
+    onSearch() {
+      this.getList()
     }
   }
 }
