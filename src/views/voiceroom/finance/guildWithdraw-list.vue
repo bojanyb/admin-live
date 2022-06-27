@@ -161,6 +161,9 @@ export default {
         return {
             ruleForm: {
                 allMoney: null
+            },
+            searchParams: {
+                status: '1'
             }
         };
     },
@@ -177,7 +180,7 @@ export default {
                 user_number: s.user_number,
                 sort: s.sort,
                 channel: s.channel,
-                status: !s.status ? '1' : s.status,
+                status: s.status,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000)
             }
