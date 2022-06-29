@@ -91,7 +91,12 @@
 					isShowIndex: true,
 					columns: [
 						{
-							label: '房间号码',
+							label: '直播场次ID',
+							width: '100px',
+							prop: 'room_number'
+						},
+						{
+							label: '房间ID',
 							width: '100px',
 							prop: 'room_number'
 						},
@@ -101,21 +106,19 @@
 							prop: 'room_name'
 						},
 						{
-							label: '房主ID',
-							width: '100px',
-							prop: 'live_user_number'
-						},
-						{
 							label: '房间类型',
 							width: '100px',
 							prop: 'room_genre_name'
 						},
 						{
-							label: '在线时长',
-							width: '120px',
+							label: '房主ID',
+							width: '100px',
+							prop: 'live_user_number'
+						},
+						{
+							label: '所属公会',
 							render: (h, params) => {
-								let data = formatTime(params.row.live_time)
-								return h('span', data ? data : '无')
+								return h('span', params.row.guild_number || '无')
 							}
 						},
 						{
@@ -133,78 +136,37 @@
 							}
 						},
 						{
-							label: '所属公会',
+							label: '开播时长',
+							width: '120px',
 							render: (h, params) => {
-								return h('span', params.row.guild_number || '无')
+								let data = formatTime(params.row.live_time)
+								return h('span', data ? data : '无')
 							}
 						},
 						{
-							label: '在线人数',
+							label: '进入房间人数',
+							width: '120px',
+							prop: 'people'
+						},
+						{
+							label: '付费人数',
 							width: '95px',
 							prop: 'people'
 						},
 						{
-							label: '被举报次数',
+							label: '本场流水（喵粮）',
+							width: '140px',
+							prop: 'people'
+						},
+						{
+							label: '解散方式',
 							width: '95px',
-							prop: 'report'
+							prop: 'people'
 						},
 						{
-							label: '直播状态',
+							label: '解散人',
 							width: '95px',
-							render: (h, params) => {
-								let data = MAPDATA.ROOMSTATUSLIST.find(item => { return item.value === params.row.is_live })
-								return h('span', {
-									style: {
-										color: params.row.is_live === 1 ? '#85CE61' : '#ff6d6d'
-									}
-								}, data ? data.name : '无')
-							}
-						},
-						{
-							label: '状态',
-							width: '95px',
-							render: (h, params) => {
-								let data = MAPDATA.ROOMCARDSTATUSLIST.find(item => { return item.value === params.row.status })
-								return h('span', data ? data.name : '无')
-							}
-						},
-						{
-							label: '总流水',
-							prop: 'total_flow'
-						},
-						{
-							label: '当日流水',
-							prop: 'today_flow'
-						},
-						{
-							label: '本周流水',
-							prop: 'now_week_flow'
-						},
-						{
-							label: '上一周流水',
-							width: '100px',
-							prop: 'last_week_flow'
-						},
-						{
-							label: '操作',
-							width : '230px',
-							fixed: 'right',
-							render: (h, params) => {
-								return h('div', [
-									h('el-button', { props : { type: 'danger'}, style: {
-										display: params.row.status == 1 ? 'unset' : 'none'
-									}, on: {click:()=>{this.handleRoom(params.row)}}},'冻结'),
-									h('el-button', { props : { type: 'danger'}, style: {
-										display: params.row.status == 3 ? 'unset' : 'none'
-									}, on: {click:()=>{this.handleRoom(params.row)}}},'解冻'),
-									h('el-button', { props : { type: 'primary'}, style: {
-										display: params.row.is_hide == 1 ? 'unset' : 'none'
-									}, on: {click:()=>{this.roomHideFunc(params.row.id, 2)}}}, '房间隐藏'),
-									h('el-button', { props : { type: 'primary'}, style: {
-										display: params.row.is_hide == 2 ? 'unset' : 'none'
-									}, on: {click:()=>{this.roomHideFunc(params.row.id, 1)}}}, '取消隐藏')
-								])
-							}
+							prop: 'people'
 						}
 					]
 				}
@@ -285,6 +247,8 @@
 </script>
 <style lang="scss">
 .room-historylist {
+	padding: 20px;
+	box-sizing: border-box;
     .el-form-item {
 		// margin-bottom: initial;
 	}

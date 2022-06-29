@@ -127,24 +127,6 @@ export function getUserWallet(data) {
   })
 }
 
-// 一键换图
-export function defaultFace(data) {
-  return request({
-    url: api.user.defaultFace,
-    method: 'post',
-    data
-  })
-}
-
-// 用户封禁/启用
-export function getUserSave(data) {
-  return request({
-    url: 'User/userSave',
-    method: 'post',
-    data
-  })
-}
-
 // 用户列表  统计页面显示和隐藏
 export function getUserStatisticalShow(data) {
   return request({

@@ -95,6 +95,15 @@ const systemConfigRouter = {
 			}
 		},
 		{
+			path: 'menus',
+			component: () => import('@/views/voiceroom/systemConfig/menus/index'),
+			name: 'menus',
+			meta: {
+			  title: '菜单管理',
+			  noCache: true
+			}
+		},
+		{
 			path: 'jurisdiction',
 			component: () => import('@/views/voiceroom/systemConfig/jurisdiction/index'),
 			name: 'jurisdiction',

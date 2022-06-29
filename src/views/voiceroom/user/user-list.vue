@@ -6,48 +6,17 @@
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
-		<el-dialog title="操作" :visible.sync="editPop">
-			<el-form :model="popForm">
-
-				<el-form-item label="状态" :label-width="formLabelWidth">
-					<el-radio-group v-model="popForm.status">
-						<el-radio :label="1">正常</el-radio>
-						<el-radio :label="2">封禁</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item v-if="popForm.status == 2" label="封禁时间" prop="kill_time" :label-width="formLabelWidth">
-					<el-select v-model="popForm.kill_time" placeholder="请选择">
-						<el-option v-for="item in timerList" :key="item.value" :label="item.name"
-							:value="item.value" />
-					</el-select>
-				</el-form-item>
-				<el-form-item v-if="popForm.status == 2" label="封禁说明" :label-width="formLabelWidth">
-					<el-input v-model="popForm.remark" style="width: 335px;" type="textarea" :rows="5"
-						placeholder="正常状态可不填" clearable autocomplete="off" />
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="editPop = false">取 消</el-button>
-				<el-button :loading="loading" type="primary" @click="handleChange">确 定</el-button>
-			</div>
-		</el-dialog>
-
 		<bindStuck ref="bindStuck"></bindStuck>
 
 		<!-- 详情组件 -->
-		<userEdit ref="userEdit" v-if="isDestoryComp" @destoryComp="destoryComp"></userEdit>
+		<userEdit ref="userEdit" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></userEdit>
 	</div>
 </template>
 
 <script>
-	import {
-		defaultFace,
-		getUserSave,
-		getUserStatisticalShow
-	} from '@/api/videoRoom'
-
+	import { getUserStatisticalShow } from '@/api/videoRoom'
+	// 卡列表组件
 	import bindStuck from './components/bindStuck.vue'
-
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -74,16 +43,6 @@
 		},
 		data() {
 			return {
-				editPop: false,
-				loading: false,
-				formLabelWidth: '120px',
-				popForm: {
-					'id': '',
-					'status': 1,
-					'kill_time': '',
-					'remark': ''
-				},
-				timerList: MAPDATA.DURATION,
 				isDestoryComp: false
 			}
 		},
@@ -141,7 +100,9 @@
 						{
 							label: '个性签名',
 							width: '110px',
-							prop: 'signature'
+							render: (h, params) => {
+								return h('span', params.row.autograph || '无')
+							}
 						},
 						{
 							label: '所属公会',
@@ -222,13 +183,6 @@
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
-									// h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.defaultFaceFunc(params.row)}}},'一键换图'),
-									// h('el-button', { props : { type: 'danger'}, style: {
-									// 	display: params.row.status == 1 ? 'unset' : 'none'
-									// }, on: {click:()=>{this.handleUser(params.row)}}},'封禁'),
-									// h('el-button', { props : { type: 'primary'}, style: {
-									// 	display: params.row.status == 2 ? 'unset' : 'none'
-									// }, on: {click:()=>{this.handleUser(params.row)}}}, '启用'),
 									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '编辑')
 								])
 							}
@@ -272,39 +226,6 @@
 			// 销毁组件
 			destoryComp() {
 				this.isDestoryComp = false
-			},
-			// 一键换图
-			async defaultFaceFunc(row) {
-				await defaultFace({ user_id: row.id })
-				this.getList()
-			},
-			handleUser(row) {
-				this.$set(this.popForm, 'status', row.status)
-				this.$set(this.popForm, 'remark', row.remark)
-				this.$set(this.popForm, 'kill_time', row.kill_time)
-				this.$set(this.popForm, 'id', row.id)
-				this.editPop = true
-			},
-			handleChange() {
-				if (this.popForm.status == 2 && this.popForm.remark == '') {
-					this.$message.error('封禁说明不能为空')
-					return
-				}
-				if (this.popForm.status == 1) {
-					this.popForm.remark = ''
-				}
-				this.loading = true
-				getUserSave(this.popForm).then(res => {
-					this.$message.success('操作成功')
-					this.getList()
-					setTimeout(it => {
-						this.editPop = false
-						this.loading = false
-					}, 300)
-				}).catch(err => {
-					this.editPop = false
-					this.loading = false
-				})
 			},
 			handleStatistics(row) {
 				let tipsText = row.statistical_show == 1 ? "确认关闭该用户房间统计页面？" : "确认为该用户开启房间统计页面？";

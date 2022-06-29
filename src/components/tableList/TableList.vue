@@ -1,6 +1,8 @@
 <template>
   <article class="share-table-list-box">
-    <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe" :border="cfgs.border || true"
+    <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe" :border="!cfgs.border"
+    :default-expand-all="cfgs.defaultExpandAll"
+    :tree-props="{children: cfgs.children, hasChildren: cfgs.hasChildren}"
       ref="table" @sort-change="handleSortChange" @selection-change="handleSelectionChange" v-loading="loading">
       <!-- checkbox -->
       <el-table-column type="selection" width="55" align="center" v-if="cfgs.isShowCheckbox"></el-table-column>

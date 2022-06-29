@@ -649,6 +649,17 @@ const SUPERSTATUSLIST = [
     }
 ]
 
+// 菜单管理 - 状态
+const MENUSTATUSLIST = [
+    {
+        name: '正常',
+        value: 1
+    },
+    {
+        name: '停用',
+        value: 2
+    }
+]
 
 
 export default {
@@ -679,5 +690,6 @@ export default {
     SYSTEMSTATUSLIST,
     ROOMSTATUSLIST,
     ROOMCARDSTATUSLIST,
-    SUPERSTATUSLIST
+    SUPERSTATUSLIST,
+    MENUSTATUSLIST
 }

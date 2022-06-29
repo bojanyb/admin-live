@@ -98,6 +98,8 @@ const request = {
         list: `${HTTPHEADER}/User`,
         defaultFace: `${HTTPHEADER}/user/defaultFace`,
         autonymlist: `${HTTPHEADER}/Verify`,
+        edit: `${HTTPHEADER}/User/userEdit`, // 编辑用户
+        userSave: `${HTTPHEADER}User/userSave`, // 用户封禁/启用
     },
     
     // 审核管理

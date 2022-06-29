@@ -1,24 +1,29 @@
-import request from '@/utils/request'
+import request from '@/utils/request2'
+import api from '@/request/index'
 
-export function login(data) {
+// 用户编辑
+export function edit(data) {
   return request({
-    url: '/vue-element-admin/user/login',
+    url: api.user.edit,
     method: 'post',
     data
   })
 }
 
-export function getInfo(token) {
+// 用户封禁/启用
+export function getUserSave(data) {
   return request({
-    url: '/vue-element-admin/user/info',
-    method: 'get',
-    params: { token }
+    url: api.user.userSave,
+    method: 'post',
+    data
   })
 }
 
-export function logout() {
+// 一键换图
+export function defaultFace(data) {
   return request({
-    url: '/vue-element-admin/user/logout',
-    method: 'post'
+    url: api.user.defaultFace,
+    method: 'post',
+    data
   })
 }

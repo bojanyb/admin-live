@@ -5,6 +5,9 @@
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+
+		<!-- 编辑组件 -->
+		<roomEdit ref="roomEdit" v-if="isDestoryComp" @destoryComp="destoryComp"></roomEdit>
 	</div>
 </template>
 
@@ -18,6 +21,8 @@
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
 	import tableList from '@/components/tableList/TableList.vue'
+	// 引入编辑组件
+	import roomEdit from './components/roomEdit.vue'
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
@@ -26,19 +31,18 @@
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
-	// 引入公共方法
-	import { formatTime } from '@/utils/common.js'
 
 	export default {
 		name: 'RoomList',
 		mixins: [mixins],
 		components: {
 			SearchPanel,
-			tableList
+			tableList,
+			roomEdit
 		},
 		data() {
 			return {
-
+				isDestoryComp: false // 是否销毁组件
 			}
 		},
 		computed: {
@@ -190,7 +194,15 @@
 
 			// 编辑
 			editFunc(row) {
-				
+				this.isDestoryComp = true
+				setTimeout(() => {
+					this.$refs.roomEdit.dialogVisible = true
+				}, 50);
+			},
+
+			// 销毁组件
+			destoryComp() {
+				this.isDestoryComp = false
 			}
 		}
 	}

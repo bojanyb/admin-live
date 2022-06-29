@@ -64,6 +64,7 @@ const actions = {
 				} = response
 				commit('SET_TOKEN', data.token)
 				setToken(data.token)
+				localStorage.setItem('admin_id', data.admin_id)
 				resolve(data.admin_id)
 			}).catch(error => {
 				reject(error)
@@ -159,7 +160,7 @@ const actions = {
 					res.data.list.forEach(item => {
 						if(user_pids.indexOf(item.id) !== -1) {
 							array.push(item.title)
-						}
+						}  
 						if(item.child && item.child.length > 0) {
 							item.child.forEach(a => {
 								if(user_pids.indexOf(a.id) !== -1) {
@@ -183,6 +184,7 @@ const actions = {
 					})
 					localStorage.setItem('permissionList', array)
 				}
+
 				resolve(res)
 			}).catch(error => {
 				reject(error)

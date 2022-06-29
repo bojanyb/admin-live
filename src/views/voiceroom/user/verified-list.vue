@@ -37,7 +37,7 @@ export default {
     forms() {
       return [
         {
-          name: 'user_id',
+          name: 'user_number',
           type: 'input',
           value: '',
           label: '用户ID',
@@ -45,7 +45,7 @@ export default {
           placeholder: '请输入用户ID'
         },
         {
-          name: 'phone',
+          name: 'user_phone',
           type: 'input',
           value: '',
           label: '手机号',
@@ -105,8 +105,8 @@ export default {
       return {
         page: params.page,
         pagesize: params.size,
-        user_id: s.user_id,
-        phone: s.phone
+        user_number: s.user_number,
+        user_phone: s.user_phone
       }
     },
     // 刷新列表
