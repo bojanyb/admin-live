@@ -20,15 +20,6 @@ const userRouter = {
 			}
 		},
 		{
-			path: 'user-history',
-			component: () => import('@/views/voiceroom/user/user-history'),
-			name: 'user-history',
-			meta: {
-				title: '用户信息编辑历史',
-				noCache: true
-			}
-		},
-		{
 			path: 'verified-list',
 			component: () => import('@/views/voiceroom/user/verified-list'),
 			name: 'verified-list',

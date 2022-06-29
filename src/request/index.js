@@ -91,6 +91,7 @@ const request = {
     room: {
         report: `${HTTPHEADER}/Room/feedback`,
         roomList: `${HTTPHEADER}/Room/room`,
+        roomBg: `${HTTPHEADER}/room/roomBg`,
     },
 
     // 用户管理

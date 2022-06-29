@@ -16,25 +16,7 @@ const voiceroomRouter = {
 			component: () => import('@/views/voiceroom/room/room-list'),
 			name: 'room-list',
 			meta: {
-				title: '房间信息列表',
-				noCache: true
-			}
-		},
-		{
-			path: 'room-livelist',
-			component: () => import('@/views/voiceroom/room/room-livelist'),
-			name: 'room-livelist',
-			meta: {
-				title: '房间直播列表',
-				noCache: true
-			}
-		},
-		{
-			path: 'room-historylist',
-			component: () => import('@/views/voiceroom/room/room-historylist'),
-			name: 'room-historylist',
-			meta: {
-				title: '房间历史记录',
+				title: '房间列表',
 				noCache: true
 			}
 		},

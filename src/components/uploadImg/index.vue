@@ -9,9 +9,10 @@
         :before-upload="beforeUpload"
         :before-remove="beforeRemove"
         :http-request="upLoad">
-            <img v-if="url && !isSpecial" :src="url" class="avatar">
-            <span class="fileName" v-if="url && isSpecial">已上传文件</span>
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <img v-if="url && isSpecial === 'png'" :src="url" class="avatar">
+            <!-- <span class="fileName" v-if="url && isSpecial">已上传文件</span> -->
+            <svgComp v-if="url && isSpecial === 'svga' && isShowSvg" ref="svgComp" :src="url" :styleObj="{ width: '178px', height: '178px' }"></svgComp>
+            <i v-if="!url" class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
     </div>
 </template>
@@ -20,16 +21,17 @@
 
 // 引入oss
 import { uploadOSS } from '@/utils/oss.js'
+// 引入svg组件
+import svgComp from '@/components/svgComp/index.vue'
 
 export default {
+    components: {
+        svgComp
+    },
     props: {
         name: { // 字段名
             type: String,
             default: ''
-        },
-        isSpecial: { // 是否为特效商品
-            type: Boolean,
-            default: false
         },
         disabled: { // 是否只能查看
             type: Boolean,
@@ -57,24 +59,36 @@ export default {
         }
     },
     computed: {
-        url() {
+        url() { // 返回地址
             if(this.imgUrl) {
                 return this.imgUrl
             }
             return this.imageUrl
+        },
+        isSpecial() { // 判断是图片还是svga
+            if(this.url) {
+                if(this.url.indexOf('png') !== -1 || this.url.indexOf('jpg') !== -1 || this.url.indexOf('jpeg') !== -1) {
+                    return 'png'
+                } else if(this.url.indexOf('svga') !== -1) {
+                    return 'svga'
+                }
+            }
         }
     },
     data() {
         return {
             imageUrl: '',
+            isShowSvg: true
         };
     },
     methods: {
         // 上传
         upLoad(file) {
+            this.isShowSvg = false
             uploadOSS(file.file).then(res => {
                 if(res.url) {
                     this.$emit('input', res.url)
+                    this.isShowSvg = true
                     this.$emit('validateField', this.name)
                     this.imageUrl = res.url
                 }

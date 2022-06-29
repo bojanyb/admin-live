@@ -78,7 +78,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="商品特效" prop="goods_animation_path" v-if="goodsType === 1">
-                    <upload v-model="ruleForm.goods_animation_path" :imgUrl="ruleForm.goods_animation_path" name="goods_animation_path" :isSpecial="true" ref="goods_animation_path" @validateField="validateField"></upload>
+                    <upload v-model="ruleForm.goods_animation_path" :imgUrl="ruleForm.goods_animation_path" name="goods_animation_path" ref="goods_animation_path" @validateField="validateField"></upload>
                 </el-form-item>
                 <el-form-item label="商品静态图" prop="goods_image" v-if="goodsType === 2">
                     <upload v-model="ruleForm.goods_image" :imgUrl="ruleForm.goods_image" accept=".png,.jpg,.jpeg" name="goods_image" ref="goods_image" @validateField="validateField"></upload>

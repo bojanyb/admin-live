@@ -560,6 +560,26 @@ const ROOMCARDSTATUSLIST = [
     }
 ]
 
+// 房间类型
+const ROOMTYPELIST = [
+    {
+        value: 0,
+        name: '不配置'
+    },
+    {
+        value: 1,
+        name: '游戏'
+    },
+    {
+        value: 2,
+        name: '点唱'
+    },
+    {
+        value: 3,
+        name: '情感'
+    }
+]
+
 /*
 *用户管理 - 用户列表
 */
@@ -679,5 +699,6 @@ export default {
     SYSTEMSTATUSLIST,
     ROOMSTATUSLIST,
     ROOMCARDSTATUSLIST,
-    SUPERSTATUSLIST
+    SUPERSTATUSLIST,
+    ROOMTYPELIST
 }

@@ -33,9 +33,6 @@
 		</el-dialog>
 
 		<bindStuck ref="bindStuck"></bindStuck>
-
-		<!-- 详情组件 -->
-		<userEdit ref="userEdit" v-if="isDestoryComp" @destoryComp="destoryComp"></userEdit>
 	</div>
 </template>
 
@@ -60,8 +57,6 @@
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
-	// 详情组件
-	import userEdit from './components/userEdit.vue'
 
 	export default {
 		name: 'UserList',
@@ -69,8 +64,7 @@
 		components: {
 			bindStuck,
 			tableList,
-			SearchPanel,
-			userEdit
+			SearchPanel
 		},
 		data() {
 			return {
@@ -83,8 +77,7 @@
 					'kill_time': '',
 					'remark': ''
 				},
-				timerList: MAPDATA.DURATION,
-				isDestoryComp: false
+				timerList: MAPDATA.DURATION
 			}
 		},
 		computed: {
@@ -137,11 +130,6 @@
 								let data = MAPDATA.SEXLIST.find(item => { return item.value === params.row.sex })
 								return h('span', data ? data.name : '无')
 							}
-						},
-						{
-							label: '个性签名',
-							width: '110px',
-							prop: 'signature'
 						},
 						{
 							label: '所属公会',
@@ -218,18 +206,17 @@
 						},
 						{
 							label: '操作',
-							width : '150px',
+							width : '230px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
-									// h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.defaultFaceFunc(params.row)}}},'一键换图'),
-									// h('el-button', { props : { type: 'danger'}, style: {
-									// 	display: params.row.status == 1 ? 'unset' : 'none'
-									// }, on: {click:()=>{this.handleUser(params.row)}}},'封禁'),
-									// h('el-button', { props : { type: 'primary'}, style: {
-									// 	display: params.row.status == 2 ? 'unset' : 'none'
-									// }, on: {click:()=>{this.handleUser(params.row)}}}, '启用'),
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '编辑')
+									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.defaultFaceFunc(params.row)}}},'一键换图'),
+									h('el-button', { props : { type: 'danger'}, style: {
+										display: params.row.status == 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.handleUser(params.row)}}},'封禁'),
+									h('el-button', { props : { type: 'primary'}, style: {
+										display: params.row.status == 2 ? 'unset' : 'none'
+									}, on: {click:()=>{this.handleUser(params.row)}}}, '启用')
 								])
 							}
 						}
@@ -256,22 +243,14 @@
 			// 重置
 			reset() {
 				this.searchParams = {}
+				this.dateTimeParams = {
+					activity_type_id: 1
+				}
 				this.getList()
 			},
 			// 查询
 			onSearch() {
 				this.getList()
-			},
-			// 编辑
-			editFunc(row) {
-				this.isDestoryComp = true
-				setTimeout(() => {
-					this.$refs.userEdit.loadParams(row)
-				}, 50);
-			},
-			// 销毁组件
-			destoryComp() {
-				this.isDestoryComp = false
 			},
 			// 一键换图
 			async defaultFaceFunc(row) {
