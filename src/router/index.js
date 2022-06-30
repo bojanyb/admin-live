@@ -78,11 +78,11 @@ export const constantRoutes = [{
 		component: () => import('@/views/error-page/401'),
 		hidden: true
 	},
-	{
-		path: '/',
-		component: Layout,
-		redirect: '/overview/index',
-	}
+	// {
+	// 	path: '/',
+	// 	component: Layout,
+	// 	redirect: '/overview/index',
+	// }
 ]
 
 export const asyncRoutes = [

@@ -6,24 +6,26 @@ const giveAwayRouter = {
 	path: '/giveAway',
 	component: Layout,
 	redirect: 'noRedirect',
-	name: 'Charts',
+	name: 'giveAway',
 	meta: {
 		title: '财务管理',
 		icon: 'el-icon-goods'
 	},
 	children: [{
-			path: 'giveAway',
+			path: 'giveMe',
 			component: () => import('@/views/voiceroom/activity/giftHistory/giveAway'),
 			meta: {
 				title: '平台赠送',
-			}
+			},
+			name: 'giveMe'
 		},
 		{
 			path: 'giftHistory-list',
 			component: () => import('@/views/voiceroom/activity/giftHistory/giftHistory-list'),
 			meta: {
 				title: '赠送记录',
-			}
+			},
+			name: 'giftHistory-list'
 		},
 		{
 			path: 'guildWithdraw-list',
@@ -62,9 +64,9 @@ const giveAwayRouter = {
 		// 	}
 		// },
 		{
-			path: 'operateHistory-list',
+			path: 'operateHistory',
 			component: () => import('@/views/voiceroom/paySystem/operateHistory'),
-			name: 'operateHistory-list',
+			name: 'operateHistory',
 			meta: {
 				title: '操作记录',
 				noCache: true

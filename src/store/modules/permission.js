@@ -86,7 +86,7 @@ const actions = {
                   item.params = {
                     component: a.component,
                     meta: a.meta,
-                    name: item.name,
+                    name: a.name,
                     path: a.path,
                     redirect: a.redirect
                   }
@@ -108,9 +108,6 @@ const actions = {
               path: item.params.path,
               redirect: item.params.redirect
             })
-            if(!item.params.name) {
-              delete array[index].name
-            }
             array[index].meta.title = item.title
             if(item.child && item.child.length > 0) {
               array[index].children = []
@@ -121,9 +118,6 @@ const actions = {
                   name: a.params.name,
                   path: a.params.path,
                 })
-                if(!a.params.name) {
-                  delete array[index].children[b].name
-                }
                 array[index].children[b].meta.title = a.title
                 if(a.child && a.child.length > 0) {
                   array[index].children[b].children = []
@@ -132,6 +126,7 @@ const actions = {
                       component: x.params.component,
                       meta: x.params.meta,
                       path: x.params.path,
+                      name: x.params.name,
                     })
                     array[index].children[b].children[s].meta.title = x.title
                   })
@@ -140,7 +135,11 @@ const actions = {
             }
           })
 
-
+          array.push({
+            path: '*',
+            redirect: '/404',
+            hidden: true
+          })
 
           let accessedRoutes
           if (roles.includes('admin')) {

@@ -23,21 +23,24 @@ const platformActivityRouter = {
 					component: () => import('@/views/voiceroom/platformActivity/xyzpActivity/turntableSet'),
 					meta: {
 						title: '幸运转盘设置',
-					}
+					},
+					name: 'turntableSet'
 				},
 				{
 					path: 'turntableCount',
 					component: () => import('@/views/voiceroom/platformActivity/xyzpActivity/turntableCount'),
 					meta: {
 						title: '幸运转盘统计',
-					}
+					},
+					name: 'turntableCount'
 				},
 				{
 					path: 'turntableRecord',
 					component: () => import('@/views/voiceroom/platformActivity/xyzpActivity/turntableRecord'),
 					meta: {
 						title: '幸运转盘记录',
-					}
+					},
+					name: 'turntableRecord'
 				},
 			]
 		},
@@ -47,27 +50,31 @@ const platformActivityRouter = {
 			meta: {
 				title: '喵喵乐园'
 			},
+			name: 'mmly',
 			children: [
 				{
 					path: 'paradiseSet',
 					component: () => import('@/views/voiceroom/platformActivity/mmlyActivity/paradiseSet'),
 					meta: {
 						title: '喵喵乐园设置',
-					}
+					},
+					name: 'paradiseSet'
 				},
 				{
 					path: 'paradiseCount',
 					component: () => import('@/views/voiceroom/platformActivity/mmlyActivity/paradiseCount'),
 					meta: {
 						title: '喵喵乐园统计',
-					}
+					},
+					name: 'paradiseCount'
 				},
 				{
 					path: 'paradiseRecord',
 					component: () => import('@/views/voiceroom/platformActivity/mmlyActivity/paradiseRecord'),
 					meta: {
 						title: '喵喵乐园记录',
-					}
+					},
+					name: 'paradiseRecord'
 				},
 			]
 		},
@@ -80,25 +87,28 @@ const platformActivityRouter = {
 			// hidden: true,
 			children: [
 				{
-					path: 'allocation',
+					path: 'zzbxallocation',
 					component: () => import('@/views/voiceroom/platformActivity/zzbxActivity/allocation'),
 					meta: {
 						title: '转转宝箱设置',
-					}
+					},
+					name: 'zzbxallocation'
 				},
 				{
-					path: 'statistics',
+					path: 'zzbxstatistics',
 					component: () => import('@/views/voiceroom/platformActivity/zzbxActivity/statistics'),
 					meta: {
 						title: '转转宝箱统计',
-					}
+					},
+					name: 'zzbxstatistics'
 				},
 				{
-					path: 'history',
+					path: 'zzbxhistory',
 					component: () => import('@/views/voiceroom/platformActivity/zzbxActivity/history'),
 					meta: {
 						title: '转转宝箱记录',
-					}
+					},
+					name: 'zzbxhistory'
 				},
 			]
 		},

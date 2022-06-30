@@ -17,7 +17,8 @@ const activityRouter = {
 			meta: {
 				title: '活动列表',
 				noCache: true
-			}
+			},
+			name: 'activity-list'
 		},
 		{
 			path: '/activity-gift-list',
@@ -25,7 +26,8 @@ const activityRouter = {
 			meta: {
 				title: '活动配置列表',
 				noCache: true
-			}
+			},
+			name: 'activity-gift-list'
 		},
 		{
 			path: '/lottery-list',
@@ -33,7 +35,8 @@ const activityRouter = {
 			meta: {
 				title: '抽奖记录',
 				noCache: true
-			}
+			},
+			name: 'lottery-list'
 		},
 		{
 			path: '/lotteryDetails-list',
@@ -41,7 +44,8 @@ const activityRouter = {
 			meta: {
 				title: '抽奖明细',
 				noCache: true
-			}
+			},
+			name: 'lotteryDetails-list'
 		},
 		// {
 		// 	path: '/giftHistory',

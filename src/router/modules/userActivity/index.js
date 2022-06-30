@@ -21,25 +21,28 @@ const userActivity = {
 			},
 			children: [
 				{
-					path: 'allocation',
+					path: 'wzbxallocation',
 					component: () => import('@/views/voiceroom/userActivity/wzbxActivity/allocation'),
 					meta: {
 						title: '玩转宝箱设置',
-					}
+					},
+					name: 'wzbxallocation'
 				},
 				{
-					path: 'statistics',
+					path: 'wzbxstatistics',
 					component: () => import('@/views/voiceroom/userActivity/wzbxActivity/statistics'),
 					meta: {
 						title: '玩转宝箱统计',
-					}
+					},
+					name: 'wzbxstatistics'
 				},
 				{
-					path: 'history',
+					path: 'wzbxhistory',
 					component: () => import('@/views/voiceroom/userActivity/wzbxActivity/history'),
 					meta: {
 						title: '玩转宝箱记录',
-					}
+					},
+					name: 'wzbxhistory'
 				},
 			]
 		},
@@ -51,18 +54,20 @@ const userActivity = {
 			},
 			children: [
 				{
-					path: 'allocation',
+					path: 'dwallocation',
 					component: () => import('@/views/voiceroom/userActivity/dwActivity/allocation'),
 					meta: {
 						title: '端午活动配置',
-					}
+					},
+					name: 'dwallocation'
 				},
 				{
-					path: 'statistics',
+					path: 'dwstatistics',
 					component: () => import('@/views/voiceroom/userActivity/dwActivity/statistics'),
 					meta: {
 						title: '端午统计',
-					}
+					},
+					name: 'dwstatistics'
 				}
 			]
 		},
