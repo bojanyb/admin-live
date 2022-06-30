@@ -145,9 +145,9 @@
 					s.live_user_number = s.inputSelect
 					s.user_number = s.inputSelect
 					if(s.iSelect == 'code') {
-						delete s.user_number
-					} else if(s.iSelect == 'name') {
 						delete s.live_user_number
+					} else if(s.iSelect == 'name') {
+						delete s.user_number
 					}
 				}
 				return {

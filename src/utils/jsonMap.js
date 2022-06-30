@@ -207,6 +207,10 @@ const EMBODYSORT = [
 // 充值页面 - 充值类型
 const INSTITUTION = [
     {
+        value: '',
+        name: '全部'
+    },
+    {
         value: 8,
         name: '汇付支付'
     },
