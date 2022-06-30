@@ -2,10 +2,10 @@
 
 import Layout from '@/layout'
 const userRouter = {
-	path: '/dashboard',
+	path: '/overview',
 	component: Layout,
 	redirect: 'noRedirect',
-	name: 'dashboard',
+	name: 'overview',
 	meta: {
 		title: '总览',
 		icon: 'dashboard'
@@ -16,7 +16,7 @@ const userRouter = {
 			component: () => import('@/views/dashboard/index'),
 			name: 'index',
 			meta: {
-				title: '总览',
+				title: '详情',
 				noCache: true
 			},
 		},

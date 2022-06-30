@@ -156,9 +156,32 @@ export default {
             let res;
             if(status === 'add') {
                 res = await getAllPermission()
+                console.log(res, 'res-----------')
             } else {
                 res = await editAdmin({admin_id: id})
             }
+
+            let prv = (list, params) => {
+                list.forEach((item,index) => {
+                    if(!item.status) {
+                        if(item.pid === 0) {
+                            list.splice(index, 1)
+                            prv(list)
+                        } else {
+                            if(params) {
+                                params.child.splice(index, 1)
+                                prv(list, item)
+                            }
+                        }
+                    }
+                    if(item.child && item.child.length > 0) {
+                        prv(item.child, item)
+                    }
+                })
+            }
+
+            prv(res.data.list)
+
             this.isDestoryComp = true
             setTimeout(() => {
                 this.$refs.add.dialogVisible = true

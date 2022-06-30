@@ -92,7 +92,9 @@ export default {
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
-                                h('el-button', { props : { type: 'success'}, on: {click:()=>{this.add(params.row)}}}, '新增')
+                                h('el-button', { props : { type: 'success'}, style: {
+                                    display: params.row.child && params.row.child.length > 0 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.add(params.row)}}}, '新增')
                             ])
                         }
                     }
@@ -141,22 +143,34 @@ export default {
         },
         // 列表返回数据
         saleAmunt(res) {
-            if(res.list && res.list.length > 0) {
+            let arr = JSON.parse(JSON.stringify(res.list))
+            if(arr && arr.length > 0) {
                 let prv = (list) => { // 递归最后一级隐藏箭头
                     list.forEach(item => {
                         if(item.child && item.child.length > 0) {
-                            prv(item.child)
+                            prv(item.child, item)
                         } else {
                             delete item.child
                         }
                     })
                 }
-                prv(res.list)
+                prv(arr)
+
+
+                arr.forEach(item => {
+                    if(item.child && item.child.length > 0) {
+                        item.child.forEach(a => {
+                            if(a.child && a.child.length > 0) {
+                                delete a.child
+                            }
+                        })
+                    }
+                })
+
                 
             }
-            this.menuList = res.list || []
+            this.menuList = arr || []
 
-            console.log(this.menuList, 'menuList----------')
         },
         // 销毁组件
         destoryComp() {

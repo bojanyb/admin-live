@@ -53,9 +53,7 @@ const actions = {
     
     return new Promise(resolve => {
       let admin_id = Number(localStorage.getItem('admin_id'))
-      console.log(asyncRoutes, 'asyncRoutes----------')
       editAdmin({ admin_id }).then(res => {
-        console.log(res, 'res------------')
         let array = []
         let arr = JSON.parse(JSON.stringify(res.data.list))
         let user_pids = res.data.user_pids
@@ -80,30 +78,83 @@ const actions = {
           }
           prv(arr)
 
-          console.log(arr, 'arr-------------------')
 
           let sv = (list, list2) => {
             list.forEach(item => {
               list2.forEach(a => {
-                // if(item.)
+                if(item.h5_path === a.path) {
+                  item.params = {
+                    component: a.component,
+                    meta: a.meta,
+                    name: item.name,
+                    path: a.path,
+                    redirect: a.redirect
+                  }
+                }
+                if(item.child && item.child.length > 0 && a.children && a.children.length > 0) {
+                  sv(item.child, a.children)
+                }
               })
             })
           }
 
           sv(arr, asyncRoutes)
-          
+
+          arr.forEach((item,index) => {
+            array.push({
+              component: item.params.component,
+              meta: item.params.meta,
+              name: item.params.name,
+              path: item.params.path,
+              redirect: item.params.redirect
+            })
+            if(!item.params.name) {
+              delete array[index].name
+            }
+            array[index].meta.title = item.title
+            if(item.child && item.child.length > 0) {
+              array[index].children = []
+              item.child.forEach((a,b) => {
+                array[index].children.push({
+                  component: a.params.component,
+                  meta: a.params.meta,
+                  name: a.params.name,
+                  path: a.params.path,
+                })
+                if(!a.params.name) {
+                  delete array[index].children[b].name
+                }
+                array[index].children[b].meta.title = a.title
+                if(a.child && a.child.length > 0) {
+                  array[index].children[b].children = []
+                  a.child.forEach((x,s) => {
+                    array[index].children[b].children.push({
+                      component: x.params.component,
+                      meta: x.params.meta,
+                      path: x.params.path,
+                    })
+                    array[index].children[b].children[s].meta.title = x.title
+                  })
+                }
+              })
+            }
+          })
+
+
+
+          let accessedRoutes
+          if (roles.includes('admin')) {
+            accessedRoutes = array || []
+          } else {
+            accessedRoutes = filterAsyncRoutes(array, roles)
+          }
+
+          commit('SET_ROUTES', accessedRoutes)
+          resolve(accessedRoutes)
 
         }
       })
-      let accessedRoutes
-      if (roles.includes('admin')) {
-        accessedRoutes = asyncRoutes || []
-      } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-      }
-
-      commit('SET_ROUTES', accessedRoutes)
-      resolve(accessedRoutes)
+      
     })
   }
 }

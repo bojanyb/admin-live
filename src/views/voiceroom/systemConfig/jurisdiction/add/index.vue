@@ -27,10 +27,8 @@
                 <div class="jurisdiction">
                     <ul v-for="(item,index) in jurisdictionList" :key="index">
                         <!-- 第一级树 -->
-                        <div class="funcBox">
-                            <el-checkbox v-model="item.checked" :disabled="disabled" @change="changeStatus(item,index, 1)">{{ item.title }}</el-checkbox>
-                            <span class="add">新增</span>
-                        </div>
+                        <el-checkbox v-model="item.checked" :disabled="disabled" @change="changeStatus(item,index, 1)">{{ item.title }}</el-checkbox>
+                        <span class="add">新增</span>
                         <li>
                             <!-- 第二级树 -->
                             <div :style="{'width': a.child && a.child.length > 0 ? '100%' : 'auto'}" v-if="item.child" v-for="(a,b) in item.child" :key="b">
@@ -163,17 +161,12 @@ export default {
             } else if(val === 2) { // 二级树选中
                 prv(this.jurisdictionList[index].child[b].child) // 递归下面所有子级选中
                 let params = this.jurisdictionList[index].child.find(item => { return !item.checked }) // 查找当前层级是不是所有都未选中
-                if(params) {
-                    this.$set(this.jurisdictionList[index], 'checked', false)
-                } else {
+                if(!params) {
                     this.$set(this.jurisdictionList[index], 'checked', true)
                 }
             } else if(val === 3) { // 三级树选中
                 let params = this.jurisdictionList[index].child[b].child.find(item => { return !item.checked }) // 查找当前层级是不是所有都未选中
-                if(params) {
-                    this.$set(this.jurisdictionList[index].child[b], 'checked', false)
-                    this.$set(this.jurisdictionList[index], 'checked', false)
-                } else {
+                if(!params) {
                     this.$set(this.jurisdictionList[index].child[b], 'checked', true)
                     this.$set(this.jurisdictionList[index], 'checked', true)
                 }
@@ -292,20 +285,17 @@ export default {
             ul {
                 padding-left: 0px;
                 margin-bottom: 30px;
-                .funcBox {
+                >.el-checkbox {
                     display: flex;
-                    >.el-checkbox {
-                        display: flex;
-                        align-items: center;
-                        .el-checkbox__label {
-                            font-weight: 600;
-                            font-size: 18px;
-                        }
+                    align-items: center;
+                    .el-checkbox__label {
+                        font-weight: 600;
+                        font-size: 18px;
                     }
+                }
 
-                    >span.add {
-                        visibility: hidden;
-                    }
+                >span.add {
+                    visibility: hidden;
                 }
                 .funcBox:hover {
                     >span.add {

@@ -81,7 +81,7 @@ export const constantRoutes = [{
 	{
 		path: '/',
 		component: Layout,
-		redirect: '/dashboard/index',
+		redirect: '/overview/index',
 	}
 ]
 
