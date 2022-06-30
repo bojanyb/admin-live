@@ -29,9 +29,7 @@ router.beforeEach(async(to, from, next) => {
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
       if (hasRoles) {
         if(from.path === '/login') {
-          setTimeout(() => {
-            next()
-          }, 100);
+          next()
         } else {
           next()
         }

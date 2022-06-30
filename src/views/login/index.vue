@@ -142,50 +142,74 @@
 							.then((res) => {
 								this.$store.dispatch('user/editAdminFunc', res).then(res => {
 									let path = this.$route.query.redirect
-									let sId = null
-									let back = res.data
-									
-									let prv = (list) => {
-										list.forEach(item => {
-											if('/' + item.h5_path === path) {
-												sId = item.id
+									let arr = JSON.parse(JSON.stringify(res.data.list))
+									let user_pids = res.data.user_pids
+									let prv = (list, params) => { // 获取当前权限的所有菜单
+										list.forEach((item,index) => {
+											if(user_pids.indexOf(item.id) === -1 || item.status === 0) {
+												if(item.pid === 0) {
+													arr.splice(index, 1)
+													prv(arr)
+												} else {
+													if(params) {
+														params.child.splice(index, 1)
+														prv(item.child, item)
+													}
+												}
 											}
-											if(item.child) {
-												prv(item.child)
+											if(item.child && item.child.length > 0) {
+												prv(item.child, item)
 											}
 										})
 									}
+									prv(arr)
 
-									prv(back.list)
-
-									let num = back.user_pids[0]
-									let num1 = back.user_pids[1]
-									let params = back.list.find(item => { return item.id === Number(num) })
-									
-									
-									let array = JSON.parse(JSON.stringify(back.user_pids))
-									if(typeof array[0] === 'number') {
-										sId = Number(sId)
-									} else {
-										sId = String(sId)
+									let sv = (list, params) => { // 为所有的一级以下的所有子菜单添加全路径path
+										list.forEach(item => {
+											if(item.pid && params) {
+												if(item.child && item.child.length > 0) {
+													item.path = params.h5_path + item.h5_path
+												} else {
+													item.path = params.h5_path + '/' + item.h5_path
+												}
+											}
+											if(item.child && item.child.length > 0) {
+												sv(item.child, item)
+											}
+										})
 									}
-									if(array.indexOf(sId) !== -1) {
-										this.$router.push({
+									sv(arr)
+
+									let isRouter = false
+									let xs = (list) => { // 判断记录路由是否有权限跳转
+										list.forEach(item => {
+											if(item.path && item.path === path) {
+												isRouter = true
+											}
+											if(item.child && item.child.length > 0) {
+												xs(item.child, item)
+											}
+										})
+									}
+									xs(arr)
+
+									if(isRouter) {
+										this.$router.push({ // 记录跳转
 											path: this.redirect || '/',
 											query: this.otherQuery
 										})
 									} else {
-										if(params.child && params.child.length > 0) {
-											let params1 = params.child.find(item => { return item.id === Number(num1) })
-											this.$router.push({
-												path: '/' + params1.h5_path
+										if(arr[0].child && arr[0].child.length > 0 && arr[0].child[0].child.length <= 0) {
+											this.$router.push({ // 找不到记录取权限第一个跳转
+												path: arr[0].child[0].path
 											})
 										} else {
-											this.$router.push({
-												path: '/' + params.h5_path
+											this.$router.push({ // 找不到二级权限往三级查找跳转
+												path: arr[0].child[0].child[0].path
 											})
 										}
 									}
+
 								})
 								
 								this.loading = false

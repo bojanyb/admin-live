@@ -170,6 +170,7 @@
           <el-form-item v-if="showSearchBtn || showReset">
             <el-button v-if="showSearchBtn" type="primary" @click="onSearch">查询</el-button>
             <el-button v-if="showReset" icon="el-icon-refresh" @click="reset">重置</el-button>
+            <el-button v-if="showAdd" type="success" @click="add">新增</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -224,6 +225,11 @@ export default {
     },
     // 是否显示重置按钮
     showReset: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示新增按钮
+    showAdd: {
       type: Boolean,
       default: false
     },
@@ -394,6 +400,10 @@ export default {
   mounted() {},
   beforeDestroy() {},
   methods: {
+    // 新增
+    add() {
+      this.$emit('add')
+    },
     // 重置
     reset() {
       this.$refs.dataForm.resetFields()

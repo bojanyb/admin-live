@@ -20,7 +20,7 @@
             type="textarea"
             :rows="5"
             style="width: 335px;"
-            placeholder="请输入礼物说明"
+            placeholder="请输入处理结果"
             clearable
             autocomplete="off"
           />

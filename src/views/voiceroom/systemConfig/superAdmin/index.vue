@@ -19,8 +19,6 @@ import REQUEST from '@/request/index.js'
 import { timeFormat } from '@/utils/common.js'
 // 引入新增/修改
 import addComp from './add/index.vue'
-
-import { getActivetyGiftADelete, getActivetyGiftSave, getActivetyHasGiftList } from '@/api/videoRoom'
 // 引入api
 import { setSuperUser } from '@/api/super'
 

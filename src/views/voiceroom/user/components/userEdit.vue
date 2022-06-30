@@ -12,15 +12,15 @@
                     <el-form-item label="用户ID" prop="user_number" class="mustBox">
                         <el-input v-model="ruleForm.user_number" :disabled="true"></el-input>
                     </el-form-item>
-                    <el-form-item label="个性签名" prop="signature">
-                        <el-input v-model="ruleForm.signature"></el-input>
+                    <el-form-item label="个性签名" prop="autograph">
+                        <el-input v-model="ruleForm.autograph"></el-input>
                     </el-form-item>
                     <el-form-item label="手机号" prop="phone" class="mustBox">
                         <el-input v-model="ruleForm.phone" :disabled="true"></el-input>
                     </el-form-item>
                     <el-form-item label="状态" prop="status" class="mustBox">
                         <div class="statusBox">
-                            <span v-for="(item,index) in statusList" :key="index" :class="{ 'hign': statusIndex === item.value }" @click="statusClick(item.value)">
+                            <span v-for="(item,index) in statusList" :key="index" :class="[{ 'hign': statusIndex === item.value }, { 'hignBox': item.value == 2 && statusIndex == 2 }]"  @click="statusClick(item.value)">
                                 {{ item.name }}
                             </span>
                         </div>
@@ -64,6 +64,8 @@
 
 <script>
 
+// 引入api
+import { edit, getUserSave, defaultFace } from '@/api/user.js'
 // 公共图片组件
 import uploadImg from '@/components/uploadImg/index.vue'
 // 引入封禁组件
@@ -84,12 +86,12 @@ export default {
             dialogVisible: false,
             statusList: MAPDATA.USERSTATUSLIST,
             sexList: MAPDATA.SEXLIST,
-            statusIndex: 1,
+            statusIndex: null,
             defaultImg: require('@/assets/default.png'), // 默认头像
             ruleForm: {
                 user_number: '',
                 nickname: '',
-                signature: '',
+                autograph: '',
                 sex: '',
                 guild_name: '',
                 phone: '',
@@ -98,11 +100,12 @@ export default {
                 face: '',
                 blockedParams: {}
             },
+            oldParams: {}, // 老数据用来对比的
             rules: {
                 nickname: [
                     { required: true, message: '请输入昵称', trigger: 'blur' }
                 ],
-                signature: [
+                autograph: [
                     { required: true, message: '请输入个性签名', trigger: 'blur' }
                 ]
             }
@@ -111,6 +114,7 @@ export default {
     methods: {
         loadParams(row) {
             this.dialogVisible = true
+            this.oldParams = row
             let params = JSON.parse(JSON.stringify(row))
             params.phone = params.phone ? params.phone : '无'
             params.guild_name = params.guild_name ? params.guild_name : '无'
@@ -129,11 +133,39 @@ export default {
 				this.$refs.bindStuck.getList(this.ruleForm.id)
             }
         },
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+        async submitForm(formName) {
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    console.log(this.ruleForm, 'ruleForm------------')
-                    // alert('submit!');
+                    let s = this.ruleForm
+                    let x = this.oldParams
+                    let params = {
+                        user_id: s.id,
+                        nickname: s.nickname,
+                        autograph: s.autograph
+                    }
+                    let res = await edit(params)
+                    if(res.code === 2000) {
+                        if(this.statusIndex !== x.status) { // 封禁 - 启用
+                            let obj = {
+                                status: this.statusIndex,
+                                remark: s.blockedParams.remark,
+                                kill_time: s.blockedParams.kill_time,
+                                id: s.id
+                            }
+                            if(this.statusIndex === 1) {
+                                delete obj.kill_time
+                                delete obj.remark
+                            }
+                            await getUserSave(obj)
+                        }
+                        if(s.face !== x.face) { // 设置默认头像
+                            await await defaultFace({ user_id: s.id })
+                        }
+                        setTimeout(() => {
+                            this.dialogVisible = false
+                            this.$emit('getList')
+                        }, 50);
+                    }
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -151,7 +183,6 @@ export default {
         replaceImg() {
             this.$set(this.ruleForm, 'face', this.defaultImg)
         },
-        // 
         // 销毁组件
         closed() {
             this.$emit('destoryComp');
@@ -197,6 +228,10 @@ export default {
                         background: #1890FF;
                         color: #fff;
                         border: 1px solid #1890FF;
+                    }
+                    >span.hignBox {
+                        background: #F56C6C;
+                        border: 1px solid #F56C6C;
                     }
                     >span:last-child {
                         margin-right: 0px;

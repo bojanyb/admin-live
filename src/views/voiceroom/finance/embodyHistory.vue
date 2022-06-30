@@ -275,9 +275,7 @@ export default {
         // 查询
         reset() {
             this.searchParams = {}
-            this.dateTimeParams = {
-                activity_type_id: 1
-            }
+            this.dateTimeParams = {}
             this.getList()
         },
         // 重置

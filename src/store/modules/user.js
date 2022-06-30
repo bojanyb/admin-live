@@ -64,6 +64,7 @@ const actions = {
 				} = response
 				commit('SET_TOKEN', data.token)
 				setToken(data.token)
+				localStorage.setItem('admin_id', data.admin_id)
 				resolve(data.admin_id)
 			}).catch(error => {
 				reject(error)
@@ -140,7 +141,8 @@ const actions = {
 				dispatch('tagsView/delAllViews', null, {
 					root: true
 				})
-				localStorage.removeItem('permissionList')
+
+				localStorage.removeItem('admin_id')
 
 				resolve()
 			}).catch(error => {
@@ -153,36 +155,6 @@ const actions = {
 	editAdminFunc({ commit }, admin_id) {
 		return new Promise((resolve, reject) => {
 			editAdmin({ admin_id }).then((res) => {
-				let array = []
-				if(res.data && res.data.list.length > 0) {
-					let user_pids = res.data.user_pids
-					res.data.list.forEach(item => {
-						if(user_pids.indexOf(item.id) !== -1) {
-							array.push(item.title)
-						}
-						if(item.child && item.child.length > 0) {
-							item.child.forEach(a => {
-								if(user_pids.indexOf(a.id) !== -1) {
-									array.push(a.title)
-									if(user_pids.indexOf(item.id) === -1) {
-										array.push(item.title)
-									}
-								}
-								if(a.child && a.child.length > 0) {
-									a.child.forEach(x => {
-										if(user_pids.indexOf(x.id) !== -1) {
-											array.push(x.title)
-											if(user_pids.indexOf(item.id) === -1) {
-												array.push(item.title)
-											}
-										}
-									})
-								}
-							})
-						}
-					})
-					localStorage.setItem('permissionList', array)
-				}
 				resolve(res)
 			}).catch(error => {
 				reject(error)

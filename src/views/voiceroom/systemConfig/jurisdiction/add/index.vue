@@ -20,16 +20,25 @@
                             <el-input v-model="ruleForm.username" :disabled="status !== 'add'"></el-input>
                         </el-form-item>
                         <el-form-item label="密码" prop="password">
-                            <el-input v-model="ruleForm.password" :disabled="status !== 'add'"></el-input>
+                            <el-input v-model="ruleForm.password"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>
                 <div class="jurisdiction">
                     <ul v-for="(item,index) in jurisdictionList" :key="index">
+                        <!-- 第一级树 -->
                         <el-checkbox v-model="item.checked" :disabled="disabled" @change="changeStatus(item,index, 1)">{{ item.title }}</el-checkbox>
+                        <span class="add">新增</span>
                         <li>
-                            <div v-if="item.child" v-for="(a,b) in item.child" :key="b">
-                                <el-checkbox v-model="a.checked" :disabled="disabled" @change="changeStatus(a, index, 2)">{{ a.title }}</el-checkbox>
+                            <!-- 第二级树 -->
+                            <div :style="{'width': a.child && a.child.length > 0 ? '100%' : 'auto'}" v-if="item.child" v-for="(a,b) in item.child" :key="b">
+                                <el-checkbox :class="{'tree_two': a.child && a.child.length > 0}" v-model="a.checked" :disabled="disabled" @change="changeStatus(a, index, 2, b)">{{ a.title }}</el-checkbox>
+                                <!-- 第三级树 -->
+                                <div class="tree_three">
+                                    <div v-if="a.child" v-for="(x,s) in a.child" :key="s">
+                                        <el-checkbox v-model="x.checked" :disabled="disabled" @change="changeStatus(a, index, 3, b)">{{ x.title }}</el-checkbox>
+                                    </div>
+                                </div>
                             </div>
                         </li>
                     </ul>
@@ -101,7 +110,6 @@ export default {
     methods: {
         // 赋值
         load(status, row) {
-            console.log(row, 'row')
             this.status = status
 
             // 递归初始化未选中状态
@@ -109,7 +117,7 @@ export default {
                 list.forEach(item => {
                     item.checked = false
                     if(user_pids) {
-                        if(user_pids.indexOf(item.id) !== -1) {
+                        if(user_pids.indexOf(item.id) !== -1) { // 当前角色的拥有的权限选中
                             item.checked = true
                         }
                     }
@@ -119,14 +127,12 @@ export default {
                 })
             }
             prv(row.list, row.user_pids)
-
-            
             
             if(status !== 'add') {
                 row.user.password = row.user.password_word
                 this.$set(this.$data, 'ruleForm', row.user)
                 row.list.forEach(item => {
-                    if(item.child) {
+                    if(item.child && item.child.length > 0) {
                         let params = item.child.find(a => { return !a.checked })
                         if(params) {
                             item.checked = false
@@ -138,18 +144,30 @@ export default {
             this.jurisdictionList = row.list || []
         },
         // 权限 - 选择
-        changeStatus(row, index, val) {
-            if(val === 1) {
+        changeStatus(row, index, val, b) {
+
+            let prv = (list) => { // 递归下面所有子级选中
+                list.forEach(item => {
+                    this.$set(item, 'checked', row.checked)
+                    if(item.child && item.child.length > 0) {
+                        prv(item.child)
+                    }
+                })
+            }
+            if(val === 1) { // 一级树选中
                 if(row.child) {
-                    this.jurisdictionList[index].child.forEach(item => {
-                        this.$set(item, 'checked', row.checked)
-                    })
+                    prv(this.jurisdictionList[index].child)
                 }
-            } else if(val === 2) {
-                let params = this.jurisdictionList[index].child.find(item => { return !item.checked })
-                if(params) {
-                    this.$set(this.jurisdictionList[index], 'checked', false)
-                } else {
+            } else if(val === 2) { // 二级树选中
+                prv(this.jurisdictionList[index].child[b].child) // 递归下面所有子级选中
+                let params = this.jurisdictionList[index].child.find(item => { return !item.checked }) // 查找当前层级是不是所有都未选中
+                if(!params) {
+                    this.$set(this.jurisdictionList[index], 'checked', true)
+                }
+            } else if(val === 3) { // 三级树选中
+                let params = this.jurisdictionList[index].child[b].child.find(item => { return !item.checked }) // 查找当前层级是不是所有都未选中
+                if(!params) {
+                    this.$set(this.jurisdictionList[index].child[b], 'checked', true)
                     this.$set(this.jurisdictionList[index], 'checked', true)
                 }
             }
@@ -275,12 +293,35 @@ export default {
                         font-size: 18px;
                     }
                 }
+
+                >span.add {
+                    visibility: hidden;
+                }
+                .funcBox:hover {
+                    >span.add {
+                        visibility: visible;
+                    }
+                }
                 li {
                     display: flex;
                     flex-wrap: wrap;
                     margin-top: 10px;
                     >div {
                         margin-right: 30px;
+                        >div.tree_three {
+                            display: flex;
+                            margin-top: 5px;
+                            >div {
+                                margin-bottom: 20px;
+                                margin-right: 30px;
+                            }
+                        }
+
+                        .tree_two {
+                            .el-checkbox__label {
+                                font-weight: 1000;
+                            }
+                        }
                     }
                 }
             }

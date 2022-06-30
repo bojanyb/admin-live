@@ -1,6 +1,9 @@
 <template>
   <article class="share-table-list-box">
-    <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe" :border="cfgs.border || true"
+    <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe" :border="!cfgs.border"
+    :default-expand-all="cfgs.defaultExpandAll"
+    row-key="id"
+    :tree-props="{children: cfgs.children}"
       ref="table" @sort-change="handleSortChange" @selection-change="handleSelectionChange" v-loading="loading">
       <!-- checkbox -->
       <el-table-column type="selection" width="55" align="center" v-if="cfgs.isShowCheckbox"></el-table-column>
@@ -8,7 +11,7 @@
       <el-table-column type="index" v-if="cfgs.isShowIndex" label="序号" width="80" align="center"></el-table-column>
       <!-- 自定义渲染列 -->
       <el-table-column v-for="item in cfgs.columns" :prop="item.prop" :sortable="item.sortable ? item.sortable : false"
-        align="center" :header-align="item.headerAlign" :label="item.label" :fixed="item.fixed" :width="item.width"
+        :align="item.align || 'center'" :header-align="item.headerAlign" :label="item.label" :fixed="item.fixed" :width="item.width"
         :min-width="item.minWidth" :key="item.label" :show-overflow-tooltip="item.showOverFlow" v-if="heckoutGoodsField(item.label)">
         <template slot-scope="scope">
           <WeTableCustomColumn :renderContent="item.render" v-if="!item.isimg" :scope="scope" :prop="item.prop"></WeTableCustomColumn>
