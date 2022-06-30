@@ -7,6 +7,7 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
+import dashboardRouter from './modules/dashboard'
 import chartsRouter from './modules/charts'
 import voiceroomRouter from './modules/room/voiceroom'
 import systemConfigRouter from './modules/systemConfig/system'
@@ -80,21 +81,12 @@ export const constantRoutes = [{
 	{
 		path: '/',
 		component: Layout,
-		redirect: '/dashboard',
-		children: [{
-			path: 'dashboard',
-			component: () => import('@/views/dashboard/index'),
-			name: 'Dashboard',
-			meta: {
-				title: '总览',
-				icon: 'dashboard',
-				affix: true
-			}
-		}]
+		redirect: '/dashboard/index',
 	}
 ]
 
 export const asyncRoutes = [
+	dashboardRouter,
 	// chartsRouter,
 	userRouter,
 	voiceroomRouter,

@@ -144,10 +144,11 @@
 									let path = this.$route.query.redirect
 									let sId = null
 									let back = res.data
+									debugger
 									
 									let prv = (list) => {
 										list.forEach(item => {
-											if('/' + item.h5_path === path) {
+											if(item.h5_path === path) {
 												sId = item.id
 											}
 											if(item.child) {
@@ -171,18 +172,18 @@
 									}
 									if(array.indexOf(sId) !== -1) {
 										this.$router.push({
-											path: this.redirect || '/',
+											path: this.redirect || '/dashboard/index',
 											query: this.otherQuery
 										})
 									} else {
 										if(params.child && params.child.length > 0) {
 											let params1 = params.child.find(item => { return item.id === Number(num1) })
 											this.$router.push({
-												path: '/' + params1.h5_path
+												path: params1.h5_path
 											})
 										} else {
 											this.$router.push({
-												path: '/' + params.h5_path
+												path: params.h5_path
 											})
 										}
 									}

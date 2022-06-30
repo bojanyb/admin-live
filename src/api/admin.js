@@ -72,3 +72,21 @@ export function adminStatus(data) {
         data
     })
 }
+
+// 添加菜单
+export function addRule(data) {
+    return request({
+        url: api.system.menu.addRule,
+        method: 'post',
+        data
+    })
+}
+
+// 编辑菜单
+export function editRule(data) {
+    return request({
+        url: api.system.menu.editRule,
+        method: 'post',
+        data
+    })
+}

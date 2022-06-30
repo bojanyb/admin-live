@@ -43,6 +43,10 @@ const request = {
             punishLog: `${HTTPHEADER}/Room/punishLog`, // 待处理处罚
             superUserList: `${HTTPHEADER}/User/superUserList`, // 超管列表
             setSuperUser: `${HTTPHEADER}/User/setSuperUser`, // 设置超管
+        },
+        menu: {
+            addRule: `${HTTPHEADER}/admin/addRule`, // 添加菜单
+            editRule: `${HTTPHEADER}/admin/editRule`, // 编辑菜单
         }
     },
 

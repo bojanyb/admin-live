@@ -4,9 +4,9 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
-        <tableList :cfgs="cfgs" ref="tableList"></tableList>
+        <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
 
-        <addComp ref="addComp"></addComp>
+        <addComp v-if="isDestoryComp" ref="addComp" :menuList="menuList" @destoryComp="destoryComp" @getList="getList"></addComp>
     </div>
 </template>
 
@@ -33,7 +33,8 @@ export default {
     mixins: [mixins],
     data() {
         return {
-            property: 'value',
+            menuList: [],
+            isDestoryComp: false
         };
     },
     computed: {
@@ -61,27 +62,39 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.user.list,
+                url: REQUEST.system.getAllPermission,
                 border: true,
-                defaultExpandAll: true,
-                children: 'children',
-                hasChildren: 'hasChildren',
+                defaultExpandAll: false,
+                children: 'child',
                 columns: [
                     {
-                        label: '用户ID',
-                        width: '95px',
-                        prop: 'user_number'
+                        label: '菜单名称',
+                        prop: 'title',
+                        align: 'left'
                     },
                     {
-                        label: '昵称',
-                        width: '110px',
-                        prop: 'nickname'
+                        label: '排序',
+                        prop: 'sort'
                     },
                     {
-                        label: '头像',
-                        isimg: true,
-                        prop: 'face',
-                        imgWidth: '50px'
+                        label: '路由地址',
+                        prop: 'h5_path'
+                    },
+                    {
+                        label: '状态',
+                        render: (h, params) => {
+                            let data = MAPDATA.MENUSTATUSLIST.find(item => { return item.value === params.row.status })
+                            return h('span', data ? data.name : '无')
+                        }
+                    },
+                    {
+                        label: '操作',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
+                                h('el-button', { props : { type: 'success'}, on: {click:()=>{this.add(params.row)}}}, '新增')
+                            ])
+                        }
                     }
                 ]
             }
@@ -113,8 +126,41 @@ export default {
             this.getList()
         },
         // 新增
-        add() {
-            this.addComp.$refs.dialogVisible = true
+        add(row) {
+            this.load('add', row)
+        },
+        // 修改
+        update(row) {
+            this.load('update', row)
+        },
+        load(status, row) {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.addComp.loadParams(status, row)
+            }, 50);
+        },
+        // 列表返回数据
+        saleAmunt(res) {
+            if(res.list && res.list.length > 0) {
+                let prv = (list) => { // 递归最后一级隐藏箭头
+                    list.forEach(item => {
+                        if(item.child && item.child.length > 0) {
+                            prv(item.child)
+                        } else {
+                            delete item.child
+                        }
+                    })
+                }
+                prv(res.list)
+                
+            }
+            this.menuList = res.list || []
+
+            console.log(this.menuList, 'menuList----------')
+        },
+        // 销毁组件
+        destoryComp() {
+            this.isDestoryComp = false
         }
     }
 }

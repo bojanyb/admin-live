@@ -657,7 +657,7 @@ const MENUSTATUSLIST = [
     },
     {
         name: '停用',
-        value: 2
+        value: 0
     }
 ]
 

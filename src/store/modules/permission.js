@@ -55,47 +55,45 @@ const actions = {
       let admin_id = Number(localStorage.getItem('admin_id'))
       console.log(asyncRoutes, 'asyncRoutes----------')
       editAdmin({ admin_id }).then(res => {
-          let array = []
-          let routes = JSON.parse(JSON.stringify(asyncRoutes))
-          let user_pids = res.data.user_pids
-          res.data.list.forEach(item => {
-            if(user_pids.indexOf(item.id) !== -1) {
-              array.push(item)
-            }
-            if(item.child && item.child.length > 0) {
-              item.child.forEach(a => {
-                if(user_pids.indexOf(a.id) !== -1) {
-                  array.push(a)
-                  if(user_pids.indexOf(item.id) === -1) {
-                    array.push(item)
+        console.log(res, 'res------------')
+        let array = []
+        let arr = JSON.parse(JSON.stringify(res.data.list))
+        let user_pids = res.data.user_pids
+        if(arr && arr.length > 0) { // 递归删除所有不需要展示的菜单
+          let prv = (list, params) => {
+            list.forEach((item,index) => {
+              if(user_pids.indexOf(item.id) === -1 || item.status === 0) {
+                if(item.pid === 0) {
+                  arr.splice(index, 1)
+                  prv(arr)
+                } else {
+                  if(params) {
+                    params.child.splice(index, 1)
+                    prv(item.child, item)
                   }
                 }
-                if(a.child && a.child.length > 0) {
-                  a.child.forEach(x => {
-                    if(user_pids.indexOf(x.id) !== -1) {
-                      array.push(x)
-                      if(user_pids.indexOf(a.id) === -1) {
-                        array.push(a)
-                      }
-                      if(user_pids.indexOf(item.id) === -1) {
-                        array.push(item)
-                      }
-                    }
-                  })
-                }
-              })
-            }
-          })
-          console.log(routes, 'routes----------------')
-          array.forEach(item => {
-            routes.forEach(a => {
+              }
               if(item.child && item.child.length > 0) {
-                // a.
+                prv(item.child, item)
               }
             })
-          })
-          let arr = []
-          console.log(arr.concat(array), 'array------------')
+          }
+          prv(arr)
+
+          console.log(arr, 'arr-------------------')
+
+          let sv = (list, list2) => {
+            list.forEach(item => {
+              list2.forEach(a => {
+                // if(item.)
+              })
+            })
+          }
+
+          sv(arr, asyncRoutes)
+          
+
+        }
       })
       let accessedRoutes
       if (roles.includes('admin')) {
