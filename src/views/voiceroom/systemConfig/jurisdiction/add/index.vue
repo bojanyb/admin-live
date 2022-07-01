@@ -131,14 +131,6 @@ export default {
             if(status !== 'add') {
                 row.user.password = row.user.password_word
                 this.$set(this.$data, 'ruleForm', row.user)
-                row.list.forEach(item => {
-                    if(item.child && item.child.length > 0) {
-                        let params = item.child.find(a => { return !a.checked })
-                        if(params) {
-                            item.checked = false
-                        }
-                    }
-                })
             }
 
             this.jurisdictionList = row.list || []
