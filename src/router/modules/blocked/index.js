@@ -9,7 +9,7 @@ const blockedRouter = {
     name: 'blocked',
     meta: {
         title: '封禁记录',
-        icon: 'form'
+        icon: 'el-icon-folder-delete'
     },
     children: [
         {
