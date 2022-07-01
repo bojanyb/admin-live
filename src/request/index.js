@@ -115,6 +115,11 @@ const request = {
     // 交易管理
     deal: {
         userFlow2: `${HTTPHEADER}/Statistical/userFlow2`
+    },
+
+    // 公会管理
+    guild: {
+        list: `${HTTPHEADER}/Guild/guildList`
     }
 }
 

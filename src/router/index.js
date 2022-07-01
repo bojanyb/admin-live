@@ -8,6 +8,7 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import dashboardRouter from './modules/dashboard'
+import blockedRouter from './modules/blocked'
 import chartsRouter from './modules/charts'
 import voiceroomRouter from './modules/room/voiceroom'
 import systemConfigRouter from './modules/systemConfig/system'
@@ -87,6 +88,7 @@ export const constantRoutes = [{
 
 export const asyncRoutes = [
 	dashboardRouter,
+	blockedRouter,
 	// chartsRouter,
 	userRouter,
 	voiceroomRouter,

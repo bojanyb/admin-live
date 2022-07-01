@@ -22,6 +22,13 @@ import * as filters from './filters' // global filters
 // 引入指令
 import * as directives from '@/utils/directive'
 
+// 引入video插件
+import VideoPlayer from 'vue-video-player'
+require('video.js/dist/video-js.css')
+require('vue-video-player/src/custom-theme.css')
+
+Vue.use(VideoPlayer)
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

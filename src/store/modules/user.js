@@ -143,6 +143,7 @@ const actions = {
 				})
 
 				localStorage.removeItem('admin_id')
+				localStorage.removeItem('jumpPath')
 
 				resolve()
 			}).catch(error => {

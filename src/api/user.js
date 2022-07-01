@@ -27,3 +27,12 @@ export function defaultFace(data) {
     data
   })
 }
+
+// 用户信息
+export function getUser(data) {
+  return request({
+    url: api.user.list,
+    method: 'post',
+    data
+  })
+}

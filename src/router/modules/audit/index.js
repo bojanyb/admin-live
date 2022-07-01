@@ -12,33 +12,23 @@ const userRouter = {
 	},
 	children: [
 		{
-			path: 'user-audit-list',
-			component: () => import('@/views/voiceroom/user/user-audit-list'),
-			name: 'user-audit-list',
+			path: 'user-stayAudit',
+			component: () => import('@/views/voiceroom/user/user-stayAudit'),
+			name: 'user-stayAudit',
 			meta: {
-				title: '用户资料审核列表',
+				title: '待审核',
 				noCache: true
 			}
 		},
 		{
-			path: 'userbg-list',
-			component: () => import('@/views/voiceroom/user/userbg-list'),
-			name: 'userbg-list',
+			path: 'user-endAudit',
+			component: () => import('@/views/voiceroom/user/user-endAudit'),
+			name: 'user-endAudit',
 			meta: {
-				title: '用户图片资料审核列表',
-				noCache: true
-			}
-		},
-		{
-			path: 'dynamic-list',
-			component: () => import('@/views/voiceroom/user/dynamic-list'),
-			name: 'dynamic-list',
-			meta: {
-				title: '动态审核列表',
+				title: '已审核',
 				noCache: true
 			}
 		}
-		
 	]
 }
 
