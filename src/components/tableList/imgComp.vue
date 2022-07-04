@@ -51,6 +51,8 @@ export default {
                     return 'png'
                 } else if(this.src.indexOf('svga') !== -1) {
                     return 'svga'
+                } else {
+                    return 'png'
                 }
             }
         }
