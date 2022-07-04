@@ -60,6 +60,8 @@ export default {
                     return 'svga'
                 } else if(this.src.indexOf('mp4') !== -1) {
                     return 'mp4'
+                } else {
+                    return 'png'
                 }
             }
         }
