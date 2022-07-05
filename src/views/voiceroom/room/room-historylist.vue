@@ -98,7 +98,7 @@
 					columns: [
 						{
 							label: '直播场次ID',
-							prop: 'room_number'
+							prop: 'id'
 						},
 						{
 							label: '房间ID',
