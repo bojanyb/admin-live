@@ -21,6 +21,23 @@ export function formatTime(time, format) {
     return data
 }
 
+// 格式化时间 - 二次
+export function formatTimeTwo(time, format) {
+    let data = null
+    if(time > 60) {
+        if(time > 3600) {
+            let hours = Math.floor(time / 3600)
+            let fen = time - (hours * 3600)
+            data = hours + '小时 ' + parseInt(fen / 60) + '分钟 ' + (time % 60) + '秒钟'
+        } else {
+            data = parseInt(time / 60) + '分钟 ' + (time % 60) + '秒钟'
+        }
+    } else {
+        data = time + '秒钟'
+    }
+    return data
+}
+
 // 礼物 - 错误提示
 export function errStatus(list) {
     let s = list

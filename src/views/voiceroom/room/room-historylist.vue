@@ -27,7 +27,7 @@
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
 	// 引入公共方法
-	import { formatTime } from '@/utils/common.js'
+	import { formatTimeTwo } from '@/utils/common.js'
 
 	export default {
 		name: 'RoomList',
@@ -138,7 +138,7 @@
 							label: '开播时长',
 							render: (h, params) => {
 								let time = params.row.end_time - params.row.start_time
-								let data = formatTime(time)
+								let data = formatTimeTwo(time)
 								return h('span', data ? data : '无')
 							}
 						},
