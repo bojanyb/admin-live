@@ -85,6 +85,15 @@ const voiceroomRouter = {
 				noCache: true
 			}
 		},
+		{
+			path: 'game-list',
+			component: () => import('@/views/voiceroom/room/gameList/index.vue'),
+			name: 'game-list',
+			meta: {
+				title: '游戏配置',
+				noCache: true
+			}
+		},
 	]
 }
 

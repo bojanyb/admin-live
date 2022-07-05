@@ -100,7 +100,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .uploadImg {
     width: 178px;
     height: 178px;
@@ -145,4 +145,6 @@ export default {
         box-sizing: border-box;
     }
 }
+
+
 </style>

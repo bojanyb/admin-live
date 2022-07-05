@@ -171,6 +171,7 @@
             <el-button v-if="showSearchBtn" type="primary" @click="onSearch">查询</el-button>
             <el-button v-if="showReset" icon="el-icon-refresh" @click="reset">重置</el-button>
             <el-button v-if="showAdd" type="success" @click="add">新增</el-button>
+            <el-button v-if="showBatchPass" type="primary" @click="batchPass">批量通过</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -230,6 +231,11 @@ export default {
     },
     // 是否显示新增按钮
     showAdd: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示批量通过按钮
+    showBatchPass: {
       type: Boolean,
       default: false
     },
@@ -400,6 +406,10 @@ export default {
   mounted() {},
   beforeDestroy() {},
   methods: {
+    // 批量通过
+    batchPass() {
+      this.$emit('batchPass')
+    },
     // 新增
     add() {
       this.$emit('add')
