@@ -178,27 +178,8 @@
         if (typeof vm.onSearchSuccess === 'function') {
           stData = vm.onSearchSuccess(res);
         } else {
-          if (res.data) {
-            let list;
-
-            if(res.data.list && res.data.list.length !== 0) {
-              list = res.data.list
-            } else if(res.data.data && res.data.data.length !== 0) {
-              list = res.data.data
-            } else if(res.data) {
-              list = res.data
-            }
-            
-            for (const i in list) {
-              if (typeof list[i] === 'object') {
-                stData.data = list;
-                stData.total = res.data.count;
-              } else {
-                stData.data = [];
-                stData.total = res.data.count || 1;
-              }
-            }
-          }
+          stData.data = res.data.list || res.data.data || res.data || [];
+          stData.total = res.data.count || res.count || 0;
         }
         this.data = stData.data;
 
