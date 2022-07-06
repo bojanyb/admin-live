@@ -65,8 +65,8 @@
 					{
 						name: 'dateTimeParams',
 						type: 'datePicker',
-						dateType: 'daterange',
-						format: "yyyy-MM-dd",
+						dateType: 'datetimerange',
+						format: "yyyy-MM-dd HH:mm:ss",
 						label: '时间选择',
 						value: '',
 						handler: {
@@ -117,7 +117,7 @@
 							prop: 'gift_num'
 						},
 						{
-							label: '金额',
+							label: '喵粮',
 							prop: 'amount'
 						},
 						{
