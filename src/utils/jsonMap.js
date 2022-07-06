@@ -584,6 +584,22 @@ const ROOMTYPELIST = [
     }
 ]
 
+// 直播历史记录 - 解散方式
+const DISSOLUTIONTYPELIST = [
+    {
+        value: 0,
+        name: '房主解散'
+    },
+    {
+        value: 1,
+        name: '超管解散'
+    },
+    {
+        value: 2,
+        name: '后台管理解散'
+    }
+]
+
 // 游戏配置 - 游戏列表
 const PARTYGAMELIST = [
     {
@@ -756,5 +772,6 @@ export default {
     SUPERSTATUSLIST,
     ROOMTYPELIST,
     MENUSTATUSLIST,
-    PARTYGAMELIST
+    PARTYGAMELIST,
+    DISSOLUTIONTYPELIST
 }

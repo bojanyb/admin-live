@@ -58,94 +58,94 @@ const actions = {
         let arr = JSON.parse(JSON.stringify(res.data.list))
         let user_pids = res.data.user_pids
         if(arr && arr.length > 0) { // 递归删除所有不需要展示的菜单
-          // let prv = (list, params) => {
-          //   list.forEach((item,index) => {
-          //     if(user_pids.indexOf(item.id) === -1 || item.status === 0) {
-          //       if(item.pid === 0) {
-          //         arr.splice(index, 1)
-          //         prv(arr)
-          //       } else {
-          //         if(params) {
-          //           params.child.splice(index, 1)
-          //           prv(item.child, item)
-          //         }
-          //       }
-          //     }
-          //     if(item.child && item.child.length > 0) {
-          //       prv(item.child, item)
-          //     }
-          //   })
-          // }
-          // prv(arr)
+          let prv = (list, params) => {
+            list.forEach((item,index) => {
+              if(user_pids.indexOf(item.id) === -1 || item.status === 0) {
+                if(item.pid === 0) {
+                  arr.splice(index, 1)
+                  prv(arr)
+                } else {
+                  if(params) {
+                    params.child.splice(index, 1)
+                    prv(item.child, item)
+                  }
+                }
+              }
+              if(item.child && item.child.length > 0) {
+                prv(item.child, item)
+              }
+            })
+          }
+          prv(arr)
 
 
-          // let sv = (list, list2) => {
-          //   list.forEach(item => {
-          //     list2.forEach(a => {
-          //       if(item.h5_path === a.path) {
-          //         item.params = {
-          //           component: a.component,
-          //           meta: a.meta,
-          //           name: a.name,
-          //           path: a.path,
-          //           redirect: a.redirect
-          //         }
-          //       }
-          //       if(item.child && item.child.length > 0 && a.children && a.children.length > 0) {
-          //         sv(item.child, a.children)
-          //       }
-          //     })
-          //   })
-          // }
+          let sv = (list, list2) => {
+            list.forEach(item => {
+              list2.forEach(a => {
+                if(item.h5_path === a.path && a.component) {
+                  item.params = {
+                    component: a.component,
+                    meta: a.meta,
+                    name: a.name,
+                    path: a.path,
+                    redirect: a.redirect
+                  }
+                }
+                if(item.child && item.child.length > 0 && a.children && a.children.length > 0) {
+                  sv(item.child, a.children)
+                }
+              })
+            })
+          }
 
-          // sv(arr, asyncRoutes)
+          sv(arr, asyncRoutes)
 
-          // arr.forEach((item,index) => {
-          //   array.push({
-          //     component: item.params.component,
-          //     meta: item.params.meta,
-          //     name: item.params.name,
-          //     path: item.params.path,
-          //     redirect: item.params.redirect
-          //   })
-          //   array[index].meta.title = item.title
-          //   if(item.child && item.child.length > 0) {
-          //     array[index].children = []
-          //     item.child.forEach((a,b) => {
-          //       array[index].children.push({
-          //         component: a.params.component,
-          //         meta: a.params.meta,
-          //         name: a.params.name,
-          //         path: a.params.path,
-          //       })
-          //       array[index].children[b].meta.title = a.title
-          //       if(a.child && a.child.length > 0) {
-          //         array[index].children[b].children = []
-          //         a.child.forEach((x,s) => {
-          //           array[index].children[b].children.push({
-          //             component: x.params.component,
-          //             meta: x.params.meta,
-          //             path: x.params.path,
-          //             name: x.params.name,
-          //           })
-          //           array[index].children[b].children[s].meta.title = x.title
-          //         })
-          //       }
-          //     })
-          //   }
-          // })
+          arr.forEach((item,index) => {
+            array.push({
+              component: item.params.component,
+              meta: item.params.meta,
+              name: item.params.name,
+              path: item.params.path,
+              redirect: item.params.redirect
+            })
+            array[index].meta.title = item.title
+            if(item.child && item.child.length > 0) {
+              array[index].children = []
+              item.child.forEach((a,b) => {
+                array[index].children.push({
+                  component: a.params.component,
+                  meta: a.params.meta,
+                  name: a.params.name,
+                  path: a.params.path,
+                })
+                array[index].children[b].meta.title = a.title
+                if(a.child && a.child.length > 0) {
+                  array[index].children[b].children = []
+                  a.child.forEach((x,s) => {
+                    array[index].children[b].children.push({
+                      component: x.params.component,
+                      meta: x.params.meta,
+                      path: x.params.path,
+                      name: x.params.name,
+                    })
+                    array[index].children[b].children[s].meta.title = x.title
+                  })
+                }
+              })
+            }
+          })
 
-          // array.push({
-          //   path: '*',
-          //   redirect: '/404',
-          //   hidden: true
-          // })
+          array.push({
+            path: '*',
+            redirect: '/404',
+            hidden: true
+          })
 
           let accessedRoutes
           if (roles.includes('admin')) {
-            accessedRoutes = asyncRoutes || []
+            accessedRoutes = array || []
           } else {
-            accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+            accessedRoutes = filterAsyncRoutes(array, roles)
           }
 
           commit('SET_ROUTES', accessedRoutes)

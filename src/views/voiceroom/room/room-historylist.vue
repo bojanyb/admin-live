@@ -142,31 +142,35 @@
 								return h('span', data ? data : '无')
 							}
 						},
-						// {
-						// 	label: '进入房间人数',
-						// 	width: '120px',
-						// 	prop: 'people'
-						// },
-						// {
-						// 	label: '付费人数',
-						// 	width: '95px',
-						// 	prop: 'people'
-						// },
-						// {
-						// 	label: '本场流水（喵粮）',
-						// 	width: '140px',
-						// 	prop: 'people'
-						// },
-						// {
-						// 	label: '解散方式',
-						// 	width: '95px',
-						// 	prop: 'people'
-						// },
-						// {
-						// 	label: '解散人',
-						// 	width: '95px',
-						// 	prop: 'people'
-						// }
+						{
+							label: '进入房间人数',
+							width: '120px',
+							prop: 'enter_user_count'
+						},
+						{
+							label: '付费人数',
+							width: '95px',
+							prop: 'consume_user_count'
+						},
+						{
+							label: '本场流水（喵粮）',
+							width: '140px',
+							prop: 'total_gain'
+						},
+						{
+							label: '解散方式',
+							width: '95px',
+							prop: 'people',
+							render: (h, params) => {
+								let data = MAPDATA.DISSOLUTIONTYPELIST.find(item => { return params.row.disband_type === item.value })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '解散人',
+							width: '95px',
+							prop: 'disband_username'
+						}
 					]
 				}
 			}
