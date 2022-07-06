@@ -416,7 +416,7 @@ export default {
     },
     // 重置
     reset() {
-      this.$refs.dataForm.resetFields()
+      // this.$refs.dataForm.resetFields()
       this.$emit('onReset', null)
     },
     // 搜索

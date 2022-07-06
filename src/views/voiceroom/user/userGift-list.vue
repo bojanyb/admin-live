@@ -161,7 +161,10 @@
 			},
 			// 重置
 			reset() {
-				this.searchParams = {}
+				this.searchParams = {
+					iSelect: 'all',
+					inputSelect: ''
+				}
 				this.getList()
 			},
 			// 查询

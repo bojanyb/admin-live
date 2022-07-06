@@ -27,7 +27,7 @@
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
 	// 引入公共方法
-	import { formatTime } from '@/utils/common.js'
+	import { formatTimeTwo } from '@/utils/common.js'
 
 	export default {
 		name: 'RoomList',
@@ -57,25 +57,31 @@
 			forms() {
 				return [
 					{
-						name: 'room_number',
-						type: 'input',
+						name: 'inputSelect',
 						value: '',
-						label: '房间号码',
-						isNum: true,
-						placeholder: '请输入房间号码'
+						selectName: 'iSelect',
+						type: 'inputSelect',
+						placeholder: '请输入ID',
+						selectPlaceholder: '请选择',
+						selctValue: 'room',
+						keyName: 'key',
+						optionLabel: 'label',
+						selectWidth: '130px',
+						handler: {
+							change: (v) => {
+								console.log(v, 'v----')
+								if(v == 'code') {
+									// this.$set(this.searchParams, 'live_user_number', )
+								}
+							}
+						},
+						options: [
+							{ key: 'room', label: '房间ID' },
+							{ key: 'user', label: '房主ID' }
+						]
 					},
 					{
-						name: 'is_live',
-						type: 'select',
-						value: '',
-						keyName: 'value',
-						optionLabel: 'name',
-						label: '直播状态',
-						placeholder: '请选择',
-						options: MAPDATA.ROOMSTATUSLIST
-					},
-					{
-						name: 'guild_number',
+						name: 'guild_id',
 						type: 'input',
 						value: '',
 						label: '工会',
@@ -87,87 +93,80 @@
 			cfgs() {
 				return {
 					vm: this,
-					url: REQUEST.room.roomList,
+					url: REQUEST.room.liveRoomHistory,
 					isShowIndex: true,
 					columns: [
 						{
 							label: '直播场次ID',
-							width: '100px',
-							prop: 'room_number'
+							prop: 'id'
 						},
 						{
 							label: '房间ID',
-							width: '100px',
 							prop: 'room_number'
 						},
 						{
 							label: '房间名称',
-							width: '180px',
 							prop: 'room_name'
 						},
 						{
 							label: '房间类型',
-							width: '100px',
 							prop: 'room_genre_name'
 						},
 						{
 							label: '房主ID',
-							width: '100px',
-							prop: 'live_user_number'
+							prop: 'user_number'
 						},
 						{
 							label: '所属公会',
 							render: (h, params) => {
-								return h('span', params.row.guild_number || '无')
+								return h('span', params.row.guild_name || '无')
 							}
 						},
 						{
 							label: '开播时间',
-							width: '180px',
 							render: (h, params) => {
 								return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
 						{
 							label: '结束时间',
-							width: '180px',
 							render: (h, params) => {
 								return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
 						{
 							label: '开播时长',
-							width: '120px',
 							render: (h, params) => {
-								let data = formatTime(params.row.live_time)
+								let time = params.row.end_time - params.row.start_time
+								let data = formatTimeTwo(time)
 								return h('span', data ? data : '无')
 							}
 						},
-						{
-							label: '进入房间人数',
-							width: '120px',
-							prop: 'people'
-						},
-						{
-							label: '付费人数',
-							width: '95px',
-							prop: 'people'
-						},
-						{
-							label: '本场流水（喵粮）',
-							width: '140px',
-							prop: 'people'
-						},
-						{
-							label: '解散方式',
-							width: '95px',
-							prop: 'people'
-						},
-						{
-							label: '解散人',
-							width: '95px',
-							prop: 'people'
-						}
+						// {
+						// 	label: '进入房间人数',
+						// 	width: '120px',
+						// 	prop: 'people'
+						// },
+						// {
+						// 	label: '付费人数',
+						// 	width: '95px',
+						// 	prop: 'people'
+						// },
+						// {
+						// 	label: '本场流水（喵粮）',
+						// 	width: '140px',
+						// 	prop: 'people'
+						// },
+						// {
+						// 	label: '解散方式',
+						// 	width: '95px',
+						// 	prop: 'people'
+						// },
+						// {
+						// 	label: '解散人',
+						// 	width: '95px',
+						// 	prop: 'people'
+						// }
 					]
 				}
 			}
@@ -176,12 +175,19 @@
 			// 配置参数
 			beforeSearch(params) {
 				let s = { ...this.searchParams }
+				s.room_number = s.inputSelect
+				s.user_number = s.inputSelect
+				if(s.iSelect === 'room') {
+					delete s.user_number
+				} else if(s.iSelect === 'user') {
+					delete s.room_number
+				}
 				return {
 					page: params.page,
 					pagesize: params.size,
 					room_number: s.room_number,
-					is_live: s.is_live,
-					guild_number: s.guild_number
+					user_number: s.user_number,
+					guild_id: s.guild_number
 				}
 			},
 			// 刷新列表
@@ -190,9 +196,9 @@
 			},
 			// 重置
 			reset() {
-				this.searchParams = {}
-				this.dateTimeParams = {
-					activity_type_id: 1
+				this.searchParams = {
+					iSelect: 'room',
+					inputSelect: ''
 				}
 				this.getList()
 			},
