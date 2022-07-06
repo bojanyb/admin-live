@@ -198,15 +198,18 @@
 											path: this.redirect || '/',
 											query: this.otherQuery
 										})
+										localStorage.setItem('jumpPath', this.redirect)
 									} else {
 										if(arr[0].child && arr[0].child.length > 0 && arr[0].child[0].child.length <= 0) {
 											this.$router.push({ // 找不到记录取权限第一个跳转
 												path: arr[0].child[0].path
 											})
+											localStorage.setItem('jumpPath', arr[0].child[0].path) // 存储路由
 										} else {
 											this.$router.push({ // 找不到二级权限往三级查找跳转
 												path: arr[0].child[0].child[0].path
 											})
+											localStorage.setItem('jumpPath', arr[0].child[0].child[0].path) // 存储路由
 										}
 									}
 

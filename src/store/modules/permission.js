@@ -1,6 +1,7 @@
 import { asyncRoutes, constantRoutes } from '@/router'
 // 引入api
 import { editAdmin } from '@/api/admin.js'
+import Layout from '@/layout'
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -139,6 +140,14 @@ const actions = {
             path: '*',
             redirect: '/404',
             hidden: true
+          })
+
+          // 获取储存路由
+          let jumpPath = localStorage.getItem('jumpPath')
+          array.push({
+            path: '/',
+            component: Layout,
+            redirect: jumpPath
           })
 
           let accessedRoutes

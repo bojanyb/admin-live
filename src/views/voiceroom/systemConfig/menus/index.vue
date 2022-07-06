@@ -93,7 +93,7 @@ export default {
                             return h('div', [
                                 h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
                                 h('el-button', { props : { type: 'success'}, style: {
-                                    display: params.row.child && params.row.child.length > 0 ? 'unset' : 'none'
+                                    display: params.row.child && params.row.child.length > 0 ? 'unset' : 'unset'
                                 }, on: {click:()=>{this.add(params.row)}}}, '新增')
                             ])
                         }

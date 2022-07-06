@@ -1,5 +1,5 @@
 <template>
-	<div class="app-container">
+	<div class="room-blocked-box">
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
@@ -22,7 +22,7 @@
 	// 引入列表组件
 	import tableList from '@/components/tableList/TableList.vue'
 	// 引入编辑组件
-	import roomEdit from './components/roomEdit.vue'
+	// import roomEdit from './components/roomEdit.vue'
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
@@ -38,7 +38,6 @@
 		components: {
 			SearchPanel,
 			tableList,
-			roomEdit
 		},
 		data() {
 			return {
@@ -52,43 +51,40 @@
 						name: 'room_number',
 						type: 'input',
 						value: '',
-						label: '房间ID',
+						label: '用户ID',
 						isNum: true,
-						placeholder: '请输入房间ID'
-					},
-					{
-						name: 'guild_number',
-						type: 'input',
-						value: '',
-						label: '工会ID',
-						isNum: true,
-						placeholder: '请输入工会ID'
-					},
+						placeholder: '请输入用户ID'
+					}
 				]
 			},
 			cfgs() {
 				return {
 					vm: this,
 					url: REQUEST.room.roomList,
-					isShowIndex: true,
 					columns: [
 						{
 							label: '房间ID',
 							prop: 'room_number'
 						},
-						{
-							label: '房间名称',
-							prop: 'room_name'
-						},
-						{
+                        {
 							label: '房主ID',
 							prop: 'live_user_number'
 						},
 						{
-							label: '所属公会',
-							render: (h, params) => {
-								return h('span', params.row.guild_number || '无')
-							}
+							label: '房主名称',
+							prop: 'room_name'
+						},
+                        {
+							label: '封禁时间',
+							prop: 'room_name'
+						},
+                        {
+							label: '封禁时长',
+							prop: 'room_name'
+						},
+                        {
+							label: '封禁原因',
+							prop: 'room_name'
 						},
 						{
 							label: '状态',
@@ -97,18 +93,13 @@
 								return h('span', data ? data.name : '无')
 							}
 						},
-						{
-							label: '操作',
-							render: (h, params) => {
-								return h('div', [
-									h('el-button', { props : { type: 'primary'}, style: {
-										display: params.row.status == 1 ? 'unset' : 'none'
-									}, on: {click:()=>{this.editFunc(params.row)}}},'编辑'),
-									h('el-button', { props : { type: 'danger'}, style: {
-										display: params.row.status == 3 ? 'unset' : 'none'
-									}, on: {click:()=>{this.deblocking(params.row)}}},'解封'),
-								])
-							}
+                        {
+							label: '创建时间',
+							prop: 'room_name'
+						},
+                        {
+							label: '操作人',
+							prop: 'room_name'
 						}
 					]
 				}
@@ -214,20 +205,10 @@
 		}
 	}
 </script>
+
 <style lang="scss" scoped="scoped">
-	.el-form-item {
-		// margin-bottom: initial;
-	}
-
-	.pagination-container {
-		margin-top: initial;
-	}
-
-	.colorNormal {
-		color: #67C23A;
-	}
-
-	.colorDel {
-		color: #F56C6C;
-	}
+.room-blocked-box {
+    padding: 20px;
+    box-sizing: border-box;
+}
 </style>

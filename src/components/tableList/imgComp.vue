@@ -1,14 +1,18 @@
 <template>
     <div class="imgComp-box">
-        <el-image v-if="isSpecial === 'png'" :src="src || $store.state.defaultImg" :style="{width: width,height: height}"
-            :preview-src-list="[previewSrcList||$store.state.defaultImg]">
+        <el-image v-if="isSpecial === 'png'" :src="src || imgUrl" :style="{width: width,height: height}"
+            :preview-src-list="[previewSrcList||imgUrl]">
             <div slot="error" class="image-slot">
-              <img :src="$store.state.loadingError" />
+              <img :src="imgUrl" />
             </div>
         </el-image>
 
         <div class="svgaBox" v-if="isSpecial === 'svga'" @click="zoomClick">
             <svgComp ref="svgComp" :src="src" :styleObj="{ width: width, height: height }" ></svgComp>
+        </div>
+
+        <div class="videoBox" v-if="isSpecial === 'mp4'">
+            <videoPlayerComp ref="videoPlayerComp" :url="src"></videoPlayerComp>
         </div>
 
 
@@ -22,9 +26,12 @@
 <script>
 // 引入svg组件
 import svgComp from '@/components/svgComp/index.vue'
+// 引入视频组件
+import videoPlayerComp from '@/components/videoPlayer/index'
 export default {
     components: {
-        svgComp
+        svgComp,
+        videoPlayerComp
     },
     props: {
         src: { // 图片地址
@@ -51,6 +58,8 @@ export default {
                     return 'png'
                 } else if(this.src.indexOf('svga') !== -1) {
                     return 'svga'
+                } else if(this.src.indexOf('mp4') !== -1) {
+                    return 'mp4'
                 } else {
                     return 'png'
                 }
@@ -60,6 +69,7 @@ export default {
     data() {
         return {
             isShowZoom: false,
+            imgUrl: require('@/assets/error.png')
         };
     },
     methods: {
