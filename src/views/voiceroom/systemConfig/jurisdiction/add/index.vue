@@ -152,15 +152,28 @@ export default {
                 }
             } else if(val === 2) { // 二级树选中
                 prv(this.jurisdictionList[index].child[b].child) // 递归下面所有子级选中
-                let params = this.jurisdictionList[index].child.find(item => { return !item.checked }) // 查找当前层级是不是所有都未选中
-                if(!params) {
+                let params = this.jurisdictionList[index].child.find(item => { return item.checked }) // 查找当前层级是不是所有都未选中
+                if(params) {
                     this.$set(this.jurisdictionList[index], 'checked', true)
+                } else {
+                    this.$set(this.jurisdictionList[index], 'checked', false)
                 }
             } else if(val === 3) { // 三级树选中
-                let params = this.jurisdictionList[index].child[b].child.find(item => { return !item.checked }) // 查找当前层级是不是所有都未选中
-                if(!params) {
+                let params = this.jurisdictionList[index].child[b].child.find(item => { return item.checked }) // 查找当前层级是不是所有都未选中
+                if(params) {
                     this.$set(this.jurisdictionList[index].child[b], 'checked', true)
                     this.$set(this.jurisdictionList[index], 'checked', true)
+                } else {
+                    this.$set(this.jurisdictionList[index].child[b], 'checked', false)
+                }
+                let arr = []
+                this.jurisdictionList[index].child.forEach(item => {
+                    let data = item.child.find(a => { return a.checked })
+                    arr.push(data)
+                })
+                let params2 = arr.find(item => { return item })
+                if(!params2) {
+                    this.$set(this.jurisdictionList[index], 'checked', false)
                 }
             }
         },
