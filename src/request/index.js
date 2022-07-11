@@ -120,7 +120,9 @@ const request = {
 
     // 公会管理
     guild: {
-        list: `${HTTPHEADER}/Guild/guildList`
+        list: `${HTTPHEADER}/Guild/guildList`, // 公会列表
+        getGuildUserList: `${HTTPHEADER}/guild/getGuildUserList`, // 成员明细
+        addGuildUser: `${HTTPHEADER}/guild/addGuildUser`, // 添加工会成员
     }
 }
 

@@ -12,7 +12,7 @@
             <div class="formBox">
                 <div class="inputBox">
                     <el-input v-model="user_id" placeholder="请输入成员ID"></el-input>
-                    <el-button type="success" @click="addUser">添加</el-button>
+                    <el-button type="success" @keyup.native.enter="addUser" @click="addUser">添加</el-button>
                 </div>
                 <div class="userListBox">
                     <div class="userBox" v-for="(item, index) in userList" :key="item.id">
@@ -122,8 +122,11 @@ export default {
                 }
                 >span.name {
                     margin: 0px 30px 0px 70px;
-                    display: flex;
+                    display: block;
                     width: 115px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
                 }
             }
             

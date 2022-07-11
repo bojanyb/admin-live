@@ -39,6 +39,12 @@ import mixins from '@/utils/mixins.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
+    props: {
+        guildParams: {
+            type: Object,
+            default: {}
+        }
+    },
     mixins: [mixins],
     components: {
         tableList,
@@ -48,7 +54,7 @@ export default {
         cfgs1() {
             return {
                 vm: this,
-                url: REQUEST.guild.list,
+                url: REQUEST.guild.getGuildUserList,
                 columns: [
                     {
                         label: '成员ID',
@@ -148,6 +154,15 @@ export default {
         this.cfgs = this.cfgs1
     },
     methods: {
+        // 配置参数
+        beforeSearch(params) {
+            let s = { ...this.guildParams }
+            return {
+                page: params.page,
+                pagesize: params.size,
+                guild_id: s.guild_number
+            }
+        },
         // 移除
         deleteParams(row, status) {
             this.$confirm('是否确定移除?', '提示', {

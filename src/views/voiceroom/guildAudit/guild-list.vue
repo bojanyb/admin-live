@@ -10,7 +10,7 @@
 		<editComp ref="editComp" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></editComp>
 
 		<!-- 明细组件 -->
-		<guildDetails ref="guildDetails"></guildDetails>
+		<guildDetails ref="guildDetails" :guildParams="guildParams"></guildDetails>
 	</div>
 </template>
 
@@ -44,7 +44,8 @@
 		},
 		data() {
 			return {
-				isDestoryComp: false
+				isDestoryComp: false,
+				guildParams: {}
 			}
 		},
 		computed: {
@@ -179,7 +180,8 @@
 				}, 50);
 			},
 			// 明细
-			details() {
+			details(row) {
+				this.guildParams = row
 				this.$refs.guildDetails.dialogVisible = true
 			},
 			// 解散公会

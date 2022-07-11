@@ -83,7 +83,7 @@ const actions = {
           let sv = (list, list2) => {
             list.forEach(item => {
               list2.forEach(a => {
-                if(item.h5_path === a.path && a.component) {
+                if(item.h5_path === a.path) {
                   item.params = {
                     component: a.component,
                     meta: a.meta,
