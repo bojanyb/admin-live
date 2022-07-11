@@ -143,7 +143,7 @@ export default {
     data() {
         return {
             status: 'add',
-            code: 'zzbx',
+            code: 'wzbx',
             dialogVisible: false,
             activetyList: [],
             ruleForm: {

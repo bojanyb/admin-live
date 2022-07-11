@@ -51,16 +51,16 @@
 						name: 'room_number',
 						type: 'input',
 						value: '',
-						label: '用户ID',
+						label: '房间ID',
 						isNum: true,
-						placeholder: '请输入用户ID'
+						placeholder: '请输入房间ID'
 					}
 				]
 			},
 			cfgs() {
 				return {
 					vm: this,
-					url: REQUEST.room.roomList,
+					url: REQUEST.blocked.bannedRoomLog,
 					columns: [
 						{
 							label: '房间ID',
@@ -68,38 +68,48 @@
 						},
                         {
 							label: '房主ID',
-							prop: 'live_user_number'
+							prop: 'user_number'
 						},
 						{
 							label: '房主名称',
-							prop: 'room_name'
+							prop: 'nickname'
 						},
                         {
 							label: '封禁时间',
-							prop: 'room_name'
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
 						},
                         {
 							label: '封禁时长',
-							prop: 'room_name'
+							render: (h, params) => {
+								return h('span', params.row.duration || '无')
+							}
 						},
                         {
 							label: '封禁原因',
-							prop: 'room_name'
+							render: (h, params) => {
+								return h('span', params.row.remark || '无')
+							}
 						},
 						{
 							label: '状态',
 							render: (h, params) => {
-								let data = MAPDATA.ROOMCARDSTATUSLIST.find(item => { return item.value === params.row.status })
+								let data = MAPDATA.USERBLOCKEDSTATUSLIST.find(item => { return item.value === params.row.status })
 								return h('span', data ? data.name : '无')
 							}
 						},
                         {
 							label: '创建时间',
-							prop: 'room_name'
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
 						},
                         {
 							label: '操作人',
-							prop: 'room_name'
+							render: (h, params) => {
+								return h('span', params.row.admin_nickname || '无')
+							}
 						}
 					]
 				}
@@ -112,9 +122,7 @@
 				return {
 					page: params.page,
 					pagesize: params.size,
-					room_number: s.room_number,
-					is_live: s.is_live,
-					guild_number: s.guild_number
+					room_number: s.room_number
 				}
 			},
 			// 刷新列表
@@ -124,9 +132,6 @@
 			// 重置
 			reset() {
 				this.searchParams = {}
-				this.dateTimeParams = {
-					activity_type_id: 1
-				}
 				this.getList()
 			},
 			// 查询

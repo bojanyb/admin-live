@@ -1,5 +1,5 @@
 <template>
-	<div class="app-container">
+	<div class="room-list-box">
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
@@ -7,7 +7,7 @@
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
 		<!-- 编辑组件 -->
-		<roomEdit ref="roomEdit" v-if="isDestoryComp" @destoryComp="destoryComp"></roomEdit>
+		<roomEdit ref="roomEdit" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></roomEdit>
 	</div>
 </template>
 
@@ -133,9 +133,6 @@
 			// 重置
 			reset() {
 				this.searchParams = {}
-				this.dateTimeParams = {
-					activity_type_id: 1
-				}
 				this.getList()
 			},
 			// 查询
@@ -189,22 +186,18 @@
 			editFunc(row) {
 				this.isDestoryComp = true
 				setTimeout(() => {
-					this.$refs.roomEdit.dialogVisible = true
+					this.$refs.roomEdit.loadParams(row)
 				}, 50);
 			},
 
 			// 解封
-			deblocking(row) {
-				this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					});
-				}).catch(() => {});
+			async deblocking(row) {
+				let params = {
+					room_number: row.room_number,
+					status: 1
+				}
+				await getRoomSave(params)
+				this.getList()
 			},
 
 			// 销毁组件
@@ -214,20 +207,14 @@
 		}
 	}
 </script>
-<style lang="scss" scoped="scoped">
-	.el-form-item {
-		// margin-bottom: initial;
+<style lang="scss">
+.room-list-box {
+	padding: 20px;
+	box-sizing: border-box;
+	.el-table {
+		.el-button {
+			margin-left: 0px;
+		}
 	}
-
-	.pagination-container {
-		margin-top: initial;
-	}
-
-	.colorNormal {
-		color: #67C23A;
-	}
-
-	.colorDel {
-		color: #F56C6C;
-	}
+}
 </style>

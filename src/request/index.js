@@ -97,6 +97,7 @@ const request = {
         roomList: `${HTTPHEADER}/Room/room`,
         roomBg: `${HTTPHEADER}/room/roomBg`,
         liveRoomHistory: `${HTTPHEADER}/Room/liveRoomHistory`,
+        roomGameList: `${HTTPHEADER}/Room/roomGameList`, // 房间游戏列表
     },
 
     // 用户管理
@@ -123,6 +124,16 @@ const request = {
         list: `${HTTPHEADER}/Guild/guildList`, // 公会列表
         getGuildUserList: `${HTTPHEADER}/guild/getGuildUserList`, // 成员明细
         addGuildUser: `${HTTPHEADER}/guild/addGuildUser`, // 添加工会成员
+        getGuildRoomList: `${HTTPHEADER}/guild/getGuildRoomList`, // 绑定厅列表
+        removeGuildUser: `${HTTPHEADER}/guild/removeGuildUser`, // 删除工会成员
+        removeGuildRoom: `${HTTPHEADER}/guild/removeGuildRoom`, // 移除大厅
+        disbandGuild: `${HTTPHEADER}/guild/disbandGuild`, // 解散工会
+    },
+
+    // 封禁记录
+    blocked: {
+        bannedUserLog: `${HTTPHEADER}/User/bannedUserLog`, // 封禁用户记录
+        bannedRoomLog: `${HTTPHEADER}/Room/bannedRoomLog`, // 封禁房间记录
     }
 }
 

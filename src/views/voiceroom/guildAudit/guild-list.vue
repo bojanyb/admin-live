@@ -10,12 +10,13 @@
 		<editComp ref="editComp" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></editComp>
 
 		<!-- 明细组件 -->
-		<guildDetails ref="guildDetails" :guildParams="guildParams"></guildDetails>
+		<guildDetails v-if="isDestoryComp" ref="guildDetails" :guildParams="guildParams" @getList="getList" @destoryComp="destoryComp"></guildDetails>
 	</div>
 </template>
 
 <script>
-
+	// 引入api
+	import { disbandGuild } from '@/api/user.js'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -181,25 +182,33 @@
 			},
 			// 明细
 			details(row) {
+				this.isDestoryComp = true
 				this.guildParams = row
-				this.$refs.guildDetails.dialogVisible = true
+				setTimeout(() => {
+					this.$refs.guildDetails.dialogVisible = true
+				}, 50);
 			},
 			// 解散公会
-			deleteParams() {
+			async deleteParams(row) {
 				this.$confirm('是否确认解散公会?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
-				}).then(() => {
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					});
+				}).then(async () => {
+					let res = await disbandGuild({ guild_id: row.id })
+					if(res.code === 2000) {
+						this.$message({
+							type: 'success',
+							message: '删除成功!'
+						});
+						this.getList()
+					}
 				}).catch(() => {});
 			},
 			// 销毁组件
 			destoryComp() {
 				this.isDestoryComp = false
+				this.getList()
 			}
 		}
 	}

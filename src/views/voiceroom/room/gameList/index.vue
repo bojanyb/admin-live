@@ -13,22 +13,18 @@
                         </el-option>
                     </el-select>
                 </div>
-                <!-- <el-button type="primary">编辑</el-button> -->
             </div>
 
             <div class="gameBox">
                 <div v-for="(item,index) in selectList" :key="item.value">
                     <div class="uploadBox">
-                        <uploadImg v-model="item.img" :imgUrl="item.img" ref="uploadImg" accept=".png,.jpg,.jpeg" :beforeUpload="beforeUpload"></uploadImg>
+                        <img :src="item.url" alt="">
                     </div>
                     <span class="name"><span>名称：</span> {{ item.name }}</span>
                     <span class="nickname"><span>昵称：</span> {{ item.nickname }}</span>
                     <span><span>特色：</span> {{ item.feature }}</span>
                     
                     <span class="closeBox" @click="deleteParams(index)">删除</span>
-                    <!-- <div class="statisticsBox">
-                        <span><span>统计：</span><span>50</span></span>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -36,14 +32,11 @@
 </template>
 
 <script>
+// 引入api
+import { roomGameList } from '@/api/user.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
-// 引入图片上传组件
-import uploadImg from '@/components/uploadImg/index.vue'
 export default {
-    components: {
-        uploadImg
-    },
     data() {
         return {
             value1: '',
@@ -54,6 +47,11 @@ export default {
     methods: {
         // 选择游戏
         gameChange(v) {
+            let params = { ids: v.toString() }
+            this.getRoomGame(params)
+        },
+        // 设置游戏
+        setGame(v) {
             let array = []
             if(v && v.length > 0) {
                 v.forEach(item => {
@@ -66,9 +64,23 @@ export default {
         // 删除
         deleteParams(index) {
             this.selectList.splice(index, 1)
+            this.value1.splice(index, 1)
+            this.gameChange(this.value1)
         },
         // 限制图片
-        beforeUpload() {}
+        beforeUpload() {},
+        // 获取所有游戏
+        async getRoomGame(params) {
+            let res = await roomGameList(params)
+            if(res.data.ids) {
+                let arr = res.data.ids.split(',')
+                this.value1 = arr.map(a => { return Number(a) })
+                this.setGame(this.value1)
+            }
+        }
+    },
+    mounted() {
+        this.getRoomGame()
     }
 }
 </script>
@@ -105,35 +117,9 @@ export default {
                 overflow: hidden;
                 .uploadBox {
                     margin-right: 20px;
-                    .uploadImg {
-                        width: 50px !important;
-                        height: 50px !important;
-                        .el-form-item__content {
-                            width: 50px !important;
-                            height: 50px !important;
-                        }
-                        .el-upload--text {
-                            width: 50px !important;
-                            height: 50px !important;
-                        }
-                        .avatar-uploader-icon {
-                            width: 50px !important;
-                            height: 50px !important;
-                            line-height: 50px !important;
-                        }
-                        .el-upload {
-                            width: 50px !important;
-                            height: 50px !important;
-                            border: none !important;
-                        }
-                        .avatar-uploader {
-                            width: 50px !important;
-                            height: 50px !important;
-                        }
-                        .avatar {
-                            width: 50px !important;
-                            height: 50px !important;
-                        }
+                    >img {
+                        width: 50px;
+                        height: 50px;
                     }
                 }
                 .nickname {

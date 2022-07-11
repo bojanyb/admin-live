@@ -12,7 +12,7 @@
             <div class="formBox">
                 <div class="inputBox">
                     <el-input v-model="user_id" placeholder="请输入成员ID"></el-input>
-                    <el-button type="success" @keyup.native.enter="addUser" @click="addUser">添加</el-button>
+                    <el-button type="success" @keyup.native.enter="addUser" @click="addUser">查询</el-button>
                 </div>
                 <div class="userListBox">
                     <div class="userBox" v-for="(item, index) in userList" :key="item.id">
@@ -27,7 +27,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                <el-button type="primary" @click="submit">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -35,9 +35,15 @@
 
 <script>
 // 引入api
-import { getUser } from '@/api/user.js'
+import { getUser, addGuildUser } from '@/api/user.js'
 
 export default {
+    props: {
+        guildParams: {
+            type: Object,
+            default: {}
+        }
+    },
     data() {
         return {
             dialogVisible: false,
@@ -64,16 +70,42 @@ export default {
                 let isPush = false
                 if(this.userList && this.userList.length > 0) {
                     this.userList.forEach(item => {
-                        if(this.user_id === item.user_number) {
+                        if(Number(this.user_id) === item.user_number) {
+                            console.log(item.user_number, 'user_number----')
                             isPush = true
                         }
                     })
                 }
+                console.log(this.user_id, 'user_id----')
                 if(!isPush) {
                     this.userList.push(...res.data.list)
                     this.user_id = ''
+                } else {
+                    this.$message.error('当前用户已添加')
                 }
             }
+        },
+        // 提交
+        async submit() {
+            if(this.userList.length >= 0) {
+                let params = {
+                    user_id: [],
+                    guild_id: this.guildParams.id
+                }
+                this.userList.forEach(item => {
+                    params.user_id.push(item.id)
+                })
+                params.user_id = JSON.stringify(params.user_id)
+                let res = await addGuildUser(params)
+                if(res.code === 2000) {
+                    this.$message.success('添加成功')
+                }
+                this.dialogVisible = false
+                this.$emit('getList')
+            } else {
+                this.$message.error('请先查询用户')
+            }
+            
         },
         // 删除
         deleteData(index) {

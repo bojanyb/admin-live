@@ -7,13 +7,16 @@
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
-                <el-form-item label="修改名称" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
+                <el-form-item label="修改名称" prop="room_name">
+                    <el-input v-model="ruleForm.room_name"></el-input>
                 </el-form-item>
-                <el-form-item label="冻结房间" prop="region">
-                    <el-select v-model="ruleForm.region" placeholder="请选择">
+                <el-form-item label="封禁房间" prop="banned_duration">
+                    <el-select v-model="ruleForm.banned_duration" clearable placeholder="请选择">
                         <el-option v-for="item in roomStatusList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="封禁原因" v-if="ruleForm.banned_duration" prop="banned_remark">
+                    <el-input type="textarea" :rows="4" v-model="ruleForm.banned_remark"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -27,37 +30,66 @@
 <script>
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
-
+// 引入api
+import { getRoomSave } from '@/api/videoRoom.js'
 export default {
     data() {
         return {
             dialogVisible: false,
             roomStatusList: MAPDATA.DURATION,
             ruleForm: {
-                name: '',
-                region: ''
+                room_name: '',
+                banned_duration: '',
+                banned_remark: ''
             },
+            oldParams: {},
             rules: {
-                name: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                room_name: [
+                    { required: false, message: '请输入活动名称', trigger: 'blur' },
+                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
-                region: [
-                    { required: true, message: '请选择活动区域', trigger: 'change' }
+                banned_remark: [
+                    { required: true, message: '请填写封禁原因', trigger: 'blur' }
                 ]
             }
         };
     },
     methods: {
+        loadParams(row) {
+            this.oldParams = row
+            this.ruleForm.room_name = row.room_name
+            this.dialogVisible = true
+        },
         // 关闭弹窗
         handleClose() {
             this.resetForm()
         },
         // 提交
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+        async submitForm(formName) {
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    alert('submit!');
+                    let s = this.ruleForm
+                    let a = this.oldParams
+                    let res,back;
+                    if(s.room_name !== a.room_name) {
+
+                    }
+                    if(s.banned_duration) {
+                        let params = {
+                            room_number: a.room_number,
+                            status: 3,
+                            banned_duration: s.banned_duration,
+                            banned_remark: s.banned_remark
+                        }
+                        res = await getRoomSave(params)
+                    }
+                    if(res.code === 2000) {
+                        this.$message.success('编辑成功')
+                    } else {
+                        this.$message.success('编辑失败')
+                    }
+                    this.dialogVisible = false
+                    this.$emit('getList')
                 } else {
                     console.log('error submit!!');
                     return false;

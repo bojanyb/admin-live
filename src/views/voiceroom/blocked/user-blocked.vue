@@ -48,7 +48,7 @@
 			forms() {
 				return [
 					{
-						name: 'room_number',
+						name: 'user_number',
 						type: 'input',
 						value: '',
 						label: '用户ID',
@@ -60,46 +60,55 @@
 			cfgs() {
 				return {
 					vm: this,
-					url: REQUEST.room.roomList,
+					url: REQUEST.blocked.bannedUserLog,
 					columns: [
 						{
 							label: '用户ID',
-							prop: 'room_number'
+							prop: 'user_number'
 						},
 						{
 							label: '昵称',
-							prop: 'room_name'
+							prop: 'nickname'
 						},
 						{
 							label: '头像',
-							prop: 'live_user_number'
+							isimg: true,
+							prop: 'face',
+							imgWidth: '50px',
+							imgHeight: '50px',
 						},
                         {
 							label: '封禁时间',
-							prop: 'room_name'
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
 						},
                         {
 							label: '封禁时长',
-							prop: 'room_name'
+							prop: 'duration',
 						},
                         {
 							label: '封禁原因',
-							prop: 'room_name'
+							prop: 'remark'
 						},
 						{
 							label: '状态',
 							render: (h, params) => {
-								let data = MAPDATA.ROOMCARDSTATUSLIST.find(item => { return item.value === params.row.status })
+								let data = MAPDATA.USERBLOCKEDSTATUSLIST.find(item => { return item.value === params.row.status })
 								return h('span', data ? data.name : '无')
 							}
 						},
                         {
 							label: '创建时间',
-							prop: 'room_name'
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
 						},
                         {
 							label: '操作人',
-							prop: 'room_name'
+							render: (h, params) => {
+								return h('span', params.row.admin_nickname || '无')
+							}
 						}
 					]
 				}
@@ -112,9 +121,7 @@
 				return {
 					page: params.page,
 					pagesize: params.size,
-					room_number: s.room_number,
-					is_live: s.is_live,
-					guild_number: s.guild_number
+					user_number: s.user_number
 				}
 			},
 			// 刷新列表
@@ -124,9 +131,6 @@
 			// 重置
 			reset() {
 				this.searchParams = {}
-				this.dateTimeParams = {
-					activity_type_id: 1
-				}
 				this.getList()
 			},
 			// 查询

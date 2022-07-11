@@ -36,3 +36,48 @@ export function getUser(data) {
     data
   })
 }
+
+// 添加公会成员
+export function addGuildUser(data) {
+  return request({
+    url: api.guild.addGuildUser,
+    method: 'post',
+    data
+  })
+}
+
+// 删除工会成员
+export function removeGuildUser(data) {
+  return request({
+    url: api.guild.removeGuildUser,
+    method: 'post',
+    data
+  })
+}
+
+// 移除大厅
+export function removeGuildRoom(data) {
+  return request({
+    url: api.guild.removeGuildRoom,
+    method: 'post',
+    data
+  })
+}
+
+// 解散工会
+export function disbandGuild(data) {
+  return request({
+    url: api.guild.disbandGuild,
+    method: 'post',
+    data
+  })
+}
+
+// 房间游戏列表
+export function roomGameList(data) {
+  return request({
+    url: api.room.roomGameList,
+    method: 'post',
+    data
+  })
+}

@@ -145,7 +145,7 @@ export default {
                     }
                     let res = await edit(params)
                     if(res.code === 2000) {
-                        if(this.statusIndex !== x.status) { // 封禁 - 启用
+                        if(this.statusIndex !== 1 || x.status !== 1) { // 封禁 - 启用
                             let obj = {
                                 status: this.statusIndex,
                                 remark: s.blockedParams.remark,

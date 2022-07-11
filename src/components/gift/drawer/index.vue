@@ -127,6 +127,7 @@ export default {
         // 选中礼物
         handleSelect(row) {
             let params = this.activityList.find(item => { return item.name === this.activityType })
+            console.log(params, 'params----------------')
             let num = this.gifts.length
             if((num + 1) > params.max) {
                 this.$message.error('当前活动已超过添加最大礼物数量')

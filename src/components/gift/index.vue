@@ -1,7 +1,8 @@
 <template>
     <div class="share-gift-box">
         <div class="giftAllocation">
-            <zItem ref="zItem" :isShowProperty="isShowProperty" :status="status" :isShowLocation="isShowLocation" :gifts="gifts" @deleteData="deleteData"></zItem>
+            <!-- <zItem ref="zItem" :isShowProperty="isShowProperty" :status="status" :isShowLocation="isShowLocation" :gifts="gifts" @deleteData="deleteData"></zItem> -->
+            <tableComp ref="tableComp" :status="status" :isShowLocation="isShowLocation" :gifts="gifts" @deleteData="deleteData"></tableComp>
         </div>
 
         <drawer ref="drawer" v-if="isDestoryComp" :status="status" @distoryComp="distoryComp" :activityType="activityType" :list="gifts"></drawer>
@@ -11,13 +12,14 @@
 <script>
 
 // 表单礼物
-import zItem from './item/index.vue'
+// import zItem from './item/index.vue'
+import tableComp from './table/index.vue'
 // 礼物库
 import drawer from './drawer/index.vue'
 
 export default {
     components: {
-        zItem,
+        tableComp,
         drawer
     },
     props: {
