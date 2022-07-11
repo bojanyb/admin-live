@@ -98,6 +98,7 @@
 					columns: [
 						{
 							label: '直播场次ID',
+							width: '100px',
 							prop: 'id'
 						},
 						{
@@ -106,6 +107,7 @@
 						},
 						{
 							label: '房间名称',
+							width: '150px',
 							prop: 'room_name'
 						},
 						{
@@ -114,63 +116,68 @@
 						},
 						{
 							label: '房主ID',
+							width: '100px',
 							prop: 'user_number'
 						},
 						{
 							label: '所属公会',
+							width: '100px',
 							render: (h, params) => {
 								return h('span', params.row.guild_name || '无')
 							}
 						},
 						{
 							label: '开播时间',
+							width: '180px',
 							render: (h, params) => {
 								return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
 						{
 							label: '结束时间',
+							width: '180px',
 							render: (h, params) => {
 								return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
 						{
 							label: '开播时长',
+							width: '180px',
 							render: (h, params) => {
 								let time = params.row.end_time - params.row.start_time
 								let data = formatTimeTwo(time)
 								return h('span', data ? data : '无')
 							}
 						},
-						// {
-						// 	label: '进入房间人数',
-						// 	width: '120px',
-						// 	prop: 'enter_user_count'
-						// },
-						// {
-						// 	label: '付费人数',
-						// 	width: '95px',
-						// 	prop: 'consume_user_count'
-						// },
-						// {
-						// 	label: '本场流水（喵粮）',
-						// 	width: '140px',
-						// 	prop: 'total_gain'
-						// },
-						// {
-						// 	label: '解散方式',
-						// 	width: '95px',
-						// 	prop: 'people',
-						// 	render: (h, params) => {
-						// 		let data = MAPDATA.DISSOLUTIONTYPELIST.find(item => { return params.row.disband_type === item.value })
-						// 		return h('span', data ? data.name : '无')
-						// 	}
-						// },
-						// {
-						// 	label: '解散人',
-						// 	width: '95px',
-						// 	prop: 'disband_username'
-						// }
+						{
+							label: '进入房间人数',
+							width: '120px',
+							prop: 'enter_user_count'
+						},
+						{
+							label: '付费人数',
+							width: '95px',
+							prop: 'consume_user_count'
+						},
+						{
+							label: '本场流水（喵粮）',
+							width: '140px',
+							prop: 'total_gain'
+						},
+						{
+							label: '解散方式',
+							width: '95px',
+							prop: 'people',
+							render: (h, params) => {
+								let data = MAPDATA.DISSOLUTIONTYPELIST.find(item => { return params.row.disband_type === item.value })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '解散人',
+							width: '95px',
+							prop: 'disband_username'
+						}
 					]
 				}
 			}

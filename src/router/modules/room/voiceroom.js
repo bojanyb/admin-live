@@ -34,15 +34,6 @@ const voiceroomRouter = {
 			component: () => import('@/views/voiceroom/room/room-historylist'),
 			name: 'room-historylist',
 			meta: {
-				title: '房间历史记录',
-				noCache: true
-			}
-		},
-		{
-			path: 'room-historylist',
-			component: () => import('@/views/voiceroom/room/room-historylist'),
-			name: 'room-historylist',
-			meta: {
 				title: '直播历史记录',
 				noCache: true
 			}
