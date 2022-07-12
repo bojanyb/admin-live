@@ -64,7 +64,7 @@ const jurisdiction = [
         ]
     },
     {
-        name: '工会管理',
+        name: '公会管理',
         id: 3,
         checked: false,
         children: [

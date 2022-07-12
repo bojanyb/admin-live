@@ -84,9 +84,9 @@
 						name: 'guild_id',
 						type: 'input',
 						value: '',
-						label: '工会',
+						label: '公会',
 						isNum: true,
-						placeholder: '请输入工会ID'
+						placeholder: '请输入公会ID'
 					},
 				]
 			},

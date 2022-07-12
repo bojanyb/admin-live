@@ -25,6 +25,7 @@ const option = {
 		assetsDir: 'static',
 		mode: 'development',
 	    domainHttps: 'http://api.huixin.info', // https环境地址
+	    domainHttp: 'http://m.huixin.info', // app端接口
 	  //   domainHttps: 'http://api.huida.vip', // https环境地址
 		// domainHttps: 'http://192.168.0.114', // https环境地址
 		httpHeader: '', // 后台本地携带
@@ -36,6 +37,7 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'info',
 	  domainHttps: 'http://api.huixin.info', // https环境地址
+	  domainHttp: 'http://m.huida.vip', // app端接口
 	  httpHeader: '', // 后台本地携带
 	},
 	// 测试环境
@@ -190,6 +192,7 @@ module.exports = {
 				// 全局常量
 				'HTTPHEADER': JSON.stringify(configObj.httpHeader),
 				'ENV_DOMAINHTTPS': JSON.stringify(configObj.domainHttps),
+				'ENV_DOMAINHTTP': JSON.stringify(configObj.domainHttp),
 				'process.env': {
 					NODE_ENV: JSON.stringify(configObj.mode),
 					BASE_URL: JSON.stringify(configObj.publicPath)

@@ -46,7 +46,7 @@ export function addGuildUser(data) {
   })
 }
 
-// 删除工会成员
+// 删除公会成员
 export function removeGuildUser(data) {
   return request({
     url: api.guild.removeGuildUser,
@@ -64,7 +64,7 @@ export function removeGuildRoom(data) {
   })
 }
 
-// 解散工会
+// 解散公会
 export function disbandGuild(data) {
   return request({
     url: api.guild.disbandGuild,

@@ -67,14 +67,12 @@ export default {
             this.value1.splice(index, 1)
             this.gameChange(this.value1)
         },
-        // 限制图片
-        beforeUpload() {},
         // 获取所有游戏
         async getRoomGame(params) {
             let res = await roomGameList(params)
             if(res.data.ids) {
                 let arr = res.data.ids.split(',')
-                this.value1 = arr.map(a => { return Number(a) })
+                this.value1 = arr.map(a => { return a })
                 this.setGame(this.value1)
             }
         }

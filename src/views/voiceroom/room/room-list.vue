@@ -60,9 +60,9 @@
 						name: 'guild_number',
 						type: 'input',
 						value: '',
-						label: '工会ID',
+						label: '公会ID',
 						isNum: true,
-						placeholder: '请输入工会ID'
+						placeholder: '请输入公会ID'
 					},
 				]
 			},
@@ -93,7 +93,7 @@
 						{
 							label: '状态',
 							render: (h, params) => {
-								let data = MAPDATA.ROOMCARDSTATUSLIST.find(item => { return item.value === params.row.status })
+								let data = MAPDATA.USERSTATUSLIST.find(item => { return item.value === params.row.status })
 								return h('span', data ? data.name : '无')
 							}
 						},

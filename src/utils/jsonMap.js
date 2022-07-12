@@ -611,7 +611,7 @@ const PARTYGAMELIST = [
         index: 1,
         nickname: 'bumper',
         name: '碰碰我最强',
-        value: 1461227817776713818,
+        value: '1461227817776713818',
         feature: '多人实时同步对战，3D碰碰车真实物理碰撞表现，击败对方获得体型增幅奖励，个性皮肤表现',
         url: require('@/assets/game/bumper.png')
     },
@@ -619,7 +619,7 @@ const PARTYGAMELIST = [
         index: 2,
         name: '飞行棋',
         nickname: 'ludo',
-        value: 1468180338417074177,
+        value: '1468180338417074177',
         feature: 'LUDO，带快速+经典模式，支持2/4个棋子，选玩3个特色道具（超级骰子、吸铁石、炸弹），带常规的对抗',
         url: require('@/assets/game/ludo.png')
     },
@@ -627,7 +627,7 @@ const PARTYGAMELIST = [
         index: 3,
         name: '扫雷',
         nickname: 'mine',
-        value: 1468434401847222273,
+        value: '1468434401847222273',
         feature: '经典扫雷，多人实时观测',
         url: require('@/assets/game/mine.png')
     },
@@ -635,7 +635,7 @@ const PARTYGAMELIST = [
         index: 4,
         name: '你画我猜',
         nickname: 'drawandguess',
-        value: 1461228410184400899,
+        value: '1461228410184400899',
         feature: '多种色彩、多种粗细、多种橡皮自由发挥，可文字或语音抢答，支持语音击中，可喝彩倒彩互动',
         url: require('@/assets/game/drawandguess.png')
     },
@@ -643,7 +643,7 @@ const PARTYGAMELIST = [
         index: 5,
         name: '五子棋',
         nickname: 'gobang',
-        value: 1461297734886621238,
+        value: '1461297734886621238',
         feature: '经典玩法，双重操作防误操作',
         url: require('@/assets/game/gobang.png')
     }
@@ -675,8 +675,8 @@ const USERSTATUSLIST = [
         value: 1
     },
     {
-        name: '封禁',
-        value: 2
+        name: '封禁中',
+        value: 3
     }
 ]
 

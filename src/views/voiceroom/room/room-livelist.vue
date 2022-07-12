@@ -12,11 +12,8 @@
 </template>
 
 <script>
-	import {
-		roomHide,
-		getRoomSave,
-		roomTop
-	} from '@/api/videoRoom'
+	import { roomHide, getRoomSave, roomTop } from '@/api/videoRoom'
+	import { liveEnd } from '@/api/callApp.js'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -64,30 +61,36 @@
 			forms() {
 				return [
 					{
-						name: 'room_number',
-						type: 'input',
+						name: 'inputSelect',
 						value: '',
-						label: '房间号码',
-						isNum: true,
-						placeholder: '请输入房间号码'
-					},
-					{
-						name: 'is_live',
-						type: 'select',
-						value: '',
-						keyName: 'value',
-						optionLabel: 'name',
-						label: '直播状态',
-						placeholder: '请选择',
-						options: MAPDATA.ROOMSTATUSLIST
+						selectName: 'iSelect',
+						type: 'inputSelect',
+						placeholder: '请输入ID',
+						selectPlaceholder: '请选择',
+						selctValue: 'room',
+						keyName: 'key',
+						optionLabel: 'label',
+						selectWidth: '130px',
+						handler: {
+							change: (v) => {
+								console.log(v, 'v----')
+								if(v == 'code') {
+									// this.$set(this.searchParams, 'live_user_number', )
+								}
+							}
+						},
+						options: [
+							{ key: 'room', label: '房间ID' },
+							{ key: 'user', label: '房主ID' }
+						]
 					},
 					{
 						name: 'guild_number',
 						type: 'input',
 						value: '',
-						label: '工会',
+						label: '公会',
 						isNum: true,
-						placeholder: '请输入工会ID'
+						placeholder: '请输入公会ID'
 					},
 				]
 			},
@@ -159,11 +162,19 @@
 			// 配置参数
 			beforeSearch(params) {
 				let s = { ...this.searchParams }
+				s.room_number = s.inputSelect
+				s.user_number = s.inputSelect
+				if(s.iSelect === 'room') {
+					delete s.user_number
+				} else if(s.iSelect === 'user') {
+					delete s.room_number
+				}
 				return {
 					page: params.page,
 					pagesize: params.size,
 					room_number: s.room_number,
-					is_live: s.is_live,
+					user_number: s.user_number,
+					is_live: 1,
 					guild_number: s.guild_number
 				}
 			},
@@ -205,16 +216,24 @@
 			},
 
 			// 解散房间
-			dissolveFunc(row) {
+			async dissolveFunc(row) {
 				this.$confirm('是否确认解散?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
-				}).then(() => {
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					});
+				}).then(async () => {
+					let params = {
+						room_number: row.room_number,
+						uid: row.live_user_id
+					}
+					let res = await liveEnd(params)
+					if(res.code === 2000) {
+						this.$message({
+							type: 'success',
+							message: '解散成功'
+						});
+					}
+					
 				}).catch(() => {});
 			},
 

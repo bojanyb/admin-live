@@ -11,7 +11,7 @@
         @closed="closed">
             <div class="formBox">
                 <div class="inputBox">
-                    <el-input v-model="user_id" placeholder="请输入成员ID"></el-input>
+                    <el-input v-model="user_id" placeholder="请输入用户ID"></el-input>
                     <el-button type="success" @keyup.native.enter="addUser" @click="addUser">查询</el-button>
                 </div>
                 <div class="userListBox">
