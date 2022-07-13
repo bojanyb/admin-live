@@ -3,7 +3,7 @@
         <el-dialog
         :title="title"
         :visible.sync="dialogVisible"
-        width="600px"
+        width="580px"
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
@@ -33,14 +33,15 @@
                 </div>
                 
                 <el-form-item label="入场横幅" prop="region">
-                    <el-button type="primary">添加</el-button>
+                    <el-button type="primary" @click="selectFunc('goodsBank')">添加</el-button>
                 </el-form-item>
                 <el-form-item label="入场座驾" prop="region">
-                    <el-button type="primary">添加</el-button>
+                    <el-button type="primary" @click="selectFunc('goodsBank')">添加</el-button>
                 </el-form-item>
                 <el-form-item label="专属礼物" prop="region">
-                    <el-button type="primary">添加</el-button>
+                    <el-button type="primary" @click="selectFunc('drawer')">添加</el-button>
                 </el-form-item>
+                
 
                 <div class="specialBox">
                     <el-form-item prop="name">
@@ -66,21 +67,37 @@
                 <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
             </span>
         </el-dialog>
+
+        <!-- 商品组件 -->
+        <goodsBank ref="goodsBank" v-if="isDestoryComp" :list="list" @validateField="validateField"></goodsBank>
+
+        <!-- 礼物组件 -->
+        <drawer ref="drawer" v-if="isDestoryComp" :status="status" @distoryComp="distoryComp" :activityType="activityType" :list="gifts"></drawer>
     </div>
 </template>
 
 <script>
+// 礼物库
+import drawer from '@/components/gift/drawer/index.vue'
+// 引入商品库组件
+import goodsBank from '@/components/goodsBank/index.vue'
 // 引入图片上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
-        uploadImg
+        uploadImg,
+        goodsBank,
+        drawer
     },
     data() {
         return {
+            list: [],
+            gifts: [],
+            activityType: 'mmly',
             dialogVisible: true,
+            isDestoryComp: false, // 销毁组件
             privilegeList: MAPDATA.NOBILITYPRIVILEGELIST, // 特权列表
             status: 'add', // 状态
             ruleForm: {
@@ -131,6 +148,14 @@ export default {
         }
     },
     methods: {
+        // 选择商品 - 礼物
+        selectFunc(name) {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs[name].drawer = true
+                this.$refs[name].giftList()
+            }, 50);
+        },
         // 获取数据
         loadParams(status, row) {
             this.status = status
@@ -158,9 +183,13 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
+        validateField() {},
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
+        },
+        distoryComp() {
+            this.isDestoryComp = false
         }
     }
 }
@@ -168,6 +197,9 @@ export default {
 
 <style lang="scss">
 .nobility-privilegeAdd-box {
+    .el-select {
+        width: 460px;
+    }
     .specialBox {
         display: flex;
         .el-form-item {
