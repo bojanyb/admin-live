@@ -37,7 +37,7 @@
 			forms() {
 				return [
 					{
-						name: 'user_id',
+						name: 'user_number',
 						type: 'input',
 						value: '',
 						label: '用户ID',
@@ -49,29 +49,31 @@
 			cfgs() {
 				return {
 					vm: this,
-					url: REQUEST.audit.list,
+					url: REQUEST.audit.toAuditList,
 					columns: [
 						{
 							label: '用户ID',
-							prop: 'user_id'
+							render: (h, params) => {
+								return h('span', params.row.user_number || '无')
+							}
 						},
                         {
 							label: '昵称',
 							render: (h, params) => {
-								return h('span', params.row.userinfo.nickname || '无')
+								return h('span', params.row.nickname || '无')
 							}
 						},
                         {
 							label: '头像',
 							isimg: true,
-							prop: 'pic',
+							prop: 'face',
 							imgWidth: '50px',
 							imgHeight: '50px'
 						},
                         {
 							label: '个性签名',
 							render: (h, params) => {
-								return h('span', params.row.userinfo.nickname || '无')
+								return h('span', params.row.autograph || '无')
 							}
 						},
                         {
@@ -84,20 +86,23 @@
                         {
 							label: '录制声音',
 							render: (h, params) => {
-								return h('span', params.row.userinfo.nickname || '无')
+								return h('span', params.row.sound || '无')
 							}
 						},
                         {
 							label: '动态内容',
 							render: (h, params) => {
-								return h('span', params.row.userinfo.nickname || '无')
+								return h('span', params.row.moments_content || '无')
 							}
 						},
                         {
 							label: '动态图片/视频',
-							render: (h, params) => {
-								return h('span', params.row.userinfo.nickname || '无')
-							}
+							isimgList: true,
+							prop: 'moments_media_list',
+							type: 'moments_media_type',
+							imgWidth: '70px',
+							imgHeight: '70px',
+							width: '200px'
 						},
 						{
 							label: '上传时间',
@@ -127,8 +132,7 @@
 				return {
 					page: params.page,
 					pagesize: params.size,
-					user_id: s.user_id,
-					status: s.status
+					user_number: s.user_number
 				}
 			},
 			// 刷新列表

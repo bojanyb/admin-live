@@ -14,7 +14,7 @@
         :align="item.align || 'center'" :header-align="item.headerAlign" :label="item.label" :fixed="item.fixed" :width="item.width"
         :min-width="item.minWidth" :key="item.label" :show-overflow-tooltip="item.showOverFlow" v-if="heckoutGoodsField(item.label)">
         <template slot-scope="scope">
-          <WeTableCustomColumn :renderContent="item.render" v-if="!item.isimg" :scope="scope" :prop="item.prop"></WeTableCustomColumn>
+          <WeTableCustomColumn :renderContent="item.render" v-if="!item.isimg && !item.isSwitch && !item.isimgList" :scope="scope" :prop="item.prop"></WeTableCustomColumn>
           <!-- <el-image v-if="item.isimg" :src="scope.row[item.prop] || $store.state.defaultImg" :style="{width:item.imgWidth,height:item.imgHeight}"
             :preview-src-list="[scope.row[item.prop]||$store.state.defaultImg]">
             <div slot="error" class="image-slot">
@@ -30,6 +30,16 @@
           :preview-src-list="scope.row[item.prop]"
           ref="imgComp">
           </imgComp>
+
+          <imgListComp 
+          v-if="item.isimgList"
+          :srcList="scope.row[item.prop]"
+          :type="scope.row[item.type]"
+          :width="item.imgWidth"
+          :height="item.imgHeight"
+          :preview-src-list="scope.row[item.prop]"
+          ref="imgComp">
+          </imgListComp>
 
           <el-switch
             v-if="item.isSwitch"
@@ -62,6 +72,7 @@
   import request from '@/utils/request2'
   // 引入图片/svga组件
   import imgComp from './imgComp.vue'
+  import imgListComp from './imgListComp.vue'
 
   // 获得元素的top位置
   function getTop(e) {
@@ -74,7 +85,8 @@
     name: 'TableList',
     components: {
       WeTableCustomColumn,
-      imgComp
+      imgComp,
+      imgListComp
     },
     props: {
       cfgs: {

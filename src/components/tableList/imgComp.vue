@@ -7,13 +7,15 @@
             </div>
         </el-image>
 
-        <div class="svgaBox" v-if="isSpecial === 'svga'" @click="zoomClick">
+        <div class="svgaBox" v-else-if="isSpecial === 'svga'" @click="zoomClick">
             <svgComp ref="svgComp" :src="src" :styleObj="{ width: width, height: height }" ></svgComp>
         </div>
 
-        <div class="videoBox" v-if="isSpecial === 'mp4'">
+        <div class="videoBox" v-else-if="isSpecial === 'mp4'">
             <videoPlayerComp ref="videoPlayerComp" :url="src"></videoPlayerComp>
         </div>
+
+        <div v-else>无</div>
 
 
         <div class="screenBox" v-if="isShowZoom">
