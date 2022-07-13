@@ -86,7 +86,8 @@
 							label: '头像',
 							isimg: true,
 							prop: 'face',
-							imgWidth: '50px'
+							imgWidth: '50px',
+							imgHeight: '50px'
 						},
 						{
 							label: '性别',

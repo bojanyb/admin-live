@@ -17,7 +17,7 @@ const dashboardRouter = {
 			component: () => import('@/views/dashboard/index'),
 			name: 'index',
 			meta: {
-				title: '详情',
+				title: '总览',
 				noCache: true
 			},
 		},

@@ -190,13 +190,12 @@ export default {
         // 状态切换
         statusClick(index) {
             this.statusIndex = index
-            if(index === 2) {
+            if(index === 3) {
                 this.$refs.blocked.loadParams()
             }
         },
         // 封禁组件返回数据
         evaluationFunc(row) {
-            console.log(row, 'row------------')
             this.ruleForm.blockedParams = row
         }
     }

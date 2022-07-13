@@ -593,15 +593,15 @@ const ROOMTYPELIST = [
 const DISSOLUTIONTYPELIST = [
     {
         value: 0,
-        name: '房主解散'
+        name: '正常解散'
     },
     {
         value: 1,
-        name: '超管解散'
+        name: '强制解散'
     },
     {
         value: 2,
-        name: '后台管理解散'
+        name: '强制解散'
     }
 ]
 
@@ -675,7 +675,7 @@ const USERSTATUSLIST = [
         value: 1
     },
     {
-        name: '封禁中',
+        name: '封禁',
         value: 3
     }
 ]
@@ -769,6 +769,73 @@ const USERBLOCKEDSTATUSLIST = [
     }
 ]
 
+/*
+*贵族管理 - 贵族特权设置
+*/
+// 拥有特权
+const NOBILITYPRIVILEGELIST = [
+    {
+        name: '贵族勋章',
+        value: 1
+    },
+    {
+        name: '入场特效',
+        value: 2
+    },
+    {
+        name: '入场横幅',
+        value: 3
+    },
+    {
+        name: '个性名片',
+        value: 4
+    },
+    {
+        name: '专属礼物',
+        value: 5
+    },
+    {
+        name: '贵族装扮',
+        value: 6
+    },
+    {
+        name: '贵族专属客服',
+        value: 7
+    },
+    {
+        name: '送礼特效',
+        value: 8
+    },
+    {
+        name: '入场座驾',
+        value: 9
+    },
+    {
+        name: '防骚扰',
+        value: 10
+    },
+    {
+        name: '状态隐身',
+        value: 11
+    },
+    {
+        name: '进房隐身',
+        value: 12
+    },
+    {
+        name: '榜单隐身',
+        value: 13
+    },
+    {
+        name: '防禁言',
+        value: 14
+    },
+    {
+        name: '防被踢',
+        value: 15
+    },
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -802,5 +869,6 @@ export default {
     MENUSTATUSLIST,
     PARTYGAMELIST,
     DISSOLUTIONTYPELIST,
-    USERBLOCKEDSTATUSLIST
+    USERBLOCKEDSTATUSLIST,
+    NOBILITYPRIVILEGELIST
 }

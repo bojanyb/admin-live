@@ -89,6 +89,14 @@ export default {
 .imgComp-box {
     display: flex;
     justify-content: center;
+    .el-image {
+        .image-slot {
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
     .svgaBox {
         cursor: pointer;
     }

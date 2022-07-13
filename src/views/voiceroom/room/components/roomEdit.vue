@@ -70,19 +70,19 @@ export default {
                 if (valid) {
                     let s = this.ruleForm
                     let a = this.oldParams
-                    let res,back;
-                    if(s.room_name !== a.room_name) {
-
+                    let params = {
+                        room_number: a.room_number,
+                        status: 3,
+                        banned_duration: s.banned_duration,
+                        banned_remark: s.banned_remark,
+                        room_name: s.room_name
                     }
-                    if(s.banned_duration) {
-                        let params = {
-                            room_number: a.room_number,
-                            status: 3,
-                            banned_duration: s.banned_duration,
-                            banned_remark: s.banned_remark
-                        }
-                        res = await getRoomSave(params)
+                    if(!s.banned_duration) {
+                        delete params.status
+                        delete params.banned_duration
+                        delete params.banned_remark
                     }
+                    let res = await getRoomSave(params)
                     if(res.code === 2000) {
                         this.$message.success('编辑成功')
                     } else {

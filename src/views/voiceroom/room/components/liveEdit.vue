@@ -7,14 +7,14 @@
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="隐藏房间" prop="resource">
-                    <el-radio-group v-model="ruleForm.resource">
-                        <el-radio label="开启"></el-radio>
-                        <el-radio label="隐藏"></el-radio>
+                <el-form-item label="隐藏房间" prop="is_hide">
+                    <el-radio-group v-model="ruleForm.is_hide">
+                        <el-radio :label="1">开启</el-radio>
+                        <el-radio :label="2">隐藏</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="修改名称" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
+                <el-form-item label="修改名称" prop="room_name">
+                    <el-input v-model="ruleForm.room_name"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -26,20 +26,23 @@
 </template>
 
 <script>
+// 引入api
+import { roomHide, getRoomSave } from '@/api/videoRoom'
 export default {
     data() {
         return {
             dialogVisible: false,
             ruleForm: {
-                name: '',
-                resource: ''
+                room_name: '',
+                is_hide: ''
             },
+            oldParams: {}, // 老数据
             rules: {
-                name: [
+                room_name: [
                     { required: false, message: '请输入名称', trigger: 'blur' },
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
-                resource: [
+                is_hide: [
                     { required: false, message: '请选择活动资源', trigger: 'change' }
                 ]
             }
@@ -53,14 +56,33 @@ export default {
         loadParams(row) {
             this.dialogVisible = true
             // 防止数据同源
+            this.oldParams = row
             let params = JSON.parse(JSON.stringify(row))
             this.$set(this.$data, 'ruleForm', params)
         },
         // 提交
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+        async submitForm(formName) {
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    alert('submit!');
+                    let s = this.ruleForm
+                    let a = this.oldParams
+                    let params = {
+                        id: s.id,
+                        is_hide: s.is_hide
+                    }
+                    if(s.room_name !== a.room_name) {
+                        await getRoomSave({ room_name: s.room_name, room_number: s.room_number })
+                    }
+                    if(s.is_hide !== a.is_hide) {
+                        let res = await roomHide(params)
+                        if(res.code === 2000) {
+                            this.$message.success('操作成功')
+                        } else {
+                            this.$message.error('操作失败')
+                        }
+                    }
+                    this.dialogVisible = false
+                    this.$emit('getList')
                 } else {
                     console.log('error submit!!');
                     return false;

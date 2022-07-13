@@ -1,23 +1,25 @@
 <template>
-	<div class="room-historylist">
+	<div class="nobility-privilege-box">
 		<div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" :show-add="true"></SearchPanel>
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+
+		<!-- 直播编辑组件 -->
+		<!-- <liveEdit ref="liveEdit" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></liveEdit> -->
 	</div>
 </template>
 
 <script>
-	import {
-		roomHide,
-		getRoomSave,
-		roomTop
-	} from '@/api/videoRoom'
+	import { roomHide, getRoomSave, roomTop } from '@/api/videoRoom'
+	import { liveEnd } from '@/api/callApp.js'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
 	import tableList from '@/components/tableList/TableList.vue'
+	// 引入房间直播编辑组件
+	// import liveEdit from './components/liveEdit.vue'
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
@@ -27,14 +29,14 @@
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
 	// 引入公共方法
-	import { formatTimeTwo } from '@/utils/common.js'
+	import { formatTime } from '@/utils/common.js'
 
 	export default {
 		name: 'RoomList',
 		mixins: [mixins],
 		components: {
 			SearchPanel,
-			tableList
+			tableList,
 		},
 		data() {
 			return {
@@ -50,7 +52,8 @@
 				page: {
 					page: 1,
 					limit: 10
-				}
+				},
+				isDestoryComp: false // 是否销毁组件
 			}
 		},
 		computed: {
@@ -69,6 +72,7 @@
 						selectWidth: '130px',
 						handler: {
 							change: (v) => {
+								console.log(v, 'v----')
 								if(v == 'code') {
 									// this.$set(this.searchParams, 'live_user_number', )
 								}
@@ -80,7 +84,7 @@
 						]
 					},
 					{
-						name: 'guild_id',
+						name: 'guild_number',
 						type: 'input',
 						value: '',
 						label: '公会',
@@ -92,13 +96,12 @@
 			cfgs() {
 				return {
 					vm: this,
-					url: REQUEST.room.liveRoomHistory,
+					url: REQUEST.room.roomList,
 					isShowIndex: true,
 					columns: [
 						{
 							label: '直播场次ID',
-							width: '100px',
-							prop: 'id'
+							prop: 'room_number'
 						},
 						{
 							label: '房间ID',
@@ -106,7 +109,6 @@
 						},
 						{
 							label: '房间名称',
-							width: '150px',
 							prop: 'room_name'
 						},
 						{
@@ -115,14 +117,12 @@
 						},
 						{
 							label: '房主ID',
-							width: '100px',
-							prop: 'user_number'
+							prop: 'live_user_number'
 						},
 						{
 							label: '所属公会',
-							width: '100px',
 							render: (h, params) => {
-								return h('span', params.row.guild_name || '无')
+								return h('span', params.row.guild_number || '无')
 							}
 						},
 						{
@@ -133,49 +133,25 @@
 							}
 						},
 						{
-							label: '结束时间',
-							width: '180px',
-							render: (h, params) => {
-								return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-							}
-						},
-						{
 							label: '开播时长',
-							width: '180px',
 							render: (h, params) => {
-								let time = params.row.end_time - params.row.start_time
-								let data = formatTimeTwo(time)
+								let data = formatTime(params.row.live_time)
 								return h('span', data ? data : '无')
 							}
 						},
 						{
-							label: '进入房间人数',
-							width: '120px',
-							prop: 'enter_user_count'
+							label: '在线人数',
+							prop: 'people'
 						},
 						{
-							label: '付费人数',
-							width: '95px',
-							prop: 'consume_user_count'
-						},
-						{
-							label: '本场流水（喵粮）',
-							width: '140px',
-							prop: 'total_gain'
-						},
-						{
-							label: '解散方式',
-							width: '95px',
-							prop: 'people',
+							label: '操作',
+							width : '230px',
 							render: (h, params) => {
-								let data = MAPDATA.DISSOLUTIONTYPELIST.find(item => { return params.row.disband_type === item.value })
-								return h('span', data ? data.name : '无')
+								return h('div', [
+									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.liveEditFunc(params.row)}}},'编辑'),
+									h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.dissolveFunc(params.row)}}},'解散')
+								])
 							}
-						},
-						{
-							label: '解散人',
-							width: '95px',
-							prop: 'disband_username'
 						}
 					]
 				}
@@ -197,7 +173,8 @@
 					pagesize: params.size,
 					room_number: s.room_number,
 					user_number: s.user_number,
-					guild_id: s.guild_number
+					is_live: 1,
+					guild_number: s.guild_number
 				}
 			},
 			// 刷新列表
@@ -206,10 +183,8 @@
 			},
 			// 重置
 			reset() {
-				this.searchParams = {
-					iSelect: 'room',
-					inputSelect: ''
-				}
+				this.searchParams = {}
+				this.dateTimeParams = {}
 				this.getList()
 			},
 			// 查询
@@ -217,26 +192,39 @@
 				this.getList()
 			},
 
-			// 冻结/解冻
-			handleRoom(source) {
-				var tipsText = source.status == 1 ? '确定冻结当前房间吗?' : '确定解冻当前房间吗?'
-				this.$alert(tipsText, '提示', {
+			// 解散房间
+			async dissolveFunc(row) {
+				this.$confirm('是否确认解散?', '提示', {
 					confirmButtonText: '确定',
-					callback: action => {
-						if (action == 'confirm') {
-							var params = {
-								'room_number': JSON.stringify(source.room_number),
-								'status': source.status == 1 ? '3' : '1'
-							}
-							getRoomSave(params).then(res => {
-								this.$message.success("操作成功")
-								this.getList()
-							}).catch(err => {
-								this.$message.error("操作失败")
-							})
-						} else if (action == 'cancel') {}
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(async () => {
+					let params = {
+						room_number: row.room_number,
+						uid: row.live_user_id
 					}
-				})
+					let res = await liveEnd(params)
+					if(res.code === 2000) {
+						this.$message({
+							type: 'success',
+							message: '解散成功'
+						});
+					}
+					
+				}).catch(() => {});
+			},
+
+			// 编辑房间
+			liveEditFunc(row) {
+				this.isDestoryComp = true
+				setTimeout(() => {
+					this.$refs.liveEdit.loadParams(row)
+				}, 50);
+			},
+
+			// 销毁组件
+			destoryComp() {
+				this.isDestoryComp = false
 			},
 
 			// 房间隐藏
@@ -247,22 +235,12 @@
 				}
 				await roomHide(params)
 				this.getList()
-			},
-
-			// 置顶 - 取消置顶
-			async roomTopFunc(id, top) {
-				let params = {
-					id,
-					top
-				}
-				await roomTop(params)
-				this.getList()
 			}
 		}
 	}
 </script>
 <style lang="scss">
-.room-historylist {
+.nobility-privilege-box {
 	padding: 20px;
 	box-sizing: border-box;
     .el-form-item {
