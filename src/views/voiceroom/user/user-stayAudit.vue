@@ -90,6 +90,7 @@
 						},
                         {
 							label: '动态内容',
+							width: '180px',
 							render: (h, params) => {
 								return h('span', params.row.moments_content || '')
 							}
@@ -112,7 +113,7 @@
 						},
 						{
 							label: '操作',
-							width : '230px',
+							width : '200px',
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.audioFunc(params.row, 1)}}}, '通过'),
