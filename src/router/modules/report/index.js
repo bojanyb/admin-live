@@ -34,7 +34,7 @@ const userRouter = {
 			component: () => import('@/views/voiceroom/room/room-name'),
 			name: 'room-name',
 			meta: {
-				title: '房间名称记录',
+				title: '举报房间记录',
 				noCache: true
 			}
 		},

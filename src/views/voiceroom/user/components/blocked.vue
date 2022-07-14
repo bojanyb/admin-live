@@ -66,6 +66,10 @@ export default {
                     return false;
                 }
             });
+        },
+        // 重置
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
         }
     }
 }

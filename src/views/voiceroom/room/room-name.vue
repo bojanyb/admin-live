@@ -1,227 +1,128 @@
 <template>
-	<div class="app-container">
-
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true">
-				<el-form-item>
-					<el-button type="success" @click="handleRoomName">新增</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row>
-			<el-table-column label="添加时间" prop="create_timeText" align="center" />
-			<el-table-column label="类型" align="center" prop="room_genre_id">
-				<template slot-scope="scope">
-					<div v-if="scope.row.room_genre_id == 1">游戏</div>
-					<div v-if="scope.row.room_genre_id == 2">点唱</div>
-					<div v-if="scope.row.room_genre_id == 3">情感</div>
-					<div v-if="scope.row.room_genre_id == 4">闲聊</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="房间名称" prop="name" align="center" show-overflow-tooltip />
-			<el-table-column align="center" label="操作">
-				<template slot-scope="scope">
-					<el-button type="primary" @click="handleChange(scope.row)">修改</el-button>
-					<el-button type="danger" @click="handleDel(scope.row)">删除</el-button>
-				</template>
-			</el-table-column>
-			</el-table-column>
-		</el-table>
-
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="roomNameList" />
-
-		<el-dialog :title="editTitle" :visible.sync="editPop">
-			<el-form :model="popForm">
-				<el-form-item label="房间类型" :label-width="formLabelWidth">
-					<el-select v-model="popForm.room_genre_id" placeholder="请选择">
-						<el-option v-for="item in roomTypeList" :key="item.value" :label="item.label"
-							:value="item.value" />
-					</el-select>
-				</el-form-item>
-				<el-form-item label="房间名称" :label-width="formLabelWidth">
-					<el-input v-model="popForm.name" style="width: 300px;" maxlength="16" placeholder="请输入房间名称"
-						clearable autocomplete="off" />
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button :loading="loading" :type="isDisabled == true ? 'info' : 'primary'" :disabled="isDisabled"
-					@click="handleSubmit">确 定</el-button>
-			</div>
-		</el-dialog>
-
-	</div>
+  <div class="app-container">
+    <div class="searchParams">
+      <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+    </div>
+    <tableList :cfgs="cfgs" ref="tableList"></tableList>
+  </div>
 </template>
 
 <script>
-	import {
-		getLiveRoomList,
-		getLiveCreate,
-		getLiveUpdate,
-		getLiveDelete
-	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
-	export default {
-		name: 'RoomList',
-		components: {
-			Pagination
-		},
-		data() {
-			return {
-				list: [],
-				loading: false,
-				listLoading: true,
-				total: 0,
-				multipleSelection: [],
-				page: {
-					page: 1,
-					limit: 10
-				},
-				editTitle: "新增",
-				editPop: false,
-				formLabelWidth: '120px',
-				roomTypeList: [{
-						'label': '游戏',
-						'value': 1
-					},
-					{
-						'label': '点唱',
-						'value': 2
-					},
-					{
-						'label': '情感',
-						'value': 3
-					},
-					{
-						'label': '闲聊',
-						'value': 4
-					},
-				],
-				popForm: {
-					"id": "",
-					"room_genre_id": "",
-					"name": ""
-				},
-				isDisabled: true
-			}
-		},
-		created() {
-			this.roomNameList()
-		},
-		watch: {
-			"popForm.name": {
-				handler(newValue) {
-					if (newValue.length > 0) {
-						this.isDisabled = false
-					} else {
-						this.isDisabled = true
-					}
-				},
-				deep: true
-			}
-		},
-		methods: {
-			// 房间名称列表
-			roomNameList() {
-				this.listLoading = true
-				var params = {
-					'page': this.page.page,
-					'pagesize': this.page.limit
-				}
-				getLiveRoomList(params).then(response => {
-					this.total = response.data.count
-					this.list = response.data.list
-					this.list.map(function(item) {
-						item.create_timeText = moment(item.create_time * 1000).format(
-							'YYYY-MM-DD HH:mm:ss')
-					})
-					this.listLoading = false
-				}).catch(err => {
-					this.listLoading = false
-				})
-			},
-			handleRoomName() {
-				this.editTitle = "新增";
-				this.popForm.id = "";
-				this.popForm.room_genre_id = "";
-				this.popForm.name = "";
-				this.editPop = true;
-			},
+// 引入菜单组件
+import SearchPanel from '@/components/SearchPanel/final.vue'
+// 引入列表组件
+import tableList from '@/components/tableList/TableList.vue'
+// 引入api
+import REQUEST from '@/request/index.js'
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
+// 引入公共参数
+import mixins from '@/utils/mixins.js'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 
-			handleChange(row) {
-				this.editTitle = "修改";
-				this.popForm.id = row.id;
-				this.popForm.room_genre_id = row.room_genre_id;
-				this.popForm.name = row.name;
-				this.editPop = true;
-			},
-			handleDel(row) {
-				this.$alert("确定删除当前房间名称吗?", '提示', {
-					confirmButtonText: '确定',
-					callback: action => {
-						if (action == 'confirm') {
-							let params = {
-								"id": row.id
-							}
-							getLiveDelete(params).then(res => {
-								this.$message.success("删除成功");
-								this.roomNameList();
-							}).catch(err => {
-								this.$message.error(err)
-							})
-						}
-					}
-				})
-			},
-			handleSubmit() {
-				if (this.editTitle == "新增") {
-					let params = {
-						"name": this.popForm.name,
-						"room_genre_id": this.popForm.room_genre_id,
-					}
-					getLiveCreate(params).then(res => {
-						this.$message.success("新增成功");
-						this.roomNameList();
-					}).catch(err => {
-						this.$message.error(err)
-					})
-				} else if (this.editTitle == "修改") {
-					let params = {
-						"id": this.popForm.id,
-						"name": this.popForm.name,
-						"room_genre_id": this.popForm.room_genre_id,
-					}
-					getLiveUpdate(params).then(res => {
-						this.$message.success("修改成功");
-						this.roomNameList();
-					}).catch(err => {
-						this.$message.error(err)
-					})
-				}
-				this.editPop = false;
-			}
-		}
-	}
+export default {
+  name: 'ReportList',
+  components: {
+    SearchPanel,
+    tableList
+  },
+  mixins: [mixins],
+  data() {
+    return {
+      loadParams: {},  // 当前数据
+      status: null, // 状态
+    }
+  },
+  computed: {
+    forms() {
+      return [
+        {
+          name: 'live_room_id',
+          type: 'input',
+          value: '',
+          label: '被举报房主ID',
+          isNum: true,
+          placeholder: '请输入被举报房主ID'
+        }
+      ]
+    },
+    cfgs() {
+      return {
+        vm: this,
+        url: REQUEST.room.report,
+        columns: [
+		  {
+            label: '举报人ID',
+            prop: 'user_number'
+          },
+          {
+            label: '直播场次ID',
+            prop: 'live_room_id'
+          },
+          {
+            label: '房间ID',
+            prop: 'room_number'
+          },
+          {
+            label: '房主昵称',
+            prop: 'anchor'
+          },
+          {
+            label: '房间类型',
+            prop: 'room_genre_name'
+          },
+          {
+            label: '举报原因',
+            prop: 'content'
+          },
+          {
+            label: '举报时间',
+            prop: 'create_time',
+            render: (h, params) => {
+              return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+            }
+          },
+          {
+            label: '状态',
+            prop: 'status',
+            render: (h, params) => {
+              let data = MAPDATA.AUDITSTATUSLISTTWO.find(item => { return params.row.status == item.value })
+              return h('span', data ? data.name : '无')
+            }
+          },
+		  {
+            label: '操作人',
+            prop: 'admin_name'
+          }
+        ]
+      }
+    }
+  },
+  methods: {
+    // 重置
+    reset() {
+      this.searchParams = {}
+      this.getList()
+    },
+    // 查询
+    onSearch() {
+      this.getList()
+    },
+    // 配置参数
+    beforeSearch(params) {
+      let s = this.searchParams
+      return {
+        page: params.page,
+        pagesize: params.pagesize,
+        status: '2,3',
+        live_user_number: s.live_user_number
+      }
+    },
+    // 刷新列表
+    getList() {
+      this.$refs.tableList.getData()
+    }
+  }
+}
 </script>
-<style lang="scss" scoped="scoped">
-	.el-form-item {
-		// margin-bottom: initial;
-	}
-
-	.pagination-container {
-		margin-top: initial;
-	}
-
-	.colorNormal {
-		color: #67C23A;
-	}
-
-	.colorDel {
-		color: #F56C6C;
-	}
-</style>

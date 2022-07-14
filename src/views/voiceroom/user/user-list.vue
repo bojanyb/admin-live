@@ -132,7 +132,7 @@
 							label: '状态',
 							width: '95px',
 							render: (h, params) => {
-								let data = MAPDATA.USERSTATUSLIST.find(item => { return item.value === params.row.status })
+								let data = MAPDATA.USERSTATUSLISTTWO.find(item => { return item.value === params.row.status })
 								return h('span', data ? data.name : '无')
 							}
 						},

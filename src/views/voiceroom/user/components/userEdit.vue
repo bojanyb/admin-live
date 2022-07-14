@@ -84,7 +84,7 @@ export default {
     data() {
         return {
             dialogVisible: false,
-            statusList: MAPDATA.USERSTATUSLIST,
+            statusList: MAPDATA.USERSTATUSLISTTWO,
             sexList: MAPDATA.SEXLIST,
             statusIndex: null,
             defaultImg: require('@/assets/default.png'), // 默认头像
@@ -190,7 +190,7 @@ export default {
         // 状态切换
         statusClick(index) {
             this.statusIndex = index
-            if(index === 3) {
+            if(index === 2) {
                 this.$refs.blocked.loadParams()
             }
         },

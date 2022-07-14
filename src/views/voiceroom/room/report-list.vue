@@ -1,36 +1,12 @@
 <template>
   <div class="app-container">
+    <div class="searchParams">
+      <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+    </div>
     <tableList :cfgs="cfgs" ref="tableList"></tableList>
 
-    <el-dialog :title="editTitle" :visible.sync="editPop">
-      <el-form :model="popForm">
-        <el-form-item label="状态" :label-width="formLabelWidth">
-          <el-select v-model="popForm.status" placeholder="请选择">
-            <el-option
-              v-for="item in statusList"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="处理结果" :label-width="formLabelWidth">
-          <el-input
-            v-model="popForm.replay"
-            type="textarea"
-            :rows="5"
-            style="width: 335px;"
-            placeholder="请输入处理结果"
-            clearable
-            autocomplete="off"
-          />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="editPop = false">取 消</el-button>
-        <el-button :loading="loading" type="primary" @click="handleChange">确 定</el-button>
-      </div>
-    </el-dialog>
+    <!-- 封禁组件 -->
+    <blocked ref="blocked" @evaluationFunc="evaluationFunc"></blocked>
   </div>
 </template>
 
@@ -38,51 +14,71 @@
 import {
   getFeedBackSave
 } from '@/api/videoRoom'
-
+// 引入api
+import { getRoomSave } from '@/api/videoRoom.js'
+// 引入菜单组件
+import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
+// 引入封禁组件
+import blocked from '@/views/voiceroom/user/components/blocked.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
 import { timeFormat } from '@/utils/common.js'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
+// 引入公共参数
+import mixins from '@/utils/mixins.js'
 
 export default {
   name: 'ReportList',
   components: {
-    tableList
+    SearchPanel,
+    tableList,
+    blocked
   },
+  mixins: [mixins],
   data() {
     return {
-      loading: false,
-      formLabelWidth: '120px',
-      editTitle: '',
-      editPop: false,
-      popForm: {
-        'id': '',
-        'status': '',
-        'replay': ''
-      },
-      statusList: MAPDATA.REPORTSTATUS
+      loadParams: {},  // 当前数据
+      status: null, // 状态
     }
   },
   computed: {
+    forms() {
+      return [
+        {
+          name: 'room_number',
+          type: 'input',
+          value: '',
+          label: '房间ID',
+          isNum: true,
+          placeholder: '请输入房间ID'
+        },
+        {
+          name: 'user_number',
+          type: 'input',
+          value: '',
+          label: '举报人ID',
+          isNum: true,
+          placeholder: '请输入举报人ID'
+        },
+      ]
+    },
     cfgs() {
       return {
         vm: this,
         url: REQUEST.room.report,
         columns: [
           {
-            label: '用户ID',
-            prop: 'user_number'
+            label: '被举报房主ID',
+            prop: 'live_user_number'
           },
           {
             label: '直播场次ID',
             prop: 'live_room_id'
           },
           {
-            label: '房间号码',
+            label: '房间ID',
             prop: 'room_number'
           },
           {
@@ -94,24 +90,17 @@ export default {
             prop: 'room_genre_name'
           },
           {
-            label: '举报房主ID',
-            prop: 'live_user_number'
+            label: '举报人ID',
+            prop: 'user_number'
           },
           {
-            label: '举报人昵称',
+            label: '举报人名称',
             prop: 'user_name'
           },
           {
             label: '举报内容',
             width: '160px',
             prop: 'content'
-          },
-          {
-            label: '回复',
-            width: '200px',
-            render: (h, params) => {
-              return h('span', params.row.reply || '无')
-            }
           },
           {
             label: '举报时间',
@@ -121,18 +110,22 @@ export default {
               return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
             }
           },
-          {
-            label: '状态',
-            prop: 'status',
-            render: (h, params) => {
-              let data = MAPDATA.REPORTSTATUS.find(item => { return params.row.status == item.value })
-              return h('span', data ? data.name : '无')
-            }
-          },
+          // {
+          //   label: '状态',
+          //   prop: 'status',
+          //   render: (h, params) => {
+          //     let data = MAPDATA.REPORTSTATUS.find(item => { return params.row.status == item.value })
+          //     return h('span', data ? data.name : '无')
+          //   }
+          // },
           {
             label: '操作',
+            width: '200px',
             render: (h, params) => {
-              return h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.handleFeedBackEdit(params.row)}}},'审核')
+              return h('div', [
+                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.FeedBackFunc(params.row, 2)}}},'处理'),
+                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.loseSight(params.row, 3)}}},'忽略')
+              ])
             }
           }
         ]
@@ -140,36 +133,67 @@ export default {
     }
   },
   methods: {
+    // 重置
+    reset() {
+      this.searchParams = {}
+      this.getList()
+    },
+    // 查询
+    onSearch() {
+      this.getList()
+    },
     // 配置参数
     beforeSearch(params) {
+      let s = this.searchParams
       return {
         page: params.page,
         pagesize: params.pagesize,
-        status: '1'
+        status: '1',
+        room_number: s.room_number,
+        user_number: s.user_number
       }
     },
     // 刷新列表
     getList() {
       this.$refs.tableList.getData()
     },
-    handleFeedBackEdit(row) {
-      this.editTitle = '审核'
-      this.popForm = {
-        'id': row.id,
-        'status': row.status,
-        'replay': row.replay
-      }
-      this.editPop = true
+    // 封禁
+    FeedBackFunc(row, status) {
+      this.status = status
+      this.loadParams = row
+      this.$refs.blocked.dialogVisible = true
+      setTimeout(() => {
+        this.$refs.blocked.resetForm('ruleForm')
+      }, 10);
     },
-    handleChange() {
-      if (this.popForm.status == 1) {
-        this.$message.error('请先选择处理状态')
-        return
+    // 忽略
+    loseSight(row, status) {
+      this.status = status
+      this.loadParams = row
+      this.handleChange()
+    },
+    // 封禁参数
+    async evaluationFunc(row) {
+      let params = {
+        status: 3,
+        banned_remark: row.remark,
+        banned_duration: row.kill_time,
+        room_number: this.loadParams.room_number,
       }
-      getFeedBackSave(this.popForm).then(res => {
-        this.getList()
-        this.editPop = false
-      })
+      await getRoomSave(params)
+      this.handleChange()
+    },
+    // 审核 - 处理
+    async handleChange() {
+      let params = {
+        id: this.loadParams.id,
+        status: this.status
+      }
+      let res = await getFeedBackSave(params)
+      if(res.code === 3000) {
+        this.$message.success('操作成功')
+      }
+      this.getList()
     }
   }
 }

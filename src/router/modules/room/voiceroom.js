@@ -65,15 +65,15 @@ const voiceroomRouter = {
 		// 		noCache: true
 		// 	}
 		// },
-		{
-			path: 'report-history',
-			component: () => import('@/views/voiceroom/room/report-history'),
-			name: 'report-history',
-			meta: {
-				title: '举报房间记录',
-				noCache: true
-			}
-		},
+		// {
+		// 	path: 'report-history',
+		// 	component: () => import('@/views/voiceroom/room/report-history'),
+		// 	name: 'report-history',
+		// 	meta: {
+		// 		title: '举报房间记录',
+		// 		noCache: true
+		// 	}
+		// },
 		{
 			path: 'chat-record',
 			component: () => import('@/views/voiceroom/room/chat-record'),

@@ -589,6 +589,18 @@ const ROOMTYPELIST = [
     }
 ]
 
+// 封禁 - 状态
+const USERSTATUSLISTTWO = [
+    {
+        name: '正常',
+        value: 1
+    },
+    {
+        name: '封禁',
+        value: 2
+    }
+]
+
 // 直播历史记录 - 解散方式
 const DISSOLUTIONTYPELIST = [
     {
@@ -692,6 +704,18 @@ const AUDITSTATUSLIST = [
     {
         name: '已驳回',
         value: 2
+    }
+]
+
+// 状态 - 仅用于审核管理 - 房间举报记录
+const AUDITSTATUSLISTTWO = [
+    {
+        name: '已封禁',
+        value: 2
+    },
+    {
+        name: '已驳回',
+        value: 3
     }
 ]
 
@@ -858,5 +882,7 @@ export default {
     PARTYGAMELIST,
     DISSOLUTIONTYPELIST,
     USERBLOCKEDSTATUSLIST,
-    NOBILITYPRIVILEGELIST
+    NOBILITYPRIVILEGELIST,
+    USERSTATUSLISTTWO,
+    AUDITSTATUSLISTTWO
 }
