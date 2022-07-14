@@ -114,6 +114,8 @@ const request = {
     audit: {
         list: `${HTTPHEADER}/user/getUserBgi`,
         toAuditList: `${HTTPHEADER}/User/toAuditList`, // 待审核列表
+        auditedList: `${HTTPHEADER}/User/auditedList`, // 已审核记录
+        checkContentAudit: `${HTTPHEADER}/User/checkContentAudit`, // 审核用户操作记录
     },
 
     // 交易管理

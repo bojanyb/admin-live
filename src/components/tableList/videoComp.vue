@@ -6,7 +6,7 @@
         top="5vh"
         :before-close="handleClose">
             <div class="video">
-                <videoPlayerComp ref="videoPlayerComp"></videoPlayerComp>
+                <videoPlayerComp v-if="url" :url="url" ref="videoPlayerComp"></videoPlayerComp>
             </div>
         </el-dialog>
     </div>
@@ -16,6 +16,12 @@
 // 引入视频组件
 import videoPlayerComp from '@/components/videoPlayer/index'
 export default {
+    props: {
+        url: {
+            type: String,
+            default: ''
+        }
+    },
     components: {
         videoPlayerComp
     },
@@ -29,6 +35,11 @@ export default {
             this.dialogVisible = false
             this.$emit('destoryComp')
         }
+    },
+    mounted() {
+        // setTimeout(() => {
+        //     this.$refs.videoPlayerComp.openVideo()
+        // }, 100);
     }
 }
 </script>

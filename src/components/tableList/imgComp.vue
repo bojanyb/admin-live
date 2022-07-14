@@ -11,6 +11,10 @@
             <svgComp ref="svgComp" :src="src" :styleObj="{ width: width, height: height }" ></svgComp>
         </div>
 
+        <div class="audioBox" v-else-if="isSpecial === 'mp3'">
+            <audio ref="audio" :src="src" controls="controls"></audio>
+        </div>
+
         <div class="videoBox" v-else-if="isSpecial === 'mp4'">
             <videoPlayerComp ref="videoPlayerComp" :url="src"></videoPlayerComp>
         </div>
@@ -62,6 +66,8 @@ export default {
                     return 'svga'
                 } else if(this.src.indexOf('mp4') !== -1) {
                     return 'mp4'
+                }  else if(this.src.indexOf('mp3') !== -1 || this.src.indexOf('m4a') !== -1) {
+                    return 'mp3'
                 } else {
                     return 'png'
                 }

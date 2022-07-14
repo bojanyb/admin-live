@@ -9,7 +9,6 @@
 </template>
 
 <script>
-	import { getUserBgiAudit } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -24,7 +23,6 @@
 	import MAPDATA from '@/utils/jsonMap.js'
 
 	export default {
-		name: 'userbg-list',
 		mixins: [mixins],
 		components: {
 			SearchPanel,
@@ -37,7 +35,7 @@
 			forms() {
 				return [
 					{
-						name: 'user_id',
+						name: 'user_number',
 						type: 'input',
 						value: '',
 						label: '用户ID',
@@ -49,29 +47,35 @@
 			cfgs() {
 				return {
 					vm: this,
-					url: REQUEST.audit.list,
+					url: REQUEST.audit.auditedList,
 					columns: [
 						{
 							label: '用户ID',
-							prop: 'user_id'
+							width: '100px',
+							render: (h, params) => {
+								return h('span', params.row.user_number || '无')
+							}
 						},
                         {
 							label: '昵称',
+							width: '130px',
 							render: (h, params) => {
-								return h('span', params.row.userinfo.nickname || '无')
+								return h('span', params.row.nickname || '无')
 							}
 						},
                         {
 							label: '头像',
 							isimg: true,
-							prop: 'pic',
+							prop: 'face',
 							imgWidth: '50px',
-							imgHeight: '50px'
+							imgHeight: '50px',
+							width: '100px'
 						},
                         {
 							label: '个性签名',
+							width: '100px',
 							render: (h, params) => {
-								return h('span', params.row.userinfo.nickname || '无')
+								return h('span', params.row.autograph || '无')
 							}
 						},
                         {
@@ -79,53 +83,62 @@
 							isimg: true,
 							prop: 'pic',
 							imgWidth: '50px',
-							imgHeight: '50px'
+							imgHeight: '50px',
+							width: '100px',
 						},
                         {
 							label: '录制声音',
-							render: (h, params) => {
-								return h('span', params.row.userinfo.nickname || '无')
-							}
+							isimg: true,
+							prop: 'sound',
+							imgWidth: '50px',
+							imgHeight: '50px',
+							width: '300px'
 						},
                         {
 							label: '动态内容',
+							width: '180px',
 							render: (h, params) => {
-								return h('span', params.row.userinfo.nickname || '无')
+								return h('span', params.row.moments_content || '无')
 							}
 						},
                         {
 							label: '动态图片/视频',
-							render: (h, params) => {
-								return h('span', params.row.userinfo.nickname || '无')
-							}
+							isimgList: true,
+							prop: 'moments_media_list',
+							type: 'moments_media_type',
+							imgWidth: '70px',
+							imgHeight: '70px',
+							width: '200px'
 						},
-                        {
+						{
 							label: '上传时间',
 							width: '180px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
-                        {
+						{
 							label: '状态',
+							width: '100px',
 							render: (h, params) => {
 								let data = MAPDATA.AUDITSTATUSLIST.find(item => { return item.value === params.row.status })
 								return h('span', data ? data.name : '无')
 							}
 						},
-                        {
+						{
 							label: '处理时间',
 							width: '180px',
 							render: (h, params) => {
 								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
-                        {
+						{
 							label: '处理人',
+							width: '100px',
 							render: (h, params) => {
-								return h('span', params.row.make_userid || '无')
+								return h('span', params.row.admin_name || '无')
 							}
-						}
+						},
 					]
 				}
 			}
@@ -137,8 +150,7 @@
 				return {
 					page: params.page,
 					pagesize: params.size,
-					user_id: s.user_id,
-					status: s.status
+					user_number: s.user_number
 				}
 			},
 			// 刷新列表
@@ -148,27 +160,11 @@
 			// 重置
 			reset() {
 				this.searchParams = {}
-				this.dateTimeParams = {
-					activity_type_id: 1
-				}
 				this.getList()
 			},
 			// 查询
 			onSearch() {
 				this.getList()
-			},
-			handleChange(row,status){
-				var params = {
-					id : row.id,
-					status : status,
-					make_userid: row.make_userid
-				}
-				getUserBgiAudit(params).then(res=>{
-					this.$message.success("处理成功");
-					this.getList();
-				}).catch(err=>{
-					this.$message.error(err);
-				})
 			}
 		}
 	}

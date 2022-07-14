@@ -81,3 +81,12 @@ export function roomGameList(data) {
     data
   })
 }
+
+// 审核用户操作记录
+export function checkContentAudit(data) {
+  return request({
+    url: api.audit.checkContentAudit,
+    method: 'post',
+    data
+  })
+}

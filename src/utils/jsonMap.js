@@ -686,24 +686,12 @@ const USERSTATUSLIST = [
 // 状态
 const AUDITSTATUSLIST = [
     {
-        name: '全部',
-        value: ''
-    },
-    {
-        name: '待审核',
-        value: 0
-    },
-    {
-        name: '通过',
+        name: '已通过',
         value: 1
     },
     {
-        name: '驳回',
+        name: '已驳回',
         value: 2
-    },
-    {
-        name: '已删除',
-        value: 3
     }
 ]
 

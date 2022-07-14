@@ -23,7 +23,7 @@ export default {
             // 视频播放
             playerOptions: {
                 playbackRates : [ 0.5, 1.0, 1.5, 2.0 ], //可选择的播放速度
-                autoplay : false, //如果true,浏览器准备好时开始回放。
+                autoplay : true, //如果true,浏览器准备好时开始回放。
                 muted : false, // 默认情况下将会消除任何音频。
                 loop : false, // 视频一结束就重新开始。
                 preload : 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
@@ -32,7 +32,7 @@ export default {
                 fluid : true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
                 sources : [ {
                     type : "",
-                    src : 'http://www.html5videoplayer.net/videos/madagascar3.mp4'//url地址
+                    src : this.url//url地址
                 } ],
                 poster : "", //你的封面地址
                 // width: document.documentElement.clientWidth,
@@ -49,6 +49,8 @@ export default {
     methods: {
         //按钮播放
         openVideo() {
+            console.log('进入------------')
+            console.log(this.$refs.videoPlayer, 'videoPlayer---------9696')
             this.$refs.videoPlayer.player.play();
         },
     }

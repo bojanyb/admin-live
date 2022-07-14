@@ -9,7 +9,7 @@
 </template>
 
 <script>
-	import { getUserBgiAudit } from '@/api/videoRoom'
+	import { checkContentAudit } from '@/api/user'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -20,11 +20,8 @@
 	import { timeFormat } from '@/utils/common.js'
 	// 引入公共参数
 	import mixins from '@/utils/mixins.js'
-	// 引入公共map
-	import MAPDATA from '@/utils/jsonMap.js'
 
 	export default {
-		name: 'userbg-list',
 		mixins: [mixins],
 		components: {
 			SearchPanel,
@@ -85,9 +82,11 @@
 						},
                         {
 							label: '录制声音',
-							render: (h, params) => {
-								return h('span', params.row.sound || '无')
-							}
+							isimg: true,
+							prop: 'sound',
+							imgWidth: '50px',
+							imgHeight: '50px',
+							width: '300px'
 						},
                         {
 							label: '动态内容',
@@ -116,8 +115,8 @@
 							width : '230px',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.handleChange(params.row, 1)}}}, '通过'),
-									h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.handleChange(params.row, 2)}}},'驳回')
+									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.audioFunc(params.row, 1)}}}, '通过'),
+									h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.audioFunc(params.row, 2)}}},'驳回')
 								])
 							}
 						}
@@ -151,18 +150,22 @@
 			onSearch() {
 				this.getList()
 			},
-			handleChange(row,status){
-				var params = {
-					id : row.id,
-					status : status,
-					make_userid: row.make_userid
+			// 审核
+			async audioFunc(row, status) {
+				console.log(row, 'row-------------')
+				let params = {
+					id: row.id,
+					status: status
 				}
-				getUserBgiAudit(params).then(res=>{
-					this.$message.success("处理成功");
-					this.getList();
-				}).catch(err=>{
-					this.$message.error(err);
-				})
+				let res = await checkContentAudit(params)
+				if(res.code === 2000) {
+					if(status === 1) {
+						this.$message.success('审核通过')
+					} else {
+						this.$message.success('驳回成功')
+					}
+				}
+				this.getList()
 			}
 		}
 	}

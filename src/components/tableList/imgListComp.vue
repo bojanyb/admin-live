@@ -2,7 +2,7 @@
     <div class="imgListComp-box">
         
         <div class="imgBox" v-if="type === 1">
-            <el-image v-for="(item,index) in imgList" :key="index" :src="item || item"
+            <el-image v-for="(item,index) in srcList" :key="index" :src="item || item"
             :preview-src-list="[item||imgUrl]">
                 <div slot="error" class="image-slot">
                     <img :src="imgUrl" />
@@ -11,14 +11,14 @@
         </div>
 
         <div class="videoBox" v-else-if="type === 2" @click="zoomClick">
-            <videoPlayerComp class="videoPlayComp" ref="videoPlayerComp" :style="{width: width,height: height}" :url="imgList[0]"></videoPlayerComp>
+            <videoPlayerComp class="videoPlayComp" ref="videoPlayerComp" :style="{width: width,height: height}" :url="srcList[0]"></videoPlayerComp>
         </div>
 
-        <div v-else>无</div>
+        <div v-else @click="zoomClick">无</div>
 
 
         <!-- 视频放大组件 -->
-        <videoComp v-if="isDestoryComp" ref="videoComp" @destoryComp="destoryComp"></videoComp>
+        <videoComp v-if="isDestoryComp" ref="videoComp" :url="srcList[0]" @destoryComp="destoryComp"></videoComp>
     </div>
 </template>
 
@@ -35,8 +35,8 @@ export default {
     },
     props: {
         srcList: { // 图片地址
-            type: String,
-            default: ''
+            type: Array,
+            default: []
         },
         type: { // 媒体类型
             type: Number,
@@ -57,16 +57,9 @@ export default {
             imgUrl: require('@/assets/error.png')
         };
     },
-    computed: {
-        imgList() {
-            return this.srcList.split(',')
-        }
-    },
     methods: {
         // 放大
         zoomClick() {
-            // this.isShowZoom = true
-            console.log('进入-----------')
             this.isDestoryComp = true
             setTimeout(() => {
                 this.$refs.videoComp.dialogVisible = true
