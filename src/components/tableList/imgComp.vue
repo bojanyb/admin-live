@@ -19,7 +19,7 @@
             <videoPlayerComp ref="videoPlayerComp" :url="src"></videoPlayerComp>
         </div>
 
-        <div v-else>无</div>
+        <!-- <div v-else>无</div> -->
 
 
         <div class="screenBox" v-if="isShowZoom">

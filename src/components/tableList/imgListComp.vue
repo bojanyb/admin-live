@@ -14,8 +14,6 @@
             <videoPlayerComp class="videoPlayComp" ref="videoPlayerComp" :style="{width: width,height: height}" :url="srcList[0]"></videoPlayerComp>
         </div>
 
-        <div v-else @click="zoomClick">无</div>
-
 
         <!-- 视频放大组件 -->
         <videoComp v-if="isDestoryComp" ref="videoComp" :url="srcList[0]" @destoryComp="destoryComp"></videoComp>

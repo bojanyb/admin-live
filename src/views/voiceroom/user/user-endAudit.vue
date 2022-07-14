@@ -53,14 +53,14 @@
 							label: '用户ID',
 							width: '100px',
 							render: (h, params) => {
-								return h('span', params.row.user_number || '无')
+								return h('span', params.row.user_number || '')
 							}
 						},
                         {
 							label: '昵称',
 							width: '130px',
 							render: (h, params) => {
-								return h('span', params.row.nickname || '无')
+								return h('span', params.row.nickname || '')
 							}
 						},
                         {
@@ -75,7 +75,7 @@
 							label: '个性签名',
 							width: '100px',
 							render: (h, params) => {
-								return h('span', params.row.autograph || '无')
+								return h('span', params.row.autograph || '')
 							}
 						},
                         {
@@ -98,7 +98,7 @@
 							label: '动态内容',
 							width: '180px',
 							render: (h, params) => {
-								return h('span', params.row.moments_content || '无')
+								return h('span', params.row.moments_content || '')
 							}
 						},
                         {
@@ -114,7 +114,7 @@
 							label: '上传时间',
 							width: '180px',
 							render: (h, params) => {
-								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '')
 							}
 						},
 						{
@@ -129,14 +129,14 @@
 							label: '处理时间',
 							width: '180px',
 							render: (h, params) => {
-								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '')
 							}
 						},
 						{
 							label: '处理人',
 							width: '100px',
 							render: (h, params) => {
-								return h('span', params.row.admin_name || '无')
+								return h('span', params.row.admin_name || '')
 							}
 						},
 					]
