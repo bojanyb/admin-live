@@ -7,8 +7,6 @@
         :before-close="handleClose">
             <div class="video">
                 <videoPlayerComp v-if="url" :url="url" ref="videoPlayerComp"></videoPlayerComp>
-
-                <videoPlayerComp2 v-if="url" :url="url" ref="videoPlayerComp2"></videoPlayerComp2>
             </div>
         </el-dialog>
     </div>
@@ -17,7 +15,6 @@
 <script>
 // 引入视频组件
 import videoPlayerComp from '@/components/videoPlayer/index'
-import videoPlayerComp2 from '@/components/videoPlayer/index2'
 export default {
     props: {
         url: {
@@ -26,8 +23,7 @@ export default {
         }
     },
     components: {
-        videoPlayerComp,
-        videoPlayerComp2
+        videoPlayerComp
     },
     data() {
         return {
@@ -41,9 +37,9 @@ export default {
         }
     },
     mounted() {
-        // setTimeout(() => {
-        //     this.$refs.videoPlayerComp.openVideo()
-        // }, 100);
+        setTimeout(() => {
+            this.$refs.videoPlayerComp.openVideo()
+        }, 100);
     }
 }
 </script>
