@@ -89,7 +89,7 @@ export const constantRoutes = [{
 
 export const asyncRoutes = [
 	dashboardRouter,
-	// nobilityRouter,
+	nobilityRouter,
 	blockedRouter,
 	// chartsRouter,
 	userRouter,
