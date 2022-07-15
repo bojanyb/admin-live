@@ -4,6 +4,7 @@
         :title="title"
         :visible.sync="dialogVisible"
         width="580px"
+        top="5vh"
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
@@ -33,7 +34,7 @@
                 </div>
                 
                 <el-form-item label="入场横幅" prop="region">
-                    <el-button type="primary" @click="selectFunc('goodsBank')">添加</el-button>
+                    <el-button type="primary" @click="selectFunc('goodsBank', )">添加</el-button>
                 </el-form-item>
                 <el-form-item label="入场座驾" prop="region">
                     <el-button type="primary" @click="selectFunc('goodsBank')">添加</el-button>
@@ -145,6 +146,20 @@ export default {
             } else {
                 return '查看贵族'
             }
+        }
+    },
+    watch: {
+        gifts: {
+            handler(n) {
+                console.log(n, 'n---------1010')
+            },
+            deep: true
+        },
+        list: {
+            handler(n) {
+                console.log(n, 'n-------2020')
+            },
+            deep: true
         }
     },
     methods: {
