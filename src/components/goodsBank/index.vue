@@ -66,7 +66,8 @@ export default {
             giftListArr: [],
             giftPage: {
                 page: 1,
-                limit: 10
+                limit: 10,
+                goods_type: null
             },
             giftTotal: 0,
             giftTypeList: MAPDATA.GIFTTYPE, // 礼物列表
@@ -98,16 +99,13 @@ export default {
         // 获取所有礼物
         giftList() {
             var params = {
-                'page': this.giftPage.page,
+                page: this.giftPage.page,
+                goods_type: this.giftPage.goods_type
             }
             this.giftListArr = [];
             goodsList(params).then(res => {
                 this.giftTotal = res.data.count;
-            
-                // res.data.list.map(re=>{
-                //     let params = this.giftTypeList.find(item => { return re.gift_genre === item.value })
-                //     re.gift_genreText = params.name
-                // })
+
                 this.giftListArr = res.data.list;
                 this.giftSelectSource();
             }).catch(err => {})

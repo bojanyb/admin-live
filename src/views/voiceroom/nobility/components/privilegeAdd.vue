@@ -34,10 +34,10 @@
                 </div>
                 
                 <el-form-item label="入场横幅" prop="region">
-                    <el-button type="primary" @click="selectFunc('goodsBank', )">添加</el-button>
+                    <el-button type="primary" @click="selectFunc('goodsBank', 2)">添加</el-button>
                 </el-form-item>
                 <el-form-item label="入场座驾" prop="region">
-                    <el-button type="primary" @click="selectFunc('goodsBank')">添加</el-button>
+                    <el-button type="primary" @click="selectFunc('goodsBank', 4)">添加</el-button>
                 </el-form-item>
                 <el-form-item label="专属礼物" prop="region">
                     <el-button type="primary" @click="selectFunc('drawer')">添加</el-button>
@@ -164,10 +164,13 @@ export default {
     },
     methods: {
         // 选择商品 - 礼物
-        selectFunc(name) {
+        selectFunc(name, val) {
             this.isDestoryComp = true
             setTimeout(() => {
                 this.$refs[name].drawer = true
+                if(name === 'goodsBank') {
+                    this.$refs[name].giftPage.goods_type = val
+                }
                 this.$refs[name].giftList()
             }, 50);
         },
