@@ -122,7 +122,10 @@
 							label: '所属公会',
 							width: '100px',
 							render: (h, params) => {
-								return h('span', params.row.guild_name || '无')
+								return h('div', [
+									h('div', params.row.guild_number),
+									h('div', params.row.guild_name || '无')
+								])
 							}
 						},
 						{
