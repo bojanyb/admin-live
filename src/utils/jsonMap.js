@@ -739,6 +739,50 @@ const SYSTEMSTATUSLIST = [
     }
 ]
 
+// 礼物类型
+const SYSTEMGIFTLIST = [
+    {
+        name: '普通礼物',
+        value: 1
+    },
+    {
+        name: '抽奖礼物',
+        value: 2
+    },
+    {
+        name: '抽奖包裹内礼物',
+        value: 3
+    },
+    {
+        name: '普通礼物',
+        value: 4
+    },
+    {
+        name: '免费礼物',
+        value: 5
+    },
+    {
+        name: '动效礼物',
+        value: 6
+    },
+    {
+        name: '全屏礼物',
+        value: 7
+    }
+]
+
+// 播放类型
+const SYSTEMGIFTPLAYTYPELIST = [
+    {
+        name: 'Lottie',
+        value: 1
+    },
+    {
+        name: 'SVGA',
+        value: 2
+    }
+]
+
 // 超管管理 - 状态
 const SUPERSTATUSLIST = [
     {
@@ -764,6 +808,22 @@ const MENUSTATUSLIST = [
     {
         name: '停用',
         value: 0
+    }
+]
+
+// 礼物库 - 礼物状态
+const LIBRARYGIFTSLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '正常',
+        value: 1
+    },
+    {
+        name: '废除',
+        value: 2
     }
 ]
 
@@ -889,5 +949,8 @@ export default {
     USERBLOCKEDSTATUSLIST,
     NOBILITYPRIVILEGELIST,
     USERSTATUSLISTTWO,
-    AUDITSTATUSLISTTWO
+    AUDITSTATUSLISTTWO,
+    LIBRARYGIFTSLIST,
+    SYSTEMGIFTLIST,
+    SYSTEMGIFTPLAYTYPELIST
 }

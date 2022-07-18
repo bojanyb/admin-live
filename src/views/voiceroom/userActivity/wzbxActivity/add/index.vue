@@ -18,7 +18,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="单次抽奖砖石" prop="cost">
-                    <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" onkeyup="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled" v-model="ruleForm.cost"></el-input>
+                    <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled" v-model="ruleForm.cost"></el-input>
                 </el-form-item>
                 <el-form-item label="开始时间" prop="start_time">
                     <el-date-picker

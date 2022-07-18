@@ -47,6 +47,9 @@ const request = {
         menu: {
             addRule: `${HTTPHEADER}/admin/addRule`, // 添加菜单
             editRule: `${HTTPHEADER}/admin/editRule`, // 编辑菜单
+        },
+        gift: {
+            giftList: `${HTTPHEADER}/Gift`, // 礼物列表
         }
     },
 
@@ -138,6 +141,16 @@ const request = {
     blocked: {
         bannedUserLog: `${HTTPHEADER}/User/bannedUserLog`, // 封禁用户记录
         bannedRoomLog: `${HTTPHEADER}/Room/bannedRoomLog`, // 封禁房间记录
+    },
+
+    // 贵族配置
+    nobility: {
+        nobilitylist: `${HTTPHEADER}/nobleGrade/index`, // 贵族特权设置列表
+        save: `${HTTPHEADER}/nobleGrade/save`, // 贵族特权设置修改/新增
+        detail: `${HTTPHEADER}/nobleGrade/detail`, // 贵族特权设置详情
+        noblePrice: `${HTTPHEADER}/noblePrice/index`, // 贵族价格管理
+        priceSave: `${HTTPHEADER}/noblePrice/save`, // 贵族价格新增/修改
+        nobleUser: `${HTTPHEADER}/nobleUser/index`, // 贵族用户列表
     }
 }
 

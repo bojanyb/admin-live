@@ -28,7 +28,7 @@
                 label="数量">
                 <template slot-scope="scope">
                     <div class="numBox">
-                        <el-input v-model="scope.row.num" onkeydown="this.value=this.value.replace(/^0+/,'');" @input="numInput(scope.row)"></el-input>个
+                        <el-input v-model="scope.row.num" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>个
                     </div>
                 </template>
             </el-table-column>
@@ -101,9 +101,6 @@ export default {
         },
     },
     methods: {
-        numInput(row) {
-            row.num = row.num.replace(/[^\d]/g,'')
-        },
         // 删除
         deleteData(row, index) {
             this.$emit('deleteData', {row, index})

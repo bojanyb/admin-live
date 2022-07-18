@@ -51,7 +51,7 @@
                     <div class="limit-fa">
                         <div class="limit" v-for="(item,index) in ruleForm.time_limit" :key="index">
                             <el-input v-model="item.day" :maxlength="2" placeholder="请输入天数"></el-input>
-                            <el-input v-model="item.money" onkeyup="this.value=this.value.replace(/[^\d]/g,'');" onkeydown="this.value=this.value.replace(/^0+/,'');" placeholder="请输入价格（喵粮）"></el-input>
+                            <el-input v-model="item.money" oninput="this.value=this.value.replace(/[^\d]/g,'');" onkeydown="this.value=this.value.replace(/^0+/,'');" placeholder="请输入价格（喵粮）"></el-input>
                             <el-button type="danger" v-if="ruleForm.time_limit.length > 1" @click="deleteData(index)">删除</el-button>
                         </div>
                     </div>
