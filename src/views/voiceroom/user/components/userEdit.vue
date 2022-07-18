@@ -106,7 +106,7 @@ export default {
                     { required: true, message: '请输入昵称', trigger: 'blur' }
                 ],
                 autograph: [
-                    { required: true, message: '请输入个性签名', trigger: 'blur' }
+                    { required: false, message: '请输入个性签名', trigger: 'blur' }
                 ]
             }
         };

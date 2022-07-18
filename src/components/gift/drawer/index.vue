@@ -131,7 +131,7 @@ export default {
             console.log(params, 'params----------------')
             let num = this.gifts.length
             if((num + 1) > params.max) {
-                this.$message.error('当前活动已超过添加最大礼物数量')
+                this.$message.error('已超过添加最大礼物数量')
                 return false
             }
 

@@ -47,6 +47,7 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'test',
 	  domainHttps: 'http://api.huida.vip', // https环境地址
+	  domainHttp: 'http://m.huida.vip', // app端接口
 	  httpHeader: '', // 后台本地携带
 	},
 	// 预生产环境
@@ -56,6 +57,7 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'pre',
 	  domainHttps: 'http://api.huidapay.net', // https环境地址
+	  domainHttp: 'http://m.huidapay.net', // app端接口
 	  httpHeader: '', // 后台本地携带
 	},
 	// 生产环境
@@ -65,6 +67,7 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'prod',
 	  domainHttps: 'http://api.aiyi.live', // https环境地址
+	  domainHttp: 'http://m.aiyi.live', // app端接口
 	  httpHeader: '', // 后台本地携带
 	}
 }
