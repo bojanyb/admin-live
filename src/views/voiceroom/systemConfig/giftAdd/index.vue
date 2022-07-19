@@ -3,7 +3,7 @@
         <el-dialog
         :title="title"
         :visible.sync="dialogVisible"
-        width="800px"
+        width="580px"
         top="5vh"
         :before-close="handleClose"
         @closed="closed">
@@ -15,6 +15,21 @@
                     <el-radio-group v-model="ruleForm.gift_genre">
                         <el-radio v-for="item in giftTypeList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
                     </el-radio-group>
+                </el-form-item>
+                <el-form-item label="礼物分类" prop="checkList">
+                    <el-checkbox-group v-model="ruleForm.checkList">
+                        <el-checkbox v-for="item in classifyList" :key="item.value" :label="item.value">{{ item.name }}</el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <el-form-item label="贵族等级" prop="class" v-if="ruleForm.checkList.indexOf(5) !== -1">
+                    <el-select v-model="ruleForm.class" placeholder="请选择">
+                        <el-option
+                        v-for="item in nobilityList"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="礼物播放类型" prop="play_type">
                     <el-radio-group v-model="ruleForm.play_type">
@@ -42,6 +57,7 @@
                     type="datetime"
                     placeholder="选择时间"
                     format="yyyy-MM-dd HH:mm:ss"
+                    value-format="timestamp"
                     :picker-options="timePicker">
                     </el-date-picker>
                 </el-form-item>
@@ -51,6 +67,7 @@
                     type="datetime"
                     placeholder="选择时间"
                     format="yyyy-MM-dd HH:mm:ss"
+                    value-format="timestamp"
                     :picker-options="timePicker">
                     </el-date-picker>
                 </el-form-item>
@@ -80,6 +97,8 @@
 </template>
 
 <script>
+// 引入api
+import { getGiftAdd, getGiftEdit } from '@/api/videoRoom'
 // 引入图片上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
 // 引入公共map
@@ -92,6 +111,8 @@ export default {
         return {
             dialogVisible: true,
             playTypeList: MAPDATA.SYSTEMGIFTPLAYTYPELIST, // 播放类型
+            classifyList: MAPDATA.SYSTEMGIFTCLASSIFYLIST, // 礼物分类
+            nobilityList: MAPDATA.NOBILITYCLASSLIST, // 贵族等级
             status: 'add', // 当前类型
             ruleForm: {
                 gift_name: '',
@@ -105,7 +126,9 @@ export default {
                 end_time: null,
                 status: null,
                 sort: null,
-                gift_desc: ''
+                gift_desc: '',
+                checkList: [],
+                class: ''
             },
             rules: {
                 gift_name: [
@@ -174,7 +197,7 @@ export default {
                 }
             }
         },
-        limitImgType() {
+        limitImgType() { // 限制上传文件类型
             if(this.ruleForm.play_type === 1) {
                 return '.zip'
             } else if(this.ruleForm.play_type === 2) {
@@ -195,14 +218,34 @@ export default {
             this.dialogVisible = true
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
+                params.start_time = params.start_time * 1000
+                params.end_time = params.end_time * 1000
                 this.$set(this.$data, 'ruleForm', params)
             }
         },
         // 提交
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+        async submitForm(formName) {
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    
+                    let s = this.ruleForm
+                    let params = { ...this.ruleForm }
+                    params.start_time = Math.floor(params.start_time / 1000)
+                    params.end_time = Math.floor(params.end_time / 1000)
+                    return console.log(params, 'params----------1010')
+                    if(this.status === 'add') {
+                        delete params.status
+                        delete params.gift_version
+
+                        let res = await getGiftAdd(params)
+                        if(res.code === 2000) {
+                            this.$message.success('新增成功')
+                        }
+                    } else {
+                        let res = await getGiftEdit(params)
+                        if(res.code === 2000) {
+                            this.$message.success('修改成功')
+                        }
+                    }
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -210,15 +253,17 @@ export default {
             });
         },
         // 重置
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
+        resetForm() {
+            this.handleClose()
         },
         // 关闭弹窗
         handleClose() {
             this.dialogVisible = false
         },
         // 重置 - 验证
-        validateField() {},
+        validateField(name) {
+            this.$refs.ruleForm.validateField([name])
+        },
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
@@ -229,6 +274,8 @@ export default {
 
 <style lang="scss">
 .giftAdd-box {
-
+    .el-date-editor, .el-select {
+        width: 430px;
+    }
 }
 </style>

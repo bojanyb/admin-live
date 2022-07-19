@@ -137,13 +137,16 @@ export default {
     }
     .el-upload--text {
         width: 178px;
+        height: 178px;
         position: relative;
     }
     span.fileName {
+        width: 100%;
         position: absolute;
+        left: 0px;
         top: 50%;
         transform: translateY(-50%);
-        padding-left: 50px;
+        // padding-left: 50px;
         box-sizing: border-box;
     }
 }

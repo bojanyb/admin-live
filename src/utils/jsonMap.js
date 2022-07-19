@@ -282,6 +282,14 @@ const CLASSIFY = [
     {
         value: 3,
         name: '活动'
+    },
+    {
+        value: 4,
+        name: '贵族'
+    },
+    {
+        value: 5,
+        name: '贵族赠送'
     }
 ]
 
@@ -771,6 +779,30 @@ const SYSTEMGIFTLIST = [
     }
 ]
 
+// 礼物分类
+const SYSTEMGIFTCLASSIFYLIST = [
+    {
+        name: '礼物栏',
+        value: 1
+    },
+    {
+        name: '宝箱专属',
+        value: 2
+    },
+    {
+        name: '喵喵乐园专属',
+        value: 3
+    },
+    {
+        name: '幸运转盘专属',
+        value: 4
+    },
+    {
+        name: '贵族专属',
+        value: 5
+    }
+]
+
 // 播放类型
 const SYSTEMGIFTPLAYTYPELIST = [
     {
@@ -913,6 +945,46 @@ const NOBILITYPRIVILEGELIST = [
     },
 ]
 
+// 贵族等级
+const NOBILITYCLASSLIST = [
+    {
+        name: '游侠',
+        value: 1
+    },
+    {
+        name: '骑士',
+        value: 2
+    },
+    {
+        name: '子爵',
+        value: 3
+    },
+    {
+        name: '伯爵',
+        value: 4
+    },
+    {
+        name: '公爵',
+        value: 5
+    },
+    {
+        name: '亲王',
+        value: 6
+    },
+    {
+        name: '国王',
+        value: 7
+    },
+    {
+        name: '皇帝',
+        value: 8
+    },
+    {
+        name: '神',
+        value: 9
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -952,5 +1024,7 @@ export default {
     AUDITSTATUSLISTTWO,
     LIBRARYGIFTSLIST,
     SYSTEMGIFTLIST,
-    SYSTEMGIFTPLAYTYPELIST
+    SYSTEMGIFTPLAYTYPELIST,
+    SYSTEMGIFTCLASSIFYLIST,
+    NOBILITYCLASSLIST
 }

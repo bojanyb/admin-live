@@ -192,7 +192,6 @@
 			onSearch() {
 				this.getList()
 			},
-
 			// 解散房间
 			async dissolveFunc(row) {
 				this.$confirm('是否确认解散?', '提示', {
@@ -211,10 +210,10 @@
 							message: '解散成功'
 						});
 					}
+					this.getList()
 					
 				}).catch(() => {});
 			},
-
 			// 编辑房间
 			liveEditFunc(row) {
 				this.isDestoryComp = true
@@ -222,20 +221,9 @@
 					this.$refs.liveEdit.loadParams(row)
 				}, 50);
 			},
-
 			// 销毁组件
 			destoryComp() {
 				this.isDestoryComp = false
-			},
-
-			// 房间隐藏
-			async roomHideFunc(id, status) {
-				let params = {
-					id: id,
-					is_hide: status
-				}
-				await roomHide(params)
-				this.getList()
 			}
 		}
 	}
