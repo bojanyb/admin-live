@@ -95,7 +95,7 @@ export default {
         return {
             list: [],
             gifts: [],
-            activityType: 'mmly',
+            activityType: 'gzpz',
             dialogVisible: true,
             isDestoryComp: false, // 销毁组件
             privilegeList: MAPDATA.NOBILITYPRIVILEGELIST, // 特权列表
