@@ -1,11 +1,8 @@
 // 商品列表
 <template>
     <div class="shopping-box">
-        <div class="model">
-            <el-button type="success" @click="add">新增</el-button>
-        </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
