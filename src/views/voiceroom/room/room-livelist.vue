@@ -211,7 +211,7 @@
 							message: '解散成功'
 						});
 					}
-					
+					this.getList()
 				}).catch(() => {});
 			},
 
