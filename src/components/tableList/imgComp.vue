@@ -12,7 +12,11 @@
         </div>
 
         <div class="audioBox" v-else-if="isSpecial === 'mp3'">
+            <div class="audio-name" v-if="name" :title="name">{{ name }}</div>
             <audio ref="audio" :src="src" controls="controls"></audio>
+            <div v-if="tagList.length > 0">
+                <span v-for="(item,index) in tagList" :key="index">{{ item }}</span>
+            </div>
         </div>
 
         <div class="videoBox" v-else-if="isSpecial === 'mp4'">
@@ -55,6 +59,14 @@ export default {
         previewSrcList: { // 预览
             type: String,
             default: ''
+        },
+        name: { // 音乐名称 - 音乐专用
+            type: String,
+            default: ''
+        },
+        tagList: { // 标签 - 音乐专用
+            type: Array,
+            default: []
         }
     },
     computed: {
@@ -124,6 +136,18 @@ export default {
             top: 30px;
             font-size: 40px;
             cursor: pointer;
+        }
+    }
+
+    .audioBox {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .audio-name {
+            width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 }

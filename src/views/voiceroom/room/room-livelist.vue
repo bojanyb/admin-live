@@ -12,7 +12,6 @@
 </template>
 
 <script>
-	import { roomHide, getRoomSave, roomTop } from '@/api/videoRoom'
 	import { liveEnd } from '@/api/callApp.js'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
@@ -26,8 +25,6 @@
 	import { timeFormat } from '@/utils/common.js'
 	// 引入公共参数
 	import mixins from '@/utils/mixins.js'
-	// 引入公共map
-	import MAPDATA from '@/utils/jsonMap.js'
 	// 引入公共方法
 	import { formatTime } from '@/utils/common.js'
 
@@ -41,19 +38,6 @@
 		},
 		data() {
 			return {
-				list: [],
-				listLoading: true,
-				total: 0,
-				multipleSelection: [],
-				filters: {
-					'room_number': '',
-					'is_live': '',
-					guild_number: null
-				},
-				page: {
-					page: 1,
-					limit: 10
-				},
 				isDestoryComp: false // 是否销毁组件
 			}
 		},
@@ -72,12 +56,7 @@
 						optionLabel: 'label',
 						selectWidth: '130px',
 						handler: {
-							change: (v) => {
-								console.log(v, 'v----')
-								if(v == 'code') {
-									// this.$set(this.searchParams, 'live_user_number', )
-								}
-							}
+							change: (v) => {}
 						},
 						options: [
 							{ key: 'room', label: '房间ID' },
@@ -102,6 +81,7 @@
 					columns: [
 						{
 							label: '直播场次ID',
+							minWidth: '100px',
 							prop: 'room_number'
 						},
 						{
@@ -110,6 +90,7 @@
 						},
 						{
 							label: '房间名称',
+							minWidth: '120px',
 							prop: 'room_name'
 						},
 						{
@@ -118,6 +99,7 @@
 						},
 						{
 							label: '房主ID',
+							minWidth: '100px',
 							prop: 'live_user_number'
 						},
 						{
@@ -128,7 +110,7 @@
 						},
 						{
 							label: '开播时间',
-							width: '180px',
+							minWidth: '180px',
 							render: (h, params) => {
 								return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
@@ -146,7 +128,7 @@
 						},
 						{
 							label: '操作',
-							width : '230px',
+							minWidth : '230px',
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.liveEditFunc(params.row)}}},'编辑'),
@@ -185,7 +167,6 @@
 			// 重置
 			reset() {
 				this.searchParams = {}
-				this.dateTimeParams = {}
 				this.getList()
 			},
 			// 查询
@@ -232,20 +213,5 @@
 .room-livelist {
 	padding: 20px;
 	box-sizing: border-box;
-    .el-form-item {
-		// margin-bottom: initial;
-	}
-
-	.pagination-container {
-		margin-top: initial;
-	}
-
-	.colorNormal {
-		color: #67C23A;
-	}
-
-	.colorDel {
-		color: #F56C6C;
-	}
 }
 </style>

@@ -1,3 +1,4 @@
+// 总览
 <template>
     <div class="dashboard-item-box">
         <ul>
@@ -73,6 +74,8 @@ export default {
             .Con {
                 display: flex;
                 align-items: center;
+                >span {
+                }
                 .num {
                     margin-left: 10px;
                     >span.total {
@@ -87,7 +90,7 @@ export default {
                 }
             }
             >div {
-                flex: 0.3;
+                flex: 0.333;
             }
         }
         >li:hover {

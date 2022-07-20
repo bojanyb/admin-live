@@ -45,39 +45,42 @@
 						{
 							label: '拥有特权',
 							prop: 'privilege_titles',
-							width: '500px'
+							width: '550px'
 						},
 						{
 							label: '成长值（喵粮）',
-							prop: 'growth_value'
+							prop: 'growth_value',
+							minWidth: '120px'
 						},
 						{
 							label: '保级值（喵粮）',
-							prop: 'hold_value'
+							prop: 'hold_value',
+							minWidth: '120px'
 						},
 						{
 							label: '保级天数（天）',
-							prop: 'hold_day'
+							prop: 'hold_day',
+							minWidth: '120px'
 						},
 						{
 							label: '未保级衰减值（喵粮）',
 							prop: 'reduce_value',
-							width: '180px'
+							minWidth: '180px'
 						},
 						{
 							label: '修改时间',
-							width: '180px',
+							minWidth: '180px',
 							render: (h, params) => {
 								return h('span', params.row.update_time || '无')
 							}
 						},
 						{
 							label: '操作',
-							width: '200px',
+							minWidth: '200px',
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.see(params.row)}}},'查看')
+									h('el-button', { on: {click:()=>{this.see(params.row)}}},'查看')
 								])
 							}
 						}

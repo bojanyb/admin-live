@@ -1,104 +1,171 @@
 <template>
 	<div class="app-container">
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
 
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="getGuildTurnover()">
-				<el-form-item label="派对ID">
-					<el-input v-model="filters.room_number" v-input-limit="0" placeholder="请输入派对ID" clearable />
-				</el-form-item>
-				<el-form-item label="公会ID">
-					<el-input v-model="filters.guild_number" v-input-limit="0" placeholder="请输入公会ID" clearable />
-				</el-form-item>
-				<el-form-item label="收礼人ID">
-					<el-input v-model="filters.user_number" v-input-limit="0" placeholder="请输入收礼人ID" clearable />
-				</el-form-item>
-				<el-form-item label="选择时间">
-					<el-date-picker v-model="timer" type="datetimerange" range-separator="至" start-placeholder="开始日期"
-						end-placeholder="结束日期" @change="getGuildTurnover">
-					</el-date-picker>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="getGuildTurnover">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row>
-			<el-table-column label="收礼ID" prop="live_user_number" align="center" />
-			<el-table-column label="来源" prop="fromText" align="center" />
-			<el-table-column label="时间" prop="create_timeText" align="center" />
-			<el-table-column label="派对ID" prop="room_number" align="center" />
-			<el-table-column label="公会ID" prop="guild_number" align="center" />
-			<el-table-column label="金额" prop="amount" align="center" />
-			<el-table-column label="交易流水号" prop="relation_trade_no" align="center" />
-		</el-table>
-
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="getGuildTurnover" />
+        <tableList :cfgs="cfgs" ref="tableList"></tableList>
 	</div>
 </template>
 
 <script>
-	import {
-		getUserTurnover
-	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
 	export default {
 		name: 'userTurnover-list',
 		components: {
-			Pagination
+			tableList,
+			SearchPanel
 		},
-		data() {
-			return {
-				list: [],
-				loading: false,
-				listLoading: false,
-				total: 0,
-				formLabelWidth: '120px',
-				timer: "",
-				page: {
-					page: 1,
-					limit: 10
-				},
-				filters: {
-					'guild_number': '',
-					'room_number': '',
-					'user_number': '',
+		mixins: [mixins],
+		computed: {
+			forms() {
+				return [
+					{
+						name: 'room_number',
+						type: 'input',
+						value: '',
+						label: '派对ID',
+						isNum: true,
+						placeholder: '请输入派对ID'
+					},
+					{
+						name: 'guild_number',
+						type: 'input',
+						value: '',
+						label: '公会ID',
+						isNum: true,
+						placeholder: '请输入公会ID'
+					},
+					{
+						name: 'user_number',
+						type: 'input',
+						value: '',
+						label: '收礼人ID',
+						isNum: true,
+						placeholder: '请输入收礼人ID'
+					},
+					{
+						name: 'dateTimeParams',
+						type: 'datePicker',
+						dateType: 'datetimerange',
+						format: "yyyy-MM-dd HH:mm:ss",
+						label: '时间选择',
+						value: '',
+						handler: {
+							change: v => {
+								this.emptyDateTime()
+								this.setDateTime(v)
+								this.getList()
+							},
+							selectChange: (v, key) => {
+								this.emptyDateTime()
+								this.getList()
+							}
+						}
+					}
+				]
+			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.deal.userFlow1,
+					columns: [
+						{
+							label: '收礼ID',
+							prop: 'live_user_number'
+						},
+						{
+							label: '来源',
+							render: (h, params) => {
+								let name = params.row.room_number ? '派对' : '私聊'
+								return h('span', name)
+							}
+						},
+						{
+							label: '时间',
+							minWidth: '130px',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+							}
+						},
+						{
+							label: '派对ID',
+							render: (h, params) => {
+								return h('span', params.row.room_number || '无')
+							}
+						},
+						{
+							label: '公会ID',
+							render: (h, params) => {
+								return h('span', params.row.guild_number || '无')
+							}
+						},
+						{
+							label: '金额',
+							prop: 'amount'
+						},
+						{
+							label: '交易流水号',
+							minWidth: '150px',
+							prop: 'relation_trade_no'
+						}
+					]
 				}
 			}
 		},
-		created() {
-			this.getGuildTurnover()
+		data() {
+			return {
+
+			}
 		},
 		methods: {
-			getGuildTurnover() {
-				this.listLoading = true
-				var params = {
-					'guild_number': this.filters.guild_number,
-					'room_number': this.filters.room_number,
-					'user_number': this.filters.user_number,
-					'start_time': this.timer ? JSON.stringify(new Date(this.timer[0]).getTime() / 1000) : "",
-					'end_time': this.timer ? JSON.stringify(new Date(this.timer[1]).getTime() / 1000) : "",
-					'page': this.page.page,
-					'pagesize': this.page.limit
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
+			},
+			// 配置参数
+			beforeSearch(params) {
+				let s = { ...this.searchParams, ...this.dateTimeParams }
+				return {
+					page: params.page,
+					pagesize: params.size,
+					guild_number: s.guild_number,
+					room_number: s.room_number,
+					user_number: s.user_number,
+					start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
+					end_time: s.end_time ? Math.floor(s.end_time / 1000) : ''
 				}
-				getUserTurnover(params).then(response => {
-					this.total = response.data.count
-					this.list = response.data.list
-					this.list.map(res => {
-						res.room_number = res.room_number > 0 ? res.room_number : ""
-						res.guild_number = res.guild_number > 0 ? res.guild_number : ""
-						res.create_timeText = res.create_time > 0 ?  moment(res.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : ""
-						res.fromText = res.room_number > 0 ? "派对" : "私聊"
-					})
-					this.listLoading = false
-				}).catch(err => {
-					this.listLoading = false
-				})
+			},
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.dateTimeParams = {}
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
+			},
+			// 设置时间段
+			setDateTime(arr) {
+				const date = arr ? {
+					start_time: arr[0],
+					end_time: arr[1]
+				} : {}
+				this.$set(this, 'dateTimeParams', date)
+			},
+			// 清空日期选择
+			emptyDateTime() {
+				this.dateTimeParams = {}
 			}
 		}
 	}

@@ -10,11 +10,6 @@
 </template>
 
 <script>
-	import {
-		getUserStatistical
-	} from '@/api/videoRoom'
-
-
 	// 引入列表组件
 	import tableList from '@/components/tableList/TableList.vue'
 	// 引入菜单组件
@@ -25,9 +20,6 @@
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
 	import { timeFormat } from '@/utils/common.js'
-	// 引入公共map
-	import MAPDATA from '@/utils/jsonMap.js'
-
 	export default {
 		name: 'userGift-list',
 		components: {
@@ -49,12 +41,7 @@
 						selectWidth: '130px',
 						label: '交易查询',
 						handler: {
-							change: (v) => {
-								console.log(v, 'v----')
-								if(v == 'code') {
-									// this.$set(this.searchParams, 'live_user_number', )
-								}
-							}
+							change: (v) => {}
 						},
 						options: [
 							{ key: 'all', label: '全部' },
@@ -90,6 +77,7 @@
 					columns: [
 						{
 							label: '时间',
+							minWidth: '130px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
 							}
@@ -122,6 +110,7 @@
 						},
 						{
 							label: '交易流水号',
+							minWidth: '150px',
 							prop: 'relation_trade_no'
 						}
 					]

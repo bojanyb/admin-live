@@ -1,83 +1,120 @@
 <template>
-	<div class="app-container">
+	<div class="giftHistory-list-box">
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
 
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" @keyup.enter.native="activetyList()">
-				<el-form-item label="被赠送用户ID">
-					<el-input v-model="filters.user_number" v-input-limit="0" placeholder="被赠送用户ID" clearable />
-				</el-form-item>
-				<el-form-item>
-					<el-button type="success" @click="activetyList">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row>
-			<el-table-column label="被赠送用户ID" prop="user_number" align="center" />
-			<el-table-column label="赠送类型" prop="currencyText" align="center" />
-			<el-table-column label="赠送数量" prop="diamond" align="center" />
-			<el-table-column label="赠送时间" prop="create_timeText" align="center" />
-			<el-table-column label="赠送原因" prop="remark" align="center" show-overflow-tooltip/>
-			<el-table-column label="操作人" prop="op_user" align="center" />
-		</el-table>
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="activetyList" />
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 	</div>
 </template>
 
 <script>
-	import {getUserPlatformTopUp} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
 		name: 'giftHistoryList',
+		mixins: [mixins],
 		components: {
-			Pagination
+			SearchPanel,
+			tableList
+		},
+		computed: {
+			forms() {
+				return [
+					{
+						name: 'user_number',
+						type: 'input',
+						value: '',
+						label: '被赠送用户ID',
+						isNum: true,
+						placeholder: '请输入公会ID'
+					}
+				]
+			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.finance.platformTopUp,
+					columns: [
+						{
+							label: '被赠送用户ID',
+							prop: 'user_number'
+						},
+						{
+							label: '赠送类型',
+							render: (h, params) => {
+								let data = MAPDATA.FINANCEGIVETYPELIST.find(item => { return item.value === params.row.currency })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '赠送数量',
+							prop: 'diamond'
+						},
+						{
+							label: '赠送时间',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '赠送原因',
+							prop: 'remark',
+							showOverFlow: true
+						},
+						{
+							label: '操作人',
+							prop: 'op_user'
+						}
+					]
+				}
+			}
 		},
 		data() {
 			return {
-				list: [],
-				listLoading: false,
-				total: 0,
-				page: {
-					page: 1,
-					limit: 10
-				},
-				filters: {
-					"user_number": ""
-				},
+
 			}
 		},
-		created() {},
-		mounted() {
-			this.activetyList();
-		},
 		methods: {
-			activetyList(){
-				var params = {
-					page : this.page.page,
-					user_number: this.filters.user_number
+			// 配置参数
+			beforeSearch(params) {
+				let s = { ...this.searchParams }
+				return {
+					page: params.page,
+					pagesize: params.size,
+					user_number: s.user_number
 				}
-				this.listLoading = true;
-				getUserPlatformTopUp(params).then(res=>{
-					this.total = res.data.count;
-					res.data.list.map(re=>{
-						re.currencyText = re.currency == 1 ? "钻石" : "喵粮";
-						re.create_timeText = moment(re.create_time * 1000).format(
-							'YYYY-MM-DD HH:mm:ss') 
-					})
-					this.list = res.data.list;
-					this.listLoading = false;
-				}).catch(err=>{
-					this.$message.error(err);
-					this.listLoading = false;
-				})
+			},
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
+			},
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
 			}
 		}
 	}
 </script>
-<style scoped="scoped" lang="scss">
+
+<style lang="scss">
+.giftHistory-list-box {
+	padding: 20px;
+	box-sizing: border-box;
+}
 </style>

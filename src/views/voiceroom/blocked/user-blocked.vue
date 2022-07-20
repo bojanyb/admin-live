@@ -26,7 +26,7 @@
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
-	import { timeFormat, formatTime } from '@/utils/common.js'
+	import { timeFormat } from '@/utils/common.js'
 	// 引入公共参数
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
@@ -68,6 +68,7 @@
 						},
 						{
 							label: '昵称',
+							minWidth: '120px',
 							prop: 'nickname'
 						},
 						{
@@ -79,6 +80,7 @@
 						},
                         {
 							label: '封禁时间',
+							minWidth: '180px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
@@ -100,6 +102,7 @@
 						},
                         {
 							label: '创建时间',
+							minWidth: '180px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}

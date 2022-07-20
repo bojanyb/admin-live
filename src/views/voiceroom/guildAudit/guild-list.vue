@@ -99,36 +99,39 @@
 						},
 						{
 							label: '公会长ID',
+							minWidth: '120px',
 							prop: 'user_number'
 						},
 						{
 							label: '创建时间',
-							width: '180px',
+							minWidth: '180px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
 						{
 							label: '公会成员（人数）',
-							width: '150px',
+							minWidth: '150px',
 							prop: 'user_count'
 						},
 						{
 							label: '已绑定厅（个）',
+							minWidth: '150px',
 							prop: 'room_count'
 						},
 						{
 							label: '当日流水（喵粮）',
-							width: '150px',
+							minWidth: '150px',
 							prop: 'today_flow'
 						},
 						{
 							label: '总流水（喵粮）',
+							minWidth: '150px',
 							prop: 'total_flow'
 						},
 						{
 							label: '操作',
-							width: '300px',
+							minWidth: '300px',
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.details(params.row)}}}, '明细'),

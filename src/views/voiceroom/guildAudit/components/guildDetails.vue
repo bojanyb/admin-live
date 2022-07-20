@@ -4,6 +4,7 @@
         title="公会明细"
         :visible.sync="dialogVisible"
         width="850px"
+        top="5vh"
         :before-close="handleClose"
         @closed="closed">
             <div class="formBox">
@@ -34,12 +35,8 @@ import tableList from '@/components/tableList/TableList.vue'
 import addMember from './addMember.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
-// 引入公共方法
-import { timeFormat } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
 export default {
     props: {
         guildParams: {

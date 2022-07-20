@@ -1,226 +1,229 @@
 <template>
-	<div class="app-container">
+	<div class="guildReport-list-box">
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
 
-		<!--工具条-->
-		<el-col :span="24" class="toolbar">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="getGuildUserReportList()">
-				<el-form-item label="公会ID">
-					<el-input v-model="filters.guild_number" v-input-limit="0" placeholder="请输入公会ID" clearable />
-				</el-form-item>
-				<el-form-item label="状态">
-					<el-select v-model="filters.status" placeholder="请选择" @change="getGuildUserReportList">
-						<el-option v-for="item in statusList" :key="item.value" :label="item.label"
-							:value="item.value" />
-					</el-select>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="getGuildUserReportList">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row @cell-mouse-enter="handleCellEnter">
-			<el-table-column label="举报公会名称(ID)" align="center" show-overflow-tooltip>
-				<template slot-scope="scope">
-					<div style="display: contents;">{{scope.row.guild_nickname}}</div>
-					<div>({{scope.row.guild_number}})</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="公会等级" prop="rankText" align="center" />
-			<el-table-column label="公会长昵称(ID)" align="center" show-overflow-tooltip>
-				<template slot-scope="scope">
-					<div style="display: contents;">{{scope.row.guild_owner.nickname}}</div>
-					<div>({{scope.row.guild_owner.user_number}})</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="被举报成员昵称(ID)" align="center" show-overflow-tooltip>
-				<template slot-scope="scope">
-					<div v-if="scope.row.reported_user" style="display: contents;">{{scope.row.reported_user.nickname}}</div>
-					<div v-if="scope.row.reported_user">({{scope.row.reported_user.user_number}})</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="近72小时非本公会厅收入" prop="not_guild_free" align="center" class="colorNormal">
-				<template slot-scope="scope">
-					<el-popover placement="top-start" width="300" trigger="hover"  v-if="scope.row.not_guild_free > 0">
-						<el-table :data="gridData" >
-							<el-table-column width="130" property="room_number" label="房间ID"></el-table-column>
-							<el-table-column width="130" property="not_guild_free" label="收入"></el-table-column>
-						</el-table>
-						<div slot="reference" class="colorNormal">{{scope.row.not_guild_free}}</div>
-					</el-popover>
-					<div v-else>
-						<div slot="reference">{{scope.row.not_guild_free}}</div>
-					</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="状态" prop="statusText" align="center" />
-			<el-table-column label="举报时间" prop="create_timeText" align="center" />
-			<el-table-column label="处理人" prop="deal_user" align="center" />
-			<el-table-column label="处理时间" prop="create_timeText" align="center" />
-			<el-table-column label="操作" align="center" width="230">
-				<template slot-scope="scope">
-					<el-button type="primary" v-if="scope.row.status == 1" @click="handleChange(scope.row,2)">通过
-					</el-button>
-					<el-button type="danger" v-if="scope.row.status == 1" @click="handleChange(scope.row,3)">拒绝
-					</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="getGuildUserReportList" />
-
+		<!-- 详情组件 -->
+		<guildReportComp v-if="isDestoryComp" ref="guildReportComp" @destoryComp="destoryComp"></guildReportComp>
 	</div>
 </template>
 
 <script>
-	import {
-		getGuildUserReport,
-		getGuildDealReport,
-		getNotGuildFree
-	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	// 引入api
+	import { getGuildDealReport } from '@/api/videoRoom'
+	// 引入详情组件
+	import guildReportComp from './components/guildReportComp.vue'
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
 		name: 'guildReport-list',
+		mixins: [mixins],
 		components: {
-			Pagination
+			SearchPanel,
+			tableList,
+			guildReportComp
+		},
+		computed: {
+			forms() {
+				return [
+					{
+						name: 'guild_number',
+						type: 'input',
+						value: '',
+						label: '公会ID',
+						isNum: true,
+						placeholder: '请输入公会ID'
+					},
+					{
+						name: 'status',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '状态',
+						placeholder: '请选择',
+						options: MAPDATA.GUILDSTATUSLIST
+					}
+				]
+			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.guild.guildUserReport,
+					columns: [
+						{
+							label: '举报公会名称（ID）',
+							minWidth: '180px',
+							render: (h, params) => {
+								return h('div', [
+									h('div', params.row.guild_nickname),
+									h('div', params.row.guild_number || '无')
+								])
+							}
+						},
+						{
+							label: '公会等级',
+							render: (h, params) => {
+								let data = MAPDATA.CLASSLIST.find(item => { return item.value === params.row.rank })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '公会长昵称（ID）',
+							minWidth: '150px',
+							render: (h, params) => {
+								return h('div', [
+									h('div', params.row.guild_owner.nickname),
+									h('div', params.row.guild_owner.user_number || '无')
+								])
+							}
+						},
+						{
+							label: '被举报成员昵称（ID）',
+							minWidth: '180px',
+							render: (h, params) => {
+								return h('div', [
+									h('div', params.row.reported_user.nickname),
+									h('div', params.row.reported_user.user_number || '无')
+								])
+							}
+						},
+						{
+							label: '近72小时非本公会厅收入',
+							minWidth: '200px',
+							render: (h, params) => {
+								return h('span', {
+									style: {
+										color: params.row.not_guild_free ? '#67C23A' : '#606266'
+									},
+									on: {
+										click: () => {
+											this.details(params.row)
+										}
+									}
+								}, params.row.not_guild_free || '0')
+							}
+						},
+						{
+							label: '状态',
+							render: (h, params) => {
+								let data = MAPDATA.GUILDSTATUSLIST.find(item => { return item.value === params.row.status })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '举报时间',
+							minWidth: '180px',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '处理人',
+							prop: 'deal_user'
+						},
+						{
+							label: '处理时间',
+							minWidth: '180px',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '操作',
+							minWidth : '230px',
+							render: (h, params) => {
+								return h('div', [
+									h('el-button', { props : { type: 'primary'}, style: {
+										display: params.row.status === 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.func(params.row.id, 2)}}},'同意'),
+									h('el-button', { props : { type: 'danger'}, style: {
+										display: params.row.status === 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.func(params.row.id, 3)}}},'拒绝')
+								])
+							}
+						}
+					]
+				}
+			}
 		},
 		data() {
 			return {
-				total: 0,
-				listLoading: false,
-				list: [],
-				statusList: [{
-						"value": 0,
-						"label": "全部",
-					},
-					{
-						"value": 1,
-						"label": "未处理",
-					},
-					{
-						"value": 2,
-						"label": "已通过",
-					},
-					{
-						"value": 3,
-						"label": "已拒绝",
-					}
-				],
-				page: {
-					page: 1,
-					limit: 10
-				},
-				filters: {
-					guild_number: "",
-					status: ""
-				},
-				cellEnter: {
-					user_id: '',
-					guild_id: '',
-				},
-				gridData: []
+				isDestoryComp: false, // 是否销毁组件
 			}
-
-		},
-		mounted() {
-			this.getGuildUserReportList();
 		},
 		methods: {
-			getGuildUserReportList() {
-				var params = {
-					guild_number: this.filters.guild_number,
-					status: this.filters.status,
-					page: this.page.page,
-					pagesize: this.page.limit,
+			// 配置参数
+			beforeSearch(params) {
+				let s = { ...this.searchParams }
+				return {
+					page: params.page,
+					pagesize: params.size,
+					guild_number: s.guild_number,
+					status: s.status
 				}
-				this.listLoading = true;
-				getGuildUserReport(params).then(res => {
-					this.total = res.data.count;
-					res.data.list.map(re => {
-						switch (re.status) {
-							case 1:
-								re.statusText = "未处理";
-								break;
-							case 2:
-								re.statusText = "已通过";
-								break;
-							case 3:
-								re.statusText = "已拒绝";
-								break;
-						}
-						switch (re.rank) {
-							case 1:
-								re.rankText = "A";
-								break;
-							case 2:
-								re.rankText = "AA";
-								break;
-							case 3:
-								re.rankText = "AAA";
-								break;
-						}
-						re.create_timeText = JSON.stringify(re.create_time).length == 10 ? moment(re
-							.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
-					})
-					this.list = res.data.list;
-					this.listLoading = false;
-				}).catch(err => {
-					this.$message.error(err);
-					this.listLoading = false;
-				})
 			},
-			handleChange(row, type) {
-				var params = {
-					id: row.id,
-					status: type
-				}
-				getGuildDealReport(params).then(res => {
-					this.$message.success("处理成功")
-					this.getGuildUserReportList();
-				}).catch(err => {
-					this.$message.error(err);
-				})
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
 			},
-			handleCellEnter(row) {
-				
-				if(row.not_guild_free == 0){ // 近72小时非本公会厅收入 为0不需要请求接口
-					return
-				}
-				
-				if (row.reported_user == null ){
-					return
-				}
-				if (row.reported_user !==null && this.cellEnter.user_id && this.cellEnter.user_id == row.reported_user.user_number && this.cellEnter
-					.guild_id == row.guild_number) {
-					return
-				} else {
-					this.cellEnter.user_id = row.reported_user.user_number;
-					this.cellEnter.guild_id = row.guild_number;
-				}
-				getNotGuildFree(this.cellEnter).then(res => {
-					this.gridData = res.data.list;
-				}).catch(err => {
-					console.log(err);
-				})
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.getList()
 			},
+			// 查询
+			onSearch() {
+				this.getList()
+			},
+			// 操作 - 通过 - 拒绝
+			async func(id, status) {
+				let res = await getGuildDealReport({ id, status })
+				if(res.code === 2000) {
+					if(status === 2) {
+						this.$message.success('通过成功')
+					} else {
+						this.$message.success('拒绝成功')
+					}
+				}
+				this.getList()
+			},
+			// 销毁组件
+			destoryComp() {
+				this.isDestoryComp = false
+			},
+			// 详情 - 近72小时非本公会厅收入
+			details(row) {
+				if(row.not_guild_free && row.reported_user) {
+					let params = {
+						user_id: row.reported_user.user_number,
+						guild_id: row.guild_number
+					}
+					this.isDestoryComp = true
+					setTimeout(() => {
+						this.$refs.guildReportComp.loadParams(params)
+					}, 50);
+				}
+			}
 		}
 	}
 </script>
-<style lang="scss" scoped="scoped">
-	.el-form-item {
-		// margin-bottom: initial;
-	}
-
-	.pagination-container {
-		margin-top: initial;
-	}
-
-	.colorNormal {
-		color: #67C23A;
-		cursor: pointer;
-	}
+<style lang="scss">
+.guildReport-list-box {
+	padding: 20px;
+	box-sizing: border-box;
+}
 </style>

@@ -63,7 +63,6 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.system.getAllPermission,
-                border: true,
                 defaultExpandAll: false,
                 children: 'child',
                 columns: [

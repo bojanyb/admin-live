@@ -1,6 +1,6 @@
 <template>
   <article class="share-table-list-box">
-    <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe" :border="!cfgs.border"
+    <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe" :border="cfgs.border"
     :default-expand-all="cfgs.defaultExpandAll"
     row-key="id"
     :tree-props="{children: cfgs.children}"
@@ -25,6 +25,8 @@
           <imgComp 
           v-if="item.isimg"
           :src="scope.row[item.prop]"
+          :name="scope.row[item.nameProp]"
+          :tagList="scope.row[item.tagProp]"
           :width="item.imgWidth"
           :height="item.imgHeight"
           :preview-src-list="scope.row[item.prop]"
@@ -287,16 +289,16 @@
       thead th {
         padding: 0;
         height: 60px;
-        background: rgba(250, 250, 250, 1);
+        background: rgba(0, 0, 0, 1);
         >.cell {
           font-size: 14px;
           font-weight: 600;
-          color: rgba(102, 102, 102, 1);
+          color: rgba(255, 255, 255, 1);
         }
       }
       tbody td {
         padding: 0;
-        height: 45px;
+        height: 55px;
         >.cell {
           font-size: 14px;
           font-weight: 400;
