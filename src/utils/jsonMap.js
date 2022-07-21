@@ -564,6 +564,22 @@ const BANKLIST = [
     }
 ]
 
+// 公会申请列表 - 状态
+const GUILDAPPLYSTATUSLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '已联系',
+        value: 1
+    },
+    {
+        name: '已拒绝',
+        value: 2
+    }
+]
+
 /*
 *派对管理 - 举报房间
 */
@@ -1233,5 +1249,6 @@ export default {
     GUILDAPPLYLIST,
     GUILDSTATUSLIST,
     FINANCEGIVETYPELIST,
-    DEALSOURCELIST
+    DEALSOURCELIST,
+    GUILDAPPLYSTATUSLIST
 }

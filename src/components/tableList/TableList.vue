@@ -25,8 +25,8 @@
           <imgComp 
           v-if="item.isimg"
           :src="scope.row[item.prop]"
-          :name="scope.row[item.nameProp]"
-          :tagList="scope.row[item.tagProp]"
+          :name="item.nameProp ? scope.row[item.nameProp] : ''"
+          :tagList="item.tagProp ? scope.row[item.tagProp] : []"
           :width="item.imgWidth"
           :height="item.imgHeight"
           :preview-src-list="scope.row[item.prop]"

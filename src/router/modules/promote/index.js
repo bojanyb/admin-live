@@ -1,7 +1,7 @@
 /** When your routing table is too long, you can split it into small modules**/
 
 import Layout from '@/layout'
-const userRouter = {
+const promoteRouter = {
 	path: '/promote',
 	component: Layout,
 	redirect: 'noRedirect',
@@ -23,5 +23,5 @@ const userRouter = {
 	]
 }
 
-export default userRouter
+export default promoteRouter
 

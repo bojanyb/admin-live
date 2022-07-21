@@ -9,12 +9,22 @@ const guildAuditRouter = {
 		title: '公会管理',
 		icon: 'peoples'
 	},
-	children: [{
+	children: [
+		{
 			path: 'guild-list',
 			component: () => import('@/views/voiceroom/guildAudit/guild-list'),
 			name: 'guild-list',
 			meta: {
 				title: '公会列表',
+				noCache: true
+			}
+		},
+		{
+			path: 'guild-apply-list',
+			component: () => import('@/views/voiceroom/guildAudit/guild-apply-list'),
+			name: 'guild-apply-list',
+			meta: {
+				title: '公会申请列表',
 				noCache: true
 			}
 		},

@@ -183,7 +183,7 @@ export default {
         emptyDateTime() {
             this.dateTimeParams = {}
         },
-        // 查询
+        // 重置
         reset() {
             this.searchParams = {
                 status: '1'
@@ -191,7 +191,7 @@ export default {
             this.dateTimeParams = {}
             this.getList()
         },
-        // 重置
+        // 查询
         onSearch() {
             this.getList()
         },
