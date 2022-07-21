@@ -81,7 +81,7 @@ const request = {
     CashHisity: {
         list: `${HTTPHEADER}/cash/getcashHisity`,
         apply: `${HTTPHEADER}/cash/getCash`,
-        doCash: `${HTTPHEADER}/cash/doCash`,
+        doCash: `${HTTPHEADER}/cash/doCash2`,
         diamondRecharge: `${HTTPHEADER}/Recharge/diamondRecharge`,
     },
 

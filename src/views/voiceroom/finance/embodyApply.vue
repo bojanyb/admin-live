@@ -135,11 +135,7 @@ export default {
             if(res.code === 2000) {
                 this.$refs.tableList.loading = false
                 let message = type === 'success' ? '通过审核' : '驳回成功'
-                if(type === 'success') {
-                    this.$message.success(message)
-                } else {
-                    this.$message.error(message)
-                }
+                this.$message.success(message)
             }
             this.getList()
         },
