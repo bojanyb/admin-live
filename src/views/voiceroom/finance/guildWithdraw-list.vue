@@ -36,24 +36,6 @@ export default {
     computed: {
         forms() {
             return [
-                // {
-                //     name: 'sort',
-                //     type: 'select',
-                //     value: '',
-                //     keyName: 'value',
-                //     optionLabel: 'name',
-                //     label: '排序',
-                //     placeholder: '请选择',
-                //     options: MAPDATA.SORTLIST
-                // },
-                // {
-                //     name: 'user_number',
-                //     type: 'input',
-                //     value: '',
-                //     label: '收单机构',
-                //     isNum: true,
-                //     placeholder: '请输入收单机构'
-                // },
                 {
                     name: 'channel',
                     type: 'select',
@@ -110,11 +92,13 @@ export default {
                 columns: [
                     {
                         label: '用户ID',
-                        prop: 'user_number'
+                        render: (h, params) => {
+                            return h('span', params.row.user_number || '无')
+                        }
                     },
                     {
                         label: '充值时间',
-                        prop: 'create_time',
+                        minWidth: '150px',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
@@ -145,10 +129,12 @@ export default {
                     },
                     {
                         label: '交易单号',
+                        minWidth: '150px',
                         prop: 'trade_no'
                     },
                     {
                         label: '商户单号',
+                        minWidth: '150px',
                         render: (h, params) => {
                             return h('span', params.row.out_trade_no || '无')
                         }

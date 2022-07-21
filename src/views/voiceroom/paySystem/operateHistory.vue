@@ -63,7 +63,7 @@ export default {
         //传递参数
         beforeSearch(params) {
             return {
-                size: params.size,
+                pagesize: params.size,
                 page: params.page
             };
         },

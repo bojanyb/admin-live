@@ -180,7 +180,7 @@
 						},
 						{
 							label: '操作',
-							width : '230px',
+							width : '130px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [

@@ -10,9 +10,9 @@
         :before-remove="beforeRemove"
         :http-request="upLoad">
             <img v-if="url && isSpecial === 'png'" :src="url" class="avatar">
-            <!-- <span class="fileName" v-if="url && isSpecial">已上传文件</span> -->
             <svgComp v-if="url && isSpecial === 'svga' && isShowSvg" ref="svgComp" :src="url" :styleObj="{ width: '178px', height: '178px' }"></svgComp>
             <i v-if="!url" class="el-icon-plus avatar-uploader-icon"></i>
+            <span class="fileName" v-if="url && isSpecial === 'zip'">已上传文件</span>
         </el-upload>
     </div>
 </template>
@@ -67,10 +67,12 @@ export default {
         },
         isSpecial() { // 判断是图片还是svga
             if(this.url) {
-                if(this.url.indexOf('png') !== -1 || this.url.indexOf('jpg') !== -1 || this.url.indexOf('jpeg') !== -1) {
+                if(this.url.indexOf('.png') !== -1 || this.url.indexOf('.jpg') !== -1 || this.url.indexOf('.jpeg') !== -1) {
                     return 'png'
-                } else if(this.url.indexOf('svga') !== -1) {
+                } else if(this.url.indexOf('.svga') !== -1) {
                     return 'svga'
+                } else if(this.url.indexOf('.zip') !== -1) {
+                    return 'zip'
                 }
             }
         }
@@ -135,13 +137,16 @@ export default {
     }
     .el-upload--text {
         width: 178px;
+        height: 178px;
         position: relative;
     }
     span.fileName {
+        width: 100%;
         position: absolute;
+        left: 0px;
         top: 50%;
         transform: translateY(-50%);
-        padding-left: 50px;
+        // padding-left: 50px;
         box-sizing: border-box;
     }
 }

@@ -17,6 +17,11 @@
                         <el-option v-for="item in goodsClassifyList" :label="item.name" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="贵族等级" prop="category_id" v-if="ruleForm.category_id === 4 || ruleForm.category_id === 5">
+                    <el-select v-model="ruleForm.category_id" placeholder="请选择贵族等级">
+                        <el-option v-for="item in nobilityList" :label="item.name" :key="item.value" :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="优先推荐" prop="is_first">
                     <el-select v-model="ruleForm.is_first" placeholder="优先推荐">
                         <el-option v-for="item in priorityGiveList" :label="item.name" :key="item.value" :value="item.value"></el-option>
@@ -51,7 +56,7 @@
                     <div class="limit-fa">
                         <div class="limit" v-for="(item,index) in ruleForm.time_limit" :key="index">
                             <el-input v-model="item.day" :maxlength="2" placeholder="请输入天数"></el-input>
-                            <el-input v-model="item.money" onkeyup="this.value=this.value.replace(/[^\d]/g,'');" onkeydown="this.value=this.value.replace(/^0+/,'');" placeholder="请输入价格（喵粮）"></el-input>
+                            <el-input v-model="item.money" oninput="this.value=this.value.replace(/[^\d]/g,'');" onkeydown="this.value=this.value.replace(/^0+/,'');" placeholder="请输入价格（喵粮）"></el-input>
                             <el-button type="danger" v-if="ruleForm.time_limit.length > 1" @click="deleteData(index)">删除</el-button>
                         </div>
                     </div>
@@ -78,7 +83,7 @@
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="商品特效" prop="goods_animation_path" v-if="goodsType === 1">
-                    <upload v-model="ruleForm.goods_animation_path" :imgUrl="ruleForm.goods_animation_path" name="goods_animation_path" ref="goods_animation_path" @validateField="validateField"></upload>
+                    <upload v-model="ruleForm.goods_animation_path" :imgUrl="ruleForm.goods_animation_path" name="goods_animation_path" ref="goods_animation_path"  :accept="limitUploadType" @validateField="validateField"></upload>
                 </el-form-item>
                 <el-form-item label="商品静态图" prop="goods_image" v-if="goodsType === 2">
                     <upload v-model="ruleForm.goods_image" :imgUrl="ruleForm.goods_image" accept=".png,.jpg,.jpeg" name="goods_image" ref="goods_image" @validateField="validateField"></upload>
@@ -117,7 +122,7 @@ import MAPDATA from '@/utils/jsonMap.js'
 // 引入图片上传组件
 import upload from '@/components/uploadImg/index.vue'
 // 引入api
-import { add, down } from '@/api/shopping.js'
+import { add } from '@/api/shopping.js'
 // 获取图片真实宽高
 import { fileReader } from '@/utils/fileReader.js'
 // 引入公共方法
@@ -128,7 +133,7 @@ export default {
         upload
     },
     computed: {
-        title() {
+        title() { // 标题
             if(this.status === 'add') {
                 return '新增商品'
             } else if(this.status === 'update') {
@@ -137,21 +142,21 @@ export default {
                 return '查看商品'
             }
         },
-        StartPicker() {
+        StartPicker() { // 开始时间配置
             return {
                 disabledDate: (time) => {
                     return time.getTime() < new Date().getTime() - 24 * 60 * 60 * 1000;
                 }
             }
         },
-        EndPicker() {
+        EndPicker() { // 结束时间配置
             return {
                 disabledDate: (time) => {
                     return time.getTime() < new Date().getTime() - 24 * 60 * 60 * 1000;
                 }
             }
         },
-        startTime() {
+        startTime() { // 开始时间限制
             let start = this.ruleForm.start_time
             let now = new Date().getTime()
             let params = {}
@@ -167,7 +172,7 @@ export default {
             }
             return params
         },
-        endTime() {
+        endTime() { // 结束时间限制
             let start = this.ruleForm.start_time
             let now = new Date().getTime()
             let params = {}
@@ -183,7 +188,7 @@ export default {
             }
             return params
         },
-        limitRules() {
+        limitRules() { // 商品出售期限 - 必填
             let array = this.ruleForm.time_limit
             let isStatus = false
             array.forEach((item,index) => {
@@ -203,13 +208,21 @@ export default {
                 }
             }
             return params
+        },
+        limitUploadType() { // 限制上传文件格式
+            if(this.ruleForm.play_type === 1) {
+                return '.zip'
+            } else if(this.ruleForm.play_type === 2) {
+                return '.svg,.svga'
+            }
         }
     },
     data() {
         return {
             dialogVisible: false,
             goodsTypeList: MAPDATA.SHOPPING,
-            goodsClassifyList: MAPDATA.CLASSIFY,
+            goodsClassifyList: MAPDATA.CLASSIFY, // 分类
+            nobilityList: MAPDATA.NOBILITYCLASSLIST, // 贵族等级
             priorityGiveList: MAPDATA.PRIORITYGIVE,
             goodsType: 1,
             status: 'add',

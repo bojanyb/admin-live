@@ -151,11 +151,15 @@ const USERBALANCETYPE = [
 */
 const SORTLIST = [
     {
-        value: 1,
+        value: '',
+        name: '全部'
+    },
+    {
+        value: 0,
         name: '正序'
     },
     {
-        value: 2,
+        value: 1,
         name: '倒序'
     }
 ]
@@ -282,6 +286,14 @@ const CLASSIFY = [
     {
         value: 3,
         name: '活动'
+    },
+    {
+        value: 4,
+        name: '贵族'
+    },
+    {
+        value: 5,
+        name: '贵族赠送'
     }
 ]
 
@@ -383,6 +395,42 @@ const CLASSLIST = [
     },
     {
         name: 'AAA',
+        value: 3
+    }
+]
+
+// 公会厅申请列表 - 申请目的
+const GUILDAPPLYLIST = [
+    {
+        name: '全部',
+        value: 0
+    },
+    {
+        name: '绑定',
+        value: 1
+    },
+    {
+        name: '解绑',
+        value: 2
+    }
+]
+
+// 公会厅申请列表 - 状态
+const GUILDSTATUSLIST = [
+    {
+        name: '全部',
+        value: 0
+    },
+    {
+        name: '未处理',
+        value: 1
+    },
+    {
+        name: '已通过',
+        value: 2
+    },
+    {
+        name: '已拒绝',
         value: 3
     }
 ]
@@ -697,6 +745,134 @@ const USERSTATUSLIST = [
     }
 ]
 
+// 用户音乐上传列表 - 筛选查看
+const USERMUSICUPLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '未处理',
+        value: 1
+    },
+    {
+        name: '已下架',
+        value: 2
+    }
+]
+
+// 用户音乐上传列表 - 语种
+const USERLANGUAGELIST = [
+    {
+        name: '华语'
+    },
+    {
+        name: '粤语'
+    },
+    {
+        name: '方言'
+    },
+    {
+        name: '英语'
+    },
+    {
+        name: '日语'
+    },
+    {
+        name: '韩语'
+    },
+    {
+        name: '俄语'
+    },
+    {
+        name: '法语'
+    }
+]
+
+// 用户音乐上传列表 - 曲风
+const USERMUSICSTYLELIST = [
+    {
+        name: '流行'
+    },
+    {
+        name: '抖音热门'
+    },
+    {
+        name: '古风'
+    },
+    {
+        name: '摇滚'
+    },
+    {
+        name: 'DJ'
+    },
+    {
+        name: '合唱'
+    },
+    {
+        name: '民谣'
+    },
+    {
+        name: '儿歌'
+    },
+    {
+        name: '纯音乐'
+    },
+    {
+        name: '说唱'
+    },
+    {
+        name: 'R&B'
+    },
+    {
+        name: '动漫/游戏'
+    },
+    {
+        name: '影视'
+    }
+]
+
+// 用户音乐上传列表 - 年代
+const USERMUSICAGELIST = [
+    {
+        name: '经典老歌'
+    },
+    {
+        name: '欧美经典'
+    },
+    {
+        name: '儿歌'
+    }
+]
+
+// 用户音乐上传列表 - 铃声
+const USERMUSICBELLSLIST = [
+    {
+        name: 'DJ铃声'
+    },
+    {
+        name: '网络铃声'
+    },
+    {
+        name: '搞笑铃声'
+    },
+    {
+        name: '个性铃声'
+    },
+    {
+        name: '动漫铃声'
+    },
+    {
+        name: '游戏铃声'
+    },
+    {
+        name: '可爱铃声'
+    },
+    {
+        name: '影视广告铃声'
+    }
+]
+
 /*
 *审核管理 - 用户图片资料审核列表
 */
@@ -739,6 +915,74 @@ const SYSTEMSTATUSLIST = [
     }
 ]
 
+// 礼物类型
+const SYSTEMGIFTLIST = [
+    {
+        name: '普通礼物',
+        value: 1
+    },
+    {
+        name: '抽奖礼物',
+        value: 2
+    },
+    {
+        name: '抽奖包裹内礼物',
+        value: 3
+    },
+    {
+        name: '普通礼物',
+        value: 4
+    },
+    {
+        name: '免费礼物',
+        value: 5
+    },
+    {
+        name: '动效礼物',
+        value: 6
+    },
+    {
+        name: '全屏礼物',
+        value: 7
+    }
+]
+
+// 礼物分类
+const SYSTEMGIFTCLASSIFYLIST = [
+    {
+        name: '礼物栏',
+        value: 1
+    },
+    {
+        name: '宝箱专属',
+        value: 2
+    },
+    {
+        name: '喵喵乐园专属',
+        value: 3
+    },
+    {
+        name: '幸运转盘专属',
+        value: 4
+    },
+    {
+        name: '贵族专属',
+        value: 5
+    }
+]
+
+// 播放类型
+const SYSTEMGIFTPLAYTYPELIST = [
+    {
+        name: 'Lottie',
+        value: 1
+    },
+    {
+        name: 'SVGA',
+        value: 2
+    }
+]
+
 // 超管管理 - 状态
 const SUPERSTATUSLIST = [
     {
@@ -764,6 +1008,22 @@ const MENUSTATUSLIST = [
     {
         name: '停用',
         value: 0
+    }
+]
+
+// 礼物库 - 礼物状态
+const LIBRARYGIFTSLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '正常',
+        value: 1
+    },
+    {
+        name: '废除',
+        value: 2
     }
 ]
 
@@ -853,6 +1113,76 @@ const NOBILITYPRIVILEGELIST = [
     },
 ]
 
+// 贵族等级
+const NOBILITYCLASSLIST = [
+    {
+        name: '游侠',
+        value: 1
+    },
+    {
+        name: '骑士',
+        value: 2
+    },
+    {
+        name: '子爵',
+        value: 3
+    },
+    {
+        name: '伯爵',
+        value: 4
+    },
+    {
+        name: '公爵',
+        value: 5
+    },
+    {
+        name: '亲王',
+        value: 6
+    },
+    {
+        name: '国王',
+        value: 7
+    },
+    {
+        name: '皇帝',
+        value: 8
+    },
+    {
+        name: '神',
+        value: 9
+    }
+]
+
+/*
+*财务管理
+*/
+// 赠送记录 - 赠送类型
+const FINANCEGIVETYPELIST = [
+    {
+        name: '钻石',
+        value: 1
+    },
+    {
+        name: '喵粮',
+        value: 2
+    }
+]
+
+/*
+*交易管理
+*/
+// 流水记录 - 来源
+const DEALSOURCELIST = [
+    {
+        name: '派对',
+        value: 0
+    },
+    {
+        name: '私聊',
+        value: 1
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -889,5 +1219,19 @@ export default {
     USERBLOCKEDSTATUSLIST,
     NOBILITYPRIVILEGELIST,
     USERSTATUSLISTTWO,
-    AUDITSTATUSLISTTWO
+    AUDITSTATUSLISTTWO,
+    LIBRARYGIFTSLIST,
+    SYSTEMGIFTLIST,
+    SYSTEMGIFTPLAYTYPELIST,
+    SYSTEMGIFTCLASSIFYLIST,
+    NOBILITYCLASSLIST,
+    USERMUSICUPLIST,
+    USERLANGUAGELIST,
+    USERMUSICSTYLELIST,
+    USERMUSICAGELIST,
+    USERMUSICBELLSLIST,
+    GUILDAPPLYLIST,
+    GUILDSTATUSLIST,
+    FINANCEGIVETYPELIST,
+    DEALSOURCELIST
 }

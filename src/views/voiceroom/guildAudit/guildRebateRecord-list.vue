@@ -1,101 +1,141 @@
 <template>
-	<div class="app-container">
+	<div class="guildRebateRecord-list-box">
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
 
-		<!--工具条-->
-		<el-col :span="24" class="toolbar">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="getRebateList()">
-				<el-form-item label="公会ID">
-					<el-input v-model="filters.guild_number" v-input-limit="0" placeholder="请输入公会ID" clearable />
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="getRebateList">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
-			<el-table-column label="时间" prop="create_timeText" align="center"/>
-			<el-table-column label="公会ID" prop="guild_number" align="center" width="150"/>
-			<el-table-column label="公会等级" prop="rank" align="center" width="150"/>
-			<el-table-column label="公会长ID" prop="user_number" align="center" width="150"/>
-			<el-table-column label="流水" prop="flow" align="center" />
-			<el-table-column label="返佣比例" prop="rebate" align="center" />
-			<el-table-column label="已结算" prop="settlement" align="center" />
-			<el-table-column label="时间区间" align="center" width="305">
-				<template slot-scope="scope">
-					<div class="fl">{{scope.row.op_timeText}} </div>
-					<div class="fl" style="margin: 0 5px;"> --- </div>
-					<div class="fl"> {{scope.row.op_end_timeText}}</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="操作人" prop="op_user" align="center" />
-		</el-table>
-
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="getRebateList" />
-
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 	</div>
 </template>
 
 <script>
-	import {
-		getSettlementLog
-	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
 		name: 'guildRebateRecord-list',
+		mixins: [mixins],
 		components: {
-			Pagination
+			SearchPanel,
+			tableList
 		},
 		data() {
 			return {
-				list: [],
-				listLoading: true,
-				total: 0,
-				filters: {
-					'guild_number': '',
-				},
-				page: {
-					page: 1,
-					limit: 10
-				},
-				ids: [],
+
 			}
 		},
-		created() {
-			this.getRebateList()
+		computed: {
+			forms() {
+				return [
+					{
+						name: 'guild_number',
+						type: 'input',
+						value: '',
+						label: '公会ID',
+						isNum: true,
+						placeholder: '请输入公会ID'
+					}
+				]
+			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.guild.settlementLog,
+					columns: [
+						{
+							label: '时间',
+							minWidth: '180px',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '')
+							}
+						},
+						{
+							label: '公会ID',
+							prop: 'guild_number'
+						},
+						{
+							label: '公会等级',
+							render: (h, params) => {
+								let data = MAPDATA.CLASSLIST.find(item => { return item.value === params.row.rank })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '公会长ID',
+							minWidth: '120px',
+							prop: 'user_number'
+						},
+						{
+							label: '流水',
+							minWidth: '120px',
+							prop: 'flow'
+						},
+						{
+							label: '返佣比例',
+							prop: 'rebate'
+						},
+						{
+							label: '已结算',
+							minWidth: '120px',
+							prop: 'settlement'
+						},
+						{
+							label: '时间区间',
+							minWidth: '300px',
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.op_time ? timeFormat(params.row.op_time, 'YYYY-MM-DD HH:mm:ss', true) : ''),
+									h('span', '-'),
+									h('span', params.row.op_end_time ? timeFormat(params.row.op_end_time, 'YYYY-MM-DD HH:mm:ss', true) : '')
+								])
+							}
+						},
+						{
+							label: '操作人',
+							prop: 'op_user'
+						}
+					]
+				}
+			}
 		},
 		methods: {
-			getRebateList() {
-				var params = {
-					'page': this.page.page,
-					'pagesize': this.page.limit,
-					'guild_number': this.filters.guild_number
+			// 配置参数
+			beforeSearch(params) {
+				let s = { ...this.searchParams }
+				return {
+					page: params.page,
+					pagesize: params.size,
+					guild_number: s.guild_number
 				}
-				this.listLoading = true
-				getSettlementLog(params).then(res => {
-					this.total = res.data.count;
-					res.data.list.map((re,i)=> {
-						re.create_timeText = re.create_time > 0 ? moment(re.create_time * 1000)
-							.format('YYYY-MM-DD HH:mm:ss') : ""
-						re.op_timeText = re.op_time > 0 ? moment(re.op_time * 1000)
-							.format('YYYY-MM-DD HH:mm:ss') : ""
-						re.op_end_timeText = re.op_end_time > 0 ? moment(re.op_end_time * 1000)
-							.format('YYYY-MM-DD HH:mm:ss') : ""
-					})
-					this.list = res.data.list
-					this.listLoading = false
-				}).catch(err => {
-					this.listLoading = false
-				})
 			},
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
+			},
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
+			}
 		}
 	}
 </script>
-<style lang="scss" scoped="scoped">
-	.el-form-item {
-		// margin-bottom: initial;
-	}
+<style lang="scss">
+.guildRebateRecord-list-box {
+	padding: 20px;
+	box-sizing: border-box;
+}
 </style>

@@ -1,196 +1,203 @@
 <template>
-	<div class="app-container">
+	<div class="guildApplication-list-box">
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
 
-		<!--工具条-->
-		<el-col :span="24" class="toolbar">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="getGuildJoinApplyList()">
-				<el-form-item label="公会ID">
-					<el-input v-model="filters.guild_number" v-input-limit="0" placeholder="请输入公会ID" clearable />
-				</el-form-item>
-				<el-form-item label="状态">
-					<el-select v-model="filters.status" placeholder="请选择" @change="getGuildJoinApplyList">
-						<el-option v-for="item in statusList" :key="item.value" :label="item.label"
-							:value="item.value" />
-					</el-select>
-				</el-form-item>
-				<el-form-item label="申请目的">
-					<el-select v-model="filters.type" placeholder="请选择" @change="getGuildJoinApplyList">
-						<el-option v-for="item in applicationList" :key="item.value" :label="item.label"
-							:value="item.value" />
-					</el-select>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="getGuildJoinApplyList">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row>
-			<el-table-column label="公会昵称" prop="guild_nickname" align="center" />
-			<el-table-column label="公会ID" prop="guild_number" align="center" />
-			<el-table-column label="公会等级" prop="rankText" align="center" />
-			<el-table-column label="公会长昵称(ID)"  align="center">
-				<template slot-scope="scope">
-					<div>{{scope.row.guild_owner.nickname}}</div>
-					<div>({{scope.row.guild_owner.user_number}})</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="公会人数" prop="user_count" align="center" />
-			<el-table-column label="公会已绑定厅数量" prop="room_count" align="center" />
-			<el-table-column label="申请人(ID)" align="center">
-				<template slot-scope="scope">
-					<div>{{scope.row.apply_user.nickname}}</div>
-					<div>({{scope.row.apply_user.user_number}})</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="申请时间" prop="create_timeText" align="center" />
-			<el-table-column label="申请目的" prop="typeText" align="center" />
-			<el-table-column label="状态" prop="statusText" align="center" />
-			<el-table-column label="操作" align="center" width="230">
-				<template slot-scope="scope">
-					<el-button type="primary" v-if="scope.row.status == 1" @click="handleChange(scope.row,2)">同意</el-button>
-					<el-button type="danger" v-if="scope.row.status == 1" @click="handleChange(scope.row,3)">拒绝</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="getGuildJoinApplyList" />
-
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 	</div>
 </template>
 
 <script>
-	import {
-		getGuildJoinApply,
-		getGuildCheck
-	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	// 引入api
+	import { getGuildCheck } from '@/api/videoRoom'
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
-		name: 'guildApplication-list',
+		mixins: [mixins],
 		components: {
-			Pagination
+			SearchPanel,
+			tableList
 		},
-		data() {
-			return {
-				total: 0,
-				listLoading: false,
-				list:[],
-				statusList: [
+		computed: {
+			forms() {
+				return [
 					{
-						"value": 0,
-						"label": "全部",
+						name: 'guild_number',
+						type: 'input',
+						value: '',
+						label: '公会ID',
+						isNum: true,
+						placeholder: '请输入公会ID'
 					},
 					{
-						"value": 1,
-						"label": "未处理",
+						name: 'status',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '状态',
+						placeholder: '请选择',
+						options: MAPDATA.GUILDSTATUSLIST
 					},
 					{
-						"value": 2,
-						"label": "已通过",
+						name: 'type',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '申请目的',
+						placeholder: '请选择',
+						options: MAPDATA.GUILDAPPLYLIST
 					},
-					{
-						"value": 3,
-						"label": "已拒绝",
-					}
-				],
-				applicationList: [
-					{
-						"value": 0,
-						"label": "全部",
-					},
-					{
-						"value": 1,
-						"label": "绑定",
-					},
-					{
-						"value": 2,
-						"label": "解绑",
-					}
-				],
-				page: {
-					page: 1,
-					limit: 10
-				},
-				filters : {
-					guild_number : "",
-					status: "",
-					type : ""
+				]
+			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.guild.joinApply,
+					columns: [
+						{
+							label: '公会昵称',
+							prop: 'guild_nickname'
+						},
+						{
+							label: '公会ID',
+							prop: 'guild_number'
+						},
+						{
+							label: '公会等级',
+							render: (h, params) => {
+								let data = MAPDATA.CLASSLIST.find(item => { return item.value === params.row.rank })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '公会长昵称（ID）',
+							minWidth: '150px',
+							render: (h, params) => {
+								return h('div', [
+									h('div', params.row.guild_owner.nickname),
+									h('div', params.row.guild_owner.user_number || '无')
+								])
+							}
+						},
+						{
+							label: '公会人数',
+							prop: 'user_count'
+						},
+						{
+							label: '公会已绑定厅数量',
+							minWidth: '180px',
+							prop: 'room_count'
+						},
+						{
+							label: '申请人（ID）',
+							minWidth: '120px',
+							render: (h, params) => {
+								return h('div', [
+									h('div', params.row.apply_user.nickname),
+									h('div', params.row.apply_user.user_number || '无')
+								])
+							}
+						},
+						{
+							label: '申请时间',
+							minWidth: '180px',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '申请目的',
+							render: (h, params) => {
+								let data = MAPDATA.GUILDAPPLYLIST.find(item => { return item.value === params.row.type })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '状态',
+							render: (h, params) => {
+								let data = MAPDATA.GUILDSTATUSLIST.find(item => { return item.value === params.row.status })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '操作',
+							minWidth : '230px',
+							render: (h, params) => {
+								return h('div', [
+									h('el-button', { props : { type: 'primary'}, style: {
+										display: params.row.status === 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.func(params.row.id, 2)}}},'同意'),
+									h('el-button', { props : { type: 'danger'}, style: {
+										display: params.row.status === 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.func(params.row.id, 3)}}},'拒绝')
+								])
+							}
+						}
+					]
 				}
 			}
 		},
-		mounted() {
-			this.getGuildJoinApplyList();
+		data() {
+			return {
+
+			}
 		},
 		methods: {
-			getGuildJoinApplyList(){
-				var params = {
-					guild_number : this.filters.guild_number,
-					status: this.filters.status,
-					type : this.filters.type,
-					page: this.page.page,
-					pagesize: this.page.limit,
+			// 配置参数
+			beforeSearch(params) {
+				let s = { ...this.searchParams }
+				return {
+					page: params.page,
+					pagesize: params.size,
+					guild_number: s.guild_number,
+					status: s.status,
+					type: s.type
 				}
-				this.listLoading = true;
-				getGuildJoinApply(params).then(res=>{
-					this.total = res.data.count;
-					res.data.list.map(re=>{
-						switch (re.status){
-							case 1:
-							re.statusText = "未处理";
-								break;
-							case 2:
-							re.statusText = "已通过";
-								break;
-							case 3:
-							re.statusText = "已拒绝";
-								break;
-						}
-						switch (re.rank){
-							case 1:
-							re.rankText = "A";
-								break;
-							case 2:
-							re.rankText = "AA";
-								break;
-							case 3:
-							re.rankText = "AAA";
-								break;
-						}
-						re.typeText = re.type == 1 ? "绑定" : "解绑";
-						re.create_timeText = JSON.stringify(re.create_time).length == 10 ? moment(re.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "";
-					})
-					this.list = res.data.list;
-					this.listLoading = false;
-				}).catch(err=>{
-					this.$message.error(err);
-					this.listLoading = false;
-				})
 			},
-			handleChange(row,type){
-				var params = {
-					id : row.id,
-					status: type
- 				}
-				getGuildCheck(params).then(res=>{
-					this.$message.success("处理成功")
-					this.getGuildJoinApplyList();
-				}).catch(err=>{
-					this.$message.error(err);
-				})
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
+			},
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
+			},
+			// 操作 - 通过 - 拒绝
+			async func(id, status) {
+				let res = await getGuildCheck({ id, status })
+				if(res.code === 2000) {
+					if(status === 2) {
+						this.$message.success('通过成功')
+					} else {
+						this.$message.success('拒绝成功')
+					}
+				}
+				this.getList()
 			},
 		}
 	}
 </script>
-<style lang="scss" scoped="scoped">
-	.el-form-item {
-		// margin-bottom: initial;
-	}
-
-	.pagination-container {
-		margin-top: initial;
-	}
+<style lang="scss">
+.guildApplication-list-box {
+	padding: 20px;
+	box-sizing: border-box;
+}
 </style>

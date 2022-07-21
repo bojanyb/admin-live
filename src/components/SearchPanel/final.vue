@@ -171,7 +171,7 @@
             <el-button v-if="showSearchBtn" type="primary" @click="onSearch">查询</el-button>
             <el-button v-if="showReset" icon="el-icon-refresh" @click="reset">重置</el-button>
             <el-button v-if="showAdd" type="success" @click="add">新增</el-button>
-            <el-button v-if="showBatchPass" type="primary" @click="batchPass">批量通过</el-button>
+            <el-button v-if="showBatchPass" type="primary" @click="batchPass">{{ batchFuncName || '批量通过' }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -253,6 +253,11 @@ export default {
     searchOnChange: {
       type: Boolean,
       default: true
+    },
+    // 批量操作 - 按钮名称
+    batchFuncName: {
+      type: String,
+      default: ''
     }
   },
   data() {

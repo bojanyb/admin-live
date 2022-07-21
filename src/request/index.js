@@ -47,6 +47,9 @@ const request = {
         menu: {
             addRule: `${HTTPHEADER}/admin/addRule`, // 添加菜单
             editRule: `${HTTPHEADER}/admin/editRule`, // 编辑菜单
+        },
+        gift: {
+            giftList: `${HTTPHEADER}/Gift`, // 礼物列表
         }
     },
 
@@ -78,7 +81,7 @@ const request = {
     CashHisity: {
         list: `${HTTPHEADER}/cash/getcashHisity`,
         apply: `${HTTPHEADER}/cash/getCash`,
-        doCash: `${HTTPHEADER}/cash/doCash`,
+        doCash: `${HTTPHEADER}/cash/doCash2`,
         diamondRecharge: `${HTTPHEADER}/Recharge/diamondRecharge`,
     },
 
@@ -99,6 +102,7 @@ const request = {
         liveRoomHistory: `${HTTPHEADER}/Room/liveRoomHistory`,
         roomGameList: `${HTTPHEADER}/Room/roomGameList`, // 房间游戏列表
         liveEnd: `${HTTPHEADER}/Room/liveEnd`, // 房间游戏列表
+        genre: `${HTTPHEADER}/Room/genre`, // 房间类型列表
     },
 
     // 用户管理
@@ -107,7 +111,8 @@ const request = {
         defaultFace: `${HTTPHEADER}/user/defaultFace`,
         autonymlist: `${HTTPHEADER}/Verify`,
         edit: `${HTTPHEADER}/User/userEdit`, // 编辑用户
-        userSave: `${HTTPHEADER}User/userSave`, // 用户封禁/启用
+        userSave: `${HTTPHEADER}/User/userSave`, // 用户封禁/启用
+        musicList: `${HTTPHEADER}/music/index`, // 音乐列表
     },
     
     // 审核管理
@@ -120,7 +125,8 @@ const request = {
 
     // 交易管理
     deal: {
-        userFlow2: `${HTTPHEADER}/Statistical/userFlow2`
+        userFlow2: `${HTTPHEADER}/Statistical/userFlow2`, // 用户流水记录2
+        userFlow1: `${HTTPHEADER}/Statistical/userFlow1`, // 用户流水记录1
     },
 
     // 公会管理
@@ -132,12 +138,31 @@ const request = {
         removeGuildUser: `${HTTPHEADER}/guild/removeGuildUser`, // 删除公会成员
         removeGuildRoom: `${HTTPHEADER}/guild/removeGuildRoom`, // 移除大厅
         disbandGuild: `${HTTPHEADER}/guild/disbandGuild`, // 解散公会
+        joinApply: `${HTTPHEADER}/Guild/joinApply`, // 公会厅申请信息处理
+        guildUserReport: `${HTTPHEADER}/guild/guildUserReport`, // 公会举报处理
+        guildWeekList: `${HTTPHEADER}/Guild/guildWeekList`, // 公会举报处理
+        settlementLog: `${HTTPHEADER}/Guild/settlementLog`, // 返点操作日志
     },
 
     // 封禁记录
     blocked: {
         bannedUserLog: `${HTTPHEADER}/User/bannedUserLog`, // 封禁用户记录
         bannedRoomLog: `${HTTPHEADER}/Room/bannedRoomLog`, // 封禁房间记录
+    },
+
+    // 贵族配置
+    nobility: {
+        nobilitylist: `${HTTPHEADER}/nobleGrade/index`, // 贵族特权设置列表
+        save: `${HTTPHEADER}/nobleGrade/save`, // 贵族特权设置修改/新增
+        detail: `${HTTPHEADER}/nobleGrade/detail`, // 贵族特权设置详情
+        noblePrice: `${HTTPHEADER}/noblePrice/index`, // 贵族价格管理
+        priceSave: `${HTTPHEADER}/noblePrice/save`, // 贵族价格新增/修改
+        nobleUser: `${HTTPHEADER}/nobleUser/index`, // 贵族用户列表
+    },
+
+    // 财务管理
+    finance: {
+        platformTopUp: `${HTTPHEADER}/wallet/platformTopUp`, // 充值记录
     }
 }
 

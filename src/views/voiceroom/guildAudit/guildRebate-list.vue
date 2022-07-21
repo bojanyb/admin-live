@@ -1,144 +1,153 @@
 <template>
-	<div class="app-container">
+	<div class="guildRebate-list-box">
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel>
+        </div>
 
-		<!--工具条-->
-		<el-col :span="24" class="toolbar">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="getRebateList()">
-				<el-form-item label="公会ID">
-					<el-input v-model="filters.guild_number" v-input-limit="0" placeholder="请输入公会ID" clearable />
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="getRebateList">查询</el-button>
-					<el-button type="primary" @click="getRebateAll">批量返佣</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			@selection-change="handleSelectionChange" highlight-current-row>
-			<el-table-column type="selection" width="55">
-			</el-table-column>
-			<el-table-column label="序号" prop="num" align="center" width="95" />
-			<el-table-column label="公会ID" prop="guild_number" align="center" width="150"/>
-			<el-table-column label="公会等级" prop="rank" align="center" width="150">
-				<template slot-scope="scope">
-					{{ scope.row.rank | classFunc }}
-				</template>
-			</el-table-column>
-			<el-table-column label="公会长ID" prop="user_number" align="center" width="150"/>
-			<el-table-column label="时间区间" align="center" width="305">
-				<template slot-scope="scope">
-					<div class="fl">{{scope.row.last_week_startText}} </div>
-					<div class="fl" style="margin: 0 5px;"> --- </div>
-					<div class="fl"> {{scope.row.last_week_endText}}</div>
-				</template>
-			</el-table-column>
-			<el-table-column label="流水" prop="last_week_flow" align="center" />
-			<el-table-column label="返佣比例" prop="rebate" align="center" />
-			<el-table-column label="应结算" prop="last_week_back" align="center" />
-		</el-table>
-
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="getRebateList" />
-
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 	</div>
 </template>
 
 <script>
-	import {
-		getGuildWeekList,
-		getWeekRebate
-	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	// 引入api
+	import { getWeekRebate } from '@/api/videoRoom'
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
 
 	export default {
 		name: 'guildRebate-list',
+		mixins: [mixins],
 		components: {
-			Pagination
+			SearchPanel,
+			tableList
 		},
-		filters: {
-			classFunc(val) {
-				let params = MAPDATA.CLASSLIST.find(item => { return item.value === val })
-				return params ? params.name : '--'
+		computed: {
+			forms() {
+				return [
+					{
+						name: 'guild_number',
+						type: 'input',
+						value: '',
+						label: '公会ID',
+						isNum: true,
+						placeholder: '请输入公会ID'
+					}
+				]
+			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.guild.guildWeekList,
+					isShowCheckbox: true,
+					isShowIndex: true,
+					columns: [
+						{
+							label: '公会ID',
+							prop: 'guild_number'
+						},
+						{
+							label: '公会等级',
+							render: (h, params) => {
+								let data = MAPDATA.CLASSLIST.find(item => { return item.value === params.row.rank })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '公会长ID',
+							prop: 'user_number'
+						},
+						{
+							label: '时间区间',
+							minWidth: '240px',
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.last_week_start ? timeFormat(params.row.last_week_start, 'YYYY-MM-DD HH:mm:ss', true) : ''),
+									h('span', '-'),
+									h('span', params.row.last_week_end ? timeFormat(params.row.last_week_end, 'YYYY-MM-DD HH:mm:ss', true) : '')
+								])
+							}
+						},
+						{
+							label: '流水',
+							prop: 'last_week_flow'
+						},
+						{
+							label: '返佣比例',
+							prop: 'rebate'
+						},
+						{
+							label: '应结算',
+							prop: 'last_week_back'
+						}
+					]
+				}
 			}
 		},
 		data() {
 			return {
-				list: [],
-				listLoading: true,
-				total: 0,
-				filters: {
-					'guild_number': '',
-				},
-				page: {
-					page: 1,
-					limit: 10
-				},
-				ids: [],
+				selectList: [] // 选中
 			}
 		},
-		created() {
-			this.getRebateList()
-		},
 		methods: {
-			getRebateList() {
-				var params = {
-					'page': this.page.page,
-					'pagesize': this.page.limit,
-					'guild_number': this.filters.guild_number
+			// 配置参数
+			beforeSearch(params) {
+				let s = { ...this.searchParams }
+				return {
+					page: params.page,
+					pagesize: params.size,
+					guild_number: s.guild_number
 				}
-				this.listLoading = true
-				getGuildWeekList(params).then(res => {
-					this.total = res.data.count;
-					res.data.list.map((re,i)=> {
-						re.num = i + 1;
-						// let start = re.last_week_start ? re.last_week_start * 1000 - 1000 : ''
-						let end = re.last_week_end ? re.last_week_end * 1000 - 1000 : ''
-						re.last_week_startText = re.last_week_start > 0 ? moment(re.last_week_start * 1000)
-							.format('YYYY-MM-DD HH:mm:ss') : ""
-						re.last_week_endText = end > 0 ? moment(end).format('YYYY-MM-DD HH:mm:ss') : ""
-					})
-					this.list = res.data.list
-					this.listLoading = false
-				}).catch(err => {
-					this.listLoading = false
+			},
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
+			},
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
+			},
+			// 选中
+			selectionChange(v) {
+				this.selectList = v
+			},
+			// 批量返佣
+			async batchFunc() {
+				if(this.selectList.length <= 0) {
+					this.$message.error('请至少选择一条数据')
+					return false
+				}
+
+				let ids = []
+				this.selectList.forEach(item => {
+					ids.push(item.id)
 				})
-			},
-			handleSelectionChange(row){
-				this.ids = [];
-				if(row.length > 0){
-					row.map(res=>{
-						this.ids.push(res.id);
-					});
-					
-					// 数组去重
-					this.ids = [...new Set(this.ids)];
+				let res = await getWeekRebate({ ids })
+				if(res.code === 2000) {
+					this.$message.success("批量返佣成功");
 				}
-			},
-			getRebateAll() {
-				if(this.ids.length > 0){
-					let params = {
-						'ids' : this.ids
-					}
-					getWeekRebate(params).then(res=>{
-						this.$message.success("返佣成功");
-						this.getRebateList();
-					}).catch(err=>{
-						this.$message.error(err);
-					})
-				}else{
-					this.$message.error("至少选择一条数据");
-				}
+				this.getList()
 			}
 		}
 	}
 </script>
-<style lang="scss" scoped="scoped">
-	.el-form-item {
-		// margin-bottom: initial;
-	}
+<style lang="scss">
+.guildRebate-list-box {
+	padding: 20px;
+	box-sizing: border-box;
+}
 </style>

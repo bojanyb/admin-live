@@ -9,7 +9,7 @@
             @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="65px" class="demo-ruleForm">
                 <el-form-item label="用户ID" prop="user_number">
-                    <el-input onkeyup="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.user_number"></el-input>
+                    <el-input oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.user_number"></el-input>
                 </el-form-item>
                 <el-form-item class="footer">
                     <el-button @click="resetForm">取 消</el-button>

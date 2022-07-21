@@ -1,25 +1,12 @@
 <template>
 	<div class="nobility-privilege-box">
-		<div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
-        </div>
-
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
-
-		<!-- 直播编辑组件 -->
-		<!-- <liveEdit ref="liveEdit" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></liveEdit> -->
 	</div>
 </template>
 
 <script>
-	import { roomHide, getRoomSave, roomTop } from '@/api/videoRoom'
-	import { liveEnd } from '@/api/callApp.js'
-	// 引入菜单组件
-	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
 	import tableList from '@/components/tableList/TableList.vue'
-	// 引入房间直播编辑组件
-	// import liveEdit from './components/liveEdit.vue'
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
@@ -32,126 +19,46 @@
 	import { formatTime } from '@/utils/common.js'
 
 	export default {
-		name: 'RoomList',
 		mixins: [mixins],
 		components: {
-			SearchPanel,
-			tableList,
+			tableList
 		},
 		data() {
 			return {
-				list: [],
-				listLoading: true,
-				total: 0,
-				multipleSelection: [],
-				filters: {
-					'room_number': '',
-					'is_live': '',
-					guild_number: null
-				},
-				page: {
-					page: 1,
-					limit: 10
-				},
-				isDestoryComp: false // 是否销毁组件
+
 			}
 		},
 		computed: {
-			forms() {
-				return [
-					{
-						name: 'inputSelect',
-						value: '',
-						selectName: 'iSelect',
-						type: 'inputSelect',
-						placeholder: '请输入ID',
-						selectPlaceholder: '请选择',
-						selctValue: 'room',
-						keyName: 'key',
-						optionLabel: 'label',
-						selectWidth: '130px',
-						handler: {
-							change: (v) => {
-								console.log(v, 'v----')
-								if(v == 'code') {
-									// this.$set(this.searchParams, 'live_user_number', )
-								}
-							}
-						},
-						options: [
-							{ key: 'room', label: '房间ID' },
-							{ key: 'user', label: '房主ID' }
-						]
-					},
-					{
-						name: 'guild_number',
-						type: 'input',
-						value: '',
-						label: '公会',
-						isNum: true,
-						placeholder: '请输入公会ID'
-					},
-				]
-			},
 			cfgs() {
 				return {
 					vm: this,
-					url: REQUEST.room.roomList,
-					isShowIndex: true,
+					url: REQUEST.nobility.nobleUser,
 					columns: [
 						{
-							label: '直播场次ID',
-							prop: 'room_number'
+							label: '用户昵称',
+							prop: 'nickname'
 						},
 						{
-							label: '房间ID',
-							prop: 'room_number'
+							label: '用户ID',
+							prop: 'user_number'
 						},
 						{
-							label: '房间名称',
-							prop: 'room_name'
-						},
-						{
-							label: '房间类型',
-							prop: 'room_genre_name'
-						},
-						{
-							label: '房主ID',
-							prop: 'live_user_number'
-						},
-						{
-							label: '所属公会',
+							label: '开通时间',
 							render: (h, params) => {
-								return h('span', params.row.guild_number || '无')
+								return h('span', params.row.create_time || '无')
 							}
 						},
 						{
-							label: '开播时间',
-							width: '180px',
-							render: (h, params) => {
-								return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-							}
+							label: '当前贵族等级',
+							prop: 'noble_grade_id'
 						},
 						{
-							label: '开播时长',
-							render: (h, params) => {
-								let data = formatTime(params.row.live_time)
-								return h('span', data ? data : '无')
-							}
+							label: '当前成长值',
+							prop: 'growth_value'
 						},
 						{
-							label: '在线人数',
-							prop: 'people'
-						},
-						{
-							label: '操作',
-							width : '230px',
-							render: (h, params) => {
-								return h('div', [
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.liveEditFunc(params.row)}}},'编辑'),
-									h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.dissolveFunc(params.row)}}},'解散')
-								])
-							}
+							label: '剩余保级天数',
+							prop: 'hold_day'
 						}
 					]
 				}

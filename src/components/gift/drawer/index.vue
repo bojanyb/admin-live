@@ -62,7 +62,8 @@ export default {
             giftListArr: [],
             giftPage: {
                 page: 1,
-                limit: 10
+                limit: 10,
+                
             },
             giftTotal: 0,
             giftTypeList: MAPDATA.GIFTTYPE, // 礼物列表
