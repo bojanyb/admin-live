@@ -1,14 +1,19 @@
 <template>
     <div class="activity-message-box">
         <div class="btnBox">
-            <el-button type="success">新增</el-button>
+            <el-button type="success" @add="add">新增</el-button>
         </div>
 
         <tableList :cfgs="cfgs" ref="tableList"></tableList>
+
+        <!-- 新增组件 -->
+        <messageComp v-if="isDestoryComp" ref="messageComp" @destoryComp="destoryComp" @getList="getList"></messageComp>
     </div>
 </template>
 
 <script>
+// 引入新增组件
+import messageComp from './components/messageComp.vue'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入公共参数
@@ -22,6 +27,7 @@ import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
         tableList,
+        messageComp
     },
     mixins: [mixins],
     computed: {
@@ -79,6 +85,11 @@ export default {
             }
         }
     },
+    data() {
+        return {
+            isDestoryComp: false
+        };
+    },
     methods: {
         // 刷新列表
         getList() {
@@ -101,6 +112,16 @@ export default {
         // 查询
         onSearch() {
             this.getList()
+        },
+        add() {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.messageComp.dialogVisible = true
+            }, 50);
+        },
+        // 销毁组件
+        destoryComp() {
+            this.isDestoryComp = false
         }
     }
 }

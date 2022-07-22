@@ -110,7 +110,9 @@
         headerTopPoint: 0,
         headerFixed: false,
         loading: false,
-        tableHeight: 0
+        tableHeight: 0,
+
+        oldPage: 0 // 老数据分页  -  用来比对
       };
     },
     methods: {
@@ -157,7 +159,14 @@
         };
         if (typeof vm.beforeSearch === 'function') {
           params = vm.beforeSearch(params);
+          if(this.oldPage && this.oldPage == params.page) { // 搜索 - 重置分页
+            this.search.page = 1
+            params.page = 1
+          }
         }
+
+        // 用来比对分页 - 重置分页
+        this.oldPage = params.page
 
         if (this.cfgs.url) {
           request({

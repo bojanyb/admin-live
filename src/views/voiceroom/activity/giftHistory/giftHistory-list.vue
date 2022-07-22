@@ -37,7 +37,7 @@
 						value: '',
 						label: '被赠送用户ID',
 						isNum: true,
-						placeholder: '请输入公会ID'
+						placeholder: '请输入被赠送用户ID'
 					}
 				]
 			},
