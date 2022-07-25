@@ -1,11 +1,11 @@
 <template>
     <div class="messageComp-box">
         <el-dialog
-        title="提示"
+        title="新增活动通知"
         :visible.sync="dialogVisible"
-        width="30%"
+        width="450px"
         :before-close="handleClose">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <el-form-item label="活动标题" prop="name">
                     <el-input v-model="ruleForm.name"></el-input>
                 </el-form-item>
@@ -16,7 +16,13 @@
                     <el-input v-model="ruleForm.name"></el-input>
                 </el-form-item>
                 <el-form-item label="开始推送时间" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
+                    <el-date-picker
+                    v-model="ruleForm.name"
+                    type="datetime"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    value-format="timestamp"
+                    placeholder="选择开始推送时间">
+                    </el-date-picker>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -36,7 +42,7 @@ export default {
     },
     data() {
         return {
-            dialogVisible: false,
+            dialogVisible: true,
             ruleForm: {
                 name: '',
                 region: '',
@@ -94,6 +100,8 @@ export default {
 
 <style lang="scss">
 .messageComp-box {
-
+    .el-date-editor {
+        width: 300px;
+    }
 }
 </style>

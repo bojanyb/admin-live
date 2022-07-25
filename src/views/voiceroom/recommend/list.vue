@@ -1,19 +1,17 @@
 <template>
-    <div class="activity-message-box">
-        <div class="btnBox">
-            <el-button type="success" @click="add">新增</el-button>
+    <div class="recommend-box">
+        <div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
         <tableList :cfgs="cfgs" ref="tableList"></tableList>
 
-        <!-- 新增组件 -->
-        <messageComp v-if="isDestoryComp" ref="messageComp" @destoryComp="destoryComp" @getList="getList"></messageComp>
     </div>
 </template>
 
 <script>
-// 引入新增组件
-import messageComp from './components/messageComp.vue'
+// 引入菜单组件
+import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入公共参数
@@ -27,58 +25,77 @@ import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
         tableList,
-        messageComp
+        SearchPanel
     },
     mixins: [mixins],
     computed: {
+        forms() {
+            return [
+                {
+                    name: 'p_user_number',
+                    type: 'input',
+                    value: '',
+                    label: '推荐人ID',
+                    isNum: true,
+                    placeholder: '请输入推荐人ID'
+                },
+                {
+                    name: 'channel',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '状态',
+                    placeholder: '请选择',
+                    options: MAPDATA.PROMOTIONTYPELIST
+                }
+            ]
+        },
         cfgs() {
             return {
                 vm: this,
                 url: REQUEST.diamondRecharge.list,
                 columns: [
                     {
-                        label: '活动标题',
+                        label: '推荐人ID',
                         render: (h, params) => {
                             return h('span', params.row.user_number || '无')
                         }
                     },
                     {
-                        label: '活动配图',
-                        isimg: true,
-                        prop: 'face',
-                        imgWidth: '50px',
-                        imgHeight: '50px'
-                    },
-                    {
-                        label: '活动链接',
+                        label: '推荐人昵称',
                         render: (h, params) => {
                             return h('span', params.row.user_number || '无')
                         }
                     },
                     {
-                        label: '推送时间',
-                        render: (h, params) => {
-                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
-                        }
-                    },
-                    {
-                        label: '创建时间',
-                        render: (h, params) => {
-                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
-                        }
-                    },
-                    {
-                        label: '创建人',
+                        label: '推荐类型',
                         render: (h, params) => {
                             return h('span', params.row.user_number || '无')
                         }
                     },
                     {
-                        label: '操作',
+                        label: '绑定用户数',
                         render: (h, params) => {
-                            return h('div', [
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '删除')
-                            ])
+                            return h('span', params.row.user_number || '无')
+                        }
+                    },
+                    {
+                        label: '绑定主播数',
+                        render: (h, params) => {
+                            return h('span', params.row.user_number || '无')
+                        }
+                    },
+                    {
+                        label: '当日收益（喵粮）',
+                        render: (h, params) => {
+                            return h('span', params.row.user_number || '无')
+                        }
+                    },
+                    {
+                        label: '总收益（喵粮）',
+                        render: (h, params) => {
+                            return h('span', params.row.user_number || '无')
                         }
                     }
                 ]
@@ -113,12 +130,6 @@ export default {
         onSearch() {
             this.getList()
         },
-        add() {
-            this.isDestoryComp = true
-            setTimeout(() => {
-                this.$refs.messageComp.dialogVisible = true
-            }, 50);
-        },
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
@@ -127,8 +138,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.activity-message-box {
+<style lang="scss">
+.recommend-box {
     padding: 20px;
     box-sizing: border-box;
     .btnBox {

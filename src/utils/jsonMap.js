@@ -1199,6 +1199,25 @@ const DEALSOURCELIST = [
     }
 ]
 
+/*
+*推广管理
+*/
+// 推广列表 - 推荐类型
+const PROMOTIONTYPELIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '主播',
+        value: 1
+    },
+    {
+        name: '用户',
+        value: 2
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -1250,5 +1269,6 @@ export default {
     GUILDSTATUSLIST,
     FINANCEGIVETYPELIST,
     DEALSOURCELIST,
-    GUILDAPPLYSTATUSLIST
+    GUILDAPPLYSTATUSLIST,
+    PROMOTIONTYPELIST
 }
