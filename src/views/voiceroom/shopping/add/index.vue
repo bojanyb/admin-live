@@ -3,7 +3,7 @@
         <el-dialog
         :title="title"
         :visible.sync="dialogVisible"
-        width="35%"
+        width="600px"
         :before-close="handleClose"
         @closed="destoryComp">
             <el-form :model="ruleForm" :rules="rules" label-suffix=":" ref="ruleForm" label-width="110px" class="demo-ruleForm">
@@ -17,9 +17,9 @@
                         <el-option v-for="item in goodsClassifyList" :label="item.name" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="贵族等级" prop="category_id" v-if="ruleForm.category_id === 4 || ruleForm.category_id === 5">
-                    <el-select v-model="ruleForm.category_id" placeholder="请选择贵族等级">
-                        <el-option v-for="item in nobilityList" :label="item.name" :key="item.value" :value="item.value"></el-option>
+                <el-form-item label="贵族等级" prop="noble_level" v-if="ruleForm.category_id === 4 || ruleForm.category_id === 5">
+                    <el-select v-model="ruleForm.noble_level" placeholder="请选择贵族等级">
+                        <el-option v-for="item in nobilityList" :label="item.noble_name" :key="item.noble_level" :value="item.noble_level"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="优先推荐" prop="is_first">
@@ -60,7 +60,7 @@
                             <el-button type="danger" v-if="ruleForm.time_limit.length > 1" @click="deleteData(index)">删除</el-button>
                         </div>
                     </div>
-                    <el-button @click="addData">添加</el-button>
+                    <el-button v-if="ruleForm.time_limit.length < 3" @click="addData">添加</el-button>
                     
                 </el-form-item>
                 <el-form-item label="商品播放类型" prop="play_type">
@@ -116,7 +116,8 @@
 </template>
 
 <script>
-
+// 引入api
+import { nobilitylist } from '@/api/nobility.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 // 引入图片上传组件
@@ -222,7 +223,7 @@ export default {
             dialogVisible: false,
             goodsTypeList: MAPDATA.SHOPPING,
             goodsClassifyList: MAPDATA.CLASSIFY, // 分类
-            nobilityList: MAPDATA.NOBILITYCLASSLIST, // 贵族等级
+            nobilityList: [], // 贵族等级
             priorityGiveList: MAPDATA.PRIORITYGIVE,
             goodsType: 1,
             status: 'add',
@@ -230,6 +231,7 @@ export default {
             ruleForm: {
                 goods_type: '',
                 category_id: '',
+                noble_level: null,
                 goods_name: '',
                 can_buy: 1,
                 goods_describe: '',
@@ -255,6 +257,9 @@ export default {
                 ],
                 category_id: [
                     { required: true, message: '请选择商品分类', trigger: 'change' }
+                ],
+                noble_level: [
+                    { required: true, message: '请选择贵族等级', trigger: 'change' }
                 ],
                 is_first: [
                     { required: true, message: '请选择是否优先推荐', trigger: 'change' }
@@ -347,6 +352,7 @@ export default {
                 let params = JSON.parse(JSON.stringify(row))
                 params.start_time = params.start_time * 1000
                 params.end_time = params.end_time * 1000
+                params.noble_level = params.noble_level ? params.noble_level : null
                 if(params.goods_animation_path) {
                     this.goodsType = 1
                 } else if(params.goods_image) {
@@ -367,6 +373,7 @@ export default {
                     } else if(this.goodsType === 2) {
                         params.goods_animation_path = ''
                     }
+                    return console.log(params, 'params-------------1010')
                     add(params).then(res => {
                         if(res.code === 2000) {
                             this.close()
@@ -417,7 +424,15 @@ export default {
         // 重置字段验证
         validateField(name) {
             this.$refs.ruleForm.validateField([name])
+        },
+        // 获取贵族等级
+        async getNobility() {
+            let res = await nobilitylist()
+            this.nobilityList = res.data.list || []
         }
+    },
+    mounted() {
+        this.getNobility()
     }
 }
 </script>

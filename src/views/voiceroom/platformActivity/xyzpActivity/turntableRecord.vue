@@ -107,6 +107,7 @@ export default {
                     },
                     {
                         label: '参与时间',
+                        minWidth: '120px',
                         props: "create_time",
                         render: (h, params) => {
                             return h('span', params.row.create_time > 0 ? moment(params.row.create_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "")
@@ -142,6 +143,7 @@ export default {
                     },
                     {
                         label: '交易流水',
+                        minWidth: '160px',
                         props: "relation_trade_no",
                         render: (h, params) => {
                             return h('span', params.row.relation_trade_no)

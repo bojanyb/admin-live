@@ -42,7 +42,8 @@ export default {
                 columns: [
                     {
                         label: '活动名称',
-                        props : 'name',
+                        minWidth: '100px',
+                        props: 'name',
                         render: (h, params) => {
                             return h('span', params.row.name)
                         }
@@ -55,35 +56,39 @@ export default {
                     },
                     {
                         label: '礼物种类数量',
-                        props : 'gift_count',
+                        minWidth: '120px',
+                        props: 'gift_count',
                         render: (h, params) => {
                             return h('span', params.row.gift_count)
                         }
                     },
                     {
                         label: '投入',
-                        props : 'in',
+                        minWidth: '100px',
+                        props: 'in',
                         render: (h, params) => {
                             return h('span', params.row.in)
                         }
                     },
                     {
                         label: '产出',
-                        props : 'out',
+                        minWidth: '100px',
+                        props: 'out',
                         render: (h, params) => {
                             return h('span', params.row.out)
                         }
                     },
                     {
                         label: '单次消耗喵粮数',
-                        props : 'cost',
+                        minWidth: '120px',
+                        props: 'cost',
                         render: (h, params) => {
                             return h('span', params.row.cost)
                         }
                     },
                     {
                         label: '活动状态',
-                        props : 'status',
+                        props: 'status',
                         render: (h, params) => {
                             let start = params.row.start_time * 1000
                             let end = params.row.end_time * 1000
@@ -100,23 +105,23 @@ export default {
                     },
                     {
                         label: '开始时间',
-                        props : 'start_time',
-                        width : '160',
+                        props: 'start_time',
+                        minWidth: '160px',
                         render: (h, params) => {
                             return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : "")
                         }
                     },
                     {
                         label: '结束时间',
-                        props : 'end_time',
-                        width : '160',
+                        props: 'end_time',
+                        minWidth: '160px',
                         render: (h, params) => {
                             return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : "")
                         }
                     },
                     {
                         label: '操作',
-                        width : '350',
+                        minWidth: '300px',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),

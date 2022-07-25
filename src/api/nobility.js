@@ -27,3 +27,12 @@ export function priceSave(data) {
         data
     })
 }
+
+// 贵族配置 - 保存
+export function nobilitylist(data) {
+    return request({
+        url: api.nobility.nobilitylist,
+        method: 'post',
+        data
+    })
+}

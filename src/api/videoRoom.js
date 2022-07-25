@@ -875,6 +875,15 @@ export function getSettlementLog(data) {
   })
 }
 
+// 创建工会审核已联系或者驳回 
+export function newGuildApplyCheck(data) {
+  return request({
+    url: api.guild.newGuildApplyCheck,
+    method: 'post',
+    data
+  })
+}
+
 // 获取交易类型 
 export function getRelationType(data) {
   return request({

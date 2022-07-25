@@ -63,9 +63,9 @@ export default {
                     name: 'order_id',
                     type: 'input',
                     value: '',
-                    label: '交易流水ID',
+                    label: '交易单号',
                     isNum: true,
-                    placeholder: '请输入交易流水ID'
+                    placeholder: '请输入交易单号'
                 },
                 {
                     name: 'status',

@@ -580,6 +580,18 @@ const GUILDAPPLYSTATUSLIST = [
     }
 ]
 
+// 公会申请 - 是否有线下工作室
+const GUILDISSTUDIO = [
+    {
+        name: '是',
+        value: 1
+    },
+    {
+        name: '否',
+        value: 0
+    }
+]
+
 /*
 *派对管理 - 举报房间
 */
@@ -975,15 +987,15 @@ const SYSTEMGIFTCLASSIFYLIST = [
     },
     {
         name: '喵喵乐园专属',
-        value: 3
-    },
-    {
-        name: '幸运转盘专属',
         value: 4
     },
     {
+        name: '幸运转盘专属',
+        value: 8
+    },
+    {
         name: '贵族专属',
-        value: 5
+        value: 16
     }
 ]
 
@@ -1270,5 +1282,6 @@ export default {
     FINANCEGIVETYPELIST,
     DEALSOURCELIST,
     GUILDAPPLYSTATUSLIST,
-    PROMOTIONTYPELIST
+    PROMOTIONTYPELIST,
+    GUILDISSTUDIO
 }

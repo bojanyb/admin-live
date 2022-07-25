@@ -3,7 +3,7 @@
         <el-dialog
             :title="title"
             :visible.sync="dialogVisible"
-            width="50%"
+            width="800px"
             :before-close="handleClose"
             @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="108px" class="demo-ruleForm">
@@ -234,6 +234,12 @@ export default {
                         return false
                     }
 
+                    let isNum = this.ruleForm.gifts.find(item => { return !item.gift_number })
+                    if(isNum) {
+                        this.$message.error('请先输入礼物数量')
+                        return
+                    }
+
                     let params = {...this.ruleForm}
                     params.start_time = Math.floor(params.start_time / 1000)
                     params.end_time = Math.floor(params.end_time / 1000)
@@ -242,7 +248,8 @@ export default {
                         params.gifts.push({
                             id: item.id,
                             type: item.type,
-                            probability: (item.probability * 100000).toFixed(0)
+                            probability: (item.probability * 100000).toFixed(0),
+                            gift_number: Number(item.gift_number)
                         })
                     })
                     getActivetyGiftSave(params).then(res => {

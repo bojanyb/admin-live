@@ -158,6 +158,7 @@ export default {
 
         .sumBoxItem {
             width: 25%;
+            white-space: nowrap;
             text-align: center;
             border-right: solid 1px #DCDCDC;
         }

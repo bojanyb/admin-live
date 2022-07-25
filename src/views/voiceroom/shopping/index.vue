@@ -69,6 +69,7 @@ export default {
                     },
                     {
                         label: '上架时间',
+                        minWidth: '160px',
                         render: (h, params) => {
                             return h('span', params.row.up_time ? timeFormat(params.row.up_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
@@ -87,12 +88,14 @@ export default {
                     },
                     {
                         label: '修改时间',
+                        minWidth: '160px',
                         render: (h, params) => {
                             return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
                         label: '操作',
+                        minWidth: '180px',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),

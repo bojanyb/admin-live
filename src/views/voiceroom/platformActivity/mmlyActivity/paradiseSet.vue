@@ -198,6 +198,7 @@ export default {
                 columns: [
                     {
                         label: '活动名称',
+                        minWidth: '100px',
                         props : 'name',
                         render: (h, params) => {
                             return h('span', params.row.name)
@@ -205,6 +206,7 @@ export default {
                     },
                     {
                         label: '礼物种类数量',
+                        minWidth: '120px',
                         props : 'gift_count',
                         render: (h, params) => {
                             return h('span', params.row.gift_count)
@@ -212,6 +214,7 @@ export default {
                     },
                     {
                         label: '投入',
+                        minWidth: '100px',
                         props : 'in',
                         render: (h, params) => {
                             return h('span', params.row.in)
@@ -219,6 +222,7 @@ export default {
                     },
                     {
                         label: '产出',
+                        minWidth: '100px',
                         props : 'out',
                         render: (h, params) => {
                             return h('span', params.row.out)
@@ -226,6 +230,7 @@ export default {
                     },
                     {
                         label: '单次消耗喵粮数',
+                        minWidth: '120px',
                         props : 'cost',
                         render: (h, params) => {
                             return h('span', params.row.cost)
@@ -250,6 +255,7 @@ export default {
                     },
                     {
                         label: '开始时间',
+                        minWidth: '160px',
                         props : 'start_time',
                         render: (h, params) => {
                             return h('span', params.row.start_time > 0 ? moment(params.row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "")
@@ -257,6 +263,7 @@ export default {
                     },
                     {
                         label: '结束时间',
+                        minWidth: '160px',
                         props : 'end_time',
                         render: (h, params) => {
                             return h('span', params.row.end_time > 0 ? moment(params.row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "")
@@ -412,8 +419,6 @@ export default {
                 this.$message.error("所有礼物概率只为只能为100%！");
                 return
             }
-
-            
 
             let params = {
                 id : this.popForm.id,

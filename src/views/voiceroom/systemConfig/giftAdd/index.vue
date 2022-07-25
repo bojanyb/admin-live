@@ -16,21 +16,21 @@
                         <el-radio v-for="item in giftTypeList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <!-- <el-form-item label="礼物分类" prop="checkList">
-                    <el-checkbox-group v-model="ruleForm.checkList">
+                <el-form-item label="礼物分类" prop="gift_class">
+                    <el-checkbox-group v-model="ruleForm.gift_class">
                         <el-checkbox v-for="item in classifyList" :key="item.value" :label="item.value">{{ item.name }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item label="贵族等级" prop="class" v-if="ruleForm.checkList.indexOf(5) !== -1">
-                    <el-select v-model="ruleForm.class" placeholder="请选择">
+                <el-form-item label="贵族等级" prop="noble_level" v-if="ruleForm.gift_class.indexOf(16) !== -1">
+                    <el-select v-model="ruleForm.noble_level" placeholder="请选择">
                         <el-option
                         v-for="item in nobilityList"
-                        :key="item.value"
-                        :label="item.name"
-                        :value="item.value">
+                        :key="item.noble_level"
+                        :label="item.noble_name"
+                        :value="item.noble_level">
                         </el-option>
                     </el-select>
-                </el-form-item> -->
+                </el-form-item>
                 <el-form-item label="礼物播放类型" prop="play_type">
                     <el-radio-group v-model="ruleForm.play_type">
                         <el-radio v-for="item in playTypeList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
@@ -89,7 +89,7 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="resetForm('ruleForm')">取 消</el-button>
+                <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
             </span>
         </el-dialog>
@@ -99,6 +99,7 @@
 <script>
 // 引入api
 import { getGiftAdd, getGiftEdit } from '@/api/videoRoom'
+import { nobilitylist } from '@/api/nobility'
 // 引入图片上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
 // 引入公共map
@@ -112,7 +113,7 @@ export default {
             dialogVisible: true,
             playTypeList: MAPDATA.SYSTEMGIFTPLAYTYPELIST, // 播放类型
             classifyList: MAPDATA.SYSTEMGIFTCLASSIFYLIST, // 礼物分类
-            nobilityList: MAPDATA.NOBILITYCLASSLIST, // 贵族等级
+            nobilityList: [], // 贵族等级
             status: 'add', // 当前类型
             ruleForm: {
                 gift_name: '',
@@ -127,8 +128,8 @@ export default {
                 status: null,
                 sort: null,
                 gift_desc: '',
-                checkList: [],
-                class: ''
+                gift_class: [],
+                noble_level: ''
             },
             rules: {
                 gift_name: [
@@ -137,6 +138,12 @@ export default {
                 ],
                 gift_genre: [
                     { required: true, message: '请选择礼物类型', trigger: 'change' }
+                ],
+                gift_class: [
+                    { required: true, message: '请选择礼物分类', trigger: 'change' }
+                ],
+                noble_level: [
+                    { required: true, message: '请选择贵族等级', trigger: 'change' }
                 ],
                 play_type: [
                     { required: true, message: '请选择礼物播放类型', trigger: 'change' }
@@ -244,6 +251,8 @@ export default {
                             this.$message.success('修改成功')
                         }
                     }
+                    this.dialogVisible = false
+                    this.$emit('getList')
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -252,7 +261,7 @@ export default {
         },
         // 重置
         resetForm() {
-            this.handleClose()
+            this.dialogVisible = false
         },
         // 关闭弹窗
         handleClose() {
@@ -265,7 +274,15 @@ export default {
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
+        },
+        // 获取贵族等级
+        async getNobility() {
+            let res = await nobilitylist()
+            this.nobilityList = res.data.list || []
         }
+    },
+    mounted() {
+        this.getNobility()
     }
 }
 </script>

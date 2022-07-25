@@ -8,6 +8,8 @@
 </template>
 
 <script>
+// 引入api
+import { newGuildApplyCheck } from '@/api/videoRoom'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -44,11 +46,11 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.diamondRecharge.list,
+                url: REQUEST.guild.newGuildApplyList,
                 columns: [
                     {
                         label: '申请时间',
-                        minWidth: '150px',
+                        minWidth: '180px',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
@@ -57,13 +59,13 @@ export default {
                         label: '公会昵称',
                         minWidth: '120px',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            return h('span', params.row.guild_name || '无')
                         }
                     },
                     {
                         label: '公会头像',
                         isimg: true,
-                        prop: 'face',
+                        prop: 'guild_icon',
                         imgWidth: '50px',
                         imgHeight: '50px',
                         minWidth: '120px'
@@ -72,59 +74,64 @@ export default {
                         label: '公会简介',
                         minWidth: '120px',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            return h('span', params.row.desc || '无')
                         }
                     },
                     {
                         label: '固定团队人数/自带老板数量',
                         minWidth: '200px',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            return h('span', params.row.question.question1 || '无')
                         }
                     },
                     {
                         label: '目前或曾经合作的业务类型',
                         minWidth: '200px',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            return h('span', params.row.question.question2 || '无')
                         }
                     },
                     {
                         label: '在其他平台开厅的ID号',
                         minWidth: '180px',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            return h('span', params.row.question.question3 || '无')
                         }
                     },
                     {
                         label: '外站开厅流水及数据情况',
-                        minWidth: '180px',
-                        render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
-                        }
+                        isimgList: true,
+                        prop: 'images',
+                        imgWidth: '50px',
+                        imgHeight: '50px',
+                        minWidth: '180px'
                     },
                     {
                         label: '是否有线下工作室',
                         minWidth: '180px',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            let data = MAPDATA.GUILDISSTUDIO.find(item => { return item.value === Number(params.row.has_workroom) })
+                            return h('span', data ? data.name : '无')
                         }
                     },
                     {
                         label: '联系方式',
                         minWidth: '120px',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            return h('span', params.row.contact_way || '无')
                         }
                     },
                     {
                         label: '操作',
-                        fixed: 'right',
                         minWidth: '230px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.details(params.row)}}}, '联系'),
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '拒绝')
+                                h('el-button', { props : { type: 'primary'}, style: {
+                                    display: params.row.status === 1 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.clickFunc(params.row, 2)}}}, '通过'),
+                                h('el-button', { props : { type: 'danger'}, style: {
+                                    display: params.row.status === 1 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.clickFunc(params.row, 3)}}}, '驳回')
                             ])
                         }
                     }
@@ -142,8 +149,8 @@ export default {
             let s = { ...this.searchParams }
             return {
                 page: params.page,
-                user_number: s.user_number,
-                sort: s.sort
+                pagesize: params.size,
+                status: s.status
             }
         },
         // 重置
@@ -153,6 +160,28 @@ export default {
         },
         // 查询
         onSearch() {
+            this.getList()
+        },
+        // 联系 - 驳回
+        async clickFunc(id, status) {
+            if(status === 2) {
+                let res = await newGuildApplyCheck({ id, status })
+                if(res.code === 2000) {
+                    this.$message.success('审核通过')
+                }
+            } else {
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(async () => {
+                    let res = await newGuildApplyCheck({ id, status })
+                    if(res.code === 2000) {
+                        this.$message.success('驳回成功')
+                    }
+                }).catch(() => {});
+            }
+            
             this.getList()
         }
     }

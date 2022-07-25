@@ -98,6 +98,7 @@ export default {
                     },
                     {
                         label: '交易时间',
+                        minWidth: '140px',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
@@ -127,7 +128,7 @@ export default {
                     {
                         label: '交易流水',
                         prop: 'relation_trade_no',
-                        width: '200'
+                        minWidth: '200px'
                     }
                 ]
             }
