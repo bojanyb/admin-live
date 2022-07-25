@@ -16,7 +16,7 @@
                         <el-radio v-for="item in giftTypeList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="礼物分类" prop="checkList">
+                <!-- <el-form-item label="礼物分类" prop="checkList">
                     <el-checkbox-group v-model="ruleForm.checkList">
                         <el-checkbox v-for="item in classifyList" :key="item.value" :label="item.value">{{ item.name }}</el-checkbox>
                     </el-checkbox-group>
@@ -30,7 +30,7 @@
                         :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="礼物播放类型" prop="play_type">
                     <el-radio-group v-model="ruleForm.play_type">
                         <el-radio v-for="item in playTypeList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
@@ -227,11 +227,9 @@ export default {
         async submitForm(formName) {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    let s = this.ruleForm
                     let params = { ...this.ruleForm }
                     params.start_time = Math.floor(params.start_time / 1000)
                     params.end_time = Math.floor(params.end_time / 1000)
-                    return console.log(params, 'params----------1010')
                     if(this.status === 'add') {
                         delete params.status
                         delete params.gift_version
