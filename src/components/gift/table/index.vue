@@ -24,12 +24,12 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="num"
                 label="数量">
                 <template slot-scope="scope">
                     <div class="numBox">
-                        <el-input v-model="scope.row.num" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>个
+                        <el-input v-model="scope.row.gift_number" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>个
                     </div>
+                    <div class="errorMsg" v-if="!scope.row.gift_number">请填写数量</div>
                 </template>
             </el-table-column>
             <el-table-column label="礼物位置" v-if="isShowLocation">
@@ -84,7 +84,7 @@ export default {
         totalNum() {
             let num = 0
             this.gifts.forEach((a) => {
-                num += a.num ? Number(a.num) : 0
+                num += a.gift_number ? Number(a.gift_number) : 0
             })
             return num
         },
@@ -146,6 +146,10 @@ export default {
                 background: none;
             }
         }
+    }
+    .errorMsg {
+        color: #FF4949;
+        font-size: 12px;
     }
     .el-select {
         width: 100px !important;

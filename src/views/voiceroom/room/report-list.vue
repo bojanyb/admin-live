@@ -71,11 +71,13 @@ export default {
         columns: [
           {
             label: '被举报房主ID',
-            prop: 'live_user_number'
+            prop: 'live_user_number',
+            minWidth: '120px'
           },
           {
             label: '直播场次ID',
-            prop: 'live_room_id'
+            prop: 'live_room_id',
+            minWidth: '120px'
           },
           {
             label: '房间ID',
@@ -87,7 +89,8 @@ export default {
           },
           {
             label: '房间类型名称',
-            prop: 'room_genre_name'
+            prop: 'room_genre_name',
+            minWidth: '120px'
           },
           {
             label: '举报人ID',
@@ -95,7 +98,8 @@ export default {
           },
           {
             label: '举报人名称',
-            prop: 'user_name'
+            prop: 'user_name',
+            minWidth: '120px'
           },
           {
             label: '举报内容',

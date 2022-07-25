@@ -1,6 +1,6 @@
 <template>
   <article class="share-table-list-box">
-    <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe" :border="cfgs.border"
+    <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe" :border="!cfgs.border"
     :default-expand-all="cfgs.defaultExpandAll"
     row-key="id"
     :tree-props="{children: cfgs.children}"
@@ -298,11 +298,11 @@
       thead th {
         padding: 0;
         height: 60px;
-        background: rgba(0, 0, 0, 1);
+        // background: rgba(0, 0, 0, 1);
         >.cell {
           font-size: 14px;
           font-weight: 600;
-          color: rgba(255, 255, 255, 1);
+          // color: rgba(255, 255, 255, 1);
         }
       }
       tbody td {

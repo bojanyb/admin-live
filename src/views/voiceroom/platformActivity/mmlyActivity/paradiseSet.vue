@@ -387,6 +387,13 @@ export default {
                 this.$message.error("至少配置9个礼物！");
                 return
             }
+            
+            let isNum = this.popForm.gifts.find(item => { return !item.gift_number })
+            if(isNum) {
+                this.$message.error('请先输入礼物数量')
+                return
+            }
+
             let gifts = [];
             let sumProbability = 0;
             this.popForm.gifts.map(res=>{
@@ -395,6 +402,7 @@ export default {
                     id : res.id,
                     sort: res.sort,
                     probability: probability.toFixed(0),
+                    gift_number: Number(res.gift_number)
                 }
                 sumProbability += probability;
                 gifts.push(item);
@@ -404,6 +412,9 @@ export default {
                 this.$message.error("所有礼物概率只为只能为100%！");
                 return
             }
+
+            
+
             let params = {
                 id : this.popForm.id,
                 code : this.popForm.code,
