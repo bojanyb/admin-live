@@ -910,3 +910,21 @@ export function getStuck(data) {
     data
   })
 }
+
+// 消息管理 - 活动通知
+export function messageAdd(data) {
+  return request({
+    url: api.message.messageAdd,
+    method: 'post',
+    data
+  })
+}
+
+// 消息管理 - 活动通知 - 删除
+export function messageDelete(data) {
+  return request({
+    url: api.message.delete,
+    method: 'post',
+    data
+  })
+}

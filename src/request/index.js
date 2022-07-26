@@ -165,6 +165,13 @@ const request = {
     // 财务管理
     finance: {
         platformTopUp: `${HTTPHEADER}/wallet/platformTopUp`, // 充值记录
+    },
+
+    // 消息管理
+    message: {
+        messageAdd: `${HTTPHEADER}/ActivityPush/add`, // 充值记录
+        list: `${HTTPHEADER}/ActivityPush/list`, // 活动通知列表
+        delete: `${HTTPHEADER}/ActivityPush/delete`, // 活动通知列表
     }
 }
 

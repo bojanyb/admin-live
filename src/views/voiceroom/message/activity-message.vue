@@ -12,6 +12,8 @@
 </template>
 
 <script>
+// 引入api
+import { messageDelete } from '@/api/videoRoom'
 // 引入新增组件
 import messageComp from './components/messageComp.vue'
 // 引入列表组件
@@ -22,8 +24,6 @@ import mixins from '@/utils/mixins.js'
 import REQUEST from '@/request/index.js'
 // 引入公共方法
 import { timeFormat } from '@/utils/common.js'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
         tableList,
@@ -34,31 +34,37 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.diamondRecharge.list,
+                url: REQUEST.message.list,
                 columns: [
                     {
                         label: '活动标题',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            return h('span', params.row.title || '无')
+                        }
+                    },
+                    {
+                        label: '活动描述',
+                        render: (h, params) => {
+                            return h('span', params.row.describe || '无')
                         }
                     },
                     {
                         label: '活动配图',
                         isimg: true,
-                        prop: 'face',
+                        prop: 'image_url',
                         imgWidth: '50px',
                         imgHeight: '50px'
                     },
                     {
                         label: '活动链接',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            return h('span', params.row.nav_to.uri || '无')
                         }
                     },
                     {
                         label: '推送时间',
                         render: (h, params) => {
-                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
@@ -70,14 +76,14 @@ export default {
                     {
                         label: '创建人',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            return h('span', params.row.nickname || '无')
                         }
                     },
                     {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '删除')
+                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.messageDelete(params.row.id)}}}, '删除')
                             ])
                         }
                     }
@@ -87,7 +93,7 @@ export default {
     },
     data() {
         return {
-            isDestoryComp: true
+            isDestoryComp: false // 是否销毁组件
         };
     },
     methods: {
@@ -100,8 +106,7 @@ export default {
             let s = { ...this.searchParams }
             return {
                 page: params.page,
-                user_number: s.user_number,
-                sort: s.sort
+                user_number: s.user_number
             }
         },
         // 重置
@@ -113,11 +118,20 @@ export default {
         onSearch() {
             this.getList()
         },
+        // 新增
         add() {
             this.isDestoryComp = true
             setTimeout(() => {
                 this.$refs.messageComp.dialogVisible = true
             }, 50);
+        },
+        // 删除
+        async messageDelete(id) {
+            let res = await messageDelete({ id })
+            if(res.code === 2000) {
+                this.$message.success('删除成功')
+            }
+            this.getList()
         },
         // 销毁组件
         destoryComp() {

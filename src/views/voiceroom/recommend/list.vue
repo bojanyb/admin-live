@@ -6,10 +6,15 @@
 
         <tableList :cfgs="cfgs" ref="tableList"></tableList>
 
+        <!-- 详情组件 -->
+        <component v-if="isDestoryComp" :ref="Comp" :is="Comp" @destoryComp="destoryComp"></component>
     </div>
 </template>
 
 <script>
+// 引入详情组件
+import bindAnchorComp from './components/bindAnchorComp.vue'
+import bindUserComp from './components/bindUserComp.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -25,7 +30,9 @@ import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
         tableList,
-        SearchPanel
+        SearchPanel,
+        bindAnchorComp,
+        bindUserComp
     },
     mixins: [mixins],
     computed: {
@@ -77,13 +84,13 @@ export default {
                     {
                         label: '绑定用户数',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            return h('span', { on: { click:()=> { this.details('bindUserComp') } } }, params.row.user_number || '无')
                         }
                     },
                     {
                         label: '绑定主播数',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            return h('span', { on: { click:()=> { this.details('bindAnchorComp') } } }, params.row.user_number || '无')
                         }
                     },
                     {
@@ -104,7 +111,8 @@ export default {
     },
     data() {
         return {
-            isDestoryComp: true
+            isDestoryComp: true, // 是否销毁组件
+            Comp: '' // 组件名称
         };
     },
     methods: {
@@ -133,6 +141,14 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
+        },
+        // 查看详情
+        details(name) {
+            this.Comp = name
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs[name].loadParams()
+            }, 50);
         }
     }
 }
