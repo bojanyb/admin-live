@@ -1,8 +1,8 @@
 <template>
 	<div class="nobility-priceList-box">
-		<!-- <div class="addBox">
+		<div class="addBox">
 			<el-button type="success" @click="add">新增</el-button>
-		</div> -->
+		</div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 

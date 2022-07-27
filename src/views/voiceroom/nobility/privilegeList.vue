@@ -1,8 +1,8 @@
 <template>
 	<div class="nobility-privilege-box">
-		<div class="searchParams">
+		<!-- <div class="searchParams">
 			<el-button type="success" @click="add">新增</el-button>
-        </div>
+        </div> -->
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
