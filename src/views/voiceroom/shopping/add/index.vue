@@ -373,7 +373,6 @@ export default {
                     } else if(this.goodsType === 2) {
                         params.goods_animation_path = ''
                     }
-                    return console.log(params, 'params-------------1010')
                     add(params).then(res => {
                         if(res.code === 2000) {
                             this.close()
