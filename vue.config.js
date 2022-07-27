@@ -37,7 +37,7 @@ const option = {
 	  assetsDir: 'static',
 	  mode: 'info',
 	  domainHttps: 'http://api.huixin.info', // https环境地址
-	  domainHttp: 'http://m.huida.vip', // app端接口
+	  domainHttp: 'http://m.huixin.info', // app端接口
 	  httpHeader: '', // 后台本地携带
 	},
 	// 测试环境
