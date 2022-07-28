@@ -4,6 +4,7 @@
         title="举报处理"
         :visible.sync="dialogVisible"
         width="400px"
+        :close-on-click-modal="false"
         :before-close="handleClose">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
                 <el-form-item label="封禁说明" prop="reply">

@@ -1181,6 +1181,22 @@ const NOBILITYCLASSLIST = [
     }
 ]
 
+// 用户列表 - 是否为贵族
+const ISNOBILITYUSERLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '是',
+        value: 1
+    },
+    {
+        name: '否',
+        value: 2
+    }
+]
+
 /*
 *财务管理
 */
@@ -1336,5 +1352,6 @@ export default {
     GUILDISSTUDIO,
     REPORTSTATUSLIST,
     LOGOUTUNTREATEDSORTLIST,
-    LOGOUTUNTREATEDSTATUSLIST
+    LOGOUTUNTREATEDSTATUSLIST,
+    ISNOBILITYUSERLIST
 }

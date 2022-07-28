@@ -6,6 +6,7 @@
         top="5vh"
         width="1050px"
         :before-close="handleClose"
+        :close-on-click-modal="false"
         @closed="closed">
             <div class="contentBox">
                 <div class="formBox">

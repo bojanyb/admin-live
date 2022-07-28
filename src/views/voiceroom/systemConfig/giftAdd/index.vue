@@ -6,6 +6,7 @@
         width="580px"
         top="5vh"
         :before-close="handleClose"
+        :close-on-click-modal="false"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <el-form-item label="礼物名" prop="gift_name">

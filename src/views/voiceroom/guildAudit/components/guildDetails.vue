@@ -6,6 +6,7 @@
         width="850px"
         top="5vh"
         :before-close="handleClose"
+        :close-on-click-modal="false"
         @closed="closed">
             <div class="formBox">
                 <el-select v-model="type" placeholder="请选择" @change="typeChange">

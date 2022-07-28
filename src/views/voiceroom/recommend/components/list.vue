@@ -4,6 +4,7 @@
         :title="title"
         :visible.sync="dialogVisible"
         width="800px"
+        :close-on-click-modal="false"
         :before-close="handleClose">
             <tableList :cfgs="cfgs" ref="tableList"></tableList>
         </el-dialog>

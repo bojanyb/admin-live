@@ -40,7 +40,7 @@
 		<!-- <pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
 			@pagination="getBannerList" /> -->
 
-		<el-dialog :title="editTitle" :visible.sync="editPop" @close="handleCancel">
+		<el-dialog :close-on-click-modal="false" :title="editTitle" :visible.sync="editPop" @close="handleCancel">
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
 				<el-form-item label="banner标题" prop="title" :label-width="formLabelWidth">
 					<el-col :span="17">

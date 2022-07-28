@@ -55,7 +55,7 @@
 		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
 			@pagination="getWallet" />
 
-		<el-dialog :title="editTitle" :visible.sync="editPop">
+		<el-dialog :close-on-click-modal="false" :title="editTitle" :visible.sync="editPop">
 			<el-form :model="popForm">
 				<el-form-item label="状态" :label-width="formLabelWidth">
 					<el-radio-group v-model="popForm.status">

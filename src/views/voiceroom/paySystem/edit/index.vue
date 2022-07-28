@@ -6,6 +6,7 @@
         width="1030px"
         top="5vh"
         :before-close="handleClose"
+        :close-on-click-modal="false"
         @closed="destoryComp">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
                 <div class="oldDeploy">

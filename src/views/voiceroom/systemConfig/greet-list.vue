@@ -25,7 +25,7 @@
 		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
 			@pagination="getDesignate" />
 
-		<el-dialog :title="editTitle" :visible.sync="editPop">
+		<el-dialog :close-on-click-modal="false" :title="editTitle" :visible.sync="editPop">
 			<el-form ref="popForm" :model="popForm" :rules="popFormRules">
 				<el-form-item label="打招呼常用语" prop="message" :label-width="formLabelWidth">
 					<el-col :span="17">

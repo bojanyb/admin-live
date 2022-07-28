@@ -1,10 +1,15 @@
 <template>
 	<div class="nobility-privilege-box">
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 	</div>
 </template>
 
 <script>
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
 	import tableList from '@/components/tableList/TableList.vue'
 	// 引入api
@@ -21,6 +26,7 @@
 	export default {
 		mixins: [mixins],
 		components: {
+			SearchPanel,
 			tableList
 		},
 		data() {
@@ -29,6 +35,18 @@
 			}
 		},
 		computed: {
+			forms() {
+				return [
+					{
+						name: 'user_number',
+						type: 'input',
+						value: '',
+						label: '用户ID',
+						isNum: true,
+						placeholder: '请输入用户ID'
+					}
+				]
+			},
 			cfgs() {
 				return {
 					vm: this,
@@ -43,23 +61,33 @@
 							prop: 'user_number'
 						},
 						{
+							label: '已累计成长值',
+							prop: 'heap_value'
+						},
+						{
 							label: '开通时间',
 							render: (h, params) => {
 								return h('span', params.row.create_time || '无')
 							}
 						},
 						{
-							label: '当前贵族等级',
-							prop: 'noble_grade_id'
+							label: '到期时间',
+							render: (h, params) => {
+								return h('span', params.row.end_time || '无')
+							}
 						},
 						{
 							label: '当前成长值',
 							prop: 'growth_value'
 						},
 						{
-							label: '剩余保级天数',
-							prop: 'hold_day'
-						}
+							label: '当前贵族等级',
+							prop: 'noble_level'
+						},
+						// {
+						// 	label: '剩余保级天数',
+						// 	prop: 'hold_day'
+						// }
 					]
 				}
 			}
@@ -68,20 +96,10 @@
 			// 配置参数
 			beforeSearch(params) {
 				let s = { ...this.searchParams }
-				s.room_number = s.inputSelect
-				s.user_number = s.inputSelect
-				if(s.iSelect === 'room') {
-					delete s.user_number
-				} else if(s.iSelect === 'user') {
-					delete s.room_number
-				}
 				return {
 					page: params.page,
 					pagesize: params.size,
-					room_number: s.room_number,
-					user_number: s.user_number,
-					is_live: 1,
-					guild_number: s.guild_number
+					user_number: s.user_number
 				}
 			},
 			// 刷新列表

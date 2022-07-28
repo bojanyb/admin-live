@@ -8,7 +8,7 @@
             <tableList :cfgs="cfgs" @saleAmunt="saleAmunt" ref="tableList"></tableList>
         </div>
 
-        <el-dialog :title="editTitle" :visible.sync="editPop" :before-close="handleCancel">
+        <el-dialog :close-on-click-modal="false" :title="editTitle" :visible.sync="editPop" :before-close="handleCancel">
 			<div slot="title" class="header-title" style="height: 40px;">
 			        <div class="fl">{{editTitle}}</div></div>
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">

@@ -5,6 +5,7 @@
         :visible.sync="dialogVisible"
         width="600px"
         :before-close="handleClose"
+        :close-on-click-modal="false"
         @closed="destoryComp">
             <el-form :model="ruleForm" :rules="rules" label-suffix=":" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <el-form-item label="商品类型" prop="goods_type">

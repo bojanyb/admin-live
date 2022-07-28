@@ -33,7 +33,7 @@
 		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
 			@pagination="activetyGiftList" />
 
-		<el-dialog :title="editTitle" :visible.sync="editPop" :before-close="handleCancel">
+		<el-dialog :title="editTitle" :visible.sync="editPop" :close-on-click-modal="false" :before-close="handleCancel">
 			<div slot="title" class="header-title" style="height: 40px;">
 			        <div class="fl">{{editTitle}}</div>
 					<!-- <div style="float: right;margin-right: 50px;">单个大礼物概率<span style="color:red;"> {{probabilityMaxNum}}% </span> + 所有小礼物概率<span style="color:red;"> {{smallSumNum}}% </span>总和 {{maxSamllSum}}% <span style="color:red;" v-if="maxSamllSum > 99"> (不超过 99%) </span></div> -->

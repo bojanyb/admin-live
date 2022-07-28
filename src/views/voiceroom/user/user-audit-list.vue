@@ -53,7 +53,7 @@
 		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
 			@pagination="getUserAuditSource" />
 
-		<el-dialog title="驳回" :visible.sync="editPop">
+		<el-dialog :close-on-click-modal="false" title="驳回" :visible.sync="editPop">
 			<el-form :model="popForm">
 				<el-form-item label="驳回类型" :label-width="formLabelWidth">
 					<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">

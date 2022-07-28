@@ -113,7 +113,7 @@
       @pagination="getGuildList"
     />
 
-    <el-dialog title="审核" :visible.sync="audioPop">
+    <el-dialog title="审核" :close-on-click-modal="false" :visible.sync="audioPop">
       <el-form ref="audioForm" :model="audioForm" :rules="audioFormRules">
         <el-form-item label="状态" prop="status" :label-width="formLabelWidth">
           <el-radio-group v-model="audioForm.status">

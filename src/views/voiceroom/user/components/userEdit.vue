@@ -6,6 +6,7 @@
         width="950px"
         :before-close="handleClose"
         @closed="closed"
+        :close-on-click-modal="false"
         class="userAdd-dialog">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <div class="leftBox">

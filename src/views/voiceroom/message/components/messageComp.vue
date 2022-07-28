@@ -5,6 +5,7 @@
         :visible.sync="dialogVisible"
         width="450px"
         :before-close="handleClose"
+        :close-on-click-modal="false"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <el-form-item label="活动标题" prop="title">

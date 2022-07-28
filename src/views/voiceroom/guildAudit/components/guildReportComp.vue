@@ -3,6 +3,7 @@
         <el-dialog
         :visible.sync="dialogVisible"
         width="400px"
+        :close-on-click-modal="false"
         :before-close="handleClose"
         @closed="closed">
             <el-table

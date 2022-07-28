@@ -4,6 +4,7 @@
         title="编辑音频"
         :visible.sync="dialogVisible"
         width="30%"
+        :close-on-click-modal="false"
         :before-close="handleClose">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="歌名" prop="name">

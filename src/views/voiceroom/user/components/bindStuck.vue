@@ -4,6 +4,7 @@
             title="卡列表"
             :visible.sync="dialogVisible"
             width="500px"
+            :close-on-click-modal="false"
             :before-close="handleClose">
             <div class="bindStuck">
                 <div v-for="(item,index) in list" :key="index">

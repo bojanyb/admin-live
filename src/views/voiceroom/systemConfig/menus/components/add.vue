@@ -5,6 +5,7 @@
         :visible.sync="dialogVisible"
         width="500px"
         :before-close="handleClose"
+        :close-on-click-modal="false"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
                 <el-form-item label="上级菜单">

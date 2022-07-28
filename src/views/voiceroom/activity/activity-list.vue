@@ -43,7 +43,7 @@
 		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
 			@pagination="activetyList" />
 
-		<el-dialog :title="editTitle" :visible.sync="editPop" @close="handleCancel">
+		<el-dialog :title="editTitle" :close-on-click-modal="false" :visible.sync="editPop" @close="handleCancel">
 			<el-form :model="popForm" ref="popForm" :rules="popFormRules">
 				<el-form-item label="活动图标" prop="imageUrl" :label-width="formLabelWidth">
 					<el-col :span="17">
@@ -72,7 +72,7 @@
 				<el-button :loading="loading" type="primary" @click="handleChange">确 定</el-button>
 			</div>
 		</el-dialog>
-		<el-dialog class="popDel" title="删除" :visible.sync="delVisible" width="30%">
+		<el-dialog class="popDel" :close-on-click-modal="false" title="删除" :visible.sync="delVisible" width="30%">
 			<span>确定删除该活动吗</span>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="delVisible = false">取 消</el-button>
@@ -80,7 +80,7 @@
 			</span>
 		</el-dialog>
 
-		<el-dialog title="特效图预览" class="showImgDialog" :visible.sync="dialogVisible" width="50%"
+		<el-dialog title="特效图预览" :close-on-click-modal="false" class="showImgDialog" :visible.sync="dialogVisible" width="50%"
 			:before-close="handleClose">
 			<el-image v-if="showImgUrl.indexOf('.png') > -1" :lazy="true" :src="showImgUrl ? showImgUrl : ''" />
 			<svgaplayer v-else-if="showImgUrl.indexOf('.svga') > -1" :height="667" :width="375" :show-img="showImgUrl" />

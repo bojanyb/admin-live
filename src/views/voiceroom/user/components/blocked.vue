@@ -5,6 +5,7 @@
         title="封禁" 
         :visible.sync="dialogVisible" 
         width="500px"
+        :close-on-click-modal="false"
         :before-close="handleClose">
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
 				<el-form-item label="封禁时间" prop="kill_time">
