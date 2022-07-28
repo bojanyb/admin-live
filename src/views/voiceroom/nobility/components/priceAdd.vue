@@ -22,9 +22,9 @@
                 <el-form-item label="说明" prop="activity_detail">
                     <el-input type="textarea" :rows="4" v-model="ruleForm.activity_detail" placeholder="请输入活动说明（选填）"></el-input>
                 </el-form-item>
-                <el-form-item label="是否自动续订" prop="auto_renewal">
+                <el-form-item label="是否自动续订" v-if="ruleForm.id === 1" prop="auto_renewal">
                     <el-radio v-model="ruleForm.auto_renewal" :label="1">是</el-radio>
-                    <el-radio v-model="ruleForm.auto_renewal" :label="0">否</el-radio>
+                    <!-- <el-radio v-if="ruleForm.id === 1" v-model="ruleForm.auto_renewal" :label="0">否</el-radio> -->
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -60,7 +60,7 @@ export default {
                 discount_price: null,
                 activity_name: '',
                 activity_detail: '',
-                auto_renewal: null
+                auto_renewal: 1
             },
             rules: {
                 title: [

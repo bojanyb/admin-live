@@ -1,152 +1,143 @@
 <template>
 	<div class="app-container">
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="userOldReportList()">
-				<el-form-item label="排序查看">
-					<el-select v-model="filters.sort" placeholder="请选择" @change="userCancellationList">
-						<el-option v-for="item in sortType" :key="item.value" :label="item.label" :value="item.value" />
-					</el-select>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="userCancellationList">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
 
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row>
-			<el-table-column label="用户昵称" prop="nickname" align="center" />
-			<el-table-column label="用户ID" prop="user_id" align="center" />
-			<el-table-column label="手机号" prop="phone" align="center" />
-			<el-table-column label="申请注销时间" prop="create_timeText" align="center" />
-			<el-table-column label="状态" prop="statusText" align="center" />
-			<el-table-column label="操作" prop="gift_str" align="center">
-				<template slot-scope="scope">
-					<el-button type="primary" @click="handleProcess(scope.row.id)">处理</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="userCancellationList" />
-
-		<el-dialog title="操作" :visible.sync="editPop">
-			<el-form :model="popForm">
-				<el-form-item label="状态" :label-width="formLabelWidth">
-					<el-radio-group v-model="popForm.status">
-						<el-radio :label="1">通过</el-radio>
-						<el-radio :label="2">不通过</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<!-- <el-form-item v-if="popForm.status == 2" label="封禁说明" :label-width="formLabelWidth">
-					<el-input v-model="popForm.remark" style="width: 335px;" type="textarea" :rows="5"
-						placeholder="正常状态可不填" clearable autocomplete="off" />
-				</el-form-item> -->
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="editPop = false">取 消</el-button>
-				<el-button :loading="loading" type="primary" @click="handleChange">确 定</el-button>
-			</div>
-		</el-dialog>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 	</div>
 </template>
 
 <script>
-	import {
-		getUserCancellationList,
-		getUserCancellationDeal
-	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	import { getUserCancellationDeal } from '@/api/videoRoom'
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
 		name: 'user-not-logOut-list',
+		mixins: [mixins],
 		components: {
-			Pagination
+			SearchPanel,
+			tableList
+		},
+		computed: {
+			forms() {
+				return [
+					{
+						name: 'sort',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '排序查看',
+						placeholder: '请选择',
+						options: MAPDATA.LOGOUTUNTREATEDSORTLIST
+					},
+				]
+			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.logout.list,
+					columns: [
+						{
+							label: '用户昵称',
+							prop: 'nickname'
+						},
+						{
+							label: '用户ID',
+							prop: 'user_id'
+						},
+						{
+							label: '手机号',
+							prop: 'phone'
+						},
+						{
+							label: '申请注销时间',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '状态',
+							render: (h, params) => {
+								let data = MAPDATA.LOGOUTUNTREATEDSTATUSLIST.find(item => { return params.row.status === item.value })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '操作',
+							render: (h, params) => {
+								return h('div', [
+									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.passFunc(params.row.id, 1)}}}, '通过'),
+									h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.reject(params.row.id, 2)}}}, '拒绝')
+								])
+							}
+						}
+					]
+				}
+			}
 		},
 		data() {
 			return {
-				list: [],
-				listLoading: false,
-				total: 0,
-				page: {
-					page: 1,
-					limit: 10
-				},
-				filters: {
-					status: 0, // 0未处理 1通过 2拒绝
-					sort: 0, // 排序规则: 0时间正序1时间倒叙
-				},
-				sortType: [{
-					value: 0,
-					label: "时间正序"
-				}, {
-					value: 1,
-					label: "时间倒序"
-				}],
-				formLabelWidth: '120px',
-				editPop: false,
-				loading: false,
-				popForm: {
-					id: "",
-					status: 1, // 1通过 2拒绝
-				},
+				searchParams: {
+					sort: 0
+				}
 			}
 		},
 		created() {
 			this.userCancellationList();
 		},
 		methods: {
-			userCancellationList() {
-				this.listLoading = true;
-				var params = {
-					'status' : this.filters.status,
-					'sort' : this.filters.sort,
-					'page': this.page.page,
-					'pagesize': this.page.limit
+			// 配置参数
+			beforeSearch(params) {
+				let s = { ...this.searchParams }
+				return {
+					page: params.page,
+					pagesize: params.size,
+					status: 0,
+					sort: s.sort
 				}
-				getUserCancellationList(params).then(res => {
-					this.total = res.data.count;
-					res.data.list.map(re => {
-						re.create_timeText = moment(re.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-						switch (re.status) {
-							case 0:
-								re.statusText = "未处理";
-								break;
-							case 1:
-								re.statusText = "已处理";
-								break;
-							case 2:
-								re.statusText = "拒绝";
-								break;
-						}
-					})
-					this.list = res.data.list;
-					this.listLoading = false;
-				}).catch(err => {
-					this.$message.error(err);
-					this.listLoading = false;
-				})
 			},
-			handleProcess(id) {
-				this.popForm.id = id;
-				this.editPop = true;
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
 			},
-			handleChange() {
-				var params = {
-					"id": this.popForm.id,
-					"status": this.popForm.status
+			// 重置
+			reset() {
+				this.searchParams = {
+					sort: 0
 				}
-				getUserCancellationDeal(params).then(res => {
-					this.editPop = false;
-					this.userCancellationList();
-					this.$message.success(res.msg);
-					this.loading = false;
-				}).catch(err => {
-					this.editPop = false;
-					this.loading = false;
-					this.$message.error(err);
-				})
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
+			},
+			// 通过
+			async passFunc(id, status) {
+				let res = await getUserCancellationDeal({ id, status })
+				if(res.code === 2000) {
+					this.$message.success('处理成功')
+				}
+				this.getList()
+			},
+			// 拒绝
+			async reject(id, status) {
+				let res = await getUserCancellationDeal({ id, status })
+				if(res.code === 2000) {
+					this.$message.success('驳回成功')
+				}
+				this.getList()
 			}
 		},
 	}

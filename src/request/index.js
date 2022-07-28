@@ -172,6 +172,16 @@ const request = {
         messageAdd: `${HTTPHEADER}/ActivityPush/add`, // 充值记录
         list: `${HTTPHEADER}/ActivityPush/list`, // 活动通知列表
         delete: `${HTTPHEADER}/ActivityPush/delete`, // 活动通知列表
+    },
+
+    // 举报管理
+    report: {
+        userHistory: `${HTTPHEADER}/Report/index`, // 举报用户记录
+    },
+
+    // 注销管理
+    logout: {
+        list: `${HTTPHEADER}/Cancellation/index`, // 注销列表
     }
 }
 

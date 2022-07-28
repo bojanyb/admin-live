@@ -78,6 +78,7 @@ export default {
           },
           {
             label: '举报时间',
+            minWidth: '140px',
             prop: 'create_time',
             render: (h, params) => {
               return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')

@@ -1230,6 +1230,56 @@ const PROMOTIONTYPELIST = [
     }
 ]
 
+/*
+*举报管理
+*/
+// 举报用户 - 被举报状态
+const REPORTSTATUSLIST = [
+    {
+        name: '正常',
+        value: 1
+    },
+    {
+        name: '封禁',
+        value: 2
+    },
+    {
+        name: '注销',
+        value: 3
+    },
+]
+
+/*
+*注销管理
+*/
+// 未处理 - 排序
+const LOGOUTUNTREATEDSORTLIST = [
+    {
+        name: '时间正序',
+        value: 0
+    },
+    {
+        name: '时间倒序',
+        value: 1
+    }
+]
+
+// 未处理 - 状态
+const LOGOUTUNTREATEDSTATUSLIST = [
+    {
+        name: '未处理',
+        value: 0
+    },
+    {
+        name: '已处理',
+        value: 1
+    },
+    {
+        name: '拒绝',
+        value: 3
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -1283,5 +1333,8 @@ export default {
     DEALSOURCELIST,
     GUILDAPPLYSTATUSLIST,
     PROMOTIONTYPELIST,
-    GUILDISSTUDIO
+    GUILDISSTUDIO,
+    REPORTSTATUSLIST,
+    LOGOUTUNTREATEDSORTLIST,
+    LOGOUTUNTREATEDSTATUSLIST
 }

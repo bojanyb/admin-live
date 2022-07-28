@@ -1,199 +1,132 @@
 <template>
 	<div class="app-container">
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row>
-			<el-table-column label="举报时间" prop="create_timeText" align="center" />
-			<el-table-column label="被举报ID" prop="feedback_user_id" align="center" />
-			<el-table-column label="被举报状态" prop="feedback_user_statusText" align="center" />
-			<el-table-column label="举报用户ID" prop="user_id" align="center" />
-			<el-table-column label="举报原因" prop="genre" align="center" />
-			<el-table-column label="举报证据" prop="content" align="center" show-overflow-tooltip />
-			<el-table-column label="操作" prop="gift_str" align="center">
-				<template slot-scope="scope">
-					<el-button type="primary" @click="handleTreat(scope.row.id,1)">处理</el-button>
-					<el-button @click="handleTreat(scope.row.id,2)">忽略</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="userReportList" />
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
-		<el-dialog title="处理" :visible.sync="editPop">
-			<el-form ref="popForm" :model="popForm" :rules="popFormRules">
-				<el-form-item label="封禁说明" prop="reply" :label-width="formLabelWidth">
-					<el-input v-model="popForm.reply" style="width: 335px;" type="textarea" :rows="5"
-						placeholder="封禁说明必填,至少二十个字" autocomplete="off" clearable />
-				</el-form-item>
-				<el-form-item label="封禁时间" prop="ban_duration" :label-width="formLabelWidth">
-					<el-select v-model="popForm.ban_duration" placeholder="请选择">
-						<el-option v-for="item in timerList" :key="item.value" :label="item.label"
-							:value="item.value" />
-					</el-select>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="editPop = false">取 消</el-button>
-				<el-button :loading="loading" type="primary" @click="handleChange()">确 定</el-button>
-			</div>
-		</el-dialog>
+		<!-- 引入处理组件 -->
+		<notReport v-if="isDestoryComp" ref="notReport" @destoryComp="destoryComp" @getList="getList"></notReport>
 	</div>
 </template>
 
 <script>
-	import {
-		getUserReportList,
-		getUserReportDeal,
-		getUserReportPass
-	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	// 引入api
+	import { getUserReportPass } from '@/api/videoRoom'
+	// 引入处理组件
+	import notReport from './components/notReport.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
 		name: 'user-not-reportList',
+		mixins: [mixins],
 		components: {
-			Pagination
+			tableList,
+			notReport
 		},
 		data() {
 			return {
-				list: [],
-				loading: false,
-				listLoading: false,
-				editPop: false,
-				total: 0,
-				formLabelWidth: '120px',
-				page: {
-					page: 1,
-					limit: 10
-				},
-				filters: {},
-				popForm: {
-					'reply': '',
-					'ban_duration': ''
-				},
-				popFormRules: {
-					reply: [{
-						required: true,
-						trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!this.popForm.reply) {
-								return cb(new Error('封禁说明不能为空!'))
-							}
-							if (this.popForm.reply.length < 20) {
-								return cb(new Error('封禁说明必填, 至少二十个字!'))
-							}
-							return cb()
-						}
-					}],
-					ban_duration: [{
-						required: true,
-						trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!this.popForm.ban_duration) {
-								return cb(new Error('封禁时间不能为空!'))
-							}
-							return cb()
-						}
-					}],
-				},
-				timerList: [{
-						"value": 1,
-						"label": "1天"
-					},
-					{
-						"value": 3,
-						"label": "3天"
-					},
-					{
-						"value": 7,
-						"label": "7天"
-					},
-					{
-						"value": 15,
-						"label": "15天"
-					},
-					{
-						"value": 30,
-						"label": "30天"
-					},
-					{
-						"value": -1,
-						"label": "永久"
-					}
-				],
+				isDestoryComp: false // 是否销毁组件
 			}
 		},
-		created() {
-			this.userReportList();
+		computed: {
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.report.userHistory,
+					columns: [
+						{
+							label: '举报时间',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '被举报ID',
+							prop: 'feedback_user_id'
+						},
+						{
+							label: '被举报状态',
+							render: (h, params) => {
+								let data = MAPDATA.REPORTSTATUSLIST.find(item => { return params.row.feedback_user_status === item.value })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '举报用户ID',
+							prop: 'user_id'
+						},
+						{
+							label: '举报原因',
+							prop: 'genre'
+						},
+						{
+							label: '举报证据',
+							prop: 'content',
+							showOverFlow: true
+						},
+						{
+							label: '操作',
+							minWidth: '120px',
+							render: (h, params) => {
+								return h('div', [
+									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.manageClick(params.row.id)}}}, '处理'),
+									h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.funcClick(params.row.id)}}}, '忽略'),
+								])
+							}
+						}
+					]
+				}
+			}
 		},
 		methods: {
-			userReportList() {
-				var params = {
-					"status": 1, // 处理状态： 1未处理 2已处理 3忽略
-					"feedback_user_id": "",
-					"user_id": "",
-					'page': this.page.page,
-					'pagesize': this.page.limit
-				}
-				getUserReportList(params).then(res => {
-					this.total = res.data.count;
-					res.data.list.map(re => {
-						re.create_timeText = moment(re.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-						switch (re.feedback_user_status) {
-							case 1:
-								re.feedback_user_statusText = "正常";
-								break;
-							case 2:
-								re.feedback_user_statusText = "封禁";
-								break;
-							case 3:
-								re.feedback_user_statusText = "注销";
-								break;
-						}
-					})
-					this.list = res.data.list;
-				}).catch(err => {
-					this.$message.error(err);
-				})
-			},
-			handleTreat(id, num) {
-				this.popForm.id = id;
-				if (num == 1) { // 处理
-					if (this.$refs["popForm"]) {
-						this.$refs["popForm"].resetFields();
-					}
-					this.editPop = true;
-				} else if (num == 2) { // 忽略
-					var params = {
-						"id": this.popForm.id
-					}
-					getUserReportPass(params).then(res => {
-						console.log(res);
-						this.userReportList();
-					}).catch(err => {
-						this.$message.error(err);
-					})
+			// 配置参数
+			beforeSearch(params) {
+				return {
+					page: params.page,
+					pagesize: params.size,
+					status: 1,
+					feedback_user_id: '',
+					user_id: ''
 				}
 			},
-			handleChange() {
-				this.$refs.popForm.validate(valid => {
-					if (valid) {
-						var params = {
-							"id": this.popForm.id,
-							"reply": this.popForm.reply,
-							"ban_duration": this.popForm.ban_duration > 0 ? (this.popForm.ban_duration * 24 *
-								60 * 60) : this.popForm.ban_duration
-						}
-						getUserReportDeal(params).then(res => {
-							this.editPop = false;
-							this.$message.success("操作成功");
-							this.userReportList();
-						}).catch(err => {
-							this.editPop = false;
-							this.$message.error(err);
-						})
-					}
-				})
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
 			},
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
+			},
+			// 处理
+			manageClick(id) {
+				this.isDestoryComp = true
+				setTimeout(() => {
+					this.$refs.notReport.loadParams(id)
+				}, 50);
+			},
+			// 忽略
+			async funcClick(id) {
+				let res = await getUserReportPass({ id })
+				if(res.code === 2000) {
+					this.$message.success('忽略成功')
+				}
+				this.getList()
+			},
+			// 销毁组件
+			destoryComp() {
+				this.isDestoryComp = false
+			}
 		},
 	}
 </script>
