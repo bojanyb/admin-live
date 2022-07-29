@@ -65,6 +65,13 @@ export default {
                     options: MAPDATA.ORDERSTATUS
                 },
                 {
+                    name: 'amount',
+                    type: 'input',
+                    value: '',
+                    label: '金额',
+                    placeholder: '请输入金额'
+                },
+                {
                     name: 'dateTimeParams',
                     type: 'datePicker',
                     dateType: 'datetimerange',
@@ -167,6 +174,7 @@ export default {
                 sort: s.sort,
                 channel: s.channel,
                 status: s.status,
+                amount: s.amount ? Number(s.amount) * 100 : s.amount,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000)
             }
