@@ -248,6 +248,9 @@ export default {
                             this.$message.success('新增成功')
                         }
                     } else {
+                        if(params.gift_class.indexOf(5) === -1) {
+                            params.noble_level = 0
+                        }
                         let res = await getGiftEdit(params)
                         if(res.code === 2000) {
                             this.$message.success('修改成功')
