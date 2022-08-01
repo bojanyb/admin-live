@@ -43,7 +43,8 @@ export default {
                 banned_duration: '',
                 banned_remark: ''
             },
-            oldParams: {},
+            oldParams: {}, // 老数据 - 用来判断是否有修改
+            oldData: {}, // 老数据 - 用来判断是否需要请求接口
             rules: {
                 room_name: [
                     { required: false, message: '请输入活动名称', trigger: 'blur' },
@@ -59,6 +60,7 @@ export default {
         loadParams(row) {
             this.oldParams = row
             this.ruleForm.room_name = row.room_name
+            this.oldData = JSON.parse(JSON.stringify(this.ruleForm))
             this.dialogVisible = true
         },
         // 关闭弹窗
@@ -83,11 +85,18 @@ export default {
                         delete params.banned_duration
                         delete params.banned_remark
                     }
-                    let res = await getRoomSave(params)
-                    if(res.code === 2000) {
-                        this.$message.success('编辑成功')
-                    } else {
-                        this.$message.success('编辑失败')
+                    if(a.room_name === s.room_name) {
+                        delete params.room_name
+                    }
+                    let n = JSON.stringify(this.oldData)
+                    let o = JSON.stringify(this.ruleForm)
+                    if(n !== o) {
+                        let res = await getRoomSave(params)
+                        if(res.code === 2000) {
+                            this.$message.success('编辑成功')
+                        } else {
+                            this.$message.success('编辑失败')
+                        }
                     }
                     this.dialogVisible = false
                     this.$emit('getList')
