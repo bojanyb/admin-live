@@ -102,6 +102,7 @@ export default {
                         label: '外站开厅流水及数据情况',
                         isimgList: true,
                         prop: 'images',
+                        type: 1,
                         imgWidth: '50px',
                         imgHeight: '50px',
                         minWidth: '180px'

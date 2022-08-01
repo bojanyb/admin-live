@@ -36,7 +36,7 @@
           <imgListComp 
           v-if="item.isimgList"
           :srcList="scope.row[item.prop]"
-          :type="scope.row[item.type]"
+          :type="scope.row[item.type] || item.type"
           :width="item.imgWidth"
           :height="item.imgHeight"
           :preview-src-list="scope.row[item.prop]"
