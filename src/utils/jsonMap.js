@@ -1296,6 +1296,22 @@ const LOGOUTUNTREATEDSTATUSLIST = [
     }
 ]
 
+// 已处理列表 - 状态
+const PROCESSEDSTATUSLIST = [
+    {
+        value: 1,
+        name: '已通过'
+    },
+    {
+        value: 2,
+        name: '未通过'
+    },
+    {
+        value: 3,
+        name: '已注销'
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -1353,5 +1369,6 @@ export default {
     REPORTSTATUSLIST,
     LOGOUTUNTREATEDSORTLIST,
     LOGOUTUNTREATEDSTATUSLIST,
-    ISNOBILITYUSERLIST
+    ISNOBILITYUSERLIST,
+    PROCESSEDSTATUSLIST
 }

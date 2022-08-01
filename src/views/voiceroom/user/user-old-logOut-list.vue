@@ -1,121 +1,138 @@
 <template>
 	<div class="app-container">
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters" @keyup.enter.native="userCancellationList()">
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
 
-				<el-form-item label="状态">
-					<el-select v-model="filters.status" placeholder="请选择" @change="userCancellationList">
-						<el-option v-for="item in statusList" :key="item.value" :label="item.label"
-							:value="item.value" />
-					</el-select>
-				</el-form-item>
-				<el-form-item label="用户ID">
-					<el-input v-model="filters.user_id" v-input-limit="0" placeholder="请输入用户ID" clearable />
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="userCancellationList">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row>
-			<el-table-column label="用户昵称" prop="nickname" align="center" />
-			<el-table-column label="用户ID" prop="user_id" align="center" />
-			<el-table-column label="手机号" prop="phone" align="center" />
-			<el-table-column label="申请注销时间" prop="create_timeText" align="center" />
-			<el-table-column label="状态" prop="statusText" align="center" />
-			<el-table-column label="处理人" prop="deal_user_name" align="center" />
-			<el-table-column label="处理时间" prop="update_timeText" align="center" />
-		</el-table>
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="userCancellationList" />
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 	</div>
 </template>
 
 <script>
-	import {
-		getUserCancellationHasDeal,
-	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
 		name: 'user-old-logOut-list',
+		mixins: [mixins],
 		components: {
-			Pagination
+			SearchPanel,
+			tableList
+		},
+		computed: {
+			forms() {
+				return [
+					{
+						name: 'status',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '状态',
+						placeholder: '请选择',
+						options: MAPDATA.PROCESSEDSTATUSLIST
+					},
+					{
+						name: 'user_id',
+						type: 'input',
+						value: '',
+						label: '用户ID',
+						isNum: true,
+						placeholder: '请输入用户ID'
+					}
+				]
+			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.logout.hasDeal,
+					columns: [
+						{
+							label: '用户昵称',
+							prop: 'nickname'
+						},
+						{
+							label: '用户ID',
+							prop: 'user_id'
+						},
+						{
+							label: '手机号',
+							prop: 'phone'
+						},
+						{
+							label: '申请注销时间',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '状态',
+							render: (h, params) => {
+								let data = MAPDATA.PROCESSEDSTATUSLIST.find(item => { return params.row.status === item.value })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '处理人',
+							prop: 'deal_user_name'
+						},
+						{
+							label: '处理时间',
+							render: (h, params) => {
+								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+					]
+				}
+			}
 		},
 		data() {
 			return {
-				list: [],
-				listLoading: false,
-				total: 0,
-				page: {
-					page: 1,
-					limit: 10
-				},
-				filters: {
-					user_id: "",
-					status: 2
-				},
-				statusList: [{
-					value: 1,
-					label: "已通过"
-				}, {
-					value: 2,
-					label: "未通过"
-				}, {
-					value: 3,
-					label: "已注销"
-				}, ],
-				popForm: {
-					user_id: "",
-					sort: 0, // 排序规则: 0 时间正序 1 时间倒叙
-					status: 2, // 1 已经注销 2 未注销
-				},
-				userImglist: []
+				searchParams: {
+					status: 2,
+					user_id: ''
+				}
 			}
 		},
-		created() {
-			this.userCancellationList();
-		},
 		methods: {
-			userCancellationList() {
-				this.listLoading = true;
-				var params = {
-					"status": this.filters.status,
-					"sort": this.popForm.sort,
-					"user_id": this.filters.user_id,
-					'page': this.page.page,
-					'pagesize': this.page.limit
+			// 配置参数
+			beforeSearch(params) {
+				let s = { ...this.searchParams }
+				return {
+					page: params.page,
+					pagesize: params.size,
+					status: s.status,
+					sort: 0,
+					user_id: s.user_id
 				}
-				getUserCancellationHasDeal(params).then(res => {
-					this.total = res.data.count;
-					res.data.list.map(re => {
-						re.create_timeText = moment(re.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-						re.update_timeText = moment(re.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-						switch (re.status) {
-							case 1:
-								re.statusText = "已通过";
-								break;
-							case 2:
-								re.statusText = "未通过";
-								break;
-							case 3:
-								re.statusText = "已注销";
-								break;
-						}
-
-					})
-					this.list = res.data.list;
-					this.listLoading = false;
-				}).catch(err => {
-					this.$message.error(err);
-					this.listLoading = false;
-				})
 			},
-		},
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
+			},
+			// 重置
+			reset() {
+				this.searchParams = {
+					sort: 0,
+					status: 2,
+					user_id: ''
+				}
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
+			}
+		}
 	}
 </script>
 

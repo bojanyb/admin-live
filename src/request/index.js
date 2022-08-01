@@ -182,6 +182,7 @@ const request = {
     // 注销管理
     logout: {
         list: `${HTTPHEADER}/Cancellation/index`, // 注销列表
+        hasDeal: `${HTTPHEADER}/Cancellation/hasDeal`, // 已处理列表
     }
 }
 
