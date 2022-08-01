@@ -129,10 +129,10 @@ export default {
                             return h('div', [
                                 h('el-button', { props : { type: 'primary'}, style: {
                                     display: params.row.status === 1 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.clickFunc(params.row, 2)}}}, '通过'),
+                                }, on: {click:()=>{this.clickFunc(params.row.id, 2)}}}, '通过'),
                                 h('el-button', { props : { type: 'danger'}, style: {
                                     display: params.row.status === 1 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.clickFunc(params.row, 3)}}}, '驳回')
+                                }, on: {click:()=>{this.clickFunc(params.row.id, 3)}}}, '驳回')
                             ])
                         }
                     }

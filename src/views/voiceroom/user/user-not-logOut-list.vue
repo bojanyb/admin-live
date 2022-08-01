@@ -94,9 +94,6 @@
 				}
 			}
 		},
-		created() {
-			this.userCancellationList();
-		},
 		methods: {
 			// 配置参数
 			beforeSearch(params) {
