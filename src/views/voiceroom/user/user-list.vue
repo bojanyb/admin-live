@@ -211,9 +211,6 @@
 			// 重置
 			reset() {
 				this.searchParams = {}
-				this.dateTimeParams = {
-					activity_type_id: 1
-				}
 				this.getList()
 			},
 			// 查询

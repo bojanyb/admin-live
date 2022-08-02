@@ -127,6 +127,7 @@ const request = {
     deal: {
         userFlow2: `${HTTPHEADER}/Statistical/userFlow2`, // 用户流水记录2
         userFlow1: `${HTTPHEADER}/Statistical/userFlow1`, // 用户流水记录1
+        diamondLog: `${HTTPHEADER}/Statistical/diamondLog`, // 余额明细
     },
 
     // 公会管理

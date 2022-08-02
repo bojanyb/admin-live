@@ -28,6 +28,7 @@ import dealRouter from './modules/deal/index.js'
 import promoteRouter from './modules/promote/index.js'
 import shoppingRouter from './modules/shopping/index.js'
 import messageRouter from './modules/message/index.js'
+import moveDatingRouter from './modules/moveDating/index.js'
 
 
 /**
@@ -91,6 +92,7 @@ export const constantRoutes = [{
 export const asyncRoutes = [
 	messageRouter,
 	dashboardRouter,
+	moveDatingRouter,
 	nobilityRouter,
 	blockedRouter,
 	// chartsRouter,
