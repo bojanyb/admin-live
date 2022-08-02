@@ -1,19 +1,19 @@
 <template>
-    <div class="app-container moveDating-box">
+    <div class="app-container roomConfig-category-box">
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
-        <!-- 详情组件 -->
-        <cardComp v-if="isDestoryComp" ref="cardComp" @destoryComp="destoryComp" @getList="getList"></cardComp>
+        <!-- 新增组件 -->
+        <categoryComp v-if="isDestoryComp" ref="categoryComp" @destoryComp="destoryComp" @getList="getList"></categoryComp>
     </div>
 </template>
 
 <script>
-// 引入详情组件
-import cardComp from './components/cardComp.vue'
+// 引入新增组件
+import categoryComp from './components/categoryComp.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -29,48 +29,54 @@ import MAPDATA from '@/utils/jsonMap.js'
 export default {
     mixins: [mixins],
     components: {
-        tableList,
         SearchPanel,
-        cardComp
+        tableList,
+        categoryComp
     },
     data() {
         return {
-            isDestoryComp: false
-        }
+            isDestoryComp: false // 是否销毁组件
+        };
     },
     computed: {
         forms() {
             return [
                 {
-                    name: 'user_number',
-                    type: 'input',
+                    name: 'status',
+                    type: 'select',
                     value: '',
-                    label: '音色分类名',
-                    isNum: true,
-                    placeholder: '请输入音色分类名'
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '业务类型',
+                    placeholder: '请选择',
+                    options: MAPDATA.CATEGORYBUSINESSTYPELIST
                 }
             ]
         },
         cfgs() {
+            let name = this.tabIndex === '0' ? 'list' : 'musicList'
             return {
                 vm: this,
-                url: REQUEST.user.list,
+                url: REQUEST.user[name],
                 columns: [
                     {
-                        label: '音色ID',
+                        label: '品类ID',
                         prop: 'user_number'
                     },
                     {
-                        label: '音色名',
-                        prop: 'nickname'
+                        label: '品类名',
+                        prop: 'user_number'
                     },
                     {
-                        label: '音色标签',
-                        prop: 'nickname'
+                        label: '品类图标',
+                        isimg: true,
+                        prop: 'face',
+                        imgWidth: '50px',
+                        imgHeight: '50px'
                     },
                     {
-                        label: '排序权重',
-                        prop: 'nickname'
+                        label: '权重排序',
+                        prop: 'user_number'
                     },
                     {
                         label: '操作',
@@ -111,8 +117,8 @@ export default {
             this.getList()
         },
         // 新增
-        add(row) {
-            this.load('add', row)
+        add() {
+           this.load('add')
         },
         // 修改
         update(row) {
@@ -121,7 +127,7 @@ export default {
         load(status, row) {
             this.isDestoryComp = true
             setTimeout(() => {
-                this.$refs.cardComp.loadParams(status, row)
+                this.$refs.categoryComp.loadParams(status, row)
             }, 50);
         },
         // 销毁组件
@@ -132,8 +138,6 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.moveDating-box {
-
-}
+<style lang="scss" scoped>
+    
 </style>

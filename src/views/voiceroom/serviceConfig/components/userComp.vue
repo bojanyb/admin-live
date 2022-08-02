@@ -1,55 +1,46 @@
 <template>
-    <div class="moveDating-cardComp-box">
+    <div class="serviceConfig-userComp-box">
         <el-dialog
-        :title="title"
+        title="用户处罚"
         :visible.sync="dialogVisible"
         width="450px"
-        :before-close="handleClose">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
-                <el-form-item label="音色分类名" prop="name">
+        :before-close="handleClose"
+        @closed="closed">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="用户处罚" prop="name">
                     <el-input v-model="ruleForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="音色标签" prop="region">
-                    <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+                <el-form-item label="处罚类型" prop="region">
+                    <el-select v-model="ruleForm.region" placeholder="请选择">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="权重排序" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
-                </el-form-item>
-                <el-form-item label="文件类型" prop="region">
-                    <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-                        <el-option label="封面" :value="1"></el-option>
-                        <el-option label="声音签名" :value="2"></el-option>
+                <el-form-item label="处罚时间" prop="region">
+                    <el-select v-model="ruleForm.region" placeholder="请选择">
+                        <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="上传封面" prop="name" v-if="ruleForm.region === 1">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.image_url" :imgUrl="ruleForm.image_url" name="image_url" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
-                </el-form-item>
-                <el-form-item label="上传声音签名" prop="name" v-if="ruleForm.region === 2">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.image_url" :imgUrl="ruleForm.image_url" name="image_url" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
+                <el-form-item label="处罚备注" prop="desc">
+                    <el-input type="textarea" :rows="4" v-model="ruleForm.desc"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+                <el-button type="primary" @click="resetForm('ruleForm')">确 定</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
-// 引入上传组件
-import uploadImg from '@/components/uploadImg/list.vue'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 export default {
-    components: {
-        uploadImg
-    },
     data() {
         return {
             dialogVisible: false,
-            status: 'add', // 当前状态
+            timeList: MAPDATA.DURATION, // 处罚时长
             ruleForm: {
                 name: '',
                 region: '',
@@ -86,27 +77,11 @@ export default {
             }
         };
     },
-    computed: {
-        title() {
-            if(this.status === 'add') {
-                return '新增心动卡片'
-            } else if(this.status === 'update') {
-                return '修改心动卡片'
-            }
-        }
-    },
     methods: {
         handleClose() {
             this.dialogVisible = false
         },
-        // 获取数据
-        loadParams(status, row) {
-            this.status = status
-            this.dialogVisible = true
-            if(status !== 'add') {
-                // let params = json
-            }
-        },
+        // 提交
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -120,18 +95,18 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
-        // 重置 - 验证
-        validateField(name) {
-            this.$refs.ruleForm.validateField([name])
+        // 销毁组件
+        closed() {
+            this.$emit('destoryComp')
         }
     }
 }
 </script>
 
 <style lang="scss">
-.moveDating-cardComp-box {
+.serviceConfig-userComp-box {
     .el-select {
-        width: 300px;
+        width: 310px;
     }
 }
 </style>

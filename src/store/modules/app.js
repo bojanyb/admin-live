@@ -7,7 +7,8 @@ const state = {
   },
   device: 'desktop',
   size: Cookies.get('size') || 'medium',
-  isRouterReload: false // 路由重置
+  isRouterReload: false, // 路由重置
+  loading: false // loading开关
 }
 
 const mutations = {
@@ -34,6 +35,9 @@ const mutations = {
   },
   SET_ROUTER_RELOAD: (state, status) => {
     state.isRouterReload = status
+  },
+  SET_LOADING: (state, status) => {
+    state.loading = status
   }
 }
 

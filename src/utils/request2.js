@@ -34,6 +34,7 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
 	config => {
+		store.commit('app/SET_LOADING', true)
 		// do something before request is sent
 		const hasToken = getToken()
 		config.headers['Admin-Token'] = hasToken
@@ -94,6 +95,7 @@ service.interceptors.response.use(
 			})
 			return Promise.reject(res.msg || new Error('Error'))
 		} else {
+			store.commit('app/SET_LOADING', false)
 			return res
 		}
 	},

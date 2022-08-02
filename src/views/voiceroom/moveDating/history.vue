@@ -1,19 +1,14 @@
 <template>
-    <div class="app-container moveDating-box">
+    <div class="app-container moveDating-history-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
-
-        <!-- 详情组件 -->
-        <cardComp v-if="isDestoryComp" ref="cardComp" @destoryComp="destoryComp" @getList="getList"></cardComp>
     </div>
 </template>
 
 <script>
-// 引入详情组件
-import cardComp from './components/cardComp.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -29,13 +24,12 @@ import MAPDATA from '@/utils/jsonMap.js'
 export default {
     mixins: [mixins],
     components: {
-        tableList,
         SearchPanel,
-        cardComp
+        tableList
     },
     data() {
         return {
-            isDestoryComp: false
+            isDestoryComp: false // 是否销毁组件
         }
     },
     computed: {
@@ -45,9 +39,36 @@ export default {
                     name: 'user_number',
                     type: 'input',
                     value: '',
-                    label: '音色分类名',
+                    label: '用户ID',
                     isNum: true,
-                    placeholder: '请输入音色分类名'
+                    placeholder: '请输入用户ID'
+                },
+                {
+                    name: 'user_number',
+                    type: 'input',
+                    value: '',
+                    label: '主播ID',
+                    isNum: true,
+                    placeholder: '请输入主播ID'
+                },
+                {
+                    name: 'dateTimeParams',
+                    type: 'datePicker',
+                    dateType: 'datetimerange',
+                    format: "yyyy-MM-dd HH:mm:ss",
+                    label: '时间选择',
+                    value: '',
+                    handler: {
+                        change: v => {
+                            this.emptyDateTime()
+                            this.setDateTime(v)
+                            this.getList()
+                        },
+                        selectChange: (v, key) => {
+                            this.emptyDateTime()
+                            this.getList()
+                        }
+                    }
                 }
             ]
         },
@@ -57,29 +78,26 @@ export default {
                 url: REQUEST.user.list,
                 columns: [
                     {
-                        label: '音色ID',
+                        label: '时间',
+                        render: (h, params) => {
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                        }
+                    },
+                    {
+                        label: '用户',
                         prop: 'user_number'
                     },
                     {
-                        label: '音色名',
-                        prop: 'nickname'
+                        label: '主播',
+                        prop: 'user_number'
                     },
                     {
-                        label: '音色标签',
-                        prop: 'nickname'
+                        label: '通话时长',
+                        prop: 'user_number'
                     },
                     {
-                        label: '排序权重',
-                        prop: 'nickname'
-                    },
-                    {
-                        label: '操作',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '修改'),
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.editFunc(params.row)}}}, '删除')
-                            ])
-                        }
+                        label: '收益金额',
+                        prop: 'user_number'
                     }
                 ]
             }
@@ -111,17 +129,10 @@ export default {
             this.getList()
         },
         // 新增
-        add(row) {
-            this.load('add', row)
-        },
-        // 修改
-        update(row) {
-            this.load('update', row)
-        },
-        load(status, row) {
+        add() {
             this.isDestoryComp = true
             setTimeout(() => {
-                this.$refs.cardComp.loadParams(status, row)
+                this.$refs.addMember.dialogVisible = true
             }, 50);
         },
         // 销毁组件
@@ -133,7 +144,7 @@ export default {
 </script>
 
 <style lang="scss">
-.moveDating-box {
+.moveDating-history-box {
 
 }
 </style>

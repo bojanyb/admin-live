@@ -211,7 +211,6 @@
 			// 销毁组件
 			destoryComp() {
 				this.isDestoryComp = false
-				this.getList()
 			}
 		}
 	}

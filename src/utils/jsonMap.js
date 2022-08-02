@@ -399,6 +399,18 @@ const CLASSLIST = [
     }
 ]
 
+// 公会列表 - 公会类型
+const GUILDCONFIGTYPELIST = [
+    {
+        name: '主播公会',
+        value: 1
+    },
+    {
+        name: '个人公会',
+        value: 2
+    }
+]
+
 // 公会厅申请列表 - 申请目的
 const GUILDAPPLYLIST = [
     {
@@ -1312,6 +1324,64 @@ const PROCESSEDSTATUSLIST = [
     }
 ]
 
+/*
+*客服管理
+*/
+// 封面审核 - 状态
+const SERVICEAUDITSTATUSLIST = [
+    {
+        value: 1,
+        name: '审核通过'
+    },
+    {
+        value: 2,
+        name: '审核拒绝'
+    },
+    {
+        value: 3,
+        name: '待审核'
+    }
+]
+
+/*
+*房间管理
+*/
+// 房间信息管理 - 房间状态
+const HOUSEMESSAGESTATUSLIST = [
+    {
+        name: '营业中',
+        value: 1
+    },
+    {
+        name: '已关厅',
+        value: 2
+    }
+]
+
+// 房间信息管理 - 房间类型
+const HOUSEMESSAGETYPELIST = [
+    {
+        name: '公会房间',
+        value: 1
+    },
+    {
+        name: '个人房间',
+        value: 2
+    }
+]
+
+// 房间品类管理 - 业务类型
+const CATEGORYBUSINESSTYPELIST = [
+    {
+        name: '派对',
+        value: 1
+    },
+    {
+        name: '直播',
+        value: 2
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -1370,5 +1440,10 @@ export default {
     LOGOUTUNTREATEDSORTLIST,
     LOGOUTUNTREATEDSTATUSLIST,
     ISNOBILITYUSERLIST,
-    PROCESSEDSTATUSLIST
+    PROCESSEDSTATUSLIST,
+    SERVICEAUDITSTATUSLIST,
+    HOUSEMESSAGESTATUSLIST,
+    HOUSEMESSAGETYPELIST,
+    CATEGORYBUSINESSTYPELIST,
+    GUILDCONFIGTYPELIST
 }

@@ -2,7 +2,7 @@
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <sidebar class="sidebar-container" />
-    <div :class="{hasTagsView:needTagsView}" class="main-container">
+    <div :class="{hasTagsView:needTagsView}" class="main-container" v-loading="loading">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
         <tags-view v-if="needTagsView" />
@@ -38,7 +38,8 @@ export default {
       device: state => state.app.device,
       showSettings: state => state.settings.showSettings,
       needTagsView: state => state.settings.tagsView,
-      fixedHeader: state => state.settings.fixedHeader
+      fixedHeader: state => state.settings.fixedHeader,
+      loading: state => state.app.loading
     }),
     classObj() {
       return {
@@ -99,4 +100,9 @@ export default {
   .mobile .fixed-header {
     width: 100%;
   }
+</style>
+<style lang="scss">
+.el-loading-mask {
+  z-index: 9999;
+}
 </style>

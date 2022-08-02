@@ -55,15 +55,15 @@ const guildAuditRouter = {
 				noCache: true
 			}
 		},
-		{
-			path: 'guildLevelRebate',
-			component: () => import('@/views/voiceroom/guildAudit/guildLevelRebate'),
-			name: 'guildLevelRebate',
-			meta: {
-				title: '公会等级返点配置',
-				noCache: true
-			}
-		},
+		// {
+		// 	path: 'guildLevelRebate',
+		// 	component: () => import('@/views/voiceroom/guildAudit/guildLevelRebate'),
+		// 	name: 'guildLevelRebate',
+		// 	meta: {
+		// 		title: '公会等级返点配置',
+		// 		noCache: true
+		// 	}
+		// },
 		{
 			path: 'guildRebate-list',
 			component: () => import('@/views/voiceroom/guildAudit/guildRebate-list'),

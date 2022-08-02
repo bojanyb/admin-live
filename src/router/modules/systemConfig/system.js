@@ -11,7 +11,45 @@ const systemConfigRouter = {
 		title: '系统配置',
 		icon: 'el-icon-setting'
 	},
-	children: [{
+	children: [
+		{
+			path: '/advanced',
+			component: () => import('@/views/voiceroom/systemConfig/index'),
+			meta: {
+				title: '高级权限',
+				noCache: true
+			},
+			children: [
+				{
+					path: 'guildLevelRebate',
+					component: () => import('@/views/voiceroom/guildAudit/guildLevelRebate'),
+					name: 'guildLevelRebate',
+					meta: {
+						title: '公会等级返点配置',
+						noCache: true
+					}
+				},
+				{
+					path: 'platform-rebate',
+					component: () => import('@/views/voiceroom/systemConfig/platform-rebate'),
+					name: 'platform-rebate',
+					meta: {
+						title: '平台返点配置',
+						noCache: true
+					}
+				},
+				// {
+				// 	path: 'rebates',
+				// 	component: () => import('@/views/voiceroom/systemConfig/advanced/rebates/index'),
+				// 	meta: {
+				// 		title: '平台返点配置',
+				// 		noCache: true
+				// 	},
+				// 	name: 'rebates'
+				// }
+			]
+		},
+		{
 			path: 'consume-list',
 			component: () => import('@/views/voiceroom/systemConfig/consume-list'),
 			name: 'consume-list',
@@ -44,15 +82,6 @@ const systemConfigRouter = {
 			name: 'greet-list',
 			meta: {
 				title: '打招呼常用语',
-				noCache: true
-			}
-		},
-		{
-			path: 'platform-rebate',
-			component: () => import('@/views/voiceroom/systemConfig/platform-rebate'),
-			name: 'platform-rebate',
-			meta: {
-				title: '平台返点配置',
 				noCache: true
 			}
 		},

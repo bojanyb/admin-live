@@ -9,7 +9,7 @@
         :close-on-click-modal="false"
         @closed="closed">
             <div class="formBox">
-                <el-select v-model="type" placeholder="请选择" @change="typeChange">
+                <el-select v-model="type" placeholder="请选择">
                     <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -51,90 +51,86 @@ export default {
         addMember
     },
     computed: {
-        cfgs1() {
+        cfgs() {
+            let arr = [
+                {
+                    label: '成员ID',
+                    prop: 'user_number'
+                },
+                {
+                    label: '成员昵称',
+                    prop: 'nickname'
+                },
+                {
+                    label: '加入时间',
+                    width: '180px',
+                    prop: 'create_time'
+                },
+                {
+                    label: '当日流水（喵粮）',
+                    width: '150px',
+                    prop: 'today_flow'
+                },
+                {
+                    label: '总流水（喵粮）',
+                    prop: 'total_flow'
+                },
+                {
+                    label: '操作',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('el-button', { props : { type: 'primary'}, style: {
+                                display: params.row.is_admin === 1 ? 'none' : 'unset'
+                            }, on: {click:()=>{this.deleteParams(params.row, 1)}}}, '移除'),
+                            h('span', { style: {
+                                display: params.row.is_admin === 1 ? 'unset' : 'none'
+                            } }, '公会长')
+                        ])
+                    }
+                }
+            ]
+            let arr2 = [
+                {
+                    label: '厅ID',
+                    prop: 'room_number'
+                },
+                {
+                    label: '所属成员ID',
+                    render: (h,params) => {
+                        return h('div', [
+                            h('div', params.row.nickname),
+                            h('div', params.row.user_number),
+                        ])
+                    }
+                },
+                {
+                    label: '绑定时间',
+                    width: '180px',
+                    prop: 'create_time'
+                },
+                {
+                    label: '当日流水（喵粮）',
+                    width: '150px',
+                    prop: 'today_flow'
+                },
+                {
+                    label: '总流水（喵粮）',
+                    prop: 'total_flow'
+                },
+                {
+                    label: '操作',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.deleteParams(params.row, 2)}}}, '移除')
+                        ])
+                    }
+                }
+            ]
+            let name = this.type === 1 ? 'getGuildUserList' : 'getGuildRoomList'
             return {
                 vm: this,
-                url: REQUEST.guild.getGuildUserList,
-                columns: [
-                    {
-                        label: '成员ID',
-                        prop: 'user_number'
-                    },
-                    {
-                        label: '成员昵称',
-                        prop: 'nickname'
-                    },
-                    {
-                        label: '加入时间',
-                        width: '180px',
-                        prop: 'create_time'
-                    },
-                    {
-                        label: '当日流水（喵粮）',
-                        width: '150px',
-                        prop: 'today_flow'
-                    },
-                    {
-                        label: '总流水（喵粮）',
-                        prop: 'total_flow'
-                    },
-                    {
-                        label: '操作',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('el-button', { props : { type: 'primary'}, style: {
-                                    display: params.row.is_admin === 1 ? 'none' : 'unset'
-                                }, on: {click:()=>{this.deleteParams(params.row, 1)}}}, '移除'),
-                                h('span', { style: {
-                                    display: params.row.is_admin === 1 ? 'unset' : 'none'
-                                } }, '公会长')
-                            ])
-                        }
-                    }
-                ]
-            }
-        },
-        cfgs2() {
-            return {
-                vm: this,
-                url: REQUEST.guild.getGuildRoomList,
-                columns: [
-                    {
-                        label: '厅ID',
-                        prop: 'room_number'
-                    },
-                    {
-                        label: '所属成员ID',
-                        render: (h,params) => {
-                            return h('div', [
-                                h('div', params.row.nickname),
-                                h('div', params.row.user_number),
-                            ])
-                        }
-                    },
-                    {
-                        label: '绑定时间',
-                        width: '180px',
-                        prop: 'create_time'
-                    },
-                    {
-                        label: '当日流水（喵粮）',
-                        width: '150px',
-                        prop: 'today_flow'
-                    },
-                    {
-                        label: '总流水（喵粮）',
-                        prop: 'total_flow'
-                    },
-                    {
-                        label: '操作',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.deleteParams(params.row, 2)}}}, '移除')
-                            ])
-                        }
-                    }
-                ]
+                url: REQUEST.guild[name],
+                columns: this.type === 1 ? arr : arr2
             }
         }
     },
@@ -143,7 +139,6 @@ export default {
             isDestoryComp: false,
             dialogVisible: false,
             type: 1,
-            cfgs: {},
             options: [
                 {
                     name: '成员',
@@ -155,9 +150,6 @@ export default {
                 },
             ]
         };
-    },
-    mounted() {
-        this.cfgs = this.cfgs1
     },
     methods: {
         // 配置参数
@@ -194,14 +186,6 @@ export default {
         handleClose() {
             this.dialogVisible = false
         },
-        // 切换类型
-        typeChange(v) {
-            if(v === 1) {
-                this.cfgs = this.cfgs1
-            } else {
-                this.cfgs = this.cfgs2
-            }
-        },
         // 刷新列表
         getList() {
             this.$refs.tableList.getData()
@@ -215,6 +199,7 @@ export default {
         },
         closed() {
             this.$emit('destoryComp')
+            this.$emit('getList')
         },
         // 销毁组件
         destoryComp() {

@@ -28,6 +28,24 @@ const moveDatingRouter = {
 				title: '心动价格配置',
 				noCache: true
 			}
+		},
+        {
+			path: 'anchor',
+			component: () => import('@/views/voiceroom/moveDating/anchor'),
+			name: 'anchor',
+			meta: {
+				title: '心动主播',
+				noCache: true
+			}
+		},
+        {
+			path: 'history',
+			component: () => import('@/views/voiceroom/moveDating/history'),
+			name: 'history',
+			meta: {
+				title: '心动记录',
+				noCache: true
+			}
 		}
 	]
 }

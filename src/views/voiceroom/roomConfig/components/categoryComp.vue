@@ -1,34 +1,26 @@
 <template>
-    <div class="moveDating-cardComp-box">
+    <div class="roomConfig-categoryComp-box">
         <el-dialog
         :title="title"
         :visible.sync="dialogVisible"
-        width="450px"
-        :before-close="handleClose">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
-                <el-form-item label="音色分类名" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
-                </el-form-item>
-                <el-form-item label="音色标签" prop="region">
-                    <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+        width="400px"
+        :before-close="handleClose"
+        @closed="closed">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="业务类型" prop="region">
+                    <el-select v-model="ruleForm.region" placeholder="请选择业务类型">
                         <el-option label="区域一" value="shanghai"></el-option>
                         <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="权重排序" prop="name">
+                <el-form-item label="品类名" prop="name">
                     <el-input v-model="ruleForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="文件类型" prop="region">
-                    <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-                        <el-option label="封面" :value="1"></el-option>
-                        <el-option label="声音签名" :value="2"></el-option>
-                    </el-select>
+                <el-form-item label="排序权重" prop="name">
+                    <el-input v-model="ruleForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="上传封面" prop="name" v-if="ruleForm.region === 1">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.image_url" :imgUrl="ruleForm.image_url" name="image_url" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
-                </el-form-item>
-                <el-form-item label="上传声音签名" prop="name" v-if="ruleForm.region === 2">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.image_url" :imgUrl="ruleForm.image_url" name="image_url" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
+                <el-form-item label="品类图标" prop="name">
+                    <uploadImg ref="uploadImg" v-model="ruleForm.face" :imgUrl="ruleForm.face" name="face" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -40,8 +32,8 @@
 </template>
 
 <script>
-// 引入上传组件
-import uploadImg from '@/components/uploadImg/list.vue'
+// 引入图片上传组件
+import uploadImg from '@/components/uploadImg/index.vue'
 export default {
     components: {
         uploadImg
@@ -49,7 +41,7 @@ export default {
     data() {
         return {
             dialogVisible: false,
-            status: 'add', // 当前状态
+            status: 'add',
             ruleForm: {
                 name: '',
                 region: '',
@@ -89,9 +81,9 @@ export default {
     computed: {
         title() {
             if(this.status === 'add') {
-                return '新增心动卡片'
+                return '新增品类'
             } else if(this.status === 'update') {
-                return '修改心动卡片'
+                return '修改品类'
             }
         }
     },
@@ -99,14 +91,16 @@ export default {
         handleClose() {
             this.dialogVisible = false
         },
-        // 获取数据
+        // 获取参数
         loadParams(status, row) {
-            this.status = status
             this.dialogVisible = true
+            this.status = status
             if(status !== 'add') {
-                // let params = json
+                let params = JSON.parse(JSON.stringify(row))
+                this.$set(this.$data, 'ruleForm', params)
             }
         },
+        // 提交
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -120,7 +114,11 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
-        // 重置 - 验证
+        // 销毁组件
+        closed() {
+            this.$emit('destoryComp')
+        },
+        // 重置字段验证
         validateField(name) {
             this.$refs.ruleForm.validateField([name])
         }
@@ -128,10 +126,10 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.moveDating-cardComp-box {
+<style lang="scss" scoped>
+.roomConfig-categoryComp-box {
     .el-select {
-        width: 300px;
+        width: 260px;
     }
 }
 </style>

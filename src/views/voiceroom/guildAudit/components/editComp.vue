@@ -8,6 +8,11 @@
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
+                <el-form-item label="公会类型" prop="type">
+                    <el-select v-model="ruleForm.type" placeholder="请选择公会等级">
+                        <el-option v-for="item in guildTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="公会头像" prop="face">
                     <uploadImg ref="uploadImg" v-model="ruleForm.face" :imgUrl="ruleForm.face" name="face" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
@@ -54,6 +59,7 @@ export default {
             dialogVisible: false,
             status: 'add',
             rankList: MAPDATA.CLASSLIST,
+            guildTypeList: MAPDATA.GUILDCONFIGTYPELIST,
             ruleForm: {
                 id: null,
                 face: '',
@@ -79,6 +85,9 @@ export default {
                 ],
                 rank: [
                     { required: true, message: '请选择公会等级', trigger: 'change' }
+                ],
+                type: [
+                    { required: true, message: '请选择公会类型', trigger: 'change' }
                 ],
                 remark: [
                     { required: false, message: '请输入公会简介', trigger: 'blur' }
