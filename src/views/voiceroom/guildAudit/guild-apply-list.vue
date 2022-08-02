@@ -169,6 +169,7 @@ export default {
                 let res = await newGuildApplyCheck({ id, status })
                 if(res.code === 2000) {
                     this.$message.success('审核通过')
+                    this.getList()
                 }
             } else {
                 this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -179,11 +180,10 @@ export default {
                     let res = await newGuildApplyCheck({ id, status })
                     if(res.code === 2000) {
                         this.$message.success('驳回成功')
+                        this.getList()
                     }
                 }).catch(() => {});
             }
-            
-            this.getList()
         }
     }
 }
