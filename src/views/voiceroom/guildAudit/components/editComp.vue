@@ -20,7 +20,7 @@
                     <el-input v-model="ruleForm.nickname" placeholder="请输入公会名字"></el-input>
                 </el-form-item>
                 <el-form-item label="固定返点" prop="rebate">
-                    <el-input v-model="ruleForm.rebate" :disabled="true" placeholder="请输入固定返点"></el-input>
+                    <el-input v-model="ruleForm.rebate" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" @input="rebateInput" placeholder="请输入固定返点"></el-input>
                 </el-form-item>
                 <el-form-item label="公会长ID" prop="user_number">
                     <el-input v-model="ruleForm.user_number" placeholder="请输入公会长ID"></el-input>
@@ -67,7 +67,7 @@ export default {
                 user_number: '',
                 rank: '',
                 remark: '',
-                rebate: 10
+                rebate: 0
             },
             rules: {
                 face: [
@@ -105,6 +105,13 @@ export default {
         }
     },
     methods: {
+        // 公会返点限制
+        rebateInput() {
+            let num = this.ruleForm.rebate
+            if(num && Number(num) > 10) {
+                this.ruleForm.rebate = 10
+            }
+        },
         handleClose() {
             this.resetForm()
         },

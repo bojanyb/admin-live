@@ -50,6 +50,15 @@ const systemConfigRouter = {
 			]
 		},
 		{
+			path: 'phone-filter',
+			component: () => import('@/views/voiceroom/systemConfig/phone-filter/index'),
+			name: 'phone-filter',
+			meta: {
+				title: '号码过滤',
+				noCache: true
+			}
+		},
+		{
 			path: 'consume-list',
 			component: () => import('@/views/voiceroom/systemConfig/consume-list'),
 			name: 'consume-list',

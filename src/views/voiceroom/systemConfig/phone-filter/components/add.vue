@@ -1,5 +1,5 @@
 <template>
-    <div class="addMember-box">
+    <div class="phone-filter-add-box">
         <el-dialog
         title="添加成员"
         :visible.sync="dialogVisible"
@@ -119,7 +119,7 @@ export default {
 </script>
 
 <style lang="scss">
-.addMember-box {
+.phone-filter-add-box {
     .formBox {
         .inputBox {
             display: flex;
