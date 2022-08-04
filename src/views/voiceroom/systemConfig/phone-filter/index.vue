@@ -2,6 +2,10 @@
     <div class="app-container systemConfig-phone-filter-box">
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
 
+        <div class="addBox">
+            <el-button type="success" @click="add">新增</el-button>
+        </div>
+
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 新增组件 -->
@@ -10,6 +14,8 @@
 </template>
 
 <script>
+// 引入api
+import { deleteVirtualPhone } from '@/api/system.js'
 // 引入新增组件
 import add from './components/add.vue'
 // 引入tab菜单组件
@@ -18,12 +24,8 @@ import menuComp from '@/components/menuComp/index.vue'
 import tableList from '@/components/tableList/TableList.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
-// 引入公共方法
-import { timeFormat } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
 export default {
     mixins: [mixins],
     components: {
@@ -37,11 +39,14 @@ export default {
             tabIndex: '0',
             menuList: [
                 {
-                    name: '白名单'
+                    name: '号码表'
                 },
-                {
-                    name: '黑名单'
-                }
+                // {
+                //     name: '白名单'
+                // },
+                // {
+                //     name: '黑名单'
+                // }
             ]
         }
     },
@@ -49,27 +54,25 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.user.list,
+                url: REQUEST.system.dummy.virtualPhoneList,
                 columns: [
                     {
                         label: '虚拟字段',
-                        prop: 'user_number'
+                        prop: 'field'
                     },
                     {
                         label: '创建时间',
-                        render: (h, params) => {
-                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-                        }
+                        prop: 'create_time'
                     },
                     {
                         label: '创建人',
-                        prop: 'nickname'
+                        prop: 'admin_name'
                     },
                     {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.editFunc(params.row)}}}, '移除')
+                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '移除')
                             ])
                         }
                     }
@@ -80,13 +83,9 @@ export default {
     methods: {
         // 配置参数
         beforeSearch(params) {
-            let s = { ...this.searchParams }
             return {
                 page: params.page,
-                pagesize: params.size,
-                user_number: s.user_number,
-                nickname: s.nickname,
-                phone: s.phone
+                pagesize: params.size
             }
         },
         // 刷新列表
@@ -95,12 +94,26 @@ export default {
         },
         // 重置
         reset() {
-            this.searchParams = {}
             this.getList()
         },
         // 查询
         onSearch() {
             this.getList()
+        },
+        // 新增
+        add() {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.add.dialogVisible = true
+            }, 50);
+        },
+        // 删除号码段
+        async deleteParams(id) {
+            let res = await deleteVirtualPhone({ id })
+            if(res.code === 2000) {
+                this.$message.success('删除成功')
+                this.getList()
+            }
         },
         // 销毁组件
         destoryComp() {
@@ -112,6 +125,8 @@ export default {
 
 <style lang="scss">
 .systemConfig-phone-filter-box {
-
+    .addBox {
+        margin-bottom: 20px;
+    }
 }
 </style>

@@ -50,6 +50,11 @@ const request = {
         },
         gift: {
             giftList: `${HTTPHEADER}/Gift`, // 礼物列表
+        },
+        dummy: {
+            virtualPhoneList: `${HTTPHEADER}/VirtualPhone/virtualPhoneList`, // 号段列表
+            deleteVirtualPhone: `${HTTPHEADER}/VirtualPhone/deleteVirtualPhone`, // 删除号码段
+            addVirtualPhoneField: `${HTTPHEADER}/VirtualPhone/addVirtualPhoneField`, // 添加号码段
         }
     },
 
