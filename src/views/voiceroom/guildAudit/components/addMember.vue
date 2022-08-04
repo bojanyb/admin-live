@@ -61,6 +61,7 @@ export default {
                 this.$message.error('请输入用户ID')
                 return false
             }
+
             let res = await getUser({ page: 1, user_number: this.user_id })
             if(res.code === 2000) {
                 if(res.data.list && res.data.list.length <= 0) {
@@ -71,12 +72,10 @@ export default {
                 if(this.userList && this.userList.length > 0) {
                     this.userList.forEach(item => {
                         if(Number(this.user_id) === item.user_number) {
-                            console.log(item.user_number, 'user_number----')
                             isPush = true
                         }
                     })
                 }
-                console.log(this.user_id, 'user_id----')
                 if(!isPush) {
                     this.userList.push(...res.data.list)
                     this.user_id = ''
@@ -87,7 +86,7 @@ export default {
         },
         // 提交
         async submit() {
-            if(this.userList.length >= 0) {
+            if(this.userList.length > 0) {
                 let params = {
                     user_id: [],
                     guild_id: this.guildParams.id
