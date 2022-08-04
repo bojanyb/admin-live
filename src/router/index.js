@@ -94,9 +94,9 @@ export const constantRoutes = [{
 export const asyncRoutes = [
 	messageRouter,
 	dashboardRouter,
-	// moveDatingRouter,
-	// serviceConfigRouter,
-	// roomConfigRouter,
+	moveDatingRouter,
+	serviceConfigRouter,
+	roomConfigRouter,
 	nobilityRouter,
 	blockedRouter,
 	// chartsRouter,
