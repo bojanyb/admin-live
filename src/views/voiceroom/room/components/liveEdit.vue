@@ -78,8 +78,6 @@ export default {
                         let res = await roomHide(params)
                         if(res.code === 2000) {
                             this.$message.success('操作成功')
-                        } else {
-                            this.$message.error('操作失败')
                         }
                     }
                     this.dialogVisible = false

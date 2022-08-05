@@ -11,15 +11,15 @@ const promoteRouter = {
 		icon: 'el-icon-position'
 	},
 	children: [
-		{
-			path: 'invite-list',
-			component: () => import('@/views/voiceroom/recommend/list'),
-			name: 'invite-list',
-			meta: {
-				title: '推广列表',
-				noCache: true
-			},
-		},
+		// {
+		// 	path: 'invite-list',
+		// 	component: () => import('@/views/voiceroom/recommend/list'),
+		// 	name: 'invite-list',
+		// 	meta: {
+		// 		title: '推广列表',
+		// 		noCache: true
+		// 	},
+		// },
 		{
 			path: 'invite-history',
 			component: () => import('@/views/voiceroom/recommend/invite-history'),
@@ -29,15 +29,15 @@ const promoteRouter = {
 				noCache: true
 			},
 		},
-		{
-			path: 'invite-rebates-set',
-			component: () => import('@/views/voiceroom/recommend/rebates-set'),
-			name: 'invite-rebates-set',
-			meta: {
-				title: '推广返点设置',
-				noCache: true
-			},
-		},
+		// {
+		// 	path: 'invite-rebates-set',
+		// 	component: () => import('@/views/voiceroom/recommend/rebates-set'),
+		// 	name: 'invite-rebates-set',
+		// 	meta: {
+		// 		title: '推广返点设置',
+		// 		noCache: true
+		// 	},
+		// },
 	]
 }
 

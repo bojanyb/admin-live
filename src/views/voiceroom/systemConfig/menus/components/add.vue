@@ -142,15 +142,11 @@ export default {
                         let res = await addRule(params)
                         if(res.code === 2000) {
                             this.$message.success('新增成功')
-                        } else {
-                            this.$message.error('新增失败')
                         }
                     } else {
                         let res = await editRule(params)
                         if(res.code === 2000) {
                             this.$message.success('修改成功')
-                        } else {
-                            this.$message.error('修改失败')
                         }
                     }
 

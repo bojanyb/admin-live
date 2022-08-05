@@ -94,8 +94,6 @@ export default {
                         let res = await getRoomSave(params)
                         if(res.code === 2000) {
                             this.$message.success('编辑成功')
-                        } else {
-                            this.$message.success('编辑失败')
                         }
                     }
                     this.dialogVisible = false
