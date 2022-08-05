@@ -218,23 +218,6 @@ export default {
                 if (valid) {
                     let s = this.ruleForm
 
-                    let { isMax, everyGift, allProbability } = errStatus(s)
-
-                    if(isMax) {
-                        this.$message.error('所有大礼物价格和概率必须一致')
-                        return false
-                    }
-
-                    if(everyGift) {
-                        this.$message.error('礼物概率不能为0')
-                        return false
-                    }
-
-                    if(allProbability) {
-                        this.$message.error('一个大礼物和所有小礼物概率之和必须是100%')
-                        return false
-                    }
-
                     let isNum = this.ruleForm.gifts.find(item => { return !item.gift_number })
                     if(isNum) {
                         this.$message.error('请先输入礼物数量')
