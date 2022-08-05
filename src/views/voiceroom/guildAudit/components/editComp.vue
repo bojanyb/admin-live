@@ -8,8 +8,8 @@
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
-                <el-form-item label="公会类型" prop="type">
-                    <el-select v-model="ruleForm.type" placeholder="请选择公会等级">
+                <el-form-item label="公会类型" prop="guild_type">
+                    <el-select v-model="ruleForm.guild_type" placeholder="请选择公会等级">
                         <el-option v-for="item in guildTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
@@ -86,7 +86,7 @@ export default {
                 rank: [
                     { required: true, message: '请选择公会等级', trigger: 'change' }
                 ],
-                type: [
+                guild_type: [
                     { required: true, message: '请选择公会类型', trigger: 'change' }
                 ],
                 remark: [
@@ -121,6 +121,7 @@ export default {
             this.status = status
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
+                params.guild_type = params.guild_type ? params.guild_type : ''
                 this.$set(this.$data, 'ruleForm', params)
             }
         },
