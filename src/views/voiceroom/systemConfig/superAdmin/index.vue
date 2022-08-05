@@ -110,8 +110,6 @@ export default {
                     let res = await setSuperUser({ user_number, status })
                     if(res.code === 2000) {
                         this.$message.success('删除成功')
-                    } else {
-                        this.$message.error('删除失败')
                     }
                     this.getList()
                 })
