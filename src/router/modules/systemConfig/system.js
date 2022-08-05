@@ -51,7 +51,7 @@ const systemConfigRouter = {
 		},
 		{
 			path: 'phoneFilter',
-			component: () => import('@/views/voiceroom/systemConfig/phoneFilter/index'),
+			component: () => import('@/views/voiceroom/systemConfig/phoneFilter/index.vue'),
 			name: 'phoneFilter',
 			meta: {
 				title: '号码过滤',
