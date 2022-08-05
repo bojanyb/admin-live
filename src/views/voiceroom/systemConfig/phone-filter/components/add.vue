@@ -24,9 +24,15 @@
 
 <script>
 // 引入api
-import { addVirtualPhoneField } from '@/api/system.js'
+import { addVirtualPhoneField, addPhoneRoll } from '@/api/system.js'
 
 export default {
+    props: {
+        tabIndex: { // 当前坐标
+            type: String,
+            default: ''
+        }
+    },
     data() {
         return {
             dialogVisible: false,
@@ -43,11 +49,27 @@ export default {
                 this.$message.error('请输入虚拟字段')
                 return false
             }
-            let res = await addVirtualPhoneField({ field: this.user_id })
-            if(res.code === 2000) {
-                this.$message.success('新增成功')
-                this.user_id = ''
-                this.$emit('getList')
+            let res;
+            // 号码列表添加
+            if(this.tabIndex === '0') {
+                res = await addVirtualPhoneField({ field: this.user_id })
+                if(res.code === 2000) {
+                    this.$message.success('新增成功')
+                    this.user_id = ''
+                    this.$emit('getList')
+                }
+            } else {
+                // 黑白名单添加
+                let params = {
+                    phone: this.user_id,
+                    type: Number(this.tabIndex)
+                }
+                res = await addPhoneRoll(params)
+                if(res.code === 2000) {
+                    this.$message.success('新增成功')
+                    this.user_id = ''
+                    this.$emit('getList')
+                }
             }
         },
         // 销毁组件

@@ -55,6 +55,9 @@ const request = {
             virtualPhoneList: `${HTTPHEADER}/VirtualPhone/virtualPhoneList`, // 号段列表
             deleteVirtualPhone: `${HTTPHEADER}/VirtualPhone/deleteVirtualPhone`, // 删除号码段
             addVirtualPhoneField: `${HTTPHEADER}/VirtualPhone/addVirtualPhoneField`, // 添加号码段
+            addPhoneRoll: `${HTTPHEADER}/VirtualPhone/addPhoneRoll`, // 添加黑/白名单
+            phoneList: `${HTTPHEADER}/VirtualPhone/phoneList`, // 黑/白名单列表
+            deletePhone: `${HTTPHEADER}/VirtualPhone/deletePhone`, // 删除黑/白名单列表
         }
     },
 
@@ -189,6 +192,16 @@ const request = {
     logout: {
         list: `${HTTPHEADER}/Cancellation/index`, // 注销列表
         hasDeal: `${HTTPHEADER}/Cancellation/hasDeal`, // 已处理列表
+    },
+
+    // 房间列表
+    house: {
+        liveList: `${HTTPHEADER}/party/liveList`, // 直播间列表
+        partyList: `${HTTPHEADER}/party/partyList`, // 派对间列表
+        updateParty: `${HTTPHEADER}/party/updateParty`, // 修改派对
+        delGenre: `${HTTPHEADER}/party/delGenre`, // 删除类别
+        saveGenre: `${HTTPHEADER}/party/saveGenre`, // 添加类别
+        genreList: `${HTTPHEADER}/Party/genreList`, // 类型列表
     }
 }
 

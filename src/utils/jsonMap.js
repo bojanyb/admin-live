@@ -1354,7 +1354,7 @@ const HOUSEMESSAGESTATUSLIST = [
     },
     {
         name: '已关厅',
-        value: 2
+        value: 0
     }
 ]
 
@@ -1366,7 +1366,31 @@ const HOUSEMESSAGETYPELIST = [
     },
     {
         name: '个人房间',
+        value: 0
+    }
+]
+
+// 房间信息管理 - 房间分类
+const HOUSEMESSAGECLASSIFYLIST = [
+    {
+        name: '点唱',
+        value: 1
+    },
+    {
+        name: '情感',
         value: 2
+    }
+]
+
+// 房间信息管理 - 房间状态 - 直播间
+const HOUSEMESSAGELIVELIST = [
+    {
+        name: '开播中',
+        value: 1
+    },
+    {
+        name: '已关播',
+        value: 0
     }
 ]
 
@@ -1445,5 +1469,7 @@ export default {
     HOUSEMESSAGESTATUSLIST,
     HOUSEMESSAGETYPELIST,
     CATEGORYBUSINESSTYPELIST,
-    GUILDCONFIGTYPELIST
+    GUILDCONFIGTYPELIST,
+    HOUSEMESSAGECLASSIFYLIST,
+    HOUSEMESSAGELIVELIST
 }
