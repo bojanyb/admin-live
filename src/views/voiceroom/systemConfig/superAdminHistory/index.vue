@@ -148,8 +148,6 @@ export default {
                 let res = await handlePunish({ id, status })
                 if(res.code === 2000) {
                     this.$message.success(`${name}成功`)
-                } else {
-                    this.$message.error(`${name}失败`)
                 }
                 this.getList()
             })

@@ -56,8 +56,6 @@ export default {
                     let res = await setSuperUser(params)
                     if(res.code === 2000) {
                         this.$message.success('添加成功')
-                    } else {
-                        this.$message.error('添加成功')
                     }
                     this.resetForm()
                     this.$emit('getList')

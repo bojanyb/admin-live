@@ -98,7 +98,6 @@ export default {
                         singer: s.singer,
                         tags: arr.toString()
                     }
-                    return console.log(params, 'params--------1010')
                     let res = await getUserMusicUpdate(params)
                     if(res.code === 2000) {
                         this.$message.success('修改成功')
