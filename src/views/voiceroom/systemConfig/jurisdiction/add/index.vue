@@ -199,8 +199,6 @@ export default {
             let res = await edit(params)
             if(res.code === 2000) {
                 this.$message.success('修改成功')
-            } else {
-                this.$message.error('修改失败')
             }
             this.dialogVisible = false
         },
@@ -210,8 +208,6 @@ export default {
             let res = await addUser(params)
             if(res.code === 2000) {
                 this.$message.success('新增成功')
-            } else {
-                this.$message.error('新增失败')
             }
             this.dialogVisible = false
             this.$emit('getList');
