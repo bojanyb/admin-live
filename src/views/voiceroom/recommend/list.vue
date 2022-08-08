@@ -23,8 +23,6 @@ import tableList from '@/components/tableList/TableList.vue'
 import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
-// 引入公共方法
-import { timeFormat } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
@@ -39,7 +37,7 @@ export default {
         forms() {
             return [
                 {
-                    name: 'p_user_number',
+                    name: 'user_number',
                     type: 'input',
                     value: '',
                     label: '推荐人ID',
@@ -47,7 +45,7 @@ export default {
                     placeholder: '请输入推荐人ID'
                 },
                 {
-                    name: 'channel',
+                    name: 'setting_flg',
                     type: 'select',
                     value: '',
                     keyName: 'value',
@@ -61,7 +59,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.diamondRecharge.list,
+                url: REQUEST.userHistory.recommender,
                 columns: [
                     {
                         label: '推荐人ID',
@@ -72,38 +70,34 @@ export default {
                     {
                         label: '推荐人昵称',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            return h('span', params.row.nickname || '无')
                         }
                     },
                     {
                         label: '推荐类型',
                         render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
+                            let data = MAPDATA.PROMOTIONTYPELIST.find(item => { return item.value === params.row.setting_flg })
+                            return h('span', data ? data.name : '无')
                         }
                     },
                     {
-                        label: '绑定用户数',
+                        label: '绑定用户/主播数',
+                        prop: 'invite_count',
                         render: (h, params) => {
-                            return h('span', { on: { click:()=> { this.details('bindUserComp') } } }, params.row.user_number || '无')
-                        }
-                    },
-                    {
-                        label: '绑定主播数',
-                        render: (h, params) => {
-                            return h('span', { on: { click:()=> { this.details('bindAnchorComp') } } }, params.row.user_number || '无')
+                            let data = MAPDATA.PROMOTIONTYPELIST.find(item => { return item.value === params.row.setting_flg })
+                            let name = params.row.invite_count + ' ' + data.name
+                            return h('span', {
+                                on: {click:()=>{this.details(params.row)}}
+                            }, name )
                         }
                     },
                     {
                         label: '当日收益（喵粮）',
-                        render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
-                        }
+                        prop: 'today_gain'
                     },
                     {
                         label: '总收益（喵粮）',
-                        render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
-                        }
+                        prop: 'total_gain'
                     }
                 ]
             }
@@ -125,8 +119,9 @@ export default {
             let s = { ...this.searchParams }
             return {
                 page: params.page,
+                pagesize: params.size,
                 user_number: s.user_number,
-                sort: s.sort
+                setting_flg: s.setting_flg
             }
         },
         // 重置
@@ -143,11 +138,17 @@ export default {
             this.isDestoryComp = false
         },
         // 查看详情
-        details(name) {
+        details(row) {
+            let name;
+            if(row.setting_flg === 1) {
+                name = 'bindAnchorComp'
+            } else {
+                name = 'bindUserComp'
+            }
             this.Comp = name
             this.isDestoryComp = true
             setTimeout(() => {
-                this.$refs[name].loadParams()
+                this.$refs[name].loadParams(row.user_id, row.setting_flg)
             }, 50);
         }
     }

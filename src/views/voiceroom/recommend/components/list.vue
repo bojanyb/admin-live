@@ -25,6 +25,14 @@ export default {
         title: { // 标题
             type: String,
             default: ''
+        },
+        pid: { // pid
+            type: String,
+            default: ''
+        },
+        setting_flg: {
+            type: Number,
+            default: null
         }
     },
     components: {
@@ -36,53 +44,61 @@ export default {
             let arr = [
                 {
                     label: '用户昵称',
-                    prop: ''
+                    prop: 'nickname'
                 },
                 {
                     label: '用户ID',
-                    prop: ''
+                    prop: 'user_number'
                 },
                 {
                     label: '用户创建时间',
-                    prop: ''
+                    minWidth: '140px',
+                    render: (h, params) => {
+                        return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : "")
+                    }
                 },
                 {
                     label: '用户充值金额',
-                    prop: ''
+                    minWidth: '120px',
+                    prop: 'today_in'
                 }
             ]
             const arr2 = [
                 {
                     label: '今日获得收益',
-                    prop: ''
+                    minWidth: '120px',
+                    prop: 'today_gain'
                 },
                 {
                     label: '总收益',
-                    prop: ''
+                    prop: 'total_gain'
                 }
             ]
             const arr3 = [
                 {
                     label: '主播昵称',
-                    prop: ''
+                    prop: 'nickname'
                 },
                 {
                     label: '主播ID',
-                    prop: ''
+                    prop: 'user_number'
                 },
                 {
                     label: '主播创建时间',
-                    prop: ''
+                    minWidth: '140px',
+                    render: (h, params) => {
+                        return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : "")
+                    }
                 },
                 {
                     label: '主播收到礼物价值',
-                    prop: '',
+                    prop: 'today_in',
                     minWidth: '120px'
                 }
             ]
             return {
                 vm: this,
-                url: REQUEST.message.list,
+                url: REQUEST.userHistory.recommendDetail,
                 columns: this.title.indexOf('用户') !== -1 ? [...arr, ...arr2] : [...arr3, ...arr2]
             }
         }
@@ -102,10 +118,11 @@ export default {
         },
         // 配置参数
         beforeSearch(params) {
-            let s = { ...this.searchParams }
             return {
                 page: params.page,
-                user_number: s.user_number
+                pagesize: params.size,
+                pid: this.pid,
+                setting_flg: this.setting_flg
             }
         },
         // 重置

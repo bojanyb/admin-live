@@ -170,18 +170,21 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.userHistory.list,
+                url: REQUEST.userHistory.history,
                 columns: [
                     {
                         label: '拉新人ID',
+                        minWidth: '120px',
                         prop: 'p_user_number'
                     },
                     {
                         label: '新注册用户昵称',
+                        minWidth: '140px',
                         prop: 'user_nickname'
                     },
                     {
                         label: '新注册用户ID',
+                        minWidth: '120px',
                         prop: 'user_number'
                     },
                     {
@@ -193,19 +196,22 @@ export default {
                     },
                     {
                         label: '新用户充值',
+                        minWidth: '120px',
                         prop: 'user_diamond_recharge'
                     },
                     {
                         label: '设备识别码',
                         prop: 'reg_device',
-                        width: '200'
+                        width: '200px'
                     },
                     {
                         label: '注册IP',
+                        minWidth: '120px',
                         prop: 'reg_ip'
                     },
                     {
                         label: '是否进入过派对',
+                        minWidth: '160px',
                         render: (h, params) => {
                             return h('span', params.row.inroom === 1 ? '否' : '是')
                         }
@@ -223,6 +229,7 @@ export default {
                     },
                     {
                         label: '最后一次登录设备',
+                        minWidth: '180px',
                         prop: 'last_login_device_id'
                     },
                 ]

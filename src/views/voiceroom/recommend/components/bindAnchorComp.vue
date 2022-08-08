@@ -1,6 +1,6 @@
 <template>
     <div class="bindAnchorComp-box">
-        <tableList ref="tableList" title="绑定主播数详情"></tableList>
+        <tableList ref="tableList" title="绑定主播数详情" :pid="id" :setting_flg="setting_flg"></tableList>
     </div>
 </template>
 
@@ -11,8 +11,16 @@ export default {
     components: {
         tableList
     },
+    data() {
+        return {
+            id: null, // 上级id
+            setting_flg: null // 推荐人类型
+        };
+    },
     methods: {
-        loadParams() {
+        loadParams(id, flag) {
+            this.id = id
+            this.setting_flg = flag
             this.$refs.tableList.dialogVisible = true
         }
     }

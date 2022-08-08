@@ -115,7 +115,8 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                belong: s.belong
+                belong: s.belong,
+                room_number: s.room_number
             }
         },
         // 刷新列表
