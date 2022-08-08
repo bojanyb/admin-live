@@ -202,6 +202,10 @@ const request = {
         delGenre: `${HTTPHEADER}/party/delGenre`, // 删除类别
         saveGenre: `${HTTPHEADER}/party/saveGenre`, // 添加类别
         genreList: `${HTTPHEADER}/Party/genreList`, // 类型列表
+        roomHotSetting: `${HTTPHEADER}/Room/roomHotSetting`, // 房间热度设置
+        addRoomHot: `${HTTPHEADER}/Room/addRoomHot`, // 增加房间热度
+        roomHotList: `${HTTPHEADER}/Room/roomHotList`, // 增加房间热度列表
+        deleteRoomHot: `${HTTPHEADER}/Room/deleteRoomHot`, // 删除热度
     }
 }
 

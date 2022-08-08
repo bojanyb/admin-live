@@ -25,8 +25,6 @@ import SearchPanel from '@/components/SearchPanel/final.vue'
 import tableList from '@/components/tableList/TableList.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
-// 引入公共方法
-import { timeFormat } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 // 引入公共map
@@ -189,6 +187,7 @@ export default {
             let arr6 = [
                 {
                     label: '操作',
+                    minWidth: '120px',
                     render: (h, params) => {
                         return h('div', [
                             h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),

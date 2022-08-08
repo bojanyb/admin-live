@@ -7,20 +7,19 @@
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="业务类型" prop="region">
-                    <el-select v-model="ruleForm.region" placeholder="请选择业务类型">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                <el-form-item label="业务类型" prop="belong">
+                    <el-select v-model="ruleForm.belong" placeholder="请选择">
+                        <el-option v-for="item in belongList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="品类名" prop="name">
                     <el-input v-model="ruleForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="排序权重" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
+                <el-form-item label="排序权重" prop="sort">
+                    <el-input v-model="ruleForm.sort"></el-input>
                 </el-form-item>
-                <el-form-item label="品类图标" prop="name">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.face" :imgUrl="ruleForm.face" name="face" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
+                <el-form-item label="品类图标" prop="icon">
+                    <uploadImg ref="uploadImg" v-model="ruleForm.icon" :imgUrl="ruleForm.icon" name="icon" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -32,48 +31,40 @@
 </template>
 
 <script>
+// 引入api
+import { saveGenre } from '@/api/house.js'
 // 引入图片上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
         uploadImg
     },
     data() {
         return {
+            belongList: MAPDATA.CATEGORYBUSINESSTYPELIST, // 分类数组
             dialogVisible: false,
             status: 'add',
             ruleForm: {
                 name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
+                belong: null,
+                sort: null,
+                icon: ''
             },
             rules: {
                 name: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                    { required: true, message: '请输入品类名', trigger: 'blur' }
+                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
-                region: [
-                    { required: true, message: '请选择活动区域', trigger: 'change' }
+                belong: [
+                    { required: true, message: '请选择业务类型', trigger: 'change' }
                 ],
-                date1: [
-                    { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+                sort: [
+                    { required: true, message: '请填写排序权重', trigger: 'blur' }
                 ],
-                date2: [
-                    { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-                ],
-                type: [
-                    { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-                ],
-                resource: [
-                    { required: true, message: '请选择活动资源', trigger: 'change' }
-                ],
-                desc: [
-                    { required: true, message: '请填写活动形式', trigger: 'blur' }
+                icon: [
+                    { required: true, message: '请上传品类图标', trigger: 'change' }
                 ]
             }
         };
@@ -101,18 +92,24 @@ export default {
             }
         },
         // 提交
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+        async submitForm(formName) {
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    alert('submit!');
+                    let params = { ...this.ruleForm }
+                    if(this.status === 'update') {
+                        delete params.create_time
+                    }
+                    let res = await saveGenre(params)
+                    if(res.code === 2000) {
+                        this.$message.success('新增成功')
+                        this.dialogVisible = false
+                        this.$emit('getList');
+                    }
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
             });
-        },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
         },
         // 销毁组件
         closed() {

@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container roomConfig-category-box">
+    <div class="app-container roomConfig-list-box">
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
@@ -7,7 +7,7 @@
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 新增组件 -->
-        <categoryComp v-if="isDestoryComp" ref="categoryComp" @destoryComp="destoryComp" @getList="getList"></categoryComp>
+        <addHeat v-if="isDestoryComp" ref="addHeat" @destoryComp="destoryComp" @getList="getList"></addHeat>
     </div>
 </template>
 
@@ -15,23 +15,23 @@
 // 引入api
 import { delGenre } from '@/api/house.js'
 // 引入新增组件
-import categoryComp from './components/categoryComp.vue'
+import addHeat from './addHeat.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
 export default {
     mixins: [mixins],
     components: {
         SearchPanel,
         tableList,
-        categoryComp
+        addHeat
     },
     data() {
         return {
@@ -45,47 +45,62 @@ export default {
         forms() {
             return [
                 {
-                    name: 'belong',
-                    type: 'select',
-                    value: 2,
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '业务类型',
-                    placeholder: '请选择',
-                    options: MAPDATA.CATEGORYBUSINESSTYPELIST
+                    name: 'room_number',
+                    type: 'input',
+                    value: '',
+                    label: '房间ID',
+                    isNum: true,
+                    placeholder: '请输入房间ID'
                 }
             ]
         },
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.house.genreList,
+                url: REQUEST.house.roomHotList,
                 columns: [
                     {
-                        label: '品类ID',
-                        prop: 'id'
+                        label: '添加时间',
+                        minWidth: '120px',
+                        prop: 'create_time'
                     },
                     {
-                        label: '品类名',
-                        prop: 'name'
+                        label: '房间ID',
+                        prop: 'room_number'
                     },
                     {
-                        label: '品类图标',
-                        isimg: true,
-                        prop: 'icon',
-                        imgWidth: '50px',
-                        imgHeight: '50px'
+                        label: '增加热度',
+                        prop: 'hot_value'
                     },
                     {
-                        label: '权重排序',
-                        prop: 'sort'
+                        label: '有效时间',
+                        minWidth: '210px',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无'),
+                                h('span', ' 至 '),
+                                h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '无'),
+                            ])
+                        }
+                    },
+                    {
+                        label: '状态',
+                        prop: 'status'
+                    },
+                    {
+                        label: '备注',
+                        minWidth: '120px',
+                        prop: 'remark',
+                        showOverFlow: true
                     },
                     {
                         label: '操作',
+                        width : '200px',
+                        fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
+                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '删除')
                             ])
                         }
                     }
@@ -129,7 +144,7 @@ export default {
         load(status, row) {
             this.isDestoryComp = true
             setTimeout(() => {
-                this.$refs.categoryComp.loadParams(status, row)
+                this.$refs.addHeat.loadParams(status, row)
             }, 50);
         },
         // 删除

@@ -28,6 +28,15 @@ const roomConfigRouter = {
 				title: '房间品类管理',
 				noCache: true
 			}
+		},
+		{
+			path: 'heat',
+			component: () => import('@/views/voiceroom/roomConfig/heat'),
+			name: 'heat',
+			meta: {
+				title: '房间热度管理',
+				noCache: true
+			}
 		}
 	]
 }

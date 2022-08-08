@@ -1398,11 +1398,19 @@ const HOUSEMESSAGELIVELIST = [
 const CATEGORYBUSINESSTYPELIST = [
     {
         name: '派对',
-        value: 1
+        value: 2
     },
     {
         name: '直播',
-        value: 2
+        value: 1
+    }
+]
+
+// 房间热度管理
+const HOUSEHEATSYSTEMSTATUSLIST = [
+    {
+        name: '未生效',
+        value: 0
     }
 ]
 
