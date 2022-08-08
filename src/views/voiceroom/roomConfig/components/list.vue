@@ -13,7 +13,7 @@
 
 <script>
 // 引入api
-import { delGenre } from '@/api/house.js'
+import { deleteRoomHot } from '@/api/house.js'
 // 引入新增组件
 import addHeat from './addHeat.vue'
 // 引入菜单组件
@@ -61,7 +61,7 @@ export default {
                 columns: [
                     {
                         label: '添加时间',
-                        minWidth: '120px',
+                        minWidth: '160px',
                         prop: 'create_time'
                     },
                     {
@@ -70,11 +70,12 @@ export default {
                     },
                     {
                         label: '增加热度',
+                        minWidth: '120px',
                         prop: 'hot_value'
                     },
                     {
                         label: '有效时间',
-                        minWidth: '210px',
+                        minWidth: '310px',
                         render: (h, params) => {
                             return h('div', [
                                 h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无'),
@@ -96,11 +97,10 @@ export default {
                     {
                         label: '操作',
                         width : '200px',
-                        fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '删除')
+                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
                             ])
                         }
                     }
@@ -149,11 +149,17 @@ export default {
         },
         // 删除
         async deleteParams(id) {
-            let res = await delGenre({ id })
-            if(res.code === 2000) {
-                this.$message.success('删除成功')
-                this.getList()
-            }
+            this.$confirm('是否确认删除该数据?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                let res = await deleteRoomHot({ id })
+                if(res.code === 2000) {
+                    this.$message.success('删除成功')
+                    this.getList()
+                }
+            }).catch(() => {});
         },
         // 销毁组件
         destoryComp() {

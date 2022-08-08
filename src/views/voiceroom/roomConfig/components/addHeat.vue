@@ -85,6 +85,9 @@ export default {
             this.status = status
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
+                let start_time = params.start_time * 1000
+                let end_time = params.end_time * 1000
+                params.time = [start_time, end_time]
                 this.$set(this.$data, 'ruleForm', params)
             }
         },
@@ -92,8 +95,15 @@ export default {
         async submitForm(formName) {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    let params = { ...this.ruleForm }
-                    delete params.time
+                    let s = this.ruleForm
+                    let params = {
+                        id: s.id || null,
+                        room_number: s.room_number,
+                        hot_value: s.hot_value,
+                        start_time: s.start_time,
+                        end_time: s.end_time,
+                        remark: s.remark
+                    }
                     let res = await addRoomHot(params)
                     if(res.code === 2000) {
                         this.$message.success('新增成功')
