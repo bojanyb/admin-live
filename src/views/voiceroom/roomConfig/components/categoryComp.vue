@@ -18,6 +18,9 @@
                 <el-form-item label="排序权重" prop="sort">
                     <el-input v-model="ruleForm.sort"></el-input>
                 </el-form-item>
+                <el-form-item label="色值" prop="color">
+                    <el-input v-model="ruleForm.color"></el-input>
+                </el-form-item>
                 <el-form-item label="品类图标" prop="icon">
                     <uploadImg ref="uploadImg" v-model="ruleForm.icon" :imgUrl="ruleForm.icon" name="icon" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
@@ -50,7 +53,8 @@ export default {
                 name: '',
                 belong: null,
                 sort: null,
-                icon: ''
+                icon: '',
+                color: null
             },
             rules: {
                 name: [
@@ -62,6 +66,9 @@ export default {
                 ],
                 sort: [
                     { required: true, message: '请填写排序权重', trigger: 'blur' }
+                ],
+                color: [
+                    { required: true, message: '请输入色值', trigger: 'blur' }
                 ],
                 icon: [
                     { required: true, message: '请上传品类图标', trigger: 'change' }

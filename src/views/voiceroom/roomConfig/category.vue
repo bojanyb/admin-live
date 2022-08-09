@@ -81,6 +81,10 @@ export default {
                         prop: 'sort'
                     },
                     {
+                        label: '色值',
+                        prop: 'color'
+                    },
+                    {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
