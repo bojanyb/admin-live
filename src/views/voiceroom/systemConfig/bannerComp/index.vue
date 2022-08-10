@@ -144,10 +144,10 @@ export default {
                     { required: false, message: '请输入banner外部链接', trigger: 'blur' }
                 ],
                 start_time: [
-                    { type: 'date', required: true, message: '请选择开始时间', trigger: 'change' }
+                    { required: true, message: '请选择开始时间', trigger: 'change' }
                 ],
                 end_time: [
-                    { type: 'date', required: true, message: '请选择结束时间', trigger: 'change' }
+                    { required: true, message: '请选择结束时间', trigger: 'change' }
                 ]
             }
         };
@@ -216,7 +216,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .bannerComp-box {
     .el-date-editor {
         width: 280px;

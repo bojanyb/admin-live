@@ -80,6 +80,13 @@
 							prop: 'guild_number'
 						},
 						{
+							label: '公会类型',
+							render: (h, params) => {
+								let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
 							label: '公会等级',
 							render: (h, params) => {
 								let data = MAPDATA.CLASSLIST.find(item => { return item.value === params.row.rank })
