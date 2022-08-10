@@ -284,10 +284,10 @@ export default {
                     { required: true, message: '请选择是否可以购买', trigger: 'change' }
                 ],
                 goods_bg_small: [
-                    { required: true, message: '请上传商品列表图片', trigger: 'change' }
+                    { required: false, message: '请上传商品列表图片', trigger: 'change' }
                 ],
                 goods_bg_big: [
-                    { required: true, message: '请上传商品背景图', trigger: 'change' }
+                    { required: false, message: '请上传商品背景图', trigger: 'change' }
                 ],
                 goods_animation_path: [
                     { required: true, message: '请上传商品特效', trigger: 'change' }
