@@ -58,6 +58,18 @@ const request = {
             addPhoneRoll: `${HTTPHEADER}/VirtualPhone/addPhoneRoll`, // 添加黑/白名单
             phoneList: `${HTTPHEADER}/VirtualPhone/phoneList`, // 黑/白名单列表
             deletePhone: `${HTTPHEADER}/VirtualPhone/deletePhone`, // 删除黑/白名单列表
+        },
+        riches: {
+            userRank: `${HTTPHEADER}/User/userRank`, // 用户等级
+        },
+        gits: {
+            liveRank: `${HTTPHEADER}/User/liveRank`, // 直播头衔列表
+        },
+        message: {
+            index: `${HTTPHEADER}/designate/index`, // 待发消息
+        },
+        banner: {
+            getBanner: `${HTTPHEADER}/moments/getBanner`, // 获取banner列表
         }
     },
 

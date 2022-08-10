@@ -43,7 +43,7 @@
 		},
 		data() {
 			return {
-				isDestoryComp: false
+				isDestoryComp: false // 是否销毁组件
 			}
 		},
 		computed: {

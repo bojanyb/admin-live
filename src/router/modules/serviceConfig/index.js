@@ -7,8 +7,8 @@ const serviceConfigRouter = {
 	redirect: 'noRedirect',
 	name: 'serviceConfig',
 	meta: {
-		title: '客服管理',
-		icon: 'el-icon-phone-outline'
+		title: '风控管理',
+		icon: 'el-icon-office-building'
 	},
 	children: [
 		{

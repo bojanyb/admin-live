@@ -112,8 +112,8 @@ export default {
     .el-image {
         .image-slot {
             img {
-                width: 100%;
-                height: 100%;
+                width: 50px;
+                height: 50px;
             }
         }
     }

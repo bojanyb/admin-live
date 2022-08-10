@@ -36,6 +36,9 @@
 			</el-table-column>
 		</el-table>
 
+
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+
 		<!--工具条-->
 		<!-- <pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
 			@pagination="getBannerList" /> -->
@@ -101,14 +104,33 @@
 	import Pagination from '@/components/Pagination'
 	import ossFile from '../components/ossFile.vue'
 	import moment from 'moment'
+
+
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
 		name: 'banner-list',
+		mixins: [mixins],
 		components: {
 			Pagination,
-			ossFile
+			ossFile,
+
+
+			tableList
 		},
 		data() {
 			return {
+				isDestoryComp: false, // 是否销毁组件
+
+
 				list: [],
 				listLoading: true,
 				total: 0,
@@ -221,11 +243,106 @@
 				}
 				return params
 			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.system.banner.getBanner,
+					columns: [
+						{
+							label: '序号',
+							prop: 'sort'
+						},
+						{
+							label: 'banner标题',
+							prop: 'title'
+						},
+						{
+							label: '轮播顺序',
+							prop: 'sort'
+						},
+						{
+							label: 'banner图片',
+							isimg: true,
+							prop: 'pic',
+							imgHeight: '50px'
+						},
+						{
+							label: 'banner类型',
+							render: (h, params) => {
+								let data = MAPDATA.BANNERSYSTEMTYPELIST.find(item => { return item.value === params.row.type })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '更新时间',
+							render: (h, params) => {
+								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '启用/禁用',
+							isSwitch: true,
+							prop: 'status',
+							isTrueValue: 1,
+							isFalseValue: 2,
+							change: (v, row) => {
+								this.changeSwitch(row.id, v)
+							}
+						},
+						{
+							label: '操作',
+							render: (h, params) => {
+								return h('div', [
+									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '修改')
+								])
+							}
+						}
+					]
+				}
+			}
 		},
 		created() {
 			this.getBannerList()
 		},
 		methods: {
+			// 配置参数
+			beforeSearch(params) {
+				return {
+					page: params.page,
+					pagesize: params.size
+				}
+			},
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
+			},
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
+			},
+			// 编辑
+			editFunc(row) {
+				this.isDestoryComp = true
+				setTimeout(() => {
+					this.$refs.userEdit.loadParams(row)
+				}, 50);
+			},
+			// 销毁组件
+			destoryComp() {
+				this.isDestoryComp = false
+			},
+			// 更改
+			changeSwitch(id, status) {
+
+			},
+
+
+
 			getBannerList() {
 				this.listLoading = true
 				this.srcList = []
@@ -235,7 +352,7 @@
 				}
 				getBanner(params).then(response => {
 					this.total = response.data.count
-					this.list = response.data.row
+					this.list = response.data.list
 					this.list.map(res => {
 						switch (res.type) {
 							case 1:

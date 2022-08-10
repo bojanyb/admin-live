@@ -73,7 +73,7 @@ export default {
                         label: '品类图标',
                         isimg: true,
                         prop: 'icon',
-                        imgWidth: '50px',
+                        // imgWidth: '50px',
                         imgHeight: '50px'
                     },
                     {

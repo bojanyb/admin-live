@@ -1,208 +1,118 @@
 <template>
-	<div class="app-container">
+	<div class="app-container consume-list-box">
+		<div class="btnBox">
+			<el-button type="success" @click="add">新增</el-button>
+		</div>
 
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true">
-				<el-form-item>
-					<el-button type="success" @click="handleLiveRankAdd">新增</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row>
-			<!-- <el-table-column label="ID" align="center" prop="id" width="95" /> -->
-			<el-table-column label="等级" prop="user_rank" align="center"/>
-			<!-- <el-table-column label="等级名称" prop="rank_name" align="center" /> -->
-			<el-table-column label="总财富贡献" prop="spending" align="center" />
-			<!-- <el-table-column label="总支出(个)" prop="spending" align="center" /> -->
-			<el-table-column label="修改时间" prop="update_timeText" align="center" />
-			<el-table-column label="操作" prop="gift_str" align="center">
-				<template slot-scope="scope">
-					<el-button type="primary" @click="handleLiveRankEdit(scope.row)">修改</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="getUserRank" />
-
-		<el-dialog :close-on-click-modal="false" :title="editTitle" :visible.sync="editPop">
-			<el-form ref="popForm" :model="popForm" :rules="popFormRules">
-				<el-form-item label="等级" v-if="editTitle == '添加'" prop="user_rank" :label-width="formLabelWidth">
-					<el-col :span="17">
-						<el-input v-model="popForm.user_rank" v-input-limit="0" style="width: 335px;"
-							placeholder="请输入等级数值" clearable autocomplete="off" />
-					</el-col>
-				</el-form-item>
-				<!-- <el-form-item label="等级名称" prop="rank_name" :label-width="formLabelWidth">
-					<el-col :span="17">
-						<el-input v-model="popForm.rank_name" style="width: 335px;" placeholder="请输入等级名称" clearable
-							autocomplete="off" />
-					</el-col>
-				</el-form-item> -->
-				<el-form-item label="总财富贡献" prop="spending" :label-width="formLabelWidth">
-					<el-col :span="17">
-						<el-input v-model="popForm.spending" v-input-limit="0" style="width: 335px;"
-							placeholder="请输入收入总财富贡献" clearable autocomplete="off" />
-					</el-col>
-				</el-form-item>
-			<!-- 	<el-form-item label="总支出" prop="spending" :label-width="formLabelWidth">
-					<el-col :span="17">
-						<el-input v-model="popForm.spending" v-input-limit="0" style="width: 335px;"
-							placeholder="请输入总支出" clearable autocomplete="off" />
-					</el-col>
-				</el-form-item> -->
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="editPop = false">取 消</el-button>
-				<el-button :loading="loading" type="primary" @click="handleChange">确 定</el-button>
-			</div>
-		</el-dialog>
+		<!-- 新增 - 修改组件 -->
+		<consumeComp v-if="isDestoryComp" ref="consumeComp" @destoryComp="destoryComp" @getList="getList"></consumeComp>
 	</div>
 </template>
 
 <script>
-	import {
-		getUserRankList,
-		getUserRankConfig
-	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	// 引入新增 - 修改组件
+	import consumeComp from './consumeComp/index.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
 	export default {
 		name: 'ConsumeList',
+		mixins: [mixins],
 		components: {
-			Pagination
+			consumeComp,
+			tableList
 		},
-		data() {
-			return {
-				list: [],
-				loading: false,
-				listLoading: false,
-				total: 0,
-				formLabelWidth: '120px',
-				page: {
-					page: 1,
-					limit: 10
-				},
-				editTitle: '',
-				editPop: false,
-				popForm: {
-					'user_rank': '',
-					// 'rank_name': '',
-					'spending': '',
-					'diamond_total': ''
-				},
-				popFormRules: {
-					user_rank: [{
-						required: true,
-						trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!this.popForm.user_rank && this.editTitle == '添加') {
-								return cb(new Error('等级不能为空!'))
+		computed: {
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.system.riches.userRank,
+					columns: [
+						{
+							label: '等级',
+							prop: 'user_rank'
+						},
+						{
+							label: '总财富贡献',
+							prop: 'spending'
+						},
+						{
+							label: '修改时间',
+							render: (h, params) => {
+								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
-							if(this.popForm.user_rank  && parseInt(this.popForm.user_rank) > 100){
-								
-								return cb(new Error('等级最大值为100!'))
+						},
+						{
+							label: '操作',
+							render: (h, params) => {
+								return h('div', [
+									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改')
+								])
 							}
-							return cb()
 						}
-					}],
-					// rank_name: [{
-					// 	required: true,
-					// 	trigger: 'blur',
-					// 	validator: (rules, value, cb) => {
-					// 		if (!this.popForm.rank_name) {
-					// 			return cb(new Error('等级名称不能为空!'))
-					// 		}
-					// 		return cb()
-					// 	}
-					// }],
-					spending: [{
-						required: true,
-						trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!this.popForm.spending) {
-								return cb(new Error('总财富贡献不能为空!'))
-							}
-							return cb()
-						}
-					}],
-					// spending: [{
-					// 	required: true,
-					// 	trigger: 'blur',
-					// 	validator: (rules, value, cb) => {
-					// 		if (!this.popForm.spending) {
-					// 			return cb(new Error('总支出不能为空!'))
-					// 		}
-					// 		return cb()
-					// 	}
-					// }]
+					]
 				}
 			}
 		},
-		created() {
-			this.getUserRank()
+		data() {
+			return {
+				isDestoryComp: false, // 是否销毁组件
+			}
 		},
 		methods: {
-			getUserRank() {
-				var params = {
-					'page': this.page.page,
-					'pagesize': this.page.limit
-				}
-				this.listLoading = true
-				getUserRankList(params).then(response => {
-					this.total = response.data.count
-					this.list = response.data.list
-					this.list.map(res => {
-						res.update_timeText = moment(res.update_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-					})
-					this.listLoading = false
-				}).catch(err => {
-					this.listLoading = false
-				})
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
 			},
-			handleLiveRankAdd() {
-				this.editTitle = '添加'
-				this.popForm = {
-					'user_rank': '',
-					// 'rank_name': '',
-					'spending': '',
-					'diamond_total': ''
+			// 配置参数
+			beforeSearch(params) {
+				return {
+					page: params.page,
+					pagesize: params.size
 				}
-				if(this.$refs["popForm"]){
-					this.$refs["popForm"].resetFields();
-				}
-				this.editPop = true
 			},
-			handleLiveRankEdit(row) {
-				this.editTitle = '修改'
-				this.popForm = {
-					'user_rank': row.user_rank,
-					// 'rank_name': row.rank_name,
-					'spending': row.spending,
-					'diamond_total': row.diamond_total
-				}
-				if(this.$refs["popForm"]){
-					this.$refs["popForm"].resetFields();
-				}
-				this.editPop = true
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.getList()
 			},
-			handleChange() {
-				this.$refs.popForm.validate(valid => {
-					if (valid) {
-						if(this.editTitle == "添加"){
-							this.popForm.diamond_total = this.popForm.spending
-						}
-						getUserRankConfig(this.popForm).then(res => {
-							this.getUserRank()
-							this.editPop = false
-						})
-					}
-				})
+			// 查询
+			onSearch() {
+				this.getList()
+			},
+			// 销毁组件
+			destoryComp() {
+				this.isDestoryComp = false
+			},
+			// 新增
+			add() {
+				this.load('add')
+			},
+			// 修改
+			update(row) {
+				this.load('update', row)
+			},
+			load(status, row) {
+				this.isDestoryComp = true
+				setTimeout(() => {
+					this.$refs.consumeComp.loadParams(status, row)
+				}, 50);
 			}
 		}
 	}
 </script>
+
+<style lang="scss">
+.consume-list-box {
+	.btnBox {
+		margin-bottom: 20px;
+	}
+}
+</style>

@@ -1067,6 +1067,14 @@ const LIBRARYGIFTSLIST = [
     }
 ]
 
+// banner管理 - banner类型
+const BANNERSYSTEMTYPELIST = [
+    {
+        name: '朋友圈轮播图',
+        value: 1
+    }
+]
+
 /*
 *封禁记录 - 用户封禁记录
 */
@@ -1406,14 +1414,6 @@ const CATEGORYBUSINESSTYPELIST = [
     }
 ]
 
-// 房间热度管理
-const HOUSEHEATSYSTEMSTATUSLIST = [
-    {
-        name: '未生效',
-        value: 0
-    }
-]
-
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -1479,5 +1479,6 @@ export default {
     CATEGORYBUSINESSTYPELIST,
     GUILDCONFIGTYPELIST,
     HOUSEMESSAGECLASSIFYLIST,
-    HOUSEMESSAGELIVELIST
+    HOUSEMESSAGELIVELIST,
+    BANNERSYSTEMTYPELIST
 }

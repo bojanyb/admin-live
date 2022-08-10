@@ -142,7 +142,7 @@ export default {
                     label: '房间封面',
                     isimg: true,
                     prop: 'cover',
-                    imgWidth: '50px',
+                    // imgWidth: '50px',
                     imgHeight: '50px'
                 },
                 {

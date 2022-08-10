@@ -97,7 +97,7 @@ export default {
                 params.user_id = JSON.stringify(params.user_id)
                 let res = await addGuildUser(params)
                 if(res.code === 2000) {
-                    this.$message.success('添加成功')
+                    this.$message.success('成功邀请')
                 }
                 this.dialogVisible = false
                 this.$emit('getList')
