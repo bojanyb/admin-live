@@ -406,7 +406,7 @@ const GUILDCONFIGTYPELIST = [
         value: 1
     },
     {
-        name: '个人公会',
+        name: '派对公会',
         value: 2
     }
 ]

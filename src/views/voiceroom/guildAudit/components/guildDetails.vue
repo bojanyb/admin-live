@@ -79,7 +79,7 @@ export default {
                     label: '操作',
                     render: (h, params) => {
                         return h('div', [
-                            h('el-button', { props : { type: 'primary'}, style: {
+                            h('el-button', { props : { type: 'danger'}, style: {
                                 display: params.row.is_admin === 1 ? 'none' : 'unset'
                             }, on: {click:()=>{this.deleteParams(params.row, 1)}}}, '移除'),
                             h('span', { style: {
