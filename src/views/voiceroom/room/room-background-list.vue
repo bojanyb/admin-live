@@ -54,6 +54,12 @@
 							imgHeight: '50px',
 						},
 						{
+							label: '背景图名称',
+							render: (h, params) => {
+								return h('span', params.row.room_bg_title || '无')
+							}
+						},
+						{
 							label: '上传时间',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')

@@ -8,7 +8,10 @@
         :close-on-click-modal="false"
         @closed="closed">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
-            <el-form-item label="图片" prop="url">
+            <el-form-item label="背景图名称" prop="room_bg_title">
+                <el-input v-model="ruleForm.room_bg_title" placeholder="请输入背景图名称"></el-input>
+            </el-form-item>
+            <el-form-item label="房间背景图" prop="url">
                 <uploadImg v-model="ruleForm.url" :imgUrl="ruleForm.url" name="url" ref="url" @validateField="validateField"></uploadImg>
             </el-form-item>
             <el-form-item label="默认配置房间类型" prop="room_genre">
@@ -44,9 +47,14 @@ export default {
             typeList: MAPDATA.ROOMTYPELIST,
             ruleForm: {
                 room_genre: '',
-                url: ''
+                url: '',
+                room_bg_title: ''
             },
             rules: {
+                room_bg_title: [
+                    { required: true, message: '请输入背景图名称', trigger: 'blur' },
+                    { min: 1, max: 5, message: '长度在 1 到 5 个字符', trigger: 'blur' }
+                ],
                 url: [
                     { required: true, message: '请上传图片', trigger: 'change' }
                 ],
@@ -87,7 +95,8 @@ export default {
                     let params = {
                         id: s.id || null,
                         room_genre: s.room_genre,
-                        url: s.url
+                        url: s.url,
+                        room_bg_title: s.room_bg_title
                     }
                     let res = await getRoomBgAdd(params)
                     if(res.code === 2000) {
@@ -116,6 +125,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-    
+<style lang="scss">
+.roomBgEdit-box {
+    .el-input {
+        width: 240px;
+    }
+}
 </style>
