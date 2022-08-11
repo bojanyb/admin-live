@@ -11,7 +11,7 @@
 					<div class="levelSource fl">
 						<div class="levelSourceHead">
 							<div class="levelSourceHeadItem fl">流水区间</div>
-							<div class="levelSourceHeadItem fl">固定返点</div>
+							<!-- <div class="levelSourceHeadItem fl">固定返点</div> -->
 							<div class="levelSourceHeadItem fl">周返点</div>
 						</div>
 						<div class="levelSourceCenter">
@@ -20,9 +20,9 @@
 									<el-input v-model="it.start" style="width:45%" v-input-limit="0" /> ~
 									<el-input v-model="it.end" style="width:45%" v-input-limit="0" />
 								</div>
-								<div class="fixedRebate fl">
+								<!-- <div class="fixedRebate fl">
 									<el-input v-model="it.rebate" disabled style="width:90%" placeholder="固定返点" v-input-limit="0" />
-								</div>
+								</div> -->
 								<div class="weeklyRebate fl">
 									<el-input v-model="it.week_rebate" style="width:90%" placeholder="周返点" v-input-limit="0" />
 								</div>
@@ -53,13 +53,11 @@
 						"configSource": [{
 								"start": 0,
 								"end": 0,
-								"rebate": 0,
 								"week_rebate": 0,
 							},
 							{
 								"start": 0,
 								"end": 0,
-								"rebate": 0,
 								"week_rebate": 0,
 							},
 						]
@@ -70,19 +68,16 @@
 						"configSource": [{
 								"start": 0,
 								"end": 0,
-								"rebate": 0,
 								"week_rebate": 0,
 							},
 							{
 								"start": 0,
 								"end": 0,
-								"rebate": 0,
 								"week_rebate": 0,
 							},
 							{
 								"start": 0,
 								"end": 0,
-								"rebate": 0,
 								"week_rebate": 0,
 							},
 						]
@@ -93,19 +88,16 @@
 						"configSource": [{
 								"start": 0,
 								"end": 0,
-								"rebate": 0,
 								"week_rebate": 0,
 							},
 							{
 								"start": 0,
 								"end": 0,
-								"rebate": 0,
 								"week_rebate": 0,
 							},
 							{
 								"start": 0,
 								"end": 0,
-								"rebate": 0,
 								"week_rebate": 0,
 							},
 						]
@@ -141,11 +133,11 @@
 				
 				let isReturn = false;
 				row.configSource.map(res=>{
-					if(res.rebate > 100){
-						this.$message.error("固定返点 取值范围为1~100");
-						isReturn = true;
-						return
-					}
+					// if(res.rebate > 100){
+					// 	this.$message.error("固定返点 取值范围为1~100");
+					// 	isReturn = true;
+					// 	return
+					// }
 					if(res.week_rebate > 100){
 						this.$message.error("周返点 取值范围为1~100");
 						isReturn = true;
