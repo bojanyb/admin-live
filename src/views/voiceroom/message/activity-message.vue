@@ -44,9 +44,11 @@ export default {
                     },
                     {
                         label: '活动描述',
+                        minWidth: '120px',
                         render: (h, params) => {
                             return h('span', params.row.describe || '无')
-                        }
+                        },
+                        showOverFlow: true
                     },
                     {
                         label: '活动配图',
@@ -57,18 +59,21 @@ export default {
                     },
                     {
                         label: '活动链接',
+                        minWidth: '120px',
                         render: (h, params) => {
                             return h('span', params.row.nav_to.uri || '无')
                         }
                     },
                     {
                         label: '推送时间',
+                        minWidth: '120px',
                         render: (h, params) => {
                             return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
                         label: '创建时间',
+                        minWidth: '120px',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
