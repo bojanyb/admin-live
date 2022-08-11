@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container serviceConfig-audioTest-box">
+    <div class="serviceConfig-audioTest-box">
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
@@ -162,6 +162,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-    
+<style lang="scss">
+.serviceConfig-audioTest-box {
+    padding: 10px 20px 20px 20px;
+    box-sizing: border-box;
+}
 </style>

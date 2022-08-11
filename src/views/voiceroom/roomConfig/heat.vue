@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container roomConfig-heat-box">
+    <div class="roomConfig-heat-box">
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
 
         <!-- 组件 -->
@@ -41,6 +41,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-    
+<style lang="scss">
+.roomConfig-heat-box {
+    padding: 10px 20px 20px 20px;
+    box-sizing: border-box;
+}
 </style>

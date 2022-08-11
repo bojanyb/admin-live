@@ -21,7 +21,6 @@
 				
 				window.addEventListener("beforeunload",() => {
 					let permissionList = that.$store.state.user.permissionList
-					console.log(permissionList, 'permissionList----------')
 					localStorage.setItem("permissionList", JSON.stringify(permissionList));
 				})
 			}

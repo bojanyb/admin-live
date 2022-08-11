@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container systemConfig-phone-filter-box">
+    <div class="systemConfig-phone-filter-box">
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
 
         <div class="addBox">
@@ -144,6 +144,8 @@ export default {
 
 <style lang="scss">
 .systemConfig-phone-filter-box {
+    padding: 10px 20px 20px 20px;
+    box-sizing: border-box;
     .addBox {
         margin-bottom: 20px;
     }
