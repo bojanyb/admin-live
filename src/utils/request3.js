@@ -99,6 +99,7 @@ service.interceptors.response.use(
 		}
 	},
 	error => {
+		store.commit('app/SET_LOADING', false)
 		Message({
 			message: error.message,
 			type: 'error',
