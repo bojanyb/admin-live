@@ -77,7 +77,8 @@
 						},
 						{
 							label: '举报证据',
-							prop: 'content'
+							prop: 'content',
+							showOverFlow: true
 						},
 						{
 							label: '处理人',

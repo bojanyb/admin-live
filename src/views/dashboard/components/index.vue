@@ -92,6 +92,18 @@ export default {
             >div {
                 flex: 0.333;
             }
+
+            @media (max-width: 1366px) {
+                >div:nth-child(1) {
+                    flex: 0.345;
+                }
+                >div:nth-child(2) {
+                    flex: 0.37;
+                }
+                >div:nth-child(3) {
+                    flex: 0.285;
+                }
+            }
         }
         >li:hover {
             box-shadow: 0px 0px 5px 0px rgba(210, 10, 10,0.5);

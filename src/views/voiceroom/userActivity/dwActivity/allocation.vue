@@ -43,6 +43,7 @@ export default {
                 columns: [
                     {
                         label: '活动名称',
+                        minWidth: '140px',
                         prop: 'name',
                         render: (h, params) => {
                             return h('span', params.row.name)
@@ -73,12 +74,12 @@ export default {
                     {
                         label: '外部链接',
                         prop: 'url',
-                        width: '200'
+                        minWidth: '240px'
                     },
                     {
                         label: '开始时间',
                         prop: 'start_time',
-                        width: '160',
+                        minWidth: '160px',
                         render: (h, params) => {
                             return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : "")
                         }

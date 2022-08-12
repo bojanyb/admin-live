@@ -117,6 +117,7 @@
 						},
 						{
 							label: '开播时长',
+							minWidth: '120px',
 							render: (h, params) => {
 								let data = formatTime(params.row.live_time)
 								return h('span', data ? data : '无')
