@@ -33,21 +33,45 @@
 				configList: [
                     {
                         name: '主播推广员返点',
+						key: 'host_invitation_sharing',
                         value: null,
                         unit: '‰'
                     },
                     {
                         name: '用户推广员返点',
+						key: 'user_invitation_sharing',
                         value: null,
                         unit: '‰'
                     }
                 ]
 			}
 		},
+		mounted() {
+			this.getSyetermConfigSource();
+		},
 		methods: {
+			getSyetermConfigSource() {
+				this.loading = true;
+				getSyetermConfig().then(res => {
+					if(res.code === 2000) {
+						if(res.data.config && res.data.config.length > 0) {
+							res.data.config.forEach(item => {
+								this.configList.forEach(a => {
+									if(item.key === a.key) {
+										a.value = item.value
+									}
+								})
+							})
+						}
+					}
+				}).catch(err => {
+					this.$message.error(err);
+					this.loading = false;
+				})
+			},
 			handleConfigSave(row) {
 				if(row.value < 1 || row.value > 100){
-					this.$message.error(row.remark + "范围为1%~100%");
+					this.$message.error(row.name + "范围为1%~100%");
 					return
 				}
 				var params = {
@@ -55,7 +79,7 @@
 					"value": row.value
 				}
 				getSyetermConfigSave(params).then(res=>{
-					this.$message.success(row.remark +" 修改成功");
+					this.$message.success(row.name +" 修改成功");
 					this.getSyetermConfigSource();
 				}).catch(err=>{
 					this.$message.error(err);
