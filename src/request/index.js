@@ -220,6 +220,11 @@ const request = {
         addRoomHot: `${HTTPHEADER}/Room/addRoomHot`, // 增加房间热度
         roomHotList: `${HTTPHEADER}/Room/roomHotList`, // 增加房间热度列表
         deleteRoomHot: `${HTTPHEADER}/Room/deleteRoomHot`, // 删除热度
+    },
+
+    // 风控检测
+    risk: {
+        audioStreamDefyList: `${HTTPHEADER}/Room/audioStreamDefyList`, // 音频违规日志
     }
 }
 

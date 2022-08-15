@@ -48,22 +48,22 @@ export default {
         forms() {
             return [
                 {
-                    name: 'user_number',
+                    name: 'room_number',
                     type: 'input',
                     value: '',
-                    label: '用户ID',
+                    label: '房间ID',
                     isNum: true,
-                    placeholder: '请输入用户ID'
+                    placeholder: '请输入房间ID'
                 },
                 {
-                    name: 'status',
+                    name: 'risk_type',
                     type: 'select',
-                    value: '1',
+                    value: null,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '风险类型',
                     placeholder: '请选择',
-                    options: MAPDATA.ORDERSTATUS
+                    options: MAPDATA.RISKSYSTEMTYPELIST
                 },
                 {
                     name: 'dateTimeParams',
@@ -87,71 +87,101 @@ export default {
             ]
         },
         cfgs() {
-            let name = this.tabIndex === '0' ? 'list' : 'musicList'
             return {
                 vm: this,
-                url: REQUEST.user[name],
+                url: REQUEST.risk.audioStreamDefyList,
                 columns: [
                     {
                         label: '时间',
                         render: (h, params) => {
-                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                            return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
                     },
                     {
                         label: '用户',
-                        prop: 'user_number'
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', params.row.nickname),
+                                h('div', params.row.user_number)
+                            ])
+                        }
                     },
                     {
                         label: '用户角色',
-                        prop: 'nickname'
+                        render: (h, params) => {
+                            let data = MAPDATA.RISKSYSTEMROLELIST.find(item => { return item.value === params.row.user_role })
+                            return h('span', data ? data.name : '无')
+                        }
                     },
                     {
                         label: '房间ID',
-                        prop: 'nickname'
+                        prop: 'room_number'
                     },
                     {
                         label: '违规行为',
-                        prop: 'nickname'
+                        prop: 'risk_type_desc'
                     },
                     {
                         label: '音频',
                         isimg: true,
-                        prop: 'face',
+                        prop: 'url',
                         imgWidth: '50px',
-                        imgHeight: '50px'
+                        imgHeight: '50px',
+                        width: '300px'
                     },
                     {
                         label: '音转文',
-                        prop: 'sex',
-                        render: (h, params) => {
-                            let data = MAPDATA.SEXLIST.find(item => { return item.value === params.row.sex })
-                            return h('span', data ? data.name : '无')
-                        }
+                        prop: 'content',
+                        showOverFlow: true
                     }
                 ]
             }
         }
     },
+    watch: {
+        tabIndex: {
+            handler(n) {
+                if(n) {
+                    this.getList()
+                }
+            },
+            deep: true
+        }
+    },
     methods: {
         // 配置参数
         beforeSearch(params) {
-            let s = { ...this.searchParams }
+            let s = { ...this.searchParams, ...this.dateTimeParams }
             return {
                 page: params.page,
                 pagesize: params.size,
-                user_number: s.user_number,
-                nickname: s.nickname,
-                phone: s.phone
+                type: this.tabIndex === '0' ? 1 : 2,
+                risk_type: s.risk_type,
+                start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
+                end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
+                room_number: s.room_number
             }
         },
         // 刷新列表
         getList() {
             this.$refs.tableList.getData()
         },
+        // 设置时间段
+        setDateTime(arr) {
+            const date = arr ? {
+                start_time: arr[0],
+                end_time: arr[1]
+            } : {}
+            this.$set(this, 'dateTimeParams', date)
+        },
+        // 清空日期选择
+        emptyDateTime() {
+            this.dateTimeParams = {}
+        },
         // 重置
         reset() {
             this.searchParams = {}
+            this.dateTimeParams = {}
             this.getList()
         },
         // 查询

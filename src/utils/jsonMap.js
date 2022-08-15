@@ -401,10 +401,10 @@ const CLASSLIST = [
 
 // 公会列表 - 公会类型
 const GUILDCONFIGTYPELIST = [
-    {
-        name: '主播公会',
-        value: 1
-    },
+    // {
+    //     name: '主播公会',
+    //     value: 1
+    // },
     {
         name: '派对公会',
         value: 2
@@ -1414,6 +1414,73 @@ const CATEGORYBUSINESSTYPELIST = [
     }
 ]
 
+/*
+*风控管理
+*/
+// 风控管理 - 风险类型
+const RISKSYSTEMTYPELIST = [
+    {
+        name: '涉政',
+        value: 100
+    },
+    {
+        name: '暴恐',
+        value: 110
+    },
+    {
+        name: '国歌',
+        value: 120
+    },
+    {
+        name: '色情',
+        value: 200
+    },
+    {
+        name: '辱骂',
+        value: 210
+    },
+    {
+        name: '娇喘',
+        value: 250
+    },
+    {
+        name: '一号领导声纹',
+        value: 260
+    },
+    {
+        name: '人声属性',
+        value: 270
+    },
+    {
+        name: '违禁歌曲',
+        value: 280
+    },
+    {
+        name: '广告',
+        value: 300
+    }
+]
+
+// 风控管理 - 角色
+const RISKSYSTEMROLELIST = [
+    {
+        name: '普通用户',
+        value: 0
+    },
+    {
+        name: '接待管理',
+        value: 1
+    },
+    {
+        name: '管理',
+        value: 2
+    },
+    {
+        name: '房主',
+        value: 3
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -1480,5 +1547,7 @@ export default {
     GUILDCONFIGTYPELIST,
     HOUSEMESSAGECLASSIFYLIST,
     HOUSEMESSAGELIVELIST,
-    BANNERSYSTEMTYPELIST
+    BANNERSYSTEMTYPELIST,
+    RISKSYSTEMTYPELIST,
+    RISKSYSTEMROLELIST
 }
