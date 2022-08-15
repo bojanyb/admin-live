@@ -67,7 +67,8 @@ export default {
                 user_number: '',
                 rank: '',
                 remark: '',
-                rebate: 0
+                rebate: 0,
+                guild_type: 2
             },
             rules: {
                 face: [
