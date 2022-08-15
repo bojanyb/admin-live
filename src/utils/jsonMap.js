@@ -768,7 +768,7 @@ const SEXLIST = [
         value: 2
     },
     {
-        name: '未知',
+        name: '女',
         value: 3
     }
 ]
