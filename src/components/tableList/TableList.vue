@@ -24,7 +24,7 @@
 
           <imgComp 
           v-if="item.isimg"
-          :src="scope.row[item.prop]"
+          :src="scope.row[item.prop] || scope.row[item.propCopy]"
           :name="item.nameProp ? scope.row[item.nameProp] : ''"
           :tagList="item.tagProp ? scope.row[item.tagProp] : []"
           :width="item.imgWidth"
@@ -59,7 +59,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="pagination" v-if="data.length != 0">
+    <div class="pagination" v-if="data.length != 0 && !isHidePage">
       <el-pagination background @size-change="handleSizeChange" @current-change="handlePageChange" :page-size="search.size"
         :current-page="search.page" layout="total, prev, pager, next, jumper" :page-sizes="cfgs.search ? cfgs.search.sizes:search.sizes"
         :total="search.total" class="fr">
@@ -94,6 +94,10 @@
       cfgs: {
         type: Object,
         required: true
+      },
+      isHidePage: {
+        type: Boolean,
+        default: false
       }
     },
     data() {

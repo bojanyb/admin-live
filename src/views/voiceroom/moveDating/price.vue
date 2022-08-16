@@ -14,7 +14,7 @@
 					</el-input>
 				</div>
 				<div class="configSave fl">
-					<el-button type="primary" @click="handleConfigSave(item)">保 存</el-button>
+					<el-button type="primary" @click="saveCardConfigFunc(item)">保 存</el-button>
 				</div>
 			</div>
 		</el-card>
@@ -22,10 +22,7 @@
 </template>
 
 <script>
-	import {
-		getSyetermConfig,
-		getSyetermConfigSave
-	} from '@/api/videoRoom'
+	import { getCardConfig, saveCardConfig } from '@/api/moveDating'
 	export default {
 		name: 'platform-rebate',
 		data() {
@@ -34,48 +31,71 @@
                     {
                         name: '通话时长',
                         value: null,
-                        unit: ' 分 '
+                        unit: ' 分 ',
+						key: 'heartbeat_call_minute'
                     },
                     {
                         name: '通话价格',
                         value: null,
-                        unit: '喵粮'
+                        unit: '喵粮',
+						key: 'heartbeat_call_price'
                     },
                     {
                         name: '折扣',
                         value: null,
-                        unit: ' 折 '
+                        unit: ' 折 ',
+						key: 'heartbeat_call_discount_ratio'
                     },
                     {
                         name: '折扣次数',
                         value: null,
-                        unit: '次'
+                        unit: '次',
+						key: 'heartbeat_call_discount_count'
                     },
                     {
                         name: '收益比例',
                         value: null,
-                        unit: '%'
+                        unit: '%',
+						key: 'heartbeat_call_profit_ratio'
                     }
                 ]
 			}
 		},
 		methods: {
-			handleConfigSave(row) {
-				if(row.value < 1 || row.value > 100){
-					this.$message.error(row.remark + "范围为1%~100%");
-					return
+			// 获取配置
+			async getCardConfigFunc() {
+				let res = await getCardConfig()
+				if(res.code === 2000) {
+					if(res.data.config) {
+						for (const key in res.data.config) {
+							this.configList.forEach(item => {
+								if(item.key === key) {
+									item.value = res.data.config[key]
+								}
+							})
+						}
+					}
 				}
-				var params = {
-					"key" : row.key,
-					"value": row.value
+			},
+
+			// 设置心动配置
+			async saveCardConfigFunc(row) {
+				if(!row.value) {
+					this.$message.error('请设置' + row.name)
+					return false
 				}
-				getSyetermConfigSave(params).then(res=>{
-					this.$message.success(row.remark +" 修改成功");
-					this.getSyetermConfigSource();
-				}).catch(err=>{
-					this.$message.error(err);
-				})
+				let params = {
+					key: row.key,
+					value: row.value
+				}
+				let res = await saveCardConfig(params)
+				if(res.code === 2000) {
+					this.getCardConfigFunc()
+				}
 			}
+		},
+		mounted() {
+			this.getCardConfigFunc()
 		}
 	}
 </script>

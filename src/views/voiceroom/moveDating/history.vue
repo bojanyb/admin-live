@@ -19,8 +19,6 @@ import REQUEST from '@/request/index.js'
 import { timeFormat } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
 export default {
     mixins: [mixins],
     components: {
@@ -44,7 +42,7 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
-                    name: 'user_number',
+                    name: 'live_user_number',
                     type: 'input',
                     value: '',
                     label: '主播ID',
@@ -75,7 +73,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.user.list,
+                url: REQUEST.move.heartOrder,
                 columns: [
                     {
                         label: '时间',
@@ -85,19 +83,30 @@ export default {
                     },
                     {
                         label: '用户',
-                        prop: 'user_number'
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', params.row.nickname),
+                                h('div', params.row.user_number)
+                            ])
+                        }
                     },
                     {
                         label: '主播',
-                        prop: 'user_number'
+                        prop: 'live_user_number',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', params.row.live_nickname),
+                                h('div', params.row.live_user_number)
+                            ])
+                        }
                     },
                     {
                         label: '通话时长',
-                        prop: 'user_number'
+                        prop: 'duration'
                     },
                     {
                         label: '收益金额',
-                        prop: 'user_number'
+                        prop: 'order_dot'
                     }
                 ]
             }
@@ -106,22 +115,36 @@ export default {
     methods: {
         // 配置参数
         beforeSearch(params) {
-            let s = { ...this.searchParams }
+            let s = { ...this.searchParams, ...this.dateTimeParams }
             return {
                 page: params.page,
-                pagesize: params.size,
+                page_size: params.size,
                 user_number: s.user_number,
-                nickname: s.nickname,
-                phone: s.phone
+                live_user_number: s.live_user_number,
+                start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
+                end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time
             }
         },
         // 刷新列表
         getList() {
             this.$refs.tableList.getData()
         },
+        // 设置时间段
+        setDateTime(arr) {
+            const date = arr ? {
+                start_time: arr[0],
+                end_time: arr[1]
+            } : {}
+            this.$set(this, 'dateTimeParams', date)
+        },
+        // 清空日期选择
+        emptyDateTime() {
+            this.dateTimeParams = {}
+        },
         // 重置
         reset() {
             this.searchParams = {}
+            this.dateTimeParams = {}
             this.getList()
         },
         // 查询

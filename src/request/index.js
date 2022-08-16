@@ -225,6 +225,19 @@ const request = {
     // 风控检测
     risk: {
         audioStreamDefyList: `${HTTPHEADER}/Room/audioStreamDefyList`, // 音频违规日志
+    },
+
+    // 心动速配
+    move: {
+        Heartbeat: `${HTTPHEADER}/Heartbeat`, // 心动卡片配置
+        save: `${HTTPHEADER}/Heartbeat/save`, // 添加/修改音色卡片
+        delete: `${HTTPHEADER}/Heartbeat/delete`, // 删除音色卡片
+        getCardConfig: `${HTTPHEADER}/Heartbeat/getCardConfig`, // 心动价格配置
+        saveCardConfig: `${HTTPHEADER}/Heartbeat/saveCardConfig`, // 设置心动卡片配置
+        heartAnchor: `${HTTPHEADER}/Heartbeat/heartAnchor`, // 心动主播
+        addHeartAnchor: `${HTTPHEADER}/Heartbeat/addHeartAnchor`, // 添加心动主播
+        rmHeartAnchor: `${HTTPHEADER}/Heartbeat/rmHeartAnchor`, // 移除心动主播
+        heartOrder: `${HTTPHEADER}/Heartbeat/heartOrder`, // 心动记录
     }
 }
 

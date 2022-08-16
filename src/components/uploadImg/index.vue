@@ -71,7 +71,7 @@ export default {
                     return 'png'
                 } else if(this.url.indexOf('.svga') !== -1) {
                     return 'svga'
-                } else if(this.url.indexOf('.zip') !== -1) {
+                } else if(this.url.indexOf('.zip') !== -1 || this.url.indexOf('.mp3') !== -1 || this.url.indexOf('.m4a') !== -1) {
                     return 'zip'
                 }
             }
@@ -87,9 +87,12 @@ export default {
         // 上传
         upLoad(file) {
             this.isShowSvg = false
+            this.$store.commit('app/SET_LOADING', true)
             uploadOSS(file.file).then(res => {
                 if(res.url) {
                     this.$emit('input', res.url)
+                    this.$emit('getFile', file)
+                    this.$store.commit('app/SET_LOADING', false)
                     this.isShowSvg = true
                     this.$emit('validateField', this.name)
                     this.imageUrl = res.url

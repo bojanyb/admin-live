@@ -12,6 +12,8 @@
 </template>
 
 <script>
+// 引入api
+import { rmHeartAnchor } from '@/api/moveDating'
 // 引入新增组件
 import anchorComp from './components/anchorComp.vue'
 // 引入菜单组件
@@ -20,12 +22,8 @@ import SearchPanel from '@/components/SearchPanel/final.vue'
 import tableList from '@/components/tableList/TableList.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
-// 引入公共方法
-import { timeFormat } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
 export default {
     mixins: [mixins],
     components: {
@@ -54,7 +52,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.user.list,
+                url: REQUEST.move.heartAnchor,
                 columns: [
                     {
                         label: '用户ID',
@@ -62,11 +60,14 @@ export default {
                     },
                     {
                         label: '用户昵称',
-                        prop: 'user_number'
+                        prop: 'nickname'
                     },
                     {
                         label: '用户头像',
-                        prop: 'user_number'
+                        isimg: true,
+                        prop: 'face',
+                        imgWidth: '50px',
+                        imgHeight: '50px'
                     },
                     {
                         label: '用户性别',
@@ -80,7 +81,7 @@ export default {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.editFunc(params.row)}}}, '移除')
+                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.user_number)}}}, '移除')
                             ])
                         }
                     }
@@ -94,10 +95,8 @@ export default {
             let s = { ...this.searchParams }
             return {
                 page: params.page,
-                pagesize: params.size,
-                user_number: s.user_number,
-                nickname: s.nickname,
-                phone: s.phone
+                page_size: params.size,
+                user_number: s.user_number
             }
         },
         // 刷新列表
@@ -123,6 +122,20 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
+        },
+        // 移除
+        async deleteParams(user_number) {
+            this.$confirm('确认移除当前心动主播?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                let res = await rmHeartAnchor({ user_number })
+                if(res.code === 2000) {
+                    this.$message.success('删除成功')
+                    this.getList()
+                }
+            }).catch(() => {});
         }
     }
 }

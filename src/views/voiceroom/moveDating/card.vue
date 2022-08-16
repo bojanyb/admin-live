@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" :isHidePage="true"></tableList>
 
         <!-- 详情组件 -->
         <cardComp v-if="isDestoryComp" ref="cardComp" @destoryComp="destoryComp" @getList="getList"></cardComp>
@@ -12,6 +12,8 @@
 </template>
 
 <script>
+// 引入api
+import { deleteParams } from '@/api/moveDating'
 // 引入详情组件
 import cardComp from './components/cardComp.vue'
 // 引入菜单组件
@@ -42,11 +44,10 @@ export default {
         forms() {
             return [
                 {
-                    name: 'user_number',
+                    name: 'sound_tag',
                     type: 'input',
                     value: '',
                     label: '音色分类名',
-                    isNum: true,
                     placeholder: '请输入音色分类名'
                 }
             ]
@@ -54,30 +55,42 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.user.list,
+                url: REQUEST.move.Heartbeat,
                 columns: [
                     {
                         label: '音色ID',
-                        prop: 'user_number'
+                        prop: 'id'
                     },
                     {
-                        label: '音色名',
-                        prop: 'nickname'
+                        label: '音色分类名',
+                        prop: 'sound_tag'
                     },
                     {
-                        label: '音色标签',
-                        prop: 'nickname'
+                        label: '音色标签图',
+                        isimg: true,
+                        prop: 'sound_img',
+                        imgWidth: '50px',
+                        imgHeight: '50px'
+                    },
+                    {
+                        label: '封面/声音签名',
+                        isimg: true,
+                        prop: 'img',
+                        propCopy: 'audio',
+                        imgWidth: '50px',
+                        imgHeight: '50px',
+                        minWidth: '100px'
                     },
                     {
                         label: '排序权重',
-                        prop: 'nickname'
+                        prop: 'sort'
                     },
                     {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '修改'),
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.editFunc(params.row)}}}, '删除')
+                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
+                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
                             ])
                         }
                     }
@@ -92,9 +105,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                user_number: s.user_number,
-                nickname: s.nickname,
-                phone: s.phone
+                sound_tag: s.sound_tag
             }
         },
         // 刷新列表
@@ -123,6 +134,20 @@ export default {
             setTimeout(() => {
                 this.$refs.cardComp.loadParams(status, row)
             }, 50);
+        },
+        // 删除
+        async deleteParams(id) {
+            this.$confirm('确认删除当前数据吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                let res = await deleteParams({ id })
+                if(res.code === 2000) {
+                    this.$message.success('删除成功')
+                    this.getList()
+                }
+            }).catch(() => {});
         },
         // 销毁组件
         destoryComp() {
