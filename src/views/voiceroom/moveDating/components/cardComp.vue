@@ -95,6 +95,7 @@ export default {
                 this.$set(this.$data, 'ruleForm', params)
             }
         },
+        // 提交
         async submitForm(formName) {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
