@@ -1333,25 +1333,6 @@ const PROCESSEDSTATUSLIST = [
 ]
 
 /*
-*客服管理
-*/
-// 封面审核 - 状态
-const SERVICEAUDITSTATUSLIST = [
-    {
-        value: 1,
-        name: '审核通过'
-    },
-    {
-        value: 2,
-        name: '审核拒绝'
-    },
-    {
-        value: 3,
-        name: '待审核'
-    }
-]
-
-/*
 *房间管理
 */
 // 房间信息管理 - 房间状态
@@ -1481,6 +1462,34 @@ const RISKSYSTEMROLELIST = [
     }
 ]
 
+// 封面审核 - 状态
+const SERVICEAUDITSTATUSLIST = [
+    {
+        value: 1,
+        name: '审核通过'
+    },
+    {
+        value: 2,
+        name: '审核拒绝'
+    },
+    {
+        value: 0,
+        name: '待审核'
+    }
+]
+
+// 封面审核 - 封面类型
+const SERVICEAUDITTYPELIST = [
+    {
+        name: '派对封面',
+        value: 1
+    },
+    {
+        name: '直播封面',
+        value: 2
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -1549,5 +1558,6 @@ export default {
     HOUSEMESSAGELIVELIST,
     BANNERSYSTEMTYPELIST,
     RISKSYSTEMTYPELIST,
-    RISKSYSTEMROLELIST
+    RISKSYSTEMROLELIST,
+    SERVICEAUDITTYPELIST
 }

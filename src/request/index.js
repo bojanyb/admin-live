@@ -225,6 +225,8 @@ const request = {
     // 风控检测
     risk: {
         audioStreamDefyList: `${HTTPHEADER}/Room/audioStreamDefyList`, // 音频违规日志
+        roomCoverCheckList: `${HTTPHEADER}/Room/roomCoverCheckList`, // 封面审核列表
+        coverCheck: `${HTTPHEADER}/Room/coverCheck`, // 封面审核
     },
 
     // 心动速配

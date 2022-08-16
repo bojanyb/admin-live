@@ -7,37 +7,33 @@
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
-                <el-form-item label="活动形式" prop="name">
-                    <el-input type="textarea" :rows="4" v-model="ruleForm.name"></el-input>
+                <el-form-item label="拒绝原因" prop="remark">
+                    <el-input type="textarea" :rows="4" v-model="ruleForm.remark"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="resetForm('ruleForm')">确 定</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
+// 引入api
+import { coverCheck } from '@/api/risk'
 export default {
     data() {
         return {
             dialogVisible: false,
             ruleForm: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
+                id: null,
+                status: '',
+                remark: ''
             },
             rules: {
-                name: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                remark: [
+                    { required: true, message: '请填写拒绝原因', trigger: 'blur' }
                 ]
             }
         };
@@ -46,11 +42,23 @@ export default {
         handleClose() {
             this.dialogVisible = false
         },
+        // 获取数据
+        loadParams(status, id) {
+            this.ruleForm.status = status
+            this.ruleForm.id = id
+            this.dialogVisible = true
+        },
         // 提交
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+        async submitForm(formName) {
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    alert('submit!');
+                    let params = { ...this.ruleForm }
+                    let res = await coverCheck(params)
+                    if(res.code === 2000) {
+                        this.$message.success('拒绝成功')
+                        this.dialogVisible = false
+                        this.$emit('getList')
+                    }
                 } else {
                     console.log('error submit!!');
                     return false;

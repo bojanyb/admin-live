@@ -1,7 +1,7 @@
 <template>
     <div class="app-container serviceConfig-coverAudit-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
@@ -12,6 +12,8 @@
 </template>
 
 <script>
+// 引入api
+import { coverCheck } from '@/api/risk'
 // 引入新增组件
 import coverComp from './components/coverComp.vue'
 // 引入菜单组件
@@ -20,8 +22,6 @@ import SearchPanel from '@/components/SearchPanel/final.vue'
 import tableList from '@/components/tableList/TableList.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
-// 引入公共方法
-import { timeFormat } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 // 引入公共map
@@ -35,14 +35,17 @@ export default {
     },
     data() {
         return {
-            isDestoryComp: false // 是否销毁组件
+            isDestoryComp: false, // 是否销毁组件
+            searchParams: {
+                status: 1
+            }
         };
     },
     computed: {
         forms() {
             return [
                 {
-                    name: 'user_number',
+                    name: 'room_number',
                     type: 'input',
                     value: '',
                     label: '房间ID',
@@ -52,7 +55,7 @@ export default {
                 {
                     name: 'status',
                     type: 'select',
-                    value: '',
+                    value: 1,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '状态',
@@ -70,11 +73,9 @@ export default {
                         change: v => {
                             this.emptyDateTime()
                             this.setDateTime(v)
-                            this.getList()
                         },
                         selectChange: (v, key) => {
                             this.emptyDateTime()
-                            this.getList()
                         }
                     }
                 }
@@ -83,47 +84,69 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.user.list,
+                url: REQUEST.risk.roomCoverCheckList,
                 columns: [
                     {
                         label: '时间',
-                        render: (h, params) => {
-                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-                        }
+                        prop: 'create_time'
                     },
                     {
                         label: '用户',
-                        prop: 'user_number'
+                        prop: 'user_number',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', params.row.nickname),
+                                h('div', params.row.user_number)
+                            ])
+                        }
+                    },
+                    {
+                        label: '房间ID',
+                        prop: 'room_number'
                     },
                     {
                         label: '封面图',
                         isimg: true,
-                        prop: 'face',
+                        prop: 'cover_url',
                         imgWidth: '50px',
                         imgHeight: '50px'
                     },
                     {
                         label: '封面类型',
-                        prop: 'nickname'
+                        render: (h, params) => {
+                            let data = MAPDATA.SERVICEAUDITTYPELIST.find(item => { return item.value === params.row.type })
+                            return h('span', data ? data.name : '无')
+                        }
                     },
                     {
                         label: '审核状态',
-                        prop: 'nickname'
+                        render: (h, params) => {
+                            let data = MAPDATA.SERVICEAUDITSTATUSLIST.find(item => { return item.value === params.row.status })
+                            return h('span', data ? data.name : '无')
+                        }
                     },
                     {
                         label: '处理人',
-                        prop: 'nickname'
+                        render: (h, params) => {
+                            return h('span', params.row.admin_nickname || '无')
+                        }
                     },
                     {
                         label: '备注',
-                        prop: 'nickname'
+                        render: (h, params) => {
+                            return h('span', params.row.remark || '无')
+                        }
                     },
                     {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '通过'),
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.editFunc(params.row)}}}, '拒绝')
+                                h('el-button', { props : { type: 'primary'}, style: {
+                                    display: params.row.status === 0 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.audit(params.row.id, 1)}}}, '通过'),
+                                h('el-button', { props : { type: 'danger'}, style: {
+                                    display: params.row.status === 0 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.audit(params.row.id, 2)}}}, '拒绝')
                             ])
                         }
                     }
@@ -134,22 +157,38 @@ export default {
     methods: {
         // 配置参数
         beforeSearch(params) {
-            let s = { ...this.searchParams }
+            let s = { ...this.searchParams, ...this.dateTimeParams }
             return {
                 page: params.page,
                 pagesize: params.size,
-                user_number: s.user_number,
-                nickname: s.nickname,
-                phone: s.phone
+                start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
+                end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
+                status: s.status,
+                room_number: s.room_number
             }
         },
         // 刷新列表
         getList() {
             this.$refs.tableList.getData()
         },
+        // 设置时间段
+        setDateTime(arr) {
+            const date = arr ? {
+                start_time: arr[0],
+                end_time: arr[1]
+            } : {}
+            this.$set(this, 'dateTimeParams', date)
+        },
+        // 清空日期选择
+        emptyDateTime() {
+            this.dateTimeParams = {}
+        },
         // 重置
         reset() {
-            this.searchParams = {}
+            this.searchParams = {
+                status: 1
+            }
+            this.dateTimeParams = {}
             this.getList()
         },
         // 查询
@@ -157,11 +196,19 @@ export default {
             this.getList()
         },
         // 新增
-        add() {
-            this.isDestoryComp = true
-            setTimeout(() => {
-                this.$refs.coverComp.dialogVisible = true
-            }, 50);
+        async audit(id, status) {
+            if(status === 1) {
+                let res = await coverCheck({ id, status })
+                if(res.code === 2000) {
+                    this.$message.success('审核通过')
+                    this.getList()
+                }
+            } else {
+                this.isDestoryComp = true
+                setTimeout(() => {
+                this.$refs.coverComp.loadParams(id, status)
+                }, 50); 
+            }
         },
         // 销毁组件
         destoryComp() {
