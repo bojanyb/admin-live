@@ -141,7 +141,6 @@
 			onSearch() {
 				this.getList()
 			},
-
 			// 冻结/解冻
 			handleRoom(source) {
 				var tipsText = source.status == 1 ? '确定冻结当前房间吗?' : '确定解冻当前房间吗?'
@@ -163,7 +162,6 @@
 					}
 				})
 			},
-
 			// 房间隐藏
 			async roomHideFunc(id, status) {
 				let params = {
@@ -173,7 +171,6 @@
 				await roomHide(params)
 				this.getList()
 			},
-
 			// 置顶 - 取消置顶
 			async roomTopFunc(id, top) {
 				let params = {
@@ -183,7 +180,6 @@
 				await roomTop(params)
 				this.getList()
 			},
-
 			// 编辑
 			editFunc(row) {
 				this.isDestoryComp = true
@@ -191,7 +187,6 @@
 					this.$refs.roomEdit.dialogVisible = true
 				}, 50);
 			},
-
 			// 解封
 			deblocking(row) {
 				this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -205,7 +200,6 @@
 					});
 				}).catch(() => {});
 			},
-
 			// 销毁组件
 			destoryComp() {
 				this.isDestoryComp = false

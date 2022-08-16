@@ -127,7 +127,7 @@ export default {
                         prop: 'url',
                         imgWidth: '50px',
                         imgHeight: '50px',
-                        width: '300px'
+                        minWidth: '120px'
                     },
                     {
                         label: '音转文',
