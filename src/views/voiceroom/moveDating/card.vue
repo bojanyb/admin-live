@@ -77,13 +77,19 @@ export default {
                         imgHeight: '50px'
                     },
                     {
-                        label: '封面/声音签名',
+                        label: '封面',
                         isimg: true,
                         prop: 'img',
-                        propCopy: 'audio',
+                        imgWidth: '50px',
+                        imgHeight: '50px'
+                    },
+                    {
+                        label: '声音签名',
+                        isimg: true,
+                        prop: 'audio',
                         imgWidth: '50px',
                         imgHeight: '50px',
-                        minWidth: '100px'
+                        minWidth: '120px'
                     },
                     {
                         label: '排序权重',

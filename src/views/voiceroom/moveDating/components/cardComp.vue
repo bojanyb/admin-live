@@ -17,16 +17,10 @@
                 <el-form-item label="权重排序" prop="sort">
                     <el-input v-model="ruleForm.sort" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
                 </el-form-item>
-                <el-form-item label="文件类型" prop="type">
-                    <el-select v-model="ruleForm.type" placeholder="请选择活动区域">
-                        <el-option label="封面" :value="1"></el-option>
-                        <el-option label="声音签名" :value="2"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="上传封面" prop="img" v-if="ruleForm.type === 1">
+                <el-form-item label="上传封面" prop="img">
                     <uploadImg ref="uploadImg" v-model="ruleForm.img" :imgUrl="ruleForm.img" name="img" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
-                <el-form-item label="上传声音签名" :rules="verifyAudio" prop="audio" v-if="ruleForm.type === 2">
+                <el-form-item label="上传声音签名" prop="audio">
                     <uploadImg ref="uploadAudio" v-model="ruleForm.audio" :imgUrl="ruleForm.audio" name="audio" @validateField="validateField" @getFile="getFile" accept=".mp3"></uploadImg>
                 </el-form-item>
             </el-form>
@@ -53,7 +47,6 @@ export default {
             status: 'add', // 当前状态
             ruleForm: {
                 id: null,
-                type: '',
                 img: '',
                 sound_tag: '',
                 sound_img: '',
@@ -72,9 +65,6 @@ export default {
                 sort: [
                     { required: true, message: '请输入权重排序', trigger: 'blur' }
                 ],
-                type: [
-                    { required: true, message: '请选择文件类型', trigger: 'change' }
-                ],
                 img: [
                     { required: true, message: '请上传封面', trigger: 'change' }
                 ],
@@ -91,9 +81,6 @@ export default {
             } else if(this.status === 'update') {
                 return '修改心动卡片'
             }
-        },
-        verifyAudio() { // 校验音频
-
         }
     },
     methods: {
@@ -106,12 +93,6 @@ export default {
             this.dialogVisible = true
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
-                console.log(params, 'params---------2020')
-                if(params.audio) {
-                    params.type = 2
-                } else {
-                    params.type = 1
-                }
                 this.$set(this.$data, 'ruleForm', params)
             }
         },
@@ -119,14 +100,7 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
-                    console.log(params, 'params---------2020')
-                    if(params.type === 1) {
-                        params.audio = ''
-                    } else {
-                        params.img = ''
-                    }
                     params.duration = params.duration ? Math.floor(params.duration) : params.duration
-                    delete params.type
                     let res = await save(params)
                     if(res.code === 2000) {
                         this.$message.success('新增成功')
