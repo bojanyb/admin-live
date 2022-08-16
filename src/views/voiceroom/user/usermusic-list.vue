@@ -98,7 +98,7 @@
 							}
 						},
 						{
-							label: '头像',
+							label: '音乐',
 							isimg: true,
 							prop: 'url',
 							nameProp: 'name',
