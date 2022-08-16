@@ -14,7 +14,7 @@
 
 <script>
 // 引入api
-import { updateParty } from '@/api/house.js'
+import { updateParty, genreList } from '@/api/house.js'
 // 引入新增组件
 import roomComp from './components/roomComp.vue'
 // 引入tab菜单组件
@@ -49,6 +49,7 @@ export default {
                     name: '直播间'
                 }
             ],
+            classifyList: [],
             searchParams: {
                 is_guild_room: 1,
                 party_status: 1,
@@ -148,7 +149,7 @@ export default {
                 {
                     label: '房间分类',
                     render: (h, params) => {
-                        let data = MAPDATA.HOUSEMESSAGECLASSIFYLIST.find(item => { return item.value === params.row.type })
+                        let data = this.classifyList.find(item => { return item.id === params.row.type })
                         return h('span', data ? data.name : '无')
                     }
                 },
@@ -243,11 +244,11 @@ export default {
         onSearch() {
             this.getList()
         },
-        // 新增
+        // 修改
         update(row) {
             this.isDestoryComp = true
             setTimeout(() => {
-                this.$refs.roomComp.loadParams(row)
+                this.$refs.roomComp.loadParams(row, this.classifyList)
             }, 50);
         },
         // 关播
@@ -268,7 +269,16 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
+        },
+        // 获取房间分类
+        async getHouse() {
+            let belong = this.tabIndex === '0' ? 2 : 1
+            let res = await genreList({ belong: belong })
+            this.classifyList = res.data.list || []
         }
+    },
+    created() {
+        this.getHouse()
     }
 }
 </script>

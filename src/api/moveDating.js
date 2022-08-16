@@ -54,3 +54,12 @@ export function deleteParams(data) {
         data
     })
 }
+
+// 获取音色分类
+export function serachTag(data) {
+    return request({
+        url: api.move.serachTag,
+        method: 'post',
+        data
+    })
+}

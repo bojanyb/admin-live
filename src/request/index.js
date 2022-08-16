@@ -240,6 +240,7 @@ const request = {
         addHeartAnchor: `${HTTPHEADER}/Heartbeat/addHeartAnchor`, // 添加心动主播
         rmHeartAnchor: `${HTTPHEADER}/Heartbeat/rmHeartAnchor`, // 移除心动主播
         heartOrder: `${HTTPHEADER}/Heartbeat/heartOrder`, // 心动记录
+        serachTag: `${HTTPHEADER}/Heartbeat/serachTag`, // 获取音色分类
     }
 }
 

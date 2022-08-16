@@ -21,7 +21,7 @@
                 </el-form-item>
                 <el-form-item label="房间分类" prop="type">
                     <el-select v-model="ruleForm.type" placeholder="请选择业务类型">
-                        <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="房间封面" prop="cover">
@@ -51,12 +51,12 @@ export default {
         return {
             dialogVisible: false,
             status: 'add',
-            typeList: MAPDATA.HOUSEMESSAGECLASSIFYLIST,
+            typeList: [],
             ruleForm: {
                 room_number: '',
                 title: '',
                 back_recommend: '',
-                type: '',
+                type: null,
                 cover: ''
             },
             rules: {
@@ -80,8 +80,9 @@ export default {
             this.dialogVisible = false
         },
         // 获取参数
-        loadParams(row) {
+        loadParams(row, list) {
             this.dialogVisible = true
+            this.typeList = list
             let params = JSON.parse(JSON.stringify(row))
             this.$set(this.$data, 'ruleForm', params)
         },

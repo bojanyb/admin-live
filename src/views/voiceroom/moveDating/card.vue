@@ -13,7 +13,7 @@
 
 <script>
 // 引入api
-import { deleteParams } from '@/api/moveDating'
+import { deleteParams, serachTag } from '@/api/moveDating'
 // 引入详情组件
 import cardComp from './components/cardComp.vue'
 // 引入菜单组件
@@ -37,7 +37,8 @@ export default {
     },
     data() {
         return {
-            isDestoryComp: false
+            isDestoryComp: false, // 是否销毁组件
+            sound_tagList: [] // 音色分类
         }
     },
     computed: {
@@ -45,11 +46,14 @@ export default {
             return [
                 {
                     name: 'sound_tag',
-                    type: 'input',
+                    type: 'select',
                     value: '',
+                    keyName: 'name',
+                    optionLabel: 'name',
                     label: '音色分类名',
-                    placeholder: '请输入音色分类名'
-                }
+                    placeholder: '请选择音色分类名',
+                    options: this.sound_tagList
+                },
             ]
         },
         cfgs() {
@@ -152,7 +156,23 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
+        },
+        // 获取音色分类
+        async serachTagFunc() {
+            let res = await serachTag()
+            if(res.data.tag && res.data.tag.length > 0) {
+                let list = []
+                res.data.tag.forEach(item => {
+                    list.push({
+                        name: item
+                    })
+                })
+                this.sound_tagList = list
+            }
         }
+    },
+    created() {
+        this.serachTagFunc()
     }
 }
 </script>

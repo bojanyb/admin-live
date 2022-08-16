@@ -28,6 +28,15 @@ export function saveGenre(data) {
     })
 }
 
+// 类型列表
+export function genreList(data) {
+    return request({
+        url: api.house.genreList,
+        method: 'post',
+        data
+    })
+}
+
 // 增加房间热度
 export function addRoomHot(data) {
     return request({
