@@ -11,9 +11,9 @@
                 <el-form-item label="音色分类名" prop="sound_tag">
                     <el-input v-model="ruleForm.sound_tag"></el-input>
                 </el-form-item>
-                <el-form-item label="音色分类图" prop="sound_img">
+                <!-- <el-form-item label="音色分类图" prop="sound_img">
                     <uploadImg ref="uploadImg" v-model="ruleForm.sound_img" :imgUrl="ruleForm.sound_img" name="sound_img" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="权重排序" prop="sort">
                     <el-input v-model="ruleForm.sort" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
                 </el-form-item>
@@ -49,7 +49,6 @@ export default {
                 id: null,
                 img: '',
                 sound_tag: '',
-                sound_img: '',
                 audio: '',
                 duration: null,
                 sort: ''
@@ -59,9 +58,9 @@ export default {
                     { required: true, message: '请输入音色分类名', trigger: 'blur' }
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
-                sound_img: [
-                    { required: true, message: '请上传音色分类图', trigger: 'change' }
-                ],
+                // sound_img: [
+                //     { required: true, message: '请上传音色分类图', trigger: 'change' }
+                // ],
                 sort: [
                     { required: true, message: '请输入权重排序', trigger: 'blur' }
                 ],
@@ -101,6 +100,7 @@ export default {
                 if (valid) {
                     let params = { ...this.ruleForm }
                     params.duration = params.duration ? Math.floor(params.duration) : params.duration
+                    params.sound_img = ''
                     let res = await save(params)
                     if(res.code === 2000) {
                         this.$message.success('新增成功')

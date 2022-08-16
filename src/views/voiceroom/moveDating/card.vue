@@ -69,13 +69,13 @@ export default {
                         label: '音色分类名',
                         prop: 'sound_tag'
                     },
-                    {
-                        label: '音色标签图',
-                        isimg: true,
-                        prop: 'sound_img',
-                        imgWidth: '50px',
-                        imgHeight: '50px'
-                    },
+                    // {
+                    //     label: '音色标签图',
+                    //     isimg: true,
+                    //     prop: 'sound_img',
+                    //     imgWidth: '50px',
+                    //     imgHeight: '50px'
+                    // },
                     {
                         label: '封面',
                         isimg: true,
