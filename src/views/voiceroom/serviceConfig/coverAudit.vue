@@ -88,7 +88,8 @@ export default {
                 columns: [
                     {
                         label: '时间',
-                        prop: 'create_time'
+                        prop: 'create_time',
+                        minWidth: '100px'
                     },
                     {
                         label: '用户',

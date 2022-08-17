@@ -12,6 +12,8 @@
 </template>
 
 <script>
+// 引入api
+import { removeUser } from '@/api/risk'
 // 引入新增组件
 import userComp from './components/userComp.vue'
 // 引入菜单组件
@@ -50,14 +52,14 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
-                    name: 'status',
+                    name: 'type',
                     type: 'select',
-                    value: '1',
+                    value: null,
                     keyName: 'value',
                     optionLabel: 'name',
-                    label: '风险类型',
+                    label: '处罚类型',
                     placeholder: '请选择',
-                    options: MAPDATA.ORDERSTATUS
+                    options: MAPDATA.USERPUNISHTYPELIST
                 },
                 {
                     name: 'dateTimeParams',
@@ -70,58 +72,70 @@ export default {
                         change: v => {
                             this.emptyDateTime()
                             this.setDateTime(v)
-                            this.getList()
                         },
                         selectChange: (v, key) => {
                             this.emptyDateTime()
-                            this.getList()
                         }
                     }
                 }
             ]
         },
         cfgs() {
-            let name = this.tabIndex === '0' ? 'list' : 'musicList'
             return {
                 vm: this,
-                url: REQUEST.user[name],
+                url: REQUEST.risk.UserPunish,
                 columns: [
                     {
                         label: '时间',
-                        render: (h, params) => {
-                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-                        }
+                        prop: 'create_time',
+                        minWidth: '100px'
                     },
                     {
                         label: '用户',
-                        prop: 'user_number'
-                    },
-                    {
-                        label: '处罚类型',
-                        prop: 'nickname'
-                    },
-                    {
-                        label: '处罚状态',
-                        prop: 'nickname'
-                    },
-                    {
-                        label: '解除时间',
                         render: (h, params) => {
-                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                            return h('div', [
+                                h('div', params.row.nickname),
+                                h('div', params.row.user_number)
+                            ])
                         }
                     },
                     {
+                        label: '处罚类型',
+                        render: (h, params) => {
+                            let data = MAPDATA.USERPUNISHTYPELIST.find(item => { return item.value === params.row.type })
+                            return h('span', data ? data.name : '无')
+                        }
+                    },
+                    {
+                        label: '处罚状态',
+                        render: (h, params) => {
+                            let data = MAPDATA.USERPUNISHSTATUSLIST.find(item => { return item.value === params.row.status })
+                            return h('span', data ? data.name : '无')
+                        }
+                    },
+                    {
+                        label: '解除时间',
+                        prop: 'ban_duration',
+                        minWidth: '100px'
+                    },
+                    {
                         label: '备注',
-                        prop: 'nickname'
+                        render: (h, params) => {
+                            return h('span', params.row.remark || '无')
+                        }
                     },
                     {
                         label: '操作人',
-                        prop: 'nickname'
+                        render: (h, params) => {
+                            return h('span', params.row.admin_name || '无')
+                        }
                     },
                     {
                         label: '操作',
                         render: (h, params) => {
-                            return h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.doCashFunc(params.row, 'reject')}}}, '解除')
+                            return h('el-button', { props : { type: 'danger'}, style: {
+                                display: params.row.status === 1 ? 'unset' : 'none'
+                            }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '解除')
                         }
                     }
                 ]
@@ -131,22 +145,36 @@ export default {
     methods: {
         // 配置参数
         beforeSearch(params) {
-            let s = { ...this.searchParams }
+            let s = { ...this.searchParams, ...this.dateTimeParams }
             return {
                 page: params.page,
-                pagesize: params.size,
+                page_size: params.size,
                 user_number: s.user_number,
-                nickname: s.nickname,
-                phone: s.phone
+                type: s.type,
+                start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
+                end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time
             }
         },
         // 刷新列表
         getList() {
             this.$refs.tableList.getData()
         },
+        // 设置时间段
+        setDateTime(arr) {
+            const date = arr ? {
+                start_time: arr[0],
+                end_time: arr[1]
+            } : {}
+            this.$set(this, 'dateTimeParams', date)
+        },
+        // 清空日期选择
+        emptyDateTime() {
+            this.dateTimeParams = {}
+        },
         // 重置
         reset() {
             this.searchParams = {}
+            this.dateTimeParams = {}
             this.getList()
         },
         // 查询
@@ -159,6 +187,14 @@ export default {
             setTimeout(() => {
                 this.$refs.userComp.dialogVisible = true
             }, 50);
+        },
+        // 解除
+        async deleteParams(id) {
+            let res = await removeUser({ id })
+            if(res.code === 2000) {
+                this.$message.success('解除成功')
+                this.getList()
+            }
         },
         // 销毁组件
         destoryComp() {

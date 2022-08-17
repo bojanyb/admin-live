@@ -93,6 +93,7 @@ export default {
                 columns: [
                     {
                         label: '时间',
+                        minWidth: '120px',
                         render: (h, params) => {
                             return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
@@ -127,12 +128,13 @@ export default {
                         prop: 'url',
                         imgWidth: '50px',
                         imgHeight: '50px',
-                        minWidth: '120px'
+                        minWidth: '220px'
                     },
                     {
                         label: '音转文',
                         prop: 'content',
-                        showOverFlow: true
+                        showOverFlow: true,
+                        minWidth: '120px'
                     }
                 ]
             }

@@ -227,6 +227,9 @@ const request = {
         audioStreamDefyList: `${HTTPHEADER}/Room/audioStreamDefyList`, // 音频违规日志
         roomCoverCheckList: `${HTTPHEADER}/Room/roomCoverCheckList`, // 封面审核列表
         coverCheck: `${HTTPHEADER}/Room/coverCheck`, // 封面审核
+        UserPunish: `${HTTPHEADER}/UserPunish`, // 用户处罚列表
+        save: `${HTTPHEADER}/UserPunish/save`, // 添加处罚用户
+        remove: `${HTTPHEADER}/UserPunish/remove`, // 解除处罚用户
     },
 
     // 心动速配

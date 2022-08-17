@@ -7,33 +7,34 @@
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="用户处罚" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
+                <el-form-item label="用户处罚" prop="user_number">
+                    <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
                 </el-form-item>
-                <el-form-item label="处罚类型" prop="region">
-                    <el-select v-model="ruleForm.region" placeholder="请选择">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+                <el-form-item label="处罚类型" prop="type">
+                    <el-select v-model="ruleForm.type" placeholder="请选择">
+                        <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="处罚时间" prop="region">
-                    <el-select v-model="ruleForm.region" placeholder="请选择">
+                <el-form-item label="处罚时间" prop="ban_duration">
+                    <el-select v-model="ruleForm.ban_duration" placeholder="请选择">
                         <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="处罚备注" prop="desc">
-                    <el-input type="textarea" :rows="4" v-model="ruleForm.desc"></el-input>
+                <el-form-item label="处罚备注" prop="remark">
+                    <el-input type="textarea" :rows="4" v-model="ruleForm.remark"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="resetForm('ruleForm')">确 定</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
+// 引入api
+import { save } from '@/api/risk'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
@@ -41,38 +42,26 @@ export default {
         return {
             dialogVisible: false,
             timeList: MAPDATA.DURATION, // 处罚时长
+            typeList: MAPDATA.USERPUNISHTYPELIST, // 处罚类型
             ruleForm: {
-                name: '',
-                region: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: ''
+                user_number: '',
+                type: null,
+                ban_duration: '',
+                remark: ''
             },
             rules: {
-                name: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-                ],
-                region: [
-                    { required: true, message: '请选择活动区域', trigger: 'change' }
-                ],
-                date1: [
-                    { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-                ],
-                date2: [
-                    { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+                user_number: [
+                    { required: true, message: '请输入用户处罚', trigger: 'blur' },
+                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
                 type: [
-                    { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+                    { required: true, message: '请选择处罚类型', trigger: 'change' }
                 ],
-                resource: [
-                    { required: true, message: '请选择活动资源', trigger: 'change' }
+                ban_duration: [
+                    { required: true, message: '请选择处罚时间', trigger: 'change' }
                 ],
-                desc: [
-                    { required: true, message: '请填写活动形式', trigger: 'blur' }
+                remark: [
+                    { required: true, message: '请输入处罚备注', trigger: 'blur' }
                 ]
             }
         };
@@ -82,10 +71,16 @@ export default {
             this.dialogVisible = false
         },
         // 提交
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+        async submitForm(formName) {
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    alert('submit!');
+                    let params = { ...this.ruleForm }
+                    let res = await save(params)
+                    if(res.code === 2000) {
+                        this.$message.success('添加成功')
+                        this.dialogVisible = false
+                        this.$emit('getList')
+                    }
                 } else {
                     console.log('error submit!!');
                     return false;

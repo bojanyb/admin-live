@@ -22,12 +22,8 @@ import SearchPanel from '@/components/SearchPanel/final.vue'
 import tableList from '@/components/tableList/TableList.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
-// 引入公共方法
-import { timeFormat } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
 export default {
     mixins: [mixins],
     components: {
@@ -89,7 +85,7 @@ export default {
                         prop: 'audio',
                         imgWidth: '50px',
                         imgHeight: '50px',
-                        minWidth: '120px'
+                        minWidth: '160px'
                     },
                     {
                         label: '排序权重',

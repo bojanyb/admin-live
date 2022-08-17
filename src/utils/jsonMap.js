@@ -1490,6 +1490,30 @@ const SERVICEAUDITTYPELIST = [
     }
 ]
 
+// 用户处罚 - 处罚类型
+const USERPUNISHTYPELIST = [
+    {
+        name: '封号',
+        value: 1
+    },
+    {
+        name: '封设备',
+        value: 2
+    }
+]
+
+// 用户处罚 - 状态
+const USERPUNISHSTATUSLIST = [
+    {
+        name: '生效中',
+        value: 1
+    },
+    {
+        name: '已解除',
+        value: 2
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -1559,5 +1583,7 @@ export default {
     BANNERSYSTEMTYPELIST,
     RISKSYSTEMTYPELIST,
     RISKSYSTEMROLELIST,
-    SERVICEAUDITTYPELIST
+    SERVICEAUDITTYPELIST,
+    USERPUNISHTYPELIST,
+    USERPUNISHSTATUSLIST
 }
