@@ -137,10 +137,10 @@
 							minWidth : '230px',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props : { type: 'primary'}, style: {
+									h('el-button', { props: { type: 'primary'}, style: {
 										display: params.row.status === 1 ? 'unset' : 'none'
 									}, on: {click:()=>{this.func(params.row.id, 2)}}},'同意'),
-									h('el-button', { props : { type: 'danger'}, style: {
+									h('el-button', { props: { type: 'danger'}, style: {
 										display: params.row.status === 1 ? 'unset' : 'none'
 									}, on: {click:()=>{this.func(params.row.id, 3)}}},'拒绝')
 								])

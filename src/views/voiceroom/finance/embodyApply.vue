@@ -107,8 +107,8 @@ export default {
                         width: '200px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.doCashFunc(params.row, 'success')}}}, '通过'),
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.doCashFunc(params.row, 'reject')}}}, '驳回')
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.doCashFunc(params.row, 'success')}}}, '通过'),
+                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.doCashFunc(params.row, 'reject')}}}, '驳回')
                             ])
                         }
                     }

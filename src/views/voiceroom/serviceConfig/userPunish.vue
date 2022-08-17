@@ -133,7 +133,7 @@ export default {
                     {
                         label: '操作',
                         render: (h, params) => {
-                            return h('el-button', { props : { type: 'danger'}, style: {
+                            return h('el-button', { props: { type: 'danger'}, style: {
                                 display: params.row.status === 1 ? 'unset' : 'none'
                             }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '解除')
                         }

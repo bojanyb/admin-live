@@ -142,10 +142,10 @@ export default {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'primary'}, style: {
+                                h('el-button', { props: { type: 'primary'}, style: {
                                     display: params.row.status === 0 ? 'unset' : 'none'
                                 }, on: {click:()=>{this.audit(params.row.id, 1)}}}, '通过'),
-                                h('el-button', { props : { type: 'danger'}, style: {
+                                h('el-button', { props: { type: 'danger'}, style: {
                                     display: params.row.status === 0 ? 'unset' : 'none'
                                 }, on: {click:()=>{this.audit(params.row.id, 2)}}}, '拒绝')
                             ])

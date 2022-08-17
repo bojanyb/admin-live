@@ -75,8 +75,8 @@
 							minWidth: '120px',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.manageClick(params.row.id)}}}, '处理'),
-									h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.funcClick(params.row.id)}}}, '忽略'),
+									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.manageClick(params.row.id)}}}, '处理'),
+									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.funcClick(params.row.id)}}}, '忽略'),
 								])
 							}
 						}

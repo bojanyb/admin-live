@@ -123,12 +123,12 @@ export default {
                         minWidth: '300px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.see(params.row)}}},'查看'),
-                                h('el-button', { props : { type: 'danger'}, style: {
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.see(params.row)}}},'查看'),
+                                h('el-button', { props: { type: 'danger'}, style: {
                                     display: new Date().getTime() < params.row.end_time * 1000 ? 'unset' : 'none'
                                 }, on: {click:()=>{this.freeze(params.row)}}}, '冻结'),
-                                h('el-button', { props : { type: 'danger'}, style: {
+                                h('el-button', { props: { type: 'danger'}, style: {
                                     display: new Date().getTime() > params.row.end_time * 1000 ? 'unset' : 'none'
                                 }, on: {click:()=>{this.deleteFunc(params.row)}}},'删除'),
                             ])

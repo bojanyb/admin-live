@@ -99,10 +99,10 @@
 							label: '操作',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props : { type: 'primary'}, style: {
+									h('el-button', { props: { type: 'primary'}, style: {
 										display: params.row.status == 1 ? 'unset' : 'none'
 									}, on: {click:()=>{this.editFunc(params.row)}}},'编辑'),
-									h('el-button', { props : { type: 'danger'}, style: {
+									h('el-button', { props: { type: 'danger'}, style: {
 										display: params.row.status == 3 ? 'unset' : 'none'
 									}, on: {click:()=>{this.deblocking(params.row)}}},'解封'),
 								])

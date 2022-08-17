@@ -78,8 +78,8 @@
 							label: '操作',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.passFunc(params.row.id, 1)}}}, '通过'),
-									h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.reject(params.row.id, 2)}}}, '拒绝')
+									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.passFunc(params.row.id, 1)}}}, '通过'),
+									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.reject(params.row.id, 2)}}}, '拒绝')
 								])
 							}
 						}

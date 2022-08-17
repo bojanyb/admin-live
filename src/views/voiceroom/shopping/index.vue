@@ -98,11 +98,11 @@ export default {
                         minWidth: '180px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),
-                                h('el-button', { props : { type: 'danger'}, style: {
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),
+                                h('el-button', { props: { type: 'danger'}, style: {
                                     display: params.row.status === 1 ? 'none' : 'unset'
                                 }, on: {click:()=>{this.down(params.row, 1)}}},'上架'),
-                                h('el-button', { props : { type: 'danger'}, style: {
+                                h('el-button', { props: { type: 'danger'}, style: {
                                     display: params.row.status === 2 ? 'none' : 'unset'
                                 }, on: {click:()=>{this.down(params.row, 2)}}},'下架')
                             ])

@@ -180,7 +180,7 @@ export default {
                     label: '操作',
                     render: (h, params) => {
                         return h('div', [
-                            h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改')
+                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改')
                         ])
                     }
                 }
@@ -191,8 +191,8 @@ export default {
                     minWidth: '120px',
                     render: (h, params) => {
                         return h('div', [
-                            h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
-                            h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.closeLive(params.row)}}}, '关播')
+                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
+                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.closeLive(params.row)}}}, '关播')
                         ])
                     }
                 }

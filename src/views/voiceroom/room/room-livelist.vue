@@ -132,8 +132,8 @@
 							minWidth : '230px',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.liveEditFunc(params.row)}}},'编辑'),
-									h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.dissolveFunc(params.row)}}},'解散')
+									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.liveEditFunc(params.row)}}},'编辑'),
+									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.dissolveFunc(params.row)}}},'解散')
 								])
 							}
 						}

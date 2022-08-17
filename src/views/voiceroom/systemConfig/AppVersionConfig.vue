@@ -165,7 +165,7 @@ import ossFile from './../components/ossFile.vue'
 					columns: [
 						{
 							label: '版本号',
-							props : 'version',
+							prop: 'version',
 							width: '120px',
 							render: (h, params) => {
 								return h('span', params.row.version)
@@ -173,7 +173,7 @@ import ossFile from './../components/ossFile.vue'
 						},
 						{
 							label: '平台',
-							props : 'platform',
+							prop: 'platform',
 							width: '120px',
 							render: (h, params) => {
 								let platformName = ""
@@ -193,21 +193,21 @@ import ossFile from './../components/ossFile.vue'
 						},
 						{
 							label: '更新内容',
-							props : 'content',
+							prop: 'content',
 							render: (h, params) => {
 								return h('span', params.row.content)
 							}
 						},
 						{
 							label: '文件下载链接',
-							props : 'download_url',
+							prop: 'download_url',
 							render: (h, params) => {
 								return h('span', params.row.download_url)
 							}
 						},
 						{
 							label: '是否强制更新',
-							props : 'download_url',
+							prop: 'download_url',
 							width: '120px',
 							render: (h, params) => {
 								let isMandatoryText = ""
@@ -224,7 +224,7 @@ import ossFile from './../components/ossFile.vue'
 						},
 						{
 							label: '创建时间',
-							props : 'start_time',
+							prop: 'start_time',
 							width: '180px',
 							render: (h, params) => {
 								return h('span', params.row.start_time > 0 ? moment(params.row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "")
@@ -232,11 +232,11 @@ import ossFile from './../components/ossFile.vue'
 						},
 						{
                         label: '操作',
-                        width : '260',
+                        width: '260',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.handleEdit(params.row)}}},'修改'),
-                                h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.handleDelete(params.row.id)}}},'删除')])
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.handleEdit(params.row)}}},'修改'),
+                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.handleDelete(params.row.id)}}},'删除')])
                         }
                     },
 					]

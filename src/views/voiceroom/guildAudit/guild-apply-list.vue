@@ -127,10 +127,10 @@ export default {
                         minWidth: '230px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'primary'}, style: {
+                                h('el-button', { props: { type: 'primary'}, style: {
                                     display: params.row.status === 1 ? 'unset' : 'none'
                                 }, on: {click:()=>{this.clickFunc(params.row.id, 2)}}}, '通过'),
-                                h('el-button', { props : { type: 'danger'}, style: {
+                                h('el-button', { props: { type: 'danger'}, style: {
                                     display: params.row.status === 1 ? 'unset' : 'none'
                                 }, on: {click:()=>{this.clickFunc(params.row.id, 3)}}}, '驳回')
                             ])

@@ -116,8 +116,8 @@
 							width : '200px',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.audioFunc(params.row, 1)}}}, '通过'),
-									h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.audioFunc(params.row, 2)}}},'驳回')
+									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.audioFunc(params.row, 1)}}}, '通过'),
+									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.audioFunc(params.row, 2)}}},'驳回')
 								])
 							}
 						}

@@ -127,8 +127,8 @@ export default {
             width: '200px',
             render: (h, params) => {
               return h('div', [
-                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.FeedBackFunc(params.row, 2)}}},'处理'),
-                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.loseSight(params.row, 3)}}},'忽略')
+                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.FeedBackFunc(params.row, 2)}}},'处理'),
+                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.loseSight(params.row, 3)}}},'忽略')
               ])
             }
           }

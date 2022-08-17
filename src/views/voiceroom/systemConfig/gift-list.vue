@@ -168,10 +168,10 @@
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props : { type: 'primary'}, style: {
+									h('el-button', { props: { type: 'primary'}, style: {
 										display: params.row.status === 1 ? 'unset' : 'none'
 									}, on: {click:()=>{this.update(params.row)}}}, '修改')
-									// h('el-button', { props : { type: 'danger'}, style: {
+									// h('el-button', { props: { type: 'danger'}, style: {
 									// 	display: params.row.status === 2 ? 'unset' : 'none'
 									// }, on: {click:()=>{this.handleEdit(params.row)}}}, '删除')
 								])

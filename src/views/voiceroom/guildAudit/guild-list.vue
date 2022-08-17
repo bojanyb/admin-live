@@ -141,9 +141,9 @@
 							minWidth: '300px',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.details(params.row)}}}, '明细'),
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '编辑'),
-									h('el-button', { props : { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '解散公会')
+									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.details(params.row)}}}, '明细'),
+									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '编辑'),
+									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '解散公会')
 								])
 							}
 						}

@@ -79,7 +79,7 @@
 							minWidth: '200px',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),
+									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),
 									h('el-button', { on: {click:()=>{this.see(params.row)}}},'查看')
 								])
 							}

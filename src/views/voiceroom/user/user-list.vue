@@ -184,7 +184,7 @@
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '编辑')
+									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '编辑')
 								])
 							}
 						}

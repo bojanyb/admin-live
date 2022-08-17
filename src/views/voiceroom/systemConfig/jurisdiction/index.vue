@@ -85,9 +85,9 @@ export default {
                         width: '300px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'编辑'),
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.see(params.row)}}},'详情'),
-                                h('el-button', { props : { type: 'danger'}, style: {
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'编辑'),
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.see(params.row)}}},'详情'),
+                                h('el-button', { props: { type: 'danger'}, style: {
                                     display: params.row.username === 'admin' ? 'none' : 'unset'
                                 }, on: {click:()=>{this.deleteData(params.row)}}},'删除')
                             ])

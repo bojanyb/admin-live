@@ -201,7 +201,7 @@ export default {
                     {
                         label: '活动名称',
                         minWidth: '100px',
-                        props : 'name',
+                        prop: 'name',
                         render: (h, params) => {
                             return h('span', params.row.name)
                         }
@@ -209,7 +209,7 @@ export default {
                     {
                         label: '礼物种类数量',
                         minWidth: '120px',
-                        props : 'gift_count',
+                        prop: 'gift_count',
                         render: (h, params) => {
                             return h('span', params.row.gift_count)
                         }
@@ -217,7 +217,7 @@ export default {
                     {
                         label: '投入',
                         minWidth: '100px',
-                        props : 'in',
+                        prop: 'in',
                         render: (h, params) => {
                             return h('span', params.row.in)
                         }
@@ -225,7 +225,7 @@ export default {
                     {
                         label: '产出',
                         minWidth: '100px',
-                        props : 'out',
+                        prop: 'out',
                         render: (h, params) => {
                             return h('span', params.row.out)
                         }
@@ -233,14 +233,14 @@ export default {
                     {
                         label: '单次消耗喵粮数',
                         minWidth: '120px',
-                        props : 'cost',
+                        prop: 'cost',
                         render: (h, params) => {
                             return h('span', params.row.cost)
                         }
                     },
                     {
                         label: '活动状态',
-                        props : 'status',
+                        prop: 'status',
                         width : '80',
                         render: (h, params) => {
                             let newDate = parseInt(new Date().getTime() / 1000);
@@ -261,7 +261,7 @@ export default {
                     {
                         label: '开始时间',
                         minWidth: '160px',
-                        props : 'start_time',
+                        prop: 'start_time',
                         render: (h, params) => {
                             return h('span', params.row.start_time > 0 ? moment(params.row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "")
                         }
@@ -269,19 +269,19 @@ export default {
                     {
                         label: '结束时间',
                         minWidth: '160px',
-                        props : 'end_time',
+                        prop: 'end_time',
                         render: (h, params) => {
                             return h('span', params.row.end_time > 0 ? moment(params.row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "")
                         }
                     },
                     {
                         label: '操作',
-                        width : '260',
+                        width: '260',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.hanldeEdit(params.row)}}},'修改'),
-                                h('el-button', { props : { type: 'primary'}, on: {click:()=>{this.hanldeShow(params.row)}}},'查看'),
-                                h('el-button', { props : { type: params.row.status == 1 ? 'danger' : 'success'}, on: {click:()=>{this.handleChange(params.row)}}},(params.row.status == 1 ? '暂停' : '开始')),
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.hanldeEdit(params.row)}}},'修改'),
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.hanldeShow(params.row)}}},'查看'),
+                                h('el-button', { props: { type: params.row.status == 1 ? 'danger' : 'success'}, on: {click:()=>{this.handleChange(params.row)}}},(params.row.status == 1 ? '暂停' : '开始')),
                             ])
                         }
                     },
