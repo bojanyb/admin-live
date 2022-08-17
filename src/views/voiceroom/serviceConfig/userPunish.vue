@@ -115,8 +115,11 @@ export default {
                     },
                     {
                         label: '解除时间',
-                        prop: 'ban_duration',
-                        minWidth: '100px'
+                        prop: 'remove_time',
+                        minWidth: '100px',
+                        render: (h, params) => {
+                            return h('span', params.row.remove_time || '无')
+                        }
                     },
                     {
                         label: '备注',
