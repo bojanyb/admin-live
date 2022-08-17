@@ -77,9 +77,7 @@ export default {
                 columns: [
                     {
                         label: '时间',
-                        render: (h, params) => {
-                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-                        }
+                        prop: 'create_time'
                     },
                     {
                         label: '用户',
