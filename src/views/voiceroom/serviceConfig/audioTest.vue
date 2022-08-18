@@ -157,7 +157,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                type: this.tabIndex === '0' ? 1 : 2,
+                type: this.tabIndex === '0' ? 2 : 1,
                 risk_type: s.risk_type,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
