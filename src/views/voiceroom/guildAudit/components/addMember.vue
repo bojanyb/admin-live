@@ -12,7 +12,7 @@
             <div class="formBox">
                 <div class="inputBox">
                     <el-input v-model="user_id" placeholder="请输入用户ID"></el-input>
-                    <el-button type="success" @keyup.native.enter="addUser" @click="addUser">查询</el-button>
+                    <el-button type="success" @keyup.native.enter="addUser" @click="addUser">邀请</el-button>
                 </div>
                 <!-- <div class="userListBox">
                     <div class="userBox" v-for="(item, index) in userList" :key="item.id">
