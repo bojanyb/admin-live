@@ -5,7 +5,6 @@
         :visible.sync="dialogVisible"
         width="600px"
         :before-close="handleClose"
-        top="5vh"
         :close-on-click-modal="false"
         :show-close="false"
         @closed="closed">
