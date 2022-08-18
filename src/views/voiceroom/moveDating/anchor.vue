@@ -24,6 +24,8 @@ import tableList from '@/components/tableList/TableList.vue'
 import REQUEST from '@/request/index.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 export default {
     mixins: [mixins],
     components: {
@@ -71,11 +73,16 @@ export default {
                     },
                     {
                         label: '用户性别',
-                        prop: 'user_number'
+                        render: (h, params) => {
+                            let data = MAPDATA.SEXLIST.find(item => { return item.value === params.row.sex })
+                            return h('span', data ? data.name : '无')
+                        }
                     },
                     {
                         label: '个性签名',
-                        prop: 'user_number'
+                        render: (h, params) => {
+                            return h('span', params.row.autograph || '无')
+                        }
                     },
                     {
                         label: '操作',
