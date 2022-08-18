@@ -132,7 +132,7 @@ export default {
             }).then(async () => {
                 let res = await rmHeartAnchor({ user_number })
                 if(res.code === 2000) {
-                    this.$message.success('删除成功')
+                    this.$success('删除成功')
                     this.getList()
                 }
             }).catch(() => {});

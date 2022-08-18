@@ -43,6 +43,16 @@ Vue.use(VideoPlayer)
 // 	} = require('../mock')
 // 	mockXHR()
 // }
+import { success, error, warning } from '@/utils/common'
+// 成功
+Vue.prototype.$success = success
+
+// 错误
+Vue.prototype.$error = error
+
+// 警告
+Vue.prototype.$warning = warning
+
 
 Vue.use(Element, {
 	size: Cookies.get('size') || 'medium' // set element-ui default size

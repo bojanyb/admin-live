@@ -1,5 +1,7 @@
 // 引入格式化时间包
 import moment from 'moment'
+// 引入提示组件
+import { Notification } from 'element-ui';
 
 // 格式化日期
 export function timeFormat(val, format = 'YYYY-MM-DD HH:mm:ss', boolean) {
@@ -100,3 +102,32 @@ export function isProportion(w, h, width, height) {
     return false
 }
 
+// 成功提示
+export function success(msg) {
+    Notification({
+		type: 'success',
+		title: '成功',
+		message: msg,
+		duration: 1500
+	})
+}
+
+// 错误提示
+export function error(msg) {
+    Notification({
+		type: 'error',
+		title: '失败',
+		message: msg,
+		duration: 1500
+	})
+}
+
+// 警告提示
+export function warning(msg) {
+    Notification({
+		type: 'warning',
+		title: '警告',
+		message: msg,
+		duration: 1500
+	})
+}

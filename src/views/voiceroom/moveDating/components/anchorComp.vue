@@ -39,12 +39,12 @@ export default {
         // 添加心动主播
         async addAnchor() {
             if(!this.user_number) {
-                this.$message.error('请输入用户ID')
+                this.$warning('请输入用户ID')
                 return false
             }
             let res = await addHeartAnchor({ user_number: this.user_number })
             if(res.code === 2000) {
-                this.$message.success('新增成功')
+                this.$success('新增成功')
                 this.user_number = ''
                 this.$emit('getList')
             }

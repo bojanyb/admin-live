@@ -1,13 +1,16 @@
 <template>
     <div class="nobility-privilegeAdd-box">
-        <el-dialog
+        <drawer 
+        size="470px"
         :title="title"
-        :visible.sync="dialogVisible"
-        width="450px"
-        :before-close="handleClose"
-        :close-on-click-modal="false"
-        @closed="closed">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
+        ref="drawer"
+        :isShowUpdate="true"
+        @cancel="cancel"
+        @submitForm="submitForm"
+        @closed="closed"
+        :disabled="disabled"
+        @update="update">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <el-form-item label="贵族名称" prop="noble_name">
                     <el-input v-model="ruleForm.noble_name" :disabled="disabled" placeholder="请输入贵族名称"></el-input>
                 </el-form-item>
@@ -31,25 +34,27 @@
                     <el-input v-model="ruleForm.reduce_value" :disabled="disabled" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入未保级衰减值"></el-input>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="resetForm('ruleForm')">取 消</el-button>
-                <el-button type="primary" :disabled="disabled" @click="submitForm('ruleForm')">确 定</el-button>
-            </span>
-        </el-dialog>
+        </drawer>
     </div>
 </template>
 
 <script>
+// 引入抽屉组件
+import drawer from '@/components/drawer/index'
 // 引入api
 import { save, detail } from '@/api/nobility.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
+    components: {
+        drawer
+    },
     data() {
         return {
             dialogVisible: false,
             privilegeList: MAPDATA.NOBILITYPRIVILEGELIST, // 特权列表
             status: 'add', // 状态
+            oldParams: {}, // 老数据
             ruleForm: {
                 noble_name: '',
                 growth_value: '',
@@ -102,8 +107,8 @@ export default {
     methods: {
         // 获取数据
         async loadParams(status, row) {
+            this.openComp()
             this.status = status
-            this.dialogVisible = true
             if(status !== 'add') {
                 let res = await detail({ id: row.id })
                 let params = res.data
@@ -112,6 +117,24 @@ export default {
                 })
                 this.toNumber(params)
                 this.$set(this.$data, 'ruleForm', params)
+            }
+            this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
+        },
+        openComp(status = true) {
+            this.$refs.drawer.loadParams(status)
+        },
+        // 取消
+        cancel() {
+            if(JSON.stringify(this.oldParams) !== JSON.stringify(this.ruleForm)) { // 记录数据 - 有改动就提示
+                this.$confirm('关闭弹窗将不会保留您的更改, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.openComp(false)
+                }).catch(() => {});
+            } else {
+                this.openComp(false)
             }
         },
         // 转数字
@@ -124,6 +147,10 @@ export default {
         // 关闭弹窗
         handleClose() {
             this.dialogVisible = false
+        },
+        // 修改
+        update() {
+            this.status = 'update'
         },
         // 提交
         async submitForm(formName) {
@@ -142,13 +169,9 @@ export default {
                     this.toNumber(params)
                     let res = await save(params)
                     if(res.code === 2000) {
-                        if(this.status === 'add') {
-                            this.$message.success('新增成功')
-                        } else {
-                            this.$message.success('修改成功')
-                        }
+                        this.$success('修改成功')
                     }
-                    this.dialogVisible = false
+                    this.openComp(false)
                     this.$emit('getList')
                 } else {
                     console.log('error submit!!');

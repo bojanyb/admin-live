@@ -4,7 +4,7 @@
 			<el-button type="success" @click="add">新增</el-button>
         </div> -->
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
 
 		<!-- 新增 - 修改 - 查看 -->
 		<privilegeAdd v-if="isDestoryComp" ref="privilegeAdd" @destoryComp="destoryComp" @getList="getList"></privilegeAdd>
@@ -76,11 +76,12 @@
 						},
 						{
 							label: '操作',
-							minWidth: '200px',
+							minWidth: '150px',
+							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),
-									h('el-button', { on: {click:()=>{this.see(params.row)}}},'查看')
+									// h('el-button', { on: {click:()=>{this.see(params.row)}}},'查看')
 								])
 							}
 						}
@@ -117,7 +118,7 @@
 				this.load('update', row)
 			},
 			// 查看
-			see(row) {
+			rowClick(row) {
 				this.load('see', row)
 			},
 			load(status, row) {
