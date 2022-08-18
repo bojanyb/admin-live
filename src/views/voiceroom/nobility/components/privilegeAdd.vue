@@ -51,7 +51,6 @@ export default {
     },
     data() {
         return {
-            dialogVisible: false,
             privilegeList: MAPDATA.NOBILITYPRIVILEGELIST, // 特权列表
             status: 'add', // 状态
             oldParams: {}, // 老数据
@@ -144,10 +143,6 @@ export default {
                 params[item] = Number(params[item])
             })
         },
-        // 关闭弹窗
-        handleClose() {
-            this.dialogVisible = false
-        },
         // 修改
         update() {
             this.status = 'update'
@@ -178,10 +173,6 @@ export default {
                     return false;
                 }
             });
-        },
-        // 重置
-        resetForm() {
-            this.handleClose()
         },
         // 销毁组件
         closed() {

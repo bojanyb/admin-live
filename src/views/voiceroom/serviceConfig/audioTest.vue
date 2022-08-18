@@ -76,11 +76,9 @@ export default {
                         change: v => {
                             this.emptyDateTime()
                             this.setDateTime(v)
-                            this.getList()
                         },
                         selectChange: (v, key) => {
                             this.emptyDateTime()
-                            this.getList()
                         }
                     }
                 }
@@ -100,6 +98,7 @@ export default {
                     },
                     {
                         label: '用户',
+                        minWidth: '90px',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.nickname),
