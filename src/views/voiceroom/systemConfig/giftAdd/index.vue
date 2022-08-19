@@ -37,6 +37,16 @@
                         <el-radio v-for="item in playTypeList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <el-form-item label="显示类型" prop="noble_level">
+                    <el-select v-model="ruleForm.noble_level" placeholder="请选择">
+                        <el-option
+                        v-for="item in showList"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="礼物图片" prop="gift_photo">
                     <uploadImg ref="uploadImg" v-model="ruleForm.gift_photo" :imgUrl="ruleForm.gift_photo" name="gift_photo" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
@@ -115,6 +125,7 @@ export default {
             playTypeList: MAPDATA.SYSTEMGIFTPLAYTYPELIST, // 播放类型
             classifyList: MAPDATA.SYSTEMGIFTCLASSIFYLIST, // 礼物分类
             nobilityList: [], // 贵族等级
+            showList: MAPDATA.GIFTSHOWTYPELIST, // 显示类型
             status: 'add', // 当前类型
             ruleForm: {
                 gift_name: '',

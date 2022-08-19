@@ -16,7 +16,7 @@ import systemConfigRouter from './modules/systemConfig/system'
 import userRouter from './modules/user/user'
 import guildAuditRouter from './modules/guild/guildAudit'
 import giveAwayRouter from './modules/giveAway/giveAway'
-import activityRouter from "./modules/activity/activity.js"
+import activityRouter from "./modules/activity/index"
 import platformActivityRouter from "./modules/platformActivity/index.js"
 import userActivity from "./modules/userActivity/index.js"
 
@@ -99,6 +99,7 @@ export const asyncRoutes = [
 	roomConfigRouter,
 	nobilityRouter,
 	blockedRouter,
+	activityRouter,
 	// chartsRouter,
 	userRouter,
 	voiceroomRouter,
