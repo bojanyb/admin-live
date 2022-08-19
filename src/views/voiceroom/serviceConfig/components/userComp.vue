@@ -7,7 +7,7 @@
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="用户处罚" prop="user_number">
+                <el-form-item label="用户ID" prop="user_number">
                     <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
                 </el-form-item>
                 <el-form-item label="处罚类型" prop="type">
@@ -51,7 +51,7 @@ export default {
             },
             rules: {
                 user_number: [
-                    { required: true, message: '请输入用户处罚', trigger: 'blur' },
+                    { required: true, message: '请输入用户ID', trigger: 'blur' },
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
                 type: [
