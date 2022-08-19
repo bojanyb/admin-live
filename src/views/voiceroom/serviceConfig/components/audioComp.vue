@@ -66,7 +66,7 @@ export default {
             this.$refs.drawer.loadParams(status)
         },
         cancel() {
-
+            this.openComp(false)
         }
     }
 }
