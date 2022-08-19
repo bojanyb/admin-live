@@ -4,7 +4,7 @@
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showAdd="true" @onReset="reset" @onSearch="onSearch" @add="add">
-                <el-button slot="right">主要按钮</el-button>
+                <el-button slot="right" v-if="tabIndex === '0'" type="primary" style="marginBottom: 20px;" @click="open">首充金额设置</el-button>
             </SearchPanel>
         </div>
 
@@ -15,10 +15,15 @@
 
         <!-- 首充用户详情组件 -->
         <userComp v-if="isDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList"></userComp>
+
+        <!-- 首充金额弹窗 -->
+        <amountComp v-if="isDestoryComp" ref="amountComp" @destoryComp="destoryComp"></amountComp>
     </div>
 </template>
 
 <script>
+// 首充金额弹窗
+import amountComp from './components/amountComp/index.vue'
 // 首充配置详情组件
 import firstChangeComp from './components/firstChangeComp/index.vue'
 // 首充用户详情组件
@@ -45,7 +50,8 @@ export default {
         menuComp,
 
         firstChangeComp,
-        userComp
+        userComp,
+        amountComp
     },
     data() {
         return {
@@ -241,6 +247,13 @@ export default {
                 } else {
                     this.$refs.userComp.loadParams(status, row)
                 }
+            }, 50);
+        },
+        // 首充金额弹窗
+        open() {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.amountComp.loadParams()
             }, 50);
         },
         // 查询

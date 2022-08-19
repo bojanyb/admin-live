@@ -5,6 +5,7 @@
   "author": "Pan <panfree23@gmail.com>",
   "scripts": {
     "dev": "vue-cli-service serve --dev",
+    "dev.info": "vue-cli-service serve --info",
     "dev.test": "vue-cli-service serve --test",
     "dev.pre": "vue-cli-service serve --pre",
     "dev.prod": "vue-cli-service serve --prod",

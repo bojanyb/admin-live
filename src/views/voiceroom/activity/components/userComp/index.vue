@@ -67,6 +67,8 @@ export default {
         return {
             status: 'add', // 当前状态
             oldParams: {}, // 老数据
+            value1: '',
+            guildTypeList: [],
             ruleForm: {
                 id: null,
                 img: '',

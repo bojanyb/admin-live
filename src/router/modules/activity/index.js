@@ -6,7 +6,7 @@ const activityRouter = {
 	path: '/activity',
 	component: Layout,
 	redirect: 'noRedirect',
-	name: 'Charts',
+	name: 'activity',
 	meta: {
 		title: '活动管理',
 		icon: 'tree'
