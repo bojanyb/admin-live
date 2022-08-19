@@ -37,8 +37,8 @@
                         <el-radio v-for="item in playTypeList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="显示类型" prop="noble_level">
-                    <el-select v-model="ruleForm.noble_level" placeholder="请选择">
+                <el-form-item label="显示类型" prop="is_hide">
+                    <el-select v-model="ruleForm.is_hide" placeholder="请选择显示类型">
                         <el-option
                         v-for="item in showList"
                         :key="item.value"
@@ -141,7 +141,8 @@ export default {
                 sort: null,
                 gift_desc: '',
                 gift_class: [],
-                noble_level: ''
+                noble_level: '',
+                is_hide: null
             },
             rules: {
                 gift_name: [
@@ -159,6 +160,9 @@ export default {
                 ],
                 play_type: [
                     { required: true, message: '请选择礼物播放类型', trigger: 'change' }
+                ],
+                is_hide: [
+                    { required: true, message: '请选择显示类型', trigger: 'change' }
                 ],
                 gift_photo: [
                     { required: true, message: '请上传礼物图片', trigger: 'change' }
