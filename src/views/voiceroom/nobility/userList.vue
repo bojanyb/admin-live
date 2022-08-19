@@ -1,13 +1,17 @@
 <template>
 	<div class="nobility-privilege-box">
-		<div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
-        </div>
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+		
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+
+		<!-- 用户详情组件 -->
+		<userComp ref="userComp"></userComp>
 	</div>
 </template>
 
 <script>
+	// 引入详情组件
+	import userComp from './components/userComp.vue'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -21,7 +25,8 @@
 		mixins: [mixins],
 		components: {
 			SearchPanel,
-			tableList
+			tableList,
+			userComp
 		},
 		data() {
 			return {
@@ -109,6 +114,10 @@
 			// 查询
 			onSearch() {
 				this.getList()
+			},
+			// 查看
+			rowClick(row) {
+				this.$refs.userComp.loadParams(row)
 			}
 		}
 	}

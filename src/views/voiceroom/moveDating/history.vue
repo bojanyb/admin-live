@@ -4,30 +4,34 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+
+        <!-- 详情组件 -->
+        <historyComp ref="historyComp"></historyComp>
     </div>
 </template>
 
 <script>
+// 引入详情组件
+import historyComp from './components/historyComp.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
-// 引入公共方法
-import { timeFormat } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 export default {
     mixins: [mixins],
     components: {
         SearchPanel,
-        tableList
+        tableList,
+        historyComp
     },
     data() {
         return {
-            isDestoryComp: false // 是否销毁组件
+
         }
     },
     computed: {
@@ -60,11 +64,9 @@ export default {
                         change: v => {
                             this.emptyDateTime()
                             this.setDateTime(v)
-                            this.getList()
                         },
                         selectChange: (v, key) => {
                             this.emptyDateTime()
-                            this.getList()
                         }
                     }
                 }
@@ -149,16 +151,9 @@ export default {
         onSearch() {
             this.getList()
         },
-        // 新增
-        add() {
-            this.isDestoryComp = true
-            setTimeout(() => {
-                this.$refs.addMember.dialogVisible = true
-            }, 50);
-        },
-        // 销毁组件
-        destoryComp() {
-            this.isDestoryComp = false
+        // 查看
+        rowClick(row) {
+            this.$refs.historyComp.loadParams(row)
         }
     }
 }

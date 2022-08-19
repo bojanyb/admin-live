@@ -1,24 +1,25 @@
 <template>
     <div class="messageComp-box">
-        <el-dialog
-        title="新增活动通知"
-        :visible.sync="dialogVisible"
-        width="450px"
-        :before-close="handleClose"
-        :close-on-click-modal="false"
-        @closed="closed">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
+        <drawer 
+        size="470px"
+        :title="title"
+        ref="drawer"
+        @cancel="cancel"
+        @submitForm="submitForm"
+        @closed="closed"
+        :disabled="disabled">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <el-form-item label="活动标题" prop="title">
-                    <el-input v-model="ruleForm.title"></el-input>
+                    <el-input v-model="ruleForm.title" :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label="活动描述" prop="describe">
-                    <el-input v-model="ruleForm.describe"></el-input>
+                    <el-input v-model="ruleForm.describe" :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label="活动配图" prop="image_url">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.image_url" :imgUrl="ruleForm.image_url" name="image_url" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
+                    <uploadImg ref="uploadImg" :disabled="disabled" v-model="ruleForm.image_url" :imgUrl="ruleForm.image_url" name="image_url" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
                 <el-form-item label="活动链接" prop="uri" :rules="navToUriParams">
-                    <el-input v-model="ruleForm.nav_to.uri"></el-input>
+                    <el-input v-model="ruleForm.nav_to.uri" :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label="开始推送时间" prop="start_time">
                     <el-date-picker
@@ -26,30 +27,30 @@
                     type="datetime"
                     format="yyyy-MM-dd HH:mm:ss"
                     value-format="timestamp"
+                    :disabled="disabled"
                     placeholder="选择开始推送时间">
                     </el-date-picker>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-            </span>
-        </el-dialog>
+        </drawer>
     </div>
 </template>
 
 <script>
+// 引入抽屉组件
+import drawer from '@/components/drawer/index'
 // 引入api
 import { messageAdd } from '@/api/videoRoom'
 // 引入上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
 export default {
     components: {
-        uploadImg
+        uploadImg,
+        drawer
     },
     data() {
         return {
-            dialogVisible: false,
+            status: 'add',
             ruleForm: {
                 title: '',
                 image_url: '',
@@ -59,6 +60,7 @@ export default {
                 },
                 start_time: null
             },
+            oldParams: {}, // 老数据
             rules: {
                 title: [
                     { required: true, message: '请输入活动标题', trigger: 'blur' },
@@ -77,6 +79,19 @@ export default {
         };
     },
     computed: {
+        disabled() {
+            if(this.status === 'see') {
+                return true
+            }
+            return false
+        },
+        title() {
+            if(this.status === 'add') {
+                return '新增活动通知'
+            } else if(this.status === 'see') {
+                return '查看活动通知'
+            }
+        },
         navToUriParams() { // 活动链接验证
             let params = {}
             params = {
@@ -94,8 +109,33 @@ export default {
         }
     },
     methods: {
-        handleClose() {
-            this.dialogVisible = false
+        // 获取参数
+        loadParams(status, row) {
+            this.openComp()
+            this.status = status
+            if(status !== 'add') {
+                let params = JSON.parse(JSON.stringify(row))
+                params.start_time = params.start_time * 1000
+                this.$set(this.$data, 'ruleForm', params)
+            }
+            this.oldParams = JSON.parse(JSON.stringify(this.ruleForm)) // 复制数据
+        },
+        openComp(status = true) {
+            this.$refs.drawer.loadParams(status)
+        },
+        // 取消
+        cancel() {
+            if(JSON.stringify(this.oldParams) !== JSON.stringify(this.ruleForm)) { // 记录数据 - 有改动就提示
+                this.$confirm('关闭弹窗将不会保留您的更改, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.openComp(false)
+                }).catch(() => {});
+            } else {
+                this.openComp(false)
+            }
         },
         // 提交
         async submitForm(formName) {
@@ -106,9 +146,9 @@ export default {
                     params.nav_to = JSON.stringify(params.nav_to)
                     let res = await messageAdd(params)
                     if(res.code === 2000) {
-                        this.$message.success('新增成功')
+                        this.$success('新增成功')
                     }
-                    this.dialogVisible = false
+                    this.openComp(false)
                     this.$emit('getList')
                 } else {
                     console.log('error submit!!');

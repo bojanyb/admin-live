@@ -561,5 +561,24 @@ export default {
     .el-form-item__label-wrap {
       margin-left: 0px !important;
     }
+
+    .el-input {
+      >input {
+        background: #F5F7FA;
+        border: none;
+        border-radius: 0;
+      }
+    }
+    .el-date-editor {
+      border: none;
+      background: #F5F7FA;
+      border-radius: 0;
+      >input {
+        background: #F5F7FA;
+      }
+      .el-input__icon {
+        line-height: 32px;
+      }
+    }
 	}
 </style>

@@ -1,10 +1,13 @@
 <template>
   <article class="share-table-list-box">
-    <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe" :border="!cfgs.border"
+    <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe"
     :default-expand-all="cfgs.defaultExpandAll"
     row-key="id"
     :tree-props="{children: cfgs.children}"
-      ref="table" @sort-change="handleSortChange" @selection-change="handleSelectionChange" v-loading="loading">
+      ref="table" @sort-change="handleSortChange" @selection-change="handleSelectionChange"
+      @row-click="rowClick"
+      v-loading="loading"
+      :row-style="{'cursor':'pointer'}">
       <!-- checkbox -->
       <el-table-column type="selection" width="55" align="center" v-if="cfgs.isShowCheckbox"></el-table-column>
       <!-- 表格序号 -->
@@ -127,6 +130,12 @@
           return index === item.disabledIndex
         }
         return item.disabled
+      },
+      // 当某一行被点击
+      rowClick(row, column) {
+        if(column.label !== '操作') {
+          this.$emit('rowClick', row, column)
+        }
       },
       handleSortChange(val) {
         if (!val.order) {
@@ -304,7 +313,7 @@
       thead th {
         padding: 0;
         height: 60px;
-        // background: rgba(0, 0, 0, 1);
+        background: #F5F7FA;
         >.cell {
           font-size: 14px;
           font-weight: 600;
@@ -314,6 +323,7 @@
       tbody td {
         padding: 0;
         height: 55px;
+        border-right: 1px solid #dfe6ec;
         >.cell {
           font-size: 14px;
           font-weight: 400;
@@ -322,6 +332,11 @@
             color: #D77E50;
             cursor: pointer;
           }
+        }
+      }
+      tbody {
+        td:first-child {
+          border-left: 1px solid #dfe6ec;
         }
       }
     }

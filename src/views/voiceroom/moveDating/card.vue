@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" :isHidePage="true"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" :isHidePage="true" @rowClick="rowClick"></tableList>
 
         <!-- 详情组件 -->
         <cardComp v-if="isDestoryComp" ref="cardComp" @destoryComp="destoryComp" @getList="getList"></cardComp>
@@ -65,13 +65,6 @@ export default {
                         label: '音色分类名',
                         prop: 'sound_tag'
                     },
-                    // {
-                    //     label: '音色标签图',
-                    //     isimg: true,
-                    //     prop: 'sound_img',
-                    //     imgWidth: '50px',
-                    //     imgHeight: '50px'
-                    // },
                     {
                         label: '封面',
                         isimg: true,
@@ -85,7 +78,7 @@ export default {
                         prop: 'audio',
                         imgWidth: '50px',
                         imgHeight: '50px',
-                        minWidth: '160px'
+                        minWidth: '170px'
                     },
                     {
                         label: '排序权重',
@@ -93,6 +86,8 @@ export default {
                     },
                     {
                         label: '操作',
+                        minWidth: '100px',
+                        fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
@@ -135,6 +130,10 @@ export default {
         update(row) {
             this.load('update', row)
         },
+        // 查看
+        rowClick(row) {
+            this.load('see', row)
+        },
         load(status, row) {
             this.isDestoryComp = true
             setTimeout(() => {
@@ -150,7 +149,7 @@ export default {
             }).then(async () => {
                 let res = await deleteParams({ id })
                 if(res.code === 2000) {
-                    this.$message.success('删除成功')
+                    this.$success('删除成功')
                     this.getList()
                 }
             }).catch(() => {});
