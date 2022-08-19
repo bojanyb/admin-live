@@ -3,7 +3,7 @@
     <div class="activity-first-charge-box">
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showAdd="true" @onReset="reset" @onSearch="onSearch" @add="add">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showAdd="tabIndex === '0' ? true : false" @onReset="reset" @onSearch="onSearch" @add="add">
                 <el-button slot="right" v-if="tabIndex === '0'" type="primary" style="marginBottom: 20px;" @click="open">首充金额设置</el-button>
             </SearchPanel>
         </div>
