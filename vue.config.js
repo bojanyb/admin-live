@@ -18,7 +18,7 @@ const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 // 定义多环境
 const option = {
 	// 开发环境
-	'--dev': {
+	'--info': {
 		// apiBaseUrl: ''
 		publicPath: '/',
 		outputDir: 'dist',
@@ -30,7 +30,7 @@ const option = {
 		// domainHttps: 'http://192.168.0.114', // https环境地址
 		httpHeader: '', // 后台本地携带
 	},
-	'--info': {
+	'--dev': {
 	  // apiBaseUrl: ''
 	  publicPath: '/',
 	  outputDir: 'dist',
