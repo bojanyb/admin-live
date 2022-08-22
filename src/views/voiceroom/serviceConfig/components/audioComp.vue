@@ -1,33 +1,42 @@
 <template>
     <div class="serviceConfig-audioComp-box">
         <drawer 
-        size="470px"
+        size="450px"
         :title="title"
         ref="drawer"
         @cancel="cancel"
         :disabled="disabled">
             <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
-                <el-form-item label="贵族名称" prop="noble_name">
-                    <el-input v-model="ruleForm.noble_name" :disabled="disabled" placeholder="请输入贵族名称"></el-input>
+                <el-form-item label="用户ID" prop="user_number">
+                    <el-input v-model="ruleForm.user_number" :disabled="disabled" placeholder="请输入用户ID"></el-input>
                 </el-form-item>
-                <el-form-item label="拥有特权" prop="privilege_ids">
-                    <el-select v-model="ruleForm.privilege_ids" :disabled="disabled" multiple placeholder="请选择特权">
-                        <el-option v-for="item in privilegeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                <el-form-item label="用户昵称" prop="nickname">
+                    <el-input v-model="ruleForm.nickname" :disabled="disabled" placeholder="请输入用户昵称"></el-input>
+                </el-form-item>
+                <el-form-item label="用户角色" prop="user_role">
+                    <el-select v-model="ruleForm.user_role" :disabled="disabled" multiple placeholder="请选择用户角色">
+                        <el-option v-for="item in roleList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item prop="growth_value">
-                    <label slot="label">成&nbsp;&nbsp;长&nbsp;&nbsp;值</label>
-                    <el-input v-model="ruleForm.growth_value" :disabled="disabled" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入成长值"></el-input>
+                <el-form-item label="房间ID" prop="room_number">
+                    <el-input v-model="ruleForm.room_number" :disabled="disabled" placeholder="请输入房间ID"></el-input>
                 </el-form-item>
-                <el-form-item prop="hold_value">
-                    <label slot="label">保&nbsp;&nbsp;级&nbsp;&nbsp;值</label>
-                    <el-input v-model="ruleForm.hold_value" :disabled="disabled" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入保级值"></el-input>
+                <el-form-item label="违规行为" prop="risk_type_desc">
+                    <el-input v-model="ruleForm.risk_type_desc" :disabled="disabled" placeholder="请输入违规行为"></el-input>
                 </el-form-item>
-                <el-form-item label="保级天数" prop="hold_day">
-                    <el-input v-model="ruleForm.hold_day" :disabled="disabled" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入保级天数"></el-input>
+                <el-form-item label="时间" prop="start_time">
+                    <el-date-picker
+                    v-model="ruleForm.start_time"
+                    type="datetime"
+                    :disabled="disabled"
+                    placeholder="选择时间">
+                    </el-date-picker>
                 </el-form-item>
-                <el-form-item label="未保级衰减值" prop="reduce_value" class="dampingBox">
-                    <el-input v-model="ruleForm.reduce_value" :disabled="disabled" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入未保级衰减值"></el-input>
+                <el-form-item label="音频" prop="url" class="audioBox">
+                    <audio ref="audio" :src="ruleForm.url" controls="controls"></audio>
+                </el-form-item>
+                <el-form-item label="音转文" prop="content">
+                    <el-input v-model="ruleForm.content" :disabled="disabled" placeholder="请输入音转文"></el-input>
                 </el-form-item>
             </el-form>
         </drawer>
@@ -37,7 +46,15 @@
 <script>
 // 引入抽屉组件
 import drawer from '@/components/drawer/index'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 export default {
+    props: {
+        tabIndex: { // 当前坐标
+            type: String,
+            default: ''
+        }
+    },
     components: {
         drawer
     },
@@ -56,12 +73,21 @@ export default {
     data() {
         return {
             status: 'see',
-            tabIndex: '0'
+            tabIndex: '0',
+            roleList: MAPDATA.RISKSYSTEMROLELIST, // 角色列表
+            ruleForm: {},
+            rules: {}
         };
     },
     methods: {
         // 获取数据
-        loadParams(status, row) {},
+        loadParams(row) {
+            this.openComp()
+            let params = JSON.parse(JSON.stringify(row))
+            params.start_time = params.start_time * 1000
+            this.$set(this.$data, 'ruleForm', params)
+            // this.ruleForm = row
+        },
         openComp(status = true) {
             this.$refs.drawer.loadParams(status)
         },
@@ -72,8 +98,18 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .serviceConfig-audioComp-box {
-
+    .el-select {
+        width: 305px;
+    }
+    .el-date-editor {
+        width: 305px;
+    }
+    .audioBox {
+        .el-form-item__label {
+            line-height: 55px;
+        }
+    }
 }
 </style>

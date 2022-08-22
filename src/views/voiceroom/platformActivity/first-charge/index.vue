@@ -15,15 +15,10 @@
 
         <!-- 首充用户详情组件 -->
         <userComp v-if="isDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList"></userComp>
-
-        <!-- 首充金额弹窗 -->
-        <amountComp v-if="isDestoryComp" ref="amountComp" @destoryComp="destoryComp"></amountComp>
     </div>
 </template>
 
 <script>
-// 首充金额弹窗
-import amountComp from './components/amountComp/index.vue'
 // 首充配置详情组件
 import firstChangeComp from './components/firstChangeComp/index.vue'
 // 首充用户详情组件
@@ -50,8 +45,7 @@ export default {
         menuComp,
 
         firstChangeComp,
-        userComp,
-        amountComp
+        userComp
     },
     data() {
         return {
@@ -109,13 +103,13 @@ export default {
         cfgs() {
             let arr = [
                 {
-                    label: '奖励名称',
+                    label: '活动名称',
                     render: (h, params) => {
                         return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                     }
                 },
                 {
-                    label: '奖励icon',
+                    label: '礼物种类数量',
                     render: (h, params) => {
                         return h('div', [
                             h('div', params.row.nickname),
@@ -124,21 +118,37 @@ export default {
                     }
                 },
                 {
-                    label: '奖励类型',
+                    label: '投入',
                     render: (h, params) => {
                         let data = MAPDATA.RISKSYSTEMROLELIST.find(item => { return item.value === params.row.user_role })
                         return h('span', data ? data.name : '无')
                     }
                 },
                 {
-                    label: '数量/有效天数',
+                    label: '产出',
+                    prop: 'room_number'
+                },
+                {
+                    label: '首充设置金额',
+                    prop: 'room_number'
+                },
+                {
+                    label: '活动状态',
+                    prop: 'room_number'
+                },
+                {
+                    label: '开始时间',
+                    prop: 'room_number'
+                },
+                {
+                    label: '结束时间',
                     prop: 'room_number'
                 },
                 {
                     label: '操作',
                     render: (h, params) => {
                         return h('div', [
-                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.doCashFunc(params.row, 'success')}}}, '修改'),
+                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row, 'success')}}}, '修改'),
                             h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.messageDelete(params.row.id)}}}, '删除')
                         ])
                     }

@@ -1,5 +1,5 @@
 <template>
-    <div class="moveDating-cardComp-box">
+    <div class="activity-userComp-box">
         <drawer 
         size="470px"
         :title="title"
@@ -11,25 +11,40 @@
         :disabled="disabled"
         @update="update">
             <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="115px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
-                <el-form-item label="奖励类型" prop="guild_type">
+                <el-form-item label="用户昵称" prop="sound_tag">
+                    <el-input v-model="ruleForm.sound_tag" :disabled="disabled"></el-input>
+                </el-form-item>
+                <el-form-item label="用户ID" prop="sound_tag">
+                    <el-input v-model="ruleForm.sound_tag" :disabled="disabled"></el-input>
+                </el-form-item>
+                <el-form-item label="首充时间" prop="sound_tag">
+                    <el-date-picker
+                    v-model="value1"
+                    type="datetime"
+                    placeholder="选择首充时间"
+                    :disabled="disabled">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="性别" prop="guild_type">
                     <el-select v-model="ruleForm.guild_type" placeholder="请选择公会等级" :disabled="disabled">
                         <el-option v-for="item in guildTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="奖品ID" prop="sound_tag">
-                    <el-input v-model="ruleForm.sound_tag" :disabled="disabled"></el-input>
+                <el-form-item label="注册时间" prop="sound_tag">
+                    <el-date-picker
+                    v-model="value1"
+                    type="datetime"
+                    placeholder="选择注册时间"
+                    :disabled="disabled">
+                    </el-date-picker>
                 </el-form-item>
-                <el-form-item label="权重排序" prop="sort">
-                    <el-input v-model="ruleForm.sort" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled"></el-input>
-                </el-form-item>
-                <el-form-item label="奖励名称" prop="sound_tag">
-                    <el-input v-model="ruleForm.sound_tag" :disabled="disabled"></el-input>
-                </el-form-item>
-                <el-form-item label="奖品数量" prop="sound_tag">
-                    <el-input v-model="ruleForm.sound_tag" :disabled="disabled"></el-input>
-                </el-form-item>
-                <el-form-item label="奖励icon" prop="img">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.img" :imgUrl="ruleForm.img" name="img" @validateField="validateField" accept=".png,.jpg,.jpeg" :disabled="disabled"></uploadImg>
+                <el-form-item label="间隔时间" prop="sound_tag">
+                    <el-date-picker
+                    v-model="value1"
+                    type="datetime"
+                    placeholder="选择间隔时间"
+                    :disabled="disabled">
+                    </el-date-picker>
                 </el-form-item>
             </el-form>
         </drawer>
@@ -52,6 +67,7 @@ export default {
         return {
             status: 'add', // 当前状态
             oldParams: {}, // 老数据
+            value1: '',
             guildTypeList: [],
             ruleForm: {
                 id: null,
@@ -187,8 +203,11 @@ export default {
 </script>
 
 <style lang="scss">
-.moveDating-cardComp-box {
+.activity-userComp-box {
     .el-select {
+        width: 300px;
+    }
+    .el-date-editor {
         width: 300px;
     }
 }

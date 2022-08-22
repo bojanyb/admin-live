@@ -202,11 +202,6 @@ export default {
                 params.start_time = params.start_time * 1000
                 params.end_time = params.end_time * 1000
                 let res = await getActivetyHasGiftList({ activity_id: params.id })
-                if(res.data.list && res.data.list.length > 0) {
-                    res.data.list.forEach(item => {
-                        item.probability = item.probability / 100000
-                    })
-                }
                 this.$set(params, 'gifts', res.data.list)
                 this.ruleForm = params
             }
@@ -217,14 +212,12 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let s = this.ruleForm
-
                     let isNum = this.ruleForm.gifts.find(item => { return !item.gift_number })
                     if(isNum) {
                         this.$message.error('请先输入礼物数量')
                         return
                     }
-
-                    let params = {...this.ruleForm}
+                    let params = { ...this.ruleForm }
                     params.start_time = Math.floor(params.start_time / 1000)
                     params.end_time = Math.floor(params.end_time / 1000)
                     params.gifts = []
@@ -232,7 +225,6 @@ export default {
                         params.gifts.push({
                             id: item.id,
                             type: item.type,
-                            probability: (item.probability * 100000).toFixed(0),
                             gift_number: Number(item.gift_number)
                         })
                     })

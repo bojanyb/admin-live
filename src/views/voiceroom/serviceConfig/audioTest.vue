@@ -5,11 +5,16 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+
+        <!-- 详情组件 -->
+        <audioComp v-if="isDestoryComp" ref="audioComp" @destoryComp="destoryComp" :tabIndex="tabIndex"></audioComp>
     </div>
 </template>
 
 <script>
+// 引入详情组件
+import audioComp from './components/audioComp.vue'
 // 引入tab菜单组件
 import menuComp from '@/components/menuComp/index.vue'
 // 引入菜单组件
@@ -29,7 +34,8 @@ export default {
     components: {
         SearchPanel,
         tableList,
-        menuComp
+        menuComp,
+        audioComp
     },
     data() {
         return {
@@ -41,7 +47,8 @@ export default {
                     name: '直播间'
                 }
             ],
-
+            isDestoryComp: false, // 是否销毁组件
+            tabIndex: '0'
         };
     },
     computed: {
@@ -188,6 +195,16 @@ export default {
         // 查询
         onSearch() {
             this.getList()
+        },
+        // 查看
+        rowClick(row) {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.audioComp.loadParams(row)
+            }, 50);
+        },
+        destoryComp() {
+            this.isDestoryComp = false
         }
     }
 }

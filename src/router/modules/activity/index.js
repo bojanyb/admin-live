@@ -14,7 +14,7 @@ const activityRouter = {
 	children: [
         {
 			path: 'first-charge',
-			component: () => import('@/views/voiceroom/activity/first-charge'),
+			component: () => import('@/views/voiceroom/platformActivity/first-charge/index.vue'),
 			meta: {
 				title: '首充活动管理',
 				noCache: true
