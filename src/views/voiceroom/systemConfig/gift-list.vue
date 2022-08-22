@@ -253,6 +253,7 @@
 		}
 	}
 </script>
+
 <style lang="scss">
 .gift-list-box {
 	padding: 20px;
