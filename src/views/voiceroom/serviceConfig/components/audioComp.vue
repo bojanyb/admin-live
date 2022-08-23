@@ -73,7 +73,6 @@ export default {
     data() {
         return {
             status: 'see',
-            tabIndex: '0',
             roleList: MAPDATA.RISKSYSTEMROLELIST, // 角色列表
             ruleForm: {},
             rules: {}

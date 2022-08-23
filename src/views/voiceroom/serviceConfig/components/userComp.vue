@@ -1,12 +1,12 @@
 <template>
     <div class="serviceConfig-userComp-box">
-        <el-dialog
-        title="用户处罚"
-        :visible.sync="dialogVisible"
-        width="450px"
-        :before-close="handleClose"
-        @closed="closed">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <drawer 
+        size="450px"
+        :title="title"
+        ref="drawer"
+        @cancel="cancel"
+        :disabled="disabled">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="用户ID" prop="user_number">
                     <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
                 </el-form-item>
@@ -24,15 +24,13 @@
                     <el-input type="textarea" :rows="4" v-model="ruleForm.remark"></el-input>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-            </span>
-        </el-dialog>
+        </drawer>
     </div>
 </template>
 
 <script>
+// 引入抽屉组件
+import drawer from '@/components/drawer/index'
 // 引入api
 import { save } from '@/api/risk'
 // 引入公共map
@@ -69,6 +67,11 @@ export default {
     methods: {
         handleClose() {
             this.dialogVisible = false
+        },
+        // 获取数据
+        loadParams() {},
+        openComp(status = true) {
+            this.$refs.drawer.loadParams(status)
         },
         // 提交
         async submitForm(formName) {
