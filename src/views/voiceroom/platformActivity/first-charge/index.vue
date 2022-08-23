@@ -69,7 +69,7 @@ export default {
         forms() {
             let arr2 = [
                 {
-                    name: 'room_number',
+                    name: 'user_number',
                     type: 'input',
                     value: '',
                     label: '用户ID',
@@ -221,13 +221,13 @@ export default {
                 page_size: params.size,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
-                room_number: s.room_number,
+                user_number: s.user_number,
                 code: 'scpz'
             }
             if(this.tabIndex === '0') {
                 delete data.start_time
                 delete data.end_time
-                delete data.room_number
+                delete data.user_number
             } else {
                 delete data.code
             }

@@ -251,11 +251,12 @@ export default {
             this.openComp()
             this.status = status
             if(status !== 'add') {
+                let params = JSON.parse(JSON.stringify(row))
+                params.start_time = params.start_time * 1000
+                params.end_time = params.end_time * 1000
+                this.$set(this.$data, 'ruleForm', params)
                 let res = await getActivetyHasGiftList({ activity_id: row.id })
                 if(res.code === 2000) {
-                    let params = JSON.parse(JSON.stringify(row))
-                    params.start_time = params.start_time * 1000
-                    params.end_time = params.end_time * 1000
                     if(res.data.goods && res.data.goods.length > 0) {
                         res.data.goods.forEach(item => {
                             // 重新修改 - 数据字段
