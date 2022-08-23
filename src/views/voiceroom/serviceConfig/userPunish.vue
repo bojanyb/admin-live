@@ -199,7 +199,7 @@ export default {
         async deleteParams(id) {
             let res = await removeUser({ id })
             if(res.code === 2000) {
-                this.$message.success('解除成功')
+                this.$success('解除成功')
                 this.getList()
             }
         },

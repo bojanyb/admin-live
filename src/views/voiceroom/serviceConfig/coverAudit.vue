@@ -4,18 +4,23 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick">></tableList>
 
-        <!-- 新增组件 -->
+        <!-- 审核组件 -->
         <coverComp v-if="isDestoryComp" ref="coverComp" @destoryComp="destoryComp" @getList="getList"></coverComp>
+
+        <!-- 详情组件 -->
+        <coverDetails ref="coverDetails"></coverDetails>
     </div>
 </template>
 
 <script>
 // 引入api
 import { coverCheck } from '@/api/risk'
-// 引入新增组件
+// 引入审核组件
 import coverComp from './components/coverComp.vue'
+// 引入详情组件
+import coverDetails from './components/coverDetails.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -31,7 +36,8 @@ export default {
     components: {
         SearchPanel,
         tableList,
-        coverComp
+        coverComp,
+        coverDetails
     },
     data() {
         return {
@@ -196,12 +202,12 @@ export default {
         onSearch() {
             this.getList()
         },
-        // 新增
+        // 审核
         async audit(id, status) {
             if(status === 1) {
                 let res = await coverCheck({ id, status })
                 if(res.code === 2000) {
-                    this.$message.success('审核通过')
+                    this.$success('审核通过')
                     this.getList()
                 }
             } else {
@@ -210,6 +216,10 @@ export default {
                 this.$refs.coverComp.loadParams(id, status)
                 }, 50); 
             }
+        },
+        // 查看
+        rowClick(row) {
+            this.$refs.coverDetails.loadParams(row)
         },
         // 销毁组件
         destoryComp() {
