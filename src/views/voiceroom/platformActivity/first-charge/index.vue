@@ -2,12 +2,12 @@
 <template>
     <div class="activity-first-charge-box">
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
-        <el-button class="btnBox" type="success" v-if="tabIndex === '0'" @click="add">新增</el-button>
-        <div class="searchParams" v-else>
+        <el-button class="btnBox" type="success" v-if="tabIndex === '0' && list.length < 0" @click="add">新增</el-button>
+        <div class="searchParams" v-if="tabIndex !== '0'">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick" @saleAmunt="saleAmunt"></tableList>
 
         <!-- 首充配置详情组件 -->
         <firstChangeComp v-if="isDestoryComp" ref="firstChangeComp" @destoryComp="destoryComp" @getList="getList"></firstChangeComp>
@@ -18,6 +18,10 @@
 </template>
 
 <script>
+// 获取api
+import { getActivetyHasGiftList } from '@/api/videoRoom'
+// 引入api
+import { addFirstCharge } from '@/api/userActivity'
 // 首充配置详情组件
 import firstChangeComp from './components/firstChangeComp/index.vue'
 // 首充用户详情组件
@@ -57,7 +61,8 @@ export default {
                 {
                     name: '首充用户'
                 }
-            ]
+            ],
+            list: [] // 列表数据
         };
     },
     computed: {
@@ -150,8 +155,8 @@ export default {
                     label: '操作',
                     render: (h, params) => {
                         return h('div', [
-                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row, 'success')}}}, '修改'),
-                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.freeze(params.row.id)}}}, '冻结')
+                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
+                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.freeze(params.row)}}}, '冻结')
                         ])
                     }
                 }
@@ -273,7 +278,18 @@ export default {
             }, 50);
         },
         // 冻结
-        freeze(row) {},
+        async freeze(row) {
+            let params = JSON.parse(JSON.stringify(row))
+            let res = await getActivetyHasGiftList({ activity_id: params.id })
+            params.end_time = Math.floor((new Date().getTime() - 1) / 1000)
+            params.goods = res.data.goods || []
+            params.gifts = res.data.gifts || []
+            let data = await addFirstCharge(params)
+            if(data.code === 2000) {
+                this.$success('冻结成功')
+                this.getList()
+            }
+        },
         // 查询
         onSearch() {
             this.getList()
@@ -281,6 +297,10 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
+        },
+        // 列表返回
+        saleAmunt(row) {
+            this.list = row.list || []
         }
     }
 }

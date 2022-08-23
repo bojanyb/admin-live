@@ -25,7 +25,7 @@
                     <el-option
                     v-for="item in scope.row.time_limit"
                     :key="item.day"
-                    :label="item.money"
+                    :label="item.day"
                     :value="item.day">
                     </el-option>
                 </el-select>

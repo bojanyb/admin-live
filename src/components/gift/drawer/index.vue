@@ -118,17 +118,12 @@ export default {
             })
         },
         // 关闭礼物库 - 需确认
-        handleClose(done) {
-            this.$confirm('确认关闭礼物库？')
-                .then(_ => {
-                    done();
-                })
-                .catch(_ => {});
+        handleClose() {
+            this.drawer = false
         },
         // 选中礼物
         handleSelect(row) {
             let params = this.activityList.find(item => { return item.name === this.activityType })
-            console.log(params, 'params----------------')
             let num = this.gifts.length
             if((num + 1) > params.max) {
                 this.$message.error('已超过添加最大礼物数量')

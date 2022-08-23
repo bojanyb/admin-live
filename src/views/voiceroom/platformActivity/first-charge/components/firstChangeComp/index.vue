@@ -72,10 +72,10 @@
 <script>
 // 获取api
 import { getActivetyHasGiftList } from '@/api/videoRoom'
-// 引入抽屉组件
-import drawer from '@/components/drawer/index'
 // 引入api
 import { addFirstCharge } from '@/api/userActivity'
+// 引入抽屉组件
+import drawer from '@/components/drawer/index'
 // 引入上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
 // 礼物组件
@@ -256,6 +256,17 @@ export default {
                     let params = JSON.parse(JSON.stringify(row))
                     params.start_time = params.start_time * 1000
                     params.end_time = params.end_time * 1000
+                    if(res.data.goods && res.data.goods.length > 0) {
+                        res.data.goods.forEach(item => {
+                            // 重新修改 - 数据字段
+                            item.goods_name = item.gift_name
+                            if(item.gift_photo.indexOf('.svga') !== -1) {
+                                item.goods_animation_path = item.gift_photo
+                            } else {
+                                item.goods_image = item.gift_photo
+                            }
+                        })
+                    }
                     params.goods = res.data.goods || []
                     params.gifts = res.data.gifts || []
                     this.$set(this.$data, 'ruleForm', params)
