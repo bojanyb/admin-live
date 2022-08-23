@@ -133,11 +133,11 @@ export default {
     computed: {
         title() { // 标题
             if(this.status === 'add') {
-                return '新增心动卡片'
+                return '新增首充活动'
             } else if(this.status === 'update') {
-                return '修改心动卡片'
+                return '修改首充活动'
             } else {
-                return '查看心动卡片'
+                return '查看首充活动'
             }
         },
         disabled() { // 禁止修改
@@ -254,14 +254,10 @@ export default {
                 let res = await getActivetyHasGiftList({ activity_id: row.id })
                 if(res.code === 2000) {
                     let params = JSON.parse(JSON.stringify(row))
-                    console.log(params, 'row---------32020')
-                    params.gain = {
-                        name: '喵粮',
-                        gain_image: '',
-                        price: ''
-                    }
                     params.start_time = params.start_time * 1000
                     params.end_time = params.end_time * 1000
+                    params.goods = res.data.goods || []
+                    params.gifts = res.data.gifts || []
                     this.$set(this.$data, 'ruleForm', params)
                 }
             }
@@ -317,7 +313,11 @@ export default {
                     }
                     let res = await addFirstCharge(s)
                     if(res.code === 2000) {
-                        this.$success('新增成功')
+                        if(this.status === 'add') {
+                            this.$success('新增成功')
+                        } else {
+                            this.$success('修改成功')
+                        }
                         this.openComp(false)
                         this.$emit('getList')
                     }
