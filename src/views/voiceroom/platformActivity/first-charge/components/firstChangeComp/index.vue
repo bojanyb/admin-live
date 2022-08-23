@@ -11,19 +11,28 @@
         :disabled="disabled"
         @update="update">
             <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="115px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
-                <el-form-item label="活动名称" prop="sound_tag">
-                    <el-input v-model="ruleForm.sound_tag" :disabled="disabled"></el-input>
+                <el-form-item label="活动名称" prop="name">
+                    <el-input v-model="ruleForm.name" :disabled="disabled"></el-input>
                 </el-form-item>
-                <el-form-item label="活动图标" prop="img">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.img" :imgUrl="ruleForm.img" name="img" @validateField="validateField" accept=".png,.jpg,.jpeg" :disabled="disabled"></uploadImg>
+                <el-form-item label="活动图标" prop="icon">
+                    <uploadImg ref="uploadImg" v-model="ruleForm.icon" :imgUrl="ruleForm.icon" name="icon" @validateField="validateField" accept=".png,.jpg,.jpeg" :disabled="disabled"></uploadImg>
                 </el-form-item>
-                <el-form-item label="活动类型" prop="guild_type">
-                    <el-select v-model="ruleForm.guild_type" placeholder="请选择公会等级" :disabled="disabled">
-                        <el-option v-for="item in guildTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                <el-form-item label="活动类型" prop="type">
+                    <el-select v-model="ruleForm.type" placeholder="请选择" :disabled="disabled">
+                        <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="首充金额" prop="sound_tag">
-                    <el-input v-model="ruleForm.sound_tag" :disabled="disabled"></el-input>
+                <el-form-item label="首充金额" prop="cost">
+                    <el-input v-model="ruleForm.cost" :disabled="disabled" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
+                </el-form-item>
+                <el-form-item label="赠送单位" prop="name" :rules="unitResult">
+                    <el-input v-model="ruleForm.gain.name" :disabled="disabled" placeholder="喵粮/砖石"></el-input>
+                </el-form-item>
+                <el-form-item label="赠送图片" prop="gain_image" :rules="ImgResult">
+                    <uploadImg ref="uploadImg" v-model="ruleForm.gain.gain_image" :imgUrl="ruleForm.gain.gain_image" name="gain_image" @validateField="validateField" accept=".png,.jpg,.jpeg" :disabled="disabled"></uploadImg>
+                </el-form-item>
+                <el-form-item label="赠送价格" prop="price" :rules="priceResult">
+                    <el-input v-model="ruleForm.gain.price" :disabled="disabled" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
                 </el-form-item>
                 <el-form-item label="开始时间" prop="start_time">
                     <el-date-picker
@@ -48,53 +57,75 @@
                 <el-form-item label="添加礼物">
                     <el-button type="primary" :disabled="disabled" @click="$refs.gift.handleAddGiftShow()">添 加</el-button>
                 </el-form-item>
-                <gift ref="gift" :isShowProperty="true" :status="status" :isShowLocation="false" :activityType="code" :list="ruleForm.gifts"></gift>
+                <!-- 礼物组件 -->
+                <gift ref="gift" :isShowProperty="true" :status="status" :isShowLocation="false" :activityType="ruleForm.code" :list="ruleForm.gifts"></gift>
+                <el-form-item label="添加商品">
+                    <el-button type="primary" :disabled="disabled" @click="$refs.goodsComp.loadParams()">添 加</el-button>
+                </el-form-item>
+                <!-- 商品组件 -->
+                <goodsComp ref="goodsComp" :list="ruleForm.goods"></goodsComp>
             </el-form>
         </drawer>
     </div>
 </template>
 
 <script>
+// 获取api
+import { getActivetyHasGiftList } from '@/api/videoRoom'
 // 引入抽屉组件
 import drawer from '@/components/drawer/index'
 // 引入api
-import { save } from '@/api/moveDating'
+import { addFirstCharge } from '@/api/userActivity'
 // 引入上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
 // 礼物组件
 import gift from '@/components/gift/index.vue'
+// 引入商品组件
+import goodsComp from '@/components/shoppingComp/index'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
         uploadImg,
         drawer,
-        gift
+        gift,
+        goodsComp
     },
     data() {
         return {
             status: 'add', // 当前状态
             oldParams: {}, // 老数据
-            guildTypeList: [],
+            typeList: MAPDATA.DWACTIVITYTYPE,
             ruleForm: {
                 id: null,
-                img: '',
-                sound_tag: '',
-                audio: '',
-                duration: null,
-                sort: ''
+                name: '',
+                code: 'scpz',
+                type: null,
+                icon: '',
+                cost: '',
+                start_time: '',
+                end_time: '',
+                gifts: [],
+                goods: [],
+                gain: {
+                    name: '喵粮',
+                    gain_image: '',
+                    price: ''
+                }
             },
             rules: {
-                sound_tag: [
-                    { required: true, message: '请输入音色分类名', trigger: 'blur' }
+                name: [
+                    { required: true, message: '请输入活动名称', trigger: 'blur' }
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
-                sort: [
-                    { required: true, message: '请输入权重排序', trigger: 'blur' }
+                cost: [
+                    { required: true, message: '请输入首充金额', trigger: 'blur' }
                 ],
-                img: [
-                    { required: true, message: '请上传封面', trigger: 'change' }
+                icon: [
+                    { required: true, message: '请上传活动图标', trigger: 'change' }
                 ],
-                audio: [
-                    { required: true, message: '请上传声音签名', trigger: 'change' }
+                type: [
+                    { required: true, message: '请选择活动类型', trigger: 'change' }
                 ]
             }
         };
@@ -165,18 +196,74 @@ export default {
                 }
             }
         },
+        unitResult() {
+            let params = {}
+            params = {
+                required: true,
+                validator: (rules, val, cb) => {
+                    let s = this.ruleForm.gain
+                    if(s.name) {
+                        cb()
+                    } else {
+                        cb(new Error('请输入赠送单位'))
+                    }
+                }
+            }
+            return params
+        },
+        ImgResult() {
+            let params = {}
+            params = {
+                required: true,
+                validator: (rules, val, cb) => {
+                    let s = this.ruleForm.gain
+                    if(s.gain_image) {
+                        cb()
+                    } else {
+                        cb(new Error('请上传赠送图片'))
+                    }
+                }
+            }
+            return params
+        },
+        priceResult() {
+            let params = {}
+            params = {
+                required: true,
+                validator: (rules, val, cb) => {
+                    let s = this.ruleForm.gain
+                    if(s.price) {
+                        cb()
+                    } else {
+                        cb(new Error('请填写赠送价格'))
+                    }
+                }
+            }
+            return params
+        }
     },
     methods: {
         handleClose() {
             this.dialogVisible = false
         },
         // 获取数据
-        loadParams(status, row) {
+        async loadParams(status, row) {
             this.openComp()
             this.status = status
             if(status !== 'add') {
-                let params = JSON.parse(JSON.stringify(row))
-                this.$set(this.$data, 'ruleForm', params)
+                let res = await getActivetyHasGiftList({ activity_id: row.id })
+                if(res.code === 2000) {
+                    let params = JSON.parse(JSON.stringify(row))
+                    console.log(params, 'row---------32020')
+                    params.gain = {
+                        name: '喵粮',
+                        gain_image: '',
+                        price: ''
+                    }
+                    params.start_time = params.start_time * 1000
+                    params.end_time = params.end_time * 1000
+                    this.$set(this.$data, 'ruleForm', params)
+                }
             }
             this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
         },
@@ -205,10 +292,30 @@ export default {
         async submitForm(formName) {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    let params = { ...this.ruleForm }
-                    params.duration = params.duration ? Math.floor(params.duration) : params.duration
-                    params.sound_img = ''
-                    let res = await save(params)
+                    let s = { ...this.ruleForm }
+                    s.start_time = Math.floor(s.start_time / 1000)
+                    s.end_time = Math.floor(s.end_time / 1000)
+                    if(s.gifts && s.gifts.length > 0) {
+                        s.gifts = s.gifts.map(a => {
+                            return {
+                                id: a.id,
+                                gift_number: a.gift_number
+                            }
+                        })
+                    }
+                    if(s.goods && s.goods.length > 0) {
+                        s.goods = s.goods.map(a => {
+                            return {
+                                id: a.id,
+                                use_date: a.use_date
+                            }
+                        })
+                    }
+                    if(s.goods.length <= 0 && s.goods.length <= 0) {
+                        this.$error('请至少添加一个商品或礼物')
+                        return false
+                    }
+                    let res = await addFirstCharge(s)
                     if(res.code === 2000) {
                         this.$success('新增成功')
                         this.openComp(false)
@@ -227,28 +334,6 @@ export default {
         validateField(name) {
             this.$refs.ruleForm.validateField([name])
         },
-        // 获取音频
-        async getFile(file) {
-            let time = await this.getMp4Time(file.file)
-            this.ruleForm.duration = time
-        },
-        getMp4Time(file) {
-            let that = this
-            return new Promise((resolve,reject) => {
-                //把element上传组件传给我们的file转成url
-                let url = URL.createObjectURL(file)
-                //获取对象
-                var audioElement = new Audio(url)
-                //监听事件
-                audioElement.addEventListener('loadedmetadata', () => { 
-                    const time = Math.round(audioElement.duration * 100) / 100
-                    resolve(time)  
-                })
-                audioElement.addEventListener('error', () => { 
-                    resolve(0)
-                })
-            })       
-        },
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
@@ -259,8 +344,22 @@ export default {
 
 <style lang="scss">
 .moveDating-cardComp-box {
+    .el-input {
+        width: 300px;
+    }
     .el-select {
         width: 300px;
+    }
+    .el-table {
+        .el-select {
+            width: 100px !important;
+            .el-input {
+                width: 100px !important;
+                input {
+                    width: 100px !important;
+                }
+            }
+        }
     }
 }
 </style>

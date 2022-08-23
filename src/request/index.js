@@ -21,6 +21,8 @@ const request = {
         drawFlow: `${HTTPHEADER}/activityins/drawFlow`, // 乐园记录
         drawRecord: `${HTTPHEADER}/activityins/drawRecord`, // 统计
         stop: `${HTTPHEADER}/Activityins/stop`, // 停止和开启
+        addFirstCharge: `${HTTPHEADER}/activityins/addFirstCharge`, // 配置首充活动
+        chargeLog: `${HTTPHEADER}/activityins/chargeLog`, // 首充用户列表
     },
 
     // 系统设置

@@ -2,10 +2,9 @@
 <template>
     <div class="activity-first-charge-box">
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
-        <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showAdd="tabIndex === '0' ? true : false" @onReset="reset" @onSearch="onSearch" @add="add">
-                <el-button slot="right" v-if="tabIndex === '0'" type="primary" style="marginBottom: 20px;" @click="open">首充金额设置</el-button>
-            </SearchPanel>
+        <el-button class="btnBox" type="success" v-if="tabIndex === '0'" @click="add">新增</el-button>
+        <div class="searchParams" v-else>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
@@ -50,6 +49,7 @@ export default {
     data() {
         return {
             isDestoryComp: false, // 是否销毁组件
+            tabIndex: '0',
             menuList: [
                 {
                     name: '首充配置'
@@ -62,15 +62,6 @@ export default {
     },
     computed: {
         forms() {
-            let arr = [
-                {
-                    name: 'room_number',
-                    type: 'input',
-                    value: '',
-                    label: '奖励名称',
-                    placeholder: '请输入奖励名称'
-                }
-            ]
             let arr2 = [
                 {
                     name: 'room_number',
@@ -98,58 +89,69 @@ export default {
                     }
                 }
             ]
-            return this.tabIndex === '0' ? arr : arr2
+            return this.tabIndex === '0' ? [] : arr2
         },
         cfgs() {
             let arr = [
                 {
                     label: '活动名称',
+                    prop: 'name'
+                },
+                {
+                    label: '礼物种类数量',
+                    prop: 'gift_count'
+                },
+                {
+                    label: '投入',
+                    prop: 'in'
+                    // render: (h, params) => {
+                    //     let data = MAPDATA.RISKSYSTEMROLELIST.find(item => { return item.value === params.row.user_role })
+                    //     return h('span', data ? data.name : '无')
+                    // }
+                },
+                {
+                    label: '产出',
+                    prop: 'out'
+                },
+                {
+                    label: '首充设置金额',
+                    prop: 'cost'
+                },
+                {
+                    label: '活动状态',
+                    render: (h, params) => {
+                        let start = params.row.start_time * 1000
+                        let end = params.row.end_time * 1000
+                        let now = new Date().getTime()
+                        if(start > now && end > now) {
+                            return h('span',{style: {color: 'green'},}, '未开始')
+                        } else if(start < now && end > now) {
+                            return h('span',{style: {color: 'green'},}, '开始中')
+                        }
+                        if(end < now) {
+                            return h('span',{style: {color: 'red'},}, '结束')
+                        }
+                    }
+                },
+                {
+                    label: '开始时间',
                     render: (h, params) => {
                         return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                     }
                 },
                 {
-                    label: '礼物种类数量',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('div', params.row.nickname),
-                            h('div', params.row.user_number)
-                        ])
-                    }
-                },
-                {
-                    label: '投入',
-                    render: (h, params) => {
-                        let data = MAPDATA.RISKSYSTEMROLELIST.find(item => { return item.value === params.row.user_role })
-                        return h('span', data ? data.name : '无')
-                    }
-                },
-                {
-                    label: '产出',
-                    prop: 'room_number'
-                },
-                {
-                    label: '首充设置金额',
-                    prop: 'room_number'
-                },
-                {
-                    label: '活动状态',
-                    prop: 'room_number'
-                },
-                {
-                    label: '开始时间',
-                    prop: 'room_number'
-                },
-                {
                     label: '结束时间',
-                    prop: 'room_number'
+                    prop: 'room_number',
+                    render: (h, params) => {
+                        return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                    }
                 },
                 {
                     label: '操作',
                     render: (h, params) => {
                         return h('div', [
                             h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row, 'success')}}}, '修改'),
-                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.messageDelete(params.row.id)}}}, '删除')
+                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.freeze(params.row.id)}}}, '冻结')
                         ])
                     }
                 }
@@ -158,62 +160,73 @@ export default {
                 {
                     label: '首充时间',
                     render: (h, params) => {
-                        return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                        return h('span', params.row.first_charge_time ? timeFormat(params.row.first_charge_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                     }
                 },
                 {
                     label: '用户',
-                    prop: 'room_number'
+                    render: (h, params) => {
+                        return h('div', [
+                            h('div', params.row.nickname),
+                            h('div', params.row.user_number)
+                        ])
+                    }
                 },
                 {
                     label: '性别',
-                    prop: 'room_number'
+                    render: (h, params) => {
+                        let data = MAPDATA.SEXLIST.find(item => {
+                            return item.value === params.row.sex
+                        })
+                        return h('span', data ? data.name : '无')
+                    }
                 },
                 {
                     label: '注册时间',
-                    prop: 'room_number'
+                    render: (h, params) => {
+                        return h('span', params.row.register_time ? timeFormat(params.row.register_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                    }
                 },
                 {
                     label: '间隔时间',
-                    prop: 'room_number'
+                    prop: 'interval_time'
                 },
             ]
             let arr3, name;
             if(this.tabIndex === '0') {
                 arr3 = arr
+                name = 'Activityins'
             } else {
                 arr3 = arr2
+                name = 'chargeLog'
             }
             return {
                 vm: this,
-                url: REQUEST.risk.audioStreamDefyList,
+                url: REQUEST.platformActivity[name],
                 columns: arr3
             }
-        }
-    },
-    watch: {
-        tabIndex: {
-            handler(n) {
-                if(n) {
-                    this.getList()
-                }
-            },
-            deep: true
         }
     },
     methods: {
         // 配置参数
         beforeSearch(params) {
             let s = { ...this.searchParams, ...this.dateTimeParams }
-            return {
+            let data = {
                 page: params.page,
-                pagesize: params.size,
-                type: this.tabIndex === '0' ? 2 : 1,
-                risk_type: s.risk_type,
+                page_size: params.size,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
-                room_number: s.room_number
+                room_number: s.room_number,
+                code: 'scpz'
             }
+            if(this.tabIndex === '0') {
+                delete data.start_time
+                delete data.end_time
+                delete data.room_number
+            } else {
+                delete data.code
+            }
+            return data
         },
         // 刷新列表
         getList() {
@@ -259,13 +272,8 @@ export default {
                 }
             }, 50);
         },
-        // 首充金额弹窗
-        open() {
-            this.isDestoryComp = true
-            setTimeout(() => {
-                this.$refs.amountComp.loadParams()
-            }, 50);
-        },
+        // 冻结
+        freeze(row) {},
         // 查询
         onSearch() {
             this.getList()
@@ -282,5 +290,8 @@ export default {
 .activity-first-charge-box {
     padding: 10px 20px 20px 20px;
     box-sizing: border-box;
+    .btnBox {
+        margin-bottom: 20px;
+    }
 }
 </style>

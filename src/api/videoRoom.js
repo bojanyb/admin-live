@@ -422,7 +422,7 @@ export function getActivetyGiftSource(data) {
 // 获取已配置礼物 
 export function getActivetyHasGiftList(data) {
   return request({
-    url: '/Activity/getHasAddGift',
+    url: api.platformActivity.getHasAddGift,
     method: 'post',
     data
   })

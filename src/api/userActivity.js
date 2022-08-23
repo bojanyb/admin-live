@@ -10,4 +10,12 @@ export function configDW(params) {
   })
 }
 
+// 平台活动 - 首充 - 新增
+export function addFirstCharge(params) {
+  return request({
+    url: api.platformActivity.addFirstCharge,
+    method: 'post',
+    data: params
+  })
+}
 

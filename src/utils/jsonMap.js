@@ -89,6 +89,11 @@ const ACTIVITYLIST = [
         name: 'gzpz',
         min: 1,
         max: 5
+    },
+    {
+        name: 'scpz',
+        min: 1,
+        max: 9999999999999999999
     }
 ]
 
