@@ -58,12 +58,12 @@
                     <el-button type="primary" :disabled="disabled" @click="$refs.gift.handleAddGiftShow()">添 加</el-button>
                 </el-form-item>
                 <!-- 礼物组件 -->
-                <gift ref="gift" :isShowProperty="true" :status="status" :isShowLocation="false" :activityType="ruleForm.code" :list="ruleForm.gifts"></gift>
+                <gift ref="gift" :isShowProperty="true" :status="status" :isShowLocation="false" :activityType="ruleForm.code" :list="ruleForm.gifts" :disabled="disabled"></gift>
                 <el-form-item label="添加商品">
                     <el-button type="primary" :disabled="disabled" @click="$refs.goodsComp.loadParams()">添 加</el-button>
                 </el-form-item>
                 <!-- 商品组件 -->
-                <goodsComp ref="goodsComp" :list="ruleForm.goods"></goodsComp>
+                <goodsComp ref="goodsComp" :list="ruleForm.goods" :disabled="disabled"></goodsComp>
             </el-form>
         </drawer>
     </div>

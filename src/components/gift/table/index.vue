@@ -10,7 +10,8 @@
             <el-table-column
                 label="礼物图标">
                 <template slot-scope="scope">
-                    <img class="imgBox" :src="scope.row.gift_photo" alt="">
+                    <!-- <img class="imgBox" :src="scope.row.gift_photo" alt=""> -->
+                    <imgComp ref="imgComp" height="50px" :tagList="[]" :src="scope.row.gift_photo" :preview-src-list="scope.row.gift_photo"></imgComp>
                 </template>
             </el-table-column>
             <el-table-column
@@ -27,14 +28,14 @@
                 label="数量">
                 <template slot-scope="scope">
                     <div class="numBox">
-                        <el-input v-model="scope.row.gift_number" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>个
+                        <el-input v-model="scope.row.gift_number" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled"></el-input>个
                     </div>
                     <div class="errorMsg" v-if="!scope.row.gift_number">请填写数量</div>
                 </template>
             </el-table-column>
             <el-table-column label="礼物位置" v-if="isShowLocation">
                 <template slot-scope="scope">
-                    <el-select v-model="scope.row.sort" placeholder="请选择">
+                    <el-select v-model="scope.row.sort" placeholder="请选择" :disabled="disabled">
                         <el-option
                             v-for="item in locationFunc"
                             :key="item.value"
@@ -47,7 +48,7 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button type="danger" @click="deleteData(scope.row, scope.$index)">删除</el-button>
+                    <el-button type="danger" @click="deleteData(scope.row, scope.$index)" :disabled="disabled">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -55,15 +56,24 @@
 </template>
 
 <script>
+// 引入图片组件
+import imgComp from '@/components/tableList/imgComp.vue'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
+    components: {
+        imgComp
+    },
     props: {
         gifts: { // 选中礼物列表
             type: Array,
             default: []
         },
         isShowLocation: { // 是否需要展示指定地址
+            type: Boolean,
+            default: false
+        },
+        disabled: { // 是否禁止输入
             type: Boolean,
             default: false
         }
@@ -156,6 +166,9 @@ export default {
         .el-input {
             width: 100px !important;
         }
+    }
+    .imgComp-box {
+        justify-content: flex-start;
     }
 }
 </style>

@@ -58,6 +58,7 @@ export default {
                 remark: '',
                 time: []
             },
+            oldParams: {}, // 老数据
             rules: {
                 room_number: [
                     { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -112,6 +113,7 @@ export default {
                 params.time = [start_time, end_time]
                 this.$set(this.$data, 'ruleForm', params)
             }
+            this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
         },
         openComp(status = true) {
             this.$refs.drawer.loadParams(status)
@@ -154,7 +156,17 @@ export default {
             this.$emit('destoryComp')
         },
         cancel() {
-            this.openComp(false)
+            if(JSON.stringify(this.oldParams) !== JSON.stringify(this.ruleForm)) { // 记录数据 - 有改动就提示
+                this.$confirm('关闭弹窗将不会保留您的更改, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.openComp(false)
+                }).catch(() => {});
+            } else {
+                this.openComp(false)
+            }
         }
     }
 }

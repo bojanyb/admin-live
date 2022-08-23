@@ -1,7 +1,7 @@
 <template>
     <div class="shoppingComp-box">
         <!-- 列表组件 -->
-        <tableComp ref="tableComp" :list="goods"></tableComp>
+        <tableComp ref="tableComp" :list="goods" :disabled="disabled"></tableComp>
 
         <!-- 商品组件 -->
         <goodsBank ref="goodsBank" :isLimit="99999999" :list="goods" @validateField="validateField"></goodsBank>
@@ -22,6 +22,10 @@ export default {
         list: { // 数据列表
             type: Array,
             default: []
+        },
+        disabled: { // 是否禁止输入
+            type: Boolean,
+            default: false
         }
     },
     computed: {

@@ -2,7 +2,7 @@
     <div class="share-gift-box">
         <div class="giftAllocation">
             <!-- <zItem ref="zItem" :isShowProperty="isShowProperty" :status="status" :isShowLocation="isShowLocation" :gifts="gifts" @deleteData="deleteData"></zItem> -->
-            <tableComp ref="tableComp" :status="status" :isShowLocation="isShowLocation" :gifts="gifts" @deleteData="deleteData"></tableComp>
+            <tableComp ref="tableComp" :status="status" :isShowLocation="isShowLocation" :gifts="gifts" @deleteData="deleteData" :disabled="disabled"></tableComp>
         </div>
 
         <drawer ref="drawer" v-if="isDestoryComp" :status="status" @distoryComp="distoryComp" :activityType="activityType" :list="gifts"></drawer>
@@ -40,6 +40,10 @@ export default {
             default: ''
         },
         isShowProperty: {
+            type: Boolean,
+            default: false
+        },
+        disabled: { // 是否禁止输入
             type: Boolean,
             default: false
         }

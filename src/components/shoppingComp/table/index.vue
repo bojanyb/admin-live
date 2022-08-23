@@ -8,7 +8,7 @@
         align="center"
         label="商品图标">
             <template slot-scope="scope">
-                <imgComp ref="imgComp" height="50px" :tagList="[]" :src="returnImg(scope.row)"></imgComp>
+                <imgComp ref="imgComp" height="50px" :tagList="[]" :src="returnImg(scope.row)" :preview-src-list="returnImg(scope.row)"></imgComp>
             </template>
         </el-table-column>
         <el-table-column
@@ -21,7 +21,7 @@
         align="center"
         label="商品天数">
             <template slot-scope="scope">
-                <el-select v-model="scope.row.use_date" placeholder="请选择">
+                <el-select v-model="scope.row.use_date" placeholder="请选择" :disabled="disabled">
                     <el-option
                     v-for="item in scope.row.time_limit"
                     :key="item.day"
@@ -36,7 +36,7 @@
         align="center"
         label="操作">
             <template slot-scope="scope">
-                <el-button type="danger" @click="deleteParams(scope.$index)">删除</el-button>
+                <el-button type="danger" @click="deleteParams(scope.$index)" :disabled="disabled">删除</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -54,6 +54,10 @@ export default {
         list: { // 选中的商品
             type: Array,
             default: []
+        },
+        disabled: { // 是否禁止输入
+            type: Boolean,
+            default: false
         }
     },
     data() {
