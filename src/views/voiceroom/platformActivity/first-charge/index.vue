@@ -106,18 +106,18 @@ export default {
                     label: '礼物种类数量',
                     prop: 'gift_count'
                 },
-                {
-                    label: '投入',
-                    prop: 'in'
-                    // render: (h, params) => {
-                    //     let data = MAPDATA.RISKSYSTEMROLELIST.find(item => { return item.value === params.row.user_role })
-                    //     return h('span', data ? data.name : '无')
-                    // }
-                },
-                {
-                    label: '产出',
-                    prop: 'out'
-                },
+                // {
+                //     label: '投入',
+                //     prop: 'in'
+                //     // render: (h, params) => {
+                //     //     let data = MAPDATA.RISKSYSTEMROLELIST.find(item => { return item.value === params.row.user_role })
+                //     //     return h('span', data ? data.name : '无')
+                //     // }
+                // },
+                // {
+                //     label: '产出',
+                //     prop: 'out'
+                // },
                 {
                     label: '首充设置金额',
                     prop: 'cost'
