@@ -8,7 +8,7 @@
         align="center"
         label="商品图标">
             <template slot-scope="scope">
-                <imgComp ref="imgComp" :tagList="[]" :src="returnImg(scope.row)"></imgComp>
+                <imgComp ref="imgComp" height="50px" :tagList="[]" :src="returnImg(scope.row)"></imgComp>
             </template>
         </el-table-column>
         <el-table-column
@@ -85,13 +85,6 @@ export default {
         width: 100%;
         tbody {
             td {
-                .imgComp-box {
-                    .el-image {
-                        img {
-                            height: 50px;
-                        }
-                    }
-                }
                 .el-select {
                     width: 100px;
                 }
