@@ -202,11 +202,6 @@ export default {
                 params.start_time = params.start_time * 1000
                 params.end_time = params.end_time * 1000
                 let res = await getActivetyHasGiftList({ activity_id: params.id })
-                if(res.data.list && res.data.list.length > 0) {
-                    res.data.list.forEach(item => {
-                        item.probability = item.probability / 100000
-                    })
-                }
                 this.$set(params, 'gifts', res.data.list)
                 this.ruleForm = params
             }
@@ -232,7 +227,6 @@ export default {
                         params.gifts.push({
                             id: item.id,
                             type: item.type,
-                            probability: (item.probability * 100000).toFixed(0),
                             gift_number: Number(item.gift_number)
                         })
                     })

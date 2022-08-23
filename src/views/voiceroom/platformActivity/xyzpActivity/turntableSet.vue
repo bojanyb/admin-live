@@ -404,27 +404,18 @@ export default {
             }
 
             let gifts = [];
-            let sumProbability = 0;
             let isShowIndex = true;
             this.popForm.gifts.map(res=>{
-                let probability =  res.probability ? res.probability * 100000 : 0;
                 let item = {
                     id : res.id,
                     sort: res.sort,
-                    probability: probability.toFixed(0),
                     gift_number: Number(res.gift_number)
                 }
-                sumProbability += probability;
                 gifts.push(item);
                 if(!res.sort){
                     isShowIndex = false;
                 }
             })
-            sumProbability = Number((sumProbability / 100000).toFixed(5));
-            if(sumProbability !== 100){
-                this.$message.error("所有礼物概率只为只能为100%！");
-                return
-            }
             if(isShowIndex == false){
                 this.$message.error("请选择有效的礼物位置");
                 return
@@ -468,9 +459,6 @@ export default {
                 method: "post",
                 data: params
             }).then(res => {
-                res.data.list.map(re=>{
-                    re.probability = re.probability / 100000;
-                })
                 this.popForm.gifts = res.data.list;
             }).catch(err=>{
             })
