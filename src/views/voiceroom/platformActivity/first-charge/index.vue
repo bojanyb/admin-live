@@ -2,7 +2,7 @@
 <template>
     <div class="activity-first-charge-box">
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
-        <el-button class="btnBox" type="success" v-if="tabIndex === '0' && list.length < 0" @click="add">新增</el-button>
+        <el-button class="btnBox" type="success" v-if="tabIndex === '0' && list.length <= 0" @click="add">新增</el-button>
         <div class="searchParams" v-if="tabIndex !== '0'">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
