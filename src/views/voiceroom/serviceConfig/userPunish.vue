@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
 
         <!-- 新增组件 -->
         <userComp v-if="isDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList"></userComp>
@@ -182,18 +182,24 @@ export default {
         onSearch() {
             this.getList()
         },
+        rowClick(row) {
+            this.load('see', row)
+        },
         // 新增
         add() {
+            this.load('add')
+        },
+        load(status, row) {
             this.isDestoryComp = true
             setTimeout(() => {
-                this.$refs.userComp.dialogVisible = true
+                this.$refs.userComp.loadParams(status, row)
             }, 50);
         },
         // 解除
         async deleteParams(id) {
             let res = await removeUser({ id })
             if(res.code === 2000) {
-                this.$message.success('解除成功')
+                this.$success('解除成功')
                 this.getList()
             }
         },

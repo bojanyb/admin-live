@@ -23,10 +23,10 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="首充金额" prop="cost">
-                    <el-input v-model="ruleForm.cost" :disabled="disabled" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
+                    <el-input v-model="ruleForm.cost" :disabled="true" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
                 </el-form-item>
                 <el-form-item label="赠送单位" prop="name" :rules="unitResult">
-                    <el-input v-model="ruleForm.gain.name" :disabled="disabled" placeholder="喵粮/砖石"></el-input>
+                    <el-input v-model="ruleForm.gain.name" :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label="赠送图片" prop="gain_image" :rules="ImgResult">
                     <uploadImg ref="uploadImg" v-model="ruleForm.gain.gain_image" :imgUrl="ruleForm.gain.gain_image" name="gain_image" @validateField="validateField" accept=".png,.jpg,.jpeg" :disabled="disabled"></uploadImg>
@@ -102,7 +102,7 @@ export default {
                 code: 'scpz',
                 type: null,
                 icon: '',
-                cost: '',
+                cost: 6,
                 start_time: '',
                 end_time: '',
                 gifts: [],
@@ -254,6 +254,7 @@ export default {
                 let params = JSON.parse(JSON.stringify(row))
                 params.start_time = params.start_time * 1000
                 params.end_time = params.end_time * 1000
+                params.cost = 6
                 let res = await getActivetyHasGiftList({ activity_id: row.id })
                 if(res.code === 2000) {
                     if(res.data.goods && res.data.goods.length > 0) {

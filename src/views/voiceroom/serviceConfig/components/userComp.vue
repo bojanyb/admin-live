@@ -5,23 +5,24 @@
         :title="title"
         ref="drawer"
         @cancel="cancel"
+        @closed="closed"
         :disabled="disabled">
             <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="用户ID" prop="user_number">
-                    <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
+                    <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label="处罚类型" prop="type">
-                    <el-select v-model="ruleForm.type" placeholder="请选择">
+                    <el-select v-model="ruleForm.type" placeholder="请选择" :disabled="disabled">
                         <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="处罚时间" prop="ban_duration">
-                    <el-select v-model="ruleForm.ban_duration" placeholder="请选择">
+                    <el-select v-model="ruleForm.ban_duration" placeholder="请选择" :disabled="disabled">
                         <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="处罚备注" prop="remark">
-                    <el-input type="textarea" :rows="4" v-model="ruleForm.remark"></el-input>
+                    <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
                 </el-form-item>
             </el-form>
         </drawer>
@@ -36,11 +37,15 @@ import { save } from '@/api/risk'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
+    components: {
+        drawer
+    },
     data() {
         return {
             dialogVisible: false,
             timeList: MAPDATA.DURATION, // 处罚时长
             typeList: MAPDATA.USERPUNISHTYPELIST, // 处罚类型
+            status: 'add',
             ruleForm: {
                 user_number: '',
                 type: null,
@@ -64,12 +69,35 @@ export default {
             }
         };
     },
+    computed: {
+        title() { // 标题
+            if(this.status === 'add') {
+                return '新增用户处罚'
+            } else if(this.status === 'see') {
+                return '查看用户处罚'
+            }
+        },
+        disabled() { // 禁止输入
+            if(this.status === 'see') {
+                return true
+            }
+            return false
+        }
+    },
     methods: {
         handleClose() {
             this.dialogVisible = false
         },
         // 获取数据
-        loadParams() {},
+        loadParams(status, row) {
+            this.openComp()
+            this.status = status
+            if(status !== 'add') {
+                let params = JSON.parse(JSON.stringify(row))
+                params.ban_duration = params.ban_duration ? params.ban_duration : ''
+                this.$set(this.$data, 'ruleForm', params)
+            }
+        },
         openComp(status = true) {
             this.$refs.drawer.loadParams(status)
         },
@@ -80,7 +108,7 @@ export default {
                     let params = { ...this.ruleForm }
                     let res = await save(params)
                     if(res.code === 2000) {
-                        this.$message.success('添加成功')
+                        this.$success('添加成功')
                         this.dialogVisible = false
                         this.$emit('getList')
                     }
@@ -96,6 +124,9 @@ export default {
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
+        },
+        cancel() {
+            this.openComp(false)
         }
     }
 }
@@ -104,7 +135,7 @@ export default {
 <style lang="scss">
 .serviceConfig-userComp-box {
     .el-select {
-        width: 310px;
+        width: 290px;
     }
 }
 </style>
