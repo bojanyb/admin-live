@@ -36,11 +36,15 @@ import { save } from '@/api/risk'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
+    components: {
+        drawer
+    },
     data() {
         return {
             dialogVisible: false,
             timeList: MAPDATA.DURATION, // 处罚时长
             typeList: MAPDATA.USERPUNISHTYPELIST, // 处罚类型
+            status: 'add',
             ruleForm: {
                 user_number: '',
                 type: null,
@@ -64,12 +68,34 @@ export default {
             }
         };
     },
+    computed: {
+        title() {
+            if(this.status === 'add') {
+                return '新增用户处罚'
+            } else if(this.status === 'see') {
+                return '查看用户处罚'
+            }
+        },
+        disabled() {
+            if(this.status === 'see') {
+                return true
+            }
+            return false
+        }
+    },
     methods: {
         handleClose() {
             this.dialogVisible = false
         },
         // 获取数据
-        loadParams() {},
+        loadParams(status, row) {
+            this.openComp()
+            this.status = status
+            if(status !== 'add') {
+                let params = JSON.parse(JSON.stringify(row))
+                this.$set(this.$data, 'ruleForm', params)
+            }
+        },
         openComp(status = true) {
             this.$refs.drawer.loadParams(status)
         },
@@ -96,6 +122,9 @@ export default {
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
+        },
+        cancel() {
+            this.openComp(false)
         }
     }
 }
