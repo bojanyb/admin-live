@@ -37,13 +37,14 @@
                 <template slot-scope="scope">
                     <el-select v-model="scope.row.sort" placeholder="请选择" :disabled="disabled">
                         <el-option
-                            v-for="item in locationFunc"
-                            :key="item.value"
-                            :label="item.value"
-                            :value="item.value"
-                            :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
+                        v-for="item in locationFunc"
+                        :key="item.value"
+                        :label="item.value"
+                        :value="item.value"
+                        :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                    <div class="errorMsg" v-if="!scope.row.sort">请选择</div>
                 </template>
             </el-table-column>
             <el-table-column label="操作">

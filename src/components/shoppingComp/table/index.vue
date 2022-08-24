@@ -29,13 +29,14 @@
             <template slot-scope="scope">
                 <el-select v-model="scope.row.sort" placeholder="请选择" :disabled="disabled">
                     <el-option
-                        v-for="item in locationFunc"
-                        :key="item.value"
-                        :label="item.value"
-                        :value="item.value"
-                        :disabled="item.disabled">
-                        </el-option>
-                    </el-select>
+                    v-for="item in locationFunc"
+                    :key="item.value"
+                    :label="item.value"
+                    :value="item.value"
+                    :disabled="item.disabled">
+                    </el-option>
+                </el-select>
+                <div class="errorMsgCopy" v-if="!scope.row.sort">请选择</div>
             </template>
         </el-table-column>
         <el-table-column
@@ -139,7 +140,12 @@ export default {
                 .errorMsg {
                     color: #FF4949;
                     font-size: 12px;
-                    margin-left: -50px;
+                    margin-left: -80px;
+                }
+                .errorMsgCopy {
+                    color: #FF4949;
+                    font-size: 12px;
+                    margin-left: -60px;
                 }
             }
         }
