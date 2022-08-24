@@ -34,6 +34,17 @@
                 <el-form-item label="赠送价格" prop="price" :rules="priceResult">
                     <el-input v-model="ruleForm.gain.price" :disabled="disabled" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
                 </el-form-item>
+                <el-form-item label="赠送排序" prop="price" :rules="priceResult">
+                    <el-select v-model="ruleForm.gain.sort" clearable placeholder="请选择" :disabled="disabled">
+                        <el-option
+                        v-for="item in locationList"
+                        :key="item.value"
+                        :label="item.value"
+                        :value="item.value"
+                        :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="开始时间" prop="start_time">
                     <el-date-picker
                     :disabled="disabled"
@@ -262,7 +273,7 @@ export default {
                         }
                     })
                 }
-                if(item.value === 4) {
+                if(item.value === this.ruleForm.gain.sort) {
                     item.disabled = true
                 }
             })

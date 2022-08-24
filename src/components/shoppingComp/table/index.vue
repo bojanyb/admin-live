@@ -27,7 +27,7 @@
         </el-table-column>
         <el-table-column label="礼物位置" align="center" v-if="isShowLocation">
             <template slot-scope="scope">
-                <el-select v-model="scope.row.sort" placeholder="请选择" :disabled="disabled">
+                <el-select v-model="scope.row.sort" clearable placeholder="请选择" :disabled="disabled">
                     <el-option
                     v-for="item in locationFunc"
                     :key="item.value"
