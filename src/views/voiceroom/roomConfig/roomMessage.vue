@@ -5,7 +5,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
 
         <!-- 引入新增组件 -->
         <roomComp v-if="isDestoryComp" ref="roomComp" @destoryComp="destoryComp" @getList="getList"></roomComp>
@@ -244,11 +244,18 @@ export default {
         onSearch() {
             this.getList()
         },
+        // 查看
+        rowClick(row) {
+            this.load('see', row)
+        },
         // 修改
         update(row) {
+            this.load('update', row)
+        },
+        load(status, row) {
             this.isDestoryComp = true
             setTimeout(() => {
-                this.$refs.roomComp.loadParams(row, this.classifyList)
+                this.$refs.roomComp.loadParams(status, row, this.classifyList)
             }, 50);
         },
         // 关播

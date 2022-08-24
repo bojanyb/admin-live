@@ -88,7 +88,7 @@ export default {
     },
     methods: {
         handleClose() {
-            this.dialogVisible = false
+            this.openComp(false)
         },
         // 获取数据
         loadParams(status, row) {

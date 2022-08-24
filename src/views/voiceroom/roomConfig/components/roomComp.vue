@@ -1,55 +1,55 @@
 <template>
     <div class="roomConfig-roomComp-box">
-        <el-dialog
-        title="修改房间信息"
-        :visible.sync="dialogVisible"
-        width="450px"
-        :before-close="handleClose"
-        @closed="closed">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-suffix=":">
+        <drawer 
+        size="450px"
+        :title="title"
+        ref="drawer"
+        :isShowUpdate="true"
+        @cancel="cancel"
+        @submitForm="submitForm"
+        @closed="closed"
+        :disabled="disabled"
+        @update="update">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-suffix=":">
                 <el-form-item label="房间ID">
                     <span class="roomBox">{{ ruleForm.room_number }}</span>
                 </el-form-item>
                 <el-form-item label="房间标题" prop="title">
-                    <el-input v-model="ruleForm.title"></el-input>
+                    <el-input v-model="ruleForm.title" :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label="首页推荐" prop="back_recommend">
-                    <el-radio-group v-model="ruleForm.back_recommend">
+                    <el-radio-group v-model="ruleForm.back_recommend" :disabled="disabled">
                         <el-radio :label="1">开</el-radio>
                         <el-radio :label="0">关</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="房间分类" prop="type">
-                    <el-select v-model="ruleForm.type" placeholder="请选择业务类型">
+                    <el-select v-model="ruleForm.type" placeholder="请选择业务类型" :disabled="disabled">
                         <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="房间封面" prop="cover">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.cover" :imgUrl="ruleForm.cover" name="cover" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
+                    <uploadImg ref="uploadImg" v-model="ruleForm.cover" :imgUrl="ruleForm.cover" name="cover" @validateField="validateField" accept=".png,.jpg,.jpeg" :disabled="disabled"></uploadImg>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-            </span>
-        </el-dialog>
+        </drawer>
     </div>
 </template>
 
 <script>
+// 引入抽屉组件
+import drawer from '@/components/drawer/index'
 // 引入api
 import { updateParty } from '@/api/house.js'
 // 引入图片上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
-        uploadImg
+        uploadImg,
+        drawer
     },
     data() {
         return {
-            dialogVisible: false,
             status: 'add',
             typeList: [],
             ruleForm: {
@@ -59,6 +59,7 @@ export default {
                 type: null,
                 cover: ''
             },
+            oldParams: {}, // 老数据
             rules: {
                 title: [
                     { required: true, message: '请输入房间标题', trigger: 'blur' }
@@ -75,16 +76,37 @@ export default {
             }
         };
     },
+    computed: {
+        title() { // 标题
+            if(this.status === 'see') {
+                return '查看房间信息'
+            } else if(this.status === 'update') {
+                return '修改房间信息'
+            }
+        },
+        disabled() { // 是否禁止输入
+            if(this.status === 'see') {
+                return true
+            }
+            return false
+        }
+    },
     methods: {
         handleClose() {
-            this.dialogVisible = false
+            this.openComp(false)
         },
         // 获取参数
-        loadParams(row, list) {
-            this.dialogVisible = true
+        loadParams(status, row, list) {
+            this.openComp()
             this.typeList = list
+            this.status = status
             let params = JSON.parse(JSON.stringify(row))
             this.$set(this.$data, 'ruleForm', params)
+
+            this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
+        },
+        openComp(status = true) {
+            this.$refs.drawer.loadParams(status)
         },
         // 提交
         async submitForm(formName) {
@@ -120,6 +142,24 @@ export default {
         // 重置字段验证
         validateField(name) {
             this.$refs.ruleForm.validateField([name])
+        },
+        // 修改
+        update() {
+            this.status = 'update'
+        },
+        // 取消
+        cancel() {
+            if(JSON.stringify(this.oldParams) !== JSON.stringify(this.ruleForm)) { // 记录数据 - 有改动就提示
+                this.$confirm('关闭弹窗将不会保留您的更改, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.openComp(false)
+                }).catch(() => {});
+            } else {
+                this.openComp(false)
+            }
         }
     }
 }
