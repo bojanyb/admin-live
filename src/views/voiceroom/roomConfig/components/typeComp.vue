@@ -1,7 +1,7 @@
 <template>
-    <div class="roomConfig-roomComp-box">
+    <div class="roomConfig-typeComp-box">
         <drawer 
-        size="600px"
+        size="500px"
         :title="title"
         ref="drawer"
         :isShowUpdate="true"
@@ -11,38 +11,15 @@
         :disabled="disabled"
         @update="update">
             <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-suffix=":">
-                <div class="flexBox">
-                    <el-form-item label="房间ID">
-                        <el-input v-model="ruleForm.room_number" :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="房主">
-                        <!-- <span class="roomBox">{{ ruleForm.nickname }}（{{ ruleForm.user_number }}）</span> -->
-                        <el-input v-model="ruleForm.room_number" :disabled="true"></el-input>
-                    </el-form-item>
-                </div>
-                <div class="flexBox">
-                    <el-form-item label="所属公会">
-                        <el-input v-model="ruleForm.guild_name" :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="房间状态">
-                        <!-- <span class="roomBox">{{ ruleForm.nickname }}（{{ ruleForm.user_number }}）</span> -->
-                        <el-select v-model="ruleForm.type" :disabled="true">
-                            <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </div>
-                <el-form-item label="房间类型" prop="type">
+                <el-form-item label="房间ID">
+                    <el-input v-model="ruleForm.room_number" :disabled="disabled"></el-input>
+                </el-form-item>
+                <el-form-item label="房间类型">
                     <el-select v-model="ruleForm.type" placeholder="请选择业务类型" :disabled="disabled">
                         <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="房间封面" prop="cover">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.cover" :imgUrl="ruleForm.cover" name="cover" @validateField="validateField" accept=".png,.jpg,.jpeg" :disabled="disabled"></uploadImg>
-                </el-form-item>
-                <el-form-item label="房间标题" prop="title">
-                    <el-input v-model="ruleForm.title" :disabled="disabled"></el-input>
-                </el-form-item>
-                <el-form-item label="房间公告" prop="title">
+                <el-form-item label="房间备注" prop="title">
                     <el-input type="textarea" :rows="4" v-model="ruleForm.title" :disabled="disabled"></el-input>
                 </el-form-item>
             </el-form>
@@ -183,23 +160,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.roomConfig-roomComp-box {
+<style lang="scss">
+.roomConfig-typeComp-box {
     .el-select {
-        width: 440px;
+        width: 340px;
     }
     .roomBox {
         font-size: 16px;
         // font-weight: 600;
-    }
-    .flexBox {
-        display: flex;
-        .el-select {
-            width: 170px;
-        }
-        .el-input {
-            width: 170px;
-        }
     }
 }
 </style>

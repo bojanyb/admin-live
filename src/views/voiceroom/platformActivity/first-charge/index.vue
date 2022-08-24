@@ -273,7 +273,7 @@ export default {
                 if(this.tabIndex === '0') {
                     this.$refs.firstChangeComp.loadParams(status, row)
                 } else {
-                    this.$refs.userComp.loadParams(status, row)
+                    this.$refs.userComp.loadParams(row)
                 }
             }, 50);
         },

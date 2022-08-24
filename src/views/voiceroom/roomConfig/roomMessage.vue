@@ -9,6 +9,9 @@
 
         <!-- 引入新增组件 -->
         <roomComp v-if="isDestoryComp" ref="roomComp" @destoryComp="destoryComp" @getList="getList"></roomComp>
+
+        <!-- 房间类型详情组件 -->
+        <typeComp v-if="isDestoryComp" ref="typeComp" @destoryComp="destoryComp" @getList="getList"></typeComp>
     </div>
 </template>
 
@@ -17,6 +20,8 @@
 import { updateParty, genreList } from '@/api/house.js'
 // 引入新增组件
 import roomComp from './components/roomComp.vue'
+// 引入房间类型详情组件
+import typeComp from './components/typeComp.vue'
 // 引入tab菜单组件
 import menuComp from '@/components/menuComp/index.vue'
 // 引入菜单组件
@@ -35,7 +40,8 @@ export default {
         SearchPanel,
         tableList,
         menuComp,
-        roomComp
+        roomComp,
+        typeComp
     },
     data() {
         return {
@@ -46,8 +52,11 @@ export default {
                     name: '派对间'
                 },
                 {
-                    name: '直播间'
-                }
+                    name: '添加房间类型'
+                },
+                // {
+                //     name: '直播间'
+                // }
             ],
             classifyList: [],
             searchParams: {
@@ -78,7 +87,7 @@ export default {
                     optionLabel: 'name',
                     label: '房间类型',
                     placeholder: '请选择',
-                    options: MAPDATA.HOUSEMESSAGETYPELIST
+                    options: this.classifyList
                 },
                 {
                     name: 'party_status',
@@ -98,33 +107,32 @@ export default {
                     value: 1,
                     keyName: 'value',
                     optionLabel: 'name',
-                    label: '房间状态',
+                    label: '房间类型',
                     placeholder: '请选择',
-                    options: MAPDATA.HOUSEMESSAGELIVELIST
+                    options: this.classifyList
                 } 
             ]
-            return this.tabIndex === '0' ? [...arr, ...arr2] : [...arr, ...arr3]
+            let array = []
+            switch (this.tabIndex) {
+                case '0':
+                    array = [...arr, ...arr2]
+                    break;
+                case '1':
+                    array = [...arr, ...arr3]
+                    break;
+                case '2':
+                    array = [...arr, ...arr3]
+                    break;
+                default:
+                    break;
+            }
+            return array
         },
         cfgs() {
             let arr = [
                 {
                     label: '房间ID',
                     prop: 'room_number'
-                },
-                {
-                    label: '房间标题',
-                    prop: 'title'
-                }
-            ]
-            let arr2 = [
-                {
-                    label: '房主',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('div', params.row.nickname),
-                            h('div', params.row.user_number || '无')
-                        ])
-                    }
                 }
             ]
             let arr3 = [
@@ -147,16 +155,14 @@ export default {
                     imgHeight: '50px'
                 },
                 {
-                    label: '房间分类',
+                    label: '房间标题',
+                    prop: 'title'
+                },
+                {
+                    label: '房间类型',
                     render: (h, params) => {
                         let data = this.classifyList.find(item => { return item.id === params.row.type })
                         return h('span', data ? data.name : '无')
-                    }
-                },
-                {
-                    label: '所属公会',
-                    render: (h, params) => {
-                        return h('span', params.row.guild_name || '无')
                     }
                 },
                 {
@@ -173,15 +179,11 @@ export default {
                         let data = MAPDATA[name].find(item => { return val === item.value })
                         return h('span', data ? data.name : '无')
                     }
-                }
-            ]
-            let arr5 = [
+                },
                 {
-                    label: '操作',
+                    label: '所属公会',
                     render: (h, params) => {
-                        return h('div', [
-                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改')
-                        ])
+                        return h('span', params.row.guild_name || '无')
                     }
                 }
             ]
@@ -192,16 +194,74 @@ export default {
                     render: (h, params) => {
                         return h('div', [
                             h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
-                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.closeLive(params.row)}}}, '关播')
+                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.closeLive(params.row)}}}, '关闭')
                         ])
                     }
                 }
             ]
-            let name = this.tabIndex === '0' ? 'partyList' : 'liveList'
+            let typeList = [
+                {
+                    label: '添加时间',
+                    render: (h, params) => {
+                        return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                    }
+                },
+                ...arr,
+                {
+                    label: '房主',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('div', params.row.nickname),
+                            h('div', params.row.user_number || '无')
+                        ])
+                    }
+                },
+                {
+                    label: '所属公会',
+                    render: (h, params) => {
+                        return h('span', params.row.guild_name || '无')
+                    }
+                },
+                {
+                    label: '备注',
+                    render: (h, params) => {
+                        return h('span', params.row.guild_name || '无')
+                    }
+                },
+                {
+                    label: '操作人',
+                    render: (h, params) => {
+                        return h('span', params.row.guild_name || '无')
+                    }
+                },
+                {
+                    label: '操作',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.closeLive(params.row)}}}, '移除')
+                        ])
+                    }
+                }
+            ]
+            let name, column;
+            switch (this.tabIndex) {
+                case '0':
+                    name = 'partyList'
+                    column = [...arr, ...arr4, ...arr6]
+                    break;
+                case '1':
+                    name = 'partyList'
+                    column = typeList
+                    break;
+                case '2':
+                    name = 'liveList'
+                    column = [...arr, ...arr3, ...arr4, ...arr6]
+                    break;
+            }
             return {
                 vm: this,
                 url: REQUEST.house[name],
-                columns: this.tabIndex === '0' ? [...arr, ...arr2, ...arr4, ...arr5] : [...arr, ...arr3, ...arr4, ...arr6]
+                columns: column
             }
         }
     },
@@ -257,7 +317,11 @@ export default {
         load(status, row) {
             this.isDestoryComp = true
             setTimeout(() => {
-                this.$refs.roomComp.loadParams(status, row, this.classifyList)
+                if(this.tabIndex === '0') {
+                    this.$refs.roomComp.loadParams(status, row, this.classifyList)
+                } else {
+                    this.$refs.typeComp.loadParams(status, row, this.classifyList)
+                }
             }, 50);
         },
         // 关播
