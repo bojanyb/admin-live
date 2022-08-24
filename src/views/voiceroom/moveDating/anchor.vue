@@ -124,8 +124,10 @@ export default {
             this.load('add')
         },
         // 查看
-        rowClick(row) {
-            this.load('see', row)
+        rowClick(row, column) {
+            if(column.property !== 'face') {
+                this.load('see', row)
+            }
         },
         load(status, row) {
             this.isDestoryComp = true

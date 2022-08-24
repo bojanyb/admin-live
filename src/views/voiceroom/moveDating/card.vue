@@ -131,8 +131,10 @@ export default {
             this.load('update', row)
         },
         // 查看
-        rowClick(row) {
-            this.load('see', row)
+        rowClick(row, column) {
+            if(column.property !== 'img') {
+                this.load('see', row)
+            }
         },
         load(status, row) {
             this.isDestoryComp = true

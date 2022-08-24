@@ -218,8 +218,10 @@ export default {
             }
         },
         // 查看
-        rowClick(row) {
-            this.$refs.coverDetails.loadParams(row)
+        rowClick(row, column) {
+            if(column.property !== 'cover_url') {
+                this.$refs.coverDetails.loadParams(row)
+            }
         },
         // 销毁组件
         destoryComp() {

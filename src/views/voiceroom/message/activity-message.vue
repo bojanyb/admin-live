@@ -125,8 +125,10 @@ export default {
             this.getList()
         },
         // 查看数据
-        rowClick(row) {
-            this.load('see', row)
+        rowClick(row, column) {
+            if(column.property !== 'image_url') {
+                this.load('see', row)
+            }
         },
         // 新增
         add() {

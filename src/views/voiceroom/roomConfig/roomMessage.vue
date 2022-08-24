@@ -245,8 +245,10 @@ export default {
             this.getList()
         },
         // 查看
-        rowClick(row) {
-            this.load('see', row)
+        rowClick(row, column) {
+            if(column.property !== 'cover') {
+                this.load('see', row)
+            }
         },
         // 修改
         update(row) {
@@ -269,7 +271,7 @@ export default {
             }
             let res = await updateParty(params)
             if(res.code === 2000) {
-                this.$message.success('关播成功')
+                this.$success('关播成功')
                 this.getList()
             }
         },

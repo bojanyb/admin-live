@@ -122,8 +122,12 @@ export default {
                     }
                     let res = await updateParty(params)
                     if(res.code === 2000) {
-                        this.$message.success('新增成功')
-                        this.dialogVisible = false
+                        if(this.status === 'add') {
+                            this.$success('新增成功')
+                        } else {
+                            this.$success('修改成功')
+                        }
+                        this.openComp(false)
                         this.$emit('getList')
                     }
                 } else {
