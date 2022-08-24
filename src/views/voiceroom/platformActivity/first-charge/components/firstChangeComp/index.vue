@@ -282,6 +282,7 @@ export default {
                 params.start_time = params.start_time * 1000
                 params.end_time = params.end_time * 1000
                 params.cost = 6
+                params.gain.sort = 1
                 let res = await getActivetyHasGiftList({ activity_id: row.id })
                 if(res.code === 2000) {
                     if(res.data.goods && res.data.goods.length > 0) {
@@ -334,7 +335,8 @@ export default {
                         s.gifts = s.gifts.map(a => {
                             return {
                                 id: a.id,
-                                gift_number: a.gift_number
+                                gift_number: a.gift_number,
+                                sort: a.sort
                             }
                         })
                     }
@@ -342,7 +344,8 @@ export default {
                         s.goods = s.goods.map(a => {
                             return {
                                 id: a.id,
-                                use_date: a.use_date
+                                use_date: a.use_date,
+                                sort: a.sort
                             }
                         })
                     }
