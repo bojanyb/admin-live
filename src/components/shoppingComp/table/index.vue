@@ -25,7 +25,7 @@
                 <div class="errorMsg" v-if="!scope.row.use_date">请选择</div>
             </template>
         </el-table-column>
-        <el-table-column label="礼物位置" align="center" v-if="isShowLocation">
+        <el-table-column label="商品位置" align="center" v-if="isShowLocation">
             <template slot-scope="scope">
                 <el-select v-model="scope.row.sort" clearable placeholder="请选择" :disabled="disabled">
                     <el-option

@@ -34,7 +34,7 @@
                 <el-form-item label="赠送价格" prop="price" :rules="priceResult">
                     <el-input v-model="ruleForm.gain.price" :disabled="disabled" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
                 </el-form-item>
-                <el-form-item label="赠送排序" prop="price" :rules="priceResult">
+                <el-form-item label="赠送排序" prop="price" :rules="sortResult">
                     <el-select v-model="ruleForm.gain.sort" clearable placeholder="请选择" :disabled="disabled">
                         <el-option
                         v-for="item in locationList"
@@ -45,7 +45,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="开始时间" prop="start_time">
+                <el-form-item label="开始时间" prop="start_time" :rules="StartRules">
                     <el-date-picker
                     :disabled="disabled"
                     v-model="ruleForm.start_time"
@@ -165,8 +165,8 @@ export default {
             params = {
                 required: true,
                 validator: (rules, val, cb) => {
-                    if(start < new Date().getTime()) {
-                        cb(new Error('开始时间不能小于当前时间!'))
+                    if(!start) {
+                        cb(new Error('请选择开始时间'))
                     } else {
                         cb()
                     }
@@ -278,6 +278,21 @@ export default {
                 }
             })
             return arr
+        },
+        sortResult() { // 赠送排序验证
+            let params = {}
+            params = {
+                required: true,
+                validator: (rules, val, cb) => {
+                    let s = this.ruleForm.gain
+                    if(s.sort) {
+                        cb()
+                    } else {
+                        cb(new Error('请选择赠送排序'))
+                    }
+                }
+            }
+            return params
         }
     },
     methods: {
@@ -342,7 +357,22 @@ export default {
                     let s = { ...this.ruleForm }
                     s.start_time = Math.floor(s.start_time / 1000)
                     s.end_time = Math.floor(s.end_time / 1000)
+                    if(s.goods.length <= 0 && s.goods.length <= 0) {
+                        this.$error('请至少添加一个商品或礼物')
+                        return false
+                    }
                     if(s.gifts && s.gifts.length > 0) {
+                        let isUse_date = s.gifts.find(item => { return !item.gift_number })
+                        let isSort = s.gifts.find(item => { return !item.sort })
+                        if(isUse_date) {
+                            this.$warning(`请先输入礼物${isUse_date.gift_name}的礼物数量`)
+                            return false
+                        }
+                        if(isSort) {
+                            this.$warning(`请先选择礼物${isSort.gift_name}的礼物位置`)
+                            return false
+                        }
+
                         s.gifts = s.gifts.map(a => {
                             return {
                                 id: a.id,
@@ -352,6 +382,17 @@ export default {
                         })
                     }
                     if(s.goods && s.goods.length > 0) {
+                        let isUse_date = s.goods.find(item => { return !item.use_date })
+                        let isSort = s.goods.find(item => { return !item.sort })
+                        if(isUse_date) {
+                            this.$warning(`请先输入商品${isUse_date.goods_name}的商品数量`)
+                            return false
+                        }
+                        if(isSort) {
+                            this.$warning(`请先选择商品${isSort.goods_name}的商品位置`)
+                            return false
+                        }
+
                         s.goods = s.goods.map(a => {
                             return {
                                 id: a.id,
@@ -359,10 +400,6 @@ export default {
                                 sort: a.sort
                             }
                         })
-                    }
-                    if(s.goods.length <= 0 && s.goods.length <= 0) {
-                        this.$error('请至少添加一个商品或礼物')
-                        return false
                     }
                     let res = await addFirstCharge(s)
                     if(res.code === 2000) {
