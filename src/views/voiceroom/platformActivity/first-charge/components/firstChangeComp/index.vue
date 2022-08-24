@@ -112,7 +112,7 @@ export default {
                     name: '喵粮',
                     gain_image: '',
                     price: '',
-                    sort: 1
+                    sort: 4
                 }
             },
             rules: {
@@ -262,7 +262,7 @@ export default {
                         }
                     })
                 }
-                if(item.value === 1) {
+                if(item.value === 4) {
                     item.disabled = true
                 }
             })
@@ -282,7 +282,7 @@ export default {
                 params.start_time = params.start_time * 1000
                 params.end_time = params.end_time * 1000
                 params.cost = 6
-                params.gain.sort = 1
+                params.gain.sort = 4
                 let res = await getActivetyHasGiftList({ activity_id: row.id })
                 if(res.code === 2000) {
                     if(res.data.goods && res.data.goods.length > 0) {
