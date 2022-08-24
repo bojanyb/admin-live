@@ -10,7 +10,7 @@
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <el-form-item label="礼物名" prop="gift_name">
-                    <el-input v-model="ruleForm.gift_name" placeholder="请输入礼物名" :disabled="true"></el-input>
+                    <el-input v-model="ruleForm.gift_name" placeholder="请输入礼物名" :disabled="status === 'add' ? false : true"></el-input>
                 </el-form-item>
                 <el-form-item label="礼物类型" prop="gift_genre">
                     <el-radio-group v-model="ruleForm.gift_genre">
@@ -57,7 +57,7 @@
                     <el-input v-model="ruleForm.gift_version" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d.]/g,'');" placeholder="请输入礼物版本号"></el-input>
                 </el-form-item>
                 <el-form-item label="钻石价格" prop="gift_diamond">
-                    <el-input v-model="ruleForm.gift_diamond" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入钻石价格" :disabled="true"></el-input>
+                    <el-input v-model="ruleForm.gift_diamond" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入钻石价格" :disabled="status === 'add' ? false : true"></el-input>
                 </el-form-item>
                 <!-- <el-form-item label="平台分成" prop="name">
                     <el-input v-model="ruleForm.gift_name"></el-input>
