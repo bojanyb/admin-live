@@ -28,7 +28,7 @@
                 label="数量">
                 <template slot-scope="scope">
                     <div class="numBox">
-                        <el-input v-model="scope.row.gift_number" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled"></el-input>个
+                        <el-input v-model="scope.row.gift_number" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled" @input="numberInput(scope.row)"></el-input>个
                     </div>
                     <div class="errorMsg" v-if="!scope.row.gift_number">请填写数量</div>
                 </template>
@@ -76,11 +76,19 @@ export default {
         disabled: { // 是否禁止输入
             type: Boolean,
             default: false
+        },
+        max: { // 最大输入
+            type: Number,
+            default: null
+        },
+        locationList: { // 礼物位置列表
+            type: Array,
+            default: []
         }
     },
     data() {
         return {
-            locationList: MAPDATA.LOCATIONLIST
+            locationListCopy: MAPDATA.LOCATIONLIST
         };
     },
     computed: {
@@ -99,21 +107,31 @@ export default {
             return num
         },
         locationFunc() {
-            let array = JSON.parse(JSON.stringify(this.locationList))
-            this.gifts.forEach(item => {
-                array.forEach(x => {
-                    if(item.sort === x.value) {
-                        x.disabled = true
-                    }
+            if(this.locationList && this.locationList.length > 0) { // 传入位置列表
+                return this.locationList
+            } else { // 不传入
+                let array = JSON.parse(JSON.stringify(this.locationListCopy))
+                this.gifts.forEach(item => {
+                    array.forEach(x => {
+                        if(item.sort === x.value) {
+                            x.disabled = true
+                        }
+                    })
                 })
-            })
-            return array
-        },
+                return array
+            }
+        }
     },
     methods: {
         // 删除
         deleteData(row, index) {
             this.$emit('deleteData', {row, index})
+        },
+        // 输入
+        numberInput(row) {
+            if(this.max && Number(row.gift_number) > this.max) {
+                row.gift_number = this.max
+            }
         }
     }
 }

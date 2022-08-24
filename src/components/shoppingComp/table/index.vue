@@ -21,15 +21,21 @@
         align="center"
         label="商品天数">
             <template slot-scope="scope">
-                <el-select v-model="scope.row.use_date" placeholder="请选择" :disabled="disabled">
-                    <el-option
-                    v-for="item in scope.row.time_limit"
-                    :key="item.day"
-                    :label="item.day"
-                    :value="item.day">
-                    </el-option>
-                </el-select>
+                <el-input v-model="scope.row.use_date" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled" @input="numberInput(scope.row)"></el-input>天
                 <div class="errorMsg" v-if="!scope.row.use_date">请选择</div>
+            </template>
+        </el-table-column>
+        <el-table-column label="礼物位置" align="center" v-if="isShowLocation">
+            <template slot-scope="scope">
+                <el-select v-model="scope.row.sort" placeholder="请选择" :disabled="disabled">
+                    <el-option
+                        v-for="item in locationFunc"
+                        :key="item.value"
+                        :label="item.value"
+                        :value="item.value"
+                        :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
             </template>
         </el-table-column>
         <el-table-column
@@ -46,6 +52,8 @@
 <script>
 // 引入图片组件
 import imgComp from '@/components/tableList/imgComp.vue'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
         imgComp
@@ -58,12 +66,42 @@ export default {
         disabled: { // 是否禁止输入
             type: Boolean,
             default: false
+        },
+        isShowLocation: { // 是否显示商品位置
+            type: Boolean,
+            default: false
+        },
+        max: { // 最大输入
+            type: Number,
+            default: null
+        },
+        locationList: { // 礼物位置列表
+            type: Array,
+            default: []
         }
     },
     data() {
         return {
-
+            locationListCopy: MAPDATA.LOCATIONLIST
         };
+    },
+    computed: {
+        // 商品位置
+        locationFunc() {
+            if(this.locationList && this.locationList.length > 0) { // 传入位置列表
+                return this.locationList
+            } else { // 不传入
+                let array = JSON.parse(JSON.stringify(this.locationListCopy))
+                this.list.forEach(item => {
+                    array.forEach(x => {
+                        if(item.sort === x.value) {
+                            x.disabled = true
+                        }
+                    })
+                })
+                return array
+            }
+        }
     },
     methods: {
         returnImg(row) {
@@ -76,6 +114,12 @@ export default {
         // 删除
         deleteParams(index) {
             this.list.splice(index, 1)
+        },
+        // 输入天数
+        numberInput(row) {
+            if(this.max && Number(row.use_date) > this.max) {
+                row.use_date = this.max
+            }
         }
     }
 }
@@ -89,7 +133,7 @@ export default {
         width: 100%;
         tbody {
             td {
-                .el-select {
+                .el-input {
                     width: 100px;
                 }
                 .errorMsg {

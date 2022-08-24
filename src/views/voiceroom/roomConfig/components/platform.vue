@@ -63,8 +63,6 @@
                             }
                         }
                     })
-
-                    console.log(this.configList, 'configList----------1010')
                 }
 			}
 		},

@@ -17,7 +17,7 @@
                 <el-form-item label="增加热度" prop="hot_value">
                     <el-input v-model="ruleForm.hot_value" :disabled="disabled"></el-input>
                 </el-form-item>
-                <el-form-item label="生效时间" prop="time">
+                <el-form-item label="生效时间" prop="time" :rules="timeResult">
                     <el-date-picker
                     v-model="ruleForm.time"
                     type="datetimerange"
@@ -91,6 +91,25 @@ export default {
                 return true
             }
             return false
+        },
+        timeResult() { // 生效时间限制
+            let params = {}
+            params = {
+                required: true,
+                validator: (rules, val, cb) => {
+                    let time = this.ruleForm.time
+                    if(!time) {
+                        cb(new Error('请选择生效时间'))
+                    } else {
+                        if(time[1] < new Date().getTime()) {
+                            cb(new Error('结束时间不可小于当前时间'))
+                        } else {
+                            cb()
+                        }
+                    }
+                }
+            }
+            return params
         }
     },
     methods: {

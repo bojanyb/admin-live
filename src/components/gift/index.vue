@@ -2,7 +2,7 @@
     <div class="share-gift-box">
         <div class="giftAllocation">
             <!-- <zItem ref="zItem" :isShowProperty="isShowProperty" :status="status" :isShowLocation="isShowLocation" :gifts="gifts" @deleteData="deleteData"></zItem> -->
-            <tableComp ref="tableComp" :status="status" :isShowLocation="isShowLocation" :gifts="gifts" @deleteData="deleteData" :disabled="disabled"></tableComp>
+            <tableComp ref="tableComp" :status="status" :isShowLocation="isShowLocation" :gifts="gifts" @deleteData="deleteData" :disabled="disabled" :max="max" :locationList="locationList"></tableComp>
         </div>
 
         <drawer ref="drawer" v-if="isDestoryComp" :status="status" @distoryComp="distoryComp" :activityType="activityType" :list="gifts"></drawer>
@@ -46,6 +46,14 @@ export default {
         disabled: { // 是否禁止输入
             type: Boolean,
             default: false
+        },
+        max: { // 最大输入天数
+            type: Number,
+            default: null
+        },
+        locationList: { // 礼物位置列表
+            type: Array,
+            default: []
         }
     },
     data() {

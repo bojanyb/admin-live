@@ -1,7 +1,7 @@
 <template>
     <div class="moveDating-cardComp-box">
         <drawer 
-        size="800px"
+        size="850px"
         :title="title"
         ref="drawer"
         :isShowUpdate="true"
@@ -58,12 +58,12 @@
                     <el-button type="primary" :disabled="disabled" @click="$refs.gift.handleAddGiftShow()">添 加</el-button>
                 </el-form-item>
                 <!-- 礼物组件 -->
-                <gift ref="gift" :isShowProperty="true" :status="status" :isShowLocation="false" :activityType="ruleForm.code" :list="ruleForm.gifts" :disabled="disabled"></gift>
+                <gift ref="gift" :isShowProperty="true" :status="status" :isShowLocation="true" :activityType="ruleForm.code" :list="ruleForm.gifts" :disabled="disabled" :max="100" :locationList="locationList"></gift>
                 <el-form-item label="添加商品">
                     <el-button type="primary" :disabled="disabled" @click="$refs.goodsComp.loadParams()">添 加</el-button>
                 </el-form-item>
                 <!-- 商品组件 -->
-                <goodsComp ref="goodsComp" :list="ruleForm.goods" :disabled="disabled"></goodsComp>
+                <goodsComp ref="goodsComp" :list="ruleForm.goods" :disabled="disabled" :max="7" :locationList="locationList" :isShowLocation="true"></goodsComp>
             </el-form>
         </drawer>
     </div>
@@ -96,6 +96,7 @@ export default {
             status: 'add', // 当前状态
             oldParams: {}, // 老数据
             typeList: MAPDATA.DWACTIVITYTYPE,
+            positionList: MAPDATA.LOCATIONLIST,
             ruleForm: {
                 id: null,
                 name: '',
@@ -110,7 +111,8 @@ export default {
                 gain: {
                     name: '喵粮',
                     gain_image: '',
-                    price: ''
+                    price: '',
+                    sort: 1
                 }
             },
             rules: {
@@ -240,6 +242,31 @@ export default {
                 }
             }
             return params
+        },
+        locationList() { // 排序列表数据
+            let array = this.positionList.filter(item => { return item.value < 5 })
+            let arr = JSON.parse(JSON.stringify(array))
+            let s = this.ruleForm
+            arr.forEach(item => {
+                if(s.goods && s.goods.length > 0) {
+                    s.goods.forEach(a => {
+                        if(a.sort === item.value) {
+                            item.disabled = true
+                        }
+                    })
+                }
+                if(s.gifts && s.gifts.length > 0) {
+                    s.gifts.forEach(a => {
+                        if(a.sort === item.value) {
+                            item.disabled = true
+                        }
+                    })
+                }
+                if(item.value === 1) {
+                    item.disabled = true
+                }
+            })
+            return arr
         }
     },
     methods: {

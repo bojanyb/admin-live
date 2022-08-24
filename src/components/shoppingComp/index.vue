@@ -1,7 +1,7 @@
 <template>
     <div class="shoppingComp-box">
         <!-- 列表组件 -->
-        <tableComp ref="tableComp" :list="goods" :disabled="disabled"></tableComp>
+        <tableComp ref="tableComp" :list="goods" :disabled="disabled" :max="max" :locationList="locationList" :isShowLocation="isShowLocation"></tableComp>
 
         <!-- 商品组件 -->
         <goodsBank ref="goodsBank" :isLimit="99999999" :list="goods" @validateField="validateField"></goodsBank>
@@ -24,6 +24,18 @@ export default {
             default: []
         },
         disabled: { // 是否禁止输入
+            type: Boolean,
+            default: false
+        },
+        max: { // 最大输入天数
+            type: Number,
+            default: null
+        },
+        locationList: { // 礼物位置列表
+            type: Array,
+            default: []
+        },
+        isShowLocation: { // 是否显示商品位置
             type: Boolean,
             default: false
         }
