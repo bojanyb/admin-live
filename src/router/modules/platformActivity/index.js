@@ -75,7 +75,7 @@ const platformActivityRouter = {
 						title: '喵喵乐园记录',
 					},
 					name: 'paradiseRecord'
-				},
+				}
 			]
 		},
 		{

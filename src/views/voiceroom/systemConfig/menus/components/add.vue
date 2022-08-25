@@ -16,6 +16,7 @@
                     :props="props"
                     :disabled="disabled"
                     :show-all-levels="false"
+                    clearable
                     @change="cascaderChange"></el-cascader>
                 </el-form-item>
                 <el-form-item label="菜单名称" prop="title">
@@ -107,7 +108,9 @@ export default {
     methods: {
         cascaderChange(v) {
             this.$refs.cascader.toggleDropDownVisible(false);
-            this.ruleForm.pid = v[v.length - 1]
+            if(v) {
+                this.ruleForm.pid = v[v.length - 1]
+            }
         },
         handleChange(value) {
             console.log(value);
