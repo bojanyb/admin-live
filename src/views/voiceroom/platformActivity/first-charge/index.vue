@@ -140,19 +140,21 @@ export default {
                 },
                 {
                     label: '开始时间',
+                    minWidth: '100px',
                     render: (h, params) => {
                         return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                     }
                 },
                 {
                     label: '结束时间',
-                    prop: 'room_number',
+                    minWidth: '100px',
                     render: (h, params) => {
                         return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                     }
                 },
                 {
                     label: '操作',
+                    minWidth: '120px',
                     render: (h, params) => {
                         return h('div', [
                             h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),

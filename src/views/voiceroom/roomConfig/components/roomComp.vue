@@ -80,7 +80,7 @@ export default {
                     { required: true, message: '请输入房间标题', trigger: 'blur' }
                 ],
                 notice: [
-                    { required: true, message: '请输入房间公告', trigger: 'blur' }
+                    { required: false, message: '请输入房间公告', trigger: 'blur' }
                 ],
                 back_recommend: [
                     { required: true, message: '是否首页推荐', trigger: 'change' }

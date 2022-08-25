@@ -33,7 +33,9 @@ export default {
         },
         locationList: { // 礼物位置列表
             type: Array,
-            default: []
+            default: function() {
+                return []
+            }
         },
         isShowLocation: { // 是否显示商品位置
             type: Boolean,

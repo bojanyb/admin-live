@@ -1,5 +1,60 @@
 <template>
     <div class="userAdd-box">
+        <drawer 
+        size="470px"
+        :title="title"
+        ref="drawer"
+        :isShowUpdate="true"
+        @cancel="cancel"
+        @submitForm="submitForm"
+        @closed="closed"
+        :disabled="disabled"
+        @update="update">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <div class="leftBox">
+                    <el-form-item label="用户ID" prop="user_number" class="mustBox">
+                        <el-input v-model="ruleForm.user_number" :disabled="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="个性签名" prop="autograph">
+                        <el-input v-model="ruleForm.autograph"></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机号" prop="phone" class="mustBox">
+                        <el-input v-model="ruleForm.phone" :disabled="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="状态" prop="status" class="mustBox">
+                        <div class="statusBox">
+                            <span v-for="(item,index) in statusList" :key="index" :class="[{ 'hign': statusIndex === item.value }, { 'hignBox': item.value == 2 && statusIndex == 2 }]"  @click="statusClick(item.value)">
+                                {{ item.name }}
+                            </span>
+                        </div>
+                    </el-form-item>
+                </div>
+                <div class="centerBox">
+                    <el-form-item label="昵称" prop="nickname">
+                        <el-input v-model="ruleForm.nickname"></el-input>
+                    </el-form-item>
+                    <el-form-item label="性别" prop="sex" class="mustBox">
+                        <el-select v-model="ruleForm.sex" placeholder="请选择性别" :disabled="true">
+                            <el-option v-for="item in sexList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="所属公会" prop="guild_name" class="mustBox">
+                        <el-input v-model="ruleForm.guild_name" :disabled="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="是否已绑卡" prop="is_bindcard" class="mustBox">
+                        <el-button type="primary" @click="isShowBindcard">{{ ruleForm.is_bindcard ? '是' : '否' }}</el-button>
+                    </el-form-item>
+                </div>
+                <div class="rightBox">
+                    <el-form-item label="头像" prop="face" class="photoBox mustBox">
+                        <uploadImg :imgUrl="ruleForm.face" :disabled="true" :isDefault="true"></uploadImg>
+                        <el-button type="primary" @click="replaceImg">替换默认头像</el-button>
+                    </el-form-item>
+                </div>
+            </el-form>
+        </drawer>
+
+
         <el-dialog
         title="用户编辑"
         :visible.sync="dialogVisible"
@@ -113,8 +168,9 @@ export default {
         };
     },
     methods: {
+        // 获取数据
         loadParams(row) {
-            this.dialogVisible = true
+            this.openComp()
             this.oldParams = row
             let params = JSON.parse(JSON.stringify(row))
             params.phone = params.phone ? params.phone : '无'
@@ -123,6 +179,9 @@ export default {
             params.blockedParams = {} // 用来接收封禁返回的数据
 
             this.$set(this.$data, 'ruleForm', params)
+        },
+        openComp(status = true) {
+            this.$refs.drawer.loadParams(status)
         },
         handleClose() {
             this.resetForm()

@@ -78,7 +78,9 @@ export default {
         },
         locationList: { // 礼物位置列表
             type: Array,
-            default: []
+            default: function() {
+                return []
+            }
         }
     },
     data() {
