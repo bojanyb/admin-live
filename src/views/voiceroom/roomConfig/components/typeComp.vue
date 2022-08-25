@@ -1,159 +1,116 @@
 <template>
     <div class="roomConfig-typeComp-box">
-        <drawer 
-        size="500px"
-        :title="title"
-        ref="drawer"
-        :isShowUpdate="true"
-        @cancel="cancel"
-        @submitForm="submitForm"
-        @closed="closed"
-        :disabled="disabled"
-        @update="update">
-            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-suffix=":">
-                <el-form-item label="房间ID">
-                    <el-input v-model="ruleForm.room_number" :disabled="disabled"></el-input>
-                </el-form-item>
-                <el-form-item label="房间类型">
-                    <el-select v-model="ruleForm.type" placeholder="请选择业务类型" :disabled="disabled">
-                        <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="房间备注" prop="title">
-                    <el-input type="textarea" :rows="4" v-model="ruleForm.title" :disabled="disabled"></el-input>
-                </el-form-item>
-            </el-form>
-        </drawer>
+        <el-dialog
+        title="设置房间分类"
+        :visible.sync="dialogVisible"
+        width="500px"
+        :before-close="handleClose">
+            <div class="btnBox">
+                <el-button type="success" @click="add">新增</el-button>
+            </div>
+            <el-table
+            :data="tableData"
+            border
+            style="width: 100%">
+                <el-table-column
+                    prop="id"
+                    align="center"
+                    label="分类ID">
+                </el-table-column>
+                <el-table-column
+                    prop="name"
+                    align="center"
+                    label="分类名称">
+                </el-table-column>
+                <el-table-column
+                    align="center"
+                    label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="danger" v-if="scope.row.id !== 1" @click="deleteTypes(scope.row.id)">移除</el-button>
+                        <div style="line-height: 36px;" v-else>默认分类</div>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <!-- 内嵌弹窗 -->
+            <el-dialog
+            width="400px"
+            title="新增房间分类"
+            custom-class="typeComp-custom-dialog-box"
+            :visible.sync="innerVisible"
+            append-to-body>
+                <el-select v-model="type_id" placeholder="请选择">
+                    <el-option
+                    v-for="item in typeList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                    </el-option>
+                </el-select>
+                <el-button type="success" @click="bindTypes">添加</el-button>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="innerVisible = false">取 消</el-button>
+                </span>
+            </el-dialog>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-// 引入抽屉组件
-import drawer from '@/components/drawer/index'
 // 引入api
-import { updateParty } from '@/api/house.js'
-// 引入图片上传组件
-import uploadImg from '@/components/uploadImg/index.vue'
+import { roomTypes, roomBindType, delBind } from '@/api/house.js'
 export default {
-    components: {
-        uploadImg,
-        drawer
-    },
     data() {
         return {
-            status: 'add',
+            dialogVisible: false,
+            tableData: [],
+            innerVisible: false,
             typeList: [],
-            ruleForm: {
-                room_number: '',
-                title: '',
-                back_recommend: '',
-                type: null,
-                cover: ''
-            },
-            oldParams: {}, // 老数据
-            rules: {
-                title: [
-                    { required: true, message: '请输入房间标题', trigger: 'blur' }
-                ],
-                back_recommend: [
-                    { required: true, message: '是否首页推荐', trigger: 'change' }
-                ],
-                type: [
-                    { required: true, message: '请选择房间分类', trigger: 'change' }
-                ],
-                cover: [
-                    { required: true, message: '请上传房间封面', trigger: 'change' }
-                ]
-            }
+            type_id: null,
+            room_number: null
         };
-    },
-    computed: {
-        title() { // 标题
-            if(this.status === 'see') {
-                return '查看房间信息'
-            } else if(this.status === 'update') {
-                return '修改房间信息'
-            }
-        },
-        disabled() { // 是否禁止输入
-            if(this.status === 'see') {
-                return true
-            }
-            return false
-        }
     },
     methods: {
         handleClose() {
-            this.openComp(false)
+            this.dialogVisible = false
         },
         // 获取参数
-        loadParams(status, row, list) {
-            this.openComp()
+        async loadParams(row, list) {
+            this.dialogVisible = true
+            this.room_number = row.room_number
+            await this.getTypes(row.room_number)
             this.typeList = list
-            this.status = status
-            let params = JSON.parse(JSON.stringify(row))
-            this.$set(this.$data, 'ruleForm', params)
-
-            this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
         },
-        openComp(status = true) {
-            this.$refs.drawer.loadParams(status)
-        },
-        // 提交
-        async submitForm(formName) {
-            this.$refs[formName].validate(async (valid) => {
-                if (valid) {
-                    let s = this.ruleForm
-                    let params = {
-                        id: s.id,
-                        title: s.title,
-                        cover: s.cover,
-                        back_recommend: s.back_recommend,
-                        type: s.type
-                    }
-                    let res = await updateParty(params)
-                    if(res.code === 2000) {
-                        if(this.status === 'add') {
-                            this.$success('新增成功')
-                        } else {
-                            this.$success('修改成功')
-                        }
-                        this.openComp(false)
-                        this.$emit('getList')
-                    }
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
+        add() {
+            this.innerVisible = true
         },
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
         },
-        // 重置字段验证
-        validateField(name) {
-            this.$refs.ruleForm.validateField([name])
+        // 获取分类
+        async getTypes(room_number) {
+            let res = await roomTypes({ room_number })
+            this.tableData = res.data.list || []
         },
-        // 修改
-        update() {
-            this.status = 'update'
+        // 绑定分类
+        async bindTypes() {
+            let { room_number, type_id } = this.$data
+            let res = await roomBindType({ room_number, type_id })
+            if(res.code === 2000) {
+                this.$success('添加成功')
+                this.getTypes(this.room_number)
+            }
         },
-        // 取消
-        cancel() {
-            if(JSON.stringify(this.oldParams) !== JSON.stringify(this.ruleForm)) { // 记录数据 - 有改动就提示
-                this.$confirm('关闭弹窗将不会保留您的更改, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.openComp(false)
-                }).catch(() => {});
-            } else {
-                this.openComp(false)
+        // 移除分类
+        async deleteTypes(id) {
+            let res = await delBind({ id })
+            if(res.code === 2000) {
+                this.$success('移除成功')
+                this.getTypes(this.room_number)
             }
         }
     }
@@ -162,12 +119,19 @@ export default {
 
 <style lang="scss">
 .roomConfig-typeComp-box {
-    .el-select {
-        width: 340px;
+    .el-dialog__body {
+        padding: 10px 20px 30px 20px;
+        .btnBox {
+            margin-bottom: 20px;
+        }
     }
-    .roomBox {
-        font-size: 16px;
-        // font-weight: 600;
+}
+
+.typeComp-custom-dialog-box {
+    .el-dialog__body {
+        .el-button {
+            margin-left: 20px;
+        }
     }
 }
 </style>

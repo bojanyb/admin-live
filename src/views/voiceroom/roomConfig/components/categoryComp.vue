@@ -11,22 +11,25 @@
         :disabled="disabled"
         @update="update">
             <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="业务类型" prop="belong">
+                <!-- <el-form-item label="业务类型" prop="belong">
                     <el-select v-model="ruleForm.belong" placeholder="请选择" :disabled="disabled">
                         <el-option v-for="item in belongList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item label="品类名" prop="name">
+                </el-form-item> -->
+                <el-form-item label="类型名称" prop="name">
                     <el-input v-model="ruleForm.name" :disabled="disabled"></el-input>
                 </el-form-item>
-                <el-form-item label="排序权重" prop="sort">
+                <el-form-item label="权重排序" prop="sort">
                     <el-input v-model="ruleForm.sort" :disabled="disabled"></el-input>
                 </el-form-item>
-                <el-form-item label="色值" prop="color">
+                <el-form-item label="类型色值" prop="color">
                     <el-input v-model="ruleForm.color" :disabled="disabled"></el-input>
                 </el-form-item>
-                <el-form-item label="品类图标" prop="icon">
+                <el-form-item label="分类图标" prop="icon">
                     <uploadImg ref="uploadImg" v-model="ruleForm.icon" :imgUrl="ruleForm.icon" name="icon" @validateField="validateField" accept=".png,.jpg,.jpeg" :disabled="disabled"></uploadImg>
+                </el-form-item>
+                <el-form-item label="类型图标" prop="img">
+                    <uploadImg ref="uploadImg" v-model="ruleForm.img" :imgUrl="ruleForm.img" name="img" @validateField="validateField" accept=".png,.jpg,.jpeg" :disabled="disabled"></uploadImg>
                 </el-form-item>
             </el-form>
         </drawer>
@@ -56,7 +59,8 @@ export default {
                 belong: null,
                 sort: null,
                 icon: '',
-                color: null
+                color: null,
+                img: ''
             },
             oldParams: {}, // 老数据
             rules: {
@@ -75,6 +79,9 @@ export default {
                 ],
                 icon: [
                     { required: true, message: '请上传品类图标', trigger: 'change' }
+                ],
+                img: [
+                    { required: true, message: '请上传类型图标', trigger: 'change' }
                 ]
             }
         };

@@ -17,7 +17,7 @@
                     </el-form-item>
                     <el-form-item label="房主">
                         <!-- <span class="roomBox">{{ ruleForm.nickname }}（{{ ruleForm.user_number }}）</span> -->
-                        <el-input v-model="ruleForm.room_number" :disabled="true"></el-input>
+                        <el-input v-model="returnName" :disabled="true"></el-input>
                     </el-form-item>
                 </div>
                 <div class="flexBox">
@@ -42,8 +42,8 @@
                 <el-form-item label="房间标题" prop="title">
                     <el-input v-model="ruleForm.title" :disabled="disabled"></el-input>
                 </el-form-item>
-                <el-form-item label="房间公告" prop="title">
-                    <el-input type="textarea" :rows="4" v-model="ruleForm.title" :disabled="disabled"></el-input>
+                <el-form-item label="房间公告" prop="notice">
+                    <el-input type="textarea" :rows="4" v-model="ruleForm.notice" :disabled="disabled"></el-input>
                 </el-form-item>
             </el-form>
         </drawer>
@@ -71,12 +71,16 @@ export default {
                 title: '',
                 back_recommend: '',
                 type: null,
-                cover: ''
+                cover: '',
+                notice: ''
             },
             oldParams: {}, // 老数据
             rules: {
                 title: [
                     { required: true, message: '请输入房间标题', trigger: 'blur' }
+                ],
+                notice: [
+                    { required: true, message: '请输入房间公告', trigger: 'blur' }
                 ],
                 back_recommend: [
                     { required: true, message: '是否首页推荐', trigger: 'change' }
@@ -103,6 +107,9 @@ export default {
                 return true
             }
             return false
+        },
+        returnName() {
+            return `${this.ruleForm.nickname}（${this.ruleForm.user_number}）`
         }
     },
     methods: {
@@ -132,7 +139,8 @@ export default {
                         title: s.title,
                         cover: s.cover,
                         back_recommend: s.back_recommend,
-                        type: s.type
+                        type: s.type,
+                        notice: s.notice
                     }
                     let res = await updateParty(params)
                     if(res.code === 2000) {

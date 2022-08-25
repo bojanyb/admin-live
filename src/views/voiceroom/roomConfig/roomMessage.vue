@@ -50,10 +50,7 @@ export default {
             menuList: [
                 {
                     name: '派对间'
-                },
-                {
-                    name: '添加房间类型'
-                },
+                }
                 // {
                 //     name: '直播间'
                 // }
@@ -80,10 +77,10 @@ export default {
             ]
             let arr2 = [
                 {
-                    name: 'is_guild_room',
+                    name: 'type',
                     type: 'select',
-                    value: 1,
-                    keyName: 'value',
+                    value: null,
+                    keyName: 'id',
                     optionLabel: 'name',
                     label: '房间类型',
                     placeholder: '请选择',
@@ -102,10 +99,10 @@ export default {
             ]
             let arr3 = [
                 {
-                    name: 'is_live',
+                    name: 'type',
                     type: 'select',
-                    value: 1,
-                    keyName: 'value',
+                    value: null,
+                    keyName: 'id',
                     optionLabel: 'name',
                     label: '房间类型',
                     placeholder: '请选择',
@@ -120,11 +117,6 @@ export default {
                 case '1':
                     array = [...arr, ...arr3]
                     break;
-                case '2':
-                    array = [...arr, ...arr3]
-                    break;
-                default:
-                    break;
             }
             return array
         },
@@ -132,7 +124,8 @@ export default {
             let arr = [
                 {
                     label: '房间ID',
-                    prop: 'room_number'
+                    prop: 'room_number',
+                    minWidth: '100px'
                 }
             ]
             let arr3 = [
@@ -152,14 +145,17 @@ export default {
                     isimg: true,
                     prop: 'cover',
                     // imgWidth: '50px',
-                    imgHeight: '50px'
+                    imgHeight: '50px',
+                    minWidth: '100px'
                 },
                 {
                     label: '房间标题',
+                    minWidth: '100px',
                     prop: 'title'
                 },
                 {
                     label: '房间类型',
+                    minWidth: '100px',
                     render: (h, params) => {
                         let data = this.classifyList.find(item => { return item.id === params.row.type })
                         return h('span', data ? data.name : '无')
@@ -167,6 +163,7 @@ export default {
                 },
                 {
                     label: '房间状态',
+                    minWidth: '100px',
                     render: (h, params) => {
                         let val, name;
                         if(this.tabIndex === '0') {
@@ -182,63 +179,40 @@ export default {
                 },
                 {
                     label: '所属公会',
+                    minWidth: '100px',
                     render: (h, params) => {
                         return h('span', params.row.guild_name || '无')
+                    }
+                },
+                {
+                    label: '房间分类',
+                    prop: 'classify',
+                    minWidth: '120px',
+                    render: (h, params) => {
+                        return h('span', {
+                            style: {
+                                color: '#55C090'
+                            },
+                            on: {
+                                click: () => {
+                                    this.setHouseClassify(params.row)
+                                }
+                            }
+                        }, '设置房间分类')
                     }
                 }
             ]
             let arr6 = [
                 {
                     label: '操作',
-                    minWidth: '120px',
+                    minWidth: '180px',
+                    fixed: 'right',
                     render: (h, params) => {
                         return h('div', [
                             h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
-                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.closeLive(params.row)}}}, '关闭')
-                        ])
-                    }
-                }
-            ]
-            let typeList = [
-                {
-                    label: '添加时间',
-                    render: (h, params) => {
-                        return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-                    }
-                },
-                ...arr,
-                {
-                    label: '房主',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('div', params.row.nickname),
-                            h('div', params.row.user_number || '无')
-                        ])
-                    }
-                },
-                {
-                    label: '所属公会',
-                    render: (h, params) => {
-                        return h('span', params.row.guild_name || '无')
-                    }
-                },
-                {
-                    label: '备注',
-                    render: (h, params) => {
-                        return h('span', params.row.guild_name || '无')
-                    }
-                },
-                {
-                    label: '操作人',
-                    render: (h, params) => {
-                        return h('span', params.row.guild_name || '无')
-                    }
-                },
-                {
-                    label: '操作',
-                    render: (h, params) => {
-                        return h('div', [
-                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.closeLive(params.row)}}}, '移除')
+                            h('el-button', { props: { type: 'danger'}, style: {
+                                display: params.row.party_status === 1 ? 'unset' : 'none'
+                            }, on: {click:()=>{this.closeLive(params.row)}}}, '关闭')
                         ])
                     }
                 }
@@ -252,10 +226,6 @@ export default {
                 case '1':
                     name = 'partyList'
                     column = typeList
-                    break;
-                case '2':
-                    name = 'liveList'
-                    column = [...arr, ...arr3, ...arr4, ...arr6]
                     break;
             }
             return {
@@ -273,7 +243,8 @@ export default {
                 room_number: s.room_number,
                 is_guild_room: s.is_guild_room,
                 party_status: s.party_status,
-                is_live: s.is_live
+                is_live: s.is_live,
+                type: s.type
             }
             if(this.tabIndex === '0') {
                 delete data.is_live
@@ -306,7 +277,7 @@ export default {
         },
         // 查看
         rowClick(row, column) {
-            if(column.property !== 'cover') {
+            if(column.property !== 'cover' && column.property !== 'classify') {
                 this.load('see', row)
             }
         },
@@ -317,11 +288,7 @@ export default {
         load(status, row) {
             this.isDestoryComp = true
             setTimeout(() => {
-                if(this.tabIndex === '0') {
-                    this.$refs.roomComp.loadParams(status, row, this.classifyList)
-                } else {
-                    this.$refs.typeComp.loadParams(status, row, this.classifyList)
-                }
+                this.$refs.roomComp.loadParams(status, row, this.classifyList)
             }, 50);
         },
         // 关播
@@ -348,6 +315,13 @@ export default {
             let belong = this.tabIndex === '0' ? 2 : 1
             let res = await genreList({ belong: belong })
             this.classifyList = res.data.list || []
+        },
+        // 设置房间分类
+        setHouseClassify(row) {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.typeComp.loadParams(row, this.classifyList)
+            }, 50);
         }
     },
     created() {

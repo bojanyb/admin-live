@@ -222,6 +222,9 @@ const request = {
         addRoomHot: `${HTTPHEADER}/Room/addRoomHot`, // 增加房间热度
         roomHotList: `${HTTPHEADER}/Room/roomHotList`, // 增加房间热度列表
         deleteRoomHot: `${HTTPHEADER}/Room/deleteRoomHot`, // 删除热度
+        roomTypes: `${HTTPHEADER}/party/roomTypes`, // 查看房间已经绑定的分类
+        roomBindType: `${HTTPHEADER}/party/roomBindType`, // 为房间绑定分类
+        delBind: `${HTTPHEADER}/party/delBind`, // 房间移除绑定分类
     },
 
     // 风控检测
