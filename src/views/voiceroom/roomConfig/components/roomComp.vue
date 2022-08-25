@@ -10,7 +10,7 @@
         @closed="closed"
         :disabled="disabled"
         @update="update">
-            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-suffix=":">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <div class="flexBox">
                     <el-form-item label="房间ID">
                         <el-input v-model="ruleForm.room_number" :disabled="true"></el-input>
@@ -194,7 +194,7 @@ export default {
 <style lang="scss" scoped>
 .roomConfig-roomComp-box {
     .el-select {
-        width: 440px;
+        width: 450px;
     }
     .roomBox {
         font-size: 16px;
@@ -203,10 +203,10 @@ export default {
     .flexBox {
         display: flex;
         .el-select {
-            width: 170px;
+            width: 180px;
         }
         .el-input {
-            width: 170px;
+            width: 180px;
         }
     }
 }

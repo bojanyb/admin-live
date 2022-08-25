@@ -6,7 +6,7 @@
         ref="drawer"
         @cancel="cancel"
         :disabled="disabled">
-            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="115px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <el-form-item label="房间ID" prop="room_number">
                     <el-input v-model="ruleForm.room_number" :disabled="disabled"></el-input>
                 </el-form-item>
@@ -100,10 +100,10 @@ export default {
 <style lang="scss">
 .blocked-roomComp-box {
     .el-date-editor {
-        width: 295px;
+        width: 330px;
     }
     .el-select {
-        width: 295px;
+        width: 330px;
     }
 }
 </style>

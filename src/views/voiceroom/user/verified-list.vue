@@ -1,15 +1,20 @@
+// 实名列表
 <template>
   <div class="app-container">
     <div class="searchParams">
       <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
     </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+
+    <!-- 实名详情组件 -->
+    <verifiedComp ref="verifiedComp"></verifiedComp>
   </div>
 </template>
 
 <script>
-
+// 引入实名详情组件
+import verifiedComp from './components/verifiedComp.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -25,7 +30,8 @@ export default {
   name: 'VerifiedList',
   components: {
     SearchPanel,
-    tableList
+    tableList,
+    verifiedComp
   },
   mixins: [mixins],
   data() {
@@ -121,6 +127,10 @@ export default {
     // 查询
     onSearch() {
       this.getList()
+    },
+    // 查看实名详情
+    rowClick(row) {
+      this.$refs.verifiedComp.loadParams(row)
     }
   }
 }

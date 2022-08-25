@@ -10,7 +10,7 @@
         @update="update"
         :isShowUpdate="true"
         :disabled="disabled">
-            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <el-form-item label="房间ID" prop="room_number">
                     <el-input v-model="ruleForm.room_number" :disabled="disabled"></el-input>
                 </el-form-item>
@@ -194,7 +194,7 @@ export default {
 <style lang="scss" scoped>
 .roomConfig-addHeat-box {
     .el-date-editor {
-        width: 330px;
+        width: 305px;
     }
 }
 </style>

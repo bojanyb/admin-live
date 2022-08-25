@@ -8,7 +8,7 @@
         align="center"
         label="商品图标">
             <template slot-scope="scope">
-                <imgComp ref="imgComp" height="50px" :tagList="[]" :src="returnImg(scope.row)" :preview-src-list="returnImg(scope.row)"></imgComp>
+                <imgComp ref="imgComp" height="50px" :src="returnImg(scope.row)" :preview-src-list="returnImg(scope.row)"></imgComp>
             </template>
         </el-table-column>
         <el-table-column

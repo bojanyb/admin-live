@@ -55,15 +55,10 @@
 </template>
 
 <script>
-import {
-		getActivetyList,
-		getActivetyGiftSave,
-		getActivetyHasGiftList,
-	} from '@/api/videoRoom'
+// 引入api
+import { getActivetyGiftSave, oldGetHasAddGift } from '@/api/videoRoom'
 // 礼物组件
 import gift from '@/components/gift/index.vue'
-// 引入公共方法
-import { errStatus } from '@/utils/common.js'
 
 export default {
     props: {
@@ -179,29 +174,13 @@ export default {
         handleClose() {
             this.resetForm()
         },
-        // 获取活动名称
-        activetyListFunc() {
-            getActivetyList().then(res => {
-                if(res.data.list && res.data.list.length > 0) {
-                    res.data.list.forEach(item => {
-                        item.disabled = false
-                        this.list.forEach(a => {
-                            if(item.name === a.name) {
-                                item.disabled = true
-                            }
-                        })
-                    })
-                }
-                this.activetyList = res.data.list;
-            })
-        },
         async loadParams(status, row) {
             this.status = status
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
                 params.start_time = params.start_time * 1000
                 params.end_time = params.end_time * 1000
-                let res = await getActivetyHasGiftList({ activity_id: params.id })
+                let res = await oldGetHasAddGift({ activity_id: params.id })
                 this.$set(params, 'gifts', res.data.list)
                 this.ruleForm = params
             }
@@ -258,9 +237,6 @@ export default {
         closed() {
             this.$emit('destoryComp')
         }
-    },
-    created() {
-        this.activetyListFunc()
     }
 }
 </script>

@@ -11,7 +11,7 @@
                 label="礼物图标">
                 <template slot-scope="scope">
                     <!-- <img class="imgBox" :src="scope.row.gift_photo" alt=""> -->
-                    <imgComp ref="imgComp" height="50px" :tagList="[]" :src="scope.row.gift_photo" :preview-src-list="scope.row.gift_photo"></imgComp>
+                    <imgComp ref="imgComp" height="50px" :src="scope.row.gift_photo" :preview-src-list="scope.row.gift_photo"></imgComp>
                 </template>
             </el-table-column>
             <el-table-column

@@ -10,7 +10,7 @@
         @closed="closed"
         :disabled="disabled"
         @update="update">
-            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <!-- <el-form-item label="业务类型" prop="belong">
                     <el-select v-model="ruleForm.belong" placeholder="请选择" :disabled="disabled">
                         <el-option v-for="item in belongList" :key="item.value" :label="item.name" :value="item.value"></el-option>

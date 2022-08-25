@@ -7,7 +7,7 @@
         @cancel="cancel"
         @closed="closed"
         :disabled="disabled">
-            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="true">
                 <el-form-item label="用户ID" prop="user_number">
                     <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled"></el-input>
                 </el-form-item>
@@ -135,7 +135,7 @@ export default {
 <style lang="scss">
 .serviceConfig-userComp-box {
     .el-select {
-        width: 290px;
+        width: 310px;
     }
 }
 </style>
