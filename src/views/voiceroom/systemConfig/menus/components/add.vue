@@ -6,8 +6,7 @@
         width="500px"
         :before-close="handleClose"
         :close-on-click-modal="false"
-        @closed="closed"
-        @open="open">
+        @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
                 <el-form-item label="上级菜单">
                     <el-cascader
@@ -17,6 +16,7 @@
                     :props="props"
                     :disabled="disabled"
                     :show-all-levels="false"
+                    clearable
                     @change="cascaderChange"></el-cascader>
                 </el-form-item>
                 <el-form-item label="菜单名称" prop="title">
@@ -30,21 +30,9 @@
                         <el-radio v-for="item in statusList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <!-- <el-form-item label="路由地址" prop="path">
-                    <el-input v-model="ruleForm.path"></el-input>
-                </el-form-item> -->
                 <el-form-item label="路由地址" prop="path">
-                    <el-autocomplete
-                    class="inline-input"
-                    v-model="ruleForm.name"
-                    :fetch-suggestions="querySearch"
-                    placeholder="请输入地址/可搜索"
-                    :trigger-on-focus="false"
-                    value-key="title"
-                    @select="handleSelect"
-                    ></el-autocomplete>
+                    <el-input v-model="ruleForm.path"></el-input>
                 </el-form-item>
-
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="resetForm">取 消</el-button>
@@ -55,7 +43,7 @@
 </template>
 
 <script>
-import { asyncRoutes } from '@/router'
+
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 // 引入api
@@ -72,15 +60,13 @@ export default {
             dialogVisible: false,
             statusList: MAPDATA.MENUSTATUSLIST,
             status: 'add', // 当前操作状态
-            routes: [],
             ruleForm: {
                 id: null,
                 pid: null,
                 title: '',
                 sort: null,
                 status: 1,
-                path: '',
-                name: ''
+                path: ''
             },
             props: {
                 checkStrictly: true,
@@ -101,9 +87,6 @@ export default {
                 path: [
                     { required: true, message: '请输入路由地址', trigger: 'blur' },
                 ],
-                name: [
-                    { required: true, message: '请输入路由地址', trigger: 'blur' },
-                ]
             }
         };
     },
@@ -123,46 +106,11 @@ export default {
         }
     },
     methods: {
-        // 打开弹窗
-        open() {
-            let arr = asyncRoutes
-            if(arr && arr.length > 0) {
-                let pvt = (list) => {
-                    list.forEach(item => {
-                        if(item.meta && item.meta.title) {
-                            item.title = item.meta.title
-                        }
-                        this.routes.push(item)
-                        if(item.children && item.children.length > 0) {
-                            pvt(item.children)
-                        }
-                    })
-                }
-                pvt(arr)
-            }
-        },
-        // 路由输入搜索
-        querySearch(queryString, cb) {
-            var restaurants = this.routes;
-            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-        },
-        createFilter(queryString) {
-            return (restaurant) => {
-            return (restaurant.path.indexOf(queryString) === 0);
-            };
-        },
-        handleSelect(item) {
-            console.log(item);
-            let params = JSON.stringify(item)
-            this.ruleForm.path = params
-            this.$refs.ruleForm.validateField('path')
-        },
-
         cascaderChange(v) {
             this.$refs.cascader.toggleDropDownVisible(false);
-            this.ruleForm.pid = v[v.length - 1]
+            if(v) {
+                this.ruleForm.pid = v[v.length - 1]
+            }
         },
         handleChange(value) {
             console.log(value);
@@ -170,7 +118,6 @@ export default {
         handleClose() {
             this.resetForm()
         },
-        // 获取数据
         loadParams(status, row) {
             this.dialogVisible = true
             this.status = status
@@ -184,6 +131,8 @@ export default {
                     this.$set(this.$data, 'ruleForm', params)
                 }
             }
+
+            console.log(this.ruleForm, 'ruleForm---------------')
         },
         // 提交
         async submitForm(formName) {
@@ -192,10 +141,6 @@ export default {
                     let params = {
                         ...this.ruleForm
                     }
-                    if(params.name) {
-                        delete params.name
-                    }
-                    console.log(params, 'params---------2020')
                     if(this.status === 'add') {
                         let res = await addRule(params)
                         if(res.code === 2000) {
@@ -224,9 +169,6 @@ export default {
         closed() {
             this.$emit('destoryComp')
         }
-    },
-    mounted() {
-        console.log(asyncRoutes, 'asyncRoutes---------2020')
     }
 }
 </script>
@@ -234,9 +176,6 @@ export default {
 <style lang="scss" scoped>
 .menus-add-box {
     .el-cascader {
-        width: 380px;
-    }
-    .el-autocomplete {
         width: 380px;
     }
 }

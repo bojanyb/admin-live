@@ -80,26 +80,53 @@ const actions = {
           prv(arr)
 
 
+          let asyncArr = []
+          let as = (list) => {
+            list.forEach(item => {
+              asyncArr.push(item)
+              if(item.children && item.children.length > 0) {
+                as(item.children)
+              }
+            })
+          }
+          as(asyncRoutes)
+
+
+
           let sv = (list, list2) => {
             list.forEach(item => {
-              list2.forEach(a => {
-                if(item.h5_path === a.path) {
-                  item.params = {
-                    component: a.component,
-                    meta: a.meta,
-                    name: a.name,
-                    path: a.path,
-                    redirect: a.redirect
-                  }
-                }
-                if(item.child && item.child.length > 0 && a.children && a.children.length > 0) {
-                  sv(item.child, a.children)
-                }
-              })
+
+              let params = asyncArr.find(a => { return item.h5_path === a.path })
+              item.params = {
+                component: params.component,
+                meta: params.meta,
+                name: params.name,
+                path: params.path,
+                redirect: params.redirect
+              }
+              if(item.child && item.child.length > 0) {
+                sv(item.child)
+              }
+              // list2.forEach(a => {
+              //   if(item.h5_path === a.path) {
+              //     item.params = {
+              //       component: a.component,
+              //       meta: a.meta,
+              //       name: a.name,
+              //       path: a.path,
+              //       redirect: a.redirect
+              //     }
+              //   }
+              //   if(item.child && item.child.length > 0 && a.children && a.children.length > 0) {
+              //     sv(item.child, a.children)
+              //   }
+              // })
             })
           }
 
           sv(arr, asyncRoutes)
+
+          console.log(arr, 'arr---------100')
 
           arr.forEach((item,index) => {
             array.push({
