@@ -4,10 +4,13 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
 
 		<!-- 编辑组件 -->
 		<roomEdit ref="roomEdit" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></roomEdit>
+
+		<!-- 房间详情组件 -->
+		<roomDetails ref="roomDetails"></roomDetails>
 	</div>
 </template>
 
@@ -17,6 +20,8 @@
 		getRoomSave,
 		roomTop
 	} from '@/api/videoRoom'
+	// 引入房间详情组件
+	import roomDetails from './components/roomDetails.vue'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -36,7 +41,8 @@
 		components: {
 			SearchPanel,
 			tableList,
-			roomEdit
+			roomEdit,
+			roomDetails
 		},
 		data() {
 			return {
@@ -137,7 +143,10 @@
 			onSearch() {
 				this.getList()
 			},
-
+			// 查看
+			rowClick(row) {
+				this.$refs.roomDetails.loadParams(row)
+			},
 			// 冻结/解冻
 			handleRoom(source) {
 				var tipsText = source.status == 1 ? '确定冻结当前房间吗?' : '确定解冻当前房间吗?'
