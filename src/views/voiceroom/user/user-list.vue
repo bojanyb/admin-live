@@ -4,9 +4,9 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
 
-		<bindStuck ref="bindStuck" @rowClick="rowClick"></bindStuck>
+		<bindStuck ref="bindStuck"></bindStuck>
 
 		<!-- 详情组件 -->
 		<userEdit ref="userEdit" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></userEdit>

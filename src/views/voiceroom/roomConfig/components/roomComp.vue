@@ -32,7 +32,7 @@
                     </el-form-item>
                 </div>
                 <el-form-item label="房间类型" prop="type">
-                    <el-select v-model="ruleForm.type" placeholder="请选择业务类型" :disabled="disabled">
+                    <el-select v-model="ruleForm.type" placeholder="请选择业务类型" :disabled="true">
                         <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -118,7 +118,6 @@ export default {
         },
         // 获取参数
         loadParams(status, row, list) {
-            console.log(row, 'row-------2020')
             this.openComp()
             this.typeList = list
             this.status = status
