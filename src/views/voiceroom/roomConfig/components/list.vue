@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
 
         <!-- 新增组件 -->
         <addHeat v-if="isDestoryComp" ref="addHeat" @destoryComp="destoryComp" @getList="getList"></addHeat>
@@ -142,6 +142,10 @@ export default {
         update(row) {
             this.load('update', row)
         },
+        // 查看
+        rowClick(row) {
+            this.load('see', row)
+        },
         load(status, row) {
             this.isDestoryComp = true
             setTimeout(() => {
@@ -157,7 +161,7 @@ export default {
             }).then(async () => {
                 let res = await deleteRoomHot({ id })
                 if(res.code === 2000) {
-                    this.$message.success('删除成功')
+                    this.$success('删除成功')
                     this.getList()
                 }
             }).catch(() => {});

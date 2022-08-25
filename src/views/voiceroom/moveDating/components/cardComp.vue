@@ -1,50 +1,49 @@
 <template>
     <div class="moveDating-cardComp-box">
-        <el-dialog
+        <drawer 
+        size="470px"
         :title="title"
-        :visible.sync="dialogVisible"
-        width="450px"
-        top="5vh"
-        :before-close="handleClose"
-        @closed="closed">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
+        ref="drawer"
+        :isShowUpdate="true"
+        @cancel="cancel"
+        @submitForm="submitForm"
+        @closed="closed"
+        :disabled="disabled"
+        @update="update">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="115px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <el-form-item label="音色分类名" prop="sound_tag">
-                    <el-input v-model="ruleForm.sound_tag"></el-input>
+                    <el-input v-model="ruleForm.sound_tag" :disabled="disabled"></el-input>
                 </el-form-item>
-                <!-- <el-form-item label="音色分类图" prop="sound_img">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.sound_img" :imgUrl="ruleForm.sound_img" name="sound_img" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
-                </el-form-item> -->
                 <el-form-item label="权重排序" prop="sort">
-                    <el-input v-model="ruleForm.sort" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
+                    <el-input v-model="ruleForm.sort" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label="上传封面" prop="img">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.img" :imgUrl="ruleForm.img" name="img" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
+                    <uploadImg ref="uploadImg" v-model="ruleForm.img" :imgUrl="ruleForm.img" name="img" @validateField="validateField" accept=".png,.jpg,.jpeg" :disabled="disabled"></uploadImg>
                 </el-form-item>
                 <el-form-item label="上传声音签名" prop="audio">
-                    <uploadImg ref="uploadAudio" v-model="ruleForm.audio" :imgUrl="ruleForm.audio" name="audio" @validateField="validateField" @getFile="getFile" accept=".mp3"></uploadImg>
+                    <uploadImg ref="uploadAudio" v-model="ruleForm.audio" :imgUrl="ruleForm.audio" name="audio" @validateField="validateField" @getFile="getFile" accept=".mp3" :disabled="disabled"></uploadImg>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-            </span>
-        </el-dialog>
+        </drawer>
     </div>
 </template>
 
 <script>
+// 引入抽屉组件
+import drawer from '@/components/drawer/index'
 // 引入api
 import { save } from '@/api/moveDating'
 // 引入上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
 export default {
     components: {
-        uploadImg
+        uploadImg,
+        drawer
     },
     data() {
         return {
-            dialogVisible: false,
             status: 'add', // 当前状态
+            oldParams: {}, // 老数据
             ruleForm: {
                 id: null,
                 img: '',
@@ -58,9 +57,6 @@ export default {
                     { required: true, message: '请输入音色分类名', trigger: 'blur' }
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
-                // sound_img: [
-                //     { required: true, message: '请上传音色分类图', trigger: 'change' }
-                // ],
                 sort: [
                     { required: true, message: '请输入权重排序', trigger: 'blur' }
                 ],
@@ -79,21 +75,51 @@ export default {
                 return '新增心动卡片'
             } else if(this.status === 'update') {
                 return '修改心动卡片'
+            } else {
+                return '查看心动卡片'
             }
+        },
+        disabled() { // 禁止修改
+            if(this.status === 'see') {
+                return true
+            }
+            return false
         }
     },
     methods: {
         handleClose() {
-            this.dialogVisible = false
+            this.openComp(false)
         },
         // 获取数据
         loadParams(status, row) {
+            this.openComp()
             this.status = status
-            this.dialogVisible = true
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
                 this.$set(this.$data, 'ruleForm', params)
             }
+            this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
+        },
+        openComp(status = true) {
+            this.$refs.drawer.loadParams(status)
+        },
+        // 取消
+        cancel() {
+            if(JSON.stringify(this.oldParams) !== JSON.stringify(this.ruleForm)) { // 记录数据 - 有改动就提示
+                this.$confirm('关闭弹窗将不会保留您的更改, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.openComp(false)
+                }).catch(() => {});
+            } else {
+                this.openComp(false)
+            }
+        },
+        // 修改
+        update() {
+            this.status = 'update'
         },
         // 提交
         async submitForm(formName) {
@@ -104,8 +130,8 @@ export default {
                     params.sound_img = ''
                     let res = await save(params)
                     if(res.code === 2000) {
-                        this.$message.success('新增成功')
-                        this.dialogVisible = false
+                        this.$success('新增成功')
+                        this.openComp(false)
                         this.$emit('getList')
                     }
                 } else {

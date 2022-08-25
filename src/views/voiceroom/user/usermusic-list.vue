@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
 
 		<upMusic v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList" ref="upMusic"></upMusic>
 	</div>
@@ -165,9 +165,16 @@
 			},
 			// 编辑
 			editFunc(row) {
+				this.load('update', row)
+			},
+			// 查看用户音乐详情
+			rowClick(row) {
+				this.load('see', row)
+			},
+			load(status, row) {
 				this.isDestoryComp = true
 				setTimeout(() => {
-					this.$refs.upMusic.loadParams(row)
+					this.$refs.upMusic.loadParams(status, row)
 				}, 50);
 			},
 			// 销毁组件
@@ -176,7 +183,7 @@
 			},
 			async up(row) {
 				await putaway({ id: row.id })
-				this.$message.success('上架成功')
+				this.$success('上架成功')
 				this.getList();
 			},
 			async down(row) {
@@ -186,7 +193,7 @@
 					type: 'warning'
 				}).then(async () => {
 					await getUserMusicBack({ id: row.id })
-					this.$message.success("下架成功");
+					this.$success("下架成功");
 					this.getList();
 				}).catch(() => {});
 			},

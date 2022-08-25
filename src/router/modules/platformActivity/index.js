@@ -112,6 +112,15 @@ const platformActivityRouter = {
 				},
 			]
 		},
+		{
+			path: 'first-charge',
+			component: () => import('@/views/voiceroom/platformActivity/first-charge/index'),
+			meta: {
+				title: '首充活动管理',
+				noCache: true
+			},
+			name: 'first-charge'
+		}
 	]
 }
 

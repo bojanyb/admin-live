@@ -1,19 +1,23 @@
 <template>
     <div class="roomConfig-addHeat-box">
-        <el-dialog
-        title="增加热度"
-        :visible.sync="dialogVisible"
-        width="450px"
-        :before-close="handleClose"
-        @closed="closed">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
+        <drawer 
+        size="450px"
+        :title="title"
+        ref="drawer"
+        @cancel="cancel"
+        @submitForm="submitForm"
+        @closed="closed"
+        @update="update"
+        :isShowUpdate="true"
+        :disabled="disabled">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <el-form-item label="房间ID" prop="room_number">
-                    <el-input v-model="ruleForm.room_number"></el-input>
+                    <el-input v-model="ruleForm.room_number" :disabled="disabled"></el-input>
                 </el-form-item>
                 <el-form-item label="增加热度" prop="hot_value">
-                    <el-input v-model="ruleForm.hot_value"></el-input>
+                    <el-input v-model="ruleForm.hot_value" :disabled="disabled"></el-input>
                 </el-form-item>
-                <el-form-item label="生效时间" prop="time">
+                <el-form-item label="生效时间" prop="time" :rules="timeResult">
                     <el-date-picker
                     v-model="ruleForm.time"
                     type="datetimerange"
@@ -22,28 +26,29 @@
                     end-placeholder="结束日期"
                     :default-time="['00:00:00', '23:59:59']"
                     value-format="timestamp"
+                    :disabled="disabled"
                     @change="timeChange">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="备注" prop="remark">
-                    <el-input type="textarea" :rows="4" v-model="ruleForm.remark"></el-input>
+                    <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-            </span>
-        </el-dialog>
+        </drawer>
     </div>
 </template>
 
 <script>
+// 引入抽屉组件
+import drawer from '@/components/drawer/index'
 // 引入api
 import { addRoomHot } from '@/api/house.js'
 export default {
+    components: {
+        drawer
+    },
     data() {
         return {
-            dialogVisible: false,
             status: 'add', // 当前状态
             ruleForm: {
                 room_number: '',
@@ -53,6 +58,7 @@ export default {
                 remark: '',
                 time: []
             },
+            oldParams: {}, // 老数据
             rules: {
                 room_number: [
                     { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -70,9 +76,45 @@ export default {
             }
         };
     },
+    computed: {
+        title() { // 标题
+            if(this.status === 'add') {
+                return '新增房间热度'
+            } else if(this.status === 'update') {
+                return '修改房间热度'
+            } else {
+                return '查看房间热度'
+            }
+        },
+        disabled() { // 禁止输入
+            if(this.status === 'see') {
+                return true
+            }
+            return false
+        },
+        timeResult() { // 生效时间限制
+            let params = {}
+            params = {
+                required: true,
+                validator: (rules, val, cb) => {
+                    let time = this.ruleForm.time
+                    if(!time) {
+                        cb(new Error('请选择生效时间'))
+                    } else {
+                        if(time[1] < new Date().getTime()) {
+                            cb(new Error('结束时间不可小于当前时间'))
+                        } else {
+                            cb()
+                        }
+                    }
+                }
+            }
+            return params
+        }
+    },
     methods: {
         handleClose() {
-            this.dialogVisible = false
+            this.openComp(false)
         },
         // 更改时间
         timeChange(val) {
@@ -81,7 +123,7 @@ export default {
         },
         // 获取数据
         loadParams(status, row) {
-            this.dialogVisible = true
+            this.openComp()
             this.status = status
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
@@ -90,6 +132,10 @@ export default {
                 params.time = [start_time, end_time]
                 this.$set(this.$data, 'ruleForm', params)
             }
+            this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
+        },
+        openComp(status = true) {
+            this.$refs.drawer.loadParams(status)
         },
         // 提交
         async submitForm(formName) {
@@ -106,8 +152,8 @@ export default {
                     }
                     let res = await addRoomHot(params)
                     if(res.code === 2000) {
-                        this.$message.success('新增成功')
-                        this.dialogVisible = false
+                        this.$success('新增成功')
+                        this.openComp(false)
                         this.$emit('getList')
                     }
                 } else {
@@ -120,9 +166,26 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
+        // 修改
+        update() {
+            this.status = 'update'
+        },
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
+        },
+        cancel() {
+            if(JSON.stringify(this.oldParams) !== JSON.stringify(this.ruleForm)) { // 记录数据 - 有改动就提示
+                this.$confirm('关闭弹窗将不会保留您的更改, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.openComp(false)
+                }).catch(() => {});
+            } else {
+                this.openComp(false)
+            }
         }
     }
 }
@@ -131,7 +194,7 @@ export default {
 <style lang="scss" scoped>
 .roomConfig-addHeat-box {
     .el-date-editor {
-        width: 330px;
+        width: 305px;
     }
 }
 </style>

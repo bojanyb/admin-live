@@ -63,3 +63,30 @@ export function deleteRoomHot(data) {
         data
     })
 }
+
+// 查看房间已经绑定的分类
+export function roomTypes(data) {
+    return request({
+        url: api.house.roomTypes,
+        method: 'post',
+        data
+    })
+}
+
+// 为房间绑定分类
+export function roomBindType(data) {
+    return request({
+        url: api.house.roomBindType,
+        method: 'post',
+        data
+    })
+}
+
+// 房间移除绑定分类
+export function delBind(data) {
+    return request({
+        url: api.house.delBind,
+        method: 'post',
+        data
+    })
+}

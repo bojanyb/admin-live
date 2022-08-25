@@ -10,7 +10,8 @@
             <el-table-column
                 label="礼物图标">
                 <template slot-scope="scope">
-                    <img class="imgBox" :src="scope.row.gift_photo" alt="">
+                    <!-- <img class="imgBox" :src="scope.row.gift_photo" alt=""> -->
+                    <imgComp ref="imgComp" height="50px" :src="scope.row.gift_photo" :preview-src-list="scope.row.gift_photo"></imgComp>
                 </template>
             </el-table-column>
             <el-table-column
@@ -27,27 +28,28 @@
                 label="数量">
                 <template slot-scope="scope">
                     <div class="numBox">
-                        <el-input v-model="scope.row.gift_number" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>个
+                        <el-input v-model="scope.row.gift_number" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled" @input="numberInput(scope.row)"></el-input>个
                     </div>
                     <div class="errorMsg" v-if="!scope.row.gift_number">请填写数量</div>
                 </template>
             </el-table-column>
             <el-table-column label="礼物位置" v-if="isShowLocation">
                 <template slot-scope="scope">
-                    <el-select v-model="scope.row.sort" placeholder="请选择">
+                    <el-select v-model="scope.row.sort" clearable placeholder="请选择" :disabled="disabled">
                         <el-option
-                            v-for="item in locationFunc"
-                            :key="item.value"
-                            :label="item.value"
-                            :value="item.value"
-                            :disabled="item.disabled">
-                            </el-option>
-                        </el-select>
+                        v-for="item in locationFunc"
+                        :key="item.value"
+                        :label="item.value"
+                        :value="item.value"
+                        :disabled="item.disabled">
+                        </el-option>
+                    </el-select>
+                    <div class="errorMsg" v-if="!scope.row.sort">请选择</div>
                 </template>
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button type="danger" @click="deleteData(scope.row, scope.$index)">删除</el-button>
+                    <el-button type="danger" @click="deleteData(scope.row, scope.$index)" :disabled="disabled">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -55,9 +57,14 @@
 </template>
 
 <script>
+// 引入图片组件
+import imgComp from '@/components/tableList/imgComp.vue'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
+    components: {
+        imgComp
+    },
     props: {
         gifts: { // 选中礼物列表
             type: Array,
@@ -66,11 +73,25 @@ export default {
         isShowLocation: { // 是否需要展示指定地址
             type: Boolean,
             default: false
+        },
+        disabled: { // 是否禁止输入
+            type: Boolean,
+            default: false
+        },
+        max: { // 最大输入
+            type: Number,
+            default: null
+        },
+        locationList: { // 礼物位置列表
+            type: Array,
+            default: function() {
+                return []
+            }
         }
     },
     data() {
         return {
-            locationList: MAPDATA.LOCATIONLIST
+            locationListCopy: MAPDATA.LOCATIONLIST
         };
     },
     computed: {
@@ -89,21 +110,31 @@ export default {
             return num
         },
         locationFunc() {
-            let array = JSON.parse(JSON.stringify(this.locationList))
-            this.gifts.forEach(item => {
-                array.forEach(x => {
-                    if(item.sort === x.value) {
-                        x.disabled = true
-                    }
+            if(this.locationList && this.locationList.length > 0) { // 传入位置列表
+                return this.locationList
+            } else { // 不传入
+                let array = JSON.parse(JSON.stringify(this.locationListCopy))
+                this.gifts.forEach(item => {
+                    array.forEach(x => {
+                        if(item.sort === x.value) {
+                            x.disabled = true
+                        }
+                    })
                 })
-            })
-            return array
-        },
+                return array
+            }
+        }
     },
     methods: {
         // 删除
         deleteData(row, index) {
             this.$emit('deleteData', {row, index})
+        },
+        // 输入
+        numberInput(row) {
+            if(this.max && Number(row.gift_number) > this.max) {
+                row.gift_number = this.max
+            }
         }
     }
 }
@@ -156,6 +187,9 @@ export default {
         .el-input {
             width: 100px !important;
         }
+    }
+    .imgComp-box {
+        justify-content: flex-start;
     }
 }
 </style>

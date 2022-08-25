@@ -124,6 +124,11 @@
 							}
 						},
 						{
+							label: '流水',
+							minWidth: '100px',
+							prop: 'now_flow'
+						},
+						{
 							label: '在线人数',
 							prop: 'people'
 						},

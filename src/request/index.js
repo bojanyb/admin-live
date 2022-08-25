@@ -18,9 +18,12 @@ const request = {
         configMMLY: `${HTTPHEADER}/activityins/configMMLY`, // 配置喵喵乐园
         configXYZP: `${HTTPHEADER}/activityins/configXYZP`, // 配置大转盘
         getHasAddGift: `${HTTPHEADER}/Activityins/getHasAddGift`, // 获取已配置礼物
+        oldGetHasAddGift: `${HTTPHEADER}/Activity/getHasAddGift`, // 新版获取已配置礼物
         drawFlow: `${HTTPHEADER}/activityins/drawFlow`, // 乐园记录
         drawRecord: `${HTTPHEADER}/activityins/drawRecord`, // 统计
         stop: `${HTTPHEADER}/Activityins/stop`, // 停止和开启
+        addFirstCharge: `${HTTPHEADER}/activityins/addFirstCharge`, // 配置首充活动
+        chargeLog: `${HTTPHEADER}/activityins/chargeLog`, // 首充用户列表
     },
 
     // 系统设置
@@ -220,6 +223,9 @@ const request = {
         addRoomHot: `${HTTPHEADER}/Room/addRoomHot`, // 增加房间热度
         roomHotList: `${HTTPHEADER}/Room/roomHotList`, // 增加房间热度列表
         deleteRoomHot: `${HTTPHEADER}/Room/deleteRoomHot`, // 删除热度
+        roomTypes: `${HTTPHEADER}/party/roomTypes`, // 查看房间已经绑定的分类
+        roomBindType: `${HTTPHEADER}/party/roomBindType`, // 为房间绑定分类
+        delBind: `${HTTPHEADER}/party/delBind`, // 房间移除绑定分类
     },
 
     // 风控检测

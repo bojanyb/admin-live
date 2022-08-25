@@ -4,10 +4,11 @@
             <el-button type="success" @click="add">新增</el-button>
         </div>
 
-        <tableList :cfgs="cfgs" ref="tableList"></tableList>
+        <tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
 
         <!-- 新增组件 -->
-        <messageComp v-if="isDestoryComp" ref="messageComp" @destoryComp="destoryComp" @getList="getList"></messageComp>
+        <messageComp v-if="isDestoryComp" ref="messageComp" @getList="getList" @destoryComp="destoryComp"></messageComp>
+
     </div>
 </template>
 
@@ -27,7 +28,7 @@ import { timeFormat } from '@/utils/common.js'
 export default {
     components: {
         tableList,
-        messageComp
+        messageComp,
     },
     mixins: [mixins],
     computed: {
@@ -123,18 +124,27 @@ export default {
         onSearch() {
             this.getList()
         },
+        // 查看数据
+        rowClick(row, column) {
+            if(column.property !== 'image_url') {
+                this.load('see', row)
+            }
+        },
         // 新增
         add() {
+            this.load('add')
+        },
+        load(status, row) {
             this.isDestoryComp = true
             setTimeout(() => {
-                this.$refs.messageComp.dialogVisible = true
+                this.$refs.messageComp.loadParams(status, row)
             }, 50);
         },
         // 删除
         async messageDelete(id) {
             let res = await messageDelete({ id })
             if(res.code === 2000) {
-                this.$message.success('删除成功')
+                this.$success('删除成功')
             }
             this.getList()
         },
@@ -152,6 +162,7 @@ export default {
     box-sizing: border-box;
     .btnBox {
         margin-bottom: 20px;
+        cursor: pointer;
     }
 }
 </style>

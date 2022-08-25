@@ -1,70 +1,71 @@
 <template>
     <div class="userAdd-box">
-        <el-dialog
-        title="用户编辑"
-        :visible.sync="dialogVisible"
-        width="950px"
-        :before-close="handleClose"
+        <drawer 
+        size="660px"
+        :title="title"
+        ref="drawer"
+        :isShowUpdate="true"
+        @cancel="cancel"
+        @submitForm="submitForm"
         @closed="closed"
-        :close-on-click-modal="false"
-        class="userAdd-dialog">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <div class="leftBox">
-                    <el-form-item label="用户ID" prop="user_number" class="mustBox">
+        :disabled="disabled"
+        @update="update">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
+                <div class="userBox">
+                    <el-form-item label="用户ID" prop="user_number" :class="{'mustBox': status !== 'see'}">
                         <el-input v-model="ruleForm.user_number" :disabled="true"></el-input>
                     </el-form-item>
-                    <el-form-item label="个性签名" prop="autograph">
-                        <el-input v-model="ruleForm.autograph"></el-input>
+                    <el-form-item label="昵称" prop="nickname">
+                        <el-input v-model="ruleForm.nickname" :disabled="disabled"></el-input>
                     </el-form-item>
-                    <el-form-item label="手机号" prop="phone" class="mustBox">
+                </div>
+                <div class="userBox selectBox">
+                    <el-form-item label="个性签名" prop="autograph">
+                        <el-input v-model="ruleForm.autograph" :disabled="disabled"></el-input>
+                    </el-form-item>
+                    <el-form-item label="性别" prop="sex" :class="{'mustBox': status !== 'see'}">
+                        <el-select v-model="ruleForm.sex" placeholder="请选择性别" :disabled="true">
+                            <el-option v-for="item in sexList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
+                <div class="userBox">
+                    <el-form-item label="手机号" prop="phone" :class="{'mustBox': status !== 'see'}">
                         <el-input v-model="ruleForm.phone" :disabled="true"></el-input>
                     </el-form-item>
-                    <el-form-item label="状态" prop="status" class="mustBox">
-                        <div class="statusBox">
+                    <el-form-item label="所属公会" prop="guild_name" :class="{'mustBox': status !== 'see'}">
+                        <el-input v-model="ruleForm.guild_name" :disabled="true"></el-input>
+                    </el-form-item>
+                </div>
+                <div class="userBox btnBox">
+                    <el-form-item label="状态" prop="status" :class="{'mustBox': status !== 'see'}">
+                        <div class="statusBox" :class="{'statusDisabled': disabled}">
                             <span v-for="(item,index) in statusList" :key="index" :class="[{ 'hign': statusIndex === item.value }, { 'hignBox': item.value == 2 && statusIndex == 2 }]"  @click="statusClick(item.value)">
                                 {{ item.name }}
                             </span>
                         </div>
                     </el-form-item>
-                </div>
-                <div class="centerBox">
-                    <el-form-item label="昵称" prop="nickname">
-                        <el-input v-model="ruleForm.nickname"></el-input>
-                    </el-form-item>
-                    <el-form-item label="性别" prop="sex" class="mustBox">
-                        <el-select v-model="ruleForm.sex" placeholder="请选择性别" :disabled="true">
-                            <el-option v-for="item in sexList" :key="item.value" :label="item.name" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="所属公会" prop="guild_name" class="mustBox">
-                        <el-input v-model="ruleForm.guild_name" :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="是否已绑卡" prop="is_bindcard" class="mustBox">
-                        <el-button type="primary" @click="isShowBindcard">{{ ruleForm.is_bindcard ? '是' : '否' }}</el-button>
+                    <el-form-item label="是否已绑卡" prop="is_bindcard" class="isBindCard" :class="{'mustBox': status !== 'see'}">
+                        <el-button type="primary" @click="isShowBindcard" :disabled="disabled">{{ ruleForm.is_bindcard ? '是' : '否' }}</el-button>
                     </el-form-item>
                 </div>
-                <div class="rightBox">
-                    <el-form-item label="头像" prop="face" class="photoBox mustBox">
-                        <uploadImg :imgUrl="ruleForm.face" :disabled="true" :isDefault="true"></uploadImg>
-                        <el-button type="primary" @click="replaceImg">替换默认头像</el-button>
-                    </el-form-item>
-                </div>
+                <el-form-item label="头像" prop="face" class="photoBox" :class="{'mustBox': status !== 'see'}">
+                    <uploadImg :imgUrl="ruleForm.face" :disabled="true" :isDefault="true"></uploadImg>
+                    <el-button type="primary" @click="replaceImg" :disabled="disabled">替换默认头像</el-button>
+                </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="resetForm('ruleForm')">取 消</el-button>
-                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-            </span>
-        </el-dialog>
+        </drawer>
         
         <!-- 封禁组件 -->
-        <blocked ref="blocked" @evaluationFunc="evaluationFunc"></blocked>
+        <blocked ref="blocked" @evaluationFunc="evaluationFunc" @blockedCancel="blockedCancel"></blocked>
         <!-- 绑卡组件 -->
         <bindStuck ref="bindStuck"></bindStuck>
     </div>
 </template>
 
 <script>
-
+// 引入抽屉组件
+import drawer from '@/components/drawer/index'
 // 引入api
 import { edit, getUserSave, defaultFace } from '@/api/user.js'
 // 公共图片组件
@@ -75,12 +76,12 @@ import blocked from './blocked.vue'
 import bindStuck from '../components/bindStuck.vue'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
-
 export default {
     components: {
         uploadImg,
         blocked,
-        bindStuck
+        bindStuck,
+        drawer
     },
     data() {
         return {
@@ -88,6 +89,7 @@ export default {
             statusList: MAPDATA.USERSTATUSLISTTWO,
             sexList: MAPDATA.SEXLIST,
             statusIndex: null,
+            status: 'see',
             defaultImg: require('@/assets/default.png'), // 默认头像
             ruleForm: {
                 user_number: '',
@@ -112,20 +114,65 @@ export default {
             }
         };
     },
+    computed: {
+        title() { // 标题
+            if(this.status === 'add') {
+                return '新增用户'
+            } else if(this.status === 'update') {
+                return '修改用户资料'
+            } else {
+                return '查看用户资料'
+            }
+        },
+        disabled() { // 禁止修改
+            if(this.status === 'see') {
+                return true
+            }
+            return false
+        }
+    },
     methods: {
-        loadParams(row) {
-            this.dialogVisible = true
-            this.oldParams = row
+        // 获取数据
+        loadParams(status, row) {
+            this.openComp()
+            this.status = status
             let params = JSON.parse(JSON.stringify(row))
             params.phone = params.phone ? params.phone : '无'
             params.guild_name = params.guild_name ? params.guild_name : '无'
             this.statusIndex = params.status
             params.blockedParams = {} // 用来接收封禁返回的数据
-
             this.$set(this.$data, 'ruleForm', params)
+
+            this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
+        },
+        openComp(status = true) {
+            this.$refs.drawer.loadParams(status)
         },
         handleClose() {
-            this.resetForm()
+            this.openComp()
+        },
+        // 取消
+        cancel() {
+            if(JSON.stringify(this.oldParams) !== JSON.stringify(this.ruleForm)) { // 记录数据 - 有改动就提示
+                this.$confirm('关闭弹窗将不会保留您的更改, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.openComp(false)
+                }).catch(() => {});
+            } else {
+                this.openComp(false)
+            }
+        },
+        // 组件取消
+        blockedCancel() {
+            this.statusIndex = this.oldParams.status
+            this.ruleForm.status = this.oldParams.status
+        },
+        // 修改
+        update() {
+            this.status = 'update'
         },
         // 卡列表
         isShowBindcard() {
@@ -163,7 +210,8 @@ export default {
                             await await defaultFace({ user_id: s.id })
                         }
                         setTimeout(() => {
-                            this.dialogVisible = false
+                            this.$success('修改成功')
+                            this.openComp(false)
                             this.$emit('getList')
                         }, 50);
                     }
@@ -190,9 +238,11 @@ export default {
         },
         // 状态切换
         statusClick(index) {
-            this.statusIndex = index
-            if(index === 2) {
-                this.$refs.blocked.loadParams()
+            if(!this.disabled) {
+                this.statusIndex = index
+                if(index === 2) {
+                    this.$refs.blocked.loadParams()
+                }
             }
         },
         // 封禁组件返回数据
@@ -205,12 +255,9 @@ export default {
 
 <style lang="scss">
 .userAdd-box {
-    .userAdd-dialog {
-        .el-dialog__body {
-            padding-right: 40px;
-            box-sizing: border-box;
+    .el-drawer {
+        .el-drawer__body {
             .el-form {
-                display: flex;
                 .statusBox {
                     display: flex;
                     >span {
@@ -238,19 +285,12 @@ export default {
                     }
                 }
 
-                .photoBox {
-                    .el-form-item__content {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        .el-button {
-                            margin-top: 20px;
-                        }
+                .statusDisabled {
+                    >span {
+                        background: #F5F7FA;
+                        color: #C0C4CC;
+                        border: 1px solid #F5F7FA;
                     }
-                }
-
-                .centerBox {
-                    margin-left: 20px;
                 }
 
                 .el-form-item {
@@ -262,6 +302,28 @@ export default {
                         content: '*';
                         color: #ff4949;
                         margin-right: 4px;
+                    }
+                }
+
+                .btnBox {
+                    .isBindCard {
+                        margin-left: 8px;
+                    }
+                }
+
+                .selectBox {
+                    .el-select {
+                        width: 188px;
+                    }
+                }
+
+                .userBox {
+                    display: flex;
+                }
+
+                .photoBox {
+                    .el-button {
+                        margin: 20px 0px 0px 30px;
                     }
                 }
             }

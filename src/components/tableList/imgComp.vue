@@ -66,7 +66,9 @@ export default {
         },
         tagList: { // 标签 - 音乐专用
             type: Array,
-            default: []
+            default: function() {
+                return []
+            }
         }
     },
     computed: {

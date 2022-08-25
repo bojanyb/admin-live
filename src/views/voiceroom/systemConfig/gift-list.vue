@@ -89,6 +89,14 @@
 							}
 						},
 						{
+							label: '显示类型',
+							width: '110px',
+							render: (h, params) => {
+								let data = MAPDATA.GIFTSHOWTYPELIST.find(item => { return item.value === params.row.is_hide })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
 							label: '钻石价格',
 							width: '95px',
 							prop: 'gift_diamond'
@@ -245,6 +253,7 @@
 		}
 	}
 </script>
+
 <style lang="scss">
 .gift-list-box {
 	padding: 20px;

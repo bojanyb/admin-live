@@ -90,6 +90,7 @@
 				}
 				let res = await saveCardConfig(params)
 				if(res.code === 2000) {
+					this.$success('设置成功')
 					this.getCardConfigFunc()
 				}
 			}

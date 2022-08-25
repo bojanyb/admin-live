@@ -55,7 +55,7 @@ export default {
                     let params = { ...this.ruleForm }
                     let res = await coverCheck(params)
                     if(res.code === 2000) {
-                        this.$message.success('拒绝成功')
+                        this.$success('拒绝成功')
                         this.dialogVisible = false
                         this.$emit('getList')
                     }

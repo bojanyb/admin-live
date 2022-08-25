@@ -10,7 +10,7 @@
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <el-form-item label="礼物名" prop="gift_name">
-                    <el-input v-model="ruleForm.gift_name" placeholder="请输入礼物名"></el-input>
+                    <el-input v-model="ruleForm.gift_name" placeholder="请输入礼物名" :disabled="status === 'add' ? false : true"></el-input>
                 </el-form-item>
                 <el-form-item label="礼物类型" prop="gift_genre">
                     <el-radio-group v-model="ruleForm.gift_genre">
@@ -37,6 +37,16 @@
                         <el-radio v-for="item in playTypeList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <el-form-item label="显示类型" prop="is_hide">
+                    <el-select v-model="ruleForm.is_hide" placeholder="请选择显示类型">
+                        <el-option
+                        v-for="item in showList"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="礼物图片" prop="gift_photo">
                     <uploadImg ref="uploadImg" v-model="ruleForm.gift_photo" :imgUrl="ruleForm.gift_photo" name="gift_photo" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
@@ -47,7 +57,7 @@
                     <el-input v-model="ruleForm.gift_version" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d.]/g,'');" placeholder="请输入礼物版本号"></el-input>
                 </el-form-item>
                 <el-form-item label="钻石价格" prop="gift_diamond">
-                    <el-input v-model="ruleForm.gift_diamond" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入钻石价格"></el-input>
+                    <el-input v-model="ruleForm.gift_diamond" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入钻石价格" :disabled="status === 'add' ? false : true"></el-input>
                 </el-form-item>
                 <!-- <el-form-item label="平台分成" prop="name">
                     <el-input v-model="ruleForm.gift_name"></el-input>
@@ -115,6 +125,7 @@ export default {
             playTypeList: MAPDATA.SYSTEMGIFTPLAYTYPELIST, // 播放类型
             classifyList: MAPDATA.SYSTEMGIFTCLASSIFYLIST, // 礼物分类
             nobilityList: [], // 贵族等级
+            showList: MAPDATA.GIFTSHOWTYPELIST, // 显示类型
             status: 'add', // 当前类型
             ruleForm: {
                 gift_name: '',
@@ -130,7 +141,8 @@ export default {
                 sort: null,
                 gift_desc: '',
                 gift_class: [],
-                noble_level: ''
+                noble_level: '',
+                is_hide: null
             },
             rules: {
                 gift_name: [
@@ -148,6 +160,9 @@ export default {
                 ],
                 play_type: [
                     { required: true, message: '请选择礼物播放类型', trigger: 'change' }
+                ],
+                is_hide: [
+                    { required: true, message: '请选择显示类型', trigger: 'change' }
                 ],
                 gift_photo: [
                     { required: true, message: '请上传礼物图片', trigger: 'change' }

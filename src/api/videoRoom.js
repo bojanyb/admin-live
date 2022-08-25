@@ -419,10 +419,19 @@ export function getActivetyGiftSource(data) {
   })
 }
 
-// 获取已配置礼物 
+// 新版获取已配置礼物 
 export function getActivetyHasGiftList(data) {
   return request({
-    url: '/Activity/getHasAddGift',
+    url: api.platformActivity.getHasAddGift,
+    method: 'post',
+    data
+  })
+}
+
+// 老版获取已配置礼物 
+export function oldGetHasAddGift(data) {
+  return request({
+    url: api.platformActivity.oldGetHasAddGift,
     method: 'post',
     data
   })

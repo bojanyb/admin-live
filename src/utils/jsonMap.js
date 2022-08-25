@@ -89,6 +89,11 @@ const ACTIVITYLIST = [
         name: 'gzpz',
         min: 1,
         max: 5
+    },
+    {
+        name: 'scpz',
+        min: 1,
+        max: 9999999999999999999
     }
 ]
 
@@ -1023,6 +1028,18 @@ const SYSTEMGIFTPLAYTYPELIST = [
     }
 ]
 
+// 礼物列表 - 显示类型
+const GIFTSHOWTYPELIST = [
+    {
+        name: '显示',
+        value: 1
+    },
+    {
+        name: '隐藏',
+        value: 2
+    }
+]
+
 // 超管管理 - 状态
 const SUPERSTATUSLIST = [
     {
@@ -1585,5 +1602,6 @@ export default {
     RISKSYSTEMROLELIST,
     SERVICEAUDITTYPELIST,
     USERPUNISHTYPELIST,
-    USERPUNISHSTATUSLIST
+    USERPUNISHSTATUSLIST,
+    GIFTSHOWTYPELIST
 }

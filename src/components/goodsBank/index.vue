@@ -1,6 +1,6 @@
 <template>
     <div class="share-goodsBank-box">
-        <el-drawer :append-to-body="true" title="礼物库" :visible.sync="drawer" :direction="direction" :before-close="handleClose" @closed="closed">
+        <el-drawer :append-to-body="true" title="商品库" :visible.sync="drawer" :direction="direction" :before-close="handleClose" @closed="closed">
 			<div class="giftListBox">
 				<el-table ref="giftTable" v-loading="giftLoading" :data="giftListArr" element-loading-text="拼命加载中"
 					border fit highlight-current-row>
@@ -56,6 +56,10 @@ export default {
         status: { // 当前状态
             type: String,
             default: ''
+        },
+        isLimit: { // 是否限制最大选择
+            type: Number,
+            default: 1
         }
     },
     data() {
@@ -120,11 +124,12 @@ export default {
         },
         // 关闭礼物库 - 需确认
         handleClose(done) {
-            this.$confirm('确认关闭礼物库？')
-                .then(_ => {
-                    done();
-                })
-                .catch(_ => {});
+            // this.$confirm('确认关闭礼物库？')
+            //     .then(_ => {
+            //         done();
+            //     })
+            //     .catch(_ => {});
+            this.drawer = false
         },
         // 选中礼物
         handleSelect(row) {
@@ -134,7 +139,7 @@ export default {
             //     this.$message.error('当前活动已超过添加最大礼物数量')
             //     return false
             // }
-            if(this.gifts.length < 1) {
+            if(this.gifts.length < this.isLimit) {
                 this.giftListArr.map(res => {
                     if (res.id == row.id) {
                         res.isSelect = true; // 当前礼物被选中
@@ -143,11 +148,11 @@ export default {
                 })
             } else {
                 this.$message.error('最多只能赠送一个商品')
+
+                this.drawer = false
+                this.$emit('validateField')
             }
             // this.$set(row, 'type', 1)
-            this.drawer = false
-            this.$emit('validateField')
-            
         },
         // 数据初始化 - 未选中
         giftSelectSource() {

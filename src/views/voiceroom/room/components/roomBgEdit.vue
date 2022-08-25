@@ -8,8 +8,8 @@
         :close-on-click-modal="false"
         @closed="closed">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
-            <el-form-item label="背景图名称" prop="room_bg_title">
-                <el-input v-model="ruleForm.room_bg_title" placeholder="请输入背景图名称"></el-input>
+            <el-form-item label="背景图名称" prop="name">
+                <el-input v-model="ruleForm.name" placeholder="请输入背景图名称"></el-input>
             </el-form-item>
             <el-form-item label="房间背景图" prop="url">
                 <uploadImg v-model="ruleForm.url" :imgUrl="ruleForm.url" name="url" ref="url" @validateField="validateField"></uploadImg>
@@ -48,10 +48,10 @@ export default {
             ruleForm: {
                 room_genre: '',
                 url: '',
-                room_bg_title: ''
+                name: ''
             },
             rules: {
-                room_bg_title: [
+                name: [
                     { required: true, message: '请输入背景图名称', trigger: 'blur' },
                     { min: 1, max: 5, message: '长度在 1 到 5 个字符', trigger: 'blur' }
                 ],
@@ -96,7 +96,7 @@ export default {
                         id: s.id || null,
                         room_genre: s.room_genre,
                         url: s.url,
-                        room_bg_title: s.room_bg_title
+                        name: s.name
                     }
                     let res = await getRoomBgAdd(params)
                     if(res.code === 2000) {
