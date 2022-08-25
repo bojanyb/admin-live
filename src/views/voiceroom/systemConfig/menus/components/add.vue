@@ -141,6 +141,7 @@ export default {
                     let params = {
                         ...this.ruleForm
                     }
+                    params.pid = params.pid || 0
                     if(this.status === 'add') {
                         let res = await addRule(params)
                         if(res.code === 2000) {
