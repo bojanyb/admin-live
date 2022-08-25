@@ -119,7 +119,8 @@
 </template>
 
 <script>
-
+// 引入抽屉组件
+import drawer from '@/components/drawer/index'
 // 引入api
 import { edit, getUserSave, defaultFace } from '@/api/user.js'
 // 公共图片组件
@@ -130,12 +131,12 @@ import blocked from './blocked.vue'
 import bindStuck from '../components/bindStuck.vue'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
-
 export default {
     components: {
         uploadImg,
         blocked,
-        bindStuck
+        bindStuck,
+        drawer
     },
     data() {
         return {

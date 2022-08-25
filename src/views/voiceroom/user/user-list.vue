@@ -6,7 +6,7 @@
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
-		<bindStuck ref="bindStuck"></bindStuck>
+		<bindStuck ref="bindStuck" @rowClick="rowClick"></bindStuck>
 
 		<!-- 详情组件 -->
 		<userEdit ref="userEdit" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></userEdit>
@@ -219,9 +219,18 @@
 			},
 			// 编辑
 			editFunc(row) {
+				this.load('update', row)
+			},
+			// 查看
+			rowClick(row, column) {
+				if(column.property !== 'face') {
+					this.load('see', row)
+				}
+			},
+			load(status, row) {
 				this.isDestoryComp = true
 				setTimeout(() => {
-					this.$refs.userEdit.loadParams(row)
+					this.$refs.userEdit.loadParams(status, row)
 				}, 50);
 			},
 			// 销毁组件

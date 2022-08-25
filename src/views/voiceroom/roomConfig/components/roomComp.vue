@@ -118,6 +118,7 @@ export default {
         },
         // 获取参数
         loadParams(status, row, list) {
+            console.log(row, 'row-------2020')
             this.openComp()
             this.typeList = list
             this.status = status

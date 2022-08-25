@@ -67,7 +67,7 @@ export default {
         },
         isSpecial() { // 判断是图片还是svga
             if(this.url) {
-                if(this.url.indexOf('.png') !== -1 || this.url.indexOf('.jpg') !== -1 || this.url.indexOf('.jpeg') !== -1) {
+                if(this.url.indexOf('.png') !== -1 || this.url.indexOf('.gif') !== -1 || this.url.indexOf('.jpg') !== -1 || this.url.indexOf('.jpeg') !== -1) {
                     return 'png'
                 } else if(this.url.indexOf('.svga') !== -1) {
                     return 'svga'
