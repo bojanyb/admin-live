@@ -1,7 +1,7 @@
 <template>
     <div class="userAdd-box">
         <drawer 
-        size="470px"
+        size="660px"
         :title="title"
         ref="drawer"
         :isShowUpdate="true"
@@ -10,52 +10,54 @@
         @closed="closed"
         :disabled="disabled"
         @update="update">
-            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <div class="leftBox">
-                    <el-form-item label="用户ID" prop="user_number" class="mustBox">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
+                <div class="userBox">
+                    <el-form-item label="用户ID" prop="user_number" :class="{'mustBox': status !== 'see'}">
                         <el-input v-model="ruleForm.user_number" :disabled="true"></el-input>
                     </el-form-item>
-                    <el-form-item label="个性签名" prop="autograph">
-                        <el-input v-model="ruleForm.autograph"></el-input>
+                    <el-form-item label="昵称" prop="nickname">
+                        <el-input v-model="ruleForm.nickname" :disabled="disabled"></el-input>
                     </el-form-item>
-                    <el-form-item label="手机号" prop="phone" class="mustBox">
+                </div>
+                <div class="userBox selectBox">
+                    <el-form-item label="个性签名" prop="autograph">
+                        <el-input v-model="ruleForm.autograph" :disabled="disabled"></el-input>
+                    </el-form-item>
+                    <el-form-item label="性别" prop="sex" :class="{'mustBox': status !== 'see'}">
+                        <el-select v-model="ruleForm.sex" placeholder="请选择性别" :disabled="true">
+                            <el-option v-for="item in sexList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
+                <div class="userBox">
+                    <el-form-item label="手机号" prop="phone" :class="{'mustBox': status !== 'see'}">
                         <el-input v-model="ruleForm.phone" :disabled="true"></el-input>
                     </el-form-item>
-                    <el-form-item label="状态" prop="status" class="mustBox">
-                        <div class="statusBox">
+                    <el-form-item label="所属公会" prop="guild_name" :class="{'mustBox': status !== 'see'}">
+                        <el-input v-model="ruleForm.guild_name" :disabled="true"></el-input>
+                    </el-form-item>
+                </div>
+                <div class="userBox btnBox">
+                    <el-form-item label="状态" prop="status" :class="{'mustBox': status !== 'see'}">
+                        <div class="statusBox" :class="{'statusDisabled': disabled}">
                             <span v-for="(item,index) in statusList" :key="index" :class="[{ 'hign': statusIndex === item.value }, { 'hignBox': item.value == 2 && statusIndex == 2 }]"  @click="statusClick(item.value)">
                                 {{ item.name }}
                             </span>
                         </div>
                     </el-form-item>
-                </div>
-                <div class="centerBox">
-                    <el-form-item label="昵称" prop="nickname">
-                        <el-input v-model="ruleForm.nickname"></el-input>
-                    </el-form-item>
-                    <el-form-item label="性别" prop="sex" class="mustBox">
-                        <el-select v-model="ruleForm.sex" placeholder="请选择性别" :disabled="true">
-                            <el-option v-for="item in sexList" :key="item.value" :label="item.name" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="所属公会" prop="guild_name" class="mustBox">
-                        <el-input v-model="ruleForm.guild_name" :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item label="是否已绑卡" prop="is_bindcard" class="mustBox">
-                        <el-button type="primary" @click="isShowBindcard">{{ ruleForm.is_bindcard ? '是' : '否' }}</el-button>
+                    <el-form-item label="是否已绑卡" prop="is_bindcard" class="isBindCard" :class="{'mustBox': status !== 'see'}">
+                        <el-button type="primary" @click="isShowBindcard" :disabled="disabled">{{ ruleForm.is_bindcard ? '是' : '否' }}</el-button>
                     </el-form-item>
                 </div>
-                <div class="rightBox">
-                    <el-form-item label="头像" prop="face" class="photoBox mustBox">
-                        <uploadImg :imgUrl="ruleForm.face" :disabled="true" :isDefault="true"></uploadImg>
-                        <el-button type="primary" @click="replaceImg">替换默认头像</el-button>
-                    </el-form-item>
-                </div>
+                <el-form-item label="头像" prop="face" class="photoBox" :class="{'mustBox': status !== 'see'}">
+                    <uploadImg :imgUrl="ruleForm.face" :disabled="true" :isDefault="true"></uploadImg>
+                    <el-button type="primary" @click="replaceImg" :disabled="disabled">替换默认头像</el-button>
+                </el-form-item>
             </el-form>
         </drawer>
         
         <!-- 封禁组件 -->
-        <blocked ref="blocked" @evaluationFunc="evaluationFunc"></blocked>
+        <blocked ref="blocked" @evaluationFunc="evaluationFunc" @blockedCancel="blockedCancel"></blocked>
         <!-- 绑卡组件 -->
         <bindStuck ref="bindStuck"></bindStuck>
     </div>
@@ -163,6 +165,11 @@ export default {
                 this.openComp(false)
             }
         },
+        // 组件取消
+        blockedCancel() {
+            this.statusIndex = this.oldParams.status
+            this.ruleForm.status = this.oldParams.status
+        },
         // 修改
         update() {
             this.status = 'update'
@@ -203,7 +210,8 @@ export default {
                             await await defaultFace({ user_id: s.id })
                         }
                         setTimeout(() => {
-                            this.dialogVisible = false
+                            this.$success('修改成功')
+                            this.openComp(false)
                             this.$emit('getList')
                         }, 50);
                     }
@@ -230,9 +238,11 @@ export default {
         },
         // 状态切换
         statusClick(index) {
-            this.statusIndex = index
-            if(index === 2) {
-                this.$refs.blocked.loadParams()
+            if(!this.disabled) {
+                this.statusIndex = index
+                if(index === 2) {
+                    this.$refs.blocked.loadParams()
+                }
             }
         },
         // 封禁组件返回数据
@@ -245,12 +255,9 @@ export default {
 
 <style lang="scss">
 .userAdd-box {
-    .userAdd-dialog {
-        .el-dialog__body {
-            padding-right: 40px;
-            box-sizing: border-box;
+    .el-drawer {
+        .el-drawer__body {
             .el-form {
-                display: flex;
                 .statusBox {
                     display: flex;
                     >span {
@@ -278,19 +285,12 @@ export default {
                     }
                 }
 
-                .photoBox {
-                    .el-form-item__content {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        .el-button {
-                            margin-top: 20px;
-                        }
+                .statusDisabled {
+                    >span {
+                        background: #F5F7FA;
+                        color: #C0C4CC;
+                        border: 1px solid #F5F7FA;
                     }
-                }
-
-                .centerBox {
-                    margin-left: 20px;
                 }
 
                 .el-form-item {
@@ -302,6 +302,28 @@ export default {
                         content: '*';
                         color: #ff4949;
                         margin-right: 4px;
+                    }
+                }
+
+                .btnBox {
+                    .isBindCard {
+                        margin-left: 8px;
+                    }
+                }
+
+                .selectBox {
+                    .el-select {
+                        width: 188px;
+                    }
+                }
+
+                .userBox {
+                    display: flex;
+                }
+
+                .photoBox {
+                    .el-button {
+                        margin: 20px 0px 0px 30px;
                     }
                 }
             }

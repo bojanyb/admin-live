@@ -91,12 +91,7 @@ export default {
                                 h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
                                 h('el-button', { props: { type: 'danger'}, style: {
                                     display: params.row.id === 1 ? 'none' : 'unset'
-                                }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除'),
-                                h('div', {
-                                    style: {
-                                        display: params.row.id === 1 ? 'unset' : 'none'
-                                    }
-                                }, '默认品类')
+                                }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
                             ])
                         }
                     }

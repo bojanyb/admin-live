@@ -18,7 +18,7 @@
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="dialogVisible = false">取 消</el-button>
+				<el-button @click="cancel">取 消</el-button>
 				<el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
 			</div>
 		</el-dialog>
@@ -67,6 +67,11 @@ export default {
                     return false;
                 }
             });
+        },
+        // 取消
+        cancel() {
+            this.dialogVisible = false
+            this.$emit('blockedCancel')
         },
         // 重置
         resetForm(formName) {
