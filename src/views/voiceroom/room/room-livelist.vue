@@ -187,8 +187,9 @@
 					type: 'warning'
 				}).then(async () => {
 					let params = {
-						room_number: row.room_number,
-						uid: row.live_user_id
+						"room_number": row.room_number,
+						"uid": row.live_user_id,
+						"admin-token": this.$store.getters.token
 					}
 					let res = await liveEnd(params)
 					if(res.code === 2000) {

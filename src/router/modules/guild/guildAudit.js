@@ -33,7 +33,7 @@ const guildAuditRouter = {
 			component: () => import('@/views/voiceroom/guildAudit/guildApplication-list'),
 			name: 'guildApplication-list',
 			meta: {
-				title: '公会厅申请列表',
+				title: '牌照管理列表',
 				noCache: true
 			}
 		},

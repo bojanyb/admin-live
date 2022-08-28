@@ -102,6 +102,14 @@
 							prop: 'room_count'
 						},
 						{
+							label: '房间编号',
+							prop: 'room_number'
+						},
+						{
+							label: '房间标题',
+							prop: 'room_title'
+						},
+						{
 							label: '申请人（ID）',
 							minWidth: '120px',
 							render: (h, params) => {
