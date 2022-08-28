@@ -98,15 +98,16 @@
 						},
 						{
 							label: '公会已绑定厅数量',
-							minWidth: '180px',
+							minWidth: '150px',
 							prop: 'room_count'
 						},
 						{
-							label: '房间编号',
+							label: '房间ID',
 							prop: 'room_number'
 						},
 						{
 							label: '房间标题',
+							minWidth: '150px',
 							prop: 'room_title'
 						},
 						{
