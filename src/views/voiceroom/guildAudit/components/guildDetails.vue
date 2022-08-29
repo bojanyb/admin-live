@@ -83,10 +83,11 @@ export default {
                     render: (h, params) => {
                         return h('div', [
                             h('el-button', { props: { type: 'danger'}, style: {
+                                marginRight: params.row.has_bind_room ? '0px' : '10px',
                                 display: params.row.is_admin === 1 ? 'none' : 'unset'
                             }, on: {click:()=>{this.deleteParams(params.row, 1)}}}, '移除'),
                             h('span', { style: {
-                                marginRight: params.row.has_bind_room? '10px' : '0px',
+                                marginRight: params.row.has_bind_room ? '0px' : '10px',
                                 display: params.row.is_admin === 1 ? 'unset' : 'none'
                             } }, '公会长'),
                             h('el-button', { props: { type: 'primary'}, style: {
