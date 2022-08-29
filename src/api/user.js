@@ -55,6 +55,15 @@ export function removeGuildUser(data) {
   })
 }
 
+// 绑定工会厅
+export function bindRoom(data) {
+  return request({
+    url: api.guild.bindRoom,
+    method: 'post',
+    data
+  })
+}
+
 // 移除大厅
 export function removeGuildRoom(data) {
   return request({

@@ -170,6 +170,7 @@ const request = {
         settlementLog: `${HTTPHEADER}/Guild/settlementLog`, // 返点操作日志
         newGuildApplyList: `${HTTPHEADER}/guild/newGuildApplyList`, // 创建工会申请列表
         newGuildApplyCheck: `${HTTPHEADER}/guild/newGuildApplyCheck`, // 创建工会审核已联系或者驳回
+        bindRoom: `${HTTPHEADER}/guild/bindRoom`, // 绑定工会厅
     },
 
     // 封禁记录
