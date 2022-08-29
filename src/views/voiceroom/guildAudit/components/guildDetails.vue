@@ -86,13 +86,17 @@ export default {
                                 marginRight: params.row.has_bind_room ? '0px' : '10px',
                                 display: params.row.is_admin === 1 ? 'none' : 'unset'
                             }, on: {click:()=>{this.deleteParams(params.row, 1)}}}, '移除'),
-                            h('span', { style: {
+                            h('div', { style: {
+                                padding: '0px 14px',
                                 marginRight: params.row.has_bind_room ? '0px' : '10px',
                                 display: params.row.is_admin === 1 ? 'unset' : 'none'
                             } }, '公会长'),
                             h('el-button', { props: { type: 'primary'}, style: {
                                 display: params.row.has_bind_room ? 'none' : 'unset'
-                            }, on: {click:()=>{this.bindHall(params.row.user_id, 1)}}}, '绑定厅'),
+                            }, on: {click:()=>{this.bindHall(params.row.user_id, 1)}}}, '未绑定'),
+                            h('el-button', { props: { type: 'success'}, style: {
+                                display: !params.row.has_bind_room ? 'none' : 'unset'
+                            }, on: {click:()=>{this.bindHall(params.row.user_id, 1)}}}, '已绑定'),
                         ])
                     }
                 }
