@@ -5,7 +5,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 详情组件 -->
         <audioComp v-if="isDestoryComp" ref="audioComp" @destoryComp="destoryComp" :tabIndex="tabIndex"></audioComp>
@@ -195,13 +195,6 @@ export default {
         // 查询
         onSearch() {
             this.getList()
-        },
-        // 查看
-        rowClick(row) {
-            this.isDestoryComp = true
-            setTimeout(() => {
-                this.$refs.audioComp.loadParams(row)
-            }, 50);
         },
         destoryComp() {
             this.isDestoryComp = false

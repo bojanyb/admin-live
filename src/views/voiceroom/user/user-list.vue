@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
 		<bindStuck ref="bindStuck"></bindStuck>
 
@@ -220,12 +220,6 @@
 			// 编辑
 			editFunc(row) {
 				this.load('update', row)
-			},
-			// 查看
-			rowClick(row, column) {
-				if(column.property !== 'face') {
-					this.load('see', row)
-				}
 			},
 			load(status, row) {
 				this.isDestoryComp = true

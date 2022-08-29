@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
 		<!-- 编辑组件 -->
 		<roomEdit ref="roomEdit" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></roomEdit>
@@ -142,10 +142,6 @@
 			// 查询
 			onSearch() {
 				this.getList()
-			},
-			// 查看
-			rowClick(row) {
-				this.$refs.roomDetails.loadParams(row)
 			},
 			// 冻结/解冻
 			handleRoom(source) {

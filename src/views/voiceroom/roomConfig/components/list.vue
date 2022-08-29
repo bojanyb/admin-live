@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 新增组件 -->
         <addHeat v-if="isDestoryComp" ref="addHeat" @destoryComp="destoryComp" @getList="getList"></addHeat>
@@ -141,10 +141,6 @@ export default {
         // 修改
         update(row) {
             this.load('update', row)
-        },
-        // 查看
-        rowClick(row) {
-            this.load('see', row)
         },
         load(status, row) {
             this.isDestoryComp = true

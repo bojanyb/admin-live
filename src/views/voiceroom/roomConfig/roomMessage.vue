@@ -5,7 +5,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 引入新增组件 -->
         <roomComp v-if="isDestoryComp" ref="roomComp" @destoryComp="destoryComp" @getList="getList"></roomComp>
@@ -274,12 +274,6 @@ export default {
         // 查询
         onSearch() {
             this.getList()
-        },
-        // 查看
-        rowClick(row, column) {
-            if(column.property !== 'cover' && column.property !== 'classify') {
-                this.load('see', row)
-            }
         },
         // 修改
         update(row) {

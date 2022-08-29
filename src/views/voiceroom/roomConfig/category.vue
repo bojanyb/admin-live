@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 新增组件 -->
         <categoryComp v-if="isDestoryComp" ref="categoryComp" @destoryComp="destoryComp" @getList="getList"></categoryComp>
@@ -127,11 +127,6 @@ export default {
         // 新增
         add() {
            this.load('add')
-        },
-        rowClick(row, column) {
-            if(column.property !== 'icon') {
-                this.load('see', row)
-            }
         },
         // 修改
         update(row) {

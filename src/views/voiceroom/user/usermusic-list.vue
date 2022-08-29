@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
 		<upMusic v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList" ref="upMusic"></upMusic>
 	</div>
@@ -166,10 +166,6 @@
 			// 编辑
 			editFunc(row) {
 				this.load('update', row)
-			},
-			// 查看用户音乐详情
-			rowClick(row) {
-				this.load('see', row)
 			},
 			load(status, row) {
 				this.isDestoryComp = true

@@ -6,7 +6,6 @@
         :append-to-body="appendToBody"
         :close-on-press-escape="closeOnPressEscape"
         :show-close="showClose"
-        :wrapperClosable="wrapperClosable"
         :visible.sync="drawer"
         :direction="direction"
         :destroy-on-close="true"

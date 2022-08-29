@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick">></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 审核组件 -->
         <coverComp v-if="isDestoryComp" ref="coverComp" @destoryComp="destoryComp" @getList="getList"></coverComp>
@@ -215,12 +215,6 @@ export default {
                 setTimeout(() => {
                 this.$refs.coverComp.loadParams(id, status)
                 }, 50); 
-            }
-        },
-        // 查看
-        rowClick(row, column) {
-            if(column.property !== 'cover_url') {
-                this.$refs.coverDetails.loadParams(row)
             }
         },
         // 销毁组件

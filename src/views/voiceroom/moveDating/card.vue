@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" :isHidePage="true" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" :isHidePage="true"></tableList>
 
         <!-- 详情组件 -->
         <cardComp v-if="isDestoryComp" ref="cardComp" @destoryComp="destoryComp" @getList="getList"></cardComp>
@@ -129,12 +129,6 @@ export default {
         // 修改
         update(row) {
             this.load('update', row)
-        },
-        // 查看
-        rowClick(row, column) {
-            if(column.property !== 'img') {
-                this.load('see', row)
-            }
         },
         load(status, row) {
             this.isDestoryComp = true
