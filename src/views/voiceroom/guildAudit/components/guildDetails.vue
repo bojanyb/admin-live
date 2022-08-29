@@ -63,6 +63,16 @@ export default {
                     prop: 'nickname'
                 },
                 {
+                    label: '房间ID',
+                    width: '100px',
+                    prop: 'room_number'
+                },
+                {
+                    label: '房间名称',
+                    width: '100px',
+                    prop: 'room_name'
+                },
+                {
                     label: '加入时间',
                     width: '160px',
                     prop: 'create_time'
@@ -80,6 +90,7 @@ export default {
                 {
                     label: '操作',
                     width: '200px',
+                    fixed: 'right',
                     render: (h, params) => {
                         return h('div', [
                             h('el-button', { props: { type: 'danger'}, style: {
