@@ -86,10 +86,10 @@ export default {
                                 display: params.row.is_admin === 1 ? 'none' : 'unset'
                             }, on: {click:()=>{this.deleteParams(params.row, 1)}}}, '移除'),
                             h('span', { style: {
+                                marginRight: params.row.has_bind_room? '10px' : '0px',
                                 display: params.row.is_admin === 1 ? 'unset' : 'none'
                             } }, '公会长'),
                             h('el-button', { props: { type: 'primary'}, style: {
-                                marginLeft: '10px',
                                 display: params.row.has_bind_room ? 'none' : 'unset'
                             }, on: {click:()=>{this.bindHall(params.row.user_id, 1)}}}, '绑定厅'),
                         ])
