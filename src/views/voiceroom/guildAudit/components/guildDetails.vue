@@ -79,7 +79,7 @@ export default {
                 },
                 {
                     label: '操作',
-                    width: '180px',
+                    width: '200px',
                     render: (h, params) => {
                         return h('div', [
                             h('el-button', { props: { type: 'danger'}, style: {
