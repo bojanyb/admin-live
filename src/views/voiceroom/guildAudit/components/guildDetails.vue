@@ -96,7 +96,7 @@ export default {
                             }, on: {click:()=>{this.bindHall(params.row.user_id, 1)}}}, '未绑定'),
                             h('el-button', { props: { type: 'success'}, style: {
                                 display: !params.row.has_bind_room ? 'none' : 'unset'
-                            }, on: {click:()=>{this.bindHall(params.row.user_id, 1)}}}, '已绑定'),
+                            }, on: {click:()=>{}}}, '已绑定'),
                         ])
                     }
                 }
