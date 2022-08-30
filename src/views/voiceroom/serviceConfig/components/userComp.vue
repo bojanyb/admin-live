@@ -5,9 +5,11 @@
         :title="title"
         ref="drawer"
         @cancel="cancel"
+        @submitForm="submitForm"
         @closed="closed"
-        :disabled="disabled">
-            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="true">
+        :disabled="disabled"
+        @update="update">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <el-form-item label="用户ID" prop="user_number">
                     <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled"></el-input>
                 </el-form-item>
@@ -42,7 +44,6 @@ export default {
     },
     data() {
         return {
-            dialogVisible: false,
             timeList: MAPDATA.DURATION, // 处罚时长
             typeList: MAPDATA.USERPUNISHTYPELIST, // 处罚类型
             status: 'add',
@@ -52,6 +53,7 @@ export default {
                 ban_duration: '',
                 remark: ''
             },
+            oldParams: {}, // 老数据
             rules: {
                 user_number: [
                     { required: true, message: '请输入用户ID', trigger: 'blur' },
@@ -85,9 +87,6 @@ export default {
         }
     },
     methods: {
-        handleClose() {
-            this.dialogVisible = false
-        },
         // 获取数据
         loadParams(status, row) {
             this.openComp()
@@ -97,6 +96,8 @@ export default {
                 params.ban_duration = params.ban_duration ? params.ban_duration : ''
                 this.$set(this.$data, 'ruleForm', params)
             }
+
+            this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
         },
         openComp(status = true) {
             this.$refs.drawer.loadParams(status)
@@ -109,7 +110,7 @@ export default {
                     let res = await save(params)
                     if(res.code === 2000) {
                         this.$success('添加成功')
-                        this.dialogVisible = false
+                        this.openComp(false)
                         this.$emit('getList')
                     }
                 } else {
@@ -126,7 +127,21 @@ export default {
             this.$emit('destoryComp')
         },
         cancel() {
-            this.openComp(false)
+            if(JSON.stringify(this.oldParams) !== JSON.stringify(this.ruleForm)) { // 记录数据 - 有改动就提示
+                this.$confirm('关闭弹窗将不会保留您的更改, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.openComp(false)
+                }).catch(() => {});
+            } else {
+                this.openComp(false)
+            }
+        },
+        // 修改
+        update() {
+            this.status = 'update'
         }
     }
 }

@@ -227,6 +227,7 @@ const request = {
         roomTypes: `${HTTPHEADER}/party/roomTypes`, // 查看房间已经绑定的分类
         roomBindType: `${HTTPHEADER}/party/roomBindType`, // 为房间绑定分类
         delBind: `${HTTPHEADER}/party/delBind`, // 房间移除绑定分类
+        endLive: `${HTTPHEADER}/party/endLive`, // 关闭直播
     },
 
     // 风控检测

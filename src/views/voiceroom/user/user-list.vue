@@ -10,6 +10,9 @@
 
 		<!-- 详情组件 -->
 		<userEdit ref="userEdit" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></userEdit>
+
+		<!-- 处罚组件 -->
+		<punishComp v-if="isDestoryComp" ref="punishComp" @destoryComp="destoryComp" @getList="getList"></punishComp>
 	</div>
 </template>
 
@@ -17,6 +20,8 @@
 	import { getUserStatisticalShow } from '@/api/videoRoom'
 	// 卡列表组件
 	import bindStuck from './components/bindStuck.vue'
+	// 引入处罚组件
+	import punishComp from './components/punishComp.vue'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -39,7 +44,8 @@
 			bindStuck,
 			tableList,
 			SearchPanel,
-			userEdit
+			userEdit,
+			punishComp
 		},
 		data() {
 			return {
@@ -184,7 +190,8 @@
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '编辑')
+									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '修改'),
+									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '处罚')
 								])
 							}
 						}

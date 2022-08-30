@@ -125,6 +125,7 @@ export default {
           {
             label: '操作',
             width: '200px',
+            fixed: 'right',
             render: (h, params) => {
               return h('div', [
                 h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.FeedBackFunc(params.row, 2)}}},'处理'),

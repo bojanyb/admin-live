@@ -124,6 +124,7 @@ export default {
                     },
                     {
                         label: '操作',
+                        fixed: 'right',
                         minWidth: '230px',
                         render: (h, params) => {
                             return h('div', [

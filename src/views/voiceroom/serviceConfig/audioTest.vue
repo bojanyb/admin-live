@@ -140,7 +140,10 @@ export default {
                         label: '音转文',
                         prop: 'content',
                         showOverFlow: true,
-                        minWidth: '120px'
+                        minWidth: '120px',
+                        render: (h, params) => {
+                            return h('span', params.row.content || '无')
+                        }
                     }
                 ]
             }
