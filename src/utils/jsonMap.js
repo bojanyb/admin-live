@@ -1519,8 +1519,40 @@ const USERPUNISHTYPELIST = [
     }
 ]
 
+// 用户处罚 - 处罚类型 - 列表
+const USERPUNISHTYPELISTCOPY = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '封号',
+        value: 1
+    },
+    {
+        name: '封设备',
+        value: 2
+    }
+]
+
 // 用户处罚 - 状态
 const USERPUNISHSTATUSLIST = [
+    {
+        name: '生效中',
+        value: 1
+    },
+    {
+        name: '已解除',
+        value: 2
+    }
+]
+
+// 用户处罚 - 状态 - 列表
+const USERPUNISHSTATUSLISTCOPY = [
+    {
+        name: '全部',
+        value: ''
+    },
     {
         name: '生效中',
         value: 1
@@ -1602,6 +1634,8 @@ export default {
     RISKSYSTEMROLELIST,
     SERVICEAUDITTYPELIST,
     USERPUNISHTYPELIST,
+    USERPUNISHTYPELISTCOPY,
     USERPUNISHSTATUSLIST,
+    USERPUNISHSTATUSLISTCOPY,
     GIFTSHOWTYPELIST
 }

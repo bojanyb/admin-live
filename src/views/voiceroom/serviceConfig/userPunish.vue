@@ -35,7 +35,10 @@ export default {
     },
     data() {
         return {
-            isDestoryComp: false // 是否销毁组件
+            isDestoryComp: false, // 是否销毁组件
+            searchParams: {
+                status: 1
+            }
         };
     },
     computed: {
@@ -52,12 +55,22 @@ export default {
                 {
                     name: 'type',
                     type: 'select',
-                    value: null,
+                    value: '',
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '处罚类型',
                     placeholder: '请选择',
-                    options: MAPDATA.USERPUNISHTYPELIST
+                    options: MAPDATA.USERPUNISHTYPELISTCOPY
+                },
+                {
+                    name: 'status',
+                    type: 'select',
+                    value: 1,
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '处罚状态',
+                    placeholder: '请选择',
+                    options: MAPDATA.USERPUNISHSTATUSLISTCOPY
                 },
                 {
                     name: 'dateTimeParams',
@@ -158,6 +171,7 @@ export default {
                 page_size: params.size,
                 user_number: s.user_number,
                 type: s.type,
+                status: s.status,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time
             }
@@ -180,7 +194,9 @@ export default {
         },
         // 重置
         reset() {
-            this.searchParams = {}
+            this.searchParams = {
+                status: 1
+            }
             this.dateTimeParams = {}
             this.getList()
         },

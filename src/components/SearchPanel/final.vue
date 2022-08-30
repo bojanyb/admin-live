@@ -569,6 +569,9 @@ export default {
         border-radius: 0;
       }
     }
+    .el-input-group__prepend {
+      border: none;
+    }
     .el-date-editor {
       border: none;
       background: #F5F7FA;
