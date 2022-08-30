@@ -191,7 +191,7 @@
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '修改'),
-									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '处罚')
+									// h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.punishFunc(params.row)}}}, '处罚')
 								])
 							}
 						}
@@ -232,6 +232,13 @@
 				this.isDestoryComp = true
 				setTimeout(() => {
 					this.$refs.userEdit.loadParams(status, row)
+				}, 50);
+			},
+			// 处罚
+			punishFunc(row) {
+				this.isDestoryComp = true
+				setTimeout(() => {
+					this.$refs.punishComp.loadParams(row)
 				}, 50);
 			},
 			// 销毁组件
