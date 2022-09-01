@@ -65,12 +65,16 @@ export default {
                 {
                     label: '房间ID',
                     width: '100px',
-                    prop: 'room_number'
+                    render: (h, params) => {
+                        return h('span', params.row.room_number || '无')
+                    }
                 },
                 {
                     label: '房间名称',
                     width: '100px',
-                    prop: 'room_name'
+                    render: (h, params) => {
+                        return h('span', params.row.room_name || '无')
+                    }
                 },
                 {
                     label: '加入时间',
