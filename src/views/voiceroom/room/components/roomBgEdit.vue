@@ -1,35 +1,35 @@
 <template>
     <div class="roomBgEdit-box">
-        <el-dialog
-        :title="title"
-        :visible.sync="dialogVisible"
-        width="500px"
-        :before-close="handleClose"
-        :close-on-click-modal="false"
-        @closed="closed">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
-            <el-form-item label="背景图名称" prop="name">
-                <el-input v-model="ruleForm.name" placeholder="请输入背景图名称"></el-input>
-            </el-form-item>
-            <el-form-item label="房间背景图" prop="url">
-                <uploadImg v-model="ruleForm.url" :imgUrl="ruleForm.url" name="url" ref="url" @validateField="validateField"></uploadImg>
-            </el-form-item>
-            <el-form-item label="默认配置房间类型" prop="room_genre">
-                <el-select v-model="ruleForm.room_genre" placeholder="请选择默认配置房间类型">
-                    <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
-                </el-select>
-            </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="resetForm">取 消</el-button>
-            <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-        </span>
-        </el-dialog>
+        <drawer 
+        size="470px"
+        title="修改房间直播信息"
+        ref="drawer"
+        :isShowUpdate="true"
+        @cancel="cancel"
+        @submitForm="submitForm"
+        @closed="closed"
+        :disabled="disabled"
+        @update="update">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
+                <el-form-item label="背景图名称" prop="name">
+                    <el-input v-model="ruleForm.name" placeholder="请输入背景图名称"></el-input>
+                </el-form-item>
+                <el-form-item label="房间背景图" prop="url">
+                    <uploadImg v-model="ruleForm.url" :imgUrl="ruleForm.url" name="url" ref="url" @validateField="validateField"></uploadImg>
+                </el-form-item>
+                <el-form-item label="默认配置房间类型" prop="room_genre">
+                    <el-select v-model="ruleForm.room_genre" placeholder="请选择默认配置房间类型">
+                        <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+        </drawer>
     </div>
 </template>
 
 <script>
-
+// 引入抽屉组件
+import drawer from '@/components/drawer/index'
 // 引入upload组件
 import uploadImg from '@/components/uploadImg/index.vue'
 // 引入公共map
@@ -38,11 +38,11 @@ import MAPDATA from '@/utils/jsonMap.js'
 import { getRoomBgAdd } from '@/api/videoRoom'
 export default {
     components: {
-        uploadImg
+        uploadImg,
+        drawer
     },
     data() {
         return {
-            dialogVisible: false,
             status: 'add',
             typeList: MAPDATA.ROOMTYPELIST,
             ruleForm: {
@@ -50,6 +50,7 @@ export default {
                 url: '',
                 name: ''
             },
+            oldParams: {}, // 老数据
             rules: {
                 name: [
                     { required: true, message: '请输入背景图名称', trigger: 'blur' },
@@ -65,27 +66,29 @@ export default {
         };
     },
     computed: {
-        title() {
+        title() { // 标题
             if(this.status === 'add') {
                 return '新增房间背景图'
             } else if(this.status === 'update') {
                 return '修改房间背景图'
             }
+        },
+        disabled() {
+            return false
         }
     },
     methods: {
         // 获取数据
         loadParams(status, row) {
-            this.dialogVisible = true
+            this.openComp()
             this.status = status
 
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
                 this.$set(this.$data, 'ruleForm', params)
             }
-        },
-        handleClose() {
-            this.resetForm()
+
+            this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
         },
         // 提交
         async submitForm(formName) {
@@ -100,9 +103,9 @@ export default {
                     }
                     let res = await getRoomBgAdd(params)
                     if(res.code === 2000) {
-                        this.$message.success('操作成功')
+                        this.$success('操作成功')
                     }
-                    this.dialogVisible = false
+                    this.openComp(false)
                     this.$emit('getList')
                 } else {
                     console.log('error submit!!');
@@ -110,8 +113,29 @@ export default {
                 }
             });
         },
+        openComp(status = true) {
+            this.$refs.drawer.loadParams(status)
+        },
+        // 取消
+        cancel() {
+            if(JSON.stringify(this.oldParams) !== JSON.stringify(this.ruleForm)) {  // 记录数据 - 有改动就提示
+                this.$confirm('关闭弹窗将不会保留您的更改, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.openComp(false)
+                }).catch(() => {});
+            } else {
+                this.openComp(false)
+            }
+        },
+        // 修改
+        update() {
+            this.status = 'update'
+        },
         resetForm() {
-            this.dialogVisible = false
+            this.openComp(false)
         },
         // 销毁组件
         closed() {

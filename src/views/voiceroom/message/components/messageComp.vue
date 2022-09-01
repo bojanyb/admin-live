@@ -8,7 +8,7 @@
         @submitForm="submitForm"
         @closed="closed"
         :disabled="disabled">
-            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="115px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <el-form-item label="活动标题" prop="title">
                     <el-input v-model="ruleForm.title" :disabled="disabled"></el-input>
                 </el-form-item>

@@ -5,7 +5,6 @@
     row-key="id"
     :tree-props="{children: cfgs.children}"
       ref="table" @sort-change="handleSortChange" @selection-change="handleSelectionChange"
-      @row-click="rowClick"
       v-loading="loading"
       :row-style="{'cursor':'pointer'}">
       <!-- checkbox -->
