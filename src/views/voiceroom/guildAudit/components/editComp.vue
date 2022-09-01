@@ -105,7 +105,7 @@ export default {
                 return '修改公会'
             }
         },
-        disabled() {
+        disabled() { // 是否禁止输入
             if(this.status === 'see') {
                 return true
             }
