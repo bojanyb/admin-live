@@ -38,6 +38,14 @@ export default {
         forms() {
             return [
                 {
+                    name: 'user_id',
+                    type: 'input',
+                    value: '',
+                    label: '用户ID',
+                    isNum: true,
+                    placeholder: '请输入用户ID'
+                },
+                {
                     name: 'sort',
                     type: 'select',
                     value: '',
@@ -46,14 +54,6 @@ export default {
                     label: '排序',
                     placeholder: '请选择',
                     options: MAPDATA.EMBODYSORT
-                },
-                {
-                    name: 'user_id',
-                    type: 'input',
-                    value: '',
-                    label: '用户ID',
-                    isNum: true,
-                    placeholder: '请输入用户ID'
                 }
             ]
         },
