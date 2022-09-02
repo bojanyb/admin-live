@@ -8,6 +8,7 @@
         :show-close="showClose"
         :visible.sync="drawer"
         :direction="direction"
+        :wrapperClosable="wrapperClosable"
         :destroy-on-close="true"
         @closed="closed">
             <div class="mainBox">
