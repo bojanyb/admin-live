@@ -19,7 +19,7 @@
                 <el-form-item label="公会头像" prop="face">
                     <uploadImg ref="uploadImg" v-model="ruleForm.face" :imgUrl="ruleForm.face" name="face" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
-                <el-form-item label="公会昵称" prop="nickname">
+                <el-form-item label="公会名称" prop="nickname">
                     <el-input v-model="ruleForm.nickname" placeholder="请输入公会名字"></el-input>
                 </el-form-item>
                 <el-form-item label="固定返点" prop="rebate">
