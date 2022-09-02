@@ -154,6 +154,7 @@
 					iSelect: 'all',
 					inputSelect: ''
 				}
+				this.dateTimeParams = {}
 				this.getList()
 			},
 			// 查询

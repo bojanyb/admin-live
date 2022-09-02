@@ -140,14 +140,16 @@
 		mounted() {},
 		methods: {
 			handleUserInfo() {
-				var params = {
-					user_number: this.popForm.user_number
+				if(this.popForm.user_number) {
+					var params = {
+						user_number: this.popForm.user_number
+					}
+					getUserWallet(params).then(res => {
+						this.userInfo = res.data;
+						this.userInfo.balance = parseInt(res.data.diamond) + parseInt(res.data.gain);
+						this.isShowUser = true;
+					}).catch(err => {})
 				}
-				getUserWallet(params).then(res => {
-					this.userInfo = res.data;
-					this.userInfo.balance = parseInt(res.data.diamond) + parseInt(res.data.gain);
-					this.isShowUser = true;
-				}).catch(err => {})
 			},
 			handleGive() {
 				this.$refs.popForm.validate(valid => {

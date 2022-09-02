@@ -32,7 +32,7 @@ export default {
         forms() {
             return [
                 {
-                    name: 'channel',
+                    name: 'status',
                     type: 'select',
                     value: '',
                     keyName: 'value',
