@@ -26,6 +26,9 @@
 				<el-form-item label="版本号" prop="version">
 					<el-input v-model="Form.version"  placeholder="如: 1.0.1"></el-input>
 				</el-form-item>
+				<el-form-item label="安卓Code" prop="version_code" v-if="platform === '2'">
+					<el-input v-model="Form.version_code" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
+				</el-form-item>
 				<el-form-item label="文件下载链接" prop="download_url">
 					<el-input v-model="Form.download_url"  placeholder="输入文件链接"></el-input>
 				</el-form-item>
@@ -86,11 +89,17 @@ import ossFile from './../components/ossFile.vue'
 					version: '', //版本号
 					content: '', //更新内容
 					download_url: '', //文件下载链接
+					version_code: '' // 安卓code
 				},
 				FormRules: {
 					version: [{
 						required: true,
 						message: '请输入版本号',
+						trigger: 'blur'
+					}],
+					version_code: [{
+						required: true,
+						message: '请输入安卓Code',
 						trigger: 'blur'
 					}],
 					content: [{
@@ -305,7 +314,8 @@ import ossFile from './../components/ossFile.vue'
 				this.Form = {
 					version: '',
 					content: '',
-					download_url: ''
+					download_url: '',
+					version_code: ''
 				};
 				this.platform = "2";
 				this.FormVisible = true;
