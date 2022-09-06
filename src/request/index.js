@@ -253,6 +253,12 @@ const request = {
         rmHeartAnchor: `${HTTPHEADER}/Heartbeat/rmHeartAnchor`, // 移除心动主播
         heartOrder: `${HTTPHEADER}/Heartbeat/heartOrder`, // 心动记录
         serachTag: `${HTTPHEADER}/Heartbeat/serachTag`, // 获取音色分类
+    },
+
+    // 动态管理
+    dynamic: {
+        getMoments: `${HTTPHEADER}/moments/getMoments`, // 获取动态
+        delMoments: `${HTTPHEADER}/moments/delMoments`, // 删除动态
     }
 }
 

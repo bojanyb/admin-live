@@ -1592,6 +1592,10 @@ const USERPUNISHTYPELIST = [
     {
         name: '封设备',
         value: 2
+    },
+    {
+        name: '封IP',
+        value: 3
     }
 ]
 

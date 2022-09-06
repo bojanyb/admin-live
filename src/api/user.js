@@ -99,3 +99,12 @@ export function checkContentAudit(data) {
     data
   })
 }
+
+// 用户列表
+export function userList(data) {
+  return request({
+    url: api.user.list,
+    method: 'post',
+    data
+  })
+}

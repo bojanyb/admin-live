@@ -14,14 +14,22 @@
                 <el-form-item label="背景图名称" prop="name">
                     <el-input v-model="ruleForm.name" placeholder="请输入背景图名称"></el-input>
                 </el-form-item>
+                <el-form-item label="排序权重" prop="sort">
+                    <el-input v-model="ruleForm.sort" placeholder="请输入排序权重" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
+                </el-form-item>
                 <el-form-item label="房间背景图" prop="url">
                     <uploadImg v-model="ruleForm.url" :imgUrl="ruleForm.url" name="url" ref="url" @validateField="validateField"></uploadImg>
                 </el-form-item>
-                <el-form-item label="默认配置房间类型" prop="room_genre">
+                <el-form-item label="是否默认" prop="is_default">
+                    <el-select v-model="ruleForm.is_default">
+                        <el-option v-for="item in defaultList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
+                <!-- <el-form-item label="默认配置房间类型" prop="room_genre">
                     <el-select v-model="ruleForm.room_genre" placeholder="请选择默认配置房间类型">
                         <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>
         </drawer>
     </div>
@@ -45,10 +53,13 @@ export default {
         return {
             status: 'add',
             typeList: MAPDATA.ROOMTYPELIST,
+            defaultList: MAPDATA.USERINVITE,
             ruleForm: {
-                room_genre: '',
+                // room_genre: '',
+                sort: '',
                 url: '',
-                name: ''
+                name: '',
+                is_default: null
             },
             oldParams: {}, // 老数据
             rules: {
@@ -56,11 +67,17 @@ export default {
                     { required: true, message: '请输入背景图名称', trigger: 'blur' },
                     { min: 1, max: 5, message: '长度在 1 到 5 个字符', trigger: 'blur' }
                 ],
+                sort: [
+                    { required: true, message: '请输入排序权重', trigger: 'blur' }
+                ],
                 url: [
                     { required: true, message: '请上传图片', trigger: 'change' }
                 ],
-                room_genre: [
-                    { required: true, message: '请选择房间类型', trigger: 'change' }
+                // room_genre: [
+                //     { required: true, message: '请选择房间类型', trigger: 'change' }
+                // ],
+                is_default: [
+                    { required: true, message: '请选择是否设置默认背景', trigger: 'change' }
                 ]
             }
         };
@@ -97,9 +114,11 @@ export default {
                     let s = this.ruleForm
                     let params = {
                         id: s.id || null,
-                        room_genre: s.room_genre,
+                        // room_genre: s.room_genre,
+                        sort: s.sort,
                         url: s.url,
-                        name: s.name
+                        name: s.name,
+                        is_default: s.is_default
                     }
                     let res = await getRoomBgAdd(params)
                     if(res.code === 2000) {
