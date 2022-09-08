@@ -50,74 +50,36 @@ export default {
                 columns: [
                     {
                         label: '申请时间',
-                        minWidth: '180px',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
                     },
                     {
+                        label: '喵喵ID',
+                        render: (h, params) => {
+                            return h('span', params.row.user_number || '无')
+                        }
+                    },
+                    {
                         label: '公会昵称',
-                        minWidth: '120px',
                         render: (h, params) => {
                             return h('span', params.row.guild_name || '无')
                         }
                     },
                     {
-                        label: '公会头像',
-                        isimg: true,
-                        prop: 'guild_icon',
-                        imgWidth: '50px',
-                        imgHeight: '50px',
-                        minWidth: '120px'
-                    },
-                    {
-                        label: '公会简介',
-                        minWidth: '120px',
-                        render: (h, params) => {
-                            return h('span', params.row.desc || '无')
-                        }
-                    },
-                    {
-                        label: '固定团队人数/自带老板数量',
-                        minWidth: '200px',
+                        label: '主播数量',
                         render: (h, params) => {
                             return h('span', params.row.question.question1 || '无')
                         }
                     },
                     {
-                        label: '目前或曾经合作的业务类型',
-                        minWidth: '200px',
+                        label: '曾经的合作平台',
                         render: (h, params) => {
                             return h('span', params.row.question.question2 || '无')
                         }
                     },
                     {
-                        label: '在其他平台开厅的ID号',
-                        minWidth: '180px',
-                        render: (h, params) => {
-                            return h('span', params.row.question.question3 || '无')
-                        }
-                    },
-                    {
-                        label: '外站开厅流水及数据情况',
-                        isimgList: true,
-                        prop: 'images',
-                        type: 1,
-                        imgWidth: '50px',
-                        imgHeight: '50px',
-                        minWidth: '180px'
-                    },
-                    {
-                        label: '是否有线下工作室',
-                        minWidth: '180px',
-                        render: (h, params) => {
-                            let data = MAPDATA.GUILDISSTUDIO.find(item => { return item.value === Number(params.row.has_workroom) })
-                            return h('span', data ? data.name : '无')
-                        }
-                    },
-                    {
                         label: '联系方式',
-                        minWidth: '120px',
                         render: (h, params) => {
                             return h('span', params.row.contact_way || '无')
                         }
@@ -125,7 +87,7 @@ export default {
                     {
                         label: '操作',
                         fixed: 'right',
-                        minWidth: '230px',
+                        minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'primary'}, style: {
