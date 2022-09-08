@@ -74,6 +74,7 @@ export default {
                     },
                     {
                         label: '曾经的合作平台',
+                        showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.question.question2 || '无')
                         }
@@ -95,7 +96,13 @@ export default {
                                 }, on: {click:()=>{this.clickFunc(params.row.id, 2)}}}, '通过'),
                                 h('el-button', { props: { type: 'danger'}, style: {
                                     display: params.row.status === 1 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.clickFunc(params.row.id, 3)}}}, '驳回')
+                                }, on: {click:()=>{this.clickFunc(params.row.id, 3)}}}, '驳回'),
+                                h('el-button', { props: { type: 'success'}, style: {
+                                    display: params.row.status === 2 ? 'unset' : 'none'
+                                }, on: {click:()=>{}}}, '已通过'),
+                                h('el-button', { props: { type: 'danger'}, style: {
+                                    display: params.row.status === 3 ? 'unset' : 'none'
+                                }, on: {click:()=>{}}}, '已拒绝')
                             ])
                         }
                     }
