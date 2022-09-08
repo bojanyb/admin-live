@@ -134,14 +134,12 @@ export default {
     methods: {
         // 获取活动类型
         async doCashFunc(row, type) {
-            this.$refs.tableList.loading = true
             let params = {
                 id: row.id,
                 status: type === 'success' ? 2 : 3
             }
             let res = await doCash(params)
             if(res.code === 2000) {
-                this.$refs.tableList.loading = false
                 let message = type === 'success' ? '通过审核' : '驳回成功'
                 this.$message.success(message)
             }
