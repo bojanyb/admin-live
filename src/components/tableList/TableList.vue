@@ -2,13 +2,13 @@
   <article class="share-table-list-box">
     <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe"
     :default-expand-all="cfgs.defaultExpandAll"
-    row-key="id"
+    :row-key="(row)=>{ return row[cfgs.keyId]}"
     :tree-props="{children: cfgs.children}"
       ref="table" @sort-change="handleSortChange" @selection-change="handleSelectionChange"
       v-loading="loading"
       :row-style="{'cursor':'pointer'}">
       <!-- checkbox -->
-      <el-table-column type="selection" width="55" align="center" v-if="cfgs.isShowCheckbox"></el-table-column>
+      <el-table-column type="selection" width="55" align="center" v-if="cfgs.isShowCheckbox" :reserve-selection="true"></el-table-column>
       <!-- 表格序号 -->
       <el-table-column type="index" v-if="cfgs.isShowIndex" label="序号" width="80" align="center"></el-table-column>
       <!-- 自定义渲染列 -->

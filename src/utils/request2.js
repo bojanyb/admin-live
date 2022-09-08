@@ -5,6 +5,7 @@ import {
 } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth' // get token from cookie
+import { error } from '@/utils/common'
 var baseUrlApi = ENV_DOMAINHTTPS;
 // switch (process.env.NODE_ENV) {
 // 	case 'development':
@@ -76,11 +77,7 @@ service.interceptors.response.use(
 					})
 				})
 			}else if(res.code == 3000 && res.msg == "请重新登录"){
-				Message({
-					message: res.msg,
-					type: 'error',
-					duration: 5 * 1000
-				})
+				error(res.msg)
 				setTimeout(res=>{
 					store.dispatch('user/resetToken').then(() => {
 						location.reload()
@@ -88,10 +85,7 @@ service.interceptors.response.use(
 				},2000)
 				return
 			}
-			Message({
-				message: res.msg,
-				type: 'error'
-			})
+			error(res.msg)
 			return Promise.reject(res.msg || new Error('Error'))
 		} else {
 			store.commit('app/SET_LOADING', false)
@@ -100,11 +94,7 @@ service.interceptors.response.use(
 	},
 	error => {
 		store.commit('app/SET_LOADING', false)
-		Message({
-			message: error.msg,
-			type: 'error',
-			duration: 5 * 1000
-		})
+		error(error.msg)
 		return Promise.reject(error)
 	}
 )

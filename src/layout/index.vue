@@ -103,6 +103,6 @@ export default {
 </style>
 <style lang="scss">
 .el-loading-mask {
-  z-index: 9999;
+  z-index: 2000;
 }
 </style>

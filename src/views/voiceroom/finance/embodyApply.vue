@@ -5,10 +5,10 @@
             <span>未处理申请：{{ ruleForm.untreated || 0 }}条</span>
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" :show-batch-pass="true" batchFuncName="批量通过" @batchPass="batchPass"></SearchPanel>
         </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt"></tableList>
         </div>
     </div>
 </template>
@@ -61,6 +61,8 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.CashHisity.apply,
+                keyId: 'id',
+                isShowCheckbox: true,
                 columns: [
                     {
                         label: '用户ID',
@@ -128,22 +130,45 @@ export default {
         return {
             ruleForm: {
                 untreated: null
-            }
+            },
+            list: [],
+            arr: []
         };
+    },
+    watch: {
+        arr: {
+            handler(n) {
+                if(n) {
+                    if(this.arr.length > 0) {
+                        let params = this.list[0]
+                        this.doCashFunc(params, 'success', 'batch')
+                    }
+                }
+            },
+            deep: true
+        }
     },
     methods: {
         // 获取活动类型
-        async doCashFunc(row, type) {
+        doCashFunc(row, type, batch) {
             let params = {
                 id: row.id,
                 status: type === 'success' ? 2 : 3
             }
-            let res = await doCash(params)
-            if(res.code === 2000) {
-                let message = type === 'success' ? '通过审核' : '驳回成功'
-                this.$message.success(message)
-            }
-            this.getList()
+            doCash(params).then(res => {
+                if(res.code === 2000) {
+                    let message = type === 'success' ? '通过审核' : '驳回成功'
+                    this.$success(message)
+                    if(batch) {
+                        this.arr.splice(0, 1)
+                    }
+                    this.getList()
+                }
+            }).catch(err => {
+                if(batch) {
+                    this.arr.splice(0, 1)
+                }
+            })
         },
         // 刷新列表
         getList() {
@@ -157,6 +182,18 @@ export default {
                 pagesize: params.size,
                 sort: s.sort,
                 user_id: s.user_id
+            }
+        },
+        // 选中
+        selectionChange(val) {
+            this.list = val
+        },
+        // 批量通过
+        batchPass() {
+            if(this.list.length > 0) {
+                this.arr = JSON.parse(JSON.stringify(this.list))
+            } else {
+                this.$warning('请至少选择一条数据')
             }
         },
         // 设置时间段
