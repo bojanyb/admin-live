@@ -588,7 +588,7 @@ const GUILDAPPLYSTATUSLIST = [
         value: ''
     },
     {
-        name: '未处理',
+        name: '未审核',
         value: 1
     },
     {
