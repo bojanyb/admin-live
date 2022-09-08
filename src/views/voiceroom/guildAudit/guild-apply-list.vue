@@ -56,18 +56,21 @@ export default {
                     },
                     {
                         label: '喵喵ID',
+                        showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.user_number || '无')
                         }
                     },
                     {
                         label: '公会昵称',
+                        showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.guild_name || '无')
                         }
                     },
                     {
                         label: '主播数量',
+                        showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.question.question1 || '无')
                         }
@@ -81,6 +84,7 @@ export default {
                     },
                     {
                         label: '联系方式',
+                        showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.contact_way || '无')
                         }

@@ -588,12 +588,16 @@ const GUILDAPPLYSTATUSLIST = [
         value: ''
     },
     {
-        name: '已联系',
+        name: '未处理',
         value: 1
     },
     {
-        name: '已拒绝',
+        name: '已联系',
         value: 2
+    },
+    {
+        name: '已拒绝',
+        value: 3
     }
 ]
 
