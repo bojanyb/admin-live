@@ -5,7 +5,7 @@
             <span>未处理申请：{{ ruleForm.untreated || 0 }}条</span>
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" :show-batch-pass="true" batchFuncName="批量通过" @batchPass="batchPass"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" :show-batch-pass="true" @batchPass="batchPass" :show-batch-rurn="true" @BatchRurn="BatchRurn"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt"></tableList>
@@ -190,6 +190,14 @@ export default {
         },
         // 批量通过
         batchPass() {
+            if(this.list.length > 0) {
+                this.arr = JSON.parse(JSON.stringify(this.list))
+            } else {
+                this.$warning('请至少选择一条数据')
+            }
+        },
+        // 批量拒绝
+        BatchRurn() {
             if(this.list.length > 0) {
                 this.arr = JSON.parse(JSON.stringify(this.list))
             } else {

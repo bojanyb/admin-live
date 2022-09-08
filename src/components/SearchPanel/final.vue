@@ -171,7 +171,8 @@
             <el-button v-if="showSearchBtn" type="primary" @click="onSearch">查询</el-button>
             <el-button v-if="showReset" icon="el-icon-refresh" @click="reset">重置</el-button>
             <el-button v-if="showAdd" type="success" @click="add">新增</el-button>
-            <el-button v-if="showBatchPass" type="primary" @click="batchPass">{{ batchFuncName || '批量通过' }}</el-button>
+            <el-button v-if="showBatchPass" type="success" @click="batchPass">{{ batchFuncName || '批量通过' }}</el-button>
+            <el-button v-if="showBatchRurn" type="danger" @click="BatchRurn">{{ batchRurnName || '批量拒绝' }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -236,6 +237,11 @@ export default {
     },
     // 是否显示批量通过按钮
     showBatchPass: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示批量拒绝按钮
+    showBatchRurn: {
       type: Boolean,
       default: false
     },
@@ -414,6 +420,10 @@ export default {
     // 批量通过
     batchPass() {
       this.$emit('batchPass')
+    },
+    // 批量拒绝
+    BatchRurn() {
+      this.$emit('BatchRurn')
     },
     // 新增
     add() {
