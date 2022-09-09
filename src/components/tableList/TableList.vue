@@ -2,6 +2,7 @@
   <article class="share-table-list-box">
     <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe"
     :default-expand-all="cfgs.defaultExpandAll"
+    row-key="id"
     :tree-props="{children: cfgs.children}"
       ref="table" @sort-change="handleSortChange" @selection-change="handleSelectionChange"
       v-loading="loading"
