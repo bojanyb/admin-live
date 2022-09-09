@@ -2,7 +2,7 @@
 <template>
     <div class="finance-embodyApply">
         <div class="model">
-            <span>未处理申请：{{ ruleForm.isNotOpt || 0 }}条</span>
+            <span>未处理申请：{{ ruleForm.count || 0 }}条</span>
             <span>到账金额：{{ (ruleForm.totalMoney - ruleForm.totalMoneyRate) / 100 || 0 }}元</span>
         </div>
         <div class="searchParams">
