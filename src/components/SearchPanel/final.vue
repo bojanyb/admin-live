@@ -264,6 +264,11 @@ export default {
     batchFuncName: {
       type: String,
       default: ''
+    },
+    // 批量操作 - 按钮名称
+    batchRurnName: {
+      type: String,
+      default: ''
     }
   },
   data() {

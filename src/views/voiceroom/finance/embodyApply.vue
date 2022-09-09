@@ -3,6 +3,7 @@
     <div class="finance-embodyApply">
         <div class="model">
             <span>未处理申请：{{ ruleForm.untreated || 0 }}条</span>
+            <span>到账金额：{{ (ruleForm.totalMoney - ruleForm.totalMoneyRate) / 100 || 0 }}元</span>
         </div>
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" :show-batch-pass="true" @batchPass="batchPass" :show-batch-rurn="true" @BatchRurn="BatchRurn"></SearchPanel>
@@ -54,6 +55,25 @@ export default {
                     label: '排序',
                     placeholder: '请选择',
                     options: MAPDATA.EMBODYSORT
+                },
+                {
+                    name: 'dateTimeParams',
+                    type: 'datePicker',
+                    dateType: 'datetimerange',
+                    format: "yyyy-MM-dd HH:mm:ss",
+                    label: '时间选择',
+                    value: '',
+                    handler: {
+                        change: v => {
+                            this.emptyDateTime()
+                            this.setDateTime(v)
+                            this.getList()
+                        },
+                        selectChange: (v, key) => {
+                            this.emptyDateTime()
+                            this.getList()
+                        }
+                    }
                 }
             ]
         },
@@ -132,7 +152,8 @@ export default {
                 untreated: null
             },
             list: [],
-            arr: []
+            arr: [],
+            isType: '',
         };
     },
     watch: {
@@ -140,8 +161,8 @@ export default {
             handler(n) {
                 if(n) {
                     if(this.arr.length > 0) {
-                        let params = this.list[0]
-                        this.doCashFunc(params, 'success', 'batch')
+                        let params = this.arr[0]
+                        this.doCashFunc(params, this.isType, 'batch')
                     }
                 }
             },
@@ -161,12 +182,19 @@ export default {
                     this.$success(message)
                     if(batch) {
                         this.arr.splice(0, 1)
+                        if(this.arr.length <= 0) {
+                            this.getList()
+                        }
+                    } else {
+                        this.getList()
                     }
-                    this.getList()
                 }
             }).catch(err => {
                 if(batch) {
                     this.arr.splice(0, 1)
+                    if(this.arr.length <= 0) {
+                        this.getList()
+                    }
                 }
             })
         },
@@ -181,7 +209,9 @@ export default {
                 page: params.page,
                 pagesize: params.size,
                 sort: s.sort,
-                user_id: s.user_id
+                user_id: s.user_id,
+                start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
+                end_time: s.end_time ? Math.floor(s.end_time / 1000) : ''
             }
         },
         // 选中
@@ -192,6 +222,7 @@ export default {
         batchPass() {
             if(this.list.length > 0) {
                 this.arr = JSON.parse(JSON.stringify(this.list))
+                this.isType = 'success'
             } else {
                 this.$warning('请至少选择一条数据')
             }
@@ -200,6 +231,7 @@ export default {
         BatchRurn() {
             if(this.list.length > 0) {
                 this.arr = JSON.parse(JSON.stringify(this.list))
+                this.isType = 'error'
             } else {
                 this.$warning('请至少选择一条数据')
             }
@@ -219,9 +251,7 @@ export default {
         // 查询
         reset() {
             this.searchParams = {}
-            this.dateTimeParams = {
-                activity_type_id: 1
-            }
+            this.dateTimeParams = {}
             this.getList()
         },
         // 重置
@@ -230,7 +260,7 @@ export default {
         },
         // 列表返回数据
         saleAmunt(data) {
-            this.ruleForm.untreated = data.count
+            this.ruleForm = { ...data }
         }
     }
 }
