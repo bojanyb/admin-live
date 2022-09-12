@@ -163,7 +163,12 @@ export default {
                 allMoney: null
             },
             searchParams: {
-                status: '1'
+                status: '1',
+                dateTimeParams: ['', '']
+            },
+            dateTimeParams: {
+                start_time: null,
+                end_time: null
             }
         };
     },
@@ -214,6 +219,17 @@ export default {
         // 列表返回数据
         saleAmunt(data) {
             this.ruleForm.allMoney = data.total_money ? data.total_money / 100 : 0
+        }
+    },
+    created() {
+        let time = new Date()
+        let date = timeFormat(time, 'YYYY-MM-DD', false)
+        let start = new Date(date + ' 00:00:00').getTime()
+        let end = new Date(date + ' 23:59:59').getTime()
+        this.searchParams.dateTimeParams = [start, end]
+        this.dateTimeParams = {
+            start_time: start,
+            end_time: end
         }
     }
 }

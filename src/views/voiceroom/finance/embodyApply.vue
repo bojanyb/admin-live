@@ -6,7 +6,7 @@
             <span>到账金额：{{ (ruleForm.totalMoney - ruleForm.totalMoneyRate) / 100 || 0 }}元</span>
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" :show-batch-pass="true" @batchPass="batchPass" :show-batch-rurn="true" @BatchRurn="BatchRurn"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" @onSearch="onSearch" :show-batch-pass="true" @batchPass="batchPass" :show-batch-rurn="true" @BatchRurn="BatchRurn" @yesterday="yesterday" @recentSeven="recentSeven"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt"></tableList>
@@ -46,16 +46,16 @@ export default {
                     isNum: true,
                     placeholder: '请输入用户ID'
                 },
-                {
-                    name: 'sort',
-                    type: 'select',
-                    value: '',
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '排序',
-                    placeholder: '请选择',
-                    options: MAPDATA.EMBODYSORT
-                },
+                // {
+                //     name: 'sort',
+                //     type: 'select',
+                //     value: '',
+                //     keyName: 'value',
+                //     optionLabel: 'name',
+                //     label: '排序',
+                //     placeholder: '请选择',
+                //     options: MAPDATA.EMBODYSORT
+                // },
                 {
                     name: 'dateTimeParams',
                     type: 'datePicker',
@@ -154,6 +154,13 @@ export default {
             list: [],
             arr: [],
             isType: '',
+            searchParams: {
+                dateTimeParams: ['', '']
+            },
+            dateTimeParams: {
+                start_time: null,
+                end_time: null
+            }
         };
     },
     watch: {
@@ -170,6 +177,37 @@ export default {
         }
     },
     methods: {
+        // 昨日
+        yesterday() {
+            this.changeIndex(0)
+        },
+        // 最近七日
+        recentSeven() {
+            this.changeIndex(1)
+        },
+        // 更改日期
+        changeIndex(index) {
+            let date = new Date()
+            let now, now1, start, end;
+            switch (index) {
+                case 0:
+                    now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+                    break;
+                case 1:
+                    now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 7, 'YYYY-MM-DD', false)
+                    break;
+            }
+            start = new Date(now + ' 00:00:00')
+            end = new Date(now1 + ' 23:59:59')
+
+            let time = [start.getTime(), end.getTime()]
+            this.searchParams.dateTimeParams = time
+            this.dateTimeParams.start_time = time[0]
+            this.dateTimeParams.end_time = time[1]
+            this.getList()
+        },
         // 获取活动类型
         doCashFunc(row, type, batch) {
             let params = {
@@ -249,18 +287,23 @@ export default {
             this.dateTimeParams = {}
         },
         // 查询
-        reset() {
-            this.searchParams = {}
-            this.dateTimeParams = {}
-            this.getList()
-        },
-        // 重置
         onSearch() {
             this.getList()
         },
         // 列表返回数据
         saleAmunt(data) {
             this.ruleForm = { ...data }
+        }
+    },
+    created() {
+        let time = new Date()
+        let date = timeFormat(time, 'YYYY-MM-DD', false)
+        let start = new Date(date + ' 00:00:00').getTime()
+        let end = new Date(date + ' 23:59:59').getTime()
+        this.searchParams.dateTimeParams = [start, end]
+        this.dateTimeParams = {
+            start_time: start,
+            end_time: end
         }
     }
 }

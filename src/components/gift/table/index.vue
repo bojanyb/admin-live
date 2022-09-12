@@ -98,7 +98,8 @@ export default {
         totalMoney() {
             let num = 0
             this.gifts.forEach((a) => {
-                num += a.gift_diamond
+                a.totalMoney_Price = a.gift_number ? Number(a.gift_number) * Number(a.gift_diamond) : 0
+                num += a.totalMoney_Price
             })
             return num
         },
