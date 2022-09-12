@@ -171,6 +171,8 @@
             <el-button v-if="showSearchBtn" type="primary" @click="onSearch">查询</el-button>
             <el-button v-if="showReset" icon="el-icon-refresh" @click="reset">重置</el-button>
             <el-button v-if="showAdd" type="success" @click="add">新增</el-button>
+            <el-button v-if="showYesterday" @click="yesterday">昨日</el-button>
+            <el-button v-if="showRecentSeven" @click="recentSeven">最近七日</el-button>
             <el-button v-if="showBatchPass" type="success" @click="batchPass">{{ batchFuncName || '批量通过' }}</el-button>
             <el-button v-if="showBatchRurn" type="danger" @click="BatchRurn">{{ batchRurnName || '批量拒绝' }}</el-button>
           </el-form-item>
@@ -269,7 +271,17 @@ export default {
     batchRurnName: {
       type: String,
       default: ''
-    }
+    },
+    // 昨日 - 操作
+    showYesterday: {
+      type: Boolean,
+      default: false
+    },
+    // 最近七日 - 操作
+    showRecentSeven: {
+      type: Boolean,
+      default: false
+    },
   },
   data() {
     return {
@@ -422,6 +434,14 @@ export default {
   mounted() {},
   beforeDestroy() {},
   methods: {
+    // 昨日
+    yesterday() {
+      this.$emit('yesterday')
+    },
+    // 最近七日
+    recentSeven() {
+      this.$emit('recentSeven')
+    },
     // 批量通过
     batchPass() {
       this.$emit('batchPass')

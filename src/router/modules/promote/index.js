@@ -38,6 +38,31 @@ const promoteRouter = {
 				noCache: true
 			},
 		},
+		{
+			path: '/promotion-system',
+			component: () => import('@/views/voiceroom/recommend/index'),
+			meta: {
+				title: '推广系统'
+			},
+			children: [
+				{
+					path: 'promote-members',
+					component: () => import('@/views/voiceroom/recommend/promotion-system/promote-members'),
+					meta: {
+						title: '推广成员管理',
+					},
+					name: 'promote-members'
+				},
+				{
+					path: 'turntableCount',
+					component: () => import('@/views/voiceroom/platformActivity/xyzpActivity/turntableCount'),
+					meta: {
+						title: '幸运转盘统计',
+					},
+					name: 'turntableCount'
+				}
+			]
+		}
 	]
 }
 
