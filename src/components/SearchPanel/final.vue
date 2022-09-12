@@ -171,6 +171,7 @@
             <el-button v-if="showSearchBtn" type="primary" @click="onSearch">查询</el-button>
             <el-button v-if="showReset" icon="el-icon-refresh" @click="reset">重置</el-button>
             <el-button v-if="showAdd" type="success" @click="add">新增</el-button>
+            <el-button v-if="showToday" @click="today">今日</el-button>
             <el-button v-if="showYesterday" @click="yesterday">昨日</el-button>
             <el-button v-if="showRecentSeven" @click="recentSeven">最近七日</el-button>
             <el-button v-if="showBatchPass" type="success" @click="batchPass">{{ batchFuncName || '批量通过' }}</el-button>
@@ -282,6 +283,11 @@ export default {
       type: Boolean,
       default: false
     },
+    // 今日 - 操作
+    showToday: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -434,6 +440,10 @@ export default {
   mounted() {},
   beforeDestroy() {},
   methods: {
+    // 今日
+    today() {
+      this.$emit('today')
+    },
     // 昨日
     yesterday() {
       this.$emit('yesterday')

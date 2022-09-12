@@ -4,9 +4,10 @@
         <div class="model">
             <span>选择时间内的已放款金额：{{ ruleForm.alreadyMoney || 0 }}元</span>
             <span>选择时间内的手续费：{{ ruleForm.deductMoney || 0 }}元</span>
+            <span>选择时间内的到账金额：{{ ruleForm.alreadyMoney - ruleForm.deductMoney || 0 }}元</span>
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -80,8 +81,8 @@ export default {
                 {
                     name: 'dateTimeParams',
                     type: 'datePicker',
-                    dateType: 'daterange',
-                    format: "yyyy-MM-dd",
+                    dateType: 'datetimerange',
+                    format: "yyyy-MM-dd HH:mm:ss",
                     label: '时间选择',
                     value: '',
                     pickerOptions: {
@@ -237,11 +238,55 @@ export default {
         return {
             ruleForm: {
                 alreadyMoney: null,
-                deductMoney: null
+                deductMoney: null,
+                dateTimeParams: ['', '']
+            },
+            dateTimeParams: {
+                start_time: null,
+                end_time: null
             }
         };
     },
     methods: {
+        // 今日
+        today() {
+            this.changeIndex(0)
+        },
+        // 昨日
+        yesterday() {
+            this.changeIndex(1)
+        },
+        // 最近七日
+        recentSeven() {
+            this.changeIndex(2)
+        },
+        // 更改日期
+        changeIndex(index) {
+            let date = new Date()
+            let now, now1, start, end;
+            switch (index) {
+                case 0:
+                    now1 = timeFormat(date, 'YYYY-MM-DD', false)
+                    now = timeFormat(date, 'YYYY-MM-DD', false)
+                    break;
+                case 1:
+                    now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+                    break;
+                case 2:
+                    now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 7, 'YYYY-MM-DD', false)
+                    break;
+            }
+            start = new Date(now + ' 00:00:00')
+            end = new Date(now1 + ' 23:59:59')
+
+            let time = [start.getTime(), end.getTime()]
+            this.searchParams.dateTimeParams = time
+            this.dateTimeParams.start_time = time[0]
+            this.dateTimeParams.end_time = time[1]
+            this.getList()
+        },
         // 刷新列表
         getList() {
             this.$refs.tableList.getData()
@@ -278,14 +323,21 @@ export default {
             this.dateTimeParams = {}
             this.getList()
         },
-        // 重置
-        onSearch() {
-            this.getList()
-        },
         // 列表返回数据
         saleAmunt(data) {
             this.ruleForm.alreadyMoney = data.totalmoney ? data.totalmoney : 0
             this.ruleForm.deductMoney = data.rate_money ? data.rate_money : 0
+        }
+    },
+    created() {
+        let time = new Date()
+        let date = timeFormat(time, 'YYYY-MM-DD', false)
+        let start = new Date(date + ' 00:00:00').getTime()
+        let end = new Date(date + ' 23:59:59').getTime()
+        this.searchParams.dateTimeParams = [start, end]
+        this.dateTimeParams = {
+            start_time: start,
+            end_time: end
         }
     }
 }
