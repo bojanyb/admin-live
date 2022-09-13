@@ -164,14 +164,14 @@
 							label: '封禁时间',
 							width: '180px',
 							render: (h, params) => {
-								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+								return h('span', (params.row.update_time && params.row.status == 2) ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
 						{
 							label: '封禁备注',
 							width: '200px',
 							render: (h, params) => {
-								return h('span', params.row.remark || '无')
+								return h('span', params.row.status == 2 ? params.row.remark : '无')
 							}
 						},
 						{
