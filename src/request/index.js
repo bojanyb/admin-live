@@ -175,6 +175,7 @@ const request = {
         newGuildApplyList: `${HTTPHEADER}/guild/newGuildApplyList`, // 创建工会申请列表
         newGuildApplyCheck: `${HTTPHEADER}/guild/newGuildApplyCheck`, // 创建工会审核已联系或者驳回
         bindRoom: `${HTTPHEADER}/guild/bindRoom`, // 绑定工会厅
+        lockGuild: `${HTTPHEADER}/Guild/lockGuild`, // 封禁（解封）公会
     },
 
     // 封禁记录

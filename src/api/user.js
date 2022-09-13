@@ -108,3 +108,12 @@ export function userList(data) {
     data
   })
 }
+
+// 封禁（解封）公会
+export function lockGuild(data) {
+  return request({
+    url: api.guild.lockGuild,
+    method: 'post',
+    data
+  })
+}

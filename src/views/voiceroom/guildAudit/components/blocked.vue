@@ -2,18 +2,18 @@
 <template>
     <div class="blocked-box">
         <el-dialog 
-        title="封禁" 
+        title="冻结" 
         :visible.sync="dialogVisible" 
         width="500px"
         :close-on-click-modal="false"
         :before-close="handleClose">
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
-				<el-form-item label="封禁时间" prop="kill_time">
-					<el-select v-model="ruleForm.kill_time" placeholder="请选择">
+				<el-form-item label="冻结时间" prop="ban_duration">
+					<el-select v-model="ruleForm.ban_duration" placeholder="请选择">
 						<el-option v-for="item in timerList" :key="item.value" :label="item.name" :value="item.value" />
 					</el-select>
 				</el-form-item>
-				<el-form-item label="封禁说明" prop="remark">
+				<el-form-item label="冻结说明" prop="remark">
 					<el-input v-model="ruleForm.remark" type="textarea" :rows="5" placeholder="正常状态可不填" clearable />
 				</el-form-item>
 			</el-form>
@@ -36,15 +36,15 @@ export default {
             dialogVisible: false,
             timerList: MAPDATA.DURATION,
             ruleForm: {
-                kill_time: null,
+                ban_duration: null,
                 remark: ''
             },
             rules: {
-                kill_time: [
-                    { required: true, message: '请选择封禁时间', trigger: 'change' }
+                ban_duration: [
+                    { required: true, message: '请选择冻结时间', trigger: 'change' }
                 ],
                 remark: [
-                    { required: true, message: '请填写封禁说明', trigger: 'blur' },
+                    { required: true, message: '请填写冻结说明', trigger: 'blur' },
                 ]
             }
         };
@@ -71,7 +71,6 @@ export default {
         // 取消
         cancel() {
             this.dialogVisible = false
-            this.$emit('blockedCancel')
         },
         // 重置
         resetForm(formName) {
