@@ -2,14 +2,14 @@
 <template>
     <div class="recommend-promotion-system">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-add="true" :show-search-btn="true" @add="add" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-add="true" :show-search-btn="true" @add="add(1)" @onSearch="onSearch"></SearchPanel>
         </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt" :loadLazy="loadLazy"></tableList>
         </div>
 
         <!-- 新增组件 -->
-        <promoteAdd v-if="isDestoryComp" ref="promoteAdd" @destoryComp="destoryComp" @getList="getList" :type="type" :pid="pid"></promoteAdd>
+        <promoteAdd v-if="isDestoryComp" ref="promoteAdd" @destoryComp="destoryComp" @getList="getList"></promoteAdd>
 
         <!-- 推广组组件 -->
         <groupCom v-if="isDestoryComp" ref="groupCom" @destoryComp="destoryComp"></groupCom>
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+// 引入api
+import { getPromoterSub } from '@/api/recommend'
 // 进入新增推广商组件
 import promoteAdd from './components/add.vue'
 // 引入推广组组件
@@ -63,6 +65,10 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.userHistory.index,
+                defaultExpandAll: false,
+                children: 'child',
+                hasChildren: 'child_count',
+                lazy: true,
                 columns: [
                     {
                         label: '创建时间',
@@ -72,42 +78,43 @@ export default {
                     },
                     {
                         label: '推广商ID',
-                        prop: 'user_number'
+                        prop: 'user_number',
                     },
                     {
                         label: '推广单价',
                         prop: 'price'
                     },
-                    {
-                        label: '推广组管理',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('span', params.row.group_count + '个推广组'),
-                                h('span', { style: {
-                                    color: '#1890FF',
-                                    marginLeft: '50px'
-                                }, on: {click:()=>{this.update(params.row, 2)}} }, '编辑推广组')
-                            ])
-                        }
-                    },
-                    {
-                        label: '推广成员管理',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('span', params.row.member_count + '个推广员'),
-                                h('span', { style: {
-                                    color: '#1890FF',
-                                    marginLeft: '50px'
-                                }, on: {click:()=>{this.update(params.row, 3)}} }, '编辑推广成员')
-                            ])
-                        }
-                    },
+                    // {
+                    //     label: '推广组管理',
+                    //     render: (h, params) => {
+                    //         return h('div', [
+                    //             h('span', params.row.group_count + '个推广组'),
+                    //             h('span', { style: {
+                    //                 color: '#1890FF',
+                    //                 marginLeft: '50px'
+                    //             }, on: {click:()=>{this.update(params.row, 2)}} }, '编辑推广组')
+                    //         ])
+                    //     }
+                    // },
+                    // {
+                    //     label: '推广成员管理',
+                    //     render: (h, params) => {
+                    //         return h('div', [
+                    //             h('span', params.row.member_count + '个推广员'),
+                    //             h('span', { style: {
+                    //                 color: '#1890FF',
+                    //                 marginLeft: '50px'
+                    //             }, on: {click:()=>{this.update(params.row, 3)}} }, '编辑推广成员')
+                    //         ])
+                    //     }
+                    // },
                     {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row, 1)}}}, '修改'),
-                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '删除')
+                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '删除'),
+                                h('el-button', { props: { type: 'success'}, on: {click:()=>{this.add(2, params.row)}}}, '新增')
                             ])
                         }
                     }
@@ -122,11 +129,15 @@ export default {
                 deductMoney: null
             },
             isDestoryComp: false, // 是否销毁组件
-            pid: null, // 父级id
-            type: 1 // 类型
+            form: {}
         };
     },
     methods: {
+        // 懒加载
+        async loadLazy(tree, treeNode, callback) {
+            let res = await getPromoterSub({ pid: tree.id })
+            callback(res.data.list || [])
+        },
         // 刷新列表
         getList() {
             this.$refs.tableList.getData()
@@ -168,9 +179,9 @@ export default {
             this.ruleForm.deductMoney = data.rate_money ? data.rate_money : 0
         },
         // 新增
-        add() {
-            this.type = 1
-            this.load('add')
+        add(type, row) {
+            this.type = type
+            this.load('add', row)
         },
         // 修改
         update(row, type) {
@@ -179,12 +190,9 @@ export default {
         },
         load(status, row) {
             this.isDestoryComp = true
+            this.form = row
             setTimeout(() => {
-                if(this.type === 1) {
-                    this.$refs.promoteAdd.loadParams(status, row)
-                } else {
-                    this.$refs.groupCom.loadParams(row, this.type)
-                }
+                this.$refs.promoteAdd.loadParams(status, row, this.type)
             }, 50);
         },
         // 删除数据

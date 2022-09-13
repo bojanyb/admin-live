@@ -1,13 +1,13 @@
 <template>
     <div class="recommend-promotion-system-add">
         <el-dialog
-            :title="title"
+            :title="status === 'add' ? '新增' + title : '修改' + title"
             :visible.sync="dialogVisible"
             width="500px"
             :before-close="handleClose"
             @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="推广商ID" prop="user_number">
+                <el-form-item :label="title + 'ID'" prop="user_number">
                     <el-input v-model="ruleForm.user_number"></el-input>
                 </el-form-item>
                 <el-form-item label="推广单价" prop="price">
@@ -26,20 +26,12 @@
 // 引入api
 import { save } from '@/api/recommend'
 export default {
-    props: {
-        pid: { // 父级id
-            type: Number,
-            default: null
-        },
-        type: { // 类型
-            type: Number,
-            default: null
-        }
-    },
     data() {
         return {
             dialogVisible: false,
             status: 'add', // 当前状态
+            type: null, // 类型
+            form: {},
             ruleForm: {
                 id: null,
                 pid: 0,
@@ -61,11 +53,8 @@ export default {
         title() { // 标题
             let arr = ['推广商', '推广组', '推广成员']
             let name = arr.find((a,b) => { return (b + 1) === this.type })
-            if(this.status === 'add') {
-                return '新增' + name
-            } else if(this.status === 'update') {
-                return '编辑' + name
-            }
+            console.log(name, 'name--------2020')
+            return name || ''
         }
     },
     methods: {
@@ -74,12 +63,17 @@ export default {
             this.dialogVisible = false
         },
         // 获取数据
-        loadParams(status, row) {
+        loadParams(status, row, type) {
+            console.log(type, 'type--------3030')
+            console.log(row, 'row--------5050')
             this.status = status
             this.dialogVisible = true
+            this.type = type
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
                 this.$set(this.$data, 'ruleForm', params)
+            } else {
+                this.$set(this.$data, 'form', row)
             }
 
             this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
@@ -89,14 +83,15 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let s = { ...this.ruleForm }
+                    let a = { ...this.form }
                     let params = {
                         id: s.id,
                         user_number: s.user_number,
                         price: s.price,
                         pid: s.pid
                     }
-                    if(!s.pid && this.pid) {
-                        params.pid = this.pid
+                    if(this.type === 2) {
+                        params.pid = a.id
                     }
                     let res = await save(params)
                     if(res.code === 2000) {

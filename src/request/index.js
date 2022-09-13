@@ -98,6 +98,7 @@ const request = {
         index: `${HTTPHEADER}/Promoter/index`, // 推广商列表
         save: `${HTTPHEADER}/Promoter/save`, // 新增和修改推广商
         delete: `${HTTPHEADER}/Promoter/delete`, // 删除
+        getPromoterSub: `${HTTPHEADER}/Promoter/getPromoterSub`, // 供应商获取下级
     },
 
     // 充值记录
