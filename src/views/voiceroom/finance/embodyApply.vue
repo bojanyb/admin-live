@@ -5,7 +5,7 @@
             <span>未处理申请：{{ ruleForm.count || 0 }}条</span>
             <span>提现金额：{{ ruleForm.totalMoney / 100 || 0 }}元</span>
             <span>手续费：{{ ruleForm.totalMoneyRate / 100 || 0 }}元</span>
-            <span>到账金额：{{ (ruleForm.totalMoney - ruleForm.totalMoneyRate) / 100 || 0 }}元</span>
+            <span>到账金额：{{ Number(((ruleForm.totalMoney - ruleForm.totalMoneyRate) / 100).toFixed(2)) || 0 }}元</span>
         </div>
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" :show-batch-pass="true" @batchPass="batchPass" :show-batch-rurn="true" @BatchRurn="BatchRurn" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>

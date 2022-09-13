@@ -5,7 +5,7 @@
             <span>选择时间内用户充值金额统计：{{ ruleForm.allMoney || 0 }}元</span>
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -173,6 +173,41 @@ export default {
         };
     },
     methods: {
+        // 昨日
+        yesterday() {
+            this.changeIndex(1)
+        },
+        // 最近七日
+        recentSeven() {
+            this.changeIndex(2)
+        },
+        // 更改日期
+        changeIndex(index) {
+            let date = new Date()
+            let now, now1, start, end;
+            switch (index) {
+                case 0:
+                    now1 = timeFormat(date, 'YYYY-MM-DD', false)
+                    now = timeFormat(date, 'YYYY-MM-DD', false)
+                    break;
+                case 1:
+                    now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+                    break;
+                case 2:
+                    now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 7, 'YYYY-MM-DD', false)
+                    break;
+            }
+            start = new Date(now + ' 00:00:00')
+            end = new Date(now1 + ' 23:59:59')
+
+            let time = [start.getTime(), end.getTime()]
+            this.searchParams.dateTimeParams = time
+            this.dateTimeParams.start_time = time[0]
+            this.dateTimeParams.end_time = time[1]
+            this.getList()
+        },
         // 刷新列表
         getList() {
             this.$refs.tableList.getData()
