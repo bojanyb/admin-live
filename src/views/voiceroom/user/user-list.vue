@@ -171,7 +171,7 @@
 							label: '封禁备注',
 							width: '200px',
 							render: (h, params) => {
-								return h('span', (params.row.remark && params.row.status == 2) || '无')
+								return h('span', params.row.status == 2 ? params.row.remark : '无')
 							}
 						},
 						{
