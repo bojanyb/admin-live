@@ -38,6 +38,14 @@ export default {
         forms() {
             return [
                 {
+                    name: 'user_id',
+                    type: 'input',
+                    value: '',
+                    label: '用户ID',
+                    isNum: true,
+                    placeholder: '请输入用户ID'
+                },
+                {
                     name: 'sort',
                     type: 'select',
                     value: '',
@@ -46,7 +54,7 @@ export default {
                     label: '排序',
                     placeholder: '请选择',
                     options: MAPDATA.EMBODYSORT
-                },
+                }
             ]
         },
         cfgs() {
@@ -149,7 +157,8 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                sort: s.sort
+                sort: s.sort,
+                user_id: s.user_id
             }
         },
         // 设置时间段

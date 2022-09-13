@@ -43,7 +43,7 @@ export default {
             this.dialogVisible = false
         },
         // 获取数据
-        loadParams(status, id) {
+        loadParams(id, status) {
             this.ruleForm.status = status
             this.ruleForm.id = id
             this.dialogVisible = true

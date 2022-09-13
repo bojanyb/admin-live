@@ -5,7 +5,7 @@
       <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
     </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
     <!-- 实名详情组件 -->
     <verifiedComp ref="verifiedComp"></verifiedComp>
@@ -127,10 +127,6 @@ export default {
     // 查询
     onSearch() {
       this.getList()
-    },
-    // 查看实名详情
-    rowClick(row) {
-      this.$refs.verifiedComp.loadParams(row)
     }
   }
 }

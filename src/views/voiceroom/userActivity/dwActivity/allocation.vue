@@ -95,6 +95,7 @@ export default {
                     {
                         label: '操作',
                         width: '350',
+                        fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),

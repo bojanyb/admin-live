@@ -1,7 +1,7 @@
 <template>
     <div class="roomConfig-addHeat-box">
         <drawer 
-        size="450px"
+        size="520px"
         :title="title"
         ref="drawer"
         @cancel="cancel"
@@ -194,7 +194,7 @@ export default {
 <style lang="scss" scoped>
 .roomConfig-addHeat-box {
     .el-date-editor {
-        width: 305px;
+        width: 375px;
     }
 }
 </style>

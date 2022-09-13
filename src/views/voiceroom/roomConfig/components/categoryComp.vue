@@ -126,6 +126,7 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
+                    params.belong = 2
                     if(this.status === 'update') {
                         delete params.create_time
                     }

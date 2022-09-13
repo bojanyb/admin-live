@@ -5,7 +5,6 @@
     row-key="id"
     :tree-props="{children: cfgs.children}"
       ref="table" @sort-change="handleSortChange" @selection-change="handleSelectionChange"
-      @row-click="rowClick"
       v-loading="loading"
       :row-style="{'cursor':'pointer'}">
       <!-- checkbox -->
@@ -38,7 +37,7 @@
 
           <imgListComp 
           v-if="item.isimgList"
-          :srcList="scope.row[item.prop]"
+          :srcList="returnImg(scope.row[item.prop])"
           :type="scope.row[item.type] || item.type"
           :width="item.imgWidth"
           :height="item.imgHeight"
@@ -124,6 +123,23 @@
       };
     },
     methods: {
+      // 图片列表显示
+      returnImg(val) {
+        if(val) {
+          if(typeof val === 'string') {
+            if(val.indexOf(',') !== -1) {
+              let arr = val.split(',')
+              return arr
+            } else {
+              return [val]
+            }
+          } else {
+            return val
+          }
+        } else {
+          return [val]
+        }
+      },
       // 是否禁止开关
       disabledFunc(item, index) {
         if(item.disabledStatus) {

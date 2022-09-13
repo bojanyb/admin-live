@@ -200,7 +200,7 @@
 					pagesize: params.size,
 					room_number: s.room_number,
 					user_number: s.user_number,
-					guild_id: s.guild_number
+					guild_id: s.guild_id
 				}
 			},
 			// 刷新列表

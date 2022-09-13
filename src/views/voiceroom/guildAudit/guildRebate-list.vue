@@ -70,11 +70,10 @@
 							label: '时间区间',
 							minWidth: '240px',
 							render: (h, params) => {
-								return h('div', [
-									h('span', params.row.last_week_start ? timeFormat(params.row.last_week_start, 'YYYY-MM-DD HH:mm:ss', true) : ''),
-									h('span', '-'),
-									h('span', params.row.last_week_end ? timeFormat(params.row.last_week_end, 'YYYY-MM-DD HH:mm:ss', true) : '')
-								])
+								let s = params.row
+								let start = s.last_week_start ? s.last_week_start : ''
+								let end = s.last_week_end ? s.last_week_end - 1 : ''
+								return h('span', start ? timeFormat(start, 'YYYY-MM-DD HH:mm:ss', true) + ' - ' + timeFormat(end, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
 						{

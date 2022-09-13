@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick">></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 审核组件 -->
         <coverComp v-if="isDestoryComp" ref="coverComp" @destoryComp="destoryComp" @getList="getList"></coverComp>
@@ -153,7 +153,15 @@ export default {
                                 }, on: {click:()=>{this.audit(params.row.id, 1)}}}, '通过'),
                                 h('el-button', { props: { type: 'danger'}, style: {
                                     display: params.row.status === 0 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.audit(params.row.id, 2)}}}, '拒绝')
+                                }, on: {click:()=>{this.audit(params.row.id, 2)}}}, '拒绝'),
+                                h('el-button', { props: { type: 'success'}, style: {
+                                    marginLeft: '0px',
+                                    display: params.row.status === 1 ? 'unset' : 'none'
+                                }, on: {click:()=>{}}}, '已通过'),
+                                h('el-button', { props: { type: 'danger'}, style: {
+                                    marginLeft: '0px',
+                                    display: params.row.status === 2 ? 'unset' : 'none'
+                                }, on: {click:()=>{}}}, '已拒绝')
                             ])
                         }
                     }
@@ -215,12 +223,6 @@ export default {
                 setTimeout(() => {
                 this.$refs.coverComp.loadParams(id, status)
                 }, 50); 
-            }
-        },
-        // 查看
-        rowClick(row, column) {
-            if(column.property !== 'cover_url') {
-                this.$refs.coverDetails.loadParams(row)
             }
         },
         // 销毁组件

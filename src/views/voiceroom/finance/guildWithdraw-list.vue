@@ -72,6 +72,13 @@ export default {
                     placeholder: '请输入金额'
                 },
                 {
+                    name: 'trade_no',
+                    type: 'input',
+                    value: '',
+                    label: '交易单号',
+                    placeholder: '请输入交易单号'
+                },
+                {
                     name: 'dateTimeParams',
                     type: 'datePicker',
                     dateType: 'datetimerange',
@@ -176,7 +183,8 @@ export default {
                 status: s.status,
                 amount: s.amount ? Number(s.amount) * 100 : s.amount,
                 start_time: Math.floor(s.start_time / 1000),
-                end_time: Math.floor(s.end_time / 1000)
+                end_time: Math.floor(s.end_time / 1000),
+                trade_no: s.trade_no
             }
         },
         // 设置时间段

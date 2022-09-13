@@ -1,19 +1,16 @@
 <template>
-    <div class="app-container moveDating-history-box">
+    <div class="app-container dynamic-list-box">
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
-
-        <!-- 详情组件 -->
-        <historyComp ref="historyComp"></historyComp>
     </div>
 </template>
 
 <script>
-// 引入详情组件
-import historyComp from './components/historyComp.vue'
+// 引入api
+import { delMoments } from '@/api/dynamic'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -27,12 +24,11 @@ export default {
     components: {
         SearchPanel,
         tableList,
-        historyComp
     },
     data() {
         return {
 
-        }
+        };
     },
     computed: {
         forms() {
@@ -44,14 +40,6 @@ export default {
                     label: '用户ID',
                     isNum: true,
                     placeholder: '请输入用户ID'
-                },
-                {
-                    name: 'live_user_number',
-                    type: 'input',
-                    value: '',
-                    label: '主播ID',
-                    isNum: true,
-                    placeholder: '请输入主播ID'
                 },
                 {
                     name: 'dateTimeParams',
@@ -75,38 +63,45 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.move.heartOrder,
+                url: REQUEST.dynamic.getMoments,
                 columns: [
                     {
-                        label: '时间',
-                        prop: 'create_time'
+                        label: '发送时间',
+                        prop: 'create_time',
+                        minWidth: '100px'
                     },
                     {
-                        label: '用户',
+                        label: '用户ID',
+                        prop: 'user_number'
+                    },
+                    {
+                        label: '用户昵称',
+                        prop: 'user_nickname'
+                    },
+                    {
+                        label: '动态内容',
+                        minWidth: '120px',
+                        showOverFlow: true,
                         render: (h, params) => {
-                            return h('div', [
-                                h('div', params.row.nickname),
-                                h('div', params.row.user_number)
-                            ])
+                            return h('span', params.row.content || '无')
                         }
                     },
                     {
-                        label: '主播',
-                        prop: 'live_user_number',
+                        label: '动态图片',
+                        isimgList: true,
+                        prop: 'media_list',
+                        type: 1,
+                        imgWidth: '50px',
+                        imgHeight: '50px',
+                        minWidth: '180px'
+                    },
+                    {
+                        label: '操作',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', params.row.live_nickname),
-                                h('div', params.row.live_user_number)
+                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
                             ])
                         }
-                    },
-                    {
-                        label: '通话时长',
-                        prop: 'duration'
-                    },
-                    {
-                        label: '收益金额',
-                        prop: 'order_dot'
                     }
                 ]
             }
@@ -118,11 +113,10 @@ export default {
             let s = { ...this.searchParams, ...this.dateTimeParams }
             return {
                 page: params.page,
-                page_size: params.size,
-                user_number: s.user_number,
-                live_user_number: s.live_user_number,
+                pagesize: params.size,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
-                end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time
+                end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
+                user_number: s.user_number
             }
         },
         // 刷新列表
@@ -147,6 +141,20 @@ export default {
             this.dateTimeParams = {}
             this.getList()
         },
+        // 删除
+        async deleteParams(id) {
+            this.$confirm('确认删除当前动态吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                let res = await delMoments({ ids: id })
+                if(res.code === 2000) {
+                    this.$success('删除成功')
+                    this.getList()
+                }
+            }).catch(() => {});
+        },
         // 查询
         onSearch() {
             this.getList()
@@ -155,8 +163,6 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.moveDating-history-box {
-
-}
+<style lang="scss" scoped>
+    
 </style>

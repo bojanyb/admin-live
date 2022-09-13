@@ -44,8 +44,18 @@
 				return {
 					vm: this,
 					url: REQUEST.room.roomBg,
-					isShowIndex: true,
+					// isShowIndex: true,
 					columns: [
+						{
+							label: '排序权重',
+							prop: 'sort'
+						},
+						{
+							label: '背景图名称',
+							render: (h, params) => {
+								return h('span', params.row.name || '无')
+							}
+						},
 						{
 							label: '房间背景图',
 							prop: 'url',
@@ -54,28 +64,24 @@
 							imgHeight: '50px',
 						},
 						{
-							label: '背景图名称',
+							label: '是否默认',
 							render: (h, params) => {
-								return h('span', params.row.room_bg_title || '无')
-							}
-						},
-						{
-							label: '上传时间',
-							render: (h, params) => {
-								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-							}
-						},
-						{
-							label: '上传人',
-							prop: 'user_name'
-						},
-						{
-							label: '默认配置房间',
-							render: (h, params) => {
-								let data = MAPDATA.ROOMTYPELIST.find(item => { return item.value === params.row.room_genre })
+								let data = MAPDATA.USERINVITE.find(item => { return item.value === params.row.is_default })
 								return h('span', data ? data.name : '无')
 							}
 						},
+						// {
+						// 	label: '上传时间',
+						// 	prop: 'create_time',
+
+						// },
+						// {
+						// 	label: '默认配置房间',
+						// 	render: (h, params) => {
+						// 		let data = MAPDATA.ROOMTYPELIST.find(item => { return item.value === params.row.room_genre })
+						// 		return h('span', data ? data.name : '无')
+						// 	}
+						// },
 						{
 							label: '操作',
 							render: (h, params) => {

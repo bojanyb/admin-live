@@ -29,7 +29,7 @@
 
 <script>
 // 引入api
-import { removeGuildUser, removeGuildRoom } from '@/api/user.js'
+import { removeGuildUser, removeGuildRoom, bindRoom } from '@/api/user.js'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 新增添加成员组件
@@ -55,6 +55,7 @@ export default {
             let arr = [
                 {
                     label: '成员ID',
+                    width: '100px',
                     prop: 'user_number'
                 },
                 {
@@ -62,8 +63,22 @@ export default {
                     prop: 'nickname'
                 },
                 {
+                    label: '房间ID',
+                    width: '100px',
+                    render: (h, params) => {
+                        return h('span', params.row.room_number || '无')
+                    }
+                },
+                {
+                    label: '房间名称',
+                    width: '100px',
+                    render: (h, params) => {
+                        return h('span', params.row.room_name || '无')
+                    }
+                },
+                {
                     label: '加入时间',
-                    width: '180px',
+                    width: '160px',
                     prop: 'create_time'
                 },
                 {
@@ -73,24 +88,36 @@ export default {
                 },
                 {
                     label: '总流水（喵粮）',
+                    width: '130px',
                     prop: 'total_flow'
                 },
                 {
                     label: '操作',
+                    width: '200px',
+                    fixed: 'right',
                     render: (h, params) => {
                         return h('div', [
                             h('el-button', { props: { type: 'danger'}, style: {
+                                marginRight: params.row.has_bind_room ? '0px' : '10px',
                                 display: params.row.is_admin === 1 ? 'none' : 'unset'
                             }, on: {click:()=>{this.deleteParams(params.row, 1)}}}, '移除'),
-                            h('span', { style: {
+                            h('div', { style: {
+                                padding: '0px 14px',
+                                marginRight: params.row.has_bind_room ? '0px' : '10px',
                                 display: params.row.is_admin === 1 ? 'unset' : 'none'
-                            } }, '公会长')
+                            } }, '公会长'),
+                            h('el-button', { props: { type: 'primary'}, style: {
+                                display: params.row.has_bind_room ? 'none' : 'unset'
+                            }, on: {click:()=>{this.bindHall(params.row.user_id, 1)}}}, '未绑定'),
+                            h('el-button', { props: { type: 'success'}, style: {
+                                display: !params.row.has_bind_room ? 'none' : 'unset'
+                            }, on: {click:()=>{}}}, '已绑定'),
                         ])
                     }
                 }
             ]
             let arr2 = [
-                {
+                {      
                     label: '厅ID',
                     prop: 'room_number'
                 },
@@ -204,6 +231,20 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
+        },
+        // 绑定厅
+        async bindHall(user_id) {
+            this.$confirm('是否确认绑定当前厅?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                let res = await bindRoom({ user_id, guild_id: this.guildParams.id })
+                if(res.code === 2000) {
+                    this.$success('绑定成功')
+                    this.getList()
+                }
+            }).catch(() => {});
         }
     }
 }

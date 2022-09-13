@@ -32,7 +32,7 @@ export default {
         forms() {
             return [
                 {
-                    name: 'channel',
+                    name: 'status',
                     type: 'select',
                     value: '',
                     keyName: 'value',
@@ -124,6 +124,7 @@ export default {
                     },
                     {
                         label: '操作',
+                        fixed: 'right',
                         minWidth: '230px',
                         render: (h, params) => {
                             return h('div', [

@@ -170,6 +170,7 @@ const request = {
         settlementLog: `${HTTPHEADER}/Guild/settlementLog`, // 返点操作日志
         newGuildApplyList: `${HTTPHEADER}/guild/newGuildApplyList`, // 创建工会申请列表
         newGuildApplyCheck: `${HTTPHEADER}/guild/newGuildApplyCheck`, // 创建工会审核已联系或者驳回
+        bindRoom: `${HTTPHEADER}/guild/bindRoom`, // 绑定工会厅
     },
 
     // 封禁记录
@@ -226,6 +227,8 @@ const request = {
         roomTypes: `${HTTPHEADER}/party/roomTypes`, // 查看房间已经绑定的分类
         roomBindType: `${HTTPHEADER}/party/roomBindType`, // 为房间绑定分类
         delBind: `${HTTPHEADER}/party/delBind`, // 房间移除绑定分类
+        endLive: `${HTTPHEADER}/party/endLive`, // 关闭直播
+        joinRoomLog: `${HTTPHEADER}/Room/joinRoomLog`, // 进入房间记录
     },
 
     // 风控检测
@@ -250,6 +253,12 @@ const request = {
         rmHeartAnchor: `${HTTPHEADER}/Heartbeat/rmHeartAnchor`, // 移除心动主播
         heartOrder: `${HTTPHEADER}/Heartbeat/heartOrder`, // 心动记录
         serachTag: `${HTTPHEADER}/Heartbeat/serachTag`, // 获取音色分类
+    },
+
+    // 动态管理
+    dynamic: {
+        getMoments: `${HTTPHEADER}/moments/getMoments`, // 获取动态
+        delMoments: `${HTTPHEADER}/moments/delMoments`, // 删除动态
     }
 }
 

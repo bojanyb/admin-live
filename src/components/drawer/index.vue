@@ -6,9 +6,9 @@
         :append-to-body="appendToBody"
         :close-on-press-escape="closeOnPressEscape"
         :show-close="showClose"
-        :wrapperClosable="wrapperClosable"
         :visible.sync="drawer"
         :direction="direction"
+        :wrapperClosable="wrapperClosable"
         :destroy-on-close="true"
         @closed="closed">
             <div class="mainBox">

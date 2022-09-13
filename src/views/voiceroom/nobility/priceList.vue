@@ -4,7 +4,7 @@
 			<el-button type="success" @click="add">新增</el-button>
 		</div> -->
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
 		<!-- 新增 - 修改组件 -->
 		<priceAdd v-if="isDestoryComp" ref="priceAdd" @destoryComp="destoryComp" @getList="getList"></priceAdd>
@@ -112,10 +112,6 @@
 			// 修改
 			update(row) {
 				this.load('update', row)
-			},
-			// 查看
-			rowClick(row) {
-				this.load('see', row)
 			},
 			load(status, row) {
 				this.isDestoryComp = true

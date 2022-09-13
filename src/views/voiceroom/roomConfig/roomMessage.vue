@@ -5,7 +5,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 引入新增组件 -->
         <roomComp v-if="isDestoryComp" ref="roomComp" @destoryComp="destoryComp" @getList="getList"></roomComp>
@@ -17,7 +17,7 @@
 
 <script>
 // 引入api
-import { updateParty, genreList } from '@/api/house.js'
+import { updateParty, genreList, endLive } from '@/api/house.js'
 // 引入新增组件
 import roomComp from './components/roomComp.vue'
 // 引入房间类型详情组件
@@ -151,7 +151,10 @@ export default {
                 {
                     label: '房间标题',
                     minWidth: '100px',
-                    prop: 'title'
+                    prop: 'title',
+                    render: (h, params) => {
+                        return h('span', params.row.title || '无')
+                    }
                 },
                 {
                     label: '房间类型',
@@ -275,12 +278,6 @@ export default {
         onSearch() {
             this.getList()
         },
-        // 查看
-        rowClick(row, column) {
-            if(column.property !== 'cover' && column.property !== 'classify') {
-                this.load('see', row)
-            }
-        },
         // 修改
         update(row) {
             this.load('update', row)
@@ -293,14 +290,7 @@ export default {
         },
         // 关播
         async closeLive(row) {
-            let params = {
-                id: row.id,
-                title: row.title,
-                cover: row.cover,
-                back_recommend: 0,
-                type: row.type
-            }
-            let res = await updateParty(params)
+            let res = await endLive({ id: row.id })
             if(res.code === 2000) {
                 this.$success('关播成功')
                 this.getList()

@@ -1,13 +1,16 @@
 <template>
     <div class="guild-editComp-box">
-        <el-dialog
+        <drawer 
+        size="470px"
         :title="title"
-        :visible.sync="dialogVisible"
-        :close-on-click-modal="false"
-        width="500px"
-        :before-close="handleClose"
-        @closed="closed">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
+        ref="drawer"
+        :isShowUpdate="true"
+        @cancel="cancel"
+        @submitForm="submitForm"
+        @closed="closed"
+        :disabled="disabled"
+        @update="update">
+            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <el-form-item label="公会类型" prop="guild_type">
                     <el-select v-model="ruleForm.guild_type" placeholder="请选择公会等级">
                         <el-option v-for="item in guildTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
@@ -16,7 +19,7 @@
                 <el-form-item label="公会头像" prop="face">
                     <uploadImg ref="uploadImg" v-model="ruleForm.face" :imgUrl="ruleForm.face" name="face" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
-                <el-form-item label="公会昵称" prop="nickname">
+                <el-form-item label="公会名称" prop="nickname">
                     <el-input v-model="ruleForm.nickname" placeholder="请输入公会名字"></el-input>
                 </el-form-item>
                 <el-form-item label="固定返点" prop="rebate">
@@ -34,16 +37,13 @@
                     <el-input type="textarea" v-model="ruleForm.remark" :rows="4"></el-input>
                 </el-form-item>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="resetForm">取 消</el-button>
-                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-            </span>
-        </el-dialog>
+        </drawer>
     </div>
 </template>
 
 <script>
-
+// 引入抽屉组件
+import drawer from '@/components/drawer/index'
 // 引入api
 import { getGuildCreate, getGuildUpdate } from '@/api/videoRoom'
 // 引入公共map
@@ -52,11 +52,11 @@ import MAPDATA from '@/utils/jsonMap.js'
 import uploadImg from '@/components/uploadImg/index.vue'
 export default {
     components: {
-        uploadImg
+        uploadImg,
+        drawer
     },
     data() {
         return {
-            dialogVisible: false,
             status: 'add',
             rankList: MAPDATA.CLASSLIST,
             guildTypeList: MAPDATA.GUILDCONFIGTYPELIST,
@@ -70,6 +70,7 @@ export default {
                 rebate: 0,
                 guild_type: null
             },
+            oldParams: {}, // 老数据
             rules: {
                 face: [
                     { required: true, message: '请上传公会头像', trigger: 'change' }
@@ -97,12 +98,18 @@ export default {
         };
     },
     computed: {
-        title() {
+        title() { // 标题
             if(this.status === 'add') {
                 return '新增公会'
             } else if(this.status === 'update') {
                 return '修改公会'
             }
+        },
+        disabled() { // 是否禁止输入
+            if(this.status === 'see') {
+                return true
+            }
+            return false
         }
     },
     methods: {
@@ -113,18 +120,38 @@ export default {
                 this.ruleForm.rebate = 10
             }
         },
-        handleClose() {
-            this.resetForm()
-        },
         // 新增 - 修改
         loadParams(status, row) {
-            this.dialogVisible = true
+            this.openComp()
             this.status = status
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
                 params.guild_type = params.guild_type ? params.guild_type : ''
                 this.$set(this.$data, 'ruleForm', params)
             }
+
+            this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
+        },
+        openComp(status = true) {
+            this.$refs.drawer.loadParams(status)
+        },
+        // 取消
+        cancel() {
+            if(JSON.stringify(this.oldParams) !== JSON.stringify(this.ruleForm)) {  // 记录数据 - 有改动就提示
+                this.$confirm('关闭弹窗将不会保留您的更改, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.openComp(false)
+                }).catch(() => {});
+            } else {
+                this.openComp(false)
+            }
+        },
+        // 修改
+        update() {
+            this.status = 'update'
         },
         // 提交
         async submitForm(formName) {
@@ -134,15 +161,15 @@ export default {
                     if(this.status === 'add') {
                         let res = await getGuildCreate(params)
                         if(res.code === 2000) {
-                            this.$message.success('新增成功')
+                            this.$success('新增成功')
                         }
                     } else {
                         let res = await getGuildUpdate(params)
                         if(res.code === 2000) {
-                            this.$message.success('修改成功')
+                            this.$success('修改成功')
                         }
                     }
-                    this.dialogVisible = false
+                    this.openComp(false)
                     this.$emit('getList')
                 } else {
                     console.log('error submit!!');
@@ -152,7 +179,7 @@ export default {
         },
         // 重置
         resetForm() {
-            this.dialogVisible = false
+            this.openComp(false)
         },
         // 重置字段验证
         validateField(name) {
@@ -169,7 +196,7 @@ export default {
 <style lang="scss" scoped>
 .guild-editComp-box {
     .el-select {
-        width: 380px;
+        width: 320px;
     }
 }
 </style>

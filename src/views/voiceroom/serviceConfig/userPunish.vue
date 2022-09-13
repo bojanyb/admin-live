@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 新增组件 -->
         <userComp v-if="isDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList"></userComp>
@@ -35,7 +35,10 @@ export default {
     },
     data() {
         return {
-            isDestoryComp: false // 是否销毁组件
+            isDestoryComp: false, // 是否销毁组件
+            searchParams: {
+                status: 1
+            }
         };
     },
     computed: {
@@ -52,12 +55,22 @@ export default {
                 {
                     name: 'type',
                     type: 'select',
-                    value: null,
+                    value: '',
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '处罚类型',
                     placeholder: '请选择',
-                    options: MAPDATA.USERPUNISHTYPELIST
+                    options: MAPDATA.USERPUNISHTYPELISTCOPY
+                },
+                {
+                    name: 'status',
+                    type: 'select',
+                    value: 1,
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '处罚状态',
+                    placeholder: '请选择',
+                    options: MAPDATA.USERPUNISHSTATUSLISTCOPY
                 },
                 {
                     name: 'dateTimeParams',
@@ -134,9 +147,15 @@ export default {
                     {
                         label: '操作',
                         render: (h, params) => {
-                            return h('el-button', { props: { type: 'danger'}, style: {
-                                display: params.row.status === 1 ? 'unset' : 'none'
-                            }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '解除')
+                            return h('div', [
+                                h('el-button', { props: { type: 'danger'}, style: {
+                                    display: params.row.status === 1 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '解除'),
+                                h('el-button', { props: { type: 'success'}, style: {
+                                    marginLeft: '0px',
+                                    display: params.row.status === 2 ? 'unset' : 'none'
+                                }, on: {click:()=>{}}}, '已解除')
+                            ])
                         }
                     }
                 ]
@@ -152,6 +171,7 @@ export default {
                 page_size: params.size,
                 user_number: s.user_number,
                 type: s.type,
+                status: s.status,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time
             }
@@ -174,16 +194,15 @@ export default {
         },
         // 重置
         reset() {
-            this.searchParams = {}
+            this.searchParams = {
+                status: 1
+            }
             this.dateTimeParams = {}
             this.getList()
         },
         // 查询
         onSearch() {
             this.getList()
-        },
-        rowClick(row) {
-            this.load('see', row)
         },
         // 新增
         add() {

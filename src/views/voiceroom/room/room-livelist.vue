@@ -6,8 +6,8 @@
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
-		<!-- 直播编辑组件 -->
-		<liveEdit ref="liveEdit" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></liveEdit>
+		<!-- 房间直播详情组件 -->
+		<liveDetails v-if="isDestoryComp" ref="liveDetails" @destoryComp="destoryComp" @getList="getList"></liveDetails>
 	</div>
 </template>
 
@@ -17,8 +17,8 @@
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
 	import tableList from '@/components/tableList/TableList.vue'
-	// 引入房间直播编辑组件
-	import liveEdit from './components/liveEdit.vue'
+	// 引入房间直播详情组件
+	import liveDetails from './components/liveDetails.vue'
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
@@ -34,7 +34,7 @@
 		components: {
 			SearchPanel,
 			tableList,
-			liveEdit
+			liveDetails
 		},
 		data() {
 			return {
@@ -135,9 +135,10 @@
 						{
 							label: '操作',
 							minWidth : '230px',
+							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.liveEditFunc(params.row)}}},'编辑'),
+									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.liveEditFunc(params.row)}}},'修改'),
 									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.dissolveFunc(params.row)}}},'解散')
 								])
 							}
@@ -205,7 +206,7 @@
 			liveEditFunc(row) {
 				this.isDestoryComp = true
 				setTimeout(() => {
-					this.$refs.liveEdit.loadParams(row)
+					this.$refs.liveDetails.loadParams(row)
 				}, 50);
 			},
 			// 销毁组件

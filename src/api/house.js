@@ -90,3 +90,12 @@ export function delBind(data) {
         data
     })
 }
+
+// 关闭直播
+export function endLive(data) {
+    return request({
+        url: api.house.endLive,
+        method: 'post',
+        data
+    })
+}

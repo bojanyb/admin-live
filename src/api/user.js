@@ -55,6 +55,15 @@ export function removeGuildUser(data) {
   })
 }
 
+// 绑定工会厅
+export function bindRoom(data) {
+  return request({
+    url: api.guild.bindRoom,
+    method: 'post',
+    data
+  })
+}
+
 // 移除大厅
 export function removeGuildRoom(data) {
   return request({
@@ -86,6 +95,15 @@ export function roomGameList(data) {
 export function checkContentAudit(data) {
   return request({
     url: api.audit.checkContentAudit,
+    method: 'post',
+    data
+  })
+}
+
+// 用户列表
+export function userList(data) {
+  return request({
+    url: api.user.list,
     method: 'post',
     data
   })

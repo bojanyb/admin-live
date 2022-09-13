@@ -37,6 +37,15 @@ const roomConfigRouter = {
 				title: '房间热度管理',
 				noCache: true
 			}
+		},
+		{
+			path: 'joinRoom',
+			component: () => import('@/views/voiceroom/roomConfig/joinRoom'),
+			name: 'joinRoom',
+			meta: {
+				title: '进房记录',
+				noCache: true
+			}
 		}
 	]
 }

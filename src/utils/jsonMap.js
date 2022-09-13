@@ -1412,6 +1412,82 @@ const CATEGORYBUSINESSTYPELIST = [
     }
 ]
 
+// 进房记录 - 进房类型
+const JOINHOUSETYPELIST = [
+    {
+        name: '未知类型',
+        value: 0
+    },
+    {
+        name: '分享进房',
+        value: 1
+    },
+    {
+        name: '推荐进房',
+        value: 2
+    },
+    {
+        name: '房间列表进房',
+        value: 3
+    },
+    {
+        name: '真爱榜进房',
+        value: 4
+    },
+    {
+        name: '心动专区进房',
+        value: 5
+    },
+    {
+        name: '动态进房',
+        value: 6
+    },
+    {
+        name: '动态卡片进房',
+        value: 7
+    },
+    {
+        name: '搜索跟随进房',
+        value: 8
+    },
+    {
+        name: '搜索进房',
+        value: 9
+    },
+    {
+        name: '足迹进房',
+        value: 10
+    },
+    {
+        name: '用户主页进房',
+        value: 11
+    },
+    {
+        name: '联系人进房',
+        value: 12
+    },
+    {
+        name: '首页弹窗进房',
+        value: 13
+    },
+    {
+        name: '全服跟随进房',
+        value: 14
+    }
+]
+
+// 进房记录 - 是否首次进房
+const ISFIRSTJOINHOUSELIST = [
+    {
+        name: '是',
+        value: 1
+    },
+    {
+        name: '否',
+        value: 0
+    }
+]
+
 /*
 *风控管理
 */
@@ -1516,11 +1592,47 @@ const USERPUNISHTYPELIST = [
     {
         name: '封设备',
         value: 2
+    },
+    {
+        name: '封IP',
+        value: 3
+    }
+]
+
+// 用户处罚 - 处罚类型 - 列表
+const USERPUNISHTYPELISTCOPY = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '封号',
+        value: 1
+    },
+    {
+        name: '封设备',
+        value: 2
     }
 ]
 
 // 用户处罚 - 状态
 const USERPUNISHSTATUSLIST = [
+    {
+        name: '生效中',
+        value: 1
+    },
+    {
+        name: '已解除',
+        value: 2
+    }
+]
+
+// 用户处罚 - 状态 - 列表
+const USERPUNISHSTATUSLISTCOPY = [
+    {
+        name: '全部',
+        value: ''
+    },
     {
         name: '生效中',
         value: 1
@@ -1602,6 +1714,10 @@ export default {
     RISKSYSTEMROLELIST,
     SERVICEAUDITTYPELIST,
     USERPUNISHTYPELIST,
+    USERPUNISHTYPELISTCOPY,
     USERPUNISHSTATUSLIST,
-    GIFTSHOWTYPELIST
+    USERPUNISHSTATUSLISTCOPY,
+    GIFTSHOWTYPELIST,
+    JOINHOUSETYPELIST,
+    ISFIRSTJOINHOUSELIST
 }

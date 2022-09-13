@@ -31,6 +31,7 @@ import messageRouter from './modules/message/index.js'
 import moveDatingRouter from './modules/moveDating/index.js'
 import serviceConfigRouter from './modules/serviceConfig/index.js'
 import roomConfigRouter from './modules/roomConfig/index.js'
+import dynamicRouter from './modules/dynamic/index.js'
 
 
 /**
@@ -92,6 +93,7 @@ export const constantRoutes = [{
 ]
 
 export const asyncRoutes = [
+	dynamicRouter,
 	messageRouter,
 	dashboardRouter,
 	moveDatingRouter,

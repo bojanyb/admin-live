@@ -4,13 +4,10 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
-
-		<!-- 编辑组件 -->
-		<roomEdit ref="roomEdit" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></roomEdit>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
 		<!-- 房间详情组件 -->
-		<roomDetails ref="roomDetails"></roomDetails>
+		<roomDetails v-if="isDestoryComp" ref="roomDetails" @destoryComp="destoryComp" @getList="getList"></roomDetails>
 	</div>
 </template>
 
@@ -26,8 +23,6 @@
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
 	import tableList from '@/components/tableList/TableList.vue'
-	// 引入编辑组件
-	import roomEdit from './components/roomEdit.vue'
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共参数
@@ -41,7 +36,6 @@
 		components: {
 			SearchPanel,
 			tableList,
-			roomEdit,
 			roomDetails
 		},
 		data() {
@@ -107,7 +101,7 @@
 								return h('div', [
 									h('el-button', { props: { type: 'primary'}, style: {
 										display: params.row.status == 1 ? 'unset' : 'none'
-									}, on: {click:()=>{this.editFunc(params.row)}}},'编辑'),
+									}, on: {click:()=>{this.editFunc(params.row)}}},'修改'),
 									h('el-button', { props: { type: 'danger'}, style: {
 										display: params.row.status == 3 ? 'unset' : 'none'
 									}, on: {click:()=>{this.deblocking(params.row)}}},'解封'),
@@ -143,10 +137,7 @@
 			onSearch() {
 				this.getList()
 			},
-			// 查看
-			rowClick(row) {
-				this.$refs.roomDetails.loadParams(row)
-			},
+			
 			// 冻结/解冻
 			handleRoom(source) {
 				var tipsText = source.status == 1 ? '确定冻结当前房间吗?' : '确定解冻当前房间吗?'
@@ -193,7 +184,7 @@
 			editFunc(row) {
 				this.isDestoryComp = true
 				setTimeout(() => {
-					this.$refs.roomEdit.loadParams(row)
+					this.$refs.roomDetails.loadParams(row)
 				}, 50);
 			},
 

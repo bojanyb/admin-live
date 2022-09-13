@@ -4,7 +4,7 @@
             <el-button type="success" @click="add">新增</el-button>
         </div>
 
-        <tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+        <tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 新增组件 -->
         <messageComp v-if="isDestoryComp" ref="messageComp" @getList="getList" @destoryComp="destoryComp"></messageComp>
@@ -123,12 +123,6 @@ export default {
         // 查询
         onSearch() {
             this.getList()
-        },
-        // 查看数据
-        rowClick(row, column) {
-            if(column.property !== 'image_url') {
-                this.load('see', row)
-            }
         },
         // 新增
         add() {

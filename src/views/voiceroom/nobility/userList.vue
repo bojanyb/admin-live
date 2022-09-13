@@ -2,7 +2,7 @@
 	<div class="nobility-privilege-box">
 		<SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
 		
-		<tableList :cfgs="cfgs" ref="tableList" @rowClick="rowClick"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
 		<!-- 用户详情组件 -->
 		<userComp ref="userComp"></userComp>
@@ -114,10 +114,6 @@
 			// 查询
 			onSearch() {
 				this.getList()
-			},
-			// 查看
-			rowClick(row) {
-				this.$refs.userComp.loadParams(row)
 			}
 		}
 	}
