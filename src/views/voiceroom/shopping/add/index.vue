@@ -376,7 +376,8 @@ export default {
                     }
                     add(params).then(res => {
                         if(res.code === 2000) {
-                            this.close()
+                            this.dialogVisible = false
+                            this.$emit('onSearch')
                         }
                     }).catch(err => {
                         this.$message.error(err)

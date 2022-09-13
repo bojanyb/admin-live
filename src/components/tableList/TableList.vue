@@ -133,7 +133,7 @@
     methods: {
       // 懒加载
       load(tree, treeNode, resolve) {
-        this.loadLazy(tree, treeNode, (res) => {
+        this.loadLazy(tree, treeNode, resolve, (res) => {
           resolve(res)
         })
       },

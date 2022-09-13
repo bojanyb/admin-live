@@ -11,10 +11,15 @@
 
 		<!-- 明细组件 -->
 		<guildDetails v-if="isDestoryComp" ref="guildDetails" :guildParams="guildParams" @getList="getList" @destoryComp="destoryComp"></guildDetails>
+
+		<!-- 冻结组件 -->
+		<blocked v-if="isDestoryComp" ref="blocked" @destoryComp="destoryComp"></blocked>
 	</div>
 </template>
 
 <script>
+	// 引入冻结组件
+	import blocked from './components/blocked.vue'
 	// 引入api
 	import { disbandGuild } from '@/api/user.js'
 	// 引入菜单组件
@@ -41,7 +46,8 @@
 			SearchPanel,
 			tableList,
 			editComp,
-			guildDetails
+			guildDetails,
+			blocked
 		},
 		data() {
 			return {
@@ -138,12 +144,14 @@
 						},
 						{
 							label: '操作',
-							minWidth: '300px',
+							minWidth: '400px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.details(params.row)}}}, '明细'),
 									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '编辑'),
+									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.freezeFunc(params.row)}}}, '冻结'),
+									// h('el-button', { props: { type: 'success'}, on: {click:()=>{this.freezeFunc(params.row)}}}, '解除冻结'),
 									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '解散公会')
 								])
 							}
@@ -219,6 +227,13 @@
 			// 销毁组件
 			destoryComp() {
 				this.isDestoryComp = false
+			},
+			// 冻结 - 解除冻结操作
+			freezeFunc(status, row) {
+				this.isDestoryComp = true
+				setTimeout(() => {
+					this.$refs.blocked.loadParams(status, row)
+				}, 50);
 			}
 		}
 	}

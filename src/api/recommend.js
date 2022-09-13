@@ -19,3 +19,12 @@ export function getPromoterSub(data) {
         data
     })
 }
+
+// 删除
+export function deleteParams(data) {
+    return request({
+        url: REQUEST.userHistory.delete,
+        method: 'post',
+        data
+    })
+}

@@ -53,7 +53,6 @@ export default {
         title() { // 标题
             let arr = ['推广商', '推广组', '推广成员']
             let name = arr.find((a,b) => { return (b + 1) === this.type })
-            console.log(name, 'name--------2020')
             return name || ''
         }
     },
@@ -64,8 +63,6 @@ export default {
         },
         // 获取数据
         loadParams(status, row, type) {
-            console.log(type, 'type--------3030')
-            console.log(row, 'row--------5050')
             this.status = status
             this.dialogVisible = true
             this.type = type
@@ -90,7 +87,7 @@ export default {
                         price: s.price,
                         pid: s.pid
                     }
-                    if(this.type === 2) {
+                    if(this.type !== 1) {
                         params.pid = a.id
                     }
                     let res = await save(params)
