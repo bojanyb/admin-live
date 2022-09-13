@@ -5,7 +5,7 @@
             <span>选择时间内用户充值金额统计：{{ ruleForm.allMoney || 0 }}元</span>
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -173,6 +173,10 @@ export default {
         };
     },
     methods: {
+        // 今日
+        today() {
+            this.changeIndex(0)
+        },
         // 昨日
         yesterday() {
             this.changeIndex(1)
