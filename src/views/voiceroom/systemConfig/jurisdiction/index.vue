@@ -154,11 +154,9 @@ export default {
             let res;
             if(status === 'add') {
                 res = await getAllPermission()
-                console.log(res, 'res-----------')
             } else {
                 res = await editAdmin({admin_id: id})
             }
-
             let prv = (list, params) => {
                 list.forEach((item,index) => {
                     if(!item.status) {
@@ -168,7 +166,7 @@ export default {
                         } else {
                             if(params) {
                                 params.child.splice(index, 1)
-                                prv(list, item)
+                                prv(list, params)
                             }
                         }
                     }

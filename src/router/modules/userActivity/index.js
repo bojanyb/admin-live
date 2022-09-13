@@ -71,6 +71,23 @@ const userActivity = {
 				}
 			]
 		},
+		{
+			path: '/zqhd',
+			component: () => import('@/views/voiceroom/userActivity/index'),
+			meta: {
+				title: '中秋活动'
+			},
+			children: [
+				{
+					path: 'zqhdallocation',
+					component: () => import('@/views/voiceroom/userActivity/zqhdActivity/allocation'),
+					meta: {
+						title: '中秋活动配置',
+					},
+					name: 'zqhdallocation'
+				}
+			]
+		}
 	]
 }
 

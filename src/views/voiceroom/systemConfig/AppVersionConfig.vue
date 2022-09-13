@@ -27,7 +27,7 @@
 					<el-input v-model="Form.version"  placeholder="如: 1.0.1"></el-input>
 				</el-form-item>
 				<el-form-item label="安卓Code" prop="version_code" v-if="platform === '2'">
-					<el-input v-model="Form.version_code" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
+					<el-input v-model="Form.version_code"></el-input>
 				</el-form-item>
 				<el-form-item label="文件下载链接" prop="download_url">
 					<el-input v-model="Form.download_url"  placeholder="输入文件链接"></el-input>

@@ -7,6 +7,7 @@ import store from '@/store'
 import {
 	getToken
 } from '@/utils/auth'
+import { error } from '@/utils/common'
 
 // create an axios instance
 const service = axios.create({
@@ -51,11 +52,7 @@ service.interceptors.response.use(
 		const res = response.data
 		// if the custom code is not 20000, it is judged as an error.
 		if (res.code !== 20000) {
-			Message({
-				message: res.message || 'Error',
-				type: 'error',
-				duration: 5 * 1000
-			})
+			error(res.message || 'Error')
 
 			// 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
 			if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
@@ -73,11 +70,7 @@ service.interceptors.response.use(
 			}
 			
 			if(res.code == 3000 && res.msg == "请重新登录"){
-				Message({
-					message: res.msg,
-					type: 'error',
-					duration: 5 * 1000
-				})
+				error(res.msg)
 				setTimeout(res=>{
 					store.dispatch('user/resetToken').then(() => {
 						location.reload()
@@ -93,11 +86,7 @@ service.interceptors.response.use(
 	},
 	error => {
 		console.log('err' + error) // for debug
-		Message({
-			message: error.message,
-			type: 'error',
-			duration: 5 * 1000
-		})
+		error(error.message)
 		return Promise.reject(error)
 	}
 )
