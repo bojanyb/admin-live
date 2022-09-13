@@ -95,6 +95,9 @@ const request = {
         history: `${HTTPHEADER}/Statistical/userInvite`, // 拉新记录
         recommender: `${HTTPHEADER}/Statistical/recommender`, // 用户邀请统计2
         recommendDetail: `${HTTPHEADER}/Statistical/recommendDetail`, // 邀请用户充值详情胡总和用户收到猫粮
+        index: `${HTTPHEADER}/Promoter/index`, // 推广商列表
+        save: `${HTTPHEADER}/Promoter/save`, // 新增和修改推广商
+        delete: `${HTTPHEADER}/Promoter/delete`, // 删除
     },
 
     // 充值记录

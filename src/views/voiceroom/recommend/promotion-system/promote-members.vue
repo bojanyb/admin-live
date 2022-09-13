@@ -9,9 +9,10 @@
         </div>
 
         <!-- 新增组件 -->
-        <promoteAdd v-if="isDestoryComp" ref="promoteAdd" @destoryComp="destoryComp"></promoteAdd>
+        <promoteAdd v-if="isDestoryComp" ref="promoteAdd" @destoryComp="destoryComp" @getList="getList" :type="type" :pid="pid"></promoteAdd>
 
         <!-- 推广组组件 -->
+        <groupCom v-if="isDestoryComp" ref="groupCom" @destoryComp="destoryComp"></groupCom>
     </div>
 </template>
 
@@ -61,37 +62,31 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.CashHisity.list,
+                url: REQUEST.userHistory.index,
                 columns: [
                     {
                         label: '创建时间',
-                        prop: 'addtime',
-                        width: '160px',
                         render: (h, params) => {
-                            return h('span', params.row.addtime ? timeFormat(params.row.addtime, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
                     },
                     {
                         label: '推广商ID',
-                        prop: 'user_id'
+                        prop: 'user_number'
                     },
                     {
                         label: '推广单价',
-                        prop: 'addtime',
-                        render: (h, params) => {
-                            return h('span', params.row.addtime ? timeFormat(params.row.addtime, 'YYYY-MM-DD HH:mm:ss', true) : '--')
-                        }
+                        prop: 'price'
                     },
                     {
                         label: '推广组管理',
-                        prop: 'money',
                         render: (h, params) => {
                             return h('div', [
-                                h('span', params.row.orderDetails.money),
+                                h('span', params.row.group_count + '个推广组'),
                                 h('span', { style: {
                                     color: '#1890FF',
                                     marginLeft: '50px'
-                                }, on: {click:()=>{this.update(params.row)}} }, '编辑推广组')
+                                }, on: {click:()=>{this.update(params.row, 2)}} }, '编辑推广组')
                             ])
                         }
                     },
@@ -99,11 +94,11 @@ export default {
                         label: '推广成员管理',
                         render: (h, params) => {
                             return h('div', [
-                                h('span', params.row.orderDetails.money),
+                                h('span', params.row.member_count + '个推广员'),
                                 h('span', { style: {
                                     color: '#1890FF',
                                     marginLeft: '50px'
-                                } }, '编辑推广成员')
+                                }, on: {click:()=>{this.update(params.row, 3)}} }, '编辑推广成员')
                             ])
                         }
                     },
@@ -111,7 +106,7 @@ export default {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row, 1)}}}, '修改'),
                                 h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '删除')
                             ])
                         }
@@ -127,6 +122,8 @@ export default {
                 deductMoney: null
             },
             isDestoryComp: false, // 是否销毁组件
+            pid: null, // 父级id
+            type: 1 // 类型
         };
     },
     methods: {
@@ -139,13 +136,8 @@ export default {
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
                 page: params.page,
-                status: s.status,
-                user_number: s.user_number,
-                start_time: Math.floor(s.start_time / 1000),
-                end_time: Math.floor(s.end_time / 1000),
-                user_id: s.user_id,
-                order_id: s.order_id,
-                sort: s.sort
+                pagesize: params.size,
+                user_number: s.user_number
             }
         },
         // 设置时间段
@@ -177,16 +169,22 @@ export default {
         },
         // 新增
         add() {
+            this.type = 1
             this.load('add')
         },
         // 修改
-        update(row) {
+        update(row, type) {
+            this.type = type
             this.load('update', row)
         },
         load(status, row) {
             this.isDestoryComp = true
             setTimeout(() => {
-                this.$refs.promoteAdd.loadParams(status, row)
+                if(this.type === 1) {
+                    this.$refs.promoteAdd.loadParams(status, row)
+                } else {
+                    this.$refs.groupCom.loadParams(row, this.type)
+                }
             }, 50);
         },
         // 删除数据
@@ -202,8 +200,7 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
-        },
-        // 编辑推广组
+        }
     }
 }
 </script>

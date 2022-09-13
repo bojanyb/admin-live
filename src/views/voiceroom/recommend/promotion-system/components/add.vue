@@ -4,13 +4,14 @@
             :title="title"
             :visible.sync="dialogVisible"
             width="500px"
-            :before-close="handleClose">
+            :before-close="handleClose"
+            @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="推广商ID" prop="name">
-                    <el-input v-model="ruleForm.name"></el-input>
+                <el-form-item label="推广商ID" prop="user_number">
+                    <el-input v-model="ruleForm.user_number"></el-input>
                 </el-form-item>
-                <el-form-item label="推广单价" prop="region">
-                    <el-input v-model="ruleForm.region"></el-input>
+                <el-form-item label="推广单价" prop="price">
+                    <el-input v-model="ruleForm.price"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -22,21 +23,35 @@
 </template>
 
 <script>
+// 引入api
+import { save } from '@/api/recommend'
 export default {
+    props: {
+        pid: { // 父级id
+            type: Number,
+            default: null
+        },
+        type: { // 类型
+            type: Number,
+            default: null
+        }
+    },
     data() {
         return {
             dialogVisible: false,
             status: 'add', // 当前状态
             ruleForm: {
-                name: '',
-                region: ''
+                id: null,
+                pid: 0,
+                user_number: '',
+                price: ''
             },
             oldParams: {}, // 老数据
             rules: {
-                name: [
+                user_number: [
                     { required: true, message: '请输入推广商ID', trigger: 'blur' }
                 ],
-                region: [
+                price: [
                     { required: true, message: '请输入推广单价', trigger: 'blur' }
                 ],
             }
@@ -44,10 +59,12 @@ export default {
     },
     computed: {
         title() { // 标题
+            let arr = ['推广商', '推广组', '推广成员']
+            let name = arr.find((a,b) => { return (b + 1) === this.type })
             if(this.status === 'add') {
-                return '新增推广商'
+                return '新增' + name
             } else if(this.status === 'update') {
-                return '编辑推广商'
+                return '编辑' + name
             }
         }
     },
@@ -68,10 +85,29 @@ export default {
             this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
         },
         // 提交
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+        async submitForm(formName) {
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    alert('submit!');
+                    let s = { ...this.ruleForm }
+                    let params = {
+                        id: s.id,
+                        user_number: s.user_number,
+                        price: s.price,
+                        pid: s.pid
+                    }
+                    if(!s.pid && this.pid) {
+                        params.pid = this.pid
+                    }
+                    let res = await save(params)
+                    if(res.code === 2000) {
+                        this.dialogVisible = false
+                        this.$emit('getList')
+                        if(this.status === 'add') {
+                            this.$success('新增成功')
+                        } else {
+                            this.$success('修改成功')
+                        }
+                    }
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -81,6 +117,10 @@ export default {
         // 重置
         resetForm(formName) {
             this.$refs[formName].resetFields();
+        },
+        // 销毁组件
+        closed() {
+            this.$emit('destoryComp')
         }
     }
 }
