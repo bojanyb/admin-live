@@ -164,7 +164,7 @@
 							label: '封禁时间',
 							width: '180px',
 							render: (h, params) => {
-								return h('span', (params.row.update_time && params.row.status == 2) ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+								return h('span', params.row.kill_time ? timeFormat(params.row.kill_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
 						{

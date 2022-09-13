@@ -4,7 +4,7 @@
         <div class="model">
             <span>选择时间内的已放款金额：{{ ruleForm.alreadyMoney || 0 }}元</span>
             <span>选择时间内的手续费：{{ ruleForm.deductMoney || 0 }}元</span>
-            <span>选择时间内的到账金额：{{ Number((ruleForm.alreadyMoney - ruleForm.deductMoney).toFixed(2)) || 0 }}元</span>
+            <!-- <span>选择时间内的到账金额：{{ Number((ruleForm.alreadyMoney - ruleForm.deductMoney).toFixed(2)) || 0 }}元</span> -->
         </div>
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
@@ -50,16 +50,16 @@ export default {
                     isNum: true,
                     placeholder: '请输入用户ID'
                 },
-                {
-                    name: 'sort',
-                    type: 'select',
-                    value: '',
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '排序',
-                    placeholder: '请选择',
-                    options: MAPDATA.EMBODYSORT
-                },
+                // {
+                //     name: 'sort',
+                //     type: 'select',
+                //     value: '',
+                //     keyName: 'value',
+                //     optionLabel: 'name',
+                //     label: '排序',
+                //     placeholder: '请选择',
+                //     options: MAPDATA.EMBODYSORT
+                // },
                 {
                     name: 'order_id',
                     type: 'input',
@@ -78,68 +78,25 @@ export default {
                     placeholder: '请选择',
                     options: this.statusComputed
                 },
-                // {
-                //     name: 'dateTimeParams',
-                //     type: 'datePicker',
-                //     dateType: 'datetimerange',
-                //     format: "yyyy-MM-dd HH:mm:ss",
-                //     label: '时间选择',
-                //     value: '',
-                //     pickerOptions: {
-                //         shortcuts: [{
-                //             text: '今天',
-                //             onClick(picker) {
-                //                 let data = new Date()
-                //                 let y = data.getFullYear()
-                //                 let m = data.getMonth()
-                //                 let day = data.getDate()
-                //                 if(m + 1 <= 12) {
-                //                     m = m + 1
-                //                 } else {
-                //                     m = 1
-                //                 }
-                //                 let start = new Date(y + '-' + m + '-' + day + ' 00:00:00')
-                //                 let end = new Date(y + '-' + m + '-' + day + ' 23:59:59')
-                //                 picker.$emit('pick', [start, end]);
-                //             }
-                //         }, {
-                //             text: '最近三天',
-                //             onClick(picker) {
-                //                 const end = new Date();
-                //                 const start = new Date();
-                //                 start.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
-                //                 picker.$emit('pick', [start, end]);
-                //             }
-                //         }, {
-                //             text: '最近七天',
-                //             onClick(picker) {
-                //                 const end = new Date();
-                //                 const start = new Date();
-                //                 start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                //                 picker.$emit('pick', [start, end]);
-                //             }
-                //         }, {
-                //             text: '最近十五天',
-                //             onClick(picker) {
-                //                 const end = new Date();
-                //                 const start = new Date();
-                //                 start.setTime(start.getTime() - 3600 * 1000 * 24 * 15);
-                //                 picker.$emit('pick', [start, end]);
-                //             }
-                //         }]
-                //     },
-                //     handler: {
-                //         change: v => {
-                //             this.emptyDateTime()
-                //             this.setDateTime(v)
-                //             this.getList()
-                //         },
-                //         selectChange: (v, key) => {
-                //             this.emptyDateTime()
-                //             this.getList()
-                //         }
-                //     }
-                // }
+                {
+                    name: 'dateTimeParams',
+                    type: 'datePicker',
+                    dateType: 'datetimerange',
+                    format: "yyyy-MM-dd HH:mm:ss",
+                    label: '时间选择',
+                    value: '',
+                    handler: {
+                        change: v => {
+                            this.emptyDateTime()
+                            this.setDateTime(v)
+                            this.getList()
+                        },
+                        selectChange: (v, key) => {
+                            this.emptyDateTime()
+                            this.getList()
+                        }
+                    }
+                }
             ]
         },
         cfgs() {
@@ -289,7 +246,9 @@ export default {
         },
         // 刷新列表
         getList() {
-            this.$refs.tableList.getData()
+            if(this.$refs.tableList) {
+                this.$refs.tableList.getData()
+            }
         },
         // 配置参数
         beforeSearch(params) {
@@ -330,15 +289,7 @@ export default {
         }
     },
     created() {
-        let time = new Date()
-        let date = timeFormat(time, 'YYYY-MM-DD', false)
-        let start = new Date(date + ' 00:00:00').getTime()
-        let end = new Date(date + ' 23:59:59').getTime()
-        this.searchParams.dateTimeParams = [start, end]
-        this.dateTimeParams = {
-            start_time: start,
-            end_time: end
-        }
+        this.changeIndex(2)
     }
 }
 </script>
