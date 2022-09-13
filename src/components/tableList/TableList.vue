@@ -3,7 +3,9 @@
     <el-table :data="data" style="width: 100%;" :size="cfgs.size ? cfgs.size : 'medium'" :stripe="cfgs.stripe"
     :default-expand-all="cfgs.defaultExpandAll"
     row-key="id"
-    :tree-props="{children: cfgs.children}"
+    :lazy="cfgs.lazy"
+    :load="load"
+    :tree-props="{children: cfgs.children, hasChildren: cfgs.hasChildren}"
       ref="table" @sort-change="handleSortChange" @selection-change="handleSelectionChange"
       v-loading="loading"
       :row-style="{'cursor':'pointer'}">
@@ -100,6 +102,12 @@
       isHidePage: {
         type: Boolean,
         default: false
+      },
+      loadLazy: { // 是否懒加载
+        type: Function,
+        default: function() {
+          return []
+        }
       }
     },
     data() {
@@ -123,6 +131,12 @@
       };
     },
     methods: {
+      // 懒加载
+      load(tree, treeNode, resolve) {
+        this.loadLazy(tree, treeNode, resolve, (res) => {
+          resolve(res)
+        })
+      },
       // 图片列表显示
       returnImg(val) {
         if(val) {

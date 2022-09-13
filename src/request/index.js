@@ -95,6 +95,10 @@ const request = {
         history: `${HTTPHEADER}/Statistical/userInvite`, // 拉新记录
         recommender: `${HTTPHEADER}/Statistical/recommender`, // 用户邀请统计2
         recommendDetail: `${HTTPHEADER}/Statistical/recommendDetail`, // 邀请用户充值详情胡总和用户收到猫粮
+        index: `${HTTPHEADER}/Promoter/index`, // 推广商列表
+        save: `${HTTPHEADER}/Promoter/save`, // 新增和修改推广商
+        delete: `${HTTPHEADER}/Promoter/delete`, // 删除
+        getPromoterSub: `${HTTPHEADER}/Promoter/getPromoterSub`, // 供应商获取下级
     },
 
     // 充值记录
@@ -171,6 +175,7 @@ const request = {
         newGuildApplyList: `${HTTPHEADER}/guild/newGuildApplyList`, // 创建工会申请列表
         newGuildApplyCheck: `${HTTPHEADER}/guild/newGuildApplyCheck`, // 创建工会审核已联系或者驳回
         bindRoom: `${HTTPHEADER}/guild/bindRoom`, // 绑定工会厅
+        lockGuild: `${HTTPHEADER}/Guild/lockGuild`, // 封禁（解封）公会
     },
 
     // 封禁记录

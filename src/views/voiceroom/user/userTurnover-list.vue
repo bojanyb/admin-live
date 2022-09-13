@@ -54,6 +54,16 @@
 						placeholder: '请输入收礼人ID'
 					},
 					{
+						name: 'is_room',
+						type: 'select',
+						value: '',
+						keyName: 'id',
+						optionLabel: 'name',
+						label: '类型',
+						placeholder: '请选择',
+						options: this.typeList
+					},
+					{
 						name: 'dateTimeParams',
 						type: 'datePicker',
 						dateType: 'datetimerange',
@@ -124,7 +134,20 @@
 		},
 		data() {
 			return {
-
+				typeList: [
+					{
+						id: 0,
+						name: '全部'
+					},
+					{
+						id: 1,
+						name: '派对'
+					},
+					{
+						id: 2,
+						name: '私聊'
+					}
+				]
 			}
 		},
 		methods: {
@@ -142,7 +165,8 @@
 					room_number: s.room_number,
 					user_number: s.user_number,
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
-					end_time: s.end_time ? Math.floor(s.end_time / 1000) : ''
+					end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
+					is_room: s.is_room
 				}
 			},
 			// 重置

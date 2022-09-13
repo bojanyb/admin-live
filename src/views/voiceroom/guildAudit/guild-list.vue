@@ -11,12 +11,17 @@
 
 		<!-- 明细组件 -->
 		<guildDetails v-if="isDestoryComp" ref="guildDetails" :guildParams="guildParams" @getList="getList" @destoryComp="destoryComp"></guildDetails>
+
+		<!-- 冻结组件 -->
+		<blocked v-if="isDestoryComp" ref="blocked" @destoryComp="destoryComp" @evaluationFunc="evaluationFunc"></blocked>
 	</div>
 </template>
 
 <script>
+	// 引入冻结组件
+	import blocked from './components/blocked.vue'
 	// 引入api
-	import { disbandGuild } from '@/api/user.js'
+	import { disbandGuild, lockGuild } from '@/api/user.js'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -41,12 +46,15 @@
 			SearchPanel,
 			tableList,
 			editComp,
-			guildDetails
+			guildDetails,
+			blocked
 		},
 		data() {
 			return {
 				isDestoryComp: false,
-				guildParams: {}
+				guildParams: {},
+				status: null,
+				ruleForm: {}
 			}
 		},
 		computed: {
@@ -138,12 +146,18 @@
 						},
 						{
 							label: '操作',
-							minWidth: '300px',
+							minWidth: '400px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.details(params.row)}}}, '明细'),
 									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '编辑'),
+									h('el-button', { props: { type: 'danger'}, style: {
+										display: params.row.status === 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.freezeFunc(2, params.row)}}}, '冻结'),
+									h('el-button', { props: { type: 'success'}, style: {
+										display: params.row.status === 2 ? 'unset' : 'none'
+									}, on: {click:()=>{this.freezeFunc(1, params.row)}}}, '解除冻结'),
 									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '解散公会')
 								])
 							}
@@ -219,6 +233,43 @@
 			// 销毁组件
 			destoryComp() {
 				this.isDestoryComp = false
+			},
+			// 冻结 - 解除冻结操作
+			async freezeFunc(status, row) {
+				this.status = status
+				this.ruleForm = row
+				if(status === 2) {
+					this.isDestoryComp = true
+					setTimeout(() => {
+						this.$refs.blocked.loadParams(status, row)
+					}, 50);
+				} else {
+					let params = {
+						guild_id: row.id,
+						status: status,
+						ban_duration: 0
+					}
+					let res = await lockGuild(params)
+					if(res.code === 2000) {
+						this.$success('解封成功')
+						this.getList()
+					}
+				}
+			},
+			// 冻结
+			async evaluationFunc(row) {
+				let params = {
+					guild_id: this.ruleForm.id,
+					status: this.status,
+					ban_duration: row.ban_duration,
+					remark: row.remark
+				}
+				let res = await lockGuild(params)
+				if(res.code === 2000) {
+					this.$success('冻结成功')
+					this.getList()
+					this.isDestoryComp = false
+				}
 			}
 		}
 	}
