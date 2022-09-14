@@ -164,6 +164,9 @@
 							label: '封禁时间',
 							width: '180px',
 							render: (h, params) => {
+								if(params.row.kill_time === -1) {
+									params.row.kill_time = '永久'
+								}
 								return h('span', params.row.kill_time ? timeFormat(params.row.kill_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
