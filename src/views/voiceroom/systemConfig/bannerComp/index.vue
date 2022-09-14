@@ -160,7 +160,6 @@ export default {
         loadParams(status, row) {
             this.status = status
             this.dialogVisible = true
-            console.log(row, 'row--------2020')
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
                 params.start_time = !params.start_time ? '' : params.start_time * 1000
