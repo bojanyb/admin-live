@@ -71,6 +71,13 @@
 						isNum: true,
 						placeholder: '请输入手机号'
 					},
+					{
+						name: 'nickname',
+						type: 'input',
+						value: '',
+						label: '昵称',
+						placeholder: '请输入昵称'
+					},
 				]
 			},
 			cfgs() {
