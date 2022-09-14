@@ -78,11 +78,11 @@ export default {
                     label: '交易单号',
                     placeholder: '请输入交易单号'
                 },
-                {
-                    name: 'time',
-                    type: 'dateControl',
-                    label: '时间选择',
-                },
+                // {
+                //     name: 'time',
+                //     type: 'dateControl',
+                //     label: '时间选择',
+                // },
                 {
                     name: 'dateTimeParams',
                     type: 'datePicker',
