@@ -163,7 +163,7 @@ export default {
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
                 params.start_time = !params.start_time ? '' : params.start_time * 1000
-                params.end_time = !params.endTime ? '' : params.endTime * 1000
+                params.end_time = !params.end_time ? '' : params.end_time * 1000
                 this.$set(this.$data, 'ruleForm', params)
             }
         },

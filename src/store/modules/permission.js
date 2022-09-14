@@ -70,6 +70,10 @@ const actions = {
                     params.child.splice(index, 1)
                     prv(item.child, item)
                   }
+
+                  if(item.child && item.child.length > 0) {
+                    prv(item.child, item)
+                  }
                 }
               }
               if(item.child && item.child.length > 0) {
@@ -78,6 +82,22 @@ const actions = {
             })
           }
           prv(arr)
+
+          let ri = (list, params) => {
+            list.forEach((item, index) => {
+              if(user_pids.indexOf(item.id) === -1 || item.status === 0) {
+                if(params) {
+                  params.child.splice(index, 1)
+                  ri(params.child, params)
+                }
+              }
+
+              if(item.child && item.child.length > 0) {
+                ri(item.child, item)
+              }
+            })
+          }
+          ri(arr)
 
 
           let asyncArr = []

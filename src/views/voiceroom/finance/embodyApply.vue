@@ -3,10 +3,12 @@
     <div class="finance-embodyApply">
         <div class="model">
             <span>未处理申请：{{ ruleForm.count || 0 }}条</span>
-            <span>到账金额：{{ (ruleForm.totalMoney - ruleForm.totalMoneyRate) / 100 || 0 }}元</span>
+            <span>提现金额：{{ ruleForm.totalMoney / 100 || 0 }}元</span>
+            <span>手续费：{{ ruleForm.totalMoneyRate / 100 || 0 }}元</span>
+            <span>到账金额：{{ Number(((ruleForm.totalMoney - ruleForm.totalMoneyRate) / 100).toFixed(2)) || 0 }}元</span>
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" @onSearch="onSearch" :show-batch-pass="true" @batchPass="batchPass" :show-batch-rurn="true" @BatchRurn="BatchRurn" @yesterday="yesterday" @recentSeven="recentSeven"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" :show-batch-pass="true" @batchPass="batchPass" :show-batch-rurn="true" @BatchRurn="BatchRurn" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt"></tableList>
@@ -155,11 +157,11 @@ export default {
             arr: [],
             isType: '',
             searchParams: {
-                dateTimeParams: [1662912000000, 1662998399000]
+                dateTimeParams: ['', '']
             },
             dateTimeParams: {
-                start_time: 1662912000000,
-                end_time: 1662998399000
+                start_time: null,
+                end_time: null
             }
         };
     },
@@ -177,13 +179,17 @@ export default {
         }
     },
     methods: {
+        // 今日
+        today() {
+            this.changeIndex(0)
+        },
         // 昨日
         yesterday() {
-            this.changeIndex(0)
+            this.changeIndex(1)
         },
         // 最近七日
         recentSeven() {
-            this.changeIndex(1)
+            this.changeIndex(2)
         },
         // 更改日期
         changeIndex(index) {
@@ -191,10 +197,14 @@ export default {
             let now, now1, start, end;
             switch (index) {
                 case 0:
+                    now1 = timeFormat(date, 'YYYY-MM-DD', false)
+                    now = timeFormat(date, 'YYYY-MM-DD', false)
+                    break;
+                case 1:
                     now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
                     now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
                     break;
-                case 1:
+                case 2:
                     now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
                     now = timeFormat(date - 3600 * 1000 * 24 * 7, 'YYYY-MM-DD', false)
                     break;
@@ -293,6 +303,17 @@ export default {
         // 列表返回数据
         saleAmunt(data) {
             this.ruleForm = { ...data }
+        }
+    },
+    created() {
+        let time = new Date()
+        let date = timeFormat(time, 'YYYY-MM-DD', false)
+        let start = new Date(date + ' 00:00:00').getTime()
+        let end = new Date(date + ' 23:59:59').getTime()
+        this.searchParams.dateTimeParams = [start, end]
+        this.dateTimeParams = {
+            start_time: start,
+            end_time: end
         }
     }
 }
