@@ -98,7 +98,7 @@ export default {
                 columns: [
                     {
                         label: '时间',
-                        prop: 'create_time',
+                        prop: 'update_time',
                         minWidth: '100px'
                     },
                     {
