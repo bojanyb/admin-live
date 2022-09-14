@@ -147,7 +147,13 @@
               :clearable="item.clearable || false"
               @change="mergeEvent(arguments, item)"
             />
-
+            <!--日期控件-->
+            <!--日期输入 - 不弹出选择时间弹窗-->
+            <dateControl 
+            v-else-if="item.type === 'dateControl'"
+            v-model="form[item.name]"
+            ref="dateControl">
+            </dateControl>
             <!--输入框-->
             <!--新增输入过滤和输入长度限制-->
             <!--{inputType}值必须为 inputLimited中fnType的键名-->
@@ -189,12 +195,15 @@
 import SearchCode from './searchCode/index.vue'
 import ZrSearch from './search/index.vue'
 import zSelect from './select/index.vue'
+// 引入日期控件
+import dateControl from '@/components/dateControl/index.vue'
 export default {
   name: 'TableSearch',
   components: {
     SearchCode,
     ZrSearch,
-    zSelect
+    zSelect,
+    dateControl
   },
   props: {
     // 列表数据

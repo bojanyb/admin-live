@@ -87,7 +87,7 @@ export default {
                         price: s.price,
                         pid: s.pid
                     }
-                    if(this.type !== 1) {
+                    if(this.type !== 1 && this.status === 'add') {
                         params.pid = a.id
                     }
                     let res = await save(params)

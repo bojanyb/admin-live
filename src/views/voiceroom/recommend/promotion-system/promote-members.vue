@@ -104,7 +104,7 @@ export default {
                         minWidth: '130px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row, 1)}}}, '修改'),
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row, params.row.level)}}}, '修改'),
                                 h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '删除'),
                                 h('el-button', { props: { type: 'success'}, style: {
                                     display: params.row.level === 3 ? 'none' : 'unset'
