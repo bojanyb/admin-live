@@ -176,9 +176,9 @@
           <el-form-item v-if="showSearchBtn || showReset">
             <el-button v-if="showSearchBtn" type="primary" @click="onSearch">查询</el-button>
             <el-button v-if="showAdd" type="success" @click="add">新增</el-button>
-            <el-button v-if="showToday" @click="today">今日</el-button>
-            <el-button v-if="showYesterday" @click="yesterday">昨日</el-button>
-            <el-button v-if="showRecentSeven" @click="recentSeven">最近七日</el-button>
+            <el-button v-if="showToday" @click="today">今天</el-button>
+            <el-button v-if="showYesterday" @click="yesterday">昨天</el-button>
+            <el-button v-if="showRecentSeven" @click="recentSeven">七天</el-button>
             <el-button v-if="showReset" icon="el-icon-refresh" @click="reset">重置</el-button>
             <el-button v-if="showBatchPass" type="success" @click="batchPass">{{ batchFuncName || '批量通过' }}</el-button>
             <el-button v-if="showBatchRurn" type="danger" @click="BatchRurn">{{ batchRurnName || '批量拒绝' }}</el-button>

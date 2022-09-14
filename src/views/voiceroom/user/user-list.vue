@@ -86,7 +86,8 @@
 						{
 							label: '昵称',
 							width: '110px',
-							prop: 'nickname'
+							prop: 'nickname',
+							showOverFlow: true
 						},
 						{
 							label: '头像',
@@ -164,10 +165,13 @@
 							label: '封禁时间',
 							width: '180px',
 							render: (h, params) => {
+								let name = ''
 								if(params.row.kill_time === -1) {
-									params.row.kill_time = '永久'
+									name = '永久'
+								} else {
+									name = params.row.kill_time ? timeFormat(params.row.kill_time, 'YYYY-MM-DD HH:mm:ss', true)	: '无'
 								}
-								return h('span', params.row.kill_time ? timeFormat(params.row.kill_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+								return h('span', name)
 							}
 						},
 						{

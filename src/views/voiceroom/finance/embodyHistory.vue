@@ -162,7 +162,8 @@ export default {
                         }
                     },
                     {
-                        label: '到账金额',
+                        label: '到账金额/驳回金额',
+                        width: '160px',
                         render: (h, params) => {
                             if(params.row.orderDetails.status != 3) {
                                 return h('span', params.row.orderDetails.real_money / 100)
@@ -172,10 +173,15 @@ export default {
                         }
                     },
                     {
-                        label: '到账时间',
+                        label: '到账时间/原因',
                         width: '160px',
+                        showOverFlow: true,
                         render: (h, params) => {
-                            return h('span', params.row.pay_time ? timeFormat(params.row.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            if(params.row.orderDetails.status != 3) {
+                                return h('span', params.row.pay_time ? timeFormat(params.row.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            } else {
+                                return h('span', params.row.orderDetails.remark || '无')
+                            }
                         }
                     },
                     {
