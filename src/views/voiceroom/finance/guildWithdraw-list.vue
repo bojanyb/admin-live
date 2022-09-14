@@ -254,6 +254,7 @@ export default {
                 status: '1'
             }
             this.dateTimeParams = {}
+            this.changeIndex(0)
             this.getList()
         },
         // 查询
