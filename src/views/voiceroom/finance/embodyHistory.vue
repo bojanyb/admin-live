@@ -7,7 +7,7 @@
             <!-- <span>选择时间内的到账金额：{{ Number((ruleForm.alreadyMoney - ruleForm.deductMoney).toFixed(2)) || 0 }}元</span> -->
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
+            <SearchPanel v-model="searchParams"  :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -237,8 +237,8 @@ export default {
                     now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
                     break;
                 case 2:
-                    now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
-                    now = timeFormat(date - 3600 * 1000 * 24 * 7, 'YYYY-MM-DD', false)
+                    now1 = timeFormat(date, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
                     break;
             }
             start = new Date(now + ' 00:00:00')
@@ -283,9 +283,7 @@ export default {
             this.dateTimeParams = {}
         },
         // 查询
-        reset() {
-            this.searchParams = {}
-            this.dateTimeParams = {}
+        onSearch() {
             this.getList()
         },
         // 列表返回数据

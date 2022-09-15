@@ -158,7 +158,7 @@
 								return h('div', { style: { 
 									color: params.row.is_bindcard ? '#ff4949' : '#666666',
 									cursor: params.row.is_bindcard ? 'pointer' : ''
-								 }, on: { click:()=>{this.bindcardFunc(params.row)} } }, params.row.is_bindcard ? '是' : '否')
+								}, on: { click:()=>{this.bindcardFunc(params.row)} } }, params.row.is_bindcard ? '是' : '否')
 							}
 						},
 						{
