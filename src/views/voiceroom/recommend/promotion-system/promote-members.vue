@@ -97,7 +97,25 @@ export default {
                     },
                     {
                         label: '推广单价',
-                        prop: 'price'
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', {
+                                    style: {
+                                        lineHeight: '18px'
+                                    }
+                                }, '推广单价1 - ' + params.row.price1),
+                                h('div', {
+                                    style: {
+                                        lineHeight: '18px'
+                                    }
+                                }, '推广单价2 - ' + params.row.price2),
+                                h('div', {
+                                    style: {
+                                        lineHeight: '18px'
+                                    }
+                                }, '推广单价3 - ' + params.row.price3)
+                            ])
+                        }
                     },
                     {
                         label: '操作',
