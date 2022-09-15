@@ -10,8 +10,14 @@
                 <el-form-item :label="title + 'ID'" prop="user_number">
                     <el-input v-model="ruleForm.user_number"></el-input>
                 </el-form-item>
-                <el-form-item label="推广单价" prop="price">
-                    <el-input v-model="ruleForm.price"></el-input>
+                <el-form-item label="推广单价1" prop="price1">
+                    <el-input v-model="ruleForm.price1"></el-input>
+                </el-form-item>
+                <el-form-item label="推广单价2" prop="price2">
+                    <el-input v-model="ruleForm.price2"></el-input>
+                </el-form-item>
+                <el-form-item label="推广单价3" prop="price3">
+                    <el-input v-model="ruleForm.price3"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -36,16 +42,24 @@ export default {
                 id: null,
                 pid: 0,
                 user_number: '',
-                price: ''
+                price1: '',
+                price2: '',
+                price3: ''
             },
             oldParams: {}, // 老数据
             rules: {
                 user_number: [
                     { required: true, message: '请输入推广商ID', trigger: 'blur' }
                 ],
-                price: [
-                    { required: true, message: '请输入推广单价', trigger: 'blur' }
+                price1: [
+                    { required: true, message: '请输入推广单价1', trigger: 'blur' }
                 ],
+                price2: [
+                    { required: true, message: '请输入推广单价2', trigger: 'blur' }
+                ],
+                price3: [
+                    { required: true, message: '请输入推广单价3', trigger: 'blur' }
+                ]
             }
         };
     },
@@ -84,7 +98,9 @@ export default {
                     let params = {
                         id: s.id,
                         user_number: s.user_number,
-                        price: s.price,
+                        price1: s.price1,
+                        price2: s.price2,
+                        price3: s.price3,
                         pid: s.pid
                     }
                     if(this.type !== 1 && this.status === 'add') {

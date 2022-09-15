@@ -2,8 +2,8 @@
 <template>
     <div class="finance-embodyHistory">
         <div class="model">
-            <span>选择时间内的已放款金额：{{ ruleForm.alreadyMoney || 0 }}元</span>
-            <span>选择时间内的手续费：{{ ruleForm.deductMoney || 0 }}元</span>
+            <span>选择时间内的{{ searchParams.status | statusName }}金额：{{ ruleForm.alreadyMoney || 0 }}元</span>
+            <span>选择时间内的{{ searchParams.status | statusName }}手续费：{{ ruleForm.deductMoney || 0 }}元</span>
             <!-- <span>选择时间内的到账金额：{{ Number((ruleForm.alreadyMoney - ruleForm.deductMoney).toFixed(2)) || 0 }}元</span> -->
         </div>
         <div class="searchParams">
@@ -30,6 +30,12 @@ import { timeFormat } from '@/utils/common.js'
 import MAPDATA from '@/utils/jsonMap.js'
 
 export default {
+    filters: {
+        statusName(val) {
+            let params = MAPDATA.STATUSLIST.find(item => { return item.value === val })
+            return params ? params.name : '无'
+        }
+    },
     components: {
         tableList,
         SearchPanel
@@ -71,7 +77,7 @@ export default {
                 {
                     name: 'status',
                     type: 'select',
-                    value: '',
+                    value: 4,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '状态筛选',
@@ -207,6 +213,9 @@ export default {
             dateTimeParams: {
                 start_time: null,
                 end_time: null
+            },
+            searchParams: {
+                status: 4
             }
         };
     },
