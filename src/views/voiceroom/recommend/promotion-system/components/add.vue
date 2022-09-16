@@ -8,7 +8,7 @@
             @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item :label="title + 'ID'" prop="user_number">
-                    <el-input v-model="ruleForm.user_number"></el-input>
+                    <el-input oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.user_number"></el-input>
                 </el-form-item>
                 <el-form-item label="推广单价1" prop="price1">
                     <el-input v-model="ruleForm.price1"></el-input>

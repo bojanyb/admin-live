@@ -54,12 +54,12 @@ const promoteRouter = {
 					name: 'promote-members'
 				},
 				{
-					path: 'turntableCount',
-					component: () => import('@/views/voiceroom/platformActivity/xyzpActivity/turntableCount'),
+					path: 'promote-order',
+					component: () => import('@/views/voiceroom/recommend/promotion-system/promote-order'),
 					meta: {
-						title: '幸运转盘统计',
+						title: '推广补单',
 					},
-					name: 'turntableCount'
+					name: 'promote-order'
 				}
 			]
 		}

@@ -99,6 +99,9 @@ const request = {
         save: `${HTTPHEADER}/Promoter/save`, // 新增和修改推广商
         delete: `${HTTPHEADER}/Promoter/delete`, // 删除
         getPromoterSub: `${HTTPHEADER}/Promoter/getPromoterSub`, // 供应商获取下级
+        replenishment: `${HTTPHEADER}/Promoter/replenishment`, // 补单列表
+        regPeplenishment: `${HTTPHEADER}/Promoter/regReplenishment`, // 推广补单
+        replenishmentDel: `${HTTPHEADER}/Promoter/replenishmentDel`, // 删除补单
     },
 
     // 充值记录
