@@ -55,9 +55,9 @@ export default {
                     name: 'user_number',
                     type: 'input',
                     value: '',
-                    label: '用户ID',
+                    label: '推广商ID',
                     isNum: true,
-                    placeholder: '请输入用户ID'
+                    placeholder: '请输入推广商ID'
                 }
             ]
         },
