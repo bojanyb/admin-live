@@ -49,7 +49,7 @@ const promoteRouter = {
 					path: 'promote-members',
 					component: () => import('@/views/voiceroom/recommend/promotion-system/promote-members'),
 					meta: {
-						title: '推广成员管理',
+						title: '推广员管理',
 					},
 					name: 'promote-members'
 				},

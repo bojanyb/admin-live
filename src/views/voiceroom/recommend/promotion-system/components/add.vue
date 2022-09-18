@@ -65,7 +65,7 @@ export default {
     },
     computed: {
         title() { // 标题
-            let arr = ['推广商', '推广组', '推广成员']
+            let arr = ['推广商', '推广组', '推广员']
             let name = arr.find((a,b) => { return (b + 1) === this.type })
             return name || ''
         }
