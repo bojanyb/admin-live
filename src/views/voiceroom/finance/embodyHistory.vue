@@ -43,8 +43,8 @@ export default {
     mixins: [mixins],
     computed: {
         statusComputed() {
-            let array = MAPDATA.STATUSLIST
-            return array.filter(item => { return item.value !== 1 })
+            let array = MAPDATA.STATUSLISTCOPY
+            return array
         },
         forms() {
             return [
@@ -77,7 +77,7 @@ export default {
                 {
                     name: 'status',
                     type: 'select',
-                    value: 4,
+                    value: '',
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '状态筛选',
@@ -214,9 +214,7 @@ export default {
                 start_time: null,
                 end_time: null
             },
-            searchParams: {
-                status: 4
-            }
+            searchParams: {}
         };
     },
     methods: {

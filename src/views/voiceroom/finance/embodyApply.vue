@@ -135,6 +135,14 @@ export default {
                         }
                     },
                     {
+                        label: '原因',
+                        minWidth: '100px',
+                        render: (h, params) => {
+                            return h('span', params.row.remark || '无')
+                        },
+                        showOverFlow: true
+                    },
+                    {
                         label: '操作',
                         width: '200px',
                         render: (h, params) => {
