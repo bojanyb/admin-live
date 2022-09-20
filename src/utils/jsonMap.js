@@ -1268,6 +1268,34 @@ const FINANCEGIVETYPELIST = [
     }
 ]
 
+// 支付配置管理 - 支付方式
+const PAYMENTALLOCATIONMANAGEMENTLIST = [
+    {
+        name: '支付宝支付',
+        value: 1
+    },
+    {
+        name: '微信支付',
+        value: 2
+    }
+]
+
+// 支付配置管理 - 支付类型
+const PAYMENTALLOCATIONMANAGEMENTTYPELIST = [
+    {
+        name: 'jsapi支付',
+        value: 0
+    },
+    {
+        name: 'app支付',
+        value: 1
+    },
+    {
+        name: 'h5支付',
+        value: 2
+    }
+]
+
 /*
 *交易管理
 */
@@ -1739,5 +1767,7 @@ export default {
     GIFTSHOWTYPELIST,
     JOINHOUSETYPELIST,
     ISFIRSTJOINHOUSELIST,
-    STATUSLISTCOPY
+    STATUSLISTCOPY,
+    PAYMENTALLOCATIONMANAGEMENTLIST,
+    PAYMENTALLOCATIONMANAGEMENTTYPELIST
 }

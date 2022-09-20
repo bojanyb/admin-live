@@ -46,6 +46,23 @@
 						label: '公会ID',
 						isNum: true,
 						placeholder: '请输入公会ID'
+					},
+					{
+						name: 'dateTimeParams',
+						type: 'datePicker',
+						dateType: 'datetimerange',
+						format: "yyyy-MM-dd HH:mm:ss",
+						label: '时间选择',
+						value: '',
+						handler: {
+							change: v => {
+								this.emptyDateTime()
+								this.setDateTime(v)
+							},
+							selectChange: (v, key) => {
+								this.emptyDateTime()
+							}
+						}
 					}
 				]
 			},
@@ -100,17 +117,26 @@
 		data() {
 			return {
 				selectList: [], // 选中
-				ruleForm: {}
+				ruleForm: {},
+				searchParams: {
+					dateTimeParams: []
+				},
+				dateTimeParams: {
+					start_time: null,
+					end_time: null
+				}
 			}
 		},
 		methods: {
 			// 配置参数
 			beforeSearch(params) {
-				let s = { ...this.searchParams }
+				let s = { ...this.searchParams, ...this.dateTimeParams }
 				return {
 					page: params.page,
 					pagesize: params.size,
-					guild_number: s.guild_number
+					guild_number: s.guild_number,
+					start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
+					end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0
 				}
 			},
 			// 刷新列表
@@ -119,12 +145,25 @@
 			},
 			// 重置
 			reset() {
+				this.changeIndex(0)
 				this.searchParams = {}
 				this.getList()
 			},
 			// 查询
 			onSearch() {
 				this.getList()
+			},
+			// 设置时间段
+			setDateTime(arr) {
+				const date = arr ? {
+					start_time: arr[0],
+					end_time: arr[1]
+				} : {}
+				this.$set(this, 'dateTimeParams', date)
+			},
+			// 清空日期选择
+			emptyDateTime() {
+				this.dateTimeParams = {}
 			},
 			// 选中
 			selectionChange(v) {
@@ -151,6 +190,35 @@
 			saleAmunt(row) {
 				this.ruleForm = { ...row }
 			},
+			// 更改日期
+			changeIndex(index) {
+				let date = new Date()
+				let now, now1, start, end;
+				switch (index) {
+					case 0:
+						now1 = timeFormat(date, 'YYYY-MM-DD', false)
+						now = timeFormat(date, 'YYYY-MM-DD', false)
+						break;
+					case 1:
+						now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+						now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+						break;
+					case 2:
+						now1 = timeFormat(date, 'YYYY-MM-DD', false)
+						now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
+						break;
+				}
+				start = new Date(now + ' 00:00:00')
+				end = new Date(now1 + ' 23:59:59')
+
+				let time = [start.getTime(), end.getTime()]
+				this.searchParams.dateTimeParams = time
+				this.dateTimeParams.start_time = time[0]
+				this.dateTimeParams.end_time = time[1]
+			}
+		},
+		created() {
+			this.changeIndex(0)
 		}
 	}
 </script>
