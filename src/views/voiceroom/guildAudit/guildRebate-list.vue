@@ -1,6 +1,7 @@
 <template>
 	<div class="guildRebate-list-box">
 		<div class="model">
+			<span>总条数：{{ ruleForm.count || 0 }}</span>
 			<span>流水总计：{{ ruleForm.all_week_flow || 0 }}</span>
 			<span>结算总计：{{ ruleForm.all_week_back || 0 }}</span>
 		</div>
@@ -47,23 +48,23 @@
 						isNum: true,
 						placeholder: '请输入公会ID'
 					},
-					{
-						name: 'dateTimeParams',
-						type: 'datePicker',
-						dateType: 'datetimerange',
-						format: "yyyy-MM-dd HH:mm:ss",
-						label: '时间选择',
-						value: '',
-						handler: {
-							change: v => {
-								this.emptyDateTime()
-								this.setDateTime(v)
-							},
-							selectChange: (v, key) => {
-								this.emptyDateTime()
-							}
-						}
-					}
+					// {
+					// 	name: 'dateTimeParams',
+					// 	type: 'datePicker',
+					// 	dateType: 'datetimerange',
+					// 	format: "yyyy-MM-dd HH:mm:ss",
+					// 	label: '时间选择',
+					// 	value: '',
+					// 	handler: {
+					// 		change: v => {
+					// 			this.emptyDateTime()
+					// 			this.setDateTime(v)
+					// 		},
+					// 		selectChange: (v, key) => {
+					// 			this.emptyDateTime()
+					// 		}
+					// 	}
+					// }
 				]
 			},
 			cfgs() {
@@ -142,8 +143,8 @@
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
-					start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
-					end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0
+					// start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
+					// end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0
 				}
 			},
 			// 刷新列表
@@ -152,7 +153,7 @@
 			},
 			// 重置
 			reset() {
-				this.changeIndex(2)
+				// this.changeIndex(2)
 				this.searchParams = {}
 				this.getList()
 			},
@@ -225,7 +226,7 @@
 			}
 		},
 		created() {
-			this.changeIndex(2)
+			// this.changeIndex(2)
 		}
 	}
 </script>
