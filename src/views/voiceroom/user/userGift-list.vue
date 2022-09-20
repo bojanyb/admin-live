@@ -142,7 +142,14 @@
 						id: 2,
 						name: '私聊'
 					}
-				]
+				],
+				searchParams: {
+					dateTimeParams: []
+				},
+				dateTimeParams: {
+					start_time: null,
+					end_time: null
+				}
 			}
 		},
 		methods: {
@@ -174,11 +181,12 @@
 			},
 			// 重置
 			reset() {
+				this.changeIndex(0)
 				this.searchParams = {
 					iSelect: 'all',
 					inputSelect: ''
 				}
-				this.dateTimeParams = {}
+				// this.dateTimeParams = {}
 				this.getList()
 			},
 			// 查询
@@ -196,7 +204,36 @@
 			// 清空日期选择
 			emptyDateTime() {
 				this.dateTimeParams = {}
+			},
+			// 更改日期
+			changeIndex(index) {
+				let date = new Date()
+				let now, now1, start, end;
+				switch (index) {
+					case 0:
+						now1 = timeFormat(date, 'YYYY-MM-DD', false)
+						now = timeFormat(date, 'YYYY-MM-DD', false)
+						break;
+					case 1:
+						now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+						now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+						break;
+					case 2:
+						now1 = timeFormat(date, 'YYYY-MM-DD', false)
+						now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
+						break;
+				}
+				start = new Date(now + ' 00:00:00')
+				end = new Date(now1 + ' 23:59:59')
+
+				let time = [start.getTime(), end.getTime()]
+				this.searchParams.dateTimeParams = time
+				this.dateTimeParams.start_time = time[0]
+				this.dateTimeParams.end_time = time[1]
 			}
+		},
+		created() {
+			this.changeIndex(0)
 		}
 	}
 </script>
