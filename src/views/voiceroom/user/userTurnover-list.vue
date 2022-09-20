@@ -1,7 +1,7 @@
 <template>
 	<div class="app-container userTurnover-list-box">
 		<div class="model">
-            <span>选择时间内总金额：{{ ruleForm.total_amount || 0 }}元</span>
+            <span>选择时间内总金额：{{ ruleForm.total_amount || 0 }}喵粮</span>
         </div>
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
