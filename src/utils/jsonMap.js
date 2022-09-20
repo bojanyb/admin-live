@@ -211,6 +211,21 @@ const STATUSLIST = [
     }
 ]
 
+const STATUSLISTCOPY = [
+    {
+        value: '',
+        name: '全部'
+    },
+    {
+        value: 4,
+        name: '提现完成'
+    },
+    {
+        value: 5,
+        name: '提现驳回'
+    }
+]
+
 // 充值记录排序
 const EMBODYSORT = [
     {
@@ -1723,5 +1738,6 @@ export default {
     USERPUNISHSTATUSLISTCOPY,
     GIFTSHOWTYPELIST,
     JOINHOUSETYPELIST,
-    ISFIRSTJOINHOUSELIST
+    ISFIRSTJOINHOUSELIST,
+    STATUSLISTCOPY
 }

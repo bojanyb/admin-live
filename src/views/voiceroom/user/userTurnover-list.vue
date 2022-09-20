@@ -108,15 +108,15 @@
 							}
 						},
 						{
-							label: '派对ID',
-							render: (h, params) => {
-								return h('span', params.row.room_number || '无')
-							}
-						},
-						{
 							label: '公会ID',
 							render: (h, params) => {
 								return h('span', params.row.guild_number || '无')
+							}
+						},
+						{
+							label: '派对ID',
+							render: (h, params) => {
+								return h('span', params.row.room_number || '无')
 							}
 						},
 						{
