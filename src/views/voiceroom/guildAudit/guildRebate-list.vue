@@ -1,10 +1,15 @@
 <template>
 	<div class="guildRebate-list-box">
+		<div class="model">
+			<span>流水总计：{{ ruleForm.all_week_flow || 0 }}</span>
+			<span>结算总计：{{ ruleForm.all_week_back || 0 }}</span>
+		</div>
+
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
 	</div>
 </template>
 
@@ -94,7 +99,8 @@
 		},
 		data() {
 			return {
-				selectList: [] // 选中
+				selectList: [], // 选中
+				ruleForm: {}
 			}
 		},
 		methods: {
@@ -140,7 +146,11 @@
 					this.$message.success("批量返佣成功");
 				}
 				this.getList()
-			}
+			},
+			// 列表返回数据
+			saleAmunt(row) {
+				this.ruleForm = { ...row }
+			},
 		}
 	}
 </script>
@@ -148,5 +158,21 @@
 .guildRebate-list-box {
 	padding: 20px;
 	box-sizing: border-box;
+	.model {
+        width: 100%;
+        height: 40px;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        padding: 0px 30px;
+        box-sizing: border-box;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+        margin-bottom: 20px;
+        >span {
+            font-size: 15px;
+            color: #fff;
+            margin-right: 100px;
+        }
+    }
 }
 </style>

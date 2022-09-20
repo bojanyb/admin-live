@@ -1,13 +1,12 @@
 <template>
   <div class="app-container">
-    
-    <div class="searchParams">
-      <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
-    </div>
-
     <div class="model">
       <span>用户收入统计：{{ ruleForm.total_income_sum || 0 }}</span>
       <span>用户支出统计：{{ ruleForm.meow_expenditure_sum || 0 }}</span>
+    </div>
+    
+    <div class="searchParams">
+      <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
     </div>
 
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
