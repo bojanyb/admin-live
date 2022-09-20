@@ -158,7 +158,12 @@ export default {
     }
   },
   created() {
-    this.changeIndex(0)
+    setTimeout(() => {
+      this.changeIndex(0)
+    }, 200);
+    // this.getRelationTypeFunc()
+  },
+  mounted() {
     this.getRelationTypeFunc()
   },
   methods: {
@@ -184,6 +189,7 @@ export default {
     },
     // 重置
     reset() {
+      this.changeIndex(0)
       this.searchParams = {}
       this.getList()
     },
@@ -236,12 +242,10 @@ export default {
       }
       start = new Date(now + ' 00:00:00')
       end = new Date(now1 + ' 23:59:59')
-
       let time = [start.getTime(), end.getTime()]
       this.searchParams.dateTimeParams = time
       this.dateTimeParams.start_time = time[0]
       this.dateTimeParams.end_time = time[1]
-      this.getList()
     },
   }
 }
