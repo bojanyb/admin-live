@@ -74,13 +74,13 @@
 					isShowCheckbox: true,
 					isShowIndex: true,
 					columns: [
-						{
-							label: '创建时间',
-							minWidth: '100px',
-							render: (h, params) => {
-								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-							}
-						},
+						// {
+						// 	label: '创建时间',
+						// 	minWidth: '100px',
+						// 	render: (h, params) => {
+						// 		return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+						// 	}
+						// },
 						{
 							label: '公会ID',
 							prop: 'guild_number'
