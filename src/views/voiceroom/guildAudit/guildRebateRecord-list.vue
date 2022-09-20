@@ -166,7 +166,7 @@
 			},
 			// 重置
 			reset() {
-				this.changeIndex(0)
+				this.changeIndex(2)
 				this.searchParams = {}
 				this.getList()
 			},
@@ -192,8 +192,8 @@
 						now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
 						break;
 					case 2:
-						now1 = timeFormat(date, 'YYYY-MM-DD', false)
-						now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
+						now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+						now = timeFormat(date - 3600 * 1000 * 24 * 7, 'YYYY-MM-DD', false)
 						break;
 				}
 				start = new Date(now + ' 00:00:00')
@@ -206,7 +206,7 @@
 			}
 		},
 		created() {
-			this.changeIndex(0)
+			this.changeIndex(2)
 		}
 	}
 </script>
