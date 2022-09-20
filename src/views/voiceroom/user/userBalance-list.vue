@@ -149,22 +149,18 @@ export default {
       jsonMapList: [],
       ruleForm: {},
       searchParams: {
-        dateTimeParams: []
+        dateTimeParams: [new Date(timeFormat(new Date(), 'YYYY-MM-DD', false) + ' 00:00:00'), new Date(timeFormat(new Date(), 'YYYY-MM-DD', false) + ' 23:59:59')]
       },
       dateTimeParams: {
-        start_time: null,
-        end_time: null
+        start_time: new Date(timeFormat(new Date(), 'YYYY-MM-DD', false) + ' 00:00:00'),
+        end_time: new Date(timeFormat(new Date(), 'YYYY-MM-DD', false) + ' 23:59:59')
       }
     }
   },
   created() {
-    setTimeout(() => {
-      this.changeIndex(0)
-    }, 200);
-    // this.getRelationTypeFunc()
-  },
-  mounted() {
     this.getRelationTypeFunc()
+
+    this.changeIndex(0, true)
   },
   methods: {
     // 配置参数
@@ -189,7 +185,7 @@ export default {
     },
     // 重置
     reset() {
-      this.changeIndex(0)
+      this.changeIndex(0, false)
       this.searchParams = {}
       this.getList()
     },
@@ -223,7 +219,7 @@ export default {
       this.ruleForm = { ...row.total_sum }
     },
     // 更改日期
-    changeIndex(index) {
+    changeIndex(index, isFirst) {
       let date = new Date()
       let now, now1, start, end;
       switch (index) {
@@ -242,10 +238,19 @@ export default {
       }
       start = new Date(now + ' 00:00:00')
       end = new Date(now1 + ' 23:59:59')
-      let time = [start.getTime(), end.getTime()]
-      this.searchParams.dateTimeParams = time
-      this.dateTimeParams.start_time = time[0]
-      this.dateTimeParams.end_time = time[1]
+      if(isFirst) {
+        setTimeout(() => {
+          let time = [start.getTime(), end.getTime()]
+          this.searchParams.dateTimeParams = time
+          this.dateTimeParams.start_time = time[0]
+          this.dateTimeParams.end_time = time[1]
+        }, 200);
+      } else {
+        let time = [start.getTime(), end.getTime()]
+        this.searchParams.dateTimeParams = time
+        this.dateTimeParams.start_time = time[0]
+        this.dateTimeParams.end_time = time[1]
+      }
     },
   }
 }
