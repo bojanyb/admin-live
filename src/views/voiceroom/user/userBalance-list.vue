@@ -71,6 +71,23 @@ export default {
           placeholder: '请选择交易渠道',
           options: this.jsonMapList
         },
+        {
+          name: 'dateTimeParams',
+          type: 'datePicker',
+          dateType: 'datetimerange',
+          format: "yyyy-MM-dd HH:mm:ss",
+          label: '时间选择',
+          value: '',
+          handler: {
+            change: v => {
+              this.emptyDateTime()
+              this.setDateTime(v)
+            },
+            selectChange: (v, key) => {
+              this.emptyDateTime()
+            }
+          }
+        }
       ]
     },
     cfgs() {
@@ -130,33 +147,57 @@ export default {
   data() {
     return {
       jsonMapList: [],
-      ruleForm: {}
+      ruleForm: {},
+      searchParams: {
+        dateTimeParams: []
+      },
+      dateTimeParams: {
+        start_time: null,
+        end_time: null
+      }
     }
   },
   created() {
+    this.changeIndex(0)
     this.getRelationTypeFunc()
   },
   methods: {
     // 配置参数
     beforeSearch(params) {
-      let s = { ...this.searchParams }
+      let s = { ...this.searchParams, ...this.dateTimeParams }
       return {
         page: params.page,
         pagesize: params.size,
         user_number: s.user_number,
         trade_no: s.trade_no,
         genre: s.genre,
-        relation_type: s.relation_type
+        relation_type: s.relation_type,
+        start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
+        end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0
       }
     },
     // 刷新列表
     getList() {
-      this.$refs.tableList.getData()
+      if(this.$refs.tableList) {
+        this.$refs.tableList.getData()
+      }
     },
     // 重置
     reset() {
       this.searchParams = {}
       this.getList()
+    },
+    // 设置时间段
+    setDateTime(arr) {
+      const date = arr ? {
+        start_time: arr[0],
+        end_time: arr[1]
+      } : {}
+      this.$set(this, 'dateTimeParams', date)
+    },
+    // 清空日期选择
+    emptyDateTime() {
+      this.dateTimeParams = {}
     },
     // 查询
     onSearch() {
@@ -174,7 +215,34 @@ export default {
     },
     saleAmunt(row) {
       this.ruleForm = { ...row.total_sum }
-    }
+    },
+    // 更改日期
+    changeIndex(index) {
+      let date = new Date()
+      let now, now1, start, end;
+      switch (index) {
+          case 0:
+              now1 = timeFormat(date, 'YYYY-MM-DD', false)
+              now = timeFormat(date, 'YYYY-MM-DD', false)
+              break;
+          case 1:
+              now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+              now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+              break;
+          case 2:
+              now1 = timeFormat(date, 'YYYY-MM-DD', false)
+              now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
+              break;
+      }
+      start = new Date(now + ' 00:00:00')
+      end = new Date(now1 + ' 23:59:59')
+
+      let time = [start.getTime(), end.getTime()]
+      this.searchParams.dateTimeParams = time
+      this.dateTimeParams.start_time = time[0]
+      this.dateTimeParams.end_time = time[1]
+      this.getList()
+    },
   }
 }
 </script>

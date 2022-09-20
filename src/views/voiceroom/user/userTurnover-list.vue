@@ -1,10 +1,13 @@
 <template>
-	<div class="app-container">
+	<div class="app-container userTurnover-list-box">
+		<div class="model">
+            <span>选择时间内总金额：{{ ruleForm.total_amount || 0 }}元</span>
+        </div>
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-        <tableList :cfgs="cfgs" ref="tableList"></tableList>
+        <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
 	</div>
 </template>
 
@@ -74,11 +77,9 @@
 							change: v => {
 								this.emptyDateTime()
 								this.setDateTime(v)
-								this.getList()
 							},
 							selectChange: (v, key) => {
 								this.emptyDateTime()
-								this.getList()
 							}
 						}
 					}
@@ -147,7 +148,8 @@
 						id: 2,
 						name: '私聊'
 					}
-				]
+				],
+				ruleForm: {}
 			}
 		},
 		methods: {
@@ -190,7 +192,32 @@
 			// 清空日期选择
 			emptyDateTime() {
 				this.dateTimeParams = {}
+			},
+			// 列表返回数据
+			saleAmunt(row) {
+				this.ruleForm = { ...row }
 			}
 		}
 	}
 </script>
+
+<style lang="scss">
+.userTurnover-list-box {
+	.model {
+        width: 100%;
+        height: 40px;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        padding: 0px 30px;
+        box-sizing: border-box;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+        margin-bottom: 20px;
+        >span {
+            font-size: 15px;
+            color: #fff;
+            margin-right: 100px;
+        }
+    }
+}
+</style>
