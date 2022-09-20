@@ -166,7 +166,7 @@
 			},
 			// 重置
 			reset() {
-				this.changeIndex(2)
+				this.changeIndex(0)
 				this.searchParams = {}
 				this.getList()
 			},
@@ -206,7 +206,7 @@
 			}
 		},
 		created() {
-			this.changeIndex(2)
+			this.changeIndex(0)
 		}
 	}
 </script>
