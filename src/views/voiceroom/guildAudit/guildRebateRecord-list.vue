@@ -1,8 +1,8 @@
 <template>
 	<div class="guildRebateRecord-list-box">
 		<div class="model">
-			<span>流水总计：{{ ruleForm.all_week_flow || 0 }}</span>
-			<span>结算总计：{{ ruleForm.all_week_back || 0 }}</span>
+			<span>流水总计：{{ ruleForm.all_flow || 0 }}</span>
+			<span>结算总计：{{ ruleForm.all_settlement || 0 }}</span>
 		</div>
 
 		<div class="searchParams">
