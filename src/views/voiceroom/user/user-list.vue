@@ -113,6 +113,16 @@
 							}
 						},
 						{
+							label: '等级',
+							width: '125px',
+							render: (h, params) => {
+								return h('div', [
+									h('div', '用户等级：' + params.row.user_rank || '无'),
+									h('div', '魅力等级：' + params.row.live_rank || '无')
+								])
+							}
+						},
+						{
 							label: '个性签名',
 							width: '110px',
 							render: (h, params) => {

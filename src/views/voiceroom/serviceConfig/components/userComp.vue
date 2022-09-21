@@ -22,8 +22,10 @@
                             <img :src="item.face" alt="">
                         </div>
                         <div class="rightBox">
-                            <div class="name">{{ item.nickname }}</div>
-                            <div class="user">ID：{{ item.user_number }}</div>
+                            <div class="name">{{ item.nickname }} </div>
+                            <div class="rank"><span>用户等级: {{item.user_rank}}</span><span>魅力等级：{{item.live_rank}}</span></div>
+                            <div class="user">ID：{{ item.user_number }} </div>
+                            <div class="timer">注册时间: {{item.create_time}}</div>
                         </div>
                     </div>
                 </div>
@@ -55,6 +57,7 @@ import drawer from '@/components/drawer/index'
 import { save } from '@/api/risk'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
+import moment from 'moment'
 export default {
     components: {
         drawer
@@ -116,6 +119,7 @@ export default {
                 if(res.data.list.length <= 0) {
                     this.$warning('查询不到数据')
                 } else {
+                    res.data.list[0].create_time = moment(res.data.list[0].create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
                     this.userList = res.data.list || []
                 }
             }
@@ -218,11 +222,18 @@ export default {
             .rightBox {
                 margin-left: 20px;
                 .name {
-                    margin-bottom: 15px;
+                    // margin-bottom: 15px;
                 }
+                .rank,
+                .timer,
                 .user {
                     font-size: 14px;
                     color: #ccc;
+                }
+                .rank{
+                    span{
+                        margin-right: 15px;
+                    }
                 }
             }
         }
