@@ -22,10 +22,11 @@
                             <img :src="item.face" alt="">
                         </div>
                         <div class="rightBox">
-                            <div class="name">{{ item.nickname }}</div>
-                            <div class="real" v-if="item.real_name"><span>实名：{{item.real_name}}</span> <span style="margin-left:15px">ID：{{ item.user_number }}</span></div>
-                            <div class="rank"><span v-if="item.guild_name !== ''">所属公会:{{item.guild_name}} {{item.user_rank}}</span><span>用户等级: {{item.user_rank}}</span><span>魅力等级：{{item.live_rank}}</span></div>
-                            <div class="timer">注册时间: {{item.create_time}}</div>
+                            <div class="name">用户昵称： {{ item.nickname }}</div>
+                            <div class="real"><span>实名信息：{{item.real_name ? item.real_name : '无'}}</span> </div>
+                            <div class="guild"><span>公会名称:{{item.guild_name ? item.guild_name : '无'}} {{item.user_rank}}</span><span>公会ID：{{ item.guild_number }}</span></div>
+                            <div class="rank"><span>用户等级: {{item.user_rank}}</span><span>魅力等级：{{item.live_rank}}</span></div>
+                            <div class="timer"><span>用户ID：{{ item.user_number }}</span><span style="margin-left:15px">注册时间: {{item.create_time}}</span></div>
                         </div>
                     </div>
                 </div>
@@ -223,10 +224,17 @@ export default {
                 margin-left: 20px;
                 .name,
                 .real,
+                .guild,
                 .rank{
                     margin-bottom: 5px;
                 }
+                .guild{
+                    span:last-child{
+                        margin-left: 15px;
+                    }
+                }
                 .real>span,
+                .guild>span,
                 .rank,
                 .timer,
                 .user {
