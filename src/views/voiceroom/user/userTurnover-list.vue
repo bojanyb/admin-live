@@ -1,7 +1,7 @@
 <template>
 	<div class="app-container userTurnover-list-box">
 		<div class="model">
-            <span>主播人数：{{ ruleForm.count || 0 }}人</span>
+            <span>收礼人数：{{ ruleForm.count || 0 }}人</span>
             <span>选择时间内总金额：{{ ruleForm.total_amount || 0 }}喵粮</span>
         </div>
 		<div class="searchParams">
@@ -36,20 +36,20 @@
 			forms() {
 				return [
 					{
-						name: 'room_number',
-						type: 'input',
-						value: '',
-						label: '派对ID',
-						isNum: true,
-						placeholder: '请输入派对ID'
-					},
-					{
 						name: 'guild_number',
 						type: 'input',
 						value: '',
 						label: '公会ID',
 						isNum: true,
 						placeholder: '请输入公会ID'
+					},
+					{
+						name: 'room_number',
+						type: 'input',
+						value: '',
+						label: '派对ID',
+						isNum: true,
+						placeholder: '请输入派对ID'
 					},
 					{
 						name: 'user_number',
@@ -132,17 +132,17 @@
 							}
 						},
 						{
-							label: '来源',
-							render: (h, params) => {
-								let name = params.row.room_number ? '派对' : '私聊'
-								return h('span', name)
-							}
-						},
-						{
 							label: '类型',
 							render: (h, params) => {
 								let data = MAPDATA.DEALSOURCETYPELIST.find(item => { return item.value === params.row.source })
 								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '来源',
+							render: (h, params) => {
+								let name = params.row.room_number ? '派对' : '私聊'
+								return h('span', name)
 							}
 						},
 						{
