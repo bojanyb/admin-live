@@ -1,4 +1,4 @@
-// 推广成员管理
+// 推广员管理
 <template>
     <div class="recommend-promotion-system">
         <div class="searchParams">
@@ -55,9 +55,9 @@ export default {
                     name: 'user_number',
                     type: 'input',
                     value: '',
-                    label: '用户ID',
+                    label: '推广商ID',
                     isNum: true,
-                    placeholder: '请输入用户ID'
+                    placeholder: '请输入推广商ID'
                 }
             ]
         },
@@ -90,7 +90,7 @@ export default {
                         label: '推广ID',
                         minWidth: '90px',
                         render: (h, params) => {
-                            let arr = ['推广商', '推广组', '推广成员']
+                            let arr = ['推广商', '推广组', '推广员']
                             let data = arr.find((a,b) => { return (b + 1) === params.row.level })
                             return h('span', data + 'ID' + ' - ' + params.row.user_number || '无')
                         }

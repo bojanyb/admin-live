@@ -81,9 +81,9 @@ export default {
                     name: 'user_number',
                     type: 'input',
                     value: '',
-                    label: '推广成员ID',
+                    label: '推广员ID',
                     isNum: true,
-                    placeholder: '请输入推广成员ID'
+                    placeholder: '请输入推广员ID'
                 },
             ]
             return this.type === 2 ? arr : arr1
@@ -109,7 +109,7 @@ export default {
             ]
             let arr2 = [
                 {
-                    label: '推广成员ID',
+                    label: '推广员ID',
                     prop: 'price'
                 }
             ]

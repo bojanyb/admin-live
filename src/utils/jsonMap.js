@@ -211,6 +211,21 @@ const STATUSLIST = [
     }
 ]
 
+const STATUSLISTCOPY = [
+    {
+        value: '',
+        name: '全部'
+    },
+    {
+        value: 4,
+        name: '提现完成'
+    },
+    {
+        value: 5,
+        name: '提现驳回'
+    }
+]
+
 // 充值记录排序
 const EMBODYSORT = [
     {
@@ -1253,6 +1268,34 @@ const FINANCEGIVETYPELIST = [
     }
 ]
 
+// 支付配置管理 - 支付方式
+const PAYMENTALLOCATIONMANAGEMENTLIST = [
+    {
+        name: '支付宝支付',
+        value: 1
+    },
+    {
+        name: '微信支付',
+        value: 2
+    }
+]
+
+// 支付配置管理 - 支付类型
+const PAYMENTALLOCATIONMANAGEMENTTYPELIST = [
+    {
+        name: 'jsapi支付',
+        value: 0
+    },
+    {
+        name: 'app支付',
+        value: 1
+    },
+    {
+        name: 'h5支付',
+        value: 2
+    }
+]
+
 /*
 *交易管理
 */
@@ -1265,6 +1308,22 @@ const DEALSOURCELIST = [
     {
         name: '私聊',
         value: 1
+    }
+]
+
+// 流水记录 - 类型
+const DEALSOURCETYPELIST = [
+    {
+        name: '全部流水',
+        value: 0
+    },
+    {
+        name: '背包流水',
+        value: 1
+    },
+    {
+        name: '礼物流水',
+        value: 2
     }
 ]
 
@@ -1723,5 +1782,9 @@ export default {
     USERPUNISHSTATUSLISTCOPY,
     GIFTSHOWTYPELIST,
     JOINHOUSETYPELIST,
-    ISFIRSTJOINHOUSELIST
+    ISFIRSTJOINHOUSELIST,
+    STATUSLISTCOPY,
+    PAYMENTALLOCATIONMANAGEMENTLIST,
+    PAYMENTALLOCATIONMANAGEMENTTYPELIST,
+    DEALSOURCETYPELIST
 }

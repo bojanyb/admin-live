@@ -5,8 +5,9 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
-        <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
+        <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt" :isHidePage="true"></tableList>
 
+        <!-- 新增 - 修改组件 -->
         <addComp v-if="isDestoryComp" ref="addComp" :menuList="menuList" @destoryComp="destoryComp" @getList="getList"></addComp>
     </div>
 </template>

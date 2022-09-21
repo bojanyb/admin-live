@@ -49,17 +49,17 @@ const promoteRouter = {
 					path: 'promote-members',
 					component: () => import('@/views/voiceroom/recommend/promotion-system/promote-members'),
 					meta: {
-						title: '推广成员管理',
+						title: '推广员管理',
 					},
 					name: 'promote-members'
 				},
 				{
-					path: 'turntableCount',
-					component: () => import('@/views/voiceroom/platformActivity/xyzpActivity/turntableCount'),
+					path: 'promote-order',
+					component: () => import('@/views/voiceroom/recommend/promotion-system/promote-order'),
 					meta: {
-						title: '幸运转盘统计',
+						title: '推广补单',
 					},
-					name: 'turntableCount'
+					name: 'promote-order'
 				}
 			]
 		}

@@ -28,3 +28,21 @@ export function deleteParams(data) {
         data
     })
 }
+
+// 推广补单
+export function regPeplenishment(data) {
+    return request({
+        url: REQUEST.userHistory.regPeplenishment,
+        method: 'post',
+        data
+    })
+}
+
+// 删除补单
+export function replenishmentDel(data) {
+    return request({
+        url: REQUEST.userHistory.replenishmentDel,
+        method: 'post',
+        data
+    })
+}

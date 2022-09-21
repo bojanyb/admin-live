@@ -1,10 +1,14 @@
 <template>
-	<div class="app-container">
+	<div class="app-container userTurnover-list-box">
+		<div class="model">
+            <span>主播人数：{{ ruleForm.count || 0 }}人</span>
+            <span>选择时间内总金额：{{ ruleForm.total_amount || 0 }}喵粮</span>
+        </div>
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-        <tableList :cfgs="cfgs" ref="tableList"></tableList>
+        <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
 	</div>
 </template>
 
@@ -19,6 +23,8 @@
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
 	import { timeFormat } from '@/utils/common.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
 		name: 'userTurnover-list',
 		components: {
@@ -54,12 +60,22 @@
 						placeholder: '请输入收礼人ID'
 					},
 					{
-						name: 'is_room',
+						name: 'source',
 						type: 'select',
-						value: '',
-						keyName: 'id',
+						value: 0,
+						keyName: 'value',
 						optionLabel: 'name',
 						label: '类型',
+						placeholder: '请选择',
+						options: MAPDATA.DEALSOURCETYPELIST
+					},
+					{
+						name: 'is_room',
+						type: 'select',
+						value: 0,
+						keyName: 'id',
+						optionLabel: 'name',
+						label: '来源',
 						placeholder: '请选择',
 						options: this.typeList
 					},
@@ -74,11 +90,9 @@
 							change: v => {
 								this.emptyDateTime()
 								this.setDateTime(v)
-								this.getList()
 							},
 							selectChange: (v, key) => {
 								this.emptyDateTime()
-								this.getList()
 							}
 						}
 					}
@@ -90,22 +104,20 @@
 					url: REQUEST.deal.userFlow1,
 					columns: [
 						{
-							label: '收礼ID',
-							prop: 'live_user_number'
-						},
-						{
-							label: '来源',
-							render: (h, params) => {
-								let name = params.row.room_number ? '派对' : '私聊'
-								return h('span', name)
-							}
-						},
-						{
 							label: '时间',
 							minWidth: '130px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
+						},
+						{
+							label: '交易流水号',
+							minWidth: '150px',
+							prop: 'relation_trade_no'
+						},
+						{
+							label: '收礼ID',
+							prop: 'live_user_number'
 						},
 						{
 							label: '派对ID',
@@ -120,13 +132,22 @@
 							}
 						},
 						{
-							label: '金额',
-							prop: 'amount'
+							label: '来源',
+							render: (h, params) => {
+								let name = params.row.room_number ? '派对' : '私聊'
+								return h('span', name)
+							}
 						},
 						{
-							label: '交易流水号',
-							minWidth: '150px',
-							prop: 'relation_trade_no'
+							label: '类型',
+							render: (h, params) => {
+								let data = MAPDATA.DEALSOURCETYPELIST.find(item => { return item.value === params.row.source })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '金额',
+							prop: 'amount'
 						}
 					]
 				}
@@ -147,7 +168,15 @@
 						id: 2,
 						name: '私聊'
 					}
-				]
+				],
+				ruleForm: {},
+				searchParams: {
+					dateTimeParams: []
+				},
+				dateTimeParams: {
+					start_time: null,
+					end_time: null
+				}
 			}
 		},
 		methods: {
@@ -166,13 +195,15 @@
 					user_number: s.user_number,
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
 					end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
-					is_room: s.is_room
+					is_room: s.is_room,
+					source: s.source
 				}
 			},
 			// 重置
 			reset() {
+				this.changeIndex(0)
 				this.searchParams = {}
-				this.dateTimeParams = {}
+				// this.dateTimeParams = {}
 				this.getList()
 			},
 			// 查询
@@ -190,7 +221,61 @@
 			// 清空日期选择
 			emptyDateTime() {
 				this.dateTimeParams = {}
+			},
+			// 列表返回数据
+			saleAmunt(row) {
+				this.ruleForm = { ...row }
+			},
+			// 更改日期
+			changeIndex(index) {
+				let date = new Date()
+				let now, now1, start, end;
+				switch (index) {
+					case 0:
+						now1 = timeFormat(date, 'YYYY-MM-DD', false)
+						now = timeFormat(date, 'YYYY-MM-DD', false)
+						break;
+					case 1:
+						now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+						now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+						break;
+					case 2:
+						now1 = timeFormat(date, 'YYYY-MM-DD', false)
+						now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
+						break;
+				}
+				start = new Date(now + ' 00:00:00')
+				end = new Date(now1 + ' 23:59:59')
+
+				let time = [start.getTime(), end.getTime()]
+				this.searchParams.dateTimeParams = time
+				this.dateTimeParams.start_time = time[0]
+				this.dateTimeParams.end_time = time[1]
 			}
+		},
+		created() {
+			this.changeIndex(0)
 		}
 	}
 </script>
+
+<style lang="scss">
+.userTurnover-list-box {
+	.model {
+        width: 100%;
+        height: 40px;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        padding: 0px 30px;
+        box-sizing: border-box;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+        margin-bottom: 20px;
+        >span {
+            font-size: 15px;
+            color: #fff;
+            margin-right: 100px;
+        }
+    }
+}
+</style>

@@ -28,6 +28,15 @@ const giveAwayRouter = {
 			name: 'giftHistory-list'
 		},
 		{
+			path: 'payment-list',
+			component: () => import('@/views/voiceroom/finance/payment-list'),
+			name: 'payment-list',
+			meta: {
+				title: '支付配置管理',
+				noCache: true
+			},
+		},
+		{
 			path: 'guildWithdraw-list',
 			component: () => import('@/views/voiceroom/finance/guildWithdraw-list'),
 			name: 'guildWithdraw-list',
