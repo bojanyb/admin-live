@@ -1311,6 +1311,22 @@ const DEALSOURCELIST = [
     }
 ]
 
+// 流水记录 - 类型
+const DEALSOURCETYPELIST = [
+    {
+        name: '全部流水',
+        value: 0
+    },
+    {
+        name: '背包流水',
+        value: 1
+    },
+    {
+        name: '礼物流水',
+        value: 2
+    }
+]
+
 /*
 *推广管理
 */
@@ -1769,5 +1785,6 @@ export default {
     ISFIRSTJOINHOUSELIST,
     STATUSLISTCOPY,
     PAYMENTALLOCATIONMANAGEMENTLIST,
-    PAYMENTALLOCATIONMANAGEMENTTYPELIST
+    PAYMENTALLOCATIONMANAGEMENTTYPELIST,
+    DEALSOURCETYPELIST
 }

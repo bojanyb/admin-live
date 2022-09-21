@@ -1,6 +1,7 @@
 <template>
 	<div class="app-container userTurnover-list-box">
 		<div class="model">
+            <span>主播人数：{{ ruleForm.count || 0 }}人</span>
             <span>选择时间内总金额：{{ ruleForm.total_amount || 0 }}喵粮</span>
         </div>
 		<div class="searchParams">
@@ -22,6 +23,8 @@
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
 	import { timeFormat } from '@/utils/common.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
 		name: 'userTurnover-list',
 		components: {
@@ -57,12 +60,22 @@
 						placeholder: '请输入收礼人ID'
 					},
 					{
-						name: 'is_room',
+						name: 'source',
 						type: 'select',
-						value: '',
-						keyName: 'id',
+						value: 0,
+						keyName: 'value',
 						optionLabel: 'name',
 						label: '类型',
+						placeholder: '请选择',
+						options: MAPDATA.DEALSOURCETYPELIST
+					},
+					{
+						name: 'is_room',
+						type: 'select',
+						value: 0,
+						keyName: 'id',
+						optionLabel: 'name',
+						label: '来源',
 						placeholder: '请选择',
 						options: this.typeList
 					},
@@ -91,22 +104,20 @@
 					url: REQUEST.deal.userFlow1,
 					columns: [
 						{
-							label: '收礼ID',
-							prop: 'live_user_number'
-						},
-						{
-							label: '来源',
-							render: (h, params) => {
-								let name = params.row.room_number ? '派对' : '私聊'
-								return h('span', name)
-							}
-						},
-						{
 							label: '时间',
 							minWidth: '130px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
+						},
+						{
+							label: '交易流水号',
+							minWidth: '150px',
+							prop: 'relation_trade_no'
+						},
+						{
+							label: '收礼ID',
+							prop: 'live_user_number'
 						},
 						{
 							label: '派对ID',
@@ -121,13 +132,22 @@
 							}
 						},
 						{
-							label: '金额',
-							prop: 'amount'
+							label: '来源',
+							render: (h, params) => {
+								let name = params.row.room_number ? '派对' : '私聊'
+								return h('span', name)
+							}
 						},
 						{
-							label: '交易流水号',
-							minWidth: '150px',
-							prop: 'relation_trade_no'
+							label: '类型',
+							render: (h, params) => {
+								let data = MAPDATA.DEALSOURCETYPELIST.find(item => { return item.value === params.row.source })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '金额',
+							prop: 'amount'
 						}
 					]
 				}
@@ -175,7 +195,8 @@
 					user_number: s.user_number,
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
 					end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
-					is_room: s.is_room
+					is_room: s.is_room,
+					source: s.source
 				}
 			},
 			// 重置

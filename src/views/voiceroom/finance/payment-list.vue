@@ -5,10 +5,15 @@
         </div>
 
         <tableList :cfgs="cfgs" ref="tableList"></tableList>
+
+        <!-- 引入新增 - 修改弹窗 -->
+        <paymentComp v-if="isDestoryComp" ref="paymentComp" @destoryComp="destoryComp" @getList="getList"></paymentComp>
     </div>
 </template>
 
 <script>
+// 引入新增 - 修改弹窗
+import paymentComp from './components/paymentComp.vue'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -25,11 +30,12 @@ export default {
     mixins: [mixins],
     components: {
         tableList,
-        SearchPanel
+        SearchPanel,
+        paymentComp
     },
     data() {
         return {
-            
+            isDestoryComp: false // 是否销毁组件
         };
     },
     computed: {
@@ -63,54 +69,49 @@ export default {
                 url: REQUEST.diamondRecharge.list,
                 columns: [
                     {
-                        label: '用户ID',
+                        label: '支付平台',
                         render: (h, params) => {
                             return h('span', params.row.user_number || '无')
                         }
                     },
                     {
-                        label: '充值时间',
-                        minWidth: '150px',
+                        label: '商户号',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
                     },
                     {
-                        label: '充值金额',
+                        label: '商户名称（主体）',
                         prop: 'amount',
                         render: (h, params) => {
                             return h('span', params.row.amount / 100)
                         }
                     },
                     {
-                        label: '收单机构',
+                        label: '商户类型',
                         prop: 'receive'
                     },
                     {
-                        label: '充值方式',
+                        label: '商户状态',
                         render: (h, params) => {
                             return h('span', params.row.channel)
                         }
                     },
                     {
-                        label: '订单状态',
+                        label: '使用状态',
+                        prop: 'status',
+                        isSwitch: true,
+                        isTrueValue: 1,
+                        isFalseValue: 0,
+                        activeText: '启用',
+                        inactiveText: '停用',
+                        change: (v, row) => {
+                            // this.setSuperUserFunc(row.user_number, v)
+                        },
                         render: (h, params) => {
-                            let data = MAPDATA.ORDERSTATUS.find(item => { return item.value.indexOf(params.row.status) !== -1 })
-                            return h('span', data ? data.name : '无')
+                            return h('span', '')
                         }
                     },
-                    {
-                        label: '交易单号',
-                        minWidth: '150px',
-                        prop: 'trade_no'
-                    },
-                    {
-                        label: '商户单号',
-                        minWidth: '150px',
-                        render: (h, params) => {
-                            return h('span', params.row.out_trade_no || '无')
-                        }
-                    }
                 ]
             }
         }
@@ -146,7 +147,21 @@ export default {
         },
         // 新增
         add() {
-            
+           this.load('add') 
+        },
+        // 修改
+        update(row) {
+            this.load('update', row)
+        },
+        load(status, row) {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.paymentComp.loadParams(status, row)
+            }, 50);
+        },
+        // 销毁组件
+        destoryComp() {
+            this.isDestoryComp = false
         }
     }
 }

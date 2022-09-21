@@ -55,8 +55,8 @@
             :active-value="item.isTrueValue"
             :inactive-value="item.isFalseValue"
             :disabled="disabledFunc(item, scope.$index)"
-            active-text=""
-            inactive-text=""
+            :active-text="item.activeText || ''"
+            :inactive-text="item.inactiveText || ''"
             @change="(v) => item.change(v, scope.row)">
           </el-switch>
           

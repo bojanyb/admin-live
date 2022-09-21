@@ -78,6 +78,13 @@
 						label: '昵称',
 						placeholder: '请输入昵称'
 					},
+					{
+						name: 'reg_device_id',
+						type: 'input',
+						value: '',
+						label: '注册设备',
+						placeholder: '请输入注册设备'
+					}
 				]
 			},
 			cfgs() {
@@ -222,7 +229,8 @@
 					pagesize: params.size,
 					user_number: s.user_number,
 					nickname: s.nickname,
-					phone: s.phone
+					phone: s.phone,
+					reg_device_id: s.reg_device_id
 				}
 			},
 			// 刷新列表

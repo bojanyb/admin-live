@@ -1,13 +1,14 @@
 // 提现申请
 <template>
     <div class="finance-embodyApply">
-        <div class="model">
+        <div class="model" v-if="tabIndex === '0'">
             <span>未处理申请：{{ ruleForm.count || 0 }}条</span>
             <span>提现金额：{{ ruleForm.totalMoney / 100 || 0 }}元</span>
             <span>手续费：{{ ruleForm.totalMoneyRate / 100 || 0 }}元</span>
             <span>到账金额：{{ Number(((ruleForm.totalMoney - ruleForm.totalMoneyRate) / 100).toFixed(2)) || 0 }}元</span>
         </div>
-        <div class="searchParams">
+        <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
+        <div class="searchParams" v-if="tabIndex === '0'">
             <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" :show-batch-pass="true" @batchPass="batchPass" :show-batch-rurn="true" @BatchRurn="BatchRurn" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
         </div>
         <div class="tableList">
@@ -17,6 +18,8 @@
 </template>
 
 <script>
+// 引入tab菜单组件
+import menuComp from '@/components/menuComp/index.vue'
 import { doCash } from '@/api/finance'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
@@ -34,7 +37,8 @@ import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
         tableList,
-        SearchPanel
+        SearchPanel,
+        menuComp
     },
     mixins: [mixins],
     computed: {
@@ -80,84 +84,118 @@ export default {
             ]
         },
         cfgs() {
+            let arr = [
+                {
+                    label: '用户ID',
+                    width: '100px',
+                    prop: 'user_id'
+                },
+                {
+                    label: '申请提现时间',
+                    width: '200px',
+                    render: (h, params) => {
+                        return h('span', params.row.addtime ? timeFormat(params.row.addtime, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                    }
+                },
+                {
+                    label: '喵粮',
+                    prop: 'money',
+                },
+                {
+                    label: '提现金额',
+                    render: (h, params) => {
+                        return h('span', params.row.money / 100)
+                    }
+                },
+                {
+                    label: '手续费',
+                    prop: 'cash_rate',
+                    render: (h, params) => {
+                        let money = Math.floor((params.row.money / 10000 * params.row.cash_rate).toFixed(5) * 100) / 100
+                        return h('span', money)
+                    }
+                },
+                {
+                    label: '到账金额',
+                    render: (h, params) => {
+                        return h('span', params.row.real_money / 100)
+                    }
+                },
+                {
+                    label: '提现卡号',
+                    width: '200px',
+                    prop: 'card_id'
+                },
+                {
+                    label: '状态',
+                    render: (h, params) => {
+                        let paramsData = MAPDATA.STATUSLIST.find(item => { return item.value === params.row.status })
+                        return h('span', paramsData ? paramsData.name : '--')
+                    }
+                },
+                {
+                    label: '原因',
+                    minWidth: '100px',
+                    render: (h, params) => {
+                        return h('span', params.row.remark || '无')
+                    },
+                    showOverFlow: true
+                },
+                {
+                    label: '操作',
+                    width: '200px',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.doCashFunc(params.row, 'success')}}}, '通过'),
+                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.doCashFunc(params.row, 'reject')}}}, '驳回')
+                        ])
+                    }
+                }
+            ]
+            let arr1 = [
+                {
+                    label: '主体',
+                    prop: 'user_id'
+                },
+                {
+                    label: '供应商',
+                    prop: 'user_id'
+                },
+                {
+                    label: '手续费',
+                    prop: 'user_id'
+                },
+                {
+                    label: '操作',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('el-button', { props: { type: 'primary'}, style: {
+                                display: params.row.status === 0 ? 'unset' : 'none'
+                            }, on: {click:()=>{this.audit(params.row.id, 1)}}}, '通过')
+                        ])
+                    }
+                },
+            ]
             return {
                 vm: this,
                 url: REQUEST.CashHisity.apply,
                 keyId: 'id',
-                isShowCheckbox: true,
-                columns: [
-                    {
-                        label: '用户ID',
-                        width: '100px',
-                        prop: 'user_id'
-                    },
-                    {
-                        label: '申请提现时间',
-                        width: '200px',
-                        render: (h, params) => {
-                            return h('span', params.row.addtime ? timeFormat(params.row.addtime, 'YYYY-MM-DD HH:mm:ss', true) : '--')
-                        }
-                    },
-                    {
-                        label: '喵粮',
-                        prop: 'money',
-                    },
-                    {
-                        label: '提现金额',
-                        render: (h, params) => {
-                            return h('span', params.row.money / 100)
-                        }
-                    },
-                    {
-                        label: '手续费',
-                        prop: 'cash_rate',
-                        render: (h, params) => {
-                            let money = Math.floor((params.row.money / 10000 * params.row.cash_rate).toFixed(5) * 100) / 100
-                            return h('span', money)
-                        }
-                    },
-                    {
-                        label: '到账金额',
-                        render: (h, params) => {
-                            return h('span', params.row.real_money / 100)
-                        }
-                    },
-                    {
-                        label: '提现卡号',
-                        width: '200px',
-                        prop: 'card_id'
-                    },
-                    {
-                        label: '状态',
-                        render: (h, params) => {
-                            let paramsData = MAPDATA.STATUSLIST.find(item => { return item.value === params.row.status })
-                            return h('span', paramsData ? paramsData.name : '--')
-                        }
-                    },
-                    {
-                        label: '原因',
-                        minWidth: '100px',
-                        render: (h, params) => {
-                            return h('span', params.row.remark || '无')
-                        },
-                        showOverFlow: true
-                    },
-                    {
-                        label: '操作',
-                        width: '200px',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.doCashFunc(params.row, 'success')}}}, '通过'),
-                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.doCashFunc(params.row, 'reject')}}}, '驳回')
-                            ])
-                        }
-                    }
-                ]
+                isShowCheckbox: this.tabIndex === '0' ? true : false,
+                columns: this.tabIndex === '0' ? [ ...arr ] : [ ...arr1 ]
             }
         }
     },
     data() {
         return {
+            menuList: [
+                {
+                    name: '提现申请'
+                },
+                {
+                    name: '提现付款账户设置'
+                }
+            ],
+            tabIndex: '0',
             ruleForm: {
                 untreated: null
             },
