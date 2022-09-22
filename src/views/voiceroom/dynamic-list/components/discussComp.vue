@@ -1,21 +1,26 @@
 <template>
-    <div class="app-container dynamic-list-box">
-        <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
-        </div>
+    <div class="dynamic-list-discussComp-box">
+        <el-dialog
+        title="评论详情"
+        :visible.sync="dialogVisible"
+        width="900px"
+        :before-close="handleClose">
+            <div class="mainBox">
+                <div class="searchParams">
+                    <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+                </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
-
-        <!-- 详情组件 -->
-        <discussComp ref="discussComp"></discussComp>
+                <tableList :cfgs="cfgs" ref="tableList"></tableList>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-// 详情组件
-import discussComp from './components/discussComp.vue'
-// 引入api
-import { delMoments } from '@/api/dynamic'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -28,13 +33,7 @@ export default {
     mixins: [mixins],
     components: {
         SearchPanel,
-        tableList,
-        discussComp
-    },
-    data() {
-        return {
-
-        };
+        tableList
     },
     computed: {
         forms() {
@@ -106,7 +105,7 @@ export default {
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
-                                // h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.seeDetails(params.row.id)}}}, '评论详情'),
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '评论详情'),
                                 h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
                             ])
                         }
@@ -115,7 +114,16 @@ export default {
             }
         }
     },
+    data() {
+        return {
+            dialogVisible: false
+        };
+    },
     methods: {
+        // 关闭弹窗
+        handleClose() {
+            this.dialogVisible = false
+        },
         // 配置参数
         beforeSearch(params) {
             let s = { ...this.searchParams, ...this.dateTimeParams }
@@ -166,15 +174,13 @@ export default {
         // 查询
         onSearch() {
             this.getList()
-        },
-        // 查看详情
-        seeDetails() {
-            this.$refs.discussComp.dialogVisible = true
         }
     }
 }
 </script>
 
-<style lang="scss" scoped>
-    
+<style lang="scss">
+.dynamic-list-discussComp-box {
+
+}
 </style>
