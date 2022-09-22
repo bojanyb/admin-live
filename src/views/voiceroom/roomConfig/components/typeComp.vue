@@ -6,7 +6,8 @@
         width="500px"
         :before-close="handleClose">
             <div class="btnBox">
-                <el-button type="success" @click="add">新增</el-button>
+                <el-button type="success" :disabled="guild_number == 0 ? true : false" @click="add">新增</el-button>
+                <span style="color:red;margin-left: 15px;" v-if="guild_number == 0">非公会房间,不可添加房间分类</span>
             </div>
             <el-table
             :data="tableData"
@@ -70,7 +71,8 @@ export default {
             innerVisible: false,
             typeList: [],
             type_id: null,
-            room_number: null
+            room_number: null,
+            guild_number: null
         };
     },
     methods: {
@@ -81,6 +83,7 @@ export default {
         async loadParams(row, list) {
             this.dialogVisible = true
             this.room_number = row.room_number
+            this.guild_number = row.guild_number
             await this.getTypes(row.room_number)
             this.typeList = list
         },

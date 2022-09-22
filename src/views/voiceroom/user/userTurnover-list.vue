@@ -36,20 +36,20 @@
 			forms() {
 				return [
 					{
-						name: 'room_number',
-						type: 'input',
-						value: '',
-						label: '派对ID',
-						isNum: true,
-						placeholder: '请输入派对ID'
-					},
-					{
 						name: 'guild_number',
 						type: 'input',
 						value: '',
 						label: '公会ID',
 						isNum: true,
 						placeholder: '请输入公会ID'
+					},
+					{
+						name: 'room_number',
+						type: 'input',
+						value: '',
+						label: '派对ID',
+						isNum: true,
+						placeholder: '请输入派对ID'
 					},
 					{
 						name: 'user_number',
