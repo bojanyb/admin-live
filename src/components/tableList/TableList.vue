@@ -203,7 +203,6 @@
         };
         if (typeof vm.beforeSearch === 'function') {
           params = vm.beforeSearch(params);
-          debugger
           if(JSON.stringify(this.oldParams) !== JSON.stringify(params) && this.oldPage && this.oldPage == params.page) { // 搜索 - 重置分页
             this.search.page = 1
             params.page = 1
