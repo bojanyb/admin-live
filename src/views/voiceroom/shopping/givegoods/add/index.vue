@@ -39,7 +39,7 @@
             </div>
         </el-dialog>
 
-        <goodsBank ref="goodsBank" :list="list" @validateField="validateField"></goodsBank>
+        <goodsBank ref="goodsBank" :list="list" :isLimit="10" @validateField="validateField"></goodsBank>
     </div>
 </template>
 
@@ -181,6 +181,10 @@ export default {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
+                    margin-bottom: 10px;
+                }
+                >div:last-child {
+                    margin-bottom: 0px;
                 }
             }
         }
