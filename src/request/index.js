@@ -267,6 +267,8 @@ const request = {
     dynamic: {
         getMoments: `${HTTPHEADER}/moments/getMoments`, // 获取动态
         delMoments: `${HTTPHEADER}/moments/delMoments`, // 删除动态
+        msgList: `${HTTPHEADER}/moments/msgList`, // 评论列表
+        deleteMsg: `${HTTPHEADER}/moments/deleteMsg`, // 删除评论
     }
 }
 

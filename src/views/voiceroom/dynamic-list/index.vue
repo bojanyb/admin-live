@@ -7,7 +7,7 @@
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 详情组件 -->
-        <discussComp ref="discussComp"></discussComp>
+        <discussComp ref="discussComp" :msg_id="msg_id"></discussComp>
     </div>
 </template>
 
@@ -33,7 +33,7 @@ export default {
     },
     data() {
         return {
-
+            msg_id: null
         };
     },
     computed: {
@@ -106,7 +106,7 @@ export default {
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
-                                // h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.seeDetails(params.row.id)}}}, '评论详情'),
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.seeDetails(params.row.id)}}}, '评论详情'),
                                 h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
                             ])
                         }
@@ -168,7 +168,8 @@ export default {
             this.getList()
         },
         // 查看详情
-        seeDetails() {
+        seeDetails(id) {
+            this.msg_id = id
             this.$refs.discussComp.dialogVisible = true
         }
     }

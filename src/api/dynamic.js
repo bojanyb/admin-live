@@ -11,3 +11,12 @@ export function delMoments(data) {
         data
     })
 }
+
+// 删除评论
+export function deleteMsg(data) {
+    return request({
+        url: api.dynamic.deleteMsg,
+        method: 'post',
+        data
+    })
+}
