@@ -3,7 +3,7 @@
         <div class="mainBox">
             <div class="sunBox">
                 <span>密码</span>
-                <el-input v-model="password" placeholder="请输入密码（最少9位数，字母和数字）"></el-input>
+                <el-input v-model="password" clearable placeholder="请输入密码（最少9位数，字母和数字）" @change="passChange"></el-input>
                 <el-button type="primary" :disabled="password.length < 9" @click="getBannerFunc">确定</el-button>
             </div>
 
@@ -36,6 +36,12 @@ export default {
 
             }
             
+        },
+        // 更改密码
+        passChange(v) {
+            if(!v) {
+                this.passList = []
+            }
         }
     }
 }
