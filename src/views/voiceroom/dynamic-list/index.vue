@@ -7,7 +7,7 @@
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 详情组件 -->
-        <discussComp ref="discussComp" :msg_id="msg_id"></discussComp>
+        <discussComp v-if="isDestoryComp" ref="discussComp" :msg_id="msg_id" @destoryComp="destoryComp"></discussComp>
     </div>
 </template>
 
@@ -33,7 +33,8 @@ export default {
     },
     data() {
         return {
-            msg_id: null
+            msg_id: null,
+            isDestoryComp: false // 是否销毁组件
         };
     },
     computed: {
@@ -170,7 +171,13 @@ export default {
         // 查看详情
         seeDetails(id) {
             this.msg_id = id
-            this.$refs.discussComp.dialogVisible = true
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.discussComp.dialogVisible = true
+            }, 50);
+        },
+        destoryComp() {
+            this.isDestoryComp = false
         }
     }
 }

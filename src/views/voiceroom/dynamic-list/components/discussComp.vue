@@ -4,7 +4,8 @@
         title="评论详情"
         :visible.sync="dialogVisible"
         width="750px"
-        :before-close="handleClose">
+        :before-close="handleClose"
+        @closed="closed">
             <div class="mainBox">
                 <!-- <div class="searchParams">
                     <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
@@ -115,6 +116,10 @@ export default {
         // 查询
         onSearch() {
             this.getList()
+        },
+        // 关闭弹窗
+        closed() {
+            this.$emit('destoryComp')
         }
     }
 }
