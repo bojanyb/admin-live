@@ -7,7 +7,43 @@
 		</div>
 
 		<div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel>
+			<div class="formBox">
+				<div class="sunBox">
+					<span>公会</span>
+					<el-select v-model="form.guild_number" placeholder="请选择">
+						<el-option
+						v-for="item in guildList"
+						:key="item.guild_number"
+						:label="item.nickname"
+						:value="item.guild_number">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="sunBox">
+					<span>结算状态</span>
+					<el-select v-model="form.status" placeholder="请选择">
+						<el-option
+						v-for="item in closeStatusList"
+						:key="item.value"
+						:label="item.name"
+						:value="item.value">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="sunBox">
+					<span>时间</span>
+					<el-date-picker
+					v-model="form.time"
+					type="datetimerange"
+					range-separator="至"
+					start-placeholder="开始日期"
+					end-placeholder="结束日期">
+					</el-date-picker>
+				</div>
+				<el-button type="primary">查询</el-button>
+				<el-button type="primary">查询</el-button>
+			</div>
+            <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel>
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -15,6 +51,8 @@
 </template>
 
 <script>
+	// 引入公会列表接口
+	import { guildList } from '@/api/user'
 	// 引入api
 	import { getWeekRebate } from '@/api/videoRoom'
 	// 引入菜单组件
@@ -39,33 +77,58 @@
 		},
 		computed: {
 			forms() {
-				return [
+				let arr = [
 					{
 						name: 'guild_number',
-						type: 'input',
-						value: '',
-						label: '公会ID',
-						isNum: true,
-						placeholder: '请输入公会ID'
+						type: 'select',
+						value: 0,
+						keyName: 'guild_number',
+						optionLabel: 'nickname',
+						label: '公会',
+						placeholder: '请选择',
+						options: this.guildList
 					},
-					// {
-					// 	name: 'dateTimeParams',
-					// 	type: 'datePicker',
-					// 	dateType: 'datetimerange',
-					// 	format: "yyyy-MM-dd HH:mm:ss",
-					// 	label: '时间选择',
-					// 	value: '',
-					// 	handler: {
-					// 		change: v => {
-					// 			this.emptyDateTime()
-					// 			this.setDateTime(v)
-					// 		},
-					// 		selectChange: (v, key) => {
-					// 			this.emptyDateTime()
-					// 		}
-					// 	}
-					// }
+					{
+						name: 'status',
+						type: 'select',
+						value: 1,
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '结算状态',
+						placeholder: '请选择',
+						options: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST,
+						handler: {
+							change: v => {
+								console.log(v, 'v----------2020')
+								let val = JSON.parse(JSON.stringify(v))
+								// console.log(this.searchParams, 'searchParams--------3030')
+								this.$set(this.searchParams, 'status', val)
+								// this.$forceUpdate()
+								this.$refs.SearchPanel.updateView(val, 'status')
+							}
+						}
+					},
 				]
+				let arr1 = [
+					{
+						name: 'dateTimeParams',
+						type: 'datePicker',
+						dateType: 'datetimerange',
+						format: "yyyy-MM-dd HH:mm:ss",
+						label: '时间选择',
+						value: '',
+						handler: {
+							change: v => {
+								this.emptyDateTime()
+								this.setDateTime(v)
+							},
+							selectChange: (v, key) => {
+								this.emptyDateTime()
+							}
+						}
+					}
+				]
+				return this.searchParams.status === 1 ? [ ...arr ] : [ ...arr, ...arr1 ]
 			},
 			cfgs() {
 				return {
@@ -124,10 +187,18 @@
 		},
 		data() {
 			return {
+				guildList: [], // 公会列表
+				closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST, // 结算状态
+				form: { // 表单数据
+					guild_number: 0,
+					status: 1,
+					time: []
+				},
 				selectList: [], // 选中
 				ruleForm: {},
 				searchParams: {
-					dateTimeParams: []
+					dateTimeParams: [],
+					status: 1
 				},
 				dateTimeParams: {
 					start_time: null,
@@ -223,10 +294,22 @@
 				this.searchParams.dateTimeParams = time
 				this.dateTimeParams.start_time = time[0]
 				this.dateTimeParams.end_time = time[1]
+			},
+			// 获取公会列表
+			async guildListFunc() {
+				let res = await guildList()
+				if(res.data.list && res.data.list.length > 0) {
+					res.data.list.unshift({
+						guild_number: 0,
+						nickname: '全部公会'
+					})
+					this.guildList = res.data.list || []
+				}
+				
 			}
 		},
 		created() {
-			// this.changeIndex(2)
+			this.guildListFunc()
 		}
 	}
 </script>
@@ -250,5 +333,37 @@
             margin-right: 100px;
         }
     }
+	.searchParams {
+		.formBox {
+			display: flex;
+			align-items: center;
+			.sunBox {
+				margin-left: 12px;
+				>span {
+					font-size: 14px;
+    				color: #606266;
+					font-weight: 700;
+					margin-right: 12px;
+				}
+				.el-select {
+					border: none;
+					input {
+						border: none;
+						background: #F5F7FA;
+					}
+				}
+				.el-date-editor {
+					border: none;
+					background: #F5F7FA;
+					input {
+						background: #F5F7FA;
+					}
+				}
+			}
+			>div:first-child {
+				margin-left: 0px;
+			}
+		}
+	}
 }
 </style>

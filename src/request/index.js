@@ -73,6 +73,9 @@ const request = {
         },
         banner: {
             getBanner: `${HTTPHEADER}/moments/getBanner`, // 获取banner列表
+        },
+        account: {
+            getBanner: `${HTTPHEADER}/User/createAccount`, // 生成账号
         }
     },
 

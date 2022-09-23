@@ -449,6 +449,10 @@ export default {
   mounted() {},
   beforeDestroy() {},
   methods: {
+    // 更新视图
+    updateView(val, name) {
+      this.$set(this.form, name, val)
+    },
     // 今日
     today() {
       this.$emit('today')

@@ -37,6 +37,15 @@ export function getUser(data) {
   })
 }
 
+// 获取公会列表
+export function guildList(data) {
+  return request({
+    url: api.guild.list,
+    method: 'post',
+    data
+  })
+}
+
 // 添加公会成员
 export function addGuildUser(data) {
   return request({

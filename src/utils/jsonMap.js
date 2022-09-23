@@ -628,6 +628,18 @@ const GUILDISSTUDIO = [
     }
 ]
 
+// 公会结算列表 - 结算状态
+const GUILDCLOSEANACCOUNTSTATUSLIST = [
+    {
+        name: '未结算',
+        value: 1
+    },
+    {
+        name: '未到结算时间',
+        value: 2
+    }
+]
+
 /*
 *派对管理 - 举报房间
 */
@@ -1786,5 +1798,6 @@ export default {
     STATUSLISTCOPY,
     PAYMENTALLOCATIONMANAGEMENTLIST,
     PAYMENTALLOCATIONMANAGEMENTTYPELIST,
-    DEALSOURCETYPELIST
+    DEALSOURCETYPELIST,
+    GUILDCLOSEANACCOUNTSTATUSLIST
 }

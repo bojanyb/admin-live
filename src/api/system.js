@@ -1,4 +1,5 @@
 import request from '@/utils/request2'
+import request1 from '@/utils/request3'
 import api from '@/request/index'
 
 // 删除号码段
@@ -32,6 +33,15 @@ export function addPhoneRoll(data) {
 export function deletePhone(data) {
     return request({
         url: api.system.dummy.deletePhone,
+        method: 'post',
+        data
+    })
+}
+
+// 生成账号
+export function getBanner(data) {
+    return request1({
+        url: api.system.account.getBanner,
         method: 'post',
         data
     })
