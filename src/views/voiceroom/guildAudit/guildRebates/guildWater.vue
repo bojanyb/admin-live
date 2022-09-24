@@ -156,7 +156,7 @@
 						label: '总返点金额',
 						minWidth: '120px',
 						render: (h, params) => {
-							let total = params.row.flow + params.row.rewards
+							let total = params.row.settlement + params.row.rewards
 							return h('span', this.form.status === 1 ? total + '喵粮' : '无')
 						}
 					},
