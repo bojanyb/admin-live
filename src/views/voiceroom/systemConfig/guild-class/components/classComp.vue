@@ -13,7 +13,7 @@
                             <el-option v-for="item in codeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="周返点比例" prop="week_rebate">
+                    <el-form-item label="周返点比例" prop="week_rebate" :rules="rebateRules">
                         <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.week_rebate"></el-input>
                     </el-form-item>
                 </div>
@@ -94,6 +94,25 @@ export default {
                             } else {
                                 cb()
                             }
+                        } else {
+                            cb()
+                        }
+                    }
+                }
+            }
+            return params
+        },
+        // 周返点限制
+        rebateRules() {
+            let params = {}
+            params = {
+                required: true,
+                validator: (rules, val, cb) => {
+                    if(!this.ruleForm.week_rebate) {
+                        cb(new Error('请输入周返点比例'))
+                    } else {
+                        if(Number(this.ruleForm.week_rebate) > 15) {
+                            cb(new Error('周返点比例最大为15'))
                         } else {
                             cb()
                         }

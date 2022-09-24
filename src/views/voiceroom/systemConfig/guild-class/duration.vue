@@ -8,7 +8,9 @@
 				<div class="configLable fl">{{item.remark}}</div>
 				<div class="configSouce fl">
 					<el-input placeholder="请输入返点比例" v-model="item.value" v-input-limit="0">
-						<template slot="append">{{ item.key === 'host_invitation_sharing' || item.key === 'user_invitation_sharing' ? '‰' : '%' }}</template>
+						<template slot="append" v-if="item.key === 'guild_week_online_reward_online'">小时</template>
+						<template slot="append" v-if="item.key === 'guild_week_online_reward_flow'">砖石</template>
+						<template slot="append" v-if="item.key === 'guild_week_online_reward_reward'">喵粮</template>
 					</el-input>
 				</div>
 				<div class="configSave fl">
