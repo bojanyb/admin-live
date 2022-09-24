@@ -46,3 +46,21 @@ export function getBanner(data) {
         data
     })
 }
+
+// 配置周返点
+export function configRebate(data) {
+    return request({
+        url: api.system.guild.configRebate,
+        method: 'post',
+        data
+    })
+}
+
+// 删除周返点配置
+export function delConfigRebate(data) {
+    return request({
+        url: api.system.guild.delConfigRebate,
+        method: 'post',
+        data
+    })
+}

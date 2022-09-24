@@ -2,8 +2,8 @@
 	<div class="guildRebate-list-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ ruleForm.all_week_flow || 0 }}</span>
-			<span>结算总计：{{ ruleForm.all_week_back || 0 }}</span>
+			<span>流水总计：{{ form.status === 1 ? ruleForm.all_flow : ruleForm.total_flow }}</span>
+			<span>结算总计：{{ this.form.status === 1 ? ruleForm.all_settlement : ruleForm.total_settlement }}</span>
 		</div>
 
 		<div class="searchParams">
@@ -85,95 +85,99 @@
 		computed: {
 			cfgs() {
 				let name = this.form.status === 1 ? 'settlementLog' : 'guildWeekList'
+				let arr = [
+					{
+						label: '时间',
+						minWidth: '240px',
+						render: (h, params) => {
+							let year = timeFormat(new Date(), 'YYYY', false)
+							let week = moment().week()
+							let start_time = params.row.week_start ? timeFormat(params.row.week_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
+							let end_time = params.row.week_end ? timeFormat(params.row.week_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
+							return h('span', `${year}年第${week}周（${start_time}至${end_time}）`)
+						}
+					},
+					{
+						label: '公会ID',
+						minWidth: '100px',
+						prop: 'guild_number'
+					},
+					{
+						label: '公会名称',
+						minWidth: '100px',
+						prop: 'nickname'
+					},
+					{
+						label: '公会长昵称',
+						minWidth: '120px',
+						prop: 'guild_nickanme'
+					},
+					{
+						label: '流水',
+						minWidth: '120px',
+						render: (h, params) => {
+							return h('span', this.form.status === 1 ? params.row.flow + '砖石' : params.row.week_flow + '砖石')
+						}
+					},
+					{
+						label: '周返点比例',
+						minWidth: '100px',
+						render: (h, params) => {
+							return h('span', params.row.rebate + '%')
+						}
+					},
+					{
+						label: '周返点金额',
+						minWidth: '120px',
+						render: (h, params) => {
+							return h('span', this.form.status === 1 ? params.row.settlement + '喵粮' : '无')
+						}
+					},
+					{
+						label: '公会评级',
+						render: (h, params) => {
+							let data = MAPDATA.CLASSLIST.find(item => { return item.value === params.row.rank })
+							return h('span', data ? data.name : '无')
+						}
+					},
+					{
+						label: '评级奖励',
+						prop: 'rewards'
+					},
+					{
+						label: '结算状态',
+						minWidth: '120px',
+						render: (h, params) => {
+							return h('span', this.form.status === 1 ? '未结算' : '未到结算时间')
+						}
+					},
+					{
+						label: '总返点金额',
+						minWidth: '120px',
+						render: (h, params) => {
+							let total = params.row.flow + params.row.rewards
+							return h('span', this.form.status === 1 ? total + '喵粮' : '无')
+						}
+					},
+				]
+				let arr1 = [
+					{
+						label: '操作',
+						minWidth: '120px',
+						fixed: 'right',
+						render: (h, params) => {
+							return h('div', [
+								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.rebateFunc(params.row.id, 1)}}}, '结算')
+							])
+						}
+					}
+				]
 				return {
 					vm: this,
 					url: REQUEST.guild[name],
-					isShowCheckbox: true,
+					isShowCheckbox: this.form.status === 1,
 					isShowIndex: true,
-					columns: [
-						{
-							label: '时间',
-							minWidth: '240px',
-							render: (h, params) => {
-								let year = timeFormat(new Date(), 'YYYY', false)
-								let week = moment().week()
-								let start_time = params.row.week_start ? timeFormat(params.row.week_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
-								let end_time = params.row.week_end ? timeFormat(params.row.week_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
-								return h('span', `${year}年第${week}周（${start_time}至${end_time}）`)
-							}
-						},
-						{
-							label: '公会ID',
-							minWidth: '100px',
-							prop: 'guild_number'
-						},
-						{
-							label: '公会名称',
-							minWidth: '100px',
-							prop: 'nickname'
-						},
-						{
-							label: '公会长昵称',
-							minWidth: '120px',
-							prop: 'guild_nickanme'
-						},
-						{
-							label: '流水',
-							minWidth: '120px',
-							render: (h, params) => {
-								return h('span', params.row.week_flow + '砖石')
-							}
-						},
-						{
-							label: '周返点比例',
-							minWidth: '100px',
-							render: (h, params) => {
-								return h('span', params.row.rebate + '%')
-							}
-						},
-						{
-							label: '周返点金额',
-							minWidth: '120px',
-							render: (h, params) => {
-								return h('span', this.form.status === 1 ? params.row.settlement + '喵粮' : '无')
-							}
-						},
-						{
-							label: '公会评级',
-							render: (h, params) => {
-								let data = MAPDATA.CLASSLIST.find(item => { return item.value === params.row.rank })
-								return h('span', data ? data.name : '无')
-							}
-						},
-						{
-							label: '评级奖励',
-							prop: 'rewards'
-						},
-						{
-							label: '结算状态',
-							minWidth: '120px',
-							render: (h, params) => {
-								return h('span', this.form.status === 1 ? '未结算' : '未到结算时间')
-							}
-						},
-						{
-							label: '总返点金额',
-							minWidth: '120px',
-							render: (h, params) => {
-								return h('span', this.form.status === 1 ? params.row.flow + '喵粮' : '无')
-							}
-						},
-						{
-							label: '操作',
-							minWidth: '120px',
-							fixed: 'right',
-							render: (h, params) => {
-								return h('div', [
-									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.audit(params.row.id, 1)}}}, '结算')
-								])
-							}
-						}
-					]
+					columns: this.form.status === 1 ? [ ...arr, ...arr1 ] : [ ...arr ]
 				}
 			}
 		},
@@ -246,7 +250,7 @@
 			// 批量返佣
 			async batchFunc() {
 				if(this.selectList.length <= 0) {
-					this.$message.error('请至少选择一条数据')
+					this.$warning('请至少选择一条数据')
 					return false
 				}
 
@@ -256,7 +260,16 @@
 				})
 				let res = await getWeekRebate({ ids })
 				if(res.code === 2000) {
-					this.$message.success("批量返佣成功");
+					this.$success("批量返佣成功");
+				}
+				this.getList()
+			},
+			// 单个返点
+			async rebateFunc(id) {
+				let ids = [id]
+				let res = await getWeekRebate({ ids })
+				if(res.code === 2000) {
+					this.$message.success("返佣成功");
 				}
 				this.getList()
 			},

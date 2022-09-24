@@ -1123,6 +1123,18 @@ const BANNERSYSTEMTYPELIST = [
     }
 ]
 
+// 公会等级配置管理 - 评级奖励类型
+const GUILDCONFIGURATIONRATETYPELIST = [
+    {
+        name: '喵粮',
+        value: 1
+    },
+    {
+        name: '百分比',
+        value: 2
+    }
+]
+
 /*
 *封禁记录 - 用户封禁记录
 */
@@ -1799,5 +1811,6 @@ export default {
     PAYMENTALLOCATIONMANAGEMENTLIST,
     PAYMENTALLOCATIONMANAGEMENTTYPELIST,
     DEALSOURCETYPELIST,
-    GUILDCLOSEANACCOUNTSTATUSLIST
+    GUILDCLOSEANACCOUNTSTATUSLIST,
+    GUILDCONFIGURATIONRATETYPELIST
 }

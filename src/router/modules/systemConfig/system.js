@@ -22,10 +22,10 @@ const systemConfigRouter = {
 			children: [
 				{
 					path: 'guildLevelRebate',
-					component: () => import('@/views/voiceroom/guildAudit/guildLevelRebate'),
+					component: () => import('@/views/voiceroom/systemConfig/guild-class/index'),
 					name: 'guildLevelRebate',
 					meta: {
-						title: '公会等级返点配置',
+						title: '公会等级配置管理',
 						noCache: true
 					}
 				},

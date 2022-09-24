@@ -389,4 +389,8 @@
     max-height: 40rem !important;
     overflow-y: auto;
   }
+
+  .el-tooltip__popper {
+    width: 500px;
+  }
 </style>

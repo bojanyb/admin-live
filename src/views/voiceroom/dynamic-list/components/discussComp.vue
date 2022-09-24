@@ -52,7 +52,7 @@ export default {
                 columns: [
                     {
                         label: '用户昵称',
-                        prop: 'create_time',
+                        prop: 'nickname',
                     },
                     {
                         label: '用户评论',

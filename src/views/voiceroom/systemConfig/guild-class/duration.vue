@@ -1,8 +1,8 @@
 <template>
-	<div class="app-container">
+	<div class="systemConfig-guild-class-duration-box">
 		<el-card>
 			<div slot="header" class="clearfix">
-				<div class="fl" style="height: 36px;line-height: 36px;"><span>平台返点配置</span></div>
+				<div class="fl" style="height: 36px;line-height: 36px;"><span>时长奖励配置</span></div>
 			</div>
 			<div class="configItem" v-for="item in configList">
 				<div class="configLable fl">{{item.remark}}</div>
@@ -41,8 +41,8 @@
 			getSyetermConfigSource() {
 				this.loading = true;
 				getSyetermConfig().then(res => {
-					let arr = []
-                    let arr1 = ['normal_rebate', 'guild_rebate', 'private_chat_rebate', 'personal_rebate', 'host_invitation_sharing', 'user_invitation_sharing']
+                    let arr = []
+                    let arr1 = ['guild_week_online_reward_online', 'guild_week_online_reward_flow', 'guild_week_online_reward_reward']
                     if(res.data.config && res.data.config.length > 0) {
                         res.data.config.forEach(item => {
                             arr1.forEach(a => {
@@ -60,8 +60,8 @@
 				})
 			},
 			handleConfigSave(row) {
-				if(row.value < 1 || row.value > 100){
-					this.$message.error(row.remark + "范围为1%~100%");
+				if(!row.value){
+					this.$warning('请输入' + row.remark);
 					return
 				}
 				var params = {
@@ -87,7 +87,7 @@
 
 		.configLable {
 			margin-right: 15px;
-			width: 120px;
+			width: 160px;
 			text-align: right;
 		}
 
