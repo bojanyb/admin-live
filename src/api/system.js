@@ -64,3 +64,12 @@ export function delConfigRebate(data) {
         data
     })
 }
+
+// 批量结算
+export function guildRoomWeekOnline(data) {
+    return request({
+        url: api.system.guild.guildRoomWeekOnline,
+        method: 'post',
+        data
+    })
+}

@@ -81,6 +81,9 @@ const request = {
             rebateConfig: `${HTTPHEADER}/guild/rebateConfig`, // 获取周返点
             configRebate: `${HTTPHEADER}/guild/configRebate`, // 配置周返点
             delConfigRebate: `${HTTPHEADER}/guild/delConfigRebate`, // 删除周返点配置
+            getRoomOnlineRewardLog: `${HTTPHEADER}/guild/getRoomOnlineRewardLog`, // 未结算
+            getNowRoomOnlineReward: `${HTTPHEADER}/guild/getNowRoomOnlineReward`, // 未到结算时间
+            guildRoomWeekOnline: `${HTTPHEADER}/guild/guildRoomWeekOnline`, // 批量结算
         }
     },
 
