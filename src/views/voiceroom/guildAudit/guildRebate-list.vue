@@ -10,7 +10,7 @@
 			<div class="formBox">
 				<div class="sunBox">
 					<span>公会</span>
-					<el-select v-model="form.guild_number" placeholder="请选择">
+					<el-select v-model="form.guild_number" placeholder="请选择" @change="change">
 						<el-option
 						v-for="item in guildList"
 						:key="item.guild_number"
@@ -30,20 +30,25 @@
 						</el-option>
 					</el-select>
 				</div>
-				<div class="sunBox">
+				<div class="sunBox" v-if="form.status === 1">
 					<span>时间</span>
 					<el-date-picker
 					v-model="form.time"
 					type="datetimerange"
 					range-separator="至"
 					start-placeholder="开始日期"
-					end-placeholder="结束日期">
+					end-placeholder="结束日期"
+					value-format="timestamp"
+					@change="change">
 					</el-date-picker>
 				</div>
-				<el-button type="primary">查询</el-button>
-				<el-button type="primary">查询</el-button>
+				<div class="btnBox">
+					<el-button class="seeBox" type="primary" @click="getList">查询</el-button>
+					<el-button icon="el-icon-refresh" @click="reset">重置</el-button>
+					<el-button type="success" v-if="form.status === 1" @click="batchFunc">批量通过</el-button>
+				</div>
 			</div>
-            <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel>
+            <!-- <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel> -->
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -67,6 +72,8 @@
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
+	// 引入格式化时间包
+	import moment from 'moment'
 
 	export default {
 		name: 'guildRebate-list',
@@ -76,110 +83,95 @@
 			tableList
 		},
 		computed: {
-			forms() {
-				let arr = [
-					{
-						name: 'guild_number',
-						type: 'select',
-						value: 0,
-						keyName: 'guild_number',
-						optionLabel: 'nickname',
-						label: '公会',
-						placeholder: '请选择',
-						options: this.guildList
-					},
-					{
-						name: 'status',
-						type: 'select',
-						value: 1,
-						keyName: 'value',
-						optionLabel: 'name',
-						label: '结算状态',
-						placeholder: '请选择',
-						options: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST,
-						handler: {
-							change: v => {
-								console.log(v, 'v----------2020')
-								let val = JSON.parse(JSON.stringify(v))
-								// console.log(this.searchParams, 'searchParams--------3030')
-								this.$set(this.searchParams, 'status', val)
-								// this.$forceUpdate()
-								this.$refs.SearchPanel.updateView(val, 'status')
-							}
-						}
-					},
-				]
-				let arr1 = [
-					{
-						name: 'dateTimeParams',
-						type: 'datePicker',
-						dateType: 'datetimerange',
-						format: "yyyy-MM-dd HH:mm:ss",
-						label: '时间选择',
-						value: '',
-						handler: {
-							change: v => {
-								this.emptyDateTime()
-								this.setDateTime(v)
-							},
-							selectChange: (v, key) => {
-								this.emptyDateTime()
-							}
-						}
-					}
-				]
-				return this.searchParams.status === 1 ? [ ...arr ] : [ ...arr, ...arr1 ]
-			},
 			cfgs() {
+				let name = this.form.status === 1 ? 'settlementLog' : 'guildWeekList'
 				return {
 					vm: this,
-					url: REQUEST.guild.guildWeekList,
+					url: REQUEST.guild[name],
 					isShowCheckbox: true,
 					isShowIndex: true,
 					columns: [
-						// {
-						// 	label: '创建时间',
-						// 	minWidth: '100px',
-						// 	render: (h, params) => {
-						// 		return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-						// 	}
-						// },
+						{
+							label: '时间',
+							minWidth: '240px',
+							render: (h, params) => {
+								let year = timeFormat(new Date(), 'YYYY', false)
+								let week = moment().week()
+								let start_time = params.row.week_start ? timeFormat(params.row.week_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
+								let end_time = params.row.week_end ? timeFormat(params.row.week_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
+								return h('span', `${year}年第${week}周（${start_time}至${end_time}）`)
+							}
+						},
 						{
 							label: '公会ID',
+							minWidth: '100px',
 							prop: 'guild_number'
 						},
 						{
-							label: '公会等级',
+							label: '公会名称',
+							minWidth: '100px',
+							prop: 'nickname'
+						},
+						{
+							label: '公会长昵称',
+							minWidth: '120px',
+							prop: 'guild_nickanme'
+						},
+						{
+							label: '流水',
+							minWidth: '120px',
+							render: (h, params) => {
+								return h('span', params.row.week_flow + '砖石')
+							}
+						},
+						{
+							label: '周返点比例',
+							minWidth: '100px',
+							render: (h, params) => {
+								return h('span', params.row.rebate + '%')
+							}
+						},
+						{
+							label: '周返点金额',
+							minWidth: '120px',
+							render: (h, params) => {
+								return h('span', this.form.status === 1 ? params.row.settlement + '喵粮' : '无')
+							}
+						},
+						{
+							label: '公会评级',
 							render: (h, params) => {
 								let data = MAPDATA.CLASSLIST.find(item => { return item.value === params.row.rank })
 								return h('span', data ? data.name : '无')
 							}
 						},
 						{
-							label: '公会长ID',
-							prop: 'user_number'
+							label: '评级奖励',
+							prop: 'rewards'
 						},
 						{
-							label: '时间区间',
-							minWidth: '240px',
+							label: '结算状态',
+							minWidth: '120px',
 							render: (h, params) => {
-								let s = params.row
-								let start = s.last_week_start ? s.last_week_start : ''
-								let end = s.last_week_end ? s.last_week_end - 1 : ''
-								return h('span', start ? timeFormat(start, 'YYYY-MM-DD HH:mm:ss', true) + ' - ' + timeFormat(end, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+								return h('span', this.form.status === 1 ? '未结算' : '未到结算时间')
 							}
 						},
 						{
-							label: '流水',
-							prop: 'last_week_flow'
+							label: '总返点金额',
+							minWidth: '120px',
+							render: (h, params) => {
+								return h('span', this.form.status === 1 ? params.row.flow + '喵粮' : '无')
+							}
 						},
 						{
-							label: '返佣比例',
-							prop: 'rebate'
-						},
-						{
-							label: '应结算',
-							prop: 'last_week_back'
+							label: '操作',
+							minWidth: '120px',
+							fixed: 'right',
+							render: (h, params) => {
+								return h('div', [
+									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.audit(params.row.id, 1)}}}, '结算')
+								])
+							}
 						}
 					]
 				}
@@ -192,14 +184,12 @@
 				form: { // 表单数据
 					guild_number: 0,
 					status: 1,
-					time: []
+					time: [],
+					start_time: null,
+					end_time: null
 				},
 				selectList: [], // 选中
 				ruleForm: {},
-				searchParams: {
-					dateTimeParams: [],
-					status: 1
-				},
 				dateTimeParams: {
 					start_time: null,
 					end_time: null
@@ -209,14 +199,21 @@
 		methods: {
 			// 配置参数
 			beforeSearch(params) {
-				let s = { ...this.searchParams, ...this.dateTimeParams }
-				return {
+				let s = { ...this.form, ...this.dateTimeParams }
+				let data = {
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
-					// start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
-					// end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0
+					status: 0,
+					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
+					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
 				}
+				if(s.status === 2) {
+					delete data.status
+					delete data.start_time,
+					delete data.end_time
+				}
+				return data
 			},
 			// 刷新列表
 			getList() {
@@ -224,28 +221,26 @@
 			},
 			// 重置
 			reset() {
-				// this.changeIndex(2)
-				this.searchParams = {}
+				this.form = {
+					guild_number: 0,
+					status: 1,
+					time: [],
+					start_time: null,
+					end_time: null
+				}
 				this.getList()
 			},
 			// 查询
 			onSearch() {
 				this.getList()
 			},
-			// 设置时间段
-			setDateTime(arr) {
-				const date = arr ? {
-					start_time: arr[0],
-					end_time: arr[1]
-				} : {}
-				this.$set(this, 'dateTimeParams', date)
-			},
-			// 清空日期选择
-			emptyDateTime() {
-				this.dateTimeParams = {}
+			// 更改
+			change() {
+				this.getList()
 			},
 			// 选中
 			selectionChange(v) {
+				console.log(v, 'v-----------2020')
 				this.selectList = v
 			},
 			// 批量返佣
@@ -268,32 +263,6 @@
 			// 列表返回数据
 			saleAmunt(row) {
 				this.ruleForm = { ...row }
-			},
-			// 更改日期
-			changeIndex(index) {
-				let date = new Date()
-				let now, now1, start, end;
-				switch (index) {
-					case 0:
-						now1 = timeFormat(date, 'YYYY-MM-DD', false)
-						now = timeFormat(date, 'YYYY-MM-DD', false)
-						break;
-					case 1:
-						now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
-						now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
-						break;
-					case 2:
-						now1 = timeFormat(date, 'YYYY-MM-DD', false)
-						now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
-						break;
-				}
-				start = new Date(now + ' 00:00:00')
-				end = new Date(now1 + ' 23:59:59')
-
-				let time = [start.getTime(), end.getTime()]
-				this.searchParams.dateTimeParams = time
-				this.dateTimeParams.start_time = time[0]
-				this.dateTimeParams.end_time = time[1]
 			},
 			// 获取公会列表
 			async guildListFunc() {
@@ -334,11 +303,14 @@
         }
     }
 	.searchParams {
+		// margin-bottom: 20px;
 		.formBox {
 			display: flex;
 			align-items: center;
+			flex-wrap: wrap;
 			.sunBox {
-				margin-left: 12px;
+				margin-right: 12px;
+				margin-bottom: 20px;
 				>span {
 					font-size: 14px;
     				color: #606266;
@@ -360,8 +332,8 @@
 					}
 				}
 			}
-			>div:first-child {
-				margin-left: 0px;
+			.btnBox {
+				margin-bottom: 20px;
 			}
 		}
 	}
