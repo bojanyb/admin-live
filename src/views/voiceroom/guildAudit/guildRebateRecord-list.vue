@@ -112,7 +112,7 @@
 							label: '流水',
 							minWidth: '120px',
 							render: (h, params) => {
-								return h('span', params.row.flow + '砖石')
+								return h('span', params.row.flow + '钻石')
 							}
 						},
 						{

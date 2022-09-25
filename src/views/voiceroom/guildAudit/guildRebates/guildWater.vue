@@ -117,7 +117,7 @@
 						label: '流水',
 						minWidth: '120px',
 						render: (h, params) => {
-							return h('span', this.form.status === 1 ? params.row.flow + '砖石' : params.row.week_flow + '砖石')
+							return h('span', this.form.status === 1 ? params.row.flow + '钻石' : params.row.week_flow + '钻石')
 						}
 					},
 					{

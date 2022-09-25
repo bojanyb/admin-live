@@ -5,7 +5,7 @@
                 <div class="Box">
                     <span>礼物名称：<span>{{ item.gift_name }}</span></span>
                     <span>礼物图标：<img :src="item.gift_photo" alt=""></span>
-                    <span>砖石价格：<span>{{ item.gift_diamond }}砖石</span></span>
+                    <span>钻石价格：<span>{{ item.gift_diamond }}钻石</span></span>
                     <span>概率：<el-input :disabled="disabled" v-input-limit="5" v-model="item.probability"></el-input><span>%</span></span>
                     <span v-if="isShowLocation">礼物位置：<el-select v-model="item.sort" :disabled="disabled" placeholder="请选择">
                         <el-option

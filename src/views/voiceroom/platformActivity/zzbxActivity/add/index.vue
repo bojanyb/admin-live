@@ -18,7 +18,7 @@
                         <el-option label="背包" :value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="单次抽奖砖石" prop="cost">
+                <el-form-item label="单次抽奖钻石" prop="cost">
                     <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled" v-model="ruleForm.cost"></el-input>
                 </el-form-item>
                 <el-form-item label="开始时间" prop="start_time">
@@ -159,7 +159,7 @@ export default {
                     { required: true, message: '请选择活动类别', trigger: 'change' }
                 ],
                 cost: [
-                    { required: true, message: '请输入单次抽奖砖石', trigger: 'blur' }
+                    { required: true, message: '请输入单次抽奖钻石', trigger: 'blur' }
                 ],
                 start_time: [
                     { type: 'date', required: true, message: '请选择开始时间', trigger: 'change' }
