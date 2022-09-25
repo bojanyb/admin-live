@@ -120,9 +120,8 @@
 					{
 						label: '时长奖励',
 						minWidth: '100px',
-						prop: 'reward',
                         render: (h, params) => {
-                            let name = this.form.status === 1 ? (params.row.reward || 0) + '喵粮' : '无'
+                            let name = this.form.status === 1 ? (params.row.settlement || 0) + '喵粮' : '无'
                             return h('span', name)
                         }
 					},
