@@ -1,25 +1,21 @@
 <template>
-    <div class="app-container finance-payment-box">
+    <div class="app-container finance-commercial-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
-
-        <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex" @tabChange="tabChange"></menuComp>
 
         <tableList :cfgs="cfgs" ref="tableList"></tableList>
 
-        <!-- 引入新增 - 修改弹窗 -->
-        <paymentComp v-if="isDestoryComp" ref="paymentComp" @destoryComp="destoryComp" @getList="getList"></paymentComp>
+        <!-- 新增 - 修改组件 -->
+        <commercialComp v-if="isDestoryComp" ref="commercialComp" @destoryComp="destoryComp" @getList="getList"></commercialComp>
     </div>
 </template>
 
 <script>
 // 引入api
-import { payList, payChannelWaySave } from '@/api/finance'
-// 引入新增 - 修改弹窗
-import paymentComp from './components/paymentComp.vue'
-// 引入tab菜单组件
-import menuComp from '@/components/menuComp/index.vue'
+import { useCash } from '@/api/finance'
+// 引入新增 - 修改组件
+import commercialComp from './components/commercialComp.vue'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -37,18 +33,14 @@ export default {
     components: {
         tableList,
         SearchPanel,
-        paymentComp,
-        menuComp
+        commercialComp
     },
     data() {
         return {
-            isDestoryComp: false, // 是否销毁组件
-            menuList: MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST,
-            tabIndex: '0',
             searchParams: {
-                channel: 3,
-                channel_way: 1
-            }
+                channel: 3
+            },
+            isDestoryComp: false // 是否销毁组件
         };
     },
     computed: {
@@ -60,7 +52,7 @@ export default {
                     value: 3,
                     keyName: 'value',
                     optionLabel: 'name',
-                    label: '支付平台',
+                    label: '商户平台',
                     placeholder: '请选择',
                     options: MAPDATA.PAYCONFIGURATIONPLATFORMLIST
                 }
@@ -69,50 +61,71 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.pay.payList,
+                url: REQUEST.pay.index,
                 columns: [
                     {
-                        label: '支付平台',
+                        label: '商户平台',
                         render: (h, params) => {
                             let data = MAPDATA.PAYCONFIGURATIONPLATFORMLIST.find(item => { return item.value === params.row.channel })
                             return h('span', data ? data.name : '无')
                         }
                     },
                     {
-                        label: '商户号',
-                        prop: 'merchant_name'
-                    },
-                    {
-                        label: '商户名称（主体）',
+                        label: '主体名称',
                         prop: 'name'
                     },
                     {
-                        label: '商户类型',
+                        label: '商户名称',
+                        prop: 'merchant_name'
+                    },
+                    {
+                        label: '商户号',
+                        minWidth: '100px',
                         render: (h, params) => {
-                            return h('span', '直联')
+                            return h('span', params.row.appid || '无')
                         }
                     },
                     {
-                        label: '商户状态',
+                        label: '支付类型',
                         render: (h, params) => {
-                            return h('span', params.row.remark || '无')
+                            let arr = params.row.channel_ways.map(item => {
+                                let name = MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST.find(a => { return Number(item) === a.value })
+                                return name ? name.name : ''
+                            })
+                            let a = arr.toString()
+                            return h('span', a)
                         }
                     },
                     {
+                        label: '提现税率',
+                        render: (h, params) => {
+                            return h('span', params.row.cash_rate + '%')
+                        }
+                    },
+                    {
+                        minWidth: '100px',
                         label: '使用状态',
-                        prop: 'status',
+                        prop: 'cash_status',
                         isSwitch: true,
                         isTrueValue: 1,
                         isFalseValue: 0,
                         activeText: '启用',
                         inactiveText: '停用',
                         change: (v, row) => {
-                            this.setSuperUserFunc(row.id, v)
+                            this.payChannelWaySaveFunc(row.id, v)
                         },
                         render: (h, params) => {
                             return h('span', '')
                         }
                     },
+                    {
+                        label: '操作',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改')
+                            ])
+                        }
+                    }
                 ]
             }
         }
@@ -126,15 +139,14 @@ export default {
         beforeSearch(params) {
             let s = { ...this.searchParams }
             return {
-                channel: s.channel,
-                channel_way: s.channel_way
+                page: params.page,
+                channel: s.channel
             }
         },
         // 重置
         reset() {
             this.searchParams = {
-                channel: 3,
-                channel_way: 1
+                channel: 3
             }
             this.getList()
         },
@@ -142,13 +154,35 @@ export default {
         onSearch() {
             this.getList()
         },
-        // 状态切换
-        async setSuperUserFunc(id, status) {
+        // 新增
+        add() {
+           this.load('add') 
+        },
+        // 修改
+        update(row) {
+            this.load('update', row)
+        },
+        load(status, row) {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.commercialComp.loadParams(status, row)
+            }, 50);
+        },
+        // 销毁组件
+        destoryComp() {
+            this.isDestoryComp = false
+        },
+        // 菜单切换
+        tabChange(v) {
+            this.searchParams.channel_way = Number(v) + 1
+        },
+        // 切换状态
+        async payChannelWaySaveFunc(id, status) {
             let params = {
                 id: id,
-                status: status
+                cash_status: status
             }
-            let res = await payChannelWaySave(params)
+            let res = await useCash(params)
             if(res.code === 2000) {
                 this.$success('操作成功')
                 this.getList()
@@ -159,7 +193,7 @@ export default {
 </script>
 
 <style lang="scss">
-.finance-payment-box {
+.finance-commercial-box {
 
 }
 </style>

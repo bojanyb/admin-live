@@ -37,6 +37,15 @@ const giveAwayRouter = {
 			},
 		},
 		{
+			path: 'commercial-list',
+			component: () => import('@/views/voiceroom/finance/commercial-list'),
+			name: 'commercial-list',
+			meta: {
+				title: '商户配置管理',
+				noCache: true
+			},
+		},
+		{
 			path: 'guildWithdraw-list',
 			component: () => import('@/views/voiceroom/finance/guildWithdraw-list'),
 			name: 'guildWithdraw-list',

@@ -1320,6 +1320,62 @@ const PAYMENTALLOCATIONMANAGEMENTTYPELIST = [
     }
 ]
 
+// 支付配置管理 - 支付平台
+const PAYCONFIGURATIONPLATFORMLIST = [
+    {
+        name: '苹果支付',
+        value: 1
+    },
+    {
+        name: '微信支付',
+        value: 2
+    },
+    {
+        name: '支付宝支付',
+        value: 3
+    },
+    // {
+    //     name: '银联支付',
+    //     value: 4
+    // }
+]
+
+// 支付配置管理 - 支付方式
+const PAYCONFIGURATIONPLATFORMTYPELIST = [
+    {
+        name: 'App',
+        value: 1
+    },
+    {
+        name: 'PC',
+        value: 2
+    },
+    {
+        name: 'H5',
+        value: 3
+    },
+    {
+        name: '公众号',
+        value: 4
+    },
+    {
+        name: '小程序',
+        value: 5
+    }
+]
+
+// 商户配置管理 - 支付类型
+const COMMERCIALMANAGEMENTPAYTYPELIST = [
+    {
+        name: 'h5支付',
+        value: 1
+    },
+    {
+        name: 'app支付',
+        value: 2
+    }
+]
+
 /*
 *交易管理
 */
@@ -1812,5 +1868,8 @@ export default {
     PAYMENTALLOCATIONMANAGEMENTTYPELIST,
     DEALSOURCETYPELIST,
     GUILDCLOSEANACCOUNTSTATUSLIST,
-    GUILDCONFIGURATIONRATETYPELIST
+    GUILDCONFIGURATIONRATETYPELIST,
+    PAYCONFIGURATIONPLATFORMLIST,
+    PAYCONFIGURATIONPLATFORMTYPELIST,
+    COMMERCIALMANAGEMENTPAYTYPELIST
 }

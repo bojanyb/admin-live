@@ -10,6 +10,13 @@ const request = {
         setAdaPayConfig: `${HTTPHEADER}/payconfig/setAdaPayConfig`, // 设置支付渠道
         getWxPay: `${HTTPHEADER}/payconfig/getWxPay`, // 设置支付渠道
         setWxpay: `${HTTPHEADER}/payconfig/setWxpay`, // 设置支付渠道
+
+        payList: `${HTTPHEADER}/pay_manage/payList`, // 获取支付渠道
+        payChannelWaySave: `${HTTPHEADER}/pay_manage/usePayChannel`, // 启用支付渠道
+        index: `${HTTPHEADER}/PayManage/index`, // 获取商户和提现列表
+        create: `${HTTPHEADER}/PayManage/create`, // 添加提现商户
+        uploadFile: `${HTTPHEADER}/PayManage/uploadFile`, // 上传支付宝证书
+        useCash: `${HTTPHEADER}/PayManage/useCash`, // 使用提现
     },
 
     // 平台活动  
@@ -117,7 +124,7 @@ const request = {
 
     // 充值记录
     diamondRecharge: {
-        list: `${HTTPHEADER}/Recharge/diamondRecharge`,
+        list: `${HTTPHEADER}/Recharge/diamondRecharge`, // 充值记录
     },
 
     // 体现记录

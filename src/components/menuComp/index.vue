@@ -22,6 +22,7 @@ export default {
     methods: {
         handleSelect(key, keyPath) {
             this.$emit('input', key)
+            this.$emit('tabChange', key)
         }
     }
 }
