@@ -416,6 +416,14 @@ const CLASSLIST = [
     {
         name: 'AAA',
         value: 3
+    },
+    {
+        name: 'AAAA',
+        value: 4
+    },
+    {
+        name: 'AAAAA',
+        value: 5
     }
 ]
 
@@ -637,6 +645,22 @@ const GUILDCLOSEANACCOUNTSTATUSLIST = [
     {
         name: '未到结算时间',
         value: 2
+    }
+]
+
+// 公会结算列表 - 结算状态
+const GUILDCLOSEANACCOUNTSTATUSLISTCOPY = [
+    {
+        name: '未结算',
+        value: 1
+    },
+    {
+        name: '未到结算时间',
+        value: 2
+    },
+    {
+        name: '已结算',
+        value: 3
     }
 ]
 
@@ -1868,6 +1892,7 @@ export default {
     PAYMENTALLOCATIONMANAGEMENTTYPELIST,
     DEALSOURCETYPELIST,
     GUILDCLOSEANACCOUNTSTATUSLIST,
+    GUILDCLOSEANACCOUNTSTATUSLISTCOPY,
     GUILDCONFIGURATIONRATETYPELIST,
     PAYCONFIGURATIONPLATFORMLIST,
     PAYCONFIGURATIONPLATFORMTYPELIST,

@@ -19,10 +19,10 @@
                 </div>
                 <div class="formBox">
                     <el-form-item label="起始流水" prop="start" :rules="startRules">
-                        <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.start" placeholder="起始流水"></el-input>
+                        <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.start" maxlength="10" placeholder="起始流水"></el-input>
                     </el-form-item>
                     <el-form-item label="结束流水" prop="end" :rules="endRules">
-                        <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.end" placeholder="结束流水"></el-input>
+                        <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.end" maxlength="10" placeholder="结束流水"></el-input>
                     </el-form-item>
                 </div>
                 <div class="formBox">

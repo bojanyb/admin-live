@@ -15,7 +15,7 @@
 				</div>
 				<div class="sunBox">
 					<span>结算状态</span>
-					<el-select v-model="form.status" placeholder="请选择">
+					<el-select v-model="form.status" placeholder="请选择" @change="statusChange">
 						<el-option
 						v-for="item in closeStatusList"
 						:key="item.value"
@@ -24,7 +24,7 @@
 						</el-option>
 					</el-select>
 				</div>
-				<div class="sunBox" v-if="form.status === 1">
+				<div class="sunBox" v-if="form.status !== 2">
 					<span>时间</span>
 					<el-date-picker
 					v-model="form.time"
@@ -79,7 +79,14 @@
 		},
 		computed: {
 			cfgs() {
-				let name = this.form.status === 1 ? 'getRoomOnlineRewardLog' : 'getNowRoomOnlineReward'
+				let name;
+				if(this.form.status === 1) {
+					name = 'getRoomOnlineRewardLog'
+				} else if(this.form.status === 2) {
+					name = 'getNowRoomOnlineReward'
+				} else {
+					name = 'getRoomOnlineRewardLog'
+				}
 				let arr = [
 					{
 						label: '房间ID',
@@ -121,7 +128,7 @@
 						label: '时长奖励',
 						minWidth: '100px',
                         render: (h, params) => {
-                            let name = this.form.status === 1 ? (params.row.settlement || 0) + '喵粮' : '无'
+                            let name = this.form.status === 2 ? '无' : (params.row.settlement || 0) + '喵粮'
                             return h('span', name)
                         }
 					},
@@ -129,7 +136,15 @@
 						label: '结算状态',
 						minWidth: '120px',
 						render: (h, params) => {
-							return h('span', this.form.status === 1 ? '未结算' : '未到结算时间')
+							let name;
+							if(this.form.status === 1) {
+								name = '未结算'
+							} else if(this.form.status === 2) {
+								name = '未到结算时间'
+							} else {
+								name = '已结算'
+							}
+							return h('span', name)
 						}
 					}
 				]
@@ -148,7 +163,7 @@
 				return {
 					vm: this,
 					url: REQUEST.system.guild[name],
-					isShowCheckbox: this.form.status === 1,
+					isShowCheckbox: true,
 					isShowIndex: true,
 					columns: this.form.status === 1 ? [ ...arr, ...arr1 ] : [ ...arr ]
 				}
@@ -157,7 +172,7 @@
 		data() {
 			return {
 				guildList: [], // 公会列表
-				closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST, // 结算状态
+				closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLISTCOPY, // 结算状态
 				form: { // 表单数据
 					guild_number: 0,
 					status: 1,
@@ -173,6 +188,18 @@
 				}
 			}
 		},
+		watch: {
+			'form.status': {
+				handler(n, o) {
+					if(o === 3 && n === 2) {
+						setTimeout(() => {
+							this.getList()
+						}, 50);
+					}
+				},
+				deep: true
+			}
+		},
 		methods: {
 			// 配置参数
 			beforeSearch(params) {
@@ -181,7 +208,7 @@
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
-					status: 0,
+					status: s.status === 1 ? 0 : 1,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
 				}
@@ -260,6 +287,12 @@
 					this.guildList = res.data.list || []
 				}
 				
+			},
+			// 状态切换
+			statusChange() {
+				// setTimeout(() => {
+				// 	this.getList()
+				// }, 50);
 			}
 		},
 		created() {

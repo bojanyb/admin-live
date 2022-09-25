@@ -173,53 +173,6 @@
 						}
 					}
 				]
-
-				let arr2 = [
-					{
-						label: '房间ID',
-						minWidth: '100px',
-						prop: 'room_number'
-					},
-					{
-						label: '房间标题',
-						minWidth: '100px',
-						prop: 'title'
-					},
-					{
-						label: '所属公会ID',
-						minWidth: '100px',
-						prop: 'guild_number'
-					},
-					{
-						label: '所属公会名称',
-						minWidth: '100px',
-						prop: 'nickname'
-					},
-					{
-						label: '本周营业时长',
-						minWidth: '100px',
-						prop: 'online'
-					},
-					{
-						label: '本周流水',
-						minWidth: '100px',
-						render: (h, params) => {
-							return h('span', params.row.flow + '砖石')
-						}
-					},
-					{
-						label: '时长奖励',
-						minWidth: '100px',
-						prop: 'reward'
-					},
-					{
-						label: '结算状态',
-						minWidth: '120px',
-						render: (h, params) => {
-							return h('span', this.form.status === 1 ? '未结算' : '未到结算时间')
-						}
-					}
-				]
 				return {
 					vm: this,
 					url: REQUEST.guild[name],
