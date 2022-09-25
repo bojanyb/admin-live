@@ -142,6 +142,11 @@ export default {
         onSearch() {
             this.getList()
         },
+        // tab切换
+        tabChange(v) {
+            this.searchParams.channel_way = Number(v) + 1
+            this.getList()
+        },
         // 状态切换
         async setSuperUserFunc(id, status) {
             let params = {
