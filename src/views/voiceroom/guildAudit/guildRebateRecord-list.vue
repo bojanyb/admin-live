@@ -158,6 +158,7 @@
 						{
 							label: '操作人',
 							prop: 'op_user',
+							minWidth: '100px',
 							render: (h, params) => {
 								return h('span', params.row.op_user || '无')
 							}
