@@ -424,6 +424,10 @@ const CLASSLIST = [
     {
         name: 'AAAAA',
         value: 5
+    },
+    {
+        name: 'AAAAAA',
+        value: 6
     }
 ]
 
