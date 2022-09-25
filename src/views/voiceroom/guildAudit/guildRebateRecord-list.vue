@@ -26,6 +26,8 @@
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
+	// 引入格式化时间包
+	import moment from 'moment'
 	export default {
 		name: 'guildRebateRecord-list',
 		mixins: [mixins],
@@ -82,55 +84,83 @@
 					columns: [
 						{
 							label: '时间',
-							minWidth: '180px',
+							minWidth: '240px',
 							render: (h, params) => {
-								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '')
+								let year = timeFormat(new Date(), 'YYYY', false)
+								let week = moment().week()
+								let start_time = params.row.week_start ? timeFormat(params.row.week_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
+								let end_time = params.row.week_end ? timeFormat(params.row.week_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
+								return h('span', `${year}年第${week}周（${start_time}至${end_time}）`)
 							}
 						},
 						{
 							label: '公会ID',
+							minWidth: '100px',
 							prop: 'guild_number'
 						},
 						{
-							label: '公会等级',
+							label: '公会名称',
+							minWidth: '100px',
+							prop: 'nickname'
+						},
+						{
+							label: '公会长昵称',
+							minWidth: '120px',
+							prop: 'guild_nickanme'
+						},
+						{
+							label: '流水',
+							minWidth: '120px',
+							render: (h, params) => {
+								return h('span', params.row.flow + '砖石')
+							}
+						},
+						{
+							label: '周返点比例',
+							minWidth: '100px',
+							render: (h, params) => {
+								return h('span', params.row.rebate + '%')
+							}
+						},
+						{
+							label: '周返点金额',
+							minWidth: '120px',
+							render: (h, params) => {
+								return h('span', params.row.settlement + '喵粮')
+							}
+						},
+						{
+							label: '公会评级',
 							render: (h, params) => {
 								let data = MAPDATA.CLASSLIST.find(item => { return item.value === params.row.rank })
 								return h('span', data ? data.name : '无')
 							}
 						},
 						{
-							label: '公会长ID',
+							label: '评级奖励',
+							prop: 'rewards'
+						},
+						{
+							label: '结算状态',
 							minWidth: '120px',
-							prop: 'user_number'
-						},
-						{
-							label: '流水',
-							minWidth: '120px',
-							prop: 'flow'
-						},
-						{
-							label: '返佣比例',
-							prop: 'rebate'
-						},
-						{
-							label: '已结算',
-							minWidth: '120px',
-							prop: 'settlement'
-						},
-						{
-							label: '时间区间',
-							minWidth: '300px',
 							render: (h, params) => {
-								return h('div', [
-									h('span', params.row.op_time ? timeFormat(params.row.op_time, 'YYYY-MM-DD HH:mm:ss', true) : ''),
-									h('span', '-'),
-									h('span', params.row.op_end_time ? timeFormat(params.row.op_end_time, 'YYYY-MM-DD HH:mm:ss', true) : '')
-								])
+								return h('span', '已结算')
+							}
+						},
+						{
+							label: '总返点金额',
+							minWidth: '120px',
+							render: (h, params) => {
+								let total = params.row.settlement + params.row.rewards
+								return h('span', total + '喵粮')
 							}
 						},
 						{
 							label: '操作人',
-							prop: 'op_user'
+							prop: 'op_user',
+							render: (h, params) => {
+								return h('span', params.row.op_user || '无')
+							}
 						}
 					]
 				}
@@ -145,7 +175,8 @@
 					pagesize: params.size,
 					guild_number: s.guild_number,
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
-					end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0
+					end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
+					status: 1
 				}
 			},
 			// 刷新列表
