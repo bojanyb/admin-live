@@ -241,7 +241,7 @@
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
-				let res = await getWeekRebate({ ids })
+				let res = await getWeekRebate({ ids, type: 1 })
 				if(res.code === 2000) {
 					this.$success("批量返佣成功");
 				}
@@ -250,7 +250,7 @@
 			// 单个返点
 			async rebateFunc(id) {
 				let ids = [id]
-				let res = await getWeekRebate({ ids })
+				let res = await getWeekRebate({ ids, type: 1 })
 				if(res.code === 2000) {
 					this.$message.success("返佣成功");
 				}
