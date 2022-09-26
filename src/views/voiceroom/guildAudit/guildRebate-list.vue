@@ -42,9 +42,9 @@ export default {
 				{
 					name: '24小时房间奖励'
 				},
-				// {
-				// 	name: '公会评级奖励'
-				// }
+				{
+					name: '公会评级奖励'
+				}
 			],
 			tabIndex: '0',
 		};
