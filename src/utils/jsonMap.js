@@ -1526,6 +1526,10 @@ const PROCESSEDSTATUSLIST = [
 // 房间信息管理 - 房间状态
 const HOUSEMESSAGESTATUSLIST = [
     {
+        name: '全部',
+        value: 2
+    },
+    {
         name: '营业中',
         value: 1
     },
