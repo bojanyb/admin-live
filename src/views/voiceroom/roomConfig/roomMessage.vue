@@ -260,7 +260,7 @@ export default {
             let s = { ...this.searchParams }
             let data = {
                 room_number: s.room_number,
-                is_guild_room: s.is_guild_room,
+                // is_guild_room: s.is_guild_room,
                 party_status: s.party_status,
                 is_live: s.is_live,
                 type: s.type,
