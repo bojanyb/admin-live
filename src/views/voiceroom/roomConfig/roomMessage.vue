@@ -58,7 +58,7 @@ export default {
             classifyList: [],
             searchParams: {
                 is_guild_room: 1,
-                party_status: 1,
+                party_status: 2,
                 is_live: 1
             }
         };
@@ -97,7 +97,7 @@ export default {
                 {
                     name: 'party_status',
                     type: 'select',
-                    value: 1,
+                    value: 2,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '房间状态',
@@ -286,7 +286,7 @@ export default {
         reset() {
             this.searchParams = {
                 is_guild_room: 1,
-                party_status: 1,
+                party_status: 2,
                 is_live: 1
             }
             this.getList()
