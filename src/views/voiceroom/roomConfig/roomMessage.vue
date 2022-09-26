@@ -58,7 +58,7 @@ export default {
             classifyList: [],
             searchParams: {
                 is_guild_room: 1,
-                party_status: 1,
+                party_status: 2,
                 is_live: 1
             }
         };
@@ -73,6 +73,14 @@ export default {
                     label: '房间ID',
                     isNum: true,
                     placeholder: '请输入房间ID'
+                },
+                {
+                    name: 'guild_number',
+                    type: 'input',
+                    value: '',
+                    label: '公会ID',
+                    isNum: true,
+                    placeholder: '请输入公会ID'
                 }
             ]
             let arr2 = [
@@ -89,7 +97,7 @@ export default {
                 {
                     name: 'party_status',
                     type: 'select',
-                    value: 1,
+                    value: 2,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '房间状态',
@@ -181,6 +189,14 @@ export default {
                     }
                 },
                 {
+                    label: '公会ID',
+                    prop: 'guild_number',
+                    minWidth: '100px',
+                    render: (h, params) => {
+                        return h('span', params.row.guild_number || '无')
+                    }
+                },
+                {
                     label: '所属公会',
                     minWidth: '100px',
                     render: (h, params) => {
@@ -247,7 +263,8 @@ export default {
                 is_guild_room: s.is_guild_room,
                 party_status: s.party_status,
                 is_live: s.is_live,
-                type: s.type
+                type: s.type,
+                guild_number: s.guild_number
             }
             if(this.tabIndex === '0') {
                 delete data.is_live
@@ -269,7 +286,7 @@ export default {
         reset() {
             this.searchParams = {
                 is_guild_room: 1,
-                party_status: 1,
+                party_status: 2,
                 is_live: 1
             }
             this.getList()
