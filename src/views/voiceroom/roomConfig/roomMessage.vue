@@ -16,8 +16,6 @@
 </template>
 
 <script>
-// 引入公会列表接口
-import { guildList } from '@/api/user'
 // 引入api
 import { updateParty, genreList, endLive } from '@/api/house.js'
 // 引入新增组件
@@ -62,13 +60,20 @@ export default {
                 is_guild_room: 1,
                 party_status: 2,
                 is_live: 1
-            },
-            guildList: [] // 公会列表
+            }
         };
     },
     computed: {
         forms() {
             let arr = [
+                {
+                    name: 'guild_number',
+                    type: 'input',
+                    value: '',
+                    label: '公会ID',
+                    isNum: true,
+                    placeholder: '请输入公会ID'
+                },
                 {
                     name: 'room_number',
                     type: 'input',
@@ -76,23 +81,13 @@ export default {
                     label: '房间ID',
                     isNum: true,
                     placeholder: '请输入房间ID'
-                },
-                {
-                    name: 'guild_number',
-                    type: 'select',
-                    value: 0,
-                    keyName: 'guild_number',
-                    optionLabel: 'nickname',
-                    label: '公会ID',
-                    placeholder: '请选择',
-                    options: this.guildList
                 }
             ]
             let arr2 = [
                 {
                     name: 'type',
                     type: 'select',
-                    value: null,
+                    value: '',
                     keyName: 'id',
                     optionLabel: 'name',
                     label: '房间类型',
@@ -154,20 +149,20 @@ export default {
             ]
             let arr4 = [
                 {
-                    label: '房间标题',
-                    minWidth: '100px',
-                    prop: 'title',
-                    render: (h, params) => {
-                        return h('span', params.row.title || '无')
-                    }
-                },
-                {
                     label: '房间封面',
                     isimg: true,
                     prop: 'cover',
                     // imgWidth: '50px',
                     imgHeight: '50px',
                     minWidth: '100px'
+                },
+                {
+                    label: '房间标题',
+                    minWidth: '100px',
+                    prop: 'title',
+                    render: (h, params) => {
+                        return h('span', params.row.title || '无')
+                    }
                 },
                 {
                     label: '房间类型',
@@ -193,14 +188,14 @@ export default {
                         return h('span', data ? data.name : '无')
                     }
                 },
-                // {
-                //     label: '公会ID',
-                //     prop: 'guild_number',
-                //     minWidth: '100px',
-                //     render: (h, params) => {
-                //         return h('span', params.row.guild_number || '无')
-                //     }
-                // },
+                {
+                    label: '公会ID',
+                    prop: 'guild_number',
+                    minWidth: '100px',
+                    render: (h, params) => {
+                        return h('span', params.row.guild_number || '无')
+                    }
+                },
                 {
                     label: '所属公会',
                     minWidth: '100px',
@@ -272,6 +267,9 @@ export default {
                 type: s.type,
                 guild_number: s.guild_number
             }
+            if(!s.type) {
+                delete data.type
+            }
             if(!s.guild_number) {
                 delete data.guild_number
             }
@@ -330,6 +328,12 @@ export default {
         async getHouse() {
             let belong = this.tabIndex === '0' ? 2 : 1
             let res = await genreList({ belong: belong })
+            if(res.data.list && res.data.list.length > 0) {
+                res.data.list.unshift({
+                    name: '全部',
+                    id: ''
+                })
+            }
             this.classifyList = res.data.list || []
         },
         // 设置房间分类
@@ -338,23 +342,10 @@ export default {
             setTimeout(() => {
                 this.$refs.typeComp.loadParams(row, this.classifyList)
             }, 50);
-        },
-        // 获取公会列表
-        async guildListFunc() {
-            let res = await guildList()
-            if(res.data.list && res.data.list.length > 0) {
-                res.data.list.unshift({
-                    guild_number: 0,
-                    nickname: '全部公会'
-                })
-                this.guildList = res.data.list || []
-            }
-            
         }
     },
     created() {
         this.getHouse()
-        this.guildListFunc()
     }
 }
 </script>
