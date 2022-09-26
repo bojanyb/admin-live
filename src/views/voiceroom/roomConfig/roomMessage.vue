@@ -73,6 +73,14 @@ export default {
                     label: '房间ID',
                     isNum: true,
                     placeholder: '请输入房间ID'
+                },
+                {
+                    name: 'guild_number',
+                    type: 'input',
+                    value: '',
+                    label: '公会ID',
+                    isNum: true,
+                    placeholder: '请输入公会ID'
                 }
             ]
             let arr2 = [
@@ -181,6 +189,14 @@ export default {
                     }
                 },
                 {
+                    label: '公会ID',
+                    prop: 'guild_number',
+                    minWidth: '100px',
+                    render: (h, params) => {
+                        return h('span', params.row.guild_number || '无')
+                    }
+                },
+                {
                     label: '所属公会',
                     minWidth: '100px',
                     render: (h, params) => {
@@ -247,7 +263,8 @@ export default {
                 is_guild_room: s.is_guild_room,
                 party_status: s.party_status,
                 is_live: s.is_live,
-                type: s.type
+                type: s.type,
+                guild_number: s.guild_number
             }
             if(this.tabIndex === '0') {
                 delete data.is_live
