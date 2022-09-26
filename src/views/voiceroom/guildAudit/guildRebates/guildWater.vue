@@ -10,14 +10,15 @@
 			<div class="formBox">
 				<div class="sunBox">
 					<span>公会</span>
-					<el-select v-model="form.guild_number" placeholder="请选择" @change="change">
+					<!-- <el-select v-model="form.guild_number" placeholder="请选择" @change="change">
 						<el-option
 						v-for="item in guildList"
 						:key="item.guild_number"
 						:label="item.nickname"
 						:value="item.guild_number">
 						</el-option>
-					</el-select>
+					</el-select> -->
+					<el-input v-model="form.guild_number" placeholder="请输入公会ID"></el-input>
 				</div>
 				<div class="sunBox">
 					<span>结算状态</span>
@@ -168,7 +169,7 @@
 				guildList: [], // 公会列表
 				closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST, // 结算状态
 				form: { // 表单数据
-					guild_number: 0,
+					guild_number: '',
 					status: 1,
 					time: [],
 					start_time: null,
@@ -209,7 +210,7 @@
 			// 重置
 			reset() {
 				this.form = {
-					guild_number: 0,
+					guild_number: '',
 					status: 1,
 					time: [],
 					start_time: null,
@@ -271,9 +272,6 @@
 				}
 				
 			}
-		},
-		created() {
-			this.guildListFunc()
 		}
 	}
 </script>
@@ -309,7 +307,15 @@
 					font-weight: 700;
 					margin-right: 12px;
 				}
+				.el-input {
+					width: 180px;
+					input {
+						border: none;
+						background: #F5F7FA;
+					}
+				}
 				.el-select {
+					width: 180px;
 					border: none;
 					input {
 						border: none;
