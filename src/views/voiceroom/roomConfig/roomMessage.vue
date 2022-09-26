@@ -67,20 +67,20 @@ export default {
         forms() {
             let arr = [
                 {
-                    name: 'guild_number',
-                    type: 'input',
-                    value: '',
-                    label: '公会ID',
-                    isNum: true,
-                    placeholder: '请输入公会ID'
-                },
-                {
                     name: 'room_number',
                     type: 'input',
                     value: '',
                     label: '房间ID',
                     isNum: true,
                     placeholder: '请输入房间ID'
+                },
+                {
+                    name: 'guild_number',
+                    type: 'input',
+                    value: '',
+                    label: '公会ID',
+                    isNum: true,
+                    placeholder: '请输入公会ID'
                 }
             ]
             let arr2 = [

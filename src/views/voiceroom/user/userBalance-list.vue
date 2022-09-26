@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="model">
-      <span>用户收入统计：{{ ruleForm.total_income_sum || 0 }}</span>
-      <span>用户支出统计：{{ ruleForm.meow_expenditure_sum || 0 }}</span>
+      <span>用户收入统计：{{ ruleForm.total_income_sum ? Number(ruleForm.total_income_sum) : 0 }}</span>
+      <span>用户支出统计：{{ ruleForm.meow_expenditure_sum ? Number(ruleForm.meow_expenditure_sum) : 0 }}</span>
     </div>
     
     <div class="searchParams">
@@ -107,14 +107,14 @@ export default {
           {
             label: '金额',
             render: (h, params) => {
-              let num = params.row.diamond ? Number(params.row.diamond) : params.row.diamond
-              return h('span', num ? params.row.genre === 1 ? `+ ${params.row.diamond}` : `- ${params.row.diamond}` : params.row.diamond)
+              let num = params.row.diamond ? Number(params.row.diamond) : 0
+              return h('span', num ? params.row.genre === 1 ? `+ ${Number(params.row.diamond)}` : `- ${Number(params.row.diamond)}` : Number(params.row.diamond))
             }
           },
           {
             label: '余额',
             render: (h, params) => {
-              return h('span', params.row.balance || '0')
+              return h('span', params.row.balance ? Number(params.row.balance) : '0')
             }
           },
           {
