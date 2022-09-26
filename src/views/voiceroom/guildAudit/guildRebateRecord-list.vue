@@ -130,29 +130,10 @@
 							}
 						},
 						{
-							label: '公会评级',
-							render: (h, params) => {
-								let data = MAPDATA.CLASSLIST.find(item => { return item.value === params.row.rank })
-								return h('span', data ? data.name : '无')
-							}
-						},
-						{
-							label: '评级奖励',
-							prop: 'rewards'
-						},
-						{
 							label: '结算状态',
 							minWidth: '120px',
 							render: (h, params) => {
 								return h('span', '已结算')
-							}
-						},
-						{
-							label: '总返点金额',
-							minWidth: '120px',
-							render: (h, params) => {
-								let total = params.row.settlement + params.row.rewards
-								return h('span', total + '喵粮')
 							}
 						},
 						{
@@ -177,7 +158,8 @@
 					guild_number: s.guild_number,
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
 					end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
-					status: 1
+					status: 1,
+					type: 1
 				}
 			},
 			// 刷新列表

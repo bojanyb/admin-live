@@ -164,6 +164,22 @@
 									}
 									prv(arr)
 
+									let ri = (list, params) => {
+										list.forEach((item, index) => {
+										if(user_pids.indexOf(item.id) === -1 || item.status === 0) {
+											if(params) {
+											params.child.splice(index, 1)
+											ri(params.child, params)
+											}
+										}
+
+										if(item.child && item.child.length > 0) {
+											ri(item.child, item)
+										}
+										})
+									}
+									ri(arr)
+
 									let sv = (list, params) => { // 为所有的一级以下的所有子菜单添加全路径path
 										list.forEach(item => {
 											if(item.pid && params) {
@@ -192,6 +208,7 @@
 										})
 									}
 									xs(arr)
+
 
 									if(isRouter) {
 										this.$router.push({ // 记录跳转

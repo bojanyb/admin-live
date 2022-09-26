@@ -643,11 +643,11 @@ const GUILDISSTUDIO = [
 // 公会结算列表 - 结算状态
 const GUILDCLOSEANACCOUNTSTATUSLIST = [
     {
-        name: '未结算',
+        name: '待结算',
         value: 1
     },
     {
-        name: '未到结算时间',
+        name: '未结算',
         value: 2
     }
 ]
@@ -655,11 +655,11 @@ const GUILDCLOSEANACCOUNTSTATUSLIST = [
 // 公会结算列表 - 结算状态
 const GUILDCLOSEANACCOUNTSTATUSLISTCOPY = [
     {
-        name: '未结算',
+        name: '待结算',
         value: 1
     },
     {
-        name: '未到结算时间',
+        name: '未结算',
         value: 2
     },
     {

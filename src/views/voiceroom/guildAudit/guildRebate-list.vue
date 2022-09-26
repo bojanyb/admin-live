@@ -13,15 +13,24 @@ import menuComp from '@/components/menuComp/index.vue'
 import guildWater from './guildRebates/guildWater.vue'
 // 引入24小时房间奖励
 import award from './guildRebates/award.vue'
+// 引入公会评级奖励组件
+import dynamic from './guildRebates/dynamic.vue'
 export default {
 	components: {
 		guildWater,
 		award,
-		menuComp
+		menuComp,
+		dynamic
 	},
 	computed: {
 		comp() {
-			return this.tabIndex === '0' ? 'guildWater' : 'award'
+			if(this.tabIndex === '0') {
+				return 'guildWater'
+			} else if(this.tabIndex === '1') {
+				return 'award'
+			} else {
+				return 'dynamic'
+			}
 		}
 	},
 	data() {
@@ -32,6 +41,9 @@ export default {
 				},
 				{
 					name: '24小时房间奖励'
+				},
+				{
+					name: '公会评级奖励'
 				}
 			],
 			tabIndex: '0',

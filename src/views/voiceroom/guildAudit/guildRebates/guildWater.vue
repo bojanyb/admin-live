@@ -135,31 +135,12 @@
 						}
 					},
 					{
-						label: '公会评级',
-						render: (h, params) => {
-							let data = MAPDATA.CLASSLIST.find(item => { return item.value === params.row.rank })
-							return h('span', data ? data.name : '无')
-						}
-					},
-					{
-						label: '评级奖励',
-						prop: 'rewards'
-					},
-					{
 						label: '结算状态',
 						minWidth: '120px',
 						render: (h, params) => {
-							return h('span', this.form.status === 1 ? '未结算' : '未到结算时间')
+							return h('span', this.form.status === 1 ? '待结算' : '未结算')
 						}
-					},
-					{
-						label: '总返点金额',
-						minWidth: '120px',
-						render: (h, params) => {
-							let total = params.row.settlement + params.row.rewards
-							return h('span', this.form.status === 1 ? total + '喵粮' : '无')
-						}
-					},
+					}
 				]
 				let arr1 = [
 					{
@@ -210,6 +191,7 @@
 					pagesize: params.size,
 					guild_number: s.guild_number,
 					status: 0,
+					type: 1,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
 				}
