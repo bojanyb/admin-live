@@ -2,8 +2,8 @@
 	<div class="guildRebate-dynamic-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ form.status === 1 ? ruleForm.all_flow : ruleForm.total_flow }}</span>
-			<span>结算总计：{{ this.form.status === 1 ? ruleForm.all_settlement : ruleForm.total_settlement }}</span>
+			<span>流水总计：{{ (form.status === 1 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
+			<span>结算总计：{{ (this.form.status === 1 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
 		</div>
 
 		<div class="searchParams">
@@ -248,7 +248,6 @@
 			},
 			// 选中
 			selectionChange(v) {
-				console.log(v, 'v-----------2020')
 				this.selectList = v
 			},
 			// 批量返佣
