@@ -6,7 +6,18 @@
         top="5vh"
         :before-close="handleClose">
             <div class="video">
-                <videoPlayerComp v-if="url" :url="url" ref="videoPlayerComp"></videoPlayerComp>
+                <!-- <videoPlayerComp v-if="url" :url="url" ref="videoPlayerComp"></videoPlayerComp> -->
+
+                <EasyPlayer
+                v-if="url"
+                ref="videoPlayerComp"
+                :videoUrl="url"
+                aspect="16:9"
+                live
+                
+                :autoplay="true"
+                stretch
+                ></EasyPlayer>
             </div>
         </el-dialog>
     </div>
@@ -14,7 +25,9 @@
 
 <script>
 // 引入视频组件
-import videoPlayerComp from '@/components/videoPlayer/index'
+// import videoPlayerComp from '@/components/videoPlayer/index'
+
+import EasyPlayer from '@easydarwin/easyplayer';
 export default {
     props: {
         url: {
@@ -23,7 +36,7 @@ export default {
         }
     },
     components: {
-        videoPlayerComp
+        EasyPlayer
     },
     data() {
         return {
@@ -38,7 +51,7 @@ export default {
     },
     mounted() {
         setTimeout(() => {
-            this.$refs.videoPlayerComp.openVideo()
+            // this.$refs.videoPlayerComp.openVideo()
         }, 100);
     }
 }
