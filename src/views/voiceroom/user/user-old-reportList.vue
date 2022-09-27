@@ -109,9 +109,6 @@
 							showOverFlow: true
 						},
 						{
-							// label: '举报证据',
-							// prop: 'content',
-							// showOverFlow: true,
 							label: '举报证据',
 							isimgList: true,
 							prop: 'img_path',

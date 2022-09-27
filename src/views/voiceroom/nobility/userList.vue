@@ -20,7 +20,8 @@
 	import REQUEST from '@/request/index.js'
 	// 引入公共参数
 	import mixins from '@/utils/mixins.js'
-
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
 		mixins: [mixins],
 		components: {
@@ -30,7 +31,9 @@
 		},
 		data() {
 			return {
-
+				searchParams: {
+					sort_field: 'id'
+				}
 			}
 		},
 		computed: {
@@ -43,6 +46,16 @@
 						label: '用户ID',
 						isNum: true,
 						placeholder: '请输入用户ID'
+					},
+					{
+						name: 'sort_field',
+						type: 'select',
+						value: 'id',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '排序',
+						placeholder: '请选择',
+						options: MAPDATA.NOBILITYUSERSORTLIST
 					}
 				]
 			},
@@ -64,6 +77,18 @@
 							prop: 'heap_value'
 						},
 						{
+							label: '魅力成长值',
+							render: (h, params) => {
+								return h('span', params.row.gain_value ? Number(params.row.gain_value) : params.row.gain_value)
+							}
+						},
+						{
+							label: '财富成长值',
+							render: (h, params) => {
+								return h('span', params.row.recharge_value ? Number(params.row.recharge_value) : params.row.recharge_value)
+							}
+						},
+						{
 							label: '开通时间',
 							render: (h, params) => {
 								return h('span', params.row.create_time || '无')
@@ -77,7 +102,10 @@
 						},
 						{
 							label: '当前成长值',
-							prop: 'growth_value'
+							prop: 'growth_value',
+							render: (h, params) => {
+								return h('span', params.row.growth_value ? Number(params.row.growth_value) : params.row.growth_value)
+							}
 						},
 						{
 							label: '当前贵族等级',
@@ -98,7 +126,8 @@
 				return {
 					page: params.page,
 					pagesize: params.size,
-					user_number: s.user_number
+					user_number: s.user_number,
+					sort_field: s.sort_field
 				}
 			},
 			// 刷新列表
@@ -107,8 +136,9 @@
 			},
 			// 重置
 			reset() {
-				this.searchParams = {}
-				this.dateTimeParams = {}
+				this.searchParams = {
+					sort_field: 'id'
+				}
 				this.getList()
 			},
 			// 查询

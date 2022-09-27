@@ -1305,6 +1305,18 @@ const ISNOBILITYUSERLIST = [
     }
 ]
 
+// 贵族用户列表 - 排序
+const NOBILITYUSERSORTLIST = [
+    {
+        name: '创建时间倒序',
+        value: 'id'
+    },
+    {
+        name: '等级倒序',
+        value: 'level'
+    }
+]
+
 /*
 *财务管理
 */
@@ -1921,5 +1933,6 @@ export default {
     PAYCONFIGURATIONPLATFORMLIST,
     PAYCONFIGURATIONPLATFORMTYPELIST,
     COMMERCIALMANAGEMENTPAYTYPELIST,
-    REPORTUSERPUNISHSTATUSLIST
+    REPORTUSERPUNISHSTATUSLIST,
+    NOBILITYUSERSORTLIST
 }
