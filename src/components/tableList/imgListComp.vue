@@ -1,7 +1,7 @@
 <template>
     <div class="imgListComp-box">
         
-        <div class="imgBox" v-if="type === 1">
+        <div class="imgBox" v-if="type === 1 || isShowImg">
             <el-image v-for="(item,index) in srcList" :key="index" :src="item || item"
             :preview-src-list="[item||imgUrl]">
                 <div slot="error" class="image-slot">
@@ -10,7 +10,7 @@
             </el-image>
         </div>
 
-        <div class="videoBox" v-else-if="type === 2" @click="zoomClick">
+        <div class="videoBox" v-else-if="type === 2 || !isShowImg" @click="zoomClick">
             <videoPlayerComp class="videoPlayComp" ref="videoPlayerComp" :style="{width: width,height: height}" :url="srcList[0]"></videoPlayerComp>
         </div>
 
@@ -40,6 +40,10 @@ export default {
             type: Number,
             default: null
         },
+        type2: { // 媒体类型
+            type: String,
+            default: ''
+        },
         width: { // 宽度
             type: String,
             default: ''
@@ -47,6 +51,18 @@ export default {
         height: { // 高度
             type: String,
             default: ''
+        }
+    },
+    computed: {
+        isShowImg() {
+            if(this.type2) {
+                if(this.type2.indexOf('mp4') !== -1) {
+                    return false
+                } else {
+                    return true
+                }
+            }
+            return true
         }
     },
     data() {

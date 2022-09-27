@@ -5,10 +5,17 @@
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+
+		<!-- 引入处理组件 -->
+		<notReport v-if="isDestoryComp" ref="notReport" @destoryComp="destoryComp" @getList="getList"></notReport>
 	</div>
 </template>
 
 <script>
+	// 引入api
+	import { getUserReportPass } from '@/api/videoRoom'
+	// 引入处理组件
+	import notReport from './components/notReport.vue'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -26,26 +33,37 @@
 		mixins: [mixins],
 		components: {
 			SearchPanel,
-			tableList
+			tableList,
+			notReport
 		},
 		computed: {
 			forms() {
 				return [
-					{
-						name: 'feedback_user_id',
-						type: 'input',
-						value: '',
-						label: '被举报用户ID',
-						isNum: true,
-						placeholder: '请输入被举报用户ID'
-					},
+					// {
+					// 	name: 'feedback_user_id',
+					// 	type: 'input',
+					// 	value: '',
+					// 	label: '被举报用户ID',
+					// 	isNum: true,
+					// 	placeholder: '请输入被举报用户ID'
+					// },
 					{
 						name: 'user_id',
 						type: 'input',
 						value: '',
-						label: '举报用户ID',
+						label: '用户ID',
 						isNum: true,
-						placeholder: '请输入举报用户ID'
+						placeholder: '请输入用户ID'
+					},
+					{
+						name: 'status',
+						type: 'select',
+						value: 1,
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '处罚状态',
+						placeholder: '请选择',
+						options: MAPDATA.REPORTUSERPUNISHSTATUSLIST
 					},
 				]
 			},
@@ -62,46 +80,64 @@
 							}
 						},
 						{
+							label: '用户ID',
+							prop: 'user_id'
+						},
+						{
+							label: '用户昵称',
+							prop: 'user_nickname'
+						},
+						{
 							label: '被举报用户ID',
 							minWidth: '100px',
 							prop: 'feedback_user_id'
 						},
 						{
-							label: '举报用户ID',
-							prop: 'user_id'
+							label: '被举报用户昵称',
+							minWidth: '100px',
+							prop: 'feedback_user_nickname'
 						},
 						{
-							label: '举报原因',
+							label: '举报类型',
 							minWidth: '100px',
 							prop: 'genre'
 						},
 						{
-							label: '举报证据',
+							label: '举报说明',
+							minWidth: '150px',
 							prop: 'content',
 							showOverFlow: true
 						},
 						{
-							label: '处理人',
-							prop: 'deal_user_name'
+							// label: '举报证据',
+							// prop: 'content',
+							// showOverFlow: true,
+							label: '举报证据',
+							isimgList: true,
+							prop: 'img_path',
+							propCopy: 'video_path',
+							imgWidth: '70px',
+							imgHeight: '70px',
+							width: '200px'
 						},
 						{
-							label: '处理结果',
+							label: '操作',
+							minWidth: '120px',
 							render: (h, params) => {
-								let data = MAPDATA.DURATION.find(item => { return params.row.ban_duration === item.value })
-								return h('span', data ? data.name : '无')
-							}
-						},
-						{
-							label: '处理说明',
-							minWidth: '150px',
-							prop: 'reply',
-							showOverFlow: true
-						},
-						{
-							label: '处理时间',
-							minWidth: '140px',
-							render: (h, params) => {
-								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+								return h('div', [
+									h('el-button', { props: { type: 'primary'}, style: {
+										display: params.row.status === 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.funcClick(params.row.id)}}}, '忽略'),
+									h('el-button', { props: { type: 'danger'}, style: {
+										display: params.row.status === 1 ? 'unset' : 'none'
+									}, on: {click:()=>{this.manageClick(params.row.id)}}}, '处理'),
+									h('el-button', { props: { type: 'success'}, style: {
+										display: params.row.status === 2 ? 'unset' : 'none'
+									}, on: {click:()=>{}}}, '已处理'),
+									h('el-button', { props: { type: 'success'}, style: {
+										display: params.row.status === 3 ? 'unset' : 'none'
+									}, on: {click:()=>{}}}, '已忽略'),
+								])
 							}
 						}
 					]
@@ -112,8 +148,10 @@
 			return {
 				searchParams: {
 					feedback_user_id: '',
-					user_id: ''
-				}
+					user_id: '',
+					status: 1
+				},
+				isDestoryComp: false // 是否销毁组件
 			}
 		},
 		methods: {
@@ -123,7 +161,7 @@
 				return {
 					page: params.page,
 					pagesize: params.size,
-					status: 2,
+					status: s.status,
 					feedback_user_id: s.feedback_user_id,
 					user_id: s.user_id
 				}
@@ -136,15 +174,35 @@
 			reset() {
 				this.searchParams = {
 					feedback_user_id: '',
-					user_id: ''
+					user_id: '',
+					status: 1
 				}
 				this.getList()
 			},
 			// 查询
 			onSearch() {
 				this.getList()
+			},
+			// 处理
+			manageClick(id) {
+				this.isDestoryComp = true
+				setTimeout(() => {
+					this.$refs.notReport.loadParams(id)
+				}, 50);
+			},
+			// 忽略
+			async funcClick(id) {
+				let res = await getUserReportPass({ id })
+				if(res.code === 2000) {
+					this.$message.success('忽略成功')
+				}
+				this.getList()
+			},
+			// 销毁组件
+			destoryComp() {
+				this.isDestoryComp = false
 			}
-		},
+		}
 	}
 </script>
 

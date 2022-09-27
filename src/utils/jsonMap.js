@@ -1520,6 +1520,22 @@ const PROCESSEDSTATUSLIST = [
     }
 ]
 
+// 举报用户 - 处罚状态
+const REPORTUSERPUNISHSTATUSLIST = [
+    {
+        name: '未处理',
+        value: 1
+    },
+    {
+        name: '已处理',
+        value: 2
+    },
+    {
+        name: '已忽略',
+        value: 3
+    }
+]
+
 /*
 *房间管理
 */
@@ -1904,5 +1920,6 @@ export default {
     GUILDCONFIGURATIONRATETYPELIST,
     PAYCONFIGURATIONPLATFORMLIST,
     PAYCONFIGURATIONPLATFORMTYPELIST,
-    COMMERCIALMANAGEMENTPAYTYPELIST
+    COMMERCIALMANAGEMENTPAYTYPELIST,
+    REPORTUSERPUNISHSTATUSLIST
 }

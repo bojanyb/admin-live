@@ -32,6 +32,14 @@
 			forms() {
 				return [
 					{
+						name: 'user_id',
+						type: 'input',
+						value: '',
+						label: '用户ID',
+						isNum: true,
+						placeholder: '请输入用户ID'
+					},
+					{
 						name: 'status',
 						type: 'select',
 						value: '',
@@ -41,14 +49,7 @@
 						placeholder: '请选择',
 						options: MAPDATA.PROCESSEDSTATUSLIST
 					},
-					{
-						name: 'user_id',
-						type: 'input',
-						value: '',
-						label: '用户ID',
-						isNum: true,
-						placeholder: '请输入用户ID'
-					}
+					
 				]
 			},
 			cfgs() {
