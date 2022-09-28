@@ -99,7 +99,7 @@
 					},
 					{
 						label: '本周营业时长',
-						minWidth: '120px',
+						minWidth: '140px',
 						prop: 'online',
                         render: (h, params) => {
                             let data = formatTimeTwo(params.row.online)
@@ -111,6 +111,17 @@
 						minWidth: '120px',
 						render: (h, params) => {
 							return h('span', params.row.flow + '钻石')
+						}
+					},
+					{
+						label: '流水是否达标',
+						minWidth: '90px',
+						render: (h, params) => {
+							return h('span', {
+								style: {
+									color: params.row.flow && Number(params.row.flow) >= 200000 ? '#13CE66' : '#FF4949'
+								}
+							}, params.row.flow && Number(params.row.flow) >= 200000 ? '已达标' : '未达标')
 						}
 					},
 					{
@@ -142,7 +153,7 @@
 				let arr1 = [
 					{
 						label: '操作',
-						minWidth: '120px',
+						minWidth: '140px',
 						fixed: 'right',
 						render: (h, params) => {
 							return h('div', [
