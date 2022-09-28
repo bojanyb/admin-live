@@ -4,19 +4,11 @@
 			<div class="formBox">
 				<div class="sunBox">
 					<span>公会</span>
-					<!-- <el-select v-model="form.guild_number" placeholder="请选择" @change="change">
-						<el-option
-						v-for="item in guildList"
-						:key="item.guild_number"
-						:label="item.nickname"
-						:value="item.guild_number">
-						</el-option>
-					</el-select> -->
 					<el-input v-model="form.guild_number" placeholder="请输入公会ID"></el-input>
 				</div>
 				<div class="sunBox">
 					<span>结算状态</span>
-					<el-select v-model="form.status" placeholder="请选择" @change="statusChange">
+					<el-select v-model="form.status" placeholder="请选择">
 						<el-option
 						v-for="item in closeStatusList"
 						:key="item.value"
@@ -41,19 +33,21 @@
 				<div class="btnBox">
 					<el-button class="seeBox" type="primary" @click="getList">查询</el-button>
 					<el-button icon="el-icon-refresh" @click="reset">重置</el-button>
-					<el-button type="success" v-if="form.status === 1" @click="batchFunc">批量通过</el-button>
+					<el-button type="success" v-if="form.status === 1" @click="batchFunc(1)">批量通过</el-button>
+					<el-button type="danger" v-if="form.status === 1" @click="batchFunc(2)">批量忽略</el-button>
+					<el-button type="success" @click="addHome">添加24小时房间</el-button>
 				</div>
 			</div>
-            <!-- <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel> -->
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
+
+		<!-- 新增24小时房间组件 -->
+		<homeComp v-if="isDestoryComp" ref="homeComp" @destoryComp="destoryComp"></homeComp>
 	</div>
 </template>
 
 <script>
-	// 引入公会列表接口
-	import { guildList } from '@/api/user'
 	// 引入api
 	import { guildRoomWeekOnline } from '@/api/system'
 	// 引入菜单组件
@@ -63,13 +57,13 @@
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
-	import { timeFormat, formatTime, formatTimeTwo } from '@/utils/common.js'
+	import { formatTimeTwo } from '@/utils/common.js'
 	// 引入公共参数
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
-	// 引入格式化时间包
-	import moment from 'moment'
+	// 引入新增24小时房间组件
+	import homeComp from './components/homeComp.vue'
 
 	export default {
 		name: 'guildRebate-list',
@@ -77,17 +71,11 @@
 		components: {
 			SearchPanel,
 			tableList,
+			homeComp
 		},
 		computed: {
 			cfgs() {
-				let name;
-				if(this.form.status === 1) {
-					name = 'getRoomOnlineRewardLog'
-				} else if(this.form.status === 2) {
-					name = 'getNowRoomOnlineReward'
-				} else {
-					name = 'getRoomOnlineRewardLog'
-				}
+				let name = this.form.status === 2 ? 'getNowRoomOnlineReward' : 'getRoomOnlineRewardLog'
 				let arr = [
 					{
 						label: '房间ID',
@@ -142,8 +130,10 @@
 								name = '待结算'
 							} else if(this.form.status === 2) {
 								name = '未结算'
-							} else {
+							} else if(this.form.status === 3) {
 								name = '已结算'
+							} else {
+								name = '已忽略'
 							}
 							return h('span', name)
 						}
@@ -156,7 +146,8 @@
 						fixed: 'right',
 						render: (h, params) => {
 							return h('div', [
-								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.rebateFunc(params.row.id, 1)}}}, '结算')
+								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.rebateFunc(params.row.id, 1)}}}, '结算'),
+								h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.rebateFunc(params.row.id, 2)}}}, '忽略')
 							])
 						}
 					}
@@ -172,7 +163,6 @@
 		},
 		data() {
 			return {
-				guildList: [], // 公会列表
 				closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLISTCOPY, // 结算状态
 				form: { // 表单数据
 					guild_number: '',
@@ -186,13 +176,14 @@
 				dateTimeParams: {
 					start_time: null,
 					end_time: null
-				}
+				},
+				isDestoryComp: false // 是否销毁组件
 			}
 		},
 		watch: {
 			'form.status': {
 				handler(n, o) {
-					if((o === 3 || o === 1) && (n === 1 || n === 3)) {
+					if((o === 3 || o === 1 || o === 4) && (n === 1 || n === 3 || n === 4)) {
 						setTimeout(() => {
 							this.getList()
 						}, 50);
@@ -209,9 +200,15 @@
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
-					status: s.status === 1 ? 0 : 1,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
+				}
+				if(this.form.status === 1) {
+					data.status = 0
+				} else if(this.form.status === 3) {
+					data.status = 1
+				} else if(this.form.status === 4) {
+					data.status = 2
 				}
 				if(s.status === 2) {
 					delete data.status
@@ -248,7 +245,7 @@
 				this.selectList = v
 			},
 			// 批量返佣
-			async batchFunc() {
+			async batchFunc(status) {
 				if(this.selectList.length <= 0) {
 					this.$warning('请至少选择一条数据')
 					return false
@@ -258,18 +255,18 @@
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
-				let res = await guildRoomWeekOnline({ ids })
+				let res = await guildRoomWeekOnline({ ids, status })
 				if(res.code === 2000) {
-					this.$success("批量返佣成功");
+					this.$success("批量操作成功");
 				}
 				this.getList()
 			},
 			// 单个返点
-			async rebateFunc(id) {
+			async rebateFunc(id, status) {
 				let ids = [id]
-				let res = await guildRoomWeekOnline({ ids })
+				let res = await guildRoomWeekOnline({ ids, status })
 				if(res.code === 2000) {
-					this.$message.success("返佣成功");
+					this.$success("操作成功");
 				}
 				this.getList()
 			},
@@ -277,23 +274,16 @@
 			saleAmunt(row) {
 				this.ruleForm = { ...row }
 			},
-			// 获取公会列表
-			async guildListFunc() {
-				let res = await guildList()
-				if(res.data.list && res.data.list.length > 0) {
-					res.data.list.unshift({
-						guild_number: 0,
-						nickname: '全部公会'
-					})
-					this.guildList = res.data.list || []
-				}
-				
+			// 添加24小时房间
+			addHome() {
+				this.isDestoryComp = true
+				setTimeout(() => {
+					this.$refs.homeComp.loadParams()
+				}, 50);
 			},
-			// 状态切换
-			statusChange() {
-				// setTimeout(() => {
-				// 	this.getList()
-				// }, 50);
+			// 销毁组件
+			destoryComp() {
+				this.isDestoryComp = false
 			}
 		}
 	}

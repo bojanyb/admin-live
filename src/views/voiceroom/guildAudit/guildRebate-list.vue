@@ -27,9 +27,9 @@ export default {
 			if(this.tabIndex === '0') {
 				return 'guildWater'
 			} else if(this.tabIndex === '1') {
-				return 'award'
-			} else {
 				return 'dynamic'
+			} else {
+				return 'award'
 			}
 		}
 	},
@@ -40,10 +40,10 @@ export default {
 					name: '公会流水结算记录'
 				},
 				{
-					name: '24小时房间奖励'
+					name: '公会评级奖励'
 				},
 				{
-					name: '公会评级奖励'
+					name: '24小时房间奖励'
 				}
 			],
 			tabIndex: '0',

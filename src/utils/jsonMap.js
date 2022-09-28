@@ -643,28 +643,40 @@ const GUILDISSTUDIO = [
 // 公会结算列表 - 结算状态
 const GUILDCLOSEANACCOUNTSTATUSLIST = [
     {
+        name: '未结算',
+        value: 2
+    },
+    {
         name: '待结算',
         value: 1
     },
     {
-        name: '未结算',
-        value: 2
+        name: '已结算',
+        value: 3
+    },
+    {
+        name: '已忽略',
+        value: 4
     }
 ]
 
 // 公会结算列表 - 结算状态
 const GUILDCLOSEANACCOUNTSTATUSLISTCOPY = [
     {
-        name: '待结算',
-        value: 1
-    },
-    {
         name: '未结算',
         value: 2
     },
     {
+        name: '待结算',
+        value: 1
+    },
+    {
         name: '已结算',
         value: 3
+    },
+    {
+        name: '已忽略',
+        value: 4
     }
 ]
 

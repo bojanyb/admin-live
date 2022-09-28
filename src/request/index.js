@@ -196,7 +196,10 @@ const request = {
         newGuildApplyList: `${HTTPHEADER}/guild/newGuildApplyList`, // 创建工会申请列表
         newGuildApplyCheck: `${HTTPHEADER}/guild/newGuildApplyCheck`, // 创建工会审核已联系或者驳回
         bindRoom: `${HTTPHEADER}/guild/bindRoom`, // 绑定工会厅
-        lockGuild: `${HTTPHEADER}/Guild/lockGuild`, // 封禁（解封）公会
+        lockGuild: `${HTTPHEADER}/Guild/lockGuild`, // 封禁（解封）公会,
+        addStatisticsroom: `${HTTPHEADER}/guild/addStatisticsroom`, // 添加24小时房间统计集合
+        statisticsroomS: `${HTTPHEADER}/guild/statisticsroomS`, // 统计24小时房间列表
+        delStatisticsroom: `${HTTPHEADER}/guild/delStatisticsroom`, // 移除24小时房间统计
     },
 
     // 封禁记录

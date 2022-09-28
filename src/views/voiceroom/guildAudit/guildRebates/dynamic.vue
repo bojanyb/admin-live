@@ -47,7 +47,8 @@
 				<div class="btnBox">
 					<el-button class="seeBox" type="primary" @click="getList">查询</el-button>
 					<el-button icon="el-icon-refresh" @click="reset">重置</el-button>
-					<el-button type="success" v-if="form.status === 1" @click="batchFunc">批量通过</el-button>
+					<el-button type="success" v-if="form.status === 1" @click="batchFunc(1)">批量通过</el-button>
+					<el-button type="danger" v-if="form.status === 1" @click="batchFunc(2)">批量忽略</el-button>
 				</div>
 			</div>
             <!-- <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel> -->
@@ -118,7 +119,7 @@
 						label: '流水',
 						minWidth: '120px',
 						render: (h, params) => {
-							return h('span', this.form.status === 1 ? params.row.flow + '钻石' : params.row.week_flow + '钻石')
+							return h('span', this.form.status === 2 ? params.row.week_flow + '钻石' : params.row.flow + '钻石')
 						}
 					},
 					{
@@ -144,8 +145,10 @@
 								name = '待结算'
 							} else if(this.form.status === 2) {
 								name = '未结算'
-							} else {
+							} else if(this.form.status === 3) {
 								name = '已结算'
+							} else {
+								name = '已忽略'
 							}
 							return h('span', name)
 						}
@@ -154,11 +157,12 @@
 				let arr1 = [
 					{
 						label: '操作',
-						minWidth: '120px',
+						minWidth: '150px',
 						fixed: 'right',
 						render: (h, params) => {
 							return h('div', [
-								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.rebateFunc(params.row.id, 1)}}}, '结算')
+								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.rebateFunc(params.row.id, 1)}}}, '结算'),
+								h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.rebateFunc(params.row.id, 2)}}}, '忽略'),
 							])
 						}
 					}
@@ -194,7 +198,7 @@
         watch: {
 			'form.status': {
 				handler(n, o) {
-					if((o === 1 || o === 3) && (n === 1 || n === 3)) {
+					if((o === 1 || o === 3 || o === 4) && (n === 1 || n === 3 || n === 4)) {
 						setTimeout(() => {
 							this.getList()
 						}, 50);
@@ -211,10 +215,16 @@
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
-					status: this.form.status === 1 ? 0 : 1,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
                     type: 2
+				}
+				if(this.form.status === 1) {
+					data.status = 0
+				} else if(this.form.status === 3) {
+					data.status = 1
+				} else if(this.form.status === 4) {
+					data.status = 2
 				}
 				if(s.status === 2) {
 					delete data.status
@@ -252,7 +262,7 @@
 				this.selectList = v
 			},
 			// 批量返佣
-			async batchFunc() {
+			async batchFunc(status) {
 				if(this.selectList.length <= 0) {
 					this.$warning('请至少选择一条数据')
 					return false
@@ -262,18 +272,18 @@
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
-				let res = await getWeekRebate({ ids, type: 2 })
+				let res = await getWeekRebate({ ids, type: 2, status })
 				if(res.code === 2000) {
-					this.$success("批量返佣成功");
+					this.$success("批量操作成功");
 				}
 				this.getList()
 			},
 			// 单个返点
-			async rebateFunc(id) {
+			async rebateFunc(id, status) {
 				let ids = [id]
-				let res = await getWeekRebate({ ids, type: 2 })
+				let res = await getWeekRebate({ ids, type: 2, status })
 				if(res.code === 2000) {
-					this.$message.success("返佣成功");
+					this.$success("操作成功");
 				}
 				this.getList()
 			},

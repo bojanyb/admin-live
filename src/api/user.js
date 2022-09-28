@@ -126,3 +126,21 @@ export function lockGuild(data) {
     data
   })
 }
+
+// 添加24小时房间统计集合
+export function addStatisticsroom(data) {
+  return request({
+    url: api.guild.addStatisticsroom,
+    method: 'post',
+    data
+  })
+}
+
+// 移除24小时房间统计
+export function delStatisticsroom(data) {
+  return request({
+    url: api.guild.delStatisticsroom,
+    method: 'post',
+    data
+  })
+}
