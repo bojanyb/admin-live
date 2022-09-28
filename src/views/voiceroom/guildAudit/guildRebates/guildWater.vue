@@ -94,11 +94,9 @@
 						label: '时间',
 						minWidth: '240px',
 						render: (h, params) => {
-							let year = timeFormat(new Date(), 'YYYY', false)
-							let week = moment().week()
 							let start_time = params.row.week_start ? timeFormat(params.row.week_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
 							let end_time = params.row.week_end ? timeFormat(params.row.week_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
-							return h('span', `${year}年第${week}周（${start_time}至${end_time}）`)
+							return h('span', `${timeFormat(params.row.week_start, 'YYYY', true)}年第${params.row.w}周（${start_time}至${end_time}）`)
 						}
 					},
 					{
