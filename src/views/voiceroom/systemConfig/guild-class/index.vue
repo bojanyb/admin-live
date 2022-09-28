@@ -24,9 +24,9 @@ export default {
                 {
                     name: '公会等级配置管理'
                 },
-                {
-                    name: '时长奖励配置'
-                }
+                // {
+                //     name: '时长奖励配置'
+                // }
             ],
             tabIndex: '0'
         };

@@ -14,7 +14,7 @@
                 <el-button :disabled="!room_number" type="success" @click="addStatisticsroomFunc">添加</el-button>
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                <el-button @click="dialogVisible = false">取 消</el-button>
             </span>
         </el-dialog>
     </div>
