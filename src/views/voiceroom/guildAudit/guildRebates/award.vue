@@ -119,9 +119,9 @@
 						render: (h, params) => {
 							return h('span', {
 								style: {
-									color: params.row.flow && Number(params.row.flow) >= 200000 ? '#13CE66' : '#FF4949'
+									color: params.row.flow && Number(params.row.flow) >= 20000000 ? '#13CE66' : '#FF4949'
 								}
-							}, params.row.flow && Number(params.row.flow) >= 200000 ? '已达标' : '未达标')
+							}, params.row.flow && Number(params.row.flow) >= 20000000 ? '已达标' : '未达标')
 						}
 					},
 					{
