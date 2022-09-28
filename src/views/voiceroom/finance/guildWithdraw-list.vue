@@ -116,7 +116,7 @@ export default {
                         }
                     },
                     {
-                        label: '充值时间',
+                        label: '创建时间',
                         minWidth: '150px',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
@@ -144,6 +144,13 @@ export default {
                         render: (h, params) => {
                             let data = MAPDATA.ORDERSTATUS.find(item => { return item.value.indexOf(params.row.status) !== -1 })
                             return h('span', data ? data.name : '无')
+                        }
+                    },
+                    {
+                        label: '到账时间',
+                        minWidth: '150px',
+                        render: (h, params) => {
+                            return h('span', params.row.pay_time ? timeFormat(params.row.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
                     },
                     {
