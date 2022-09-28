@@ -98,21 +98,21 @@ export default {
                             return h('span', params.row.remark || '无')
                         }
                     },
-                    {
-                        label: '使用状态',
-                        prop: 'status',
-                        isSwitch: true,
-                        isTrueValue: 1,
-                        isFalseValue: 0,
-                        activeText: '启用',
-                        inactiveText: '停用',
-                        change: (v, row) => {
-                            this.setSuperUserFunc(row.id, v)
-                        },
-                        render: (h, params) => {
-                            return h('span', '')
-                        }
-                    },
+                    // {
+                    //     label: '使用状态',
+                    //     prop: 'status',
+                    //     isSwitch: true,
+                    //     isTrueValue: 1,
+                    //     isFalseValue: 0,
+                    //     activeText: '启用',
+                    //     inactiveText: '停用',
+                    //     change: (v, row) => {
+                    //         this.setSuperUserFunc(row.id, v)
+                    //     },
+                    //     render: (h, params) => {
+                    //         return h('span', '')
+                    //     }
+                    // },
                 ]
             }
         }
