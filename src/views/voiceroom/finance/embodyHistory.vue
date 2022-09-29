@@ -77,7 +77,7 @@ export default {
                 {
                     name: 'status',
                     type: 'select',
-                    value: '',
+                    value: 4,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '状态筛选',
@@ -232,7 +232,9 @@ export default {
                 start_time: null,
                 end_time: null
             },
-            searchParams: {}
+            searchParams: {
+                status: 4
+            }
         };
     },
     methods: {

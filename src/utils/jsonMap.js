@@ -212,10 +212,10 @@ const STATUSLIST = [
 ]
 
 const STATUSLISTCOPY = [
-    {
-        value: '',
-        name: '全部'
-    },
+    // {
+    //     value: '',
+    //     name: '全部'
+    // },
     {
         value: 4,
         name: '提现完成'
