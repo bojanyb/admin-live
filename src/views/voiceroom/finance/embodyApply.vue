@@ -147,7 +147,7 @@ export default {
                     render: (h, params) => {
                         return h('div', [
                             h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.doCashFunc(params.row, 'success')}}}, '通过'),
-                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.doCashFunc(params.row, 'reject')}}}, '驳回')
+                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.doCashFunc(params.row, 'reject')}}}, '退回')
                         ])
                     }
                 }
@@ -272,7 +272,7 @@ export default {
             }
             doCash(params).then(res => {
                 if(res.code === 2000) {
-                    let message = type === 'success' ? '通过审核' : '驳回成功'
+                    let message = type === 'success' ? '通过审核' : '退回成功'
                     this.$success(message)
                     if(batch) {
                         this.arr.splice(0, 1)

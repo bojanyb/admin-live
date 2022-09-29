@@ -2,8 +2,8 @@
 <template>
     <div class="finance-embodyHistory">
         <div class="model">
-            <span>选择时间内的{{ searchParams.status | statusName }}金额：{{ ruleForm.alreadyMoney || 0 }}元</span>
-            <span>选择时间内的{{ searchParams.status | statusName }}手续费：{{ ruleForm.deductMoney || 0 }}元</span>
+            <span>{{ totalName }}：{{ ruleForm.alreadyMoney || 0 }}元</span>
+            <span>{{ rateName }}：{{ ruleForm.deductMoney || 0 }}元</span>
             <!-- <span>选择时间内的到账金额：{{ Number((ruleForm.alreadyMoney - ruleForm.deductMoney).toFixed(2)) || 0 }}元</span> -->
         </div>
         <div class="searchParams">
@@ -168,7 +168,7 @@ export default {
                         }
                     },
                     {
-                        label: '到账金额/驳回金额',
+                        label: '到账金额/退回金额',
                         width: '160px',
                         render: (h, params) => {
                             if(params.row.orderDetails.status != 3) {
@@ -200,6 +200,24 @@ export default {
                         prop: 'admin_id'
                     }
                 ]
+            }
+        },
+        totalName() {
+            if(!this.searchParams.status) {
+                return '总金额'
+            } else if(this.searchParams.status === 4) {
+                return '到账金额'
+            } else if(this.searchParams.status === 3) {
+                return '退回金额'
+            }
+        },
+        rateName() {
+            if(!this.searchParams.status) {
+                return '手续费'
+            } else if(this.searchParams.status === 4) {
+                return '手续费'
+            } else if(this.searchParams.status === 3) {
+                return '退回手续费'
             }
         }
     },

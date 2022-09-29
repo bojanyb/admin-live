@@ -199,7 +199,7 @@ const STATUSLIST = [
     },
     {
         value: 3,
-        name: '驳回'
+        name: '退回'
     },
     {
         value: 4,
@@ -221,8 +221,8 @@ const STATUSLISTCOPY = [
         name: '提现完成'
     },
     {
-        value: 5,
-        name: '提现驳回'
+        value: 3,
+        name: '提现退回'
     }
 ]
 
