@@ -58,6 +58,13 @@ export default {
           isNum: true,
           placeholder: '请输入手机号'
         },
+        {
+          name: 'name',
+          type: 'input',
+          value: '',
+          label: '姓名',
+          placeholder: '请输入姓名'
+        },
       ]
     },
     cfgs() {
@@ -112,7 +119,8 @@ export default {
         page: params.page,
         pagesize: params.size,
         user_number: s.user_number,
-        user_phone: s.user_phone
+        user_phone: s.user_phone,
+        name: s.name
       }
     },
     // 刷新列表
