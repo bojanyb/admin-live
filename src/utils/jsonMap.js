@@ -1858,6 +1858,62 @@ const USERPUNISHSTATUSLISTCOPY = [
     }
 ]
 
+// 消息记录 - 敏感词
+const RISKMANAGEMENTMESSAGEHISTORYLIST = [
+    {
+        name: '全部',
+        value: 2
+    },
+    {
+        name: '命中',
+        value: 1
+    },
+    {
+        name: '通过',
+        value: 0
+    }
+]
+
+// 图片审核记录 - 图片类型
+const RISKMANAGEMENTIMGTYPELIST = [
+    {
+        name: '全部',
+        value: 0
+    },
+    {
+        name: '用户头像',
+        value: 1
+    },
+    {
+        name: '用户相册',
+        value: 2
+    },
+    {
+        name: '房间封面',
+        value: 3
+    }
+]
+
+// 图片审核记录 - 审核状态
+const RISKMANAGEMENTIMGSTATUSLIST = [
+    {
+        name: '全部',
+        value: 0
+    },
+    {
+        name: '待审核',
+        value: 1
+    },
+    {
+        name: '已通过',
+        value: 2
+    },
+    {
+        name: '已拒绝',
+        value: 3
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -1946,5 +2002,8 @@ export default {
     PAYCONFIGURATIONPLATFORMTYPELIST,
     COMMERCIALMANAGEMENTPAYTYPELIST,
     REPORTUSERPUNISHSTATUSLIST,
-    NOBILITYUSERSORTLIST
+    NOBILITYUSERSORTLIST,
+    RISKMANAGEMENTMESSAGEHISTORYLIST,
+    RISKMANAGEMENTIMGTYPELIST,
+    RISKMANAGEMENTIMGSTATUSLIST
 }

@@ -191,7 +191,7 @@
 			async funcClick(id) {
 				let res = await getUserReportPass({ id })
 				if(res.code === 2000) {
-					this.$message.success('忽略成功')
+					this.$success('忽略成功')
 				}
 				this.getList()
 			},

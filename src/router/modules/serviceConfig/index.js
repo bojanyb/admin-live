@@ -37,6 +37,24 @@ const serviceConfigRouter = {
 				title: '封面审核',
 				noCache: true
 			}
+		},
+		{
+			path: 'message-history',
+			component: () => import('@/views/voiceroom/serviceConfig/message-history'),
+			name: 'message-history',
+			meta: {
+				title: '消息记录',
+				noCache: true
+			}
+		},
+		{
+			path: 'imgAudit_history',
+			component: () => import('@/views/voiceroom/serviceConfig/imgAudit_history'),
+			name: 'imgAudit_history',
+			meta: {
+				title: '图片审核记录',
+				noCache: true
+			}
 		}
 	]
 }

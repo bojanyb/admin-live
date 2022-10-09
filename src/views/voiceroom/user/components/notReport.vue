@@ -69,7 +69,7 @@ export default {
                     }
                     let res = await getUserReportDeal(params)
                     if(res.code === 2000) {
-                        this.$message.success('处理成功')
+                        this.$success('处理成功')
                     }
                     this.dialogVisible = false
                     this.$emit('getList')
