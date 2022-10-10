@@ -92,7 +92,8 @@ export default {
                     { required: true, message: '请选择公会类型', trigger: 'change' }
                 ],
                 remark: [
-                    { required: false, message: '请输入公会简介', trigger: 'blur' }
+                    { required: false, message: '请输入公会简介', trigger: 'blur' },
+                    { min: 1, max: 255, message: '长度在 1 到 255 个字符', trigger: 'blur' }
                 ]
             }
         };
