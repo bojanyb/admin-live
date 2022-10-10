@@ -7,7 +7,7 @@
             <!-- <span>选择时间内的到账金额：{{ Number((ruleForm.alreadyMoney - ruleForm.deductMoney).toFixed(2)) || 0 }}元</span> -->
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams"  :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" :show-batch-pass="true" batchFuncName="导出EXCEL" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @batchPass="batchPass"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -228,6 +228,7 @@ export default {
                 deductMoney: null,
                 dateTimeParams: ['', '']
             },
+            list: [],
             dateTimeParams: {
                 start_time: null,
                 end_time: null
@@ -317,6 +318,58 @@ export default {
         saleAmunt(data) {
             this.ruleForm.alreadyMoney = data.totalmoney ? data.totalmoney : 0
             this.ruleForm.deductMoney = data.rate_money ? data.rate_money : 0
+            this.list = data.list || []
+        },
+        // 转base64
+        base64(s) {
+            return window.btoa(unescape(encodeURIComponent(s)))
+        },
+        // 导出excel
+        batchPass() {
+            let arr = JSON.parse(JSON.stringify(this.list))
+            arr = arr.map((item,index) => {
+                let name = MAPDATA.STATUSLIST.find(a => { return a.value === item.status })
+                let params = {
+                    user_id: item.user_id,
+                    addtime: timeFormat(item.addtime, 'YYYY-MM-DD HH:mm:ss', true),
+                    money: item.orderDetails.money,
+                    applyMoney: item.orderDetails.money / 100,
+                    cash_rate: item.rate_money,
+                    operate_time: item.operate_time ? timeFormat(item.operate_time, 'YYYY-MM-DD HH:mm:ss', true) : '无',
+                    status: name.name,
+                    toMoney: item.status != 3 ? item.orderDetails.real_money / 100 : item.orderDetails.money / 100,
+                    toTime: item.status != 3 ? item.pay_time ? timeFormat(item.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无' : item.orderDetails.remark,
+                    order_id: item.order_id,
+                    admin_id: item.admin_id
+                    
+                }
+                return params
+            })
+            let str = '<tr><td style="text-align:center;height: 50px;">用户ID</td><td style="text-align:center;">申请时间</td><td style="text-align:center;">扣除喵粮</td><td style="text-align:center;">申请金额</td><td style="text-align:center;">手续费</td><td style="text-align:center;">处理时间</td><td style="text-align:center;">处理状态</td><td style="text-align:center;">到账金额/退回金额</td><td style="text-align:center;">到账时间/原因</td><td style="text-align:center;">交易单号</td><td style="text-align:center;">操作人</td></tr>';
+            // 循环遍历，每行加入tr标签，每个单元格加td标签
+            for(let i = 0 ; i < arr.length ; i++ ){
+                str+='<tr>';
+                for(const key in arr[i]){
+                    // 增加  为了不让表格显示科学计数法或者其他格式
+                    str+=`<td style="text-align:center;height: 40px;">${ (arr[i][key] || '无') + '  '}</td>`;    
+                }
+                str+='</tr>';
+            }
+            // Worksheet名
+            const worksheet = 'Sheet1'
+            const uri = 'data:application/vnd.ms-excel;base64,';
+    
+            // 下载的表格模板数据
+            const template = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+            xmlns:x="urn:schemas-microsoft-com:office:excel"
+            xmlns="http://www.w3.org/TR/REC-html40">
+            <head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
+            <x:Name>${worksheet}</x:Name>
+            <x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>
+            </x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+            </head><body><table>${str}</table></body></html>`;
+            // 下载模板
+            window.location.href = uri + this.base64(template);
         }
     },
     created() {

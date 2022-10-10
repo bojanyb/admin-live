@@ -49,6 +49,7 @@
 					<el-button icon="el-icon-refresh" @click="reset">重置</el-button>
 					<el-button type="success" v-if="form.status === 1" @click="batchFunc(1)">批量通过</el-button>
 					<el-button type="danger" v-if="form.status === 1" @click="batchFunc(2)">批量忽略</el-button>
+					<el-button type="primary" @click="exportTable">导出EXCEL</el-button>
 				</div>
 			</div>
             <!-- <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel> -->
@@ -298,6 +299,63 @@
 					this.guildList = res.data.list || []
 				}
 				
+			},
+			// 转base64
+			base64(s) {
+				return window.btoa(unescape(encodeURIComponent(s)))
+			},
+			// 导出excel
+			exportTable() {
+				let arr = JSON.parse(JSON.stringify(this.ruleForm.list))
+				let name;
+				if(this.form.status === 1) {
+					name = '待结算'
+				} else if(this.form.status === 2) {
+					name = '未结算'
+				} else if(this.form.status === 3) {
+					name = '已结算'
+				} else {
+					name = '已忽略'
+				}
+				arr = arr.map((item,index) => {
+					let params = {
+						index: index + 1,
+						time: `2022年第${item.w}周（${timeFormat(item.week_start, 'YYYY-MM-DD HH:mm:ss', true)}至${timeFormat(item.week_end, 'YYYY-MM-DD HH:mm:ss', true)}）`,
+						guild_number: item.guild_number,
+						nickname: item.nickname,
+						guild_nickanme: item.guild_nickanme,
+						flow: item.flow,
+						rebate: item.rebate + '%',
+						rebateMoney: (item.flow / 100 * item.rebate) + '喵粮',
+						status: name,
+					}
+					return params
+				})
+				let str = '<tr><td style="text-align:center;height: 50px;">序号</td><td style="text-align:center;">时间</td><td style="text-align:center;">公会ID</td><td style="text-align:center;">公会名称</td><td style="text-align:center;">公会长昵称</td><td style="text-align:center;">流水</td><td style="text-align:center;">周返点比例</td><td style="text-align:center;">周返点金额</td><td style="text-align:center;">结算状态</td></tr>';
+				// 循环遍历，每行加入tr标签，每个单元格加td标签
+				for(let i = 0 ; i < arr.length ; i++ ){
+					str+='<tr>';
+					for(const key in arr[i]){
+						// 增加  为了不让表格显示科学计数法或者其他格式
+						str+=`<td style="text-align:center;height: 40px;">${ (arr[i][key] || '无') + '  '}</td>`;    
+					}
+					str+='</tr>';
+				}
+				// Worksheet名
+				const worksheet = 'Sheet1'
+				const uri = 'data:application/vnd.ms-excel;base64,';
+		
+				// 下载的表格模板数据
+				const template = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+				xmlns:x="urn:schemas-microsoft-com:office:excel"
+				xmlns="http://www.w3.org/TR/REC-html40">
+				<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
+				<x:Name>${worksheet}</x:Name>
+				<x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>
+				</x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+				</head><body><table>${str}</table></body></html>`;
+				// 下载模板
+				window.location.href = uri + this.base64(template);
 			}
 		}
 	}

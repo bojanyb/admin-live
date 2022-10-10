@@ -167,13 +167,13 @@ export default {
                 {
                     label: '用户ID',
                     render: (h, params) => {
-                        return h('div', params.row.from_user_number || '无')
+                        return h('div', this.tabIndex === '0' ? params.row.from_user_number : params.row.user_number)
                     }
                 },
                 {
                     label: '用户昵称',
                     render: (h, params) => {
-                        return h('div', params.row.from_user_nickname || '无')
+                        return h('div', this.tabIndex === '0' ? params.row.from_user_nickname : params.row.user_nickname)
                     }
                 },
             ]
@@ -412,5 +412,6 @@ export default {
 .serviceConfig-message-history-box {
     padding: 10px 20px 20px 20px;
     box-sizing: border-box;
+    line-height: 40px;
 }
 </style>
