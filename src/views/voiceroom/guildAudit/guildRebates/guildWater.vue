@@ -307,6 +307,7 @@
 			// 导出excel
 			exportTable() {
 				let arr = JSON.parse(JSON.stringify(this.ruleForm.list))
+				if(arr.length <= 0) return this.$warning('当前没有数据导出')
 				let name;
 				if(this.form.status === 1) {
 					name = '待结算'
@@ -355,7 +356,11 @@
 				</x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
 				</head><body><table>${str}</table></body></html>`;
 				// 下载模板
-				window.location.href = uri + this.base64(template);
+				// window.location.href = uri + this.base64(template);
+				const link = document.createElement("a");
+				link.href = uri + this.base64(template);
+				link.download = timeFormat(new Date(), 'YYYY-MM-DD', false) + '公会返佣.xls';
+				link.click();
 			}
 		}
 	}

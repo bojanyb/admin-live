@@ -327,6 +327,7 @@ export default {
         // 导出excel
         batchPass() {
             let arr = JSON.parse(JSON.stringify(this.list))
+            if(arr.length <= 0) return this.$warning('当前没有数据可以导出')
             arr = arr.map((item,index) => {
                 let name = MAPDATA.STATUSLIST.find(a => { return a.value === item.status })
                 let params = {
@@ -356,7 +357,9 @@ export default {
                 str+='</tr>';
             }
             // Worksheet名
-            const worksheet = 'Sheet1'
+            const worksheet = timeFormat(new Date(), 'YYYY-MM-DD', false) + ' - 提现记录'
+            // data:text/csv;charset=utf-8,ufeff
+            // data:application/vnd.ms-excel;base64,
             const uri = 'data:application/vnd.ms-excel;base64,';
     
             // 下载的表格模板数据
@@ -369,7 +372,11 @@ export default {
             </x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
             </head><body><table>${str}</table></body></html>`;
             // 下载模板
-            window.location.href = uri + this.base64(template);
+            // window.location.href = uri + this.base64(template);
+            const link = document.createElement("a");
+            link.href = uri + this.base64(template);
+            link.download = timeFormat(new Date(), 'YYYY-MM-DD', false) + '提现记录.xls';
+            link.click();
         }
     },
     created() {
