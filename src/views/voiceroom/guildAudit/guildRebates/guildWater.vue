@@ -49,7 +49,7 @@
 					<el-button icon="el-icon-refresh" @click="reset">重置</el-button>
 					<el-button type="success" v-if="form.status === 1" @click="batchFunc(1)">批量通过</el-button>
 					<el-button type="danger" v-if="form.status === 1" @click="batchFunc(2)">批量忽略</el-button>
-					<el-button type="primary" @click="exportTable">导出EXCEL</el-button>
+					<el-button type="success" @click="exportTable">导出EXCEL</el-button>
 				</div>
 			</div>
             <!-- <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel> -->
