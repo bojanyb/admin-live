@@ -93,7 +93,7 @@ export default {
                 ],
                 remark: [
                     { required: false, message: '请输入公会简介', trigger: 'blur' },
-                    { min: 1, max: 255, message: '长度在 1 到 255 个字符', trigger: 'blur' }
+                    { min: 1, max: 255, message: '公会简介最大输入255个字符', trigger: 'blur' }
                 ]
             }
         };
