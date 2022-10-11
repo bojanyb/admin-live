@@ -97,7 +97,7 @@ export default {
                         label: '动态图片',
                         isimgList: true,
                         prop: 'media_list',
-                        type: 1,
+                        type: 'media_type',
                         imgWidth: '50px',
                         imgHeight: '50px',
                         minWidth: '180px'

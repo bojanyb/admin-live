@@ -144,3 +144,12 @@ export function delStatisticsroom(data) {
     data
   })
 }
+
+// 审核更换实名
+export function check(data) {
+  return request({
+    url: api.user.check,
+    method: 'post',
+    data
+  })
+}

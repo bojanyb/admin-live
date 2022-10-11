@@ -127,7 +127,7 @@
 									}, on: {click:()=>{this.funcClick(params.row.id)}}}, '忽略'),
 									h('el-button', { props: { type: 'danger'}, style: {
 										display: params.row.status === 1 ? 'unset' : 'none'
-									}, on: {click:()=>{this.manageClick(params.row.id)}}}, '处理'),
+									}, on: {click:()=>{this.manageClick(params.row.feedback_user_id)}}}, '处理'),
 									h('el-button', { props: { type: 'success'}, style: {
 										display: params.row.status === 2 ? 'unset' : 'none'
 									}, on: {click:()=>{}}}, '已处理'),
