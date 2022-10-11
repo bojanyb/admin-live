@@ -1703,6 +1703,22 @@ const ISFIRSTJOINHOUSELIST = [
     }
 ]
 
+// 房间背景图配置列表 - 背景选择
+const ROOMBACKGROUNDSELECTLIST = [
+    {
+        name: '全部',
+        value: 2
+    },
+    {
+        name: '通用背景',
+        value: 0
+    },
+    {
+        name: '指定背景',
+        value: 1
+    }
+]
+
 /*
 *风控管理
 */
@@ -2005,5 +2021,6 @@ export default {
     NOBILITYUSERSORTLIST,
     RISKMANAGEMENTMESSAGEHISTORYLIST,
     RISKMANAGEMENTIMGTYPELIST,
-    RISKMANAGEMENTIMGSTATUSLIST
+    RISKMANAGEMENTIMGSTATUSLIST,
+    ROOMBACKGROUNDSELECTLIST
 }

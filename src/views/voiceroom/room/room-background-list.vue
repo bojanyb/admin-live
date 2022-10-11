@@ -1,8 +1,11 @@
 <template>
 	<div class="app-container">
-		<div class="btnBox">
+		<!-- <div class="btnBox">
 			<el-button type="success" @click="add">新增</el-button>
-		</div>
+		</div> -->
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
+        </div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
@@ -12,6 +15,8 @@
 
 <script>
 	import { getRoomBgDel } from '@/api/videoRoom'
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
 	import tableList from '@/components/tableList/TableList.vue'
 	// 引入图片上传组件
@@ -29,7 +34,9 @@
 
 	export default {
 		name: 'room-background-list',
+		mixins: [mixins],
 		components: {
+			SearchPanel,
 			tableList,
 			uploadImg,
 			roomBgEdit
@@ -37,9 +44,33 @@
 		data() {
 			return {
 				isDestoryComp: false,
+				searchParams: {
+					assign_status: 2
+				}
 			}
 		},
 		computed: {
+			forms() {
+				return [
+					{
+						name: 'name',
+						type: 'input',
+						value: '',
+						label: '背景图名称',
+						placeholder: '请输入背景图名称'
+					},
+					{
+						name: 'assign_status',
+						type: 'select',
+						value: 2,
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '背景选择',
+						placeholder: '请选择',
+						options: MAPDATA.ROOMBACKGROUNDSELECTLIST
+					}
+				]
+			},
 			cfgs() {
 				return {
 					vm: this,
@@ -49,6 +80,13 @@
 						{
 							label: '排序权重',
 							prop: 'sort'
+						},
+						{
+							label: '背景选择',
+							render: (h, params) => {
+								let data = MAPDATA.ROOMBACKGROUNDSELECTLIST.find(item => { return item.value === params.row.assign_status })
+								return h('span', data ? data.name : '无')
+							}
 						},
 						{
 							label: '背景图名称',
@@ -63,13 +101,13 @@
 							imgWidth: '50px',
 							imgHeight: '50px',
 						},
-						{
-							label: '是否默认',
-							render: (h, params) => {
-								let data = MAPDATA.USERINVITE.find(item => { return item.value === params.row.is_default })
-								return h('span', data ? data.name : '无')
-							}
-						},
+						// {
+						// 	label: '是否默认',
+						// 	render: (h, params) => {
+						// 		let data = MAPDATA.USERINVITE.find(item => { return item.value === params.row.is_default })
+						// 		return h('span', data ? data.name : '无')
+						// 	}
+						// },
 						// {
 						// 	label: '上传时间',
 						// 	prop: 'create_time',
@@ -98,9 +136,12 @@
 		methods: {
 			// 配置参数
 			beforeSearch(params) {
+				let s = { ...this.searchParams }
 				return {
 					page: params.page,
-					pagesize: params.size
+					pagesize: params.size,
+					name: s.name,
+					assign_status: s.assign_status
 				}
 			},
 			// 刷新列表
@@ -109,8 +150,9 @@
 			},
 			// 重置
 			reset() {
-				this.searchParams = {}
-				this.dateTimeParams = {}
+				this.searchParams = {
+					assign_status: 2
+				}
 				this.getList()
 			},
 			// 查询

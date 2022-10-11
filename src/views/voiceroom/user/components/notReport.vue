@@ -26,7 +26,7 @@
 
 <script>
 // 引入api
-import { save } from '@/api/risk'
+import { getUserReportDeal } from '@/api/videoRoom'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
@@ -64,14 +64,12 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
-                    params.type = [1]
-                    params.user_number = params.id
-                    params.remark = params.reply
-                    delete params.reply
-                    delete params.id
-                    let res = await save(params)
+                    if(params.ban_duration > 0) {
+                        params.ban_duration = params.ban_duration * 24 * 60 * 60
+                    }
+                    let res = await getUserReportDeal(params)
                     if(res.code === 2000) {
-                        this.$success('处理成功')
+                        this.$message.success('处理成功')
                     }
                     this.dialogVisible = false
                     this.$emit('getList')
