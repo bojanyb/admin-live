@@ -27,7 +27,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="房间ID" prop="assign_room">
+                <el-form-item label="房间ID" prop="assign_room" v-if="ruleForm.assign_status === 1">
                     <el-input type="textarea" :rows="4" v-model="ruleForm.assign_room" placeholder="请输入房间ID，输入多个房间ID请用逗号隔开"></el-input>
                 </el-form-item>
                 <el-form-item label="房间背景图" prop="url">
@@ -144,7 +144,9 @@ export default {
                         name: s.name,
                         // is_default: s.is_default,
                         assign_room: s.assign_room,
-                        assign_status: s.assign_status
+                    }
+                    if(s.assign_status === 1) {
+                        params.assign_status = s.assign_status
                     }
                     let res = await getRoomBgAdd(params)
                     if(res.code === 2000) {

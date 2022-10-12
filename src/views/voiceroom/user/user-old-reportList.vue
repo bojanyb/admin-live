@@ -7,7 +7,10 @@
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
 		<!-- 引入处理组件 -->
-		<notReport v-if="isDestoryComp" ref="notReport" @destoryComp="destoryComp" @getList="getList"></notReport>
+		<!-- <notReport v-if="isDestoryComp" ref="notReport" @destoryComp="destoryComp" @getList="getList"></notReport> -->
+
+		<!-- 新增组件 -->
+        <userComp v-if="isDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList"></userComp>
 	</div>
 </template>
 
@@ -15,7 +18,8 @@
 	// 引入api
 	import { getUserReportPass } from '@/api/videoRoom'
 	// 引入处理组件
-	import notReport from './components/notReport.vue'
+	// import notReport from './components/notReport.vue'
+	import userComp from '../serviceConfig/components/userComp.vue'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -34,7 +38,7 @@
 		components: {
 			SearchPanel,
 			tableList,
-			notReport
+			userComp
 		},
 		computed: {
 			forms() {
@@ -127,7 +131,7 @@
 									}, on: {click:()=>{this.funcClick(params.row.id)}}}, '忽略'),
 									h('el-button', { props: { type: 'danger'}, style: {
 										display: params.row.status === 1 ? 'unset' : 'none'
-									}, on: {click:()=>{this.manageClick(params.row.feedback_user_id)}}}, '处理'),
+									}, on: {click:()=>{this.manageClick(params.row)}}}, '处理'),
 									h('el-button', { props: { type: 'success'}, style: {
 										display: params.row.status === 2 ? 'unset' : 'none'
 									}, on: {click:()=>{}}}, '已处理'),
@@ -181,10 +185,10 @@
 				this.getList()
 			},
 			// 处理
-			manageClick(id) {
+			manageClick(row) {
 				this.isDestoryComp = true
 				setTimeout(() => {
-					this.$refs.notReport.loadParams(id)
+					this.$refs.userComp.loadParams('add', row)
 				}, 50);
 			},
 			// 忽略
