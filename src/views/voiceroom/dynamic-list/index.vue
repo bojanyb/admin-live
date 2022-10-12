@@ -1,7 +1,7 @@
 <template>
     <div class="app-container dynamic-list-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" :showYesterday="true" :showRecentSeven="true" :showToday="true" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
@@ -24,6 +24,8 @@ import tableList from '@/components/tableList/TableList.vue'
 import REQUEST from '@/request/index.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
 export default {
     mixins: [mixins],
     components: {
@@ -34,7 +36,14 @@ export default {
     data() {
         return {
             msg_id: null,
-            isDestoryComp: false // 是否销毁组件
+            isDestoryComp: false, // 是否销毁组件
+            searchParams: {
+                dateTimeParams: []
+            },
+            dateTimeParams: {
+                start_time: null,
+                end_time: null
+            }
         };
     },
     computed: {
@@ -117,6 +126,45 @@ export default {
         }
     },
     methods: {
+        // 今日
+        today() {
+            this.changeIndex(0)
+        },
+        // 昨日
+        yesterday() {
+            this.changeIndex(1)
+        },
+        // 最近七日
+        recentSeven() {
+            this.changeIndex(2)
+        },
+        // 更改日期
+        changeIndex(index) {
+            let date = new Date()
+            let now, now1, start, end;
+            switch (index) {
+                case 0:
+                    now1 = timeFormat(date, 'YYYY-MM-DD', false)
+                    now = timeFormat(date, 'YYYY-MM-DD', false)
+                    break;
+                case 1:
+                    now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
+                    break;
+                case 2:
+                    now1 = timeFormat(date, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
+                    break;
+            }
+            start = new Date(now + ' 00:00:00')
+            end = new Date(now1 + ' 23:59:59')
+
+            let time = [start.getTime(), end.getTime()]
+            this.searchParams.dateTimeParams = time
+            this.dateTimeParams.start_time = time[0]
+            this.dateTimeParams.end_time = time[1]
+            this.getList()
+        },
         // 配置参数
         beforeSearch(params) {
             let s = { ...this.searchParams, ...this.dateTimeParams }
