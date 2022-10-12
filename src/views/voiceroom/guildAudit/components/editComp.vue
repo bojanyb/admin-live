@@ -35,7 +35,7 @@
                 </el-form-item>
                 <el-form-item label="公会运营" prop="operator">
                     <el-select v-model="ruleForm.operator" placeholder="请选择公会运营">
-                        <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        <el-option v-for="item in operationList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="公会简介" prop="remark">
@@ -73,7 +73,8 @@ export default {
                 rank: '',
                 remark: '',
                 rebate: 0,
-                guild_type: null
+                guild_type: null,
+                operator: null
             },
             oldParams: {}, // 老数据
             rules: {
@@ -119,7 +120,7 @@ export default {
             }
             return false
         },
-        operatorList() {
+        operationList() { // 公会运营
             let arr = JSON.parse(JSON.stringify(MAPDATA.GUILDOPERATIONLIST))
             return arr.filter(item => { return item.name !== '全部' })
         }

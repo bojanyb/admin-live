@@ -54,8 +54,7 @@
 				isDestoryComp: false,
 				guildParams: {},
 				status: null,
-				ruleForm: {},
-				operationList: MAPDATA.GUILDOPERATIONLIST
+				ruleForm: {}
 			}
 		},
 		computed: {
