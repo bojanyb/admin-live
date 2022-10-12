@@ -680,6 +680,22 @@ const GUILDCLOSEANACCOUNTSTATUSLISTCOPY = [
     }
 ]
 
+// 公会列表 - 公会运营
+const GUILDOPERATIONLIST = [
+    {
+        name: '全部',
+        value: 0
+    },
+    {
+        name: '万坚',
+        value: 1
+    },
+    {
+        name: '刘建民',
+        value: 2
+    }
+]
+
 /*
 *派对管理 - 举报房间
 */
@@ -1946,5 +1962,6 @@ export default {
     PAYCONFIGURATIONPLATFORMTYPELIST,
     COMMERCIALMANAGEMENTPAYTYPELIST,
     REPORTUSERPUNISHSTATUSLIST,
-    NOBILITYUSERSORTLIST
+    NOBILITYUSERSORTLIST,
+    GUILDOPERATIONLIST
 }

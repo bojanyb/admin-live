@@ -54,7 +54,8 @@
 				isDestoryComp: false,
 				guildParams: {},
 				status: null,
-				ruleForm: {}
+				ruleForm: {},
+				operationList: MAPDATA.GUILDOPERATIONLIST
 			}
 		},
 		computed: {
@@ -75,7 +76,17 @@
 						label: '公会长ID',
 						isNum: true,
 						placeholder: '请输入公会ID'
-					}
+					},
+					{
+						name: 'operator',
+						type: 'select',
+						value: 0,
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '公会运营',
+						placeholder: '请选择',
+						options: MAPDATA.GUILDOPERATIONLIST
+					},
 				]
 			},
 			cfgs() {
@@ -86,6 +97,13 @@
 						{
 							label: '公会ID',
 							prop: 'guild_number'
+						},
+						{
+							label: '公会运营',
+							render: (h, params) => {
+								let data = MAPDATA.GUILDOPERATIONLIST.find(item => { return item.value === params.row.operator })
+								return h('span', data ? data.name : '无')
+							}
 						},
 						{
 							label: '公会类型',
@@ -175,6 +193,7 @@
 					pagesize: params.size,
 					user_number: s.user_number,
 					guild_number: s.guild_number,
+					operator: s.operator
 				}
 			},
 			// 刷新列表

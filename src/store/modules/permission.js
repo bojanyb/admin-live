@@ -99,6 +99,9 @@ const actions = {
           }
           ri(arr)
 
+          console.log(arr, 'arr---------1010')
+          console.log(user_pids, 'user_pids-------------2020')
+
 
           let asyncArr = []
           let as = (list) => {
