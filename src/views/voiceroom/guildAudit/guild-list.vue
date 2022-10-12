@@ -80,7 +80,7 @@
 					{
 						name: 'operator',
 						type: 'select',
-						value: 0,
+						value: '',
 						keyName: 'value',
 						optionLabel: 'name',
 						label: '公会运营',

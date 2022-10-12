@@ -99,7 +99,6 @@ const actions = {
           }
           ri(arr)
 
-
           let asyncArr = []
           let as = (list) => {
             list.forEach(item => {

@@ -684,7 +684,7 @@ const GUILDCLOSEANACCOUNTSTATUSLISTCOPY = [
 const GUILDOPERATIONLIST = [
     {
         name: '全部',
-        value: 0
+        value: ''
     },
     {
         name: '万坚',
