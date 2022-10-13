@@ -268,6 +268,11 @@ const request = {
         UserPunish: `${HTTPHEADER}/UserPunish`, // 用户处罚列表
         save: `${HTTPHEADER}/UserPunish/save`, // 添加处罚用户
         remove: `${HTTPHEADER}/UserPunish/remove`, // 解除处罚用户
+        chatList: `${HTTPHEADER}/MsgLog/chatList`, // 私聊会话消息-列表
+        roomList: `${HTTPHEADER}/MsgLog/roomList`, // 房间会话消息-列表
+        index: `${HTTPHEADER}/Sensitive/index`, // 敏感词列表
+        softDelete: `${HTTPHEADER}/Sensitive/softDelete`, // 敏感词-软删除
+        add: `${HTTPHEADER}/Sensitive/add`, // 敏感词-添加
     },
 
     // 心动速配

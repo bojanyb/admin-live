@@ -684,7 +684,7 @@ const GUILDCLOSEANACCOUNTSTATUSLISTCOPY = [
 const GUILDOPERATIONLIST = [
     {
         name: '全部',
-        value: 0
+        value: ''
     },
     {
         name: '万坚',
@@ -1719,6 +1719,22 @@ const ISFIRSTJOINHOUSELIST = [
     }
 ]
 
+// 房间背景图配置列表 - 背景选择
+const ROOMBACKGROUNDSELECTLIST = [
+    {
+        name: '全部',
+        value: 2
+    },
+    {
+        name: '通用背景',
+        value: 0
+    },
+    {
+        name: '指定背景',
+        value: 1
+    }
+]
+
 /*
 *风控管理
 */
@@ -1843,6 +1859,10 @@ const USERPUNISHTYPELISTCOPY = [
     {
         name: '封设备',
         value: 2
+    },
+    {
+        name: '封IP',
+        value: 3
     }
 ]
 
@@ -1871,6 +1891,62 @@ const USERPUNISHSTATUSLISTCOPY = [
     {
         name: '已解除',
         value: 2
+    }
+]
+
+// 消息记录 - 敏感词
+const RISKMANAGEMENTMESSAGEHISTORYLIST = [
+    {
+        name: '全部',
+        value: 2
+    },
+    {
+        name: '命中',
+        value: 1
+    },
+    {
+        name: '通过',
+        value: 0
+    }
+]
+
+// 图片审核记录 - 图片类型
+const RISKMANAGEMENTIMGTYPELIST = [
+    {
+        name: '全部',
+        value: 0
+    },
+    {
+        name: '用户头像',
+        value: 1
+    },
+    {
+        name: '用户相册',
+        value: 2
+    },
+    {
+        name: '房间封面',
+        value: 3
+    }
+]
+
+// 图片审核记录 - 审核状态
+const RISKMANAGEMENTIMGSTATUSLIST = [
+    {
+        name: '全部',
+        value: 0
+    },
+    {
+        name: '待审核',
+        value: 1
+    },
+    {
+        name: '已通过',
+        value: 2
+    },
+    {
+        name: '已拒绝',
+        value: 3
     }
 ]
 
@@ -1963,5 +2039,9 @@ export default {
     COMMERCIALMANAGEMENTPAYTYPELIST,
     REPORTUSERPUNISHSTATUSLIST,
     NOBILITYUSERSORTLIST,
+    RISKMANAGEMENTMESSAGEHISTORYLIST,
+    RISKMANAGEMENTIMGTYPELIST,
+    RISKMANAGEMENTIMGSTATUSLIST,
+    ROOMBACKGROUNDSELECTLIST,
     GUILDOPERATIONLIST
 }

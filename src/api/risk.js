@@ -27,3 +27,21 @@ export function save(data) {
         data
     })
 }
+
+// 敏感词-软删除
+export function softDelete(data) {
+    return request({
+        url: api.risk.softDelete,
+        method: 'post',
+        data
+    })
+}
+
+// 敏感词-添加
+export function add(data) {
+    return request({
+        url: api.risk.add,
+        method: 'post',
+        data
+    })
+}
