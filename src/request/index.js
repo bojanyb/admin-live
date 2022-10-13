@@ -163,6 +163,7 @@ const request = {
         edit: `${HTTPHEADER}/User/userEdit`, // 编辑用户
         userSave: `${HTTPHEADER}/User/userSave`, // 用户封禁/启用
         musicList: `${HTTPHEADER}/music/index`, // 音乐列表
+        check: `${HTTPHEADER}/Verify/check`, // 审核更换实名
     },
     
     // 审核管理
