@@ -2,7 +2,7 @@
     <div class="serviceConfig-message-history-box">
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex" @tabChange="tabChange"></menuComp>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="tabIndex !== '2'" :showBeforeYesterday="tabIndex !== '2'" :showToday="tabIndex !== '2'" :show-add="tabIndex === '2'" @onSearch="onSearch" @yesterday="yesterday" @beforeYesterday="beforeYesterday" @today="today" @add="add"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :show-reset="true" :showYesterday="tabIndex !== '2'" :showBeforeYesterday="tabIndex !== '2'" :showToday="tabIndex !== '2'" :show-add="tabIndex === '2'" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @beforeYesterday="beforeYesterday" @today="today" @add="add"></SearchPanel>
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
@@ -68,44 +68,52 @@ export default {
         forms() {
             let arr = [
                 {
-                    name: 'inputSelect',
+                    name: 'from_user_number',
+                    type: 'input',
                     value: '',
-                    selectName: 'iSelect',
-                    type: 'inputSelect',
-                    placeholder: '请输入',
-                    selectPlaceholder: '请选择',
-                    selctValue: 'user_id',
-                    selectWidth: '130px',
-                    label: '',
-                    handler: {
-                        change: (v) => {}
-                    },
-                    options: [
-                        { key: 'user_id', label: '用户ID' },
-                        { key: 'receive_user_id', label: '接收用户ID' },
-                        { key: 'text', label: '文本内容' }
-                    ]
+                    label: '发送用户ID',
+                    isNum: true,
+                    placeholder: '请输入发送用户ID'
+                },
+                {
+                    name: 'to_user_number',
+                    type: 'input',
+                    value: '',
+                    label: '接收用户ID',
+                    isNum: true,
+                    placeholder: '请输入接收用户ID'
+                },
+                {
+                    name: 'content',
+                    type: 'input',
+                    value: '',
+                    label: '消息内容',
+                    placeholder: '请输入消息内容'
                 }
             ]
             let arr1 = [
                 {
-                    name: 'inputSelect',
+                    name: 'user_number',
+                    type: 'input',
                     value: '',
-                    selectName: 'iSelect',
-                    type: 'inputSelect',
-                    placeholder: '请输入',
-                    selectPlaceholder: '请选择',
-                    selctValue: 'user_id',
-                    selectWidth: '130px',
-                    label: '',
-                    handler: {
-                        change: (v) => {}
-                    },
-                    options: [
-                        { key: 'user_id', label: '用户ID' },
-                        { key: 'room_id', label: '房间ID' },
-                        { key: 'text', label: '文本内容' }
-                    ]
+                    label: '发送用户ID',
+                    isNum: true,
+                    placeholder: '请输入发送用户ID'
+                },
+                {
+                    name: 'room_number',
+                    type: 'input',
+                    value: '',
+                    label: '房间ID',
+                    isNum: true,
+                    placeholder: '请输入房间ID'
+                },
+                {
+                    name: 'content',
+                    type: 'input',
+                    value: '',
+                    label: '消息内容',
+                    placeholder: '请输入消息内容'
                 }
             ]
             let arr2 = [
@@ -182,6 +190,12 @@ export default {
                     label: '接收用户ID',
                     render: (h, params) => {
                         return h('div', params.row.to_user_number || '无')
+                    }
+                },
+                {
+                    label: '接收用户昵称',
+                    render: (h, params) => {
+                        return h('div', params.row.to_user_nickname || '无')
                     }
                 },
                 {
@@ -322,23 +336,12 @@ export default {
                 pagesize: params.size,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
-                sen_status: s.sen_status
-            }
-            if(s.iSelect === 'user_id') {
-                data.from_user_number = s.inputSelect
-                data.user_number = s.inputSelect
-            } else if(s.iSelect === 'receive_user_id') {
-                data.to_user_number = s.inputSelect
-            } else if(s.iSelect === 'text') {
-                data.content = s.inputSelect
-            } else if(s.iSelect === 'room_id') {
-                data.room_number = s.inputSelect
-            }
-            if(this.tabIndex === '0') {
-                delete data.user_number
-            } else {
-                delete data.from_user_number
-                delete data.to_user_number
+                sen_status: s.sen_status,
+                from_user_number: s.from_user_number,
+                to_user_number: s.to_user_number,
+                content: s.content,
+                user_number: s.user_number,
+                room_number: s.room_number
             }
             if(this.tabIndex === '2') {
                 data = {
@@ -369,8 +372,11 @@ export default {
         },
         // 重置
         reset() {
-            this.searchParams = {}
+            this.searchParams = {
+                sen_status: 1
+            }
             this.dateTimeParams = {}
+            this.changeIndex(0)
             this.getList()
         },
         // 查询
