@@ -229,14 +229,18 @@ export default {
                     label: '敏感状态',
                     render: (h, params) => {
                         let data = MAPDATA.RISKMANAGEMENTMESSAGEHISTORYLIST.find(item => { return item.value === params.row.sen_status })
-                        return h('span', data ? data.name : '无')
+                        return h('span', { style: {
+                            color: params.row.sen_status === 1 ? '#FF4949' : ''
+                        } }, data ? data.name : '无')
                     }
                 },
                 {
                     label: '敏感内容',
                     showOverFlow: true,
                     render: (h, params) => {
-                        return h('div', params.row.sen_str || '无')
+                        return h('div', { style: {
+                            color: params.row.sen_str ? '#FF4949' : ''
+                        } }, params.row.sen_str || '无')
                     }
                 }
             ]
