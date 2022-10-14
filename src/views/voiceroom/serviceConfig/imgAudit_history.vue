@@ -1,23 +1,16 @@
 <template>
     <div class="serviceConfig-message-history-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showBeforeYesterday="true" :showToday="true" @onSearch="onSearch" @yesterday="yesterday" @beforeYesterday="beforeYesterday" @today="today"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :show-reset="true" :showYesterday="true" :showBeforeYesterday="true" :showToday="true" @onSearch="onSearch" @onReset="reset" @yesterday="yesterday" @beforeYesterday="beforeYesterday" @today="today"></SearchPanel>
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
-
-        <!-- 详情组件 -->
-        <historyComp v-if="isDestoryComp" ref="historyComp" @destoryComp="destoryComp" @getList="getList"></historyComp>
     </div>
 </template>
 
 <script>
 // 引入api
-import { softDelete } from '@/api/risk.js'
-// 引入新增组件
-import historyComp from './components/historyComp.vue'
-// 引入tab菜单组件
-import menuComp from '@/components/menuComp/index.vue'
+import { review } from '@/api/risk.js'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -34,17 +27,14 @@ export default {
     mixins: [mixins],
     components: {
         SearchPanel,
-        tableList,
-        menuComp,
-        historyComp
+        tableList
     },
     data() {
         return {
-            isDestoryComp: false, // 是否销毁组件
-            tabIndex: '0',
             searchParams: {
                 dateTimeParams: [],
-                sen_status: 0
+                rel_type: 4,
+                status: 2
             },
             dateTimeParams: {
                 start_time: null,
@@ -74,9 +64,9 @@ export default {
                     ]
                 },
                 {
-                    name: 'sen_status',
+                    name: 'rel_type',
                     type: 'select',
-                    value: 0,
+                    value: 4,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '图片类型',
@@ -84,9 +74,9 @@ export default {
                     options: MAPDATA.RISKMANAGEMENTIMGTYPELIST
                 },
                 {
-                    name: 'sen_status',
+                    name: 'status',
                     type: 'select',
-                    value: 0,
+                    value: 2,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '审核状态',
@@ -115,7 +105,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.risk.chatList,
+                url: REQUEST.risk.screenImgLog,
                 columns: [
                     {
                         label: '时间',
@@ -126,40 +116,60 @@ export default {
                     {
                         label: '用户ID',
                         render: (h, params) => {
-                            return h('div', params.row.from_user_number || '无')
+                            return h('div', params.row.user_number || '无')
                         }
                     },
                     {
                         label: '用户昵称',
                         render: (h, params) => {
-                            return h('div', params.row.from_user_nickname || '无')
+                            return h('div', params.row.user_nickname || '无')
+                        }
+                    },
+                    {
+                        label: '房间ID',
+                        render: (h, params) => {
+                            return h('div', params.row.room_number || '无')
                         }
                     },
                     {
                         label: '图片类型',
                         render: (h, params) => {
-                            return h('div', params.row.to_user_number || '无')
+                            let data = MAPDATA.RISKMANAGEMENTIMGTYPELIST.find(item => { return item.value === params.row.rel_type })
+                            return h('div', data ? data.name : '无')
                         }
                     },
                     {
                         label: '图片',
-                        isimg: true,
-                        prop: 'face',
+                        isimgList: true,
+                        prop: 'img_path',
+                        type: 1,
                         imgWidth: '50px',
-                        imgHeight: '50px'
+                        imgHeight: '50px',
+                        minWidth: '150px'
                     },
                     {
                         label: '审核状态',
                         render: (h, params) => {
-                            return h('div', params.row.to_user_number || '无')
+                            let data = MAPDATA.RISKMANAGEMENTIMGSTATUSLIST.find(item => { return item.value === params.row.status })
+                            return h('div', data ? data.name : '无')
                         }
                     },
                     {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '通过'),
-                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.punishFunc(params.row)}}}, '拒绝')
+                                h('el-button', { props: { type: 'primary'}, style: {
+                                    display: params.row.status === 0 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.func(params.row.id, 1, '通过')}}}, '通过'),
+                                h('el-button', { props: { type: 'danger'}, style: {
+                                    display: params.row.status === 0 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.func(params.row.id, -1, '拒绝')}}}, '拒绝'),
+                                h('el-button', { props: { type: 'success'}, style: {
+                                    display: params.row.status === 1 ? 'unset' : 'none'
+                                }, on: {click:()=>{}}}, '已通过'),
+                                h('el-button', { props: { type: 'danger'}, style: {
+                                    display: params.row.status === -1 ? 'unset' : 'none'
+                                }, on: {click:()=>{}}}, '已拒绝'),
                             ])
                         }
                     }
@@ -217,23 +227,13 @@ export default {
                 pagesize: params.size,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
-                sen_status: s.sen_status
+                status: s.status,
+                rel_type: s.rel_type
             }
             if(s.iSelect === 'user_id') {
-                data.from_user_number = s.inputSelect
-            } else if(s.iSelect === 'receive_user_id') {
-                data.to_user_number = s.inputSelect
-            } else if(s.iSelect === 'text') {
-                data.content = s.inputSelect
+                data.user_number = s.inputSelect
             } else if(s.iSelect === 'room_id') {
                 data.room_number = s.inputSelect
-            }
-            if(this.tabIndex === '2') {
-                data = {
-                    page: params.page,
-                    pagesize: params.size,
-                    keyword: s.keyword
-                }
             }
             return data
         },
@@ -257,8 +257,12 @@ export default {
         },
         // 重置
         reset() {
-            this.searchParams = {}
+            this.searchParams = {
+                rel_type: 4,
+                status: 2
+            }
             this.dateTimeParams = {}
+            this.changeIndex(0)
             this.getList()
         },
         // 查询
@@ -269,16 +273,21 @@ export default {
         destoryComp() {
             this.isDestoryComp = false
         },
-        // 移除
-        deleteParams(id) {
-            this.$confirm('确认移除当前敏感词吗?', '提示', {
+        // 通过/拒绝操作
+        async func(id, status, name) {
+            this.$confirm(`是否确认${name}?`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(async () => {
-                let res = await softDelete({ id })
+                let params = {
+                    id,
+                    status
+                }
+                let res = await review(params)
+                console.log(res, 'res-----------2020')
                 if(res.code === 2000) {
-                    this.$success('删除成功')
+                    this.$success(name + '成功')
                     this.getList()
                 }
             }).catch(() => {});

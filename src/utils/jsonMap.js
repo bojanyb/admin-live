@@ -1914,7 +1914,7 @@ const RISKMANAGEMENTMESSAGEHISTORYLIST = [
 const RISKMANAGEMENTIMGTYPELIST = [
     {
         name: '全部',
-        value: 0
+        value: 4
     },
     {
         name: '用户头像',
@@ -1934,19 +1934,19 @@ const RISKMANAGEMENTIMGTYPELIST = [
 const RISKMANAGEMENTIMGSTATUSLIST = [
     {
         name: '全部',
-        value: 0
-    },
-    {
-        name: '待审核',
-        value: 1
-    },
-    {
-        name: '已通过',
         value: 2
     },
     {
+        name: '待审核',
+        value: 0
+    },
+    {
+        name: '已通过',
+        value: 1
+    },
+    {
         name: '已拒绝',
-        value: 3
+        value: -1
     }
 ]
 

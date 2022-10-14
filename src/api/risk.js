@@ -45,3 +45,12 @@ export function add(data) {
         data
     })
 }
+
+// 图片审核-操作
+export function review(data) {
+    return request({
+        url: api.risk.review,
+        method: 'post',
+        data
+    })
+}

@@ -14,8 +14,8 @@
                 <tableList :cfgs="cfgs" ref="tableList"></tableList>
             </div>
             <span slot="footer" class="dialog-footer">
-                <!-- <el-button @click="dialogVisible = false">取 消</el-button> -->
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <!-- <el-button type="primary" @click="dialogVisible = false">确 定</el-button> -->
             </span>
         </el-dialog>
     </div>
@@ -32,6 +32,8 @@ import tableList from '@/components/tableList/TableList.vue'
 import REQUEST from '@/request/index.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
 export default {
     mixins: [mixins],
     props: {
@@ -51,11 +53,22 @@ export default {
                 url: REQUEST.dynamic.msgList,
                 columns: [
                     {
-                        label: '用户昵称',
+                        label: '评论时间',
+                        minWidth: '100px',
+                        render: (h, params) => {
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                        }
+                    },
+                    {
+                        label: '评论用户ID',
+                        prop: 'user_number',
+                    },
+                    {
+                        label: '评论用户昵称',
                         prop: 'nickname',
                     },
                     {
-                        label: '用户评论',
+                        label: '评论内容',
                         prop: 'content',
                         showOverFlow: true,
                     },

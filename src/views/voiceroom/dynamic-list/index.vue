@@ -112,6 +112,10 @@ export default {
                         minWidth: '180px'
                     },
                     {
+                        label: '评论数量',
+                        prop: 'msg_number'
+                    },
+                    {
                         label: '操作',
                         minWidth: '100px',
                         render: (h, params) => {
@@ -129,14 +133,17 @@ export default {
         // 今日
         today() {
             this.changeIndex(0)
+            this.getList()
         },
         // 昨日
         yesterday() {
             this.changeIndex(1)
+            this.getList()
         },
         // 最近七日
         recentSeven() {
             this.changeIndex(2)
+            this.getList()
         },
         // 更改日期
         changeIndex(index) {
@@ -163,7 +170,6 @@ export default {
             this.searchParams.dateTimeParams = time
             this.dateTimeParams.start_time = time[0]
             this.dateTimeParams.end_time = time[1]
-            this.getList()
         },
         // 配置参数
         beforeSearch(params) {
@@ -195,7 +201,8 @@ export default {
         // 重置
         reset() {
             this.searchParams = {}
-            this.dateTimeParams = {}
+            // this.dateTimeParams = {}
+            this.changeIndex(0)
             this.getList()
         },
         // 删除
@@ -227,6 +234,9 @@ export default {
         destoryComp() {
             this.isDestoryComp = false
         }
+    },
+    created() {
+        this.changeIndex(0)
     }
 }
 </script>
