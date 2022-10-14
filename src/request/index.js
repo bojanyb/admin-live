@@ -274,6 +274,8 @@ const request = {
         index: `${HTTPHEADER}/Sensitive/index`, // 敏感词列表
         softDelete: `${HTTPHEADER}/Sensitive/softDelete`, // 敏感词-软删除
         add: `${HTTPHEADER}/Sensitive/add`, // 敏感词-添加
+        screenImgLog: `${HTTPHEADER}/ScreenImgLog/index`, // 图片审核-列表
+        review: `${HTTPHEADER}/ScreenImgLog/review`, // 图片审核-操作
     },
 
     // 心动速配

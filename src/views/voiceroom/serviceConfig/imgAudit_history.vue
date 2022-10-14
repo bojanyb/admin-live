@@ -1,6 +1,5 @@
 <template>
     <div class="serviceConfig-message-history-box">
-        <!-- <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex" @tabChange="tabChange"></menuComp> -->
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showBeforeYesterday="true" :showToday="true" @onSearch="onSearch" @yesterday="yesterday" @beforeYesterday="beforeYesterday" @today="today"></SearchPanel>
         </div>
@@ -41,17 +40,6 @@ export default {
     },
     data() {
         return {
-            menuList: [
-                {
-                    name: '私聊会话消息'
-                },
-                {
-                    name: '房间会话消息'
-                },
-                {
-                    name: '敏感词库'
-                }
-            ],
             isDestoryComp: false, // 是否销毁组件
             tabIndex: '0',
             searchParams: {
