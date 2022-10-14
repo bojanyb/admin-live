@@ -33,11 +33,11 @@
                         <el-option v-for="item in rankList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="公会运营" prop="operator">
+                <!-- <el-form-item label="公会运营" prop="operator">
                     <el-select v-model="ruleForm.operator" placeholder="请选择公会运营">
-                        <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        <el-option v-for="item in operationList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="公会简介" prop="remark">
                     <el-input type="textarea" v-model="ruleForm.remark" :rows="4"></el-input>
                 </el-form-item>
@@ -73,7 +73,8 @@ export default {
                 rank: '',
                 remark: '',
                 rebate: 0,
-                guild_type: null
+                guild_type: null,
+                // operator: null
             },
             oldParams: {}, // 老数据
             rules: {
@@ -93,9 +94,9 @@ export default {
                 rank: [
                     { required: true, message: '请选择公会等级', trigger: 'change' }
                 ],
-                operator: [
-                    { required: true, message: '请选择公会运营', trigger: 'change' }
-                ],
+                // operator: [
+                //     { required: true, message: '请选择公会运营', trigger: 'change' }
+                // ],
                 guild_type: [
                     { required: true, message: '请选择公会类型', trigger: 'change' }
                 ],
@@ -120,10 +121,10 @@ export default {
             }
             return false
         },
-        operatorList() {
-            let arr = JSON.parse(JSON.stringify(MAPDATA.GUILDOPERATIONLIST))
-            return arr.filter(item => { return item.name !== '全部' })
-        }
+        // operationList() { // 公会运营
+        //     let arr = JSON.parse(JSON.stringify(MAPDATA.GUILDOPERATIONLIST))
+        //     return arr.filter(item => { return item.name !== '全部' })
+        // }
     },
     methods: {
         // 公会返点限制
