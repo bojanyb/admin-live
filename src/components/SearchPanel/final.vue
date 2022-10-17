@@ -633,6 +633,10 @@ export default {
 
     .el-form-item__label-wrap {
       margin-left: 0px !important;
+      // display: flex;
+      .el-form-item__label {
+        float: left !important;
+      }
     }
 
     .el-input {
