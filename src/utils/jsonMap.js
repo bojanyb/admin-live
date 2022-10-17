@@ -1863,6 +1863,10 @@ const USERPUNISHTYPELIST = [
     {
         name: '封IP',
         value: 3
+    },
+    {
+        name: '封实名',
+        value: 4
     }
 ]
 
