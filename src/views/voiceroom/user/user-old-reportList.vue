@@ -134,6 +134,14 @@
 						imgWidth: '70px',
 						imgHeight: '70px',
 						width: '200px'
+					},
+					{
+						label: '处理状态',
+						minWidth: '100px',
+						render: (h, params) => {
+							let data = MAPDATA.REPORTUSERPUNISHSTATUSLIST.find(item => { return item.value === params.row.status })
+							return h('span', data ? data.name : '无')
+						}
 					}
 				]
 				let arr1 = [

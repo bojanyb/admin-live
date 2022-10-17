@@ -1579,7 +1579,7 @@ const PROCESSEDSTATUSLIST = [
 // 举报用户 - 处罚状态
 const REPORTUSERPUNISHSTATUSLIST = [
     {
-        name: '未处理',
+        name: '待处理',
         value: 1
     },
     {
