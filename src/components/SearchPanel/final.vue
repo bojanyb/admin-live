@@ -175,7 +175,7 @@
           </el-form-item>
           <el-form-item v-if="showSearchBtn || showReset">
             <el-button v-if="showSearchBtn" type="primary" @click="onSearch">查询</el-button>
-            <el-button v-if="showAdd" type="success" @click="add">新增</el-button>
+            <el-button v-if="showAdd" type="success" @click="add">{{ addName || '新增' }}</el-button>
             <el-button v-if="showToday" @click="today">今天</el-button>
             <el-button v-if="showYesterday" @click="yesterday">昨天</el-button>
             <el-button v-if="showBeforeYesterday" @click="beforeYesterday">前天</el-button>
@@ -247,6 +247,11 @@ export default {
     showAdd: {
       type: Boolean,
       default: false
+    },
+    // 新增 - 名称
+    addName: {
+      type: String,
+      default: ''
     },
     // 是否显示批量通过按钮
     showBatchPass: {

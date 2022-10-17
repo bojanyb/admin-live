@@ -1,3 +1,4 @@
+// 本页面暂时废弃 - 审核列表
 <template>
 	<div class="user-stayAudit-box">
 		<div class="searchParams">
@@ -9,7 +10,7 @@
 </template>
 
 <script>
-	import { checkContentAudit } from '@/api/user'
+	import { checkContentAudit } from '@/api/user' // 接口勿用 - 这里会审核图片 - 现在有图片审核模块 - 会重复审核
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -158,7 +159,7 @@
 					id: row.id,
 					status: status
 				}
-				let res = await checkContentAudit(params)
+				let res = await checkContentAudit(params) // 接口勿用 - 这里会审核图片 - 现在有图片审核模块 - 会重复审核
 				if(res.code === 2000) {
 					if(status === 1) {
 						this.$message.success('审核通过')

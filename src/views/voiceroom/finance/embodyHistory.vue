@@ -291,8 +291,8 @@ export default {
                 page: params.page,
                 status: s.status,
                 user_number: s.user_number,
-                start_time: Math.floor(s.start_time / 1000),
-                end_time: Math.floor(s.end_time / 1000),
+                start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
+                end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
                 user_id: s.user_id,
                 order_id: s.order_id,
                 sort: s.sort

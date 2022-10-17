@@ -3,7 +3,7 @@
     <div class="finance-guildWithdraw-list">
         <div class="model">
             <span>充值人数{{ ruleForm.count || 0 }}人</span>
-            <span>充值金额{{ ruleForm.allMoney || 0 }}元</span>
+            <span>充值金额{{ ruleForm.total_money / 100 || 0 }}元</span>
         </div>
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>

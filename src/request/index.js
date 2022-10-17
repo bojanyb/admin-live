@@ -171,7 +171,7 @@ const request = {
         list: `${HTTPHEADER}/user/getUserBgi`,
         toAuditList: `${HTTPHEADER}/User/toAuditList`, // 待审核列表
         auditedList: `${HTTPHEADER}/User/auditedList`, // 已审核记录
-        checkContentAudit: `${HTTPHEADER}/User/checkContentAudit`, // 审核用户操作记录
+        checkContentAudit: `${HTTPHEADER}/User/checkContentAudit`, // 审核用户操作记录 // 接口勿用 - 这里会审核图片 - 现在有图片审核模块 - 会重复审核
     },
 
     // 交易管理

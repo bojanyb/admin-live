@@ -1351,6 +1351,10 @@ const NOBILITYUSERSORTLIST = [
 // 赠送记录 - 赠送类型
 const FINANCEGIVETYPELIST = [
     {
+        name: '全部',
+        value: ''
+    },
+    {
         name: '钻石',
         value: 1
     },

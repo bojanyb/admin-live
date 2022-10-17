@@ -101,7 +101,7 @@ export function roomGameList(data) {
 }
 
 // 审核用户操作记录
-export function checkContentAudit(data) {
+export function checkContentAudit(data) { // 接口勿用 - 这里会审核图片 - 现在有图片审核模块 - 会重复审核
   return request({
     url: api.audit.checkContentAudit,
     method: 'post',
