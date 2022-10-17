@@ -56,7 +56,7 @@ export default {
             tabIndex: '0',
             searchParams: {
                 dateTimeParams: [],
-                sen_status: 1
+                sen_status: 2
             },
             dateTimeParams: {
                 start_time: null,
