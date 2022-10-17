@@ -1,3 +1,4 @@
+// 暂时废弃 - 合并到 giftHistory-list页面
 <template>
 	<div class="app-container">
 		<el-card>
