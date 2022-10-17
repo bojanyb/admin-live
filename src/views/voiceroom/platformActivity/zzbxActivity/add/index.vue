@@ -21,6 +21,9 @@
                 <el-form-item label="单次抽奖钻石" prop="cost">
                     <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled" v-model="ruleForm.cost"></el-input>
                 </el-form-item>
+                <el-form-item label="排序" prop="sort">
+                    <el-input v-model="ruleForm.sort" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled" @input="inputSort" placeholder="请输入排序"></el-input>
+                </el-form-item>
                 <el-form-item label="开始时间" prop="start_time">
                     <el-date-picker
                     :disabled="disabled"
@@ -149,7 +152,8 @@ export default {
                 cost: null,
                 start_time: null,
                 end_time: null,
-                gifts: []
+                gifts: [],
+                sort: null
             },
             rules: {
                 activity_type_id: [
@@ -161,6 +165,9 @@ export default {
                 cost: [
                     { required: true, message: '请输入单次抽奖钻石', trigger: 'blur' }
                 ],
+                sort: [
+                    { required: true, message: '请输入排序', trigger: 'blur' }
+                ],
                 start_time: [
                     { type: 'date', required: true, message: '请选择开始时间', trigger: 'change' }
                 ],
@@ -171,6 +178,12 @@ export default {
         };
     },
     methods: {
+        // 判断排序输入最大值
+        inputSort(v) {
+            if(Number(v) >= 65535) {
+                this.ruleForm.sort = 65535
+            }
+        },
         handleClose() {
             this.resetForm()
         },

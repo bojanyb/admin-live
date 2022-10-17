@@ -44,14 +44,16 @@
                         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="提现税率" prop="cash_rate" class="allocationBox">
-                    <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.cash_rate"></el-input>
-                </el-form-item>
-                <el-form-item label="支付类型" prop="cash_rate" class="allocationBox">
-                    <el-checkbox-group v-model="ruleForm.channel_ways" prop="">
-                        <el-checkbox v-for="item in payList" :key="item.value" :label="item.value">{{ item.name }}</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
+                <div class="formBox">
+                    <el-form-item label="提现税率" prop="cash_rate" class="allocationBox">
+                        <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.cash_rate"></el-input>
+                    </el-form-item>
+                    <el-form-item label="支付类型" prop="channel_ways">
+                        <el-select v-model="ruleForm.channel_ways" placeholder="请选择">
+                            <el-option v-for="item in payList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -89,7 +91,7 @@ export default {
                 name: '',
                 config_json: '',
                 cash_rate: '',
-                channel_ways: [],
+                channel_ways: null,
                 type: 1,
                 merchant_name: '',
                 file: ''
@@ -101,6 +103,9 @@ export default {
                 ],
                 channel: [
                     { required: true, message: '请选择商户平台', trigger: 'change' }
+                ],
+                channel_ways: [
+                    { required: true, message: '请选择支付类型', trigger: 'change' }
                 ],
                 merchant_name: [
                     { required: true, message: '请输入商户名称', trigger: 'blur' }
@@ -152,9 +157,6 @@ export default {
             this.dialogVisible = true
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
-                params.channel_ways = params.channel_ways.map(item => {
-                    return Number(item)
-                })
                 params.config_json = JSON.stringify(JSON.parse(params.config_json))
                 this.$set(this.$data, 'ruleForm', params)
             }

@@ -38,7 +38,8 @@ export default {
     data() {
         return {
             searchParams: {
-                channel: 3
+                channel: 3,
+                channel_way: 1
             },
             isDestoryComp: false // 是否销毁组件
         };
@@ -55,6 +56,16 @@ export default {
                     label: '商户平台',
                     placeholder: '请选择',
                     options: MAPDATA.PAYCONFIGURATIONPLATFORMLIST
+                },
+                {
+                    name: 'channel_way',
+                    type: 'select',
+                    value: 1,
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '支付类型',
+                    placeholder: '请选择',
+                    options: MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST
                 }
             ]
         },
@@ -71,6 +82,14 @@ export default {
                         }
                     },
                     {
+                        label: '支付类型',
+                        render: (h, params) => {
+                            let data = MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST.find(a => { return params.row.channel_way === a.value })
+                            return h('span', data ? data.name : '无')
+                        }
+                    },
+                    
+                    {
                         label: '主体名称',
                         prop: 'name'
                     },
@@ -79,27 +98,23 @@ export default {
                         prop: 'merchant_name'
                     },
                     {
-                        label: '商户号',
-                        minWidth: '100px',
-                        render: (h, params) => {
-                            return h('span', params.row.appid || '无')
-                        }
-                    },
-                    {
-                        label: '支付类型',
-                        render: (h, params) => {
-                            let arr = params.row.channel_ways.map(item => {
-                                let name = MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST.find(a => { return Number(item) === a.value })
-                                return name ? name.name : ''
-                            })
-                            let a = arr.toString()
-                            return h('span', a)
-                        }
-                    },
-                    {
                         label: '提现税率',
                         render: (h, params) => {
                             return h('span', params.row.cash_rate + '%')
+                        }
+                    },
+                    // {
+                    //     label: '商户号',
+                    //     minWidth: '100px',
+                    //     render: (h, params) => {
+                    //         return h('span', params.row.appid || '无')
+                    //     }
+                    // },
+                    {
+                        label: '商户状态',
+                        minWidth: '100px',
+                        render: (h, params) => {
+                            return h('span', params.row.remark || '无')
                         }
                     },
                     {
@@ -140,13 +155,15 @@ export default {
             let s = { ...this.searchParams }
             return {
                 page: params.page,
-                channel: s.channel
+                channel: s.channel,
+                channel_way: s.channel_way
             }
         },
         // 重置
         reset() {
             this.searchParams = {
-                channel: 3
+                channel: 3,
+                channel_way: 1
             }
             this.getList()
         },

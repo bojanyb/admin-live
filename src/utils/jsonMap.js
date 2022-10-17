@@ -1390,10 +1390,10 @@ const PAYMENTALLOCATIONMANAGEMENTTYPELIST = [
 
 // 支付配置管理 - 支付平台
 const PAYCONFIGURATIONPLATFORMLIST = [
-    {
-        name: '苹果支付',
-        value: 1
-    },
+    // {
+    //     name: '苹果支付',
+    //     value: 1
+    // },
     {
         name: '微信支付',
         value: 2
@@ -1411,25 +1411,25 @@ const PAYCONFIGURATIONPLATFORMLIST = [
 // 支付配置管理 - 支付方式
 const PAYCONFIGURATIONPLATFORMTYPELIST = [
     {
-        name: 'App',
+        name: 'app支付',
         value: 1
     },
+    // {
+    //     name: 'PC',
+    //     value: 2
+    // },
     {
-        name: 'PC',
-        value: 2
-    },
-    {
-        name: 'H5',
+        name: 'h5支付',
         value: 3
     },
-    {
-        name: '公众号',
-        value: 4
-    },
-    {
-        name: '小程序',
-        value: 5
-    }
+    // {
+    //     name: '公众号',
+    //     value: 4
+    // },
+    // {
+    //     name: '小程序',
+    //     value: 5
+    // }
 ]
 
 // 商户配置管理 - 支付类型
@@ -1440,6 +1440,22 @@ const COMMERCIALMANAGEMENTPAYTYPELIST = [
     },
     {
         name: 'app支付',
+        value: 2
+    }
+]
+
+// 充值记录 - 充值类型
+const RECHARGEHISTORYTYPELIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '钻石充值',
+        value: 1
+    },
+    {
+        name: '贵族充值',
         value: 2
     }
 ]
@@ -2043,5 +2059,6 @@ export default {
     RISKMANAGEMENTIMGTYPELIST,
     RISKMANAGEMENTIMGSTATUSLIST,
     ROOMBACKGROUNDSELECTLIST,
-    GUILDOPERATIONLIST
+    GUILDOPERATIONLIST,
+    RECHARGEHISTORYTYPELIST
 }

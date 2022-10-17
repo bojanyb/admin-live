@@ -35,10 +35,20 @@
 						name: 'user_number',
 						type: 'input',
 						value: '',
-						label: '被赠送用户ID',
+						label: '用户ID',
 						isNum: true,
-						placeholder: '请输入被赠送用户ID'
-					}
+						placeholder: '请输入用户ID'
+					},
+					{
+						name: 'status',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '充值状态',
+						placeholder: '请选择',
+						options: MAPDATA.ORDERSTATUS
+					},
 				]
 			},
 			cfgs() {
@@ -47,34 +57,38 @@
 					url: REQUEST.finance.platformTopUp,
 					columns: [
 						{
-							label: '被赠送用户ID',
-							prop: 'user_number'
-						},
-						{
-							label: '赠送类型',
-							render: (h, params) => {
-								let data = MAPDATA.FINANCEGIVETYPELIST.find(item => { return item.value === params.row.currency })
-								return h('span', data ? data.name : '无')
-							}
-						},
-						{
-							label: '赠送数量',
-							prop: 'diamond'
-						},
-						{
 							label: '赠送时间',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
 						{
-							label: '赠送原因',
-							prop: 'remark',
-							showOverFlow: true
+							label: '用户ID',
+							prop: 'user_number'
 						},
 						{
-							label: '操作人',
+							label: '用户昵称',
+							prop: 'user_number'
+						},
+						{
+							label: '增发类型',
+							render: (h, params) => {
+								let data = MAPDATA.FINANCEGIVETYPELIST.find(item => { return item.value === params.row.currency })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '增发数额',
+							prop: 'diamond'
+						},
+						{
+							label: '赠送人',
 							prop: 'op_user'
+						},
+						{
+							label: '赠送说明',
+							prop: 'remark',
+							showOverFlow: true
 						}
 					]
 				}
