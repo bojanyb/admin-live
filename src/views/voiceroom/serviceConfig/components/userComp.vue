@@ -9,7 +9,7 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <div class="inputBox">
                     <el-form-item label="用户ID" prop="user_number" class="numberBox">
-                        <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled"></el-input>
+                        <el-input v-model="ruleForm.user_number" :disabled="disabled" @input="numberInput"></el-input>
 
                         <el-button type="success" @click="seeUser">查询</el-button>
                     </el-form-item>
@@ -123,6 +123,9 @@ export default {
         }
     },
     methods: {
+        numberInput() {
+            this.ruleForm.user_number = this.ruleForm.user_number.replace(/[^\d]/g, '')
+        },
         handleClose() {
             this.dialogVisible = false
         },
