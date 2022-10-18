@@ -40,6 +40,7 @@
 						selctValue: 'all',
 						selectWidth: '130px',
 						label: '交易查询',
+						noClear: true,
 						handler: {
 							change: (v) => {}
 						},
