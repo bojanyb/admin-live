@@ -14,7 +14,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="用户ID" prop="user_number" class="numberBox">
-                        <el-input v-model="ruleForm.user_number"></el-input>
+                        <el-input v-model="ruleForm.user_number" @blur="seeUser"></el-input>
 
                         <el-button type="success" @click="seeUser">查询</el-button>
                     </el-form-item>
@@ -158,7 +158,7 @@ export default {
                 if (valid) {
                     let res = await getUserAddMoney(this.ruleForm)
                     if(res.code === 2000) {
-                        if(this.ruleForm.amount.indexOf('-') === -1) {
+                        if(this.ruleForm.amount.indexOf('-') !== -1) {
                             this.$success('扣除成功')
                         } else {
                             this.$success('增发成功')
@@ -186,12 +186,14 @@ export default {
             if(res.code === 2000) {
                 if(res.data.list.length <= 0) {
                     this.$warning('查询不到数据')
+                    this.userList = []
                 } else {
                     res.data.list[0].create_time = timeFormat(res.data.list[0].create_time, 'YYYY-MM-DD HH:mm:ss', true)
                     this.userList = res.data.list || []
                 }
-
-                this.handleUserInfo()
+                if(this.userList.length > 0) {
+                    this.handleUserInfo()
+                }
             }
         },
         // 获取用户余额
