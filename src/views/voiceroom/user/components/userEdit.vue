@@ -38,13 +38,13 @@
                     </el-form-item>
                 </div>
                 <div class="userBox btnBox">
-                    <el-form-item label="状态" prop="status" :class="{'mustBox': status !== 'see'}">
+                    <!-- <el-form-item label="状态" prop="status" :class="{'mustBox': status !== 'see'}">
                         <div class="statusBox" :class="{'statusDisabled': disabled}">
                             <span v-for="(item,index) in statusList" :key="index" :class="[{ 'hign': statusIndex === item.value }, { 'hignBox': item.value == 2 && statusIndex == 2 }]"  @click="statusClick(item.value)">
                                 {{ item.name }}
                             </span>
                         </div>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item label="是否已绑卡" prop="is_bindcard" class="isBindCard" :class="{'mustBox': status !== 'see'}">
                         <el-button type="primary" @click="isShowBindcard" :disabled="disabled">{{ ruleForm.is_bindcard ? '是' : '否' }}</el-button>
                     </el-form-item>
