@@ -40,8 +40,11 @@
 						selctValue: 'all',
 						selectWidth: '130px',
 						label: '交易查询',
+						noClear: true,
 						handler: {
-							change: (v) => {}
+							change: (v) => {
+								
+							}
 						},
 						options: [
 							{ key: 'all', label: '全部' },
@@ -143,6 +146,7 @@
 						name: '私聊'
 					}
 				],
+				id: null,
 				searchParams: {
 					dateTimeParams: []
 				},

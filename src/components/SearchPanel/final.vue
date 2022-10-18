@@ -377,7 +377,9 @@ export default {
             if (form.type === 'inputSelect') {
               this.$set(this.form, form.selectName, form.selctValue)
               this.$watch(`form.${form.selectName}`, n => {
-                this.$set(this.form, form.name, '')
+                if(!form.noClear) {
+                  this.$set(this.form, form.name, '')
+                }
               })
             }
             if (form.type === 'datePicker') {
