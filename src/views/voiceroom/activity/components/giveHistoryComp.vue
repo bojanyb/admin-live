@@ -19,7 +19,7 @@
                         <el-button type="success" @click="seeUser">查询</el-button>
                     </el-form-item>
                     <el-form-item label="增发数额" prop="amount" :rules="verifyAmount">
-                        <el-input v-model="ruleForm.amount" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
+                        <el-input v-model="ruleForm.amount" @input="amountInput"></el-input>
                     </el-form-item>
                     <el-form-item label="增发说明" prop="remark">
                         <el-input v-model="ruleForm.remark" :rows="4" type="textarea"></el-input>
@@ -105,9 +105,32 @@ export default {
                     if(!this.ruleForm.amount) {
                         cb(new Error('请输入增发数额'))
                     } else {
+                        let arr = this.ruleForm.amount.split('')
+                        let s = [],a = [], num = '';
+                        arr.forEach((item,index) => {
+                            if(item === '-') {
+                                s.push(item)
+                            }
+                            if(item === '+') {
+                                a.push(item)
+                            }
+                            if(index !== 0) {
+                                num += item
+                            }
+                        })
                         if(Number(this.ruleForm.amount) > 10000000) {
                             cb(new Error('充值数量最大范围10000000'))
-                        } else {
+                        } else if(arr[0] === '-' || arr[0] === '+') {
+                            if(arr[0] !== '-' && (arr[0] !== '+' || a.length != 1 || s.length != 0)) {
+                                cb(new Error('请输入正确数额，只能有一个"+", 且必须在第一位'))
+                            } else if(arr[0] !== '+' && (arr[0] !== '-' || s.length != 1 || a.length != 0)) {
+                                cb(new Error('请输入正确数额，只能有一个"-", 且必须在第一位'))
+                            } else if(arr[0] === '-' && Number(num) > this.form.balance) {
+                                cb(new Error('您要扣除的金额大于用户余额'))
+                            }  else {
+                                cb()
+                            }
+                        }else {
                             cb()
                         }
                     }
@@ -117,6 +140,10 @@ export default {
         }
     },
     methods: {
+        // 限制输入金额
+        amountInput() {
+            this.ruleForm.amount = this.ruleForm.amount.replace(/[\u4E00-\u9FA5A-Za-z_^%&'\\*\/;.,=?$\[\]!@#()\\~]/g, '')
+        },
         // 关闭弹窗
         handleClose() {
             this.dialogVisible = false
@@ -131,7 +158,11 @@ export default {
                 if (valid) {
                     let res = await getUserAddMoney(this.ruleForm)
                     if(res.code === 2000) {
-                        this.$success('赠送成功')
+                        if(this.ruleForm.amount.indexOf('-') === -1) {
+                            this.$success('扣除成功')
+                        } else {
+                            this.$success('增发成功')
+                        }
                         this.dialogVisible = false
                         this.$emit('getList')
                     }

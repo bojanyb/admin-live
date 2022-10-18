@@ -91,7 +91,7 @@
 						},
 						{
 							label: '用户昵称',
-							prop: 'user_number'
+							prop: 'nickname'
 						},
 						{
 							label: '增发类型',
@@ -102,7 +102,14 @@
 						},
 						{
 							label: '增发数额',
-							prop: 'diamond'
+							prop: 'diamond',
+							render: (h, params) => {
+								return h('span', {
+									style: {
+										color: params.row.genre === 1 ? '#13CE66' : '#ff4949'
+									}
+								}, params.row.genre === 1 ? '+' + params.row.diamond : '-' + params.row.diamond)
+							}
 						},
 						{
 							label: '赠送人',
