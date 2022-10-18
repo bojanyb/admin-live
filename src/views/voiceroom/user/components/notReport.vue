@@ -8,7 +8,7 @@
         :before-close="handleClose">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
                 <el-form-item label="封禁说明" prop="reply">
-                    <el-input type="textarea" v-model="ruleForm.reply" placeholder="封禁说明必填,至少二十个字" :rows="4"></el-input>
+                    <el-input type="textarea" v-model="ruleForm.reply" placeholder="封禁说明必填,至少三个字" :rows="4"></el-input>
                 </el-form-item>
                 <el-form-item label="封禁时间" prop="ban_duration">
                     <el-select v-model="ruleForm.ban_duration" placeholder="请选择">
@@ -42,7 +42,7 @@ export default {
             rules: {
                 reply: [
                     { required: true, message: '请输入封禁说明', trigger: 'blur' },
-                    { min: 20, max: 999, message: '至少二十个字', trigger: 'blur' }
+                    { min: 3, max: 999, message: '至少三个字', trigger: 'blur' }
                 ],
                 ban_duration: [
                     { required: true, message: '请选择封禁时间', trigger: 'change' }
