@@ -2,19 +2,23 @@
 <template>
     <div class="promote-order-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-add="true" :show-search-btn="true" @add="add" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-add="true" :show-search-btn="true" :show-batch-pass="true" batchFuncName="导入CSV" @add="add" @onSearch="onSearch" @batchPass="batchPass"></SearchPanel>
         </div>
 
         <tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 新增组件 -->
         <orderComp v-if="isDestoryComp" ref="orderComp" @destoryComp="destoryComp" @getList="getList"></orderComp>
+
+        <uploadExcel v-if="isDestoryComp" ref="uploadExcel" @destoryComp="destoryComp"></uploadExcel>
     </div>
 </template>
 
 <script>
 // 引入api
 import { replenishmentDel } from '@/api/recommend'
+// 引入导入组件
+import uploadExcel from './components/uploadExcel.vue'
 // 引入新增组件
 import orderComp from './components/orderComp.vue'
 // 引入列表组件
@@ -32,7 +36,8 @@ export default {
     components: {
         tableList,
         SearchPanel,
-        orderComp
+        orderComp,
+        uploadExcel
     },
     mixins: [mixins],
     computed: {
@@ -131,6 +136,13 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
+        },
+        // 导入
+        batchPass() {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.uploadExcel.loadParams()
+            }, 50);
         }
     }
 }

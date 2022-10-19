@@ -1,0 +1,115 @@
+<template>
+    <div class="finance-uploadExcel-box">
+        <el-dialog
+        :title="title"
+        :visible.sync="dialogVisible"
+        width="400px"
+        :before-close="handleClose"
+        @closed="closed">
+            <el-upload
+            class="avatar-uploader"
+            action="#"
+            accept=".csv,.CSV"
+            :show-file-list="false"
+            :http-request="upLoad">
+                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+        </el-dialog>
+    </div>
+</template>
+
+<script>
+// 引入api
+import { regReplenishmentByCsv } from '@/api/finance.js'
+export default {
+    props: {
+        title: { // 标题
+            type: String,
+            default: ''
+        }
+    },
+    data() {
+        return {
+            imageUrl: '',
+            dialogVisible: false
+        };
+    },
+    methods: {
+        // 关闭弹窗
+        handleClose() {
+            this.dialogVisible = false
+        },
+        // 获取数据
+        loadParams() {
+            this.dialogVisible = true
+        },
+        handleAvatarSuccess(res, file) {
+            this.imageUrl = URL.createObjectURL(file.raw);
+        },
+        // 
+        beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+            this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+            this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
+        // 上传
+        async upLoad(file) {
+            let formData = new FormData();
+            formData.append('file', file.file);
+            if(this.title === '') {}
+            let res = await regReplenishmentByCsv(formData)
+            if(res.code === 2000) {
+                this.$success('导入成功')
+                this.dialogVisible = false
+            }
+        },
+        // 销毁组件
+        closed() {
+            this.$emit('destoryComp')
+        }
+    }
+}
+</script>
+
+<style lang="scss">
+.finance-uploadExcel-box {
+    .el-dialog__body {
+        padding-bottom: 50px;
+    }
+    .avatar-uploader {
+        display: flex;
+        justify-content: center;
+    }
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
+}
+</style>

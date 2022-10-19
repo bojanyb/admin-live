@@ -6,7 +6,7 @@
             <span>充值金额{{ ruleForm.total_money / 100 || 0 }}元</span>
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" :show-batch-rurn="true"  batchRurnName="导出EXCEL" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @BatchRurn="BatchRurn"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+// 引入api
+import { diamondRechargeAll } from '@/api/finance.js'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -24,7 +26,7 @@ import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
-import { timeFormat } from '@/utils/common.js'
+import { timeFormat, exportTableData } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 
@@ -262,9 +264,8 @@ export default {
         beforeSearch(params) {
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
-                page: params.page,
+                page: params ? params.page : null,
                 user_number: s.user_number,
-                sort: s.sort,
                 channel: s.channel,
                 status: s.status,
                 amount: s.amount ? Number(s.amount) * 100 : s.amount,
@@ -302,6 +303,32 @@ export default {
         // 列表返回数据
         saleAmunt(data) {
             this.ruleForm = { ...data }
+        },
+        // 导出excel
+        async BatchRurn() {
+            let s = this.beforeSearch()
+            delete s.page
+            let res = await diamondRechargeAll(s)
+            let arr = JSON.parse(JSON.stringify(res.data.list))
+            if(arr.length <= 0) return this.$warning('当前没有数据可以导出')
+            arr = arr.map((item,index) => {
+                let name = MAPDATA.RECHARGEHISTORYTYPELIST.find(a => { return a.value === item.purpose })
+                let status = MAPDATA.ORDERSTATUS.find(a => { return a.value.indexOf(item.status) !== -1 })
+                let params = {
+                    create_time: timeFormat(item.create_time, 'YYYY-MM-DD HH:mm:ss', true),
+                    user_number: item.user_number,
+                    nickname: item.nickname,
+                    amount: item.amount / 100,
+                    type: name.name,
+                    remark: item.remark,
+                    channel: item.channel,
+                    status: status.name,
+                    trade_no: item.trade_no
+                }
+                return params
+            })
+            let nameList = [ '充值时间', '用户ID', '用户昵称', '充值金额（元）', '充值类型', '充值说明', '充值平台', '充值状态', '交易单号' ]
+            exportTableData(arr, nameList, '充值记录')
         }
     },
     created() {

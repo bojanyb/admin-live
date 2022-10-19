@@ -5,7 +5,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :show-reset="true" :showYesterday="tabIndex !== '2'" :showBeforeYesterday="tabIndex !== '2'" :showToday="tabIndex !== '2'" :show-add="tabIndex === '2'" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @beforeYesterday="beforeYesterday" @today="today" @add="add"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @handlePageChange="handlePageChange" @saleAmunt="saleAmunt"></tableList>
 
         <!-- 详情组件 -->
         <historyComp v-if="isDestoryComp" ref="historyComp" @destoryComp="destoryComp" @getList="getList"></historyComp>
@@ -61,7 +61,8 @@ export default {
             dateTimeParams: {
                 start_time: null,
                 end_time: null
-            }
+            },
+            ruleForm: {} // 储存max_id
         };
     },
     computed: {
@@ -355,6 +356,16 @@ export default {
                 }
             }
             return data
+        },
+        // 获取列表数据
+        saleAmunt(row) {
+            this.ruleForm = { ...row }
+        },
+        // 下一页操作
+        handlePageChange(val) { // 模拟缓存当前列表数据
+            this.$refs.tableList.$data.search.page = val
+            let max_id = this.ruleForm.max_id || 0
+            this.$refs.tableList.getData(max_id, this.tabIndex)
         },
         // 刷新列表
         getList() {

@@ -190,10 +190,14 @@
         this.getData();
       },
       handlePageChange(val) {
-        this.search.page = val;
-        this.getData();
+        if(window.location.href.indexOf('/serviceConfig/message-history') !== -1) { // 如果页面是消息记录 - 需要去当前页处理
+          this.$emit('handlePageChange', val)
+        } else {
+          this.search.page = val;
+          this.getData();
+        }
       },
-      getData(status) {
+      getData(max_id, tabIndex) {
         this.loading = true;
         let search = this.search,
           vm = this.cfgs.vm,
@@ -204,6 +208,9 @@
         };
         if (typeof vm.beforeSearch === 'function') {
           params = vm.beforeSearch(params);
+          if(window.location.href.indexOf('/serviceConfig/message-history') !== -1 && tabIndex !== '2') { // 模拟缓存当前列表数据 - 仅限消息记录页面使用
+            params.max_id = max_id
+          }
           if(JSON.stringify(this.oldParams) !== JSON.stringify(params) && this.oldPage && this.oldPage == params.page) { // 搜索 - 重置分页
             this.search.page = 1
             params.page = 1

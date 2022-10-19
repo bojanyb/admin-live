@@ -7,7 +7,7 @@
             <!-- <span>选择时间内的到账金额：{{ Number((ruleForm.alreadyMoney - ruleForm.deductMoney).toFixed(2)) || 0 }}元</span> -->
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" :show-batch-pass="true" batchFuncName="导出EXCEL" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @batchPass="batchPass"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" :show-batch-rurn="true"  batchRurnName="导出EXCEL" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @BatchRurn="BatchRurn"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+// 引入api
+import { getCashHisityAll } from '@/api/finance.js'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -25,7 +27,7 @@ import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
-import { timeFormat } from '@/utils/common.js'
+import { timeFormat, exportTableData } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 
@@ -38,7 +40,7 @@ export default {
     },
     components: {
         tableList,
-        SearchPanel
+        SearchPanel,
     },
     mixins: [mixins],
     computed: {
@@ -228,7 +230,6 @@ export default {
                 deductMoney: null,
                 dateTimeParams: ['', '']
             },
-            list: [],
             dateTimeParams: {
                 start_time: null,
                 end_time: null
@@ -288,7 +289,7 @@ export default {
         beforeSearch(params) {
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
-                page: params.page,
+                page: params ? params.page : null,
                 status: s.status,
                 user_number: s.user_number,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
@@ -318,15 +319,13 @@ export default {
         saleAmunt(data) {
             this.ruleForm.alreadyMoney = data.totalmoney ? data.totalmoney : 0
             this.ruleForm.deductMoney = data.rate_money ? data.rate_money : 0
-            this.list = data.list || []
-        },
-        // 转base64
-        base64(s) {
-            return window.btoa(unescape(encodeURIComponent(s)))
         },
         // 导出excel
-        batchPass() {
-            let arr = JSON.parse(JSON.stringify(this.list))
+        async BatchRurn() {
+            let s = this.beforeSearch()
+            delete s.page
+            let res = await getCashHisityAll(s)
+            let arr = JSON.parse(JSON.stringify(res.data.list))
             if(arr.length <= 0) return this.$warning('当前没有数据可以导出')
             arr = arr.map((item,index) => {
                 let name = MAPDATA.STATUSLIST.find(a => { return a.value === item.status })
@@ -342,41 +341,11 @@ export default {
                     toTime: item.status != 3 ? item.pay_time ? timeFormat(item.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无' : item.orderDetails.remark,
                     order_id: item.order_id,
                     admin_id: item.admin_id
-                    
                 }
                 return params
             })
-            let str = '<tr><td style="text-align:center;height: 50px;">用户ID</td><td style="text-align:center;">申请时间</td><td style="text-align:center;">扣除喵粮</td><td style="text-align:center;">申请金额</td><td style="text-align:center;">手续费</td><td style="text-align:center;">处理时间</td><td style="text-align:center;">处理状态</td><td style="text-align:center;">到账金额/退回金额</td><td style="text-align:center;">到账时间/原因</td><td style="text-align:center;">交易单号</td><td style="text-align:center;">操作人</td></tr>';
-            // 循环遍历，每行加入tr标签，每个单元格加td标签
-            for(let i = 0 ; i < arr.length ; i++ ){
-                str+='<tr>';
-                for(const key in arr[i]){
-                    // 增加  为了不让表格显示科学计数法或者其他格式
-                    str+=`<td style="text-align:center;height: 40px;">${ (arr[i][key] || '无') + '  '}</td>`;    
-                }
-                str+='</tr>';
-            }
-            // Worksheet名
-            const worksheet = timeFormat(new Date(), 'YYYY-MM-DD', false) + ' - 提现记录'
-            // data:text/csv;charset=utf-8,ufeff
-            // data:application/vnd.ms-excel;base64,
-            const uri = 'data:application/vnd.ms-excel;base64,';
-    
-            // 下载的表格模板数据
-            const template = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
-            xmlns:x="urn:schemas-microsoft-com:office:excel"
-            xmlns="http://www.w3.org/TR/REC-html40">
-            <head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
-            <x:Name>${worksheet}</x:Name>
-            <x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>
-            </x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
-            </head><body><table>${str}</table></body></html>`;
-            // 下载模板
-            // window.location.href = uri + this.base64(template);
-            const link = document.createElement("a");
-            link.href = uri + this.base64(template);
-            link.download = timeFormat(new Date(), 'YYYY-MM-DD', false) + '提现记录.xls';
-            link.click();
+            let nameList = [ '用户ID','申请时间', '扣除喵粮', '申请金额','手续费','处理时间','处理状态','到账金额/退回金额','到账时间/原因','交易单号','操作人' ]
+            exportTableData(arr, nameList, '提现记录')
         }
     },
     created() {

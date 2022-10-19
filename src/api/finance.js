@@ -64,3 +64,30 @@ export function useCash(data) {
     data
   })
 }
+
+// 充值记录导出
+export function diamondRechargeAll(data) {
+  return request({
+    url: REQUEST.finance.diamondRechargeAll,
+    method: 'post',
+    data
+  })
+}
+
+// 提现导出excel
+export function getCashHisityAll(data) {
+  return request({
+    url: REQUEST.finance.getCashHisityAll,
+    method: 'post',
+    data
+  })
+}
+
+// 推广补单通过csv格式
+export function regReplenishmentByCsv(data) {
+  return request({
+    url: REQUEST.finance.regReplenishmentByCsv,
+    method: 'post',
+    data
+  })
+}
