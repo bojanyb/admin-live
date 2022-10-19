@@ -171,7 +171,7 @@ const request = {
         list: `${HTTPHEADER}/user/getUserBgi`,
         toAuditList: `${HTTPHEADER}/User/toAuditList`, // 待审核列表
         auditedList: `${HTTPHEADER}/User/auditedList`, // 已审核记录
-        checkContentAudit: `${HTTPHEADER}/User/checkContentAudit`, // 审核用户操作记录
+        checkContentAudit: `${HTTPHEADER}/User/checkContentAudit`, // 审核用户操作记录 // 接口勿用 - 这里会审核图片 - 现在有图片审核模块 - 会重复审核
     },
 
     // 交易管理
@@ -222,6 +222,9 @@ const request = {
     // 财务管理
     finance: {
         platformTopUp: `${HTTPHEADER}/wallet/platformTopUp`, // 充值记录
+        getCashHisityAll: `${HTTPHEADER}/cash/getCashHisityAll`, // 提现导出excel
+        diamondRechargeAll: `${HTTPHEADER}/Recharge/diamondRechargeAll`, // 充值记录导出
+        regReplenishmentByCsv: `${HTTPHEADER}/Promoter/regReplenishmentByCsv`, // 推广补单通过csv格式
     },
 
     // 消息管理
@@ -274,6 +277,8 @@ const request = {
         index: `${HTTPHEADER}/Sensitive/index`, // 敏感词列表
         softDelete: `${HTTPHEADER}/Sensitive/softDelete`, // 敏感词-软删除
         add: `${HTTPHEADER}/Sensitive/add`, // 敏感词-添加
+        screenImgLog: `${HTTPHEADER}/ScreenImgLog/index`, // 图片审核-列表
+        review: `${HTTPHEADER}/ScreenImgLog/review`, // 图片审核-操作
     },
 
     // 心动速配

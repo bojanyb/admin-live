@@ -265,3 +265,53 @@ export function  formatJson(jsonObj, callback) {
     // 返回的数据需要去除两边的空格
     return formatted.trim();
 }
+
+// 转base64
+export function base64(s) {
+  return window.btoa(unescape(encodeURIComponent(s)))
+}
+
+// 封装列表数据导出
+export function exportTableData(list, nameList, title) {
+  let str = ''
+  str += '<tr>'
+  for (let index = 0; index < nameList.length; index++) {
+    str+=`<td style="text-align:center;height: 40px;">${ nameList[index] }</td>`
+  }
+  str+='</tr>';
+
+  // 循环遍历，每行加入tr标签，每个单元格加td标签
+  for(let i = 0 ; i < list.length ; i++ ){
+    str+='<tr>';
+    for(const key in list[i]){
+      // 增加  为了不让表格显示科学计数法或者其他格式
+      if(key === 'trade_no' || key === 'order_id') {
+        str+=`<td style="text-align:center;height: 40px;">${ ('单号:' + list[i][key] || '无') + '  '}</td>`;
+      } else {
+        str+=`<td style="text-align:center;height: 40px;">${ (list[i][key] || '无') + '  '}</td>`;
+      }
+    }
+    str+='</tr>';
+  }
+  // Worksheet名
+  const worksheet = timeFormat(new Date(), 'YYYY-MM-DD', false) + ' - ' + title
+  // data:text/csv;charset=utf-8,ufeff
+  // data:application/vnd.ms-excel;base64,
+  const uri = 'data:application/vnd.ms-excel;base64,';
+
+  // 下载的表格模板数据
+  const template = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns="http://www.w3.org/TR/REC-html40">
+  <head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
+  <x:Name>${worksheet}</x:Name>
+  <x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>
+  </x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+  </head><body><table>${str}</table></body></html>`;
+  // 下载模板
+  // window.location.href = uri + this.base64(template);
+  const link = document.createElement("a");
+  link.href = uri + base64(template);
+  link.download = timeFormat(new Date(), 'YYYY-MM-DD', false) + title + '.xls';
+  link.click();
+}

@@ -2,10 +2,11 @@
 <template>
     <div class="finance-guildWithdraw-list">
         <div class="model">
-            <span>选择时间内用户充值金额统计：{{ ruleForm.allMoney || 0 }}元</span>
+            <span>充值人数{{ ruleForm.count || 0 }}人</span>
+            <span>充值金额{{ ruleForm.total_money / 100 || 0 }}元</span>
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" :show-batch-rurn="true"  batchRurnName="导出EXCEL" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @BatchRurn="BatchRurn"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -14,6 +15,8 @@
 </template>
 
 <script>
+// 引入api
+import { diamondRechargeAll } from '@/api/finance.js'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -23,7 +26,7 @@ import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
-import { timeFormat } from '@/utils/common.js'
+import { timeFormat, exportTableData } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 
@@ -37,16 +40,6 @@ export default {
         forms() {
             return [
                 {
-                    name: 'channel',
-                    type: 'select',
-                    value: '',
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '收单机构',
-                    placeholder: '请选择',
-                    options: MAPDATA.INSTITUTION
-                },
-                {
                     name: 'user_number',
                     type: 'input',
                     value: '',
@@ -55,22 +48,43 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
-                    name: 'status',
+                    name: 'amount',
+                    type: 'input',
+                    value: '',
+                    label: '充值金额',
+                    placeholder: '请输入充值金额'
+                },
+                {
+                    name: 'channel',
                     type: 'select',
-                    value: '1',
+                    value: '',
                     keyName: 'value',
                     optionLabel: 'name',
-                    label: '订单状态',
+                    label: '充值平台',
+                    placeholder: '请选择',
+                    options: MAPDATA.INSTITUTION
+                },
+                {
+                    name: 'status',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '充值状态',
                     placeholder: '请选择',
                     options: MAPDATA.ORDERSTATUS
                 },
                 {
-                    name: 'amount',
-                    type: 'input',
+                    name: 'purpose',
+                    type: 'select',
                     value: '',
-                    label: '金额',
-                    placeholder: '请输入金额'
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '充值类型',
+                    placeholder: '请选择',
+                    options: MAPDATA.RECHARGEHISTORYTYPELIST
                 },
+                
                 {
                     name: 'trade_no',
                     type: 'input',
@@ -110,61 +124,80 @@ export default {
                 url: REQUEST.diamondRecharge.list,
                 columns: [
                     {
-                        label: '用户ID',
-                        render: (h, params) => {
-                            return h('span', params.row.user_number || '无')
-                        }
-                    },
-                    {
-                        label: '创建时间',
+                        label: '充值时间',
                         minWidth: '150px',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
                     },
                     {
-                        label: '充值金额',
-                        prop: 'amount',
+                        label: '用户ID',
+                        minWidth: '100px',
+                        render: (h, params) => {
+                            return h('span', params.row.user_number || '无')
+                        }
+                    },
+                    {
+                        label: '用户昵称',
+                        minWidth: '100px',
+                        render: (h, params) => {
+                            return h('span', params.row.nickname || '无')
+                        }
+                    },
+                    {
+                        label: '充值金额（元）',
+                        minWidth: '100px',
                         render: (h, params) => {
                             return h('span', params.row.amount / 100)
                         }
                     },
                     {
-                        label: '收单机构',
-                        prop: 'receive'
+                        label: '充值类型',
+                        minWidth: '100px',
+                        render: (h, params) => {
+                            let data = MAPDATA.RECHARGEHISTORYTYPELIST.find(item => { return item.value === params.row.purpose })
+                            return h('span', data ? data.name : '无')
+                        }
                     },
                     {
-                        label: '充值方式',
+                        label: '充值说明',
+                        prop: 'remark',
+                        render: (h, params) => {
+                            return h('span', params.row.remark || '无')
+                        }
+                    },
+                    {
+                        label: '充值平台',
                         render: (h, params) => {
                             return h('span', params.row.channel)
                         }
                     },
                     {
-                        label: '订单状态',
+                        label: '充值状态',
                         render: (h, params) => {
                             let data = MAPDATA.ORDERSTATUS.find(item => { return item.value.indexOf(params.row.status) !== -1 })
                             return h('span', data ? data.name : '无')
                         }
                     },
-                    {
-                        label: '到账时间',
-                        minWidth: '150px',
-                        render: (h, params) => {
-                            return h('span', params.row.pay_time ? timeFormat(params.row.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-                        }
-                    },
+                    // {
+                    //     label: '到账时间',
+                    //     minWidth: '150px',
+                    //     render: (h, params) => {
+                    //         return h('span', params.row.pay_time ? timeFormat(params.row.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                    //     }
+                    // },
                     {
                         label: '交易单号',
                         minWidth: '150px',
                         prop: 'trade_no'
                     },
-                    {
-                        label: '商户单号',
-                        minWidth: '150px',
-                        render: (h, params) => {
-                            return h('span', params.row.out_trade_no || '无')
-                        }
-                    }
+                    // {
+                    //     label: '商户单号',
+                    //     minWidth: '150px',
+                    //     render: (h, params) => {
+                    //         return h('span', params.row.out_trade_no || '无')
+                    //     }
+                    // }
                 ]
             }
         }
@@ -175,7 +208,6 @@ export default {
                 allMoney: null
             },
             searchParams: {
-                status: '1',
                 dateTimeParams: ['', '']
             },
             dateTimeParams: {
@@ -232,15 +264,15 @@ export default {
         beforeSearch(params) {
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
-                page: params.page,
+                page: params ? params.page : null,
                 user_number: s.user_number,
-                sort: s.sort,
                 channel: s.channel,
                 status: s.status,
                 amount: s.amount ? Number(s.amount) * 100 : s.amount,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
-                trade_no: s.trade_no
+                trade_no: s.trade_no,
+                purpose: s.purpose
             }
         },
         // 设置时间段
@@ -270,7 +302,33 @@ export default {
         },
         // 列表返回数据
         saleAmunt(data) {
-            this.ruleForm.allMoney = data.total_money ? data.total_money / 100 : 0
+            this.ruleForm = { ...data }
+        },
+        // 导出excel
+        async BatchRurn() {
+            let s = this.beforeSearch()
+            delete s.page
+            let res = await diamondRechargeAll(s)
+            let arr = JSON.parse(JSON.stringify(res.data.list))
+            if(arr.length <= 0) return this.$warning('当前没有数据可以导出')
+            arr = arr.map((item,index) => {
+                let name = MAPDATA.RECHARGEHISTORYTYPELIST.find(a => { return a.value === item.purpose })
+                let status = MAPDATA.ORDERSTATUS.find(a => { return a.value.indexOf(item.status) !== -1 })
+                let params = {
+                    create_time: timeFormat(item.create_time, 'YYYY-MM-DD HH:mm:ss', true),
+                    user_number: item.user_number,
+                    nickname: item.nickname,
+                    amount: item.amount / 100,
+                    type: name.name,
+                    remark: item.remark,
+                    channel: item.channel,
+                    status: status.name,
+                    trade_no: item.trade_no
+                }
+                return params
+            })
+            let nameList = [ '充值时间', '用户ID', '用户昵称', '充值金额（元）', '充值类型', '充值说明', '充值平台', '充值状态', '交易单号' ]
+            exportTableData(arr, nameList, '充值记录')
         }
     },
     created() {

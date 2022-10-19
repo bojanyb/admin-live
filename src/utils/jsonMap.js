@@ -1005,6 +1005,26 @@ const USERMUSICBELLSLIST = [
     }
 ]
 
+// 实名列表 - 状态
+const USERMANAGEMENTAUTONYMSTATUSLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '待审核',
+        value: 'C'
+    },
+    {
+        name: '已通过',
+        value: 'Y'
+    },
+    // {
+    //     name: '已拒绝',
+    //     value: 'R'
+    // }
+]
+
 /*
 *审核管理 - 用户图片资料审核列表
 */
@@ -1351,6 +1371,10 @@ const NOBILITYUSERSORTLIST = [
 // 赠送记录 - 赠送类型
 const FINANCEGIVETYPELIST = [
     {
+        name: '全部',
+        value: ''
+    },
+    {
         name: '钻石',
         value: 1
     },
@@ -1390,10 +1414,10 @@ const PAYMENTALLOCATIONMANAGEMENTTYPELIST = [
 
 // 支付配置管理 - 支付平台
 const PAYCONFIGURATIONPLATFORMLIST = [
-    {
-        name: '苹果支付',
-        value: 1
-    },
+    // {
+    //     name: '苹果支付',
+    //     value: 1
+    // },
     {
         name: '微信支付',
         value: 2
@@ -1411,25 +1435,25 @@ const PAYCONFIGURATIONPLATFORMLIST = [
 // 支付配置管理 - 支付方式
 const PAYCONFIGURATIONPLATFORMTYPELIST = [
     {
-        name: 'App',
+        name: 'app支付',
         value: 1
     },
+    // {
+    //     name: 'PC',
+    //     value: 2
+    // },
     {
-        name: 'PC',
-        value: 2
-    },
-    {
-        name: 'H5',
+        name: 'h5支付',
         value: 3
     },
-    {
-        name: '公众号',
-        value: 4
-    },
-    {
-        name: '小程序',
-        value: 5
-    }
+    // {
+    //     name: '公众号',
+    //     value: 4
+    // },
+    // {
+    //     name: '小程序',
+    //     value: 5
+    // }
 ]
 
 // 商户配置管理 - 支付类型
@@ -1440,6 +1464,22 @@ const COMMERCIALMANAGEMENTPAYTYPELIST = [
     },
     {
         name: 'app支付',
+        value: 2
+    }
+]
+
+// 充值记录 - 充值类型
+const RECHARGEHISTORYTYPELIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '钻石充值',
+        value: 1
+    },
+    {
+        name: '贵族充值',
         value: 2
     }
 ]
@@ -1563,7 +1603,7 @@ const PROCESSEDSTATUSLIST = [
 // 举报用户 - 处罚状态
 const REPORTUSERPUNISHSTATUSLIST = [
     {
-        name: '未处理',
+        name: '待处理',
         value: 1
     },
     {
@@ -1922,7 +1962,7 @@ const RISKMANAGEMENTMESSAGEHISTORYLIST = [
 const RISKMANAGEMENTIMGTYPELIST = [
     {
         name: '全部',
-        value: 0
+        value: 4
     },
     {
         name: '用户头像',
@@ -1942,19 +1982,19 @@ const RISKMANAGEMENTIMGTYPELIST = [
 const RISKMANAGEMENTIMGSTATUSLIST = [
     {
         name: '全部',
-        value: 0
-    },
-    {
-        name: '待审核',
-        value: 1
-    },
-    {
-        name: '已通过',
         value: 2
     },
     {
+        name: '待审核',
+        value: 0
+    },
+    {
+        name: '已通过',
+        value: 1
+    },
+    {
         name: '已拒绝',
-        value: 3
+        value: -1
     }
 ]
 
@@ -2051,5 +2091,7 @@ export default {
     RISKMANAGEMENTIMGTYPELIST,
     RISKMANAGEMENTIMGSTATUSLIST,
     ROOMBACKGROUNDSELECTLIST,
-    GUILDOPERATIONLIST
+    GUILDOPERATIONLIST,
+    RECHARGEHISTORYTYPELIST,
+    USERMANAGEMENTAUTONYMSTATUSLIST
 }

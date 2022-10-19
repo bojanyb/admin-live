@@ -7,7 +7,7 @@
             <!-- <span>选择时间内的到账金额：{{ Number((ruleForm.alreadyMoney - ruleForm.deductMoney).toFixed(2)) || 0 }}元</span> -->
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams"  :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" :show-batch-rurn="true"  batchRurnName="导出EXCEL" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @BatchRurn="BatchRurn"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -16,6 +16,8 @@
 </template>
 
 <script>
+// 引入api
+import { getCashHisityAll } from '@/api/finance.js'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -25,7 +27,7 @@ import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
-import { timeFormat } from '@/utils/common.js'
+import { timeFormat, exportTableData } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 
@@ -38,7 +40,7 @@ export default {
     },
     components: {
         tableList,
-        SearchPanel
+        SearchPanel,
     },
     mixins: [mixins],
     computed: {
@@ -287,11 +289,11 @@ export default {
         beforeSearch(params) {
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
-                page: params.page,
+                page: params ? params.page : null,
                 status: s.status,
                 user_number: s.user_number,
-                start_time: Math.floor(s.start_time / 1000),
-                end_time: Math.floor(s.end_time / 1000),
+                start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
+                end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
                 user_id: s.user_id,
                 order_id: s.order_id,
                 sort: s.sort
@@ -317,6 +319,33 @@ export default {
         saleAmunt(data) {
             this.ruleForm.alreadyMoney = data.totalmoney ? data.totalmoney : 0
             this.ruleForm.deductMoney = data.rate_money ? data.rate_money : 0
+        },
+        // 导出excel
+        async BatchRurn() {
+            let s = this.beforeSearch()
+            delete s.page
+            let res = await getCashHisityAll(s)
+            let arr = JSON.parse(JSON.stringify(res.data.list))
+            if(arr.length <= 0) return this.$warning('当前没有数据可以导出')
+            arr = arr.map((item,index) => {
+                let name = MAPDATA.STATUSLIST.find(a => { return a.value === item.status })
+                let params = {
+                    user_id: item.user_id,
+                    addtime: timeFormat(item.addtime, 'YYYY-MM-DD HH:mm:ss', true),
+                    money: item.orderDetails.money,
+                    applyMoney: item.orderDetails.money / 100,
+                    cash_rate: item.rate_money,
+                    operate_time: item.operate_time ? timeFormat(item.operate_time, 'YYYY-MM-DD HH:mm:ss', true) : '无',
+                    status: name.name,
+                    toMoney: item.status != 3 ? item.orderDetails.real_money / 100 : item.orderDetails.money / 100,
+                    toTime: item.status != 3 ? item.pay_time ? timeFormat(item.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无' : item.orderDetails.remark,
+                    order_id: item.order_id,
+                    admin_id: item.admin_id
+                }
+                return params
+            })
+            let nameList = [ '用户ID','申请时间', '扣除喵粮', '申请金额','手续费','处理时间','处理状态','到账金额/退回金额','到账时间/原因','交易单号','操作人' ]
+            exportTableData(arr, nameList, '提现记录')
         }
     },
     created() {

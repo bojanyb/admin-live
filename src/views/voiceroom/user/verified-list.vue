@@ -27,6 +27,8 @@ import REQUEST from '@/request/index.js'
 import { timeFormat } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 
 export default {
   name: 'VerifiedList',
@@ -38,7 +40,9 @@ export default {
   mixins: [mixins],
   data() {
     return {
-      
+      searchParams: {
+        status: 'C'
+      }
     }
   },
   computed: {
@@ -51,6 +55,16 @@ export default {
           label: '用户ID',
           isNum: true,
           placeholder: '请输入用户ID'
+        },
+        {
+          name: 'status',
+          type: 'select',
+          value: 'C',
+          keyName: 'value',
+          optionLabel: 'name',
+          label: '状态',
+          placeholder: '请选择',
+          options: MAPDATA.USERMANAGEMENTAUTONYMSTATUSLIST
         },
         // {
         //   name: 'user_phone',
@@ -112,14 +126,14 @@ export default {
             label: '真实姓名',
             prop: 'name',
             render: (h, params) => {
-              return h('span', this.nameDesensitize(params.row.name))
+              return h('span', params.row.name || '无')
             }
           },
           {
             label: '身份证号',
             prop: 'id_card',
             render: (h, params) => {
-              let data = params.row.id_card.replace(/^(.{1})(?:\d+)(.{1})$/, "$1************$2")
+              let data = params.row.id_card
               return h('span', data || '无')
             }
           },
@@ -128,11 +142,18 @@ export default {
             render: (h, params) => {
               let name;
               if(params.row.change_count === 0) {
-                name = '初次实名'
+                name = '第1次实名'
               } else {
                 name = `第${params.row.change_count + 1}次实名`
               }
               return h('span', name)
+            }
+          },
+          {
+            label: '状态',
+            render: (h, params) => {
+              let data = MAPDATA.USERMANAGEMENTAUTONYMSTATUSLIST.find(item => { return item.value === params.row.status })
+              return h('span', data ? data.name : '无')
             }
           },
           {
@@ -146,12 +167,12 @@ export default {
                 h('el-button', { props: { type: 'danger'}, style: {
                   display: params.row.status === 'C' ? 'unset' : 'none'
                 }, on: {click:()=>{this.manageClick(params.row.uid)}}}, '驳回'),
-                h('el-button', { props: { type: 'success'}, style: {
+                h('span', { style: {
                   display: params.row.status === 'Y' ? 'unset' : 'none'
-                }, on: {click:()=>{}}}, '已通过'),
-                h('el-button', { props: { type: 'danger'}, style: {
+                }, on: {click:()=>{}}}, '- -'),
+                h('span', { style: {
                   display: params.row.status === 'R' ? 'unset' : 'none'
-                }, on: {click:()=>{}}}, '已驳回'),
+                }, on: {click:()=>{}}}, '- -'),
               ])
             }
           }
@@ -185,6 +206,7 @@ export default {
         // name: s.name
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
+        status: s.status
       }
     },
     // 刷新列表
@@ -205,7 +227,9 @@ export default {
     },
     // 重置
     reset() {
-      this.searchParams = {}
+      this.searchParams = {
+        status: 'C'
+      }
       this.dateTimeParams = {}
       this.getList()
     },
