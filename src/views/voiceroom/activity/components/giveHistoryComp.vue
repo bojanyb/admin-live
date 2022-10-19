@@ -114,8 +114,12 @@ export default {
                             if(item === '+') {
                                 a.push(item)
                             }
-                            if(index !== 0) {
+                            if(arr[0] !== '+' && arr[0] !== '-') {
                                 num += item
+                            } else {
+                                if(index !== 0 ) {
+                                    num += item
+                                }
                             }
                         })
                         if(Number(this.ruleForm.amount) > 10000000) {
@@ -125,7 +129,7 @@ export default {
                                 cb(new Error('请输入正确数额，只能有一个"+", 且必须在第一位'))
                             } else if(arr[0] !== '+' && (arr[0] !== '-' || s.length != 1 || a.length != 0)) {
                                 cb(new Error('请输入正确数额，只能有一个"-", 且必须在第一位'))
-                            } else if(arr[0] === '-' && Number(num) > this.form.balance) {
+                            } else if(arr[0] === '-' && Number(num) && Number(num) > this.form.balance) {
                                 cb(new Error('您要扣除的金额大于用户余额'))
                             }  else {
                                 cb()
