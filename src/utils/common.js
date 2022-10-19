@@ -315,3 +315,4 @@ export function exportTableData(list, nameList, title) {
   link.download = timeFormat(new Date(), 'YYYY-MM-DD', false) + title + '.xls';
   link.click();
 }
+
