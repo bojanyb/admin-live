@@ -16,23 +16,15 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
         </el-dialog>
-
-        <!-- 成功失败弹窗 -->
-        <errorComp v-if="isDestoryComp" ref="errorComp" @destoryComp="destoryComp"></errorComp>
     </div>
 </template>
 
 <script>
 // 引入公共方法
-import { timeFormat, exportTableData } from '@/utils/common.js'
+import { exportTableData } from '@/utils/common.js'
 // 引入api
 import { regReplenishmentByCsv } from '@/api/finance.js'
-// 引入成功失败弹窗
-import errorComp from './errorComp.vue'
 export default {
-    components: {
-        errorComp
-    },
     props: {
         title: { // 标题
             type: String,
@@ -42,8 +34,7 @@ export default {
     data() {
         return {
             imageUrl: '',
-            dialogVisible: false,
-            isDestoryComp: false // 是否销毁组件
+            dialogVisible: false
         };
     },
     methods: {
@@ -77,10 +68,6 @@ export default {
             formData.append('file', file.file);
             let res = await regReplenishmentByCsv(formData)
             if(res.code === 2000) {
-                // this.isDestoryComp = true
-                // setTimeout(() => {
-                //     this.$refs.errorComp.loadParams(res.data.error)
-                // }, 50);
                 this.dialogVisible = false
                 this.$emit('getList')
 
@@ -104,10 +91,6 @@ export default {
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
-        },
-        // 销毁组件
-        destoryComp() {
-            this.isDestoryComp = false
         }
     }
 }
