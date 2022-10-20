@@ -10,7 +10,8 @@
         <!-- 新增组件 -->
         <orderComp v-if="isDestoryComp" ref="orderComp" @destoryComp="destoryComp" @getList="getList"></orderComp>
 
-        <uploadExcel v-if="isDestoryComp" ref="uploadExcel" @destoryComp="destoryComp"></uploadExcel>
+        <!-- 导入csv -->
+        <uploadExcel v-if="isDestoryComp" ref="uploadExcel" @destoryComp="destoryComp" @getList="getList" title="推广补单导入"></uploadExcel>
     </div>
 </template>
 

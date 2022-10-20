@@ -20,6 +20,8 @@
 </template>
 
 <script>
+// 引入公共方法
+import { exportTableData } from '@/utils/common.js'
 // 引入api
 import { regReplenishmentByCsv } from '@/api/finance.js'
 export default {
@@ -64,11 +66,26 @@ export default {
         async upLoad(file) {
             let formData = new FormData();
             formData.append('file', file.file);
-            if(this.title === '') {}
             let res = await regReplenishmentByCsv(formData)
             if(res.code === 2000) {
-                this.$success('导入成功')
                 this.dialogVisible = false
+                this.$emit('getList')
+
+                let arr = res.data.error || []
+                if(arr.length <= 0) {
+                    return this.$warning('导入成功，没有错误数据')
+                } else {
+                    arr = arr.map((item,index) => {
+                        let params = {
+                            user_number: item.user_number,
+                            promoter_user_number: item.promoter_user_number,
+                            error: item.error
+                        }
+                        return params
+                    })
+                    let nameList = [ '用户ID', '推广ID', '成功/错误原因' ]
+                    exportTableData(arr, nameList, '推广补单记录')
+                }
             }
         },
         // 销毁组件

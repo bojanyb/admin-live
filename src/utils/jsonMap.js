@@ -1005,6 +1005,26 @@ const USERMUSICBELLSLIST = [
     }
 ]
 
+// 实名列表 - 状态
+const USERMANAGEMENTAUTONYMSTATUSLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '待审核',
+        value: 'C'
+    },
+    {
+        name: '已通过',
+        value: 'Y'
+    },
+    // {
+    //     name: '已拒绝',
+    //     value: 'R'
+    // }
+]
+
 /*
 *审核管理 - 用户图片资料审核列表
 */
@@ -2072,5 +2092,6 @@ export default {
     RISKMANAGEMENTIMGSTATUSLIST,
     ROOMBACKGROUNDSELECTLIST,
     GUILDOPERATIONLIST,
-    RECHARGEHISTORYTYPELIST
+    RECHARGEHISTORYTYPELIST,
+    USERMANAGEMENTAUTONYMSTATUSLIST
 }
