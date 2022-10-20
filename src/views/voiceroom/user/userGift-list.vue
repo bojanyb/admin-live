@@ -30,25 +30,41 @@
 		computed: {
 			forms() {
 				return [
+					// {
+					// 	name: 'inputSelect',
+					// 	value: '',
+					// 	selectName: 'iSelect',
+					// 	type: 'inputSelect',
+					// 	placeholder: '请输入ID',
+					// 	selectPlaceholder: '请选择',
+					// 	selctValue: 'all',
+					// 	selectWidth: '130px',
+					// 	label: '交易查询',
+					// 	noClear: true,
+					// 	handler: {
+					// 		change: (v) => {}
+					// 	},
+					// 	options: [
+					// 		{ key: 'all', label: '全部' },
+					// 		{ key: 'code', label: '送礼人ID' },
+					// 		{ key: 'name', label: '收礼人ID' }
+					// 	]
+					// },
 					{
-						name: 'inputSelect',
+						name: 'live_user_number',
+						type: 'input',
 						value: '',
-						selectName: 'iSelect',
-						type: 'inputSelect',
-						placeholder: '请输入ID',
-						selectPlaceholder: '请选择',
-						selctValue: 'all',
-						selectWidth: '130px',
-						label: '交易查询',
-						noClear: true,
-						handler: {
-							change: (v) => {}
-						},
-						options: [
-							{ key: 'all', label: '全部' },
-							{ key: 'code', label: '送礼人ID' },
-							{ key: 'name', label: '收礼人ID' }
-						]
+						label: '收礼人ID',
+						isNum: true,
+						placeholder: '收礼人ID'
+					},
+					{
+						name: 'user_number',
+						type: 'input',
+						value: '',
+						label: '送礼人ID',
+						isNum: true,
+						placeholder: '送礼人ID'
 					},
 					{
 						name: 'is_room',
