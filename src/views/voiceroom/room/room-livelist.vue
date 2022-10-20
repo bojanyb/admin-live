@@ -334,22 +334,19 @@
 			},
 			// 解散房间
 			async dissolveFunc(row) {
-				this.$confirm('是否确认解散?', '提示', {
+				this.$confirm('是否确认关闭当前直播间?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(async () => {
 					let params = {
-						"room_id": row.id,
+						"room_id": row.room_id,
 						"uid": row.uid,
 						"admin-token": this.$store.getters.token
 					}
 					let res = await liveEnd(params)
 					if(res.code === 2000) {
-						this.$message({
-							type: 'success',
-							message: '解散成功'
-						});
+						this.$success('关闭成功')
 					}
 					this.getList()
 				}).catch(() => {});
