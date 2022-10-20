@@ -73,7 +73,7 @@ export default {
 
                 let arr = res.data.error || []
                 if(arr.length <= 0) {
-                    return this.$warning('导入成功，没有错误数据')
+                    return this.$success('导入成功，没有错误数据')
                 } else {
                     arr = arr.map((item,index) => {
                         let params = {
@@ -85,6 +85,7 @@ export default {
                     })
                     let nameList = [ '用户ID', '推广ID', '成功/错误原因' ]
                     exportTableData(arr, nameList, '推广补单记录')
+                    this.$warning('失败数据已下载至本地')
                 }
             }
         },

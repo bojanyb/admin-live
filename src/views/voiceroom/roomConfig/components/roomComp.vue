@@ -26,24 +26,24 @@
                     </el-form-item>
                     <el-form-item label="房间状态">
                         <!-- <span class="roomBox">{{ ruleForm.nickname }}（{{ ruleForm.user_number }}）</span> -->
-                        <el-select v-model="ruleForm.type" :disabled="true">
-                            <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                        <el-select v-model="ruleForm.is_live" :disabled="true">
+                            <el-option v-for="item in statusList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                 </div>
-                <el-form-item label="房间类型" prop="type">
-                    <el-select v-model="ruleForm.type" placeholder="请选择业务类型" :disabled="true">
+                <el-form-item label="房间类型">
+                    <el-select v-model="ruleForm.room_category_id" placeholder="请选择业务类型" :disabled="true">
                         <el-option v-for="item in typeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="房间封面" prop="cover">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.cover" :imgUrl="ruleForm.cover" name="cover" @validateField="validateField" accept=".png,.jpg,.jpeg" :disabled="disabled"></uploadImg>
+                <el-form-item label="房间封面" prop="room_cover">
+                    <uploadImg ref="uploadImg" v-model="ruleForm.room_cover" :imgUrl="ruleForm.room_cover" name="room_cover" @validateField="validateField" accept=".png,.jpg,.jpeg" :disabled="disabled"></uploadImg>
                 </el-form-item>
-                <el-form-item label="房间标题" prop="title">
-                    <el-input v-model="ruleForm.title" :disabled="disabled"></el-input>
+                <el-form-item label="房间标题" prop="room_title">
+                    <el-input v-model="ruleForm.room_title" :disabled="disabled"></el-input>
                 </el-form-item>
-                <el-form-item label="房间公告" prop="notice">
-                    <el-input type="textarea" :rows="4" v-model="ruleForm.notice" :disabled="disabled"></el-input>
+                <el-form-item label="房间公告" prop="room_notice">
+                    <el-input type="textarea" :rows="4" v-model="ruleForm.room_notice" :disabled="disabled"></el-input>
                 </el-form-item>
             </el-form>
         </drawer>
@@ -57,6 +57,8 @@ import drawer from '@/components/drawer/index'
 import { updateParty } from '@/api/house.js'
 // 引入图片上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
         uploadImg,
@@ -66,29 +68,23 @@ export default {
         return {
             status: 'add',
             typeList: [],
+            statusList: MAPDATA.HOUSEMESSAGESTATUSLIST,
             ruleForm: {
                 room_number: '',
-                title: '',
-                back_recommend: '',
-                type: null,
-                cover: '',
-                notice: ''
+                room_title: '',
+                room_category_id: null,
+                room_cover: '',
+                room_notice: ''
             },
             oldParams: {}, // 老数据
             rules: {
-                title: [
+                room_title: [
                     { required: true, message: '请输入房间标题', trigger: 'blur' }
                 ],
-                notice: [
+                room_notice: [
                     { required: false, message: '请输入房间公告', trigger: 'blur' }
                 ],
-                back_recommend: [
-                    { required: true, message: '是否首页推荐', trigger: 'change' }
-                ],
-                type: [
-                    { required: true, message: '请选择房间分类', trigger: 'change' }
-                ],
-                cover: [
+                room_cover: [
                     { required: true, message: '请上传房间封面', trigger: 'change' }
                 ]
             }
@@ -136,11 +132,10 @@ export default {
                     let s = this.ruleForm
                     let params = {
                         id: s.id,
-                        title: s.title,
-                        cover: s.cover,
-                        back_recommend: s.back_recommend,
-                        type: s.type,
-                        notice: s.notice
+                        room_title: s.room_title,
+                        room_cover: s.room_cover,
+                        room_category_id: s.room_category_id,
+                        room_notice: s.room_notice
                     }
                     let res = await updateParty(params)
                     if(res.code === 2000) {

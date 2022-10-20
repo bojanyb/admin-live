@@ -133,6 +133,8 @@ export default {
                     type: 'datePicker',
                     dateType: 'datetimerange',
                     format: "yyyy-MM-dd HH:mm:ss",
+                    clearable: true,
+                    class: 'message-history-dateTimeParams',
                     label: '时间选择',
                     value: '',
                     handler: {
@@ -441,5 +443,13 @@ export default {
     padding: 10px 20px 20px 20px;
     box-sizing: border-box;
     line-height: 40px;
+}
+
+.message-history-dateTimeParams {
+    .el-button--text {
+        span {
+            display: none;
+        }
+    }
 }
 </style>

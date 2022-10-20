@@ -85,7 +85,9 @@ export default {
             this.room_number = row.room_number
             this.guild_number = row.guild_number
             await this.getTypes(row.room_number)
-            this.typeList = list
+            if(list && list.length > 0) {
+                this.typeList = list.filter(item => { return item.name != '全部' })
+            }
         },
         add() {
             this.innerVisible = true

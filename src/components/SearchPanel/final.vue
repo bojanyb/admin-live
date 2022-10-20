@@ -82,6 +82,7 @@
                   </el-select>
                 </div>
                 <el-date-picker
+                  :popper-class="item.class"
                   v-model="form[item.name]"
                   :disabled="cDisabled(item)"
                   :type="item.dateType || dateParams.dateType"
@@ -89,7 +90,7 @@
                   range-separator="-"
                   :start-placeholder="item.startPlaceholder || '开始时间'"
                   :end-placeholder="item.endPlaceholder || '结束时间'"
-                  clearable
+                  :clearable="!item.clearable"
                   :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
                   :value-format="item.valueFormat || 'timestamp'"
                   :default-time="item.defaultTime || ['00:00:00', '23:59:59']"

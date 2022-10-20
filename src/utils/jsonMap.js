@@ -802,6 +802,18 @@ const DISSOLUTIONTYPELIST = [
     }
 ]
 
+// 直播历史记录 - 关闭房间方式 - 第二种
+const DISSOLUTIONTYPELISTCOPY = [
+    {
+        value: 1,
+        name: '正常关播'
+    },
+    {
+        value: 2,
+        name: '后台关播'
+    }
+]
+
 // 游戏配置 - 游戏列表
 const PARTYGAMELIST = [
     {
@@ -1626,11 +1638,11 @@ const HOUSEMESSAGESTATUSLIST = [
         value: 2
     },
     {
-        name: '营业中',
+        name: '开播中',
         value: 1
     },
     {
-        name: '已关厅',
+        name: '已关播',
         value: 0
     }
 ]
@@ -2093,5 +2105,6 @@ export default {
     ROOMBACKGROUNDSELECTLIST,
     GUILDOPERATIONLIST,
     RECHARGEHISTORYTYPELIST,
-    USERMANAGEMENTAUTONYMSTATUSLIST
+    USERMANAGEMENTAUTONYMSTATUSLIST,
+    DISSOLUTIONTYPELISTCOPY
 }

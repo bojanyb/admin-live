@@ -148,10 +148,13 @@ const request = {
     room: {
         report: `${HTTPHEADER}/Room/feedback`,
         roomList: `${HTTPHEADER}/Room/room`,
+        liveList: `${HTTPHEADER}/RoomV2/liveList`, // 直播房间-列表
+        liveHistoryList: `${HTTPHEADER}/RoomV2/liveHistoryList`, // 直播房间-历史列表
         roomBg: `${HTTPHEADER}/room/roomBg`,
         liveRoomHistory: `${HTTPHEADER}/Room/liveRoomHistory`,
         roomGameList: `${HTTPHEADER}/Room/roomGameList`, // 房间游戏列表
-        liveEnd: `${HTTPHEADER}/Room/liveEnd`, // 房间游戏列表
+        // liveEnd: `${HTTPHEADER}/Room/liveEnd`, // 关闭房间
+        liveEnd: `${HTTPHEADER}/v2/room/closeRoom`, // 关闭房间
         genre: `${HTTPHEADER}/Room/genre`, // 房间类型列表
     },
 
@@ -248,8 +251,10 @@ const request = {
     // 房间列表
     house: {
         liveList: `${HTTPHEADER}/party/liveList`, // 直播间列表
-        partyList: `${HTTPHEADER}/party/partyList`, // 派对间列表
-        updateParty: `${HTTPHEADER}/party/updateParty`, // 修改派对
+        // partyList: `${HTTPHEADER}/party/partyList`, // 派对间列表
+        partyList: `${HTTPHEADER}/RoomV2/list`, // 派对间列表
+        // updateParty: `${HTTPHEADER}/party/updateParty`, // 修改派对
+        updateParty: `${HTTPHEADER}/RoomV2/update`, // 修改派对
         delGenre: `${HTTPHEADER}/party/delGenre`, // 删除类别
         saveGenre: `${HTTPHEADER}/party/saveGenre`, // 添加类别
         genreList: `${HTTPHEADER}/Party/genreList`, // 类型列表

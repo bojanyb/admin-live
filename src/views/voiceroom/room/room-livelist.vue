@@ -1,5 +1,6 @@
 <template>
 	<div class="room-livelist">
+		<menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
@@ -12,7 +13,11 @@
 </template>
 
 <script>
+	// 引入api
+	import { genreList } from '@/api/house.js'
 	import { liveEnd } from '@/api/callApp.js'
+	// 引入tab菜单组件
+	import menuComp from '@/components/menuComp/index.vue'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -27,6 +32,8 @@
 	import mixins from '@/utils/mixins.js'
 	// 引入公共方法
 	import { formatTime } from '@/utils/common.js'
+	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 
 	export default {
 		name: 'RoomList',
@@ -34,10 +41,21 @@
 		components: {
 			SearchPanel,
 			tableList,
-			liveDetails
+			liveDetails,
+			menuComp
 		},
 		data() {
 			return {
+				tabIndex: '0',
+				menuList: [
+					{
+						name: '直播房间列表'
+					},
+					{
+					    name: '直播历史记录'
+					}
+				],
+				classifyList: [], // 房间类型列表
 				isDestoryComp: false // 是否销毁组件
 			}
 		},
@@ -45,23 +63,22 @@
 			forms() {
 				return [
 					{
-						name: 'inputSelect',
+						name: 'room_number',
+						type: 'input',
 						value: '',
-						selectName: 'iSelect',
-						type: 'inputSelect',
-						placeholder: '请输入ID',
-						selectPlaceholder: '请选择',
-						selctValue: 'room',
-						keyName: 'key',
-						optionLabel: 'label',
-						selectWidth: '130px',
-						handler: {
-							change: (v) => {}
-						},
-						options: [
-							{ key: 'room', label: '房间ID' },
-							{ key: 'user', label: '房主ID' }
-						]
+						label: '房间ID',
+						isNum: true,
+						placeholder: '请输入房间ID'
+					},
+					{
+						name: 'room_category_id',
+						type: 'select',
+						value: '',
+						keyName: 'id',
+						optionLabel: 'name',
+						label: '房间类型',
+						placeholder: '请选择',
+						options: this.classifyList
 					},
 					{
 						name: 'guild_number',
@@ -71,109 +88,244 @@
 						isNum: true,
 						placeholder: '请输入公会ID'
 					},
+					{
+						name: 'dateTimeParams',
+						type: 'datePicker',
+						dateType: 'datetimerange',
+						format: "yyyy-MM-dd HH:mm:ss",
+						label: '开播时间',
+						value: '',
+						handler: {
+							change: v => {
+								this.emptyDateTime()
+								this.setDateTime(v)
+								this.getList()
+							},
+							selectChange: (v, key) => {
+								this.emptyDateTime()
+								this.getList()
+							}
+						}
+					}
 				]
 			},
 			cfgs() {
+				let arr = [
+					{
+						label: '开播时间',
+						minWidth: '180px',
+						render: (h, params) => {
+							return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+						}
+					},
+					{
+						label: '房间ID',
+						prop: 'room_number'
+					},
+					{
+						label: '房间类型',
+						prop: 'room_type'
+					},
+					{
+						label: '房间标题',
+						minWidth: '120px',
+						prop: 'room_title'
+					},
+					{
+						label: '房间封面',
+						isimg: true,
+						prop: 'room_cover',
+						imgHeight: '50px',
+						minWidth: '100px'
+					},
+					{
+						label: '房主',
+						minWidth: '100px',
+						render: (h, params) => {
+							return h('div', [
+								h('div', params.row.nickname),
+								h('div', params.row.user_number || '无')
+							])
+						}
+					},
+					{
+						label: '所属公会',
+						minWidth: '100px',
+						render: (h, params) => {
+							return h('div', [
+								h('div', params.row.guild_name),
+								h('div', params.row.guild_number || '无')
+							])
+						}
+					},
+					{
+						label: '已开播时长',
+						minWidth: '120px',
+						render: (h, params) => {
+							let data = formatTime(params.row.live_time)
+							return h('span', data ? data : '无')
+						}
+					},
+					{
+						label: '流水（钻石）',
+						minWidth: '100px',
+						prop: 'now_flow'
+					},
+					{
+						label: '在线人数',
+						prop: 'people'
+					},
+					{
+						label: '操作',
+						minWidth : '100px',
+						fixed: 'right',
+						render: (h, params) => {
+							return h('div', [
+								h('el-button', { props: { type: 'danger' }, on: {click:()=>{this.dissolveFunc(params.row)}}}, '关播')
+							])
+						}
+					}
+				]
+
+				let arr1 = [
+					{
+						label: '开播时间',
+						minWidth: '180px',
+						render: (h, params) => {
+							return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+						}
+					},
+					{
+						label: '关播时间',
+						minWidth: '180px',
+						render: (h, params) => {
+							return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+						}
+					},
+					{
+						label: '直播次数',
+						minWidth: '100px',
+						prop: 'room_number'
+					},
+					{
+						label: '房间ID',
+						minWidth: '100px',
+						prop: 'room_number'
+					},
+					{
+						label: '房间类型',
+						minWidth: '100px',
+						prop: 'room_type'
+					},
+					{
+						label: '房间标题',
+						minWidth: '120px',
+						prop: 'room_title'
+					},
+					{
+						label: '房主',
+						minWidth: '120px',
+						render: (h, params) => {
+							return h('div', [
+								h('div', params.row.nickname),
+								h('div', params.row.user_number || '无')
+							])
+						}
+					},
+					{
+						label: '所属公会',
+						minWidth: '120px',
+						render: (h, params) => {
+							return h('div', [
+								h('div', params.row.guild_name),
+								h('div', params.row.guild_number || '无')
+							])
+						}
+					},
+					{
+						label: '开播时长',
+						minWidth: '120px',
+						render: (h, params) => {
+							let data = formatTime(params.row.live_time)
+							return h('span', data ? data : '无')
+						}
+					},
+					{
+						label: '流水（钻石）',
+						minWidth: '120px',
+						prop: 'total_gain'
+					},
+					{
+						label: '进房人数',
+						minWidth: '100px',
+						prop: 'enter_user_count'
+					},
+					{
+						label: '送礼用户数',
+						minWidth: '120px',
+						prop: 'consume_user_count'
+					},
+					{
+						label: '关闭类型',
+						minWidth: '100px',
+						render: (h, params) => {
+							let data = MAPDATA.DISSOLUTIONTYPELISTCOPY.find(item => { return item.value === params.row.disband_type })
+							return h('span', data ? data.name : '无')
+						}
+					},
+					{
+						label: '关闭人',
+						minWidth: '120px',
+						prop: 'disband_username'
+					}
+				]
+				let name;
+				if(this.tabIndex === '0') {
+					name = 'liveList'
+				} else {
+					name = 'liveHistoryList'
+				}
 				return {
 					vm: this,
-					url: REQUEST.room.roomList,
-					isShowIndex: true,
-					columns: [
-						{
-							label: '直播场次ID',
-							minWidth: '100px',
-							prop: 'room_number'
-						},
-						{
-							label: '房间ID',
-							prop: 'room_number'
-						},
-						{
-							label: '房间名称',
-							minWidth: '120px',
-							prop: 'room_name'
-						},
-						{
-							label: '房间类型',
-							prop: 'room_genre_name'
-						},
-						{
-							label: '房主ID',
-							minWidth: '100px',
-							prop: 'live_user_number'
-						},
-						{
-							label: '所属公会',
-							render: (h, params) => {
-								return h('span', params.row.guild_number || '无')
-							}
-						},
-						{
-							label: '开播时间',
-							minWidth: '180px',
-							render: (h, params) => {
-								return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-							}
-						},
-						{
-							label: '开播时长',
-							minWidth: '120px',
-							render: (h, params) => {
-								let data = formatTime(params.row.live_time)
-								return h('span', data ? data : '无')
-							}
-						},
-						{
-							label: '流水',
-							minWidth: '100px',
-							prop: 'now_flow'
-						},
-						{
-							label: '在线人数',
-							prop: 'people'
-						},
-						{
-							label: '操作',
-							minWidth : '230px',
-							fixed: 'right',
-							render: (h, params) => {
-								return h('div', [
-									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.liveEditFunc(params.row)}}},'修改'),
-									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.dissolveFunc(params.row)}}},'解散')
-								])
-							}
-						}
-					]
+					url: REQUEST.room[name],
+					columns: this.tabIndex === '0' ? [ ...arr ] : [ ...arr1 ]
 				}
 			}
 		},
 		methods: {
 			// 配置参数
 			beforeSearch(params) {
-				let s = { ...this.searchParams }
-				s.room_number = s.inputSelect
-				s.user_number = s.inputSelect
-				if(s.iSelect === 'room') {
-					delete s.user_number
-				} else if(s.iSelect === 'user') {
-					delete s.room_number
-				}
+				let s = { ...this.searchParams, ...this.dateTimeParams }
 				return {
 					page: params.page,
 					pagesize: params.size,
 					room_number: s.room_number,
-					user_number: s.user_number,
-					is_live: 1,
-					guild_number: s.guild_number
+					room_category_id: s.room_category_id,
+					guild_number: s.guild_number,
+					start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
+                	end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0
 				}
 			},
 			// 刷新列表
 			getList() {
 				this.$refs.tableList.getData()
 			},
+			// 设置时间段
+			setDateTime(arr) {
+				const date = arr ? {
+					start_time: arr[0],
+					end_time: arr[1]
+				} : {}
+				this.$set(this, 'dateTimeParams', date)
+			},
+			// 清空日期选择
+			emptyDateTime() {
+				this.dateTimeParams = {}
+			},
 			// 重置
 			reset() {
 				this.searchParams = {}
+				this.dateTimeParams = {}
 				this.getList()
 			},
 			// 查询
@@ -188,8 +340,8 @@
 					type: 'warning'
 				}).then(async () => {
 					let params = {
-						"room_number": row.room_number,
-						"uid": row.live_user_id,
+						"room_id": row.id,
+						"uid": row.uid,
 						"admin-token": this.$store.getters.token
 					}
 					let res = await liveEnd(params)
@@ -212,7 +364,21 @@
 			// 销毁组件
 			destoryComp() {
 				this.isDestoryComp = false
+			},
+			// 获取房间分类
+			async getHouse() {
+				let res = await genreList({ belong: 2 })
+				if(res.data.list && res.data.list.length > 0) {
+					res.data.list.unshift({
+						name: '全部',
+						id: ''
+					})
+				}
+				this.classifyList = res.data.list || []
 			}
+		},
+		created() {
+			this.getHouse()
 		}
 	}
 </script>
