@@ -332,13 +332,13 @@ export default {
                 let params = {
                     user_id: item.user_id,
                     addtime: timeFormat(item.addtime, 'YYYY-MM-DD HH:mm:ss', true),
-                    money: item.orderDetails.money,
-                    applyMoney: item.orderDetails.money / 100,
+                    money: item.money,
+                    applyMoney: item.money / 100,
                     cash_rate: item.rate_money,
                     operate_time: item.operate_time ? timeFormat(item.operate_time, 'YYYY-MM-DD HH:mm:ss', true) : '无',
                     status: name.name,
-                    toMoney: item.status != 3 ? item.orderDetails.real_money / 100 : item.orderDetails.money / 100,
-                    toTime: item.status != 3 ? item.pay_time ? timeFormat(item.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无' : item.orderDetails.remark,
+                    toMoney: item.status != 3 ? item.real_money / 100 : item.money / 100,
+                    toTime: item.status != 3 ? item.pay_time ? timeFormat(item.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无' : item.remark,
                     order_id: item.order_id,
                     admin_id: item.admin_id
                 }
