@@ -201,11 +201,11 @@
 							return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 						}
 					},
-					{
-						label: '直播次数',
-						minWidth: '100px',
-						prop: 'room_number'
-					},
+					// {
+					// 	label: '直播次数',
+					// 	minWidth: '100px',
+					// 	prop: 'room_number'
+					// },
 					{
 						label: '房间ID',
 						minWidth: '100px',
