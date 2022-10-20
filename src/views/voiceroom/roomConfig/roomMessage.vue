@@ -44,9 +44,7 @@ export default {
             isDestoryComp: false, // 是否销毁组件
             classifyList: [],
             searchParams: {
-                is_guild_room: 1,
-                party_status: 2,
-                is_live: 1
+                party_status: 2
             }
         };
     },
@@ -178,9 +176,7 @@ export default {
         // 重置
         reset() {
             this.searchParams = {
-                is_guild_room: 1,
-                party_status: 2,
-                is_live: 1
+                party_status: 2
             }
             this.getList()
         },
@@ -204,8 +200,7 @@ export default {
         },
         // 获取房间分类
         async getHouse() {
-            let belong = this.tabIndex === '0' ? 2 : 1
-            let res = await genreList({ belong: belong })
+            let res = await genreList({ belong: 2 })
             if(res.data.list && res.data.list.length > 0) {
                 res.data.list.unshift({
                     name: '全部',
