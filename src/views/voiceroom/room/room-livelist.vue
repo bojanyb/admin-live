@@ -162,8 +162,7 @@
 						label: '已开播时长',
 						minWidth: '120px',
 						render: (h, params) => {
-							let data = formatTime(params.row.live_time)
-							return h('span', data ? data : '无')
+							return h('span', params.row.live_time || '无')
 						}
 					},
 					{
@@ -246,8 +245,7 @@
 						label: '开播时长',
 						minWidth: '120px',
 						render: (h, params) => {
-							let data = formatTime(params.row.live_time)
-							return h('span', data ? data : '无')
+							return h('span', params.row.live_time || '无')
 						}
 					},
 					{
