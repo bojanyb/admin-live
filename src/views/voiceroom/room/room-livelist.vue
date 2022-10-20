@@ -140,7 +140,7 @@
 					},
 					{
 						label: '房主',
-						minWidth: '100px',
+						minWidth: '120px',
 						render: (h, params) => {
 							return h('div', [
 								h('div', params.row.nickname),
