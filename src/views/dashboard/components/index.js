@@ -28,7 +28,7 @@ const dashboardList = [
                 val: 'commission'
             },
             {
-                tit: '消费总流水:',
+                tit: '商城总收益:',
                 val: 'buy_goods'
             }
         ]
@@ -36,12 +36,12 @@ const dashboardList = [
     {
         children: [
             {
-                tit: '背包总流水:',
-                val: 'ac_in'
-            },
-            {
                 tit: '背包总价值:',
                 val: 'ac_out'
+            },
+            {
+                tit: '背包总流水:',
+                val: 'ac_in'
             },
             {
                 tit: '背包余价值:',
