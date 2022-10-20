@@ -1,7 +1,6 @@
 <template>
 	<div class="guildAudit-guildRebate-list-box">
 		<menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
-
 		<component :ref="comp" :is="comp"></component>
 	</div>
 </template>
@@ -10,34 +9,51 @@
 // 引入tab菜单组件
 import menuComp from '@/components/menuComp/index.vue'
 // 引入公会流水结算记录组件
-import guildWater from './guildRebates/guildWater.vue'
+import guildWeekWater from './guildRebates/guildWeekWater.vue'
+// 引入公会流水结算记录组件
+import guildMonthWater from './guildRebates/guildMonthWater.vue'
 // 引入24小时房间奖励
 import award from './guildRebates/award.vue'
 // 引入公会评级奖励组件
 import dynamic from './guildRebates/dynamic.vue'
 export default {
 	components: {
-		guildWater,
+		guildWeekWater,
+		guildMonthWater,
 		award,
 		menuComp,
 		dynamic
 	},
 	computed: {
 		comp() {
-			if(this.tabIndex === '0') {
-				return 'guildWater'
-			} else if(this.tabIndex === '1') {
-				return 'dynamic'
-			} else {
-				return 'award'
+			let compText= ""
+			switch (this.tabIndex) {
+				case '0': // 周流水
+					compText= "guildWeekWater"
+					break;
+				case '1': // 月流水
+					compText= "guildMonthWater"
+					break;
+				case '2': // 周评级奖励
+					compText= "dynamic"
+					break;
+				case '3': // 24小时房间奖励
+					compText= "award"
+					break;
+				default:
+					break;
 			}
+			return compText
 		}
 	},
 	data() {
 		return {
 			menuList: [
 				{
-					name: '公会流水结算记录'
+					name: '公会周流水结算记录'
+				},
+				{
+					name: '公会月流水结算记录'
 				},
 				{
 					name: '公会评级奖励'

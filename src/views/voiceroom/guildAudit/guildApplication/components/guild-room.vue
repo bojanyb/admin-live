@@ -1,27 +1,17 @@
 <template>
 	<div class="guildApplication-list-box">
-		<div class="headerBox">
-			<div class="select">
-				<span v-for="(item,index) in navList" :key="index" :class="{'high': selectNavId === item.id}" @click="selectChange(item.id)">{{ item.name }}</span>
-			</div>
-		</div>
-		<div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="selectNavId == 1 ? forms : forms1" :showAdd="selectNavId == 1 ? true : false" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
-        </div>
-		<div class="contentBox">
-			<tableList :cfgs="selectNavId == 1 ? cfgs : cfgs1" ref="tableList"></tableList>
-		</div>
-
+		<SearchPanel v-model="searchParams" :forms=" forms" :showAdd=" true " :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 		<el-dialog
         title="添加房间"
         :width="'600px'"
         :visible.sync="isAdd">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" label-suffix=":">
                 <el-form-item label="公会ID" prop="guild_number">
-                    <el-input v-model="ruleForm.guild_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入公会ID"></el-input>
+                    <el-input v-model="ruleForm.guild_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入公会ID" clearable></el-input>
                 </el-form-item>
 				<el-form-item label="房主ID" prop="user_number">
-                    <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入房主ID"></el-input>
+                    <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入房主ID" clearable></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -33,8 +23,7 @@
 </template>
 
 <script>
-	// 引入api
-	import { getGuildCheck } from '@/api/videoRoom'
+	import {addGuildRoom} from '@/api/user.js'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -45,8 +34,6 @@
 	import { timeFormat } from '@/utils/common.js'
 	// 引入公共参数
 	import mixins from '@/utils/mixins.js'
-	// 引入公共map
-	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
 		mixins: [mixins],
 		components: {
@@ -57,7 +44,7 @@
 			forms() {
 				return [
 					{
-						name: 'guild_number',
+						name: 'room_number',
 						type: 'input',
 						value: '',
 						label: '房间ID',
@@ -71,28 +58,6 @@
 						label: '公会ID',
 						isNum: true,
 						placeholder: '请输入公会ID'
-					},
-				]
-			},
-			forms1() {
-				return [
-					{
-						name: 'guild_number',
-						type: 'input',
-						value: '',
-						label: '房间ID',
-						isNum: true,
-						placeholder: '请输入房间ID'
-					},
-					{
-						name: 'status',
-						type: 'select',
-						value: '',
-						keyName: 'value',
-						optionLabel: 'name',
-						label: '申请状态',
-						placeholder: '请选择',
-						options: MAPDATA.GUILDSTATUSLIST
 					},
 				]
 			},
@@ -135,72 +100,10 @@
 					]
 				}
 			},
-			cfgs1() {
-				return {
-					vm: this,
-					url: REQUEST.guild.guildRoomApply,
-					columns: [
-						{
-							label: '申请时间',
-							render: (h, params) => {
-								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-							}
-						},
-						{
-							label: '房间ID',
-							prop: 'room_number'
-						},
-						{
-							label: '房间标题',
-							prop: 'room_title'
-						},
-						{
-							label: '所属公会ID',
-							prop: 'guild_number'
-						},
-
-						{
-							label: '所属公会昵称',
-							prop: 'guild_nickname'
-						},
-						{
-							label: '审核状态',
-							render: (h, params) => {
-								let data = MAPDATA.GUILDSTATUSLIST.find(item => { return item.value === params.row.status })
-								return h('span', data ? data.name : '无')
-							}
-						},
-						{
-							label: '操作',
-							render: (h, params) => {
-								return h('div', [
-									h('el-button', { props: { type: 'primary'}, style: {
-										display: params.row.status === 1 ? 'unset' : 'none'
-									}, on: {click:()=>{this.func(params.row.id, 2)}}},'通过'),
-									h('el-button', { props: { type: 'danger'}, style: {
-										display: params.row.status === 1 ? 'unset' : 'none'
-									}, on: {click:()=>{this.func(params.row.id, 3)}}},'拒绝')
-								])
-							}
-						}
-					]
-				}
-			}
 		},
 		data() {
 			return {
 				isAdd :false,
-				selectNavId: 1,
-				navList : [
-					{
-						id : 1,
-						name : "公会房间",
-					},
-					{
-						id : 2,
-						name : "公会房间申请列表",
-					}
-				],
 				ruleForm : {
 					guild_number : "",
 					user_number : ""
@@ -236,13 +139,11 @@
 				return {
 					page: params.page,
 					pagesize: params.size,
+					room_number: s.room_number,
 					guild_number: s.guild_number,
 					status: s.status,
 					type: s.type
 				}
-			},
-			selectChange(id){
-				this.selectNavId = id
 			},
 			// 刷新列表
 			getList() {
@@ -255,27 +156,20 @@
 			},
 			// 查询
 			onSearch() {
-				switch (this.selectNavId) {
-					case 1: //公会房间
-						
-						break;
-					case 2: //公会房间申请列表
-						this.getList()
-						break;
-				
-					default:
-						break;
-				}
+				this.getList()
 			},
 			// 公会房间 - 新增
 			add(){
 				this.isAdd = true
 			},
 			// 公会房间 - 新增确定
-			handelAdd(){
-				this.$refs.ruleForm.validate(valid => {
+			async handelAdd(){
+				this.$refs.ruleForm.validate(async (valid) => {
 					if (valid) {
-						this.isAdd = false
+						let params = { ...this.ruleForm }
+						console.log("params:",params)
+						let res = await addGuildRoom(params)
+						console.log("res:",res)
 					}
 				})
 			},
@@ -297,18 +191,10 @@
 					// }
 				}).catch(() => {});
 			},
-			// 公会房间申请列表 操作 - 通过 - 拒绝
-			async func(id, status) {
-				let res = await getGuildCheck({ id, status })
-				if(res.code === 2000) {
-					if(status === 2) {
-						this.$message.success('通过成功')
-					} else {
-						this.$message.success('拒绝成功')
-					}
-				}
-				this.getList()
-			},
+			// 新增 
+			 getAddGuildRoom(){
+				
+			}
 		}
 	}
 </script>

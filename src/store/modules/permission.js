@@ -155,13 +155,17 @@ const actions = {
             if(item.child && item.child.length > 0) {
               array[index].children = []
               item.child.forEach((a,b) => {
+               if(a.params){
                 array[index].children.push({
                   component: a.params.component,
                   meta: a.params.meta,
                   name: a.params.name,
                   path: a.params.path,
                 })
-                array[index].children[b].meta.title = a.title
+                if(array[index].children[b]){
+                  array[index].children[b].meta.title = a.title
+                }
+               }
                 if(a.child && a.child.length > 0) {
                   array[index].children[b].children = []
                   a.child.forEach((x,s) => {

@@ -87,7 +87,7 @@
 		},
 		computed: {
 			cfgs() {
-				let name = this.form.status === 2 ? 'guildWeekList' : 'settlementLog'
+				let name = this.form.status === 1 ? 'guildWeekList' : 'settlementLog'
 				let arr = [
 					{
 						label: '时间',
@@ -215,20 +215,21 @@
 					guild_number: s.guild_number,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
-                    type: 2
+                    type: 2,
+					status: s.status > 1 ? s.status - 1 : s.status,
 				}
-				if(this.form.status === 1) {
+				
+				if(this.form.status === 2) {
 					data.status = 0
 				} else if(this.form.status === 3) {
 					data.status = 1
 				} else if(this.form.status === 4) {
 					data.status = 2
 				}
-				if(s.status === 2) {
+				if(s.status === 1) {
 					delete data.status
 					delete data.start_time,
-					delete data.end_time,
-                    delete data.type
+					delete data.end_time
 				}
 				return data
 			},

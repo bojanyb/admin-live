@@ -29,6 +29,24 @@ const guildAuditRouter = {
 			}
 		},
 		{
+			path: 'guildLevel',
+			component: () => import('@/views/voiceroom/guildAudit/guild-class/index'),
+			name: 'guildLevel',
+			meta: {
+				title: '公会等级',
+				noCache: true
+			}
+		},
+		{
+			path: 'guildRoom',
+			component: () => import('@/views/voiceroom/guildAudit/guildApplication/index'),
+			name: 'guildRoom',
+			meta: {
+				title: '公会房间',
+				noCache: true
+			}
+		},
+		{
 			path: 'guildApplication-list',
 			component: () => import('@/views/voiceroom/guildAudit/guildApplication-list'),
 			name: 'guildApplication-list',
@@ -69,7 +87,7 @@ const guildAuditRouter = {
 			component: () => import('@/views/voiceroom/guildAudit/guildRebate-list'),
 			name: 'guildRebate-list',
 			meta: {
-				title: '公会返佣列表',
+				title: '流水结算',
 				noCache: true
 			}
 		},

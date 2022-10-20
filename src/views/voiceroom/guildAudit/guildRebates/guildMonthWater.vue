@@ -1,9 +1,23 @@
 <template>
-	<div class="guildAudit-award-box">
+	<div class="guildRebate-list-box">
+		<div class="model">
+			<span>总条数：{{ ruleForm.count || 0 }}</span>
+			<span>流水总计：{{ (form.status === 1 ? ruleForm.total_flow : ruleForm.total_flow) || 0 }}</span>
+			<span>结算总计：{{ (this.form.status === 1 ? ruleForm.total_settlement : ruleForm.total_settlement) || 0 }}</span>
+		</div>
+
 		<div class="searchParams">
 			<div class="formBox">
 				<div class="sunBox">
 					<span>公会</span>
+					<!-- <el-select v-model="form.guild_number" placeholder="请选择" @change="change">
+						<el-option
+						v-for="item in guildList"
+						:key="item.guild_number"
+						:label="item.nickname"
+						:value="item.guild_number">
+						</el-option>
+					</el-select> -->
 					<el-input v-model="form.guild_number" placeholder="请输入公会ID"></el-input>
 				</div>
 				<div class="sunBox">
@@ -17,7 +31,7 @@
 						</el-option>
 					</el-select>
 				</div>
-				<div class="sunBox" v-if="form.status !== 2">
+				<div class="sunBox" v-if="form.status === 1">
 					<span>时间</span>
 					<el-date-picker
 					v-model="form.time"
@@ -35,21 +49,20 @@
 					<el-button icon="el-icon-refresh" @click="reset">重置</el-button>
 					<el-button type="success" v-if="form.status === 1" @click="batchFunc(1)">批量通过</el-button>
 					<el-button type="danger" v-if="form.status === 1" @click="batchFunc(2)">批量忽略</el-button>
-					<el-button type="success" @click="addHome">添加24小时房间</el-button>
 				</div>
 			</div>
+            <!-- <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel> -->
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
-
-		<!-- 新增24小时房间组件 -->
-		<homeComp v-if="isDestoryComp" ref="homeComp" @destoryComp="destoryComp"></homeComp>
 	</div>
 </template>
 
 <script>
+	// 引入公会列表接口
+	import { guildList } from '@/api/user'
 	// 引入api
-	import { guildRoomWeekOnline } from '@/api/system'
+	import { getWeekRebate } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -57,13 +70,13 @@
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
-	import { formatTimeTwo } from '@/utils/common.js'
+	import { timeFormat } from '@/utils/common.js'
 	// 引入公共参数
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
-	// 引入新增24小时房间组件
-	import homeComp from './components/homeComp.vue'
+	// 引入格式化时间包
+	import moment from 'moment'
 
 	export default {
 		name: 'guildRebate-list',
@@ -71,66 +84,49 @@
 		components: {
 			SearchPanel,
 			tableList,
-			homeComp
 		},
 		computed: {
 			cfgs() {
-				let name = this.form.status === 1 ? 'guildWeekList' : 'settlementLog'
+				let name = this.form.status === 1 ? 'guildWeekList': 'settlementLog'
+				console.log("month:",this.form.status)
 				let arr = [
 					{
-						label: '房间ID',
-						minWidth: '100px',
-						prop: 'room_number'
+						label: '时间',
+						minWidth: '240px',
+						render: (h, params) => {
+							let start_time = params.row.time_start ? timeFormat(params.row.time_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
+							let end_time = params.row.time_end ? timeFormat(params.row.time_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
+							return h('span', `${timeFormat(params.row.time_start, 'YYYY', true)}年第${params.row.now}月（${start_time}至${end_time}）`)
+						}
 					},
 					{
-						label: '房间标题',
-						minWidth: '100px',
-						prop: 'title'
-					},
-					{
-						label: '所属公会ID',
+						label: '公会ID',
 						minWidth: '100px',
 						prop: 'guild_number'
 					},
 					{
-						label: '所属公会名称',
-						minWidth: '120px',
-						prop: 'guild_nickname'
-					},
-					{
-						label: '本周营业时长',
-						minWidth: '140px',
-						prop: 'online',
-                        render: (h, params) => {
-                            let data = formatTimeTwo(params.row.online)
-							return h('span', data ? data : '无')
-                        }
-					},
-					{
-						label: '本周流水',
-						minWidth: '120px',
-						render: (h, params) => {
-							return h('span', params.row.flow + '钻石')
-						}
-					},
-					{
-						label: '流水是否达标',
-						minWidth: '90px',
-						render: (h, params) => {
-							return h('span', {
-								style: {
-									color: params.row.flow && Number(params.row.flow) >= 0 ? '#13CE66' : '#FF4949'
-								}
-							}, params.row.flow && Number(params.row.flow) >= 0 ? '已达标' : '未达标')
-						}
-					},
-					{
-						label: '时长奖励',
+						label: '公会名称',
 						minWidth: '100px',
-                        render: (h, params) => {
-                            let name = this.form.status === 2 ? '无' : (params.row.settlement || 0) + '喵粮'
-                            return h('span', name)
-                        }
+						prop: 'guild_name'
+					},
+					{
+						label: '公会长昵称',
+						minWidth: '120px',
+						prop: 'guild_owner_nickname'
+					},
+					{
+						label: '流水',
+						minWidth: '120px',
+						render: (h, params) => {
+							return h('span', this.form.status === 2 ? params.row.week_flow + '钻石' : params.row.flow + '钻石')
+						}
+					},
+					{
+						label: '月奖励金额',
+						minWidth: '120px',
+						render: (h, params) => {
+							return h('span', this.form.status === 2 ? '无' : params.row.settlement + '喵粮')
+						}
 					},
 					{
 						label: '结算状态',
@@ -153,7 +149,7 @@
 				let arr1 = [
 					{
 						label: '操作',
-						minWidth: '140px',
+						minWidth: '150px',
 						fixed: 'right',
 						render: (h, params) => {
 							return h('div', [
@@ -166,15 +162,26 @@
 				return {
 					vm: this,
 					url: REQUEST.guild[name],
-					isShowCheckbox: true,
+					isShowCheckbox: this.form.status === 1,
 					isShowIndex: true,
 					columns: this.form.status === 1 ? [ ...arr, ...arr1 ] : [ ...arr ]
 				}
 			}
 		},
+		watch: {
+			'form.status': {
+				handler(n, o) {
+					if((o === 1 || o === 3 || o == 4) && (n === 1 || n === 3 || n === 4)) {
+						this.getList()
+					}
+				},
+				deep: true
+			}
+		},
 		data() {
 			return {
-				closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLISTCOPY, // 结算状态
+				guildList: [], // 公会列表
+				closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST, // 结算状态
 				form: { // 表单数据
 					guild_number: '',
 					status: 1,
@@ -187,20 +194,7 @@
 				dateTimeParams: {
 					start_time: null,
 					end_time: null
-				},
-				isDestoryComp: false // 是否销毁组件
-			}
-		},
-		watch: {
-			'form.status': {
-				handler(n, o) {
-					if((o === 3 || o === 1 || o === 4) && (n === 1 || n === 3 || n === 4)) {
-						setTimeout(() => {
-							this.getList()
-						}, 50);
-					}
-				},
-				deep: true
+				}
 			}
 		},
 		methods: {
@@ -211,8 +205,8 @@
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
-					type : 4,
-					status: s.closeStatusList,
+					type: 2,
+					status: s.status,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
 				}
@@ -268,7 +262,7 @@
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
-				let res = await guildRoomWeekOnline({ ids, status })
+				let res = await getWeekRebate({ ids, type: 1, status })
 				if(res.code === 2000) {
 					this.$success("批量操作成功");
 				}
@@ -277,7 +271,7 @@
 			// 单个返点
 			async rebateFunc(id, status) {
 				let ids = [id]
-				let res = await guildRoomWeekOnline({ ids, status })
+				let res = await getWeekRebate({ ids, type: 1, status })
 				if(res.code === 2000) {
 					this.$success("操作成功");
 				}
@@ -287,24 +281,40 @@
 			saleAmunt(row) {
 				this.ruleForm = { ...row }
 			},
-			// 添加24小时房间
-			addHome() {
-				this.isDestoryComp = true
-				setTimeout(() => {
-					this.$refs.homeComp.loadParams()
-				}, 50);
-			},
-			// 销毁组件
-			destoryComp() {
-				this.isDestoryComp = false
+			// 获取公会列表
+			async guildListFunc() {
+				let res = await guildList()
+				if(res.data.list && res.data.list.length > 0) {
+					res.data.list.unshift({
+						guild_number: 0,
+						nickname: '全部公会'
+					})
+					this.guildList = res.data.list || []
+				}
+				
 			}
 		}
 	}
 </script>
 <style lang="scss">
-.guildAudit-award-box {
+.guildRebate-list-box {
+	.model {
+        width: 100%;
+        height: 40px;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        padding: 0px 30px;
+        box-sizing: border-box;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+        margin-bottom: 20px;
+        >span {
+            font-size: 15px;
+            color: #fff;
+            margin-right: 100px;
+        }
+    }
 	.searchParams {
-		// margin-bottom: 20px;
 		.formBox {
 			display: flex;
 			align-items: center;
