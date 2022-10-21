@@ -254,11 +254,11 @@ const INSTITUTION = [
     },
     {
         value: 2,
-        name: '财付通'
+        name: '微信'
     },
     {
         value: 3,
-        name: '蚂蚁金服'
+        name: '支付宝'
     },
     // {
     //     value: 4,
