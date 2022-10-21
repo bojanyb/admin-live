@@ -23,7 +23,7 @@
 </template>
 
 <script>
-	import {addGuildRoom} from '@/api/user.js'
+	import {addGuildRoom,rmGuildRoom} from '@/api/videoRoom.js'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -167,9 +167,14 @@
 				this.$refs.ruleForm.validate(async (valid) => {
 					if (valid) {
 						let params = { ...this.ruleForm }
-						console.log("params:",params)
 						let res = await addGuildRoom(params)
-						console.log("res:",res)
+						if(res.code === 2000) {
+							this.$message({
+								type: 'success',
+								message: '新增成功!'
+							});
+							this.getList()
+						}
 					}
 				})
 			},
@@ -181,20 +186,16 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(async () => {
-					// let res = await disbandGuild({ guild_id: row.id })
-					// if(res.code === 2000) {
-					// 	this.$message({
-					// 		type: 'success',
-					// 		message: '移除成功!'
-					// 	});
-					// 	this.getList()
-					// }
+					let res = await rmGuildRoom({ id: row.id })
+					if(res.code === 2000) {
+						this.$message({
+							type: 'success',
+							message: '移除成功!'
+						});
+						this.getList()
+					}
 				}).catch(() => {});
 			},
-			// 新增 
-			 getAddGuildRoom(){
-				
-			}
 		}
 	}
 </script>

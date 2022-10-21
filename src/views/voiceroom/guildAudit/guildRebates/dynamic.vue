@@ -62,7 +62,7 @@
 	// 引入公会列表接口
 	import { guildList } from '@/api/user'
 	// 引入api
-	import { getWeekRebate } from '@/api/videoRoom'
+	import { doSettlement } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -87,15 +87,15 @@
 		},
 		computed: {
 			cfgs() {
-				let name = this.form.status === 1 ? 'guildWeekList' : 'settlementLog'
+				let name = this.form.status === 1 ? 'settlementLog': 'guildWeekList'
 				let arr = [
 					{
 						label: '时间',
 						minWidth: '240px',
 						render: (h, params) => {
-							let start_time = params.row.week_start ? timeFormat(params.row.week_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
-							let end_time = params.row.week_end ? timeFormat(params.row.week_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
-							return h('span', `${timeFormat(params.row.week_start, 'YYYY', true)}年第${params.row.w}周（${start_time}至${end_time}）`)
+							let start_time = params.row.time_start ? timeFormat(params.row.time_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
+							let end_time = params.row.time_end ? timeFormat(params.row.time_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
+							return h('span', `${timeFormat(params.row.time_start, 'YYYY', true)}年第${params.row.now}月（${start_time}至${end_time}）`)
 						}
 					},
 					{
@@ -106,12 +106,12 @@
 					{
 						label: '公会名称',
 						minWidth: '100px',
-						prop: 'nickname'
+						prop: 'guild_name'
 					},
 					{
 						label: '公会长昵称',
 						minWidth: '120px',
-						prop: 'guild_nickanme'
+						prop: 'guild_owner_nickname'
 					},
 					{
 						label: '流水',
@@ -121,18 +121,11 @@
 						}
 					},
 					{
-						label: '公会评级',
+						label: '周奖励金额',
+						minWidth: '120px',
 						render: (h, params) => {
-							let data = MAPDATA.CLASSLIST.find(item => { return item.value === params.row.rank })
-							return h('span', this.form.status === 2 ? '无' : data ? data.name : '无')
+							return h('span', this.form.status === 2 ? params.row.rewards + '钻石' : params.row.rewards + '钻石')
 						}
-					},
-					{
-						label: '评级奖励',
-						prop: 'rewards',
-                        render: (h, params) => {
-                            return h('span', this.form.status === 2 ? '无' : params.row.rewards)
-                        }
 					},
 					{
 						label: '结算状态',
@@ -215,7 +208,7 @@
 					guild_number: s.guild_number,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
-                    type: 2,
+                    type: 3,
 					status: s.status > 1 ? s.status - 1 : s.status,
 				}
 				
@@ -271,7 +264,7 @@
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
-				let res = await getWeekRebate({ ids, type: 2, status })
+				let res = await doSettlement({ ids, type: 2, status })
 				if(res.code === 2000) {
 					this.$success("批量操作成功");
 				}
@@ -280,7 +273,7 @@
 			// 单个返点
 			async rebateFunc(id, status) {
 				let ids = [id]
-				let res = await getWeekRebate({ ids, type: 2, status })
+				let res = await doSettlement({ ids, type: 2, status })
 				if(res.code === 2000) {
 					this.$success("操作成功");
 				}

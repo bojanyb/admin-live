@@ -969,33 +969,59 @@ export function guildRoomApplyCheck(data) {
 }
 
 // 配置周返点
-export function configRebate(data) {
+export function saveSettlementConfig(data) {
   return request({
-    url: api.guild.configRebate,
+    url: api.guild.saveSettlementConfig,
     method: 'post',
     data
   })
 }
 
 // 删除周返点配置
-export function delConfigRebate(data) {
+export function delSettlementConfig(data) {
   return request({
-    url: api.guild.delConfigRebate,
+    url: api.guild.delSettlementConfig,
     method: 'post',
     data
   })
 }
 
 // 私聊权限
-export function setPrivateChat(data) {
+export function changePrivateChat(data) {
   return request({
-    url: api.guild.setPrivateChat,
+    url: api.guild.changePrivateChat,
+    method: 'post',
+    data
+  })
+}
+
+// 公会批量结算
+export function doSettlement(data) {
+  return request({
+    url: api.guild.doSettlement,
     method: 'post',
     data
   })
 }
 
 
+// 添加公会房间
+export function addGuildRoom(data) {
+  return request({
+    url: api.guild.addGuildRoom,
+    method: 'post',
+    data
+  })
+}
+
+// 移除公会房间
+export function rmGuildRoom(data) {
+  return request({
+    url: api.guild.rmGuildRoom,
+    method: 'post',
+    data
+  })
+}
 
 
 

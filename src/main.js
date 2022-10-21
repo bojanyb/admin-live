@@ -9,6 +9,7 @@ import './styles/element-variables.scss'
 // import enLang from 'element-ui/lib/locale/lang/en' // 如果使用中文语言包请默认支持，无需额外引入，请删除该依赖
 
 import '@/styles/index.scss' // global css
+import format from 'vue-text-format'
 
 import App from './App'
 import store from './store'
@@ -28,6 +29,7 @@ require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
 
 Vue.use(VideoPlayer)
+Vue.use(format)
 
 /**
  * If you don't want to use mock-server

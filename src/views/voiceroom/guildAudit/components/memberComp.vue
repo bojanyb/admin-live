@@ -9,7 +9,7 @@
 // 引入tab菜单组件
 import menuComp from '@/components/menuComp/index.vue'
 // 引入api
-import { newGuildApplyCheck,setPrivateChat } from '@/api/videoRoom'
+import { changePrivateChat } from '@/api/videoRoom'
 import { rmGuildUser } from '@/api/user.js'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
@@ -201,7 +201,6 @@ export default {
                 console.log(value)
             }).catch(() => {});
         },
-
         // 公会成员 - 移除
         clickDel(row){
             let title = "确认移除 [ " + row.nickname + " ] 吗？"
@@ -223,10 +222,10 @@ export default {
         // 私聊权限
         change(row){
             let params = {
-                user_id: row.user_id,
+                id: row.id,
                 is_private_chat : row.is_private_chat == 0 ? 1 : 0
             }
-            setPrivateChat(params).then(res=>{
+            changePrivateChat(params).then(res=>{
                 let tipsText = "";
                 if(params.is_private_chat == 1){
                     tipsText = "私聊权限已开启";

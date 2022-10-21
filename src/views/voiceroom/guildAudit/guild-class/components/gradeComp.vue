@@ -8,13 +8,11 @@
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <div class="formBox">
-                    <el-form-item label="公会等级" prop="code">
-                        <el-select v-model="ruleForm.code" placeholder="请选择">
-                            <el-option v-for="item in codeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
-                        </el-select>
+                    <el-form-item label="公会等级" prop="name">
+                        <el-input v-model="ruleForm.name" maxlength="10" placeholder="仅支持中英文数字"></el-input>
                     </el-form-item>
-                    <el-form-item label="周返点比例" prop="rebate" :rules="rebateRules">
-                        <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.rebate"></el-input>
+                    <el-form-item label="周返点比例" prop="rewards" :rules="rewardsRules">
+                        <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.rewards"></el-input>
                     </el-form-item>
                 </div>
                 <div class="formBox">
@@ -36,16 +34,16 @@
 
 <script>
 // 引入api
-import { configRebate } from '@/api/system.js'
+import { saveSettlementConfig } from '@/api/videoRoom.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
     computed: {
         title() { // 标题
             if(this.status === 'add') {
-                return '添加公会等级'
+                return '添加公会等级配置'
             } else if(this.status === 'update') {
-                return '修改公会等级'
+                return '修改公会等级配置'
             }
         },
         startRules() { // 起始流水
@@ -93,15 +91,15 @@ export default {
             return params
         },
         // 周返点限制
-        rebateRules() {
+        rewardsRules() {
             let params = {}
             params = {
                 required: true,
                 validator: (rules, val, cb) => {
-                    if(!this.ruleForm.rebate) {
+                    if(!this.ruleForm.rewards) {
                         cb(new Error('请输入周返点比例'))
                     } else {
-                        if(Number(this.ruleForm.rebate) > 15) {
+                        if(Number(this.ruleForm.rewards) > 15) {
                             cb(new Error('周返点比例最大为15'))
                         } else {
                             cb()
@@ -119,16 +117,18 @@ export default {
             codeList: MAPDATA.CLASSLIST, // 公会等级
             ruleForm: {
                 id: null,
-                code: null,
+                name: null,
                 start: '',
                 end: '',
-                rebate: '',
+                rewards: '',
+                type: 1,
+                rewards_type: 2
             },
             rules: {
-                code: [
+                name: [
                     { required: true, message: '请选择公会等级', trigger: 'change' }
                 ],
-                rebate: [
+                rewards: [
                     { required: true, message: '请输入周返点比例', trigger: 'blur' },
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
@@ -160,7 +160,7 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
-                    let res = await configRebate(params)
+                    let res = await saveSettlementConfig(params)
                     if(res.code === 2000) {
                         if(this.status === 'add') {
                             this.$success('新增成功')

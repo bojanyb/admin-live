@@ -13,7 +13,7 @@
 
 <script>
 // 引入api
-import { delConfigRebate } from '@/api/system.js'
+import { delSettlementConfig } from '@/api/videoRoom.js'
 // 引入新增 - 修改组件
 import weekComp from './components/weekComp.vue'
 // 引入菜单组件
@@ -54,19 +54,13 @@ export default {
                 columns: [
                     {
                         label: '奖励名称',
-                        prop: 'code',
+                        prop: 'name',
                     },
                     {
                         label: '流水范围',
                         render: (h, params) => {
                             return h('span', params.row.start + '~' + params.row.end)
                         }
-                    },
-                    {
-                        label: '周返点比例',
-                        render: (h, params) => {
-							return h('span', params.row.rebate + '%')
-						}
                     },
                     {
                         label: '评级奖励类型',
@@ -142,14 +136,15 @@ export default {
         destoryComp() {
             this.isDestoryComp = false
         },
-        // 删除公会等级配置
+        // 删除公会周奖励配置
         async deleteParams(id) {
-            this.$confirm('确认删除当前公会等级配置吗?', '提示', {
+            this.$confirm('确认删除当前公会周奖励配置吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(async () => {
-                let res = await delConfigRebate({ id: id })
+                console.log(id)
+                let res = await delSettlementConfig({ id: id })
                 if(res.code === 2000) {
                     this.$success('删除成功')
                     this.getList()

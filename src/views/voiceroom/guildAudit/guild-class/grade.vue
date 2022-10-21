@@ -13,7 +13,7 @@
 
 <script>
 // 引入api
-import { delConfigRebate } from '@/api/system.js'
+import { delSettlementConfig } from '@/api/videoRoom.js'
 // 引入新增 - 修改组件
 import gradeComp from './components/gradeComp.vue'
 // 引入菜单组件
@@ -38,14 +38,13 @@ export default {
             return [
                 {
                     name: 'code',
-                    type: 'select',
-                    value: '',
+                    type: 'input',
+                    value: null,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '公会等级',
-                    placeholder: '请选择',
-                    options: MAPDATA.CLASSLIST
-                },
+                    placeholder: '公会等级',
+                }
             ]
         },
         cfgs() {
@@ -56,8 +55,7 @@ export default {
                     {
                         label: '公会等级',
                         render: (h, params) => {
-                            let data = MAPDATA.CLASSLIST.find(item => { return item.value == params.row.code })
-                            return h('span', data ? data.name : '无')
+                            return h('span', params.row.name)
                         }
                     },
                     {
@@ -69,7 +67,7 @@ export default {
                     {
                         label: '周返点比例',
                         render: (h, params) => {
-							return h('span', params.row.rebate + '%')
+							return h('span', params.row.rewards + '%')
 						}
                     },
                     {
@@ -141,7 +139,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(async () => {
-                let res = await delConfigRebate({ id: id })
+                let res = await delSettlementConfig({ id: id })
                 if(res.code === 2000) {
                     this.$success('删除成功')
                     this.getList()

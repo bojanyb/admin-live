@@ -92,6 +92,7 @@ const request = {
             getNowRoomOnlineReward: `${HTTPHEADER}/guild/getNowRoomOnlineReward`, // 未到结算时间
             guildRoomWeekOnline: `${HTTPHEADER}/guild/guildRoomWeekOnline`, // 批量结算
 
+
             statisticsroomS: `${HTTPHEADER}/guild/statisticsroomS`, // 统计24小时房间列表
         }
     },
@@ -215,19 +216,24 @@ const request = {
         // v2
         list: `${HTTPHEADER}/Guild/guildListV2`, // 公会列表
         getGuildUsers: `${HTTPHEADER}/guild/guildUsers`, // 成员列表
-        setPrivateChat: `${HTTPHEADER}/Anchor/setPrivateChat`, // 成员列表
+        changePrivateChat: `${HTTPHEADER}/guild/changePrivateChat`, // 成员列表
         rmGuildUser: `${HTTPHEADER}/guild/rmGuildUser`, // 删除公会成员
         guildUserApply: `${HTTPHEADER}/guild/guildUserApply`, // 主播申请列表
         guildUserApplyCheck: `${HTTPHEADER}/guild/guildUserApplyCheck`, // 主播申请审核
         guildRooms: `${HTTPHEADER}/guild/guildRooms`, // 公会房间列表
         guildRoomApply: `${HTTPHEADER}/guild/guildRoomApply`, // 公会房间申请列表
         addGuildRoom: `${HTTPHEADER}/guild/addGuildRoom`, // 添加公会房间
+        rmGuildRoom: `${HTTPHEADER}/guild/rmGuildRoom`, // 移除公会房间
         guildRoomApplyCheck: `${HTTPHEADER}/guild/guildRoomApplyCheck`, // 审核公会申请
         rebateConfig: `${HTTPHEADER}/guild/rebateConfig`, // 获取周返点
         delConfigRebate: `${HTTPHEADER}/guild/delConfigRebate`, // 获取周返点
         configRebate: `${HTTPHEADER}/guild/configRebate`, // 获取周返点
-        guildWeekList: `${HTTPHEADER}/Guild/guildWeekList`, // 公会结算 公会评级（周）（月）未结算
-        settlementConfig: `${HTTPHEADER}/Guild/settlementConfig`, // 获取周返点
+        guildWeekList: `${HTTPHEADER}/guild/guildWeekList`, // 公会结算 公会评级（周）（月）未结算
+        settlementConfig: `${HTTPHEADER}/guild/settlementConfig`, // 获取周返点
+        saveSettlementConfig: `${HTTPHEADER}/guild/saveSettlementConfig`, // 配置周返点
+        delSettlementConfig: `${HTTPHEADER}/guild/delSettlementConfig`, // 删除周返点配置
+        doSettlement: `${HTTPHEADER}/guild/doSettlement`, // 公会批量结算
+        getNowRoomOnlineReward: `${HTTPHEADER}/guild/getNowRoomOnlineReward`, // 待结算 24小时房间奖励 
     },
 
     // 封禁记录

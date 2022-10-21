@@ -8,11 +8,8 @@
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <div class="formBox">
-                    <el-form-item label="奖励名称" prop="code">
-                        <el-input v-model="ruleForm.code" maxlength="10" placeholder="仅支持中英文数字"></el-input>
-                    </el-form-item>
-                    <el-form-item label="周返点比例" prop="rebate" :rules="rebateRules">
-                        <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.rebate"></el-input>
+                    <el-form-item label="奖励名称" prop="name">
+                        <el-input v-model="ruleForm.name" maxlength="10" placeholder="仅支持中英文数字"></el-input>
                     </el-form-item>
                 </div>
                 <div class="formBox">
@@ -44,7 +41,7 @@
 
 <script>
 // 引入api
-import { configRebate } from '@/api/system.js'
+import { saveSettlementConfig } from '@/api/videoRoom.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
@@ -100,25 +97,6 @@ export default {
             }
             return params
         },
-        // 周返点限制
-        rebateRules() {
-            let params = {}
-            params = {
-                required: true,
-                validator: (rules, val, cb) => {
-                    if(!this.ruleForm.rebate) {
-                        cb(new Error('请输入周返点比例'))
-                    } else {
-                        if(Number(this.ruleForm.rebate) > 15) {
-                            cb(new Error('周返点比例最大为15'))
-                        } else {
-                            cb()
-                        }
-                    }
-                }
-            }
-            return params
-        }
     },
     data() {
         return {
@@ -128,29 +106,24 @@ export default {
             rewards_typeList: MAPDATA.GUILDCONFIGURATIONRATETYPELIST, // 评级类型
             ruleForm: {
                 id: null,
-                code: null,
+                name: null,
                 start: '',
                 end: '',
-                rebate: '',
                 rewards: '',
                 rewards_type: null,
-                type: 1
+                type: 2
             },
             rules: {
-                code: [
+                name: [
                     {  required: true, 
                         message: '请输入奖励名称', 
                         trigger: 'blur',
                         validator: (rules, val, cb) => {
                             let value = val.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/ig, '')
-                            this.ruleForm.code = value
+                            this.ruleForm.name = value
                             return cb()
                         }
                  }
-                ],
-                rebate: [
-                    { required: true, message: '请输入周返点比例', trigger: 'blur' },
-                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
                 start: [
                     { required: true, message: '请输入起始流水', trigger: 'blur' }
@@ -186,7 +159,7 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
-                    let res = await configRebate(params)
+                    let res = await saveSettlementConfig(params)
                     if(res.code === 2000) {
                         if(this.status === 'add') {
                             this.$success('新增成功')

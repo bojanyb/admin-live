@@ -8,8 +8,8 @@
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <div class="formBox">
-                    <el-form-item label="奖励名称" prop="code">
-                        <el-input v-model="ruleForm.code" maxlength="10" placeholder="仅支持中英文数字"></el-input>
+                    <el-form-item label="奖励名称" prop="name">
+                        <el-input v-model="ruleForm.name" maxlength="10" placeholder="仅支持中英文数字"></el-input>
                     </el-form-item>
                 </div>
                 <div class="formBox">
@@ -41,7 +41,7 @@
 
 <script>
 // 引入api
-import { configRebate } from '@/api/system.js'
+import { saveSettlementConfig } from '@/api/videoRoom.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
@@ -124,22 +124,22 @@ export default {
             rewards_typeList: MAPDATA.GUILDCONFIGURATIONRATETYPELIST, // 评级类型
             ruleForm: {
                 id: null,
-                code: null,
+                name: null,
                 start: '',
                 end: '',
                 week_rebate: '',
                 rewards: '',
                 rewards_type: null,
-                type: 2
+                type: 3
             },
             rules: {
-                code: [
+                name: [
                     {  required: true, 
                         message: '请输入奖励名称', 
                         trigger: 'blur',
                         validator: (rules, val, cb) => {
                             let value = val.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/ig, '')
-                            this.ruleForm.code = value
+                            this.ruleForm.name = value
                             return cb()
                         }
                  }
@@ -182,7 +182,7 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
-                    let res = await configRebate(params)
+                    let res = await saveSettlementConfig(params)
                     if(res.code === 2000) {
                         if(this.status === 'add') {
                             this.$success('新增成功')
