@@ -41,6 +41,7 @@ export default {
     data() {
         return {
             status: 'add',
+            isEditComp: false,
             rankList: MAPDATA.CLASSLIST,
             guildTypeList: MAPDATA.GUILDCONFIGTYPELIST,
             ruleForm: {
