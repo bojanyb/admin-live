@@ -31,7 +31,7 @@
                     <el-input type="textarea" :rows="4" v-model="ruleForm.assign_room" placeholder="请输入房间ID，输入多个房间ID请用逗号隔开"></el-input>
                 </el-form-item>
                 <el-form-item label="房间背景图" prop="url">
-                    <uploadImg v-model="ruleForm.url" :imgUrl="ruleForm.url" name="url" ref="url" @validateField="validateField"></uploadImg>
+                    <uploadImg v-model="ruleForm.url" accept=".png,.jpg,.jpeg,.svga" :imgUrl="ruleForm.url" name="url" ref="url" @validateField="validateField"></uploadImg>
                 </el-form-item>
                 <!-- <el-form-item label="是否默认" prop="is_default">
                     <el-select v-model="ruleForm.is_default">
