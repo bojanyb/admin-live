@@ -28,7 +28,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="房间ID" prop="assign_room" v-if="ruleForm.assign_status === 1">
-                    <el-input type="textarea" :rows="4" v-model="ruleForm.assign_room" placeholder="请输入房间ID，输入多个房间ID请用逗号隔开"></el-input>
+                    <el-input type="textarea" :rows="4" v-model="ruleForm.assign_room" placeholder="请输入房间ID，输入多个房间ID请用逗号隔开" @input="roomInput"></el-input>
                 </el-form-item>
                 <el-form-item label="房间背景图" prop="url">
                     <uploadImg v-model="ruleForm.url" accept=".png,.jpg,.jpeg,.svga" :imgUrl="ruleForm.url" name="url" ref="url" @validateField="validateField"></uploadImg>
@@ -119,6 +119,10 @@ export default {
         }
     },
     methods: {
+        // 限制房间id输入
+        roomInput() {
+            this.ruleForm.assign_room = this.ruleForm.assign_room.replace(/[\u4E00-\u9FA5A-Za-z_^%&'\-\*\/;.，。、‘；、】【=?$\[\]!@#()\\~]/g, '')
+        },
         // 获取数据
         loadParams(status, row) {
             this.openComp()
