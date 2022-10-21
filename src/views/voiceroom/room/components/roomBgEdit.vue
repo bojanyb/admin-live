@@ -121,7 +121,7 @@ export default {
     methods: {
         // 限制房间id输入
         roomInput() {
-            this.ruleForm.assign_room = this.ruleForm.assign_room.replace(/[\u4E00-\u9FA5A-Za-z_^%&'\-\*\/;.，。、‘；、】【=?$\[\]!@#()\\~]/g, '')
+            this.ruleForm.assign_room = this.ruleForm.assign_room.replace(/[\u4E00-\u9FA5A-Za-z_^%&'\-\*\ /;.，。、‘；、】【=?$\[\]!@#()\\~]/g, '')
         },
         // 获取数据
         loadParams(status, row) {
