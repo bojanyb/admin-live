@@ -209,7 +209,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(async () => {
-                let res = await rmGuildUser({ id: row.guild_id })
+                let res = await rmGuildUser({ id: row.id })
                 if(res.code === 2000) {
                 	this.$message({
                 		type: 'success',
