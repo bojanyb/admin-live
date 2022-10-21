@@ -144,9 +144,7 @@ export default {
                         name: s.name,
                         // is_default: s.is_default,
                         assign_room: s.assign_room,
-                    }
-                    if(s.assign_status === 1) {
-                        params.assign_status = s.assign_status
+                        assign_status: s.assign_status
                     }
                     let res = await getRoomBgAdd(params)
                     if(res.code === 2000) {
