@@ -174,11 +174,7 @@
 			async func(id, status) {
 				let res = await guildRoomApplyCheck({ id, status })
 				if(res.code === 2000) {
-					if(status === 2) {
-						this.$message.success('通过成功')
-					} else {
-						this.$message.success('拒绝成功')
-					}
+					this.$message.success('操作成功')
 				}
 				this.getList()
 			},

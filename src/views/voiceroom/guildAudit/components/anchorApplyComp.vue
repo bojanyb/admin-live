@@ -198,7 +198,7 @@ export default {
             if(status === 1) {
                 let res = await guildUserApplyCheck({ id, status })
                 if(res.code === 2000) {
-                    this.$message.success('审核通过')
+                    this.$message.success('操作成功')
                     this.$nextTick(res=>{
                         this.getList()
                     })
@@ -211,7 +211,7 @@ export default {
                 }).then(async () => {
                     let res = await guildUserApplyCheck({ id, status })
                     if(res.code === 2000) {
-                        this.$message.success('驳回成功')
+                        this.$message.success('操作成功')
                         this.getList()
                     }
                 }).catch(() => {});
