@@ -250,7 +250,7 @@ const INSTITUTION = [
     },
     {
         value: 1,
-        name: '苹果支付'
+        name: '苹果商店'
     },
     {
         value: 2,
