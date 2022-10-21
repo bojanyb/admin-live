@@ -1,9 +1,9 @@
 <template>
-	<div class="guildRebate-dynamic-box">
+	<div class="guildRebate-list-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ (form.status === 1 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
-			<span>结算总计：{{ (this.form.status === 1 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
+			<span>流水总计：{{ (form.status === 1 ? ruleForm.total_flow : ruleForm.total_flow) || 0 }}</span>
+			<span>结算总计：{{ (this.form.status === 1 ? ruleForm.total_settlement : ruleForm.total_settlement) || 0 }}</span>
 		</div>
 
 		<div class="searchParams">
@@ -18,7 +18,7 @@
 						:value="item.guild_number">
 						</el-option>
 					</el-select> -->
-                    <el-input v-model="form.guild_number" placeholder="请输入公会ID"></el-input>
+					<el-input v-model="form.guild_number" placeholder="请输入公会ID"></el-input>
 				</div>
 				<div class="sunBox">
 					<span>结算状态</span>
@@ -88,6 +88,7 @@
 		computed: {
 			cfgs() {
 				let name = this.form.status === 1 ? 'settlementLog': 'guildWeekList'
+				console.log("month:",this.form.status)
 				let arr = [
 					{
 						label: '时间',
@@ -121,17 +122,17 @@
 						}
 					},
 					{
-						label: '周奖励金额',
+						label: '月奖励金额',
 						minWidth: '120px',
 						render: (h, params) => {
-							return h('span', this.form.status === 2 ? params.row.rewards + '钻石' : params.row.rewards + '钻石')
+							return h('span', this.form.status === 2 ? '无' : params.row.settlement + '喵粮')
 						}
 					},
 					{
 						label: '结算状态',
 						minWidth: '120px',
 						render: (h, params) => {
-                            let name;
+							let name;
 							if(this.form.status === 1) {
 								name = '待结算'
 							} else if(this.form.status === 2) {
@@ -153,7 +154,7 @@
 						render: (h, params) => {
 							return h('div', [
 								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.rebateFunc(params.row.id, 1)}}}, '结算'),
-								h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.rebateFunc(params.row.id, 2)}}}, '忽略'),
+								h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.rebateFunc(params.row.id, 2)}}}, '忽略')
 							])
 						}
 					}
@@ -167,10 +168,20 @@
 				}
 			}
 		},
+		watch: {
+			'form.status': {
+				handler(n, o) {
+					if((o === 1 || o === 3 || o == 4) && (n === 1 || n === 3 || n === 4)) {
+						this.getList()
+					}
+				},
+				deep: true
+			}
+		},
 		data() {
 			return {
 				guildList: [], // 公会列表
-				closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLISTCOPY, // 结算状态
+				closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST, // 结算状态
 				form: { // 表单数据
 					guild_number: '',
 					status: 1,
@@ -186,18 +197,6 @@
 				}
 			}
 		},
-        watch: {
-			'form.status': {
-				handler(n, o) {
-					if((o === 1 || o === 3 || o === 4) && (n === 1 || n === 3 || n === 4)) {
-						setTimeout(() => {
-							this.getList()
-						}, 50);
-					}
-				},
-				deep: true
-			}
-		},
 		methods: {
 			// 配置参数
 			beforeSearch(params) {
@@ -206,12 +205,11 @@
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
+					type: 2,
+					status: s.status,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
-					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
-                    type: 3,
-					status: s.status > 1 ? s.status - 1 : s.status,
+					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
 				}
-				
 				if(this.form.status === 2) {
 					data.status = 0
 				} else if(this.form.status === 3) {
@@ -264,7 +262,7 @@
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
-				let res = await doSettlement({ ids, type: 2, status })
+				let res = await doSettlement({ ids, type: 1, status })
 				if(res.code === 2000) {
 					this.$success("批量操作成功");
 				}
@@ -273,7 +271,7 @@
 			// 单个返点
 			async rebateFunc(id, status) {
 				let ids = [id]
-				let res = await doSettlement({ ids, type: 2, status })
+				let res = await doSettlement({ ids, type: 1, status })
 				if(res.code === 2000) {
 					this.$success("操作成功");
 				}
@@ -299,7 +297,7 @@
 	}
 </script>
 <style lang="scss">
-.guildRebate-dynamic-box {
+.guildRebate-list-box {
 	.model {
         width: 100%;
         height: 40px;

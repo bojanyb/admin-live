@@ -937,3 +937,91 @@ export function messageDelete(data) {
     data
   })
 }
+
+
+
+/***********公会v2******************/ 
+// 新增公会
+export function getGuildCreateV2(data) {
+  return request({
+    url: 'guild/createV2',
+    method: 'post',
+    data
+  })
+}
+
+// 修改公会
+export function getGuildUpdateV2(data) {
+  return request({
+    url: '/guild/updateV2',
+    method: 'post',
+    data
+  })
+}
+
+// 审核公会申请
+export function guildRoomApplyCheck(data) {
+  return request({
+    url: api.guild.guildRoomApplyCheck,
+    method: 'post',
+    data
+  })
+}
+
+// 配置周返点
+export function saveSettlementConfig(data) {
+  return request({
+    url: api.guild.saveSettlementConfig,
+    method: 'post',
+    data
+  })
+}
+
+// 删除周返点配置
+export function delSettlementConfig(data) {
+  return request({
+    url: api.guild.delSettlementConfig,
+    method: 'post',
+    data
+  })
+}
+
+// 私聊权限
+export function changePrivateChat(data) {
+  return request({
+    url: api.guild.changePrivateChat,
+    method: 'post',
+    data
+  })
+}
+
+// 公会批量结算
+export function doSettlement(data) {
+  return request({
+    url: api.guild.doSettlement,
+    method: 'post',
+    data
+  })
+}
+
+
+// 添加公会房间
+export function addGuildRoom(data) {
+  return request({
+    url: api.guild.addGuildRoom,
+    method: 'post',
+    data
+  })
+}
+
+// 移除公会房间
+export function rmGuildRoom(data) {
+  return request({
+    url: api.guild.rmGuildRoom,
+    method: 'post',
+    data
+  })
+}
+
+
+

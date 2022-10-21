@@ -98,17 +98,9 @@
 						}
 					},
 					{
-						label: '用户ID',
-						prop: 'user_id'
-					},
-					{
-						label: '用户昵称',
-						prop: 'user_nickname'
-					},
-					{
 						label: '被举报用户ID',
 						minWidth: '100px',
-						prop: 'feedback_user_id'
+						prop: 'feedback_user_id',
 					},
 					{
 						label: '被举报用户昵称',
@@ -134,6 +126,13 @@
 						imgWidth: '70px',
 						imgHeight: '70px',
 						width: '200px'
+					},
+					{
+						label: '举报用户',
+						prop: 'user_id',
+						render: (h, params) => {
+							return h('span', params.row.user_id +' ('+ params.row.user_nickname +')' )
+						}
 					},
 					{
 						label: '处理状态',

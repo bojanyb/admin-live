@@ -153,3 +153,44 @@ export function check(data) {
     data
   })
 }
+
+
+
+/***********公会v2******************/ 
+
+// 主播申请审核
+export function guildUserApplyCheck(data) {
+  return request({
+    url: api.guild.guildUserApplyCheck,
+    method: 'post',
+    data
+  })
+}
+
+// 删除公会成员
+export function rmGuildUser(data) {
+  return request({
+    url: api.guild.rmGuildUser,
+    method: 'post',
+    data
+  })
+}
+
+// 公会房间列表
+export function guildRooms(data) {
+  return request({
+    url: api.guild.guildRooms,
+    method: 'post',
+    data
+  })
+}
+
+// 添加公会房间
+export function addGuildRoom(data) {
+  return request({
+    url: api.guild.addGuildRoom,
+    method: 'post',
+    data
+  })
+}
+
