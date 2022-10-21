@@ -462,19 +462,35 @@ const GUILDAPPLYLIST = [
 // 公会厅申请列表 - 状态
 const GUILDSTATUSLIST = [
     {
-        name: '全部',
+        name: '未处理',
         value: 0
     },
     {
-        name: '未处理',
+        name: '已通过',
         value: 1
     },
     {
-        name: '已通过',
+        name: '已拒绝',
+        value: 2
+    }
+]
+
+// 公会管理 - 结算状态
+const SETTLEMENTSTATUS = [
+    {
+        name: '未结算',
+        value: 0
+    },
+    {
+        name: '待结算',
+        value: 1
+    },
+    {
+        name: '已结算',
         value: 2
     },
     {
-        name: '已拒绝',
+        name: '已忽略',
         value: 3
     }
 ]
@@ -1220,6 +1236,34 @@ const GUILDCONFIGURATIONRATETYPELIST = [
     {
         name: '百分比',
         value: 2
+    }
+]
+
+// 公会状态
+const GUILDSTATUS = [
+    {
+        name: '正常',
+        value: 1
+    },
+    {
+        name: '已冻结',
+        value: 2
+    },
+    {
+        name: '已解散',
+        value: 3
+    }
+]
+
+// 公会状态
+const GUILDAPPLYTYPE = [
+    {
+        name: '入会申请',
+        value: 0
+    },
+    {
+        name: '退会申请',
+        value: 1
     }
 ]
 
@@ -2106,5 +2150,7 @@ export default {
     GUILDOPERATIONLIST,
     RECHARGEHISTORYTYPELIST,
     USERMANAGEMENTAUTONYMSTATUSLIST,
-    DISSOLUTIONTYPELISTCOPY
+    GUILDSTATUS,
+    GUILDAPPLYTYPE,
+    SETTLEMENTSTATUS
 }

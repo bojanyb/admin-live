@@ -49,7 +49,7 @@
 
 <script>
 	// 引入api
-	import { guildRoomWeekOnline } from '@/api/system'
+	import { doSettlement } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -57,7 +57,7 @@
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
-	import { formatTimeTwo } from '@/utils/common.js'
+	import { formatTimeTwo,timeFormat } from '@/utils/common.js'
 	// 引入公共参数
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
@@ -75,8 +75,17 @@
 		},
 		computed: {
 			cfgs() {
-				let name = this.form.status === 2 ? 'getNowRoomOnlineReward' : 'getRoomOnlineRewardLog'
+				let name = this.form.status === 1 ? 'settlementLog': 'guildWeekList'
 				let arr = [
+					{
+						label: '时间',
+						minWidth: '240px',
+						render: (h, params) => {
+							let start_time = params.row.start ? timeFormat(params.row.start, 'YYYY-MM-DD HH:mm:ss', true) : ''
+							let end_time = params.row.end ? timeFormat(params.row.end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
+							return h('span', `${timeFormat(params.row.start, 'YYYY', true)}年第${params.row.now}周（${start_time}至${end_time}）`)
+						}
+					},
 					{
 						label: '房间ID',
 						minWidth: '100px',
@@ -95,7 +104,7 @@
 					{
 						label: '所属公会名称',
 						minWidth: '120px',
-						prop: 'nickname'
+						prop: 'guild_nickname'
 					},
 					{
 						label: '本周营业时长',
@@ -111,17 +120,6 @@
 						minWidth: '120px',
 						render: (h, params) => {
 							return h('span', params.row.flow + '钻石')
-						}
-					},
-					{
-						label: '流水是否达标',
-						minWidth: '90px',
-						render: (h, params) => {
-							return h('span', {
-								style: {
-									color: params.row.flow && Number(params.row.flow) >= 0 ? '#13CE66' : '#FF4949'
-								}
-							}, params.row.flow && Number(params.row.flow) >= 0 ? '已达标' : '未达标')
 						}
 					},
 					{
@@ -165,7 +163,7 @@
 				]
 				return {
 					vm: this,
-					url: REQUEST.system.guild[name],
+					url: REQUEST.guild[name],
 					isShowCheckbox: true,
 					isShowIndex: true,
 					columns: this.form.status === 1 ? [ ...arr, ...arr1 ] : [ ...arr ]
@@ -211,17 +209,19 @@
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
+					type : 4,
+					status: s.closeStatusList,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
 				}
-				if(this.form.status === 1) {
+				if(this.form.status === 2) {
 					data.status = 0
 				} else if(this.form.status === 3) {
 					data.status = 1
 				} else if(this.form.status === 4) {
 					data.status = 2
 				}
-				if(s.status === 2) {
+				if(s.status === 1) {
 					delete data.status
 					delete data.start_time,
 					delete data.end_time
@@ -266,7 +266,7 @@
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
-				let res = await guildRoomWeekOnline({ ids, status })
+				let res = await doSettlement({ ids, status })
 				if(res.code === 2000) {
 					this.$success("批量操作成功");
 				}
@@ -275,7 +275,7 @@
 			// 单个返点
 			async rebateFunc(id, status) {
 				let ids = [id]
-				let res = await guildRoomWeekOnline({ ids, status })
+				let res = await doSettlement({ ids, status })
 				if(res.code === 2000) {
 					this.$success("操作成功");
 				}

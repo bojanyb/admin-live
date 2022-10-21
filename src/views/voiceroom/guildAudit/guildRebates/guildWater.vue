@@ -63,7 +63,7 @@
 	// 引入公会列表接口
 	import { guildList } from '@/api/user'
 	// 引入api
-	import { getWeekRebate } from '@/api/videoRoom'
+	import { doSettlement } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -88,8 +88,8 @@
 		},
 		computed: {
 			cfgs() {
-				let name = this.form.status === 2 ? 'guildWeekList': 'settlementLog'
-
+				let name = this.form.status === 1 ? 'settlementLog': 'guildWeekList'
+				console.log("status",this.form.status)
 				let arr = [
 					{
 						label: '时间',
@@ -214,17 +214,18 @@
 					pagesize: params.size,
 					guild_number: s.guild_number,
 					type: 1,
+					status: s.status > 1 ? s.status - 1 : s.status,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
 				}
-				if(this.form.status === 1) {
+				if(this.form.status === 2) {
 					data.status = 0
 				} else if(this.form.status === 3) {
 					data.status = 1
 				} else if(this.form.status === 4) {
 					data.status = 2
 				}
-				if(s.status === 2) {
+				if(s.status === 1) {
 					delete data.status
 					delete data.start_time,
 					delete data.end_time
@@ -269,7 +270,7 @@
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
-				let res = await getWeekRebate({ ids, type: 1, status })
+				let res = await doSettlement({ ids, type: 1, status })
 				if(res.code === 2000) {
 					this.$success("批量操作成功");
 				}
@@ -278,7 +279,7 @@
 			// 单个返点
 			async rebateFunc(id, status) {
 				let ids = [id]
-				let res = await getWeekRebate({ ids, type: 1, status })
+				let res = await doSettlement({ ids, type: 1, status })
 				if(res.code === 2000) {
 					this.$success("操作成功");
 				}

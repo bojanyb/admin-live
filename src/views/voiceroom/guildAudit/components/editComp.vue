@@ -1,87 +1,59 @@
 <template>
     <div class="guild-editComp-box">
-        <drawer 
-        size="470px"
+        <el-dialog
         :title="title"
-        ref="drawer"
-        :isShowUpdate="true"
-        @cancel="cancel"
-        @submitForm="submitForm"
+        :width="'600px'"
         @closed="closed"
-        :disabled="disabled"
-        @update="update">
-            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
+        :visible.sync="isEditComp">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
+                <el-form-item label="公会名称" prop="name">
+                    <el-input v-model="ruleForm.name" placeholder="请输入公会名字"></el-input>
+                </el-form-item>
                 <el-form-item label="公会类型" prop="guild_type">
                     <el-select v-model="ruleForm.guild_type" placeholder="请选择公会等级">
                         <el-option v-for="item in guildTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="公会头像" prop="face">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.face" :imgUrl="ruleForm.face" name="face" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
+                <el-form-item label="公会长ID" prop="guild_number">
+                    <el-input v-model="ruleForm.guild_number" placeholder="请输入公会长ID"></el-input>
                 </el-form-item>
-                <el-form-item label="公会名称" prop="nickname">
-                    <el-input v-model="ruleForm.nickname" placeholder="请输入公会名字"></el-input>
-                </el-form-item>
-                <el-form-item label="固定返点" prop="rebate">
-                    <el-input v-model="ruleForm.rebate" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" @input="rebateInput" placeholder="请输入固定返点"></el-input>
-                </el-form-item>
-                <el-form-item label="公会长ID" prop="user_number">
-                    <el-input v-model="ruleForm.user_number" placeholder="请输入公会长ID"></el-input>
-                </el-form-item>
-                <el-form-item label="公会等级" prop="rank">
-                    <el-select v-model="ruleForm.rank" placeholder="请选择公会等级">
-                        <el-option v-for="item in rankList" :key="item.value" :label="item.name" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <!-- <el-form-item label="公会运营" prop="operator">
-                    <el-select v-model="ruleForm.operator" placeholder="请选择公会运营">
-                        <el-option v-for="item in operationList" :key="item.value" :label="item.name" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item> -->
-                <el-form-item label="公会简介" prop="remark">
-                    <el-input type="textarea" v-model="ruleForm.remark" :rows="4"></el-input>
+                <el-form-item label="实时返点" prop="rebate">
+                    <el-input v-model="ruleForm.rebate" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" @input="rebateInput" placeholder="请输入实时返点">
+                        <template slot="append">%</template>
+                    </el-input>
                 </el-form-item>
             </el-form>
-        </drawer>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">取 消</el-button>
+                <el-button type="primary" @click="submitForm">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-// 引入抽屉组件
-import drawer from '@/components/drawer/index'
 // 引入api
-import { getGuildCreate, getGuildUpdate } from '@/api/videoRoom'
+import { getGuildCreateV2, getGuildUpdateV2 } from '@/api/videoRoom'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
-// 引入图片上传组件
-import uploadImg from '@/components/uploadImg/index.vue'
 export default {
-    components: {
-        uploadImg,
-        drawer
-    },
+    components: {},
     data() {
         return {
             status: 'add',
+            isEditComp: false,
             rankList: MAPDATA.CLASSLIST,
             guildTypeList: MAPDATA.GUILDCONFIGTYPELIST,
             ruleForm: {
                 id: null,
-                face: '',
-                nickname: '',
-                user_number: '',
-                rank: '',
-                remark: '',
+                name: '',
+                guild_number: '',
                 rebate: 0,
-                guild_type: null,
-                // operator: null
+                guild_type: null
             },
             oldParams: {}, // 老数据
             rules: {
-                face: [
-                    { required: true, message: '请上传公会头像', trigger: 'change' }
-                ],
-                nickname: [
+                name: [
                     { required: true, message: '请输入公会昵称', trigger: 'blur' },
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
@@ -101,8 +73,7 @@ export default {
                     { required: true, message: '请选择公会类型', trigger: 'change' }
                 ],
                 remark: [
-                    { required: false, message: '请输入公会简介', trigger: 'blur' },
-                    { min: 1, max: 255, message: '公会简介最大输入255个字符', trigger: 'blur' }
+                    { required: false, message: '请输入公会简介', trigger: 'blur' }
                 ]
             }
         };
@@ -120,11 +91,7 @@ export default {
                 return true
             }
             return false
-        },
-        // operationList() { // 公会运营
-        //     let arr = JSON.parse(JSON.stringify(MAPDATA.GUILDOPERATIONLIST))
-        //     return arr.filter(item => { return item.name !== '全部' })
-        // }
+        }
     },
     methods: {
         // 公会返点限制
@@ -140,14 +107,20 @@ export default {
             this.status = status
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
-                params.guild_type = params.guild_type ? params.guild_type : ''
-                this.$set(this.$data, 'ruleForm', params)
+                let para = {}
+                para.guild_type = params.guild_type ? params.guild_type : ''
+                para.id = params.id ? params.id : "";
+                para.name = params.name ? params.name : "";
+                para.guild_number = params.guild_number ? params.guild_number : "" ;
+                para.status = params.status;
+                para.rebate = params.rebate;
+                this.$set(this.$data, 'ruleForm', para)
             }
 
             this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
         },
         openComp(status = true) {
-            this.$refs.drawer.loadParams(status)
+            this.isEditComp = status
         },
         // 取消
         cancel() {
@@ -168,17 +141,17 @@ export default {
             this.status = 'update'
         },
         // 提交
-        async submitForm(formName) {
-            this.$refs[formName].validate(async (valid) => {
+        async submitForm() {
+            this.$refs.ruleForm.validate(async (valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
                     if(this.status === 'add') {
-                        let res = await getGuildCreate(params)
+                        let res = await getGuildCreateV2(params)
                         if(res.code === 2000) {
                             this.$success('新增成功')
                         }
                     } else {
-                        let res = await getGuildUpdate(params)
+                        let res = await getGuildUpdateV2(params)
                         if(res.code === 2000) {
                             this.$success('修改成功')
                         }
@@ -209,7 +182,8 @@ export default {
 
 <style lang="scss" scoped>
 .guild-editComp-box {
-    .el-select {
+    .el-select,
+    .el-input {
         width: 320px;
     }
 }
