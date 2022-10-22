@@ -67,7 +67,7 @@ export default {
                 {
                     name: 'status',
                     type: 'select',
-                    value: '',
+                    value: '1',
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '充值状态',

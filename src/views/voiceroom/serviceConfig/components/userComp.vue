@@ -39,7 +39,7 @@
                         <p>用户等级：<span>{{ item.user_rank }}</span></p>
                         <p>魅力等级：<span>{{ item.live_rank }}</span></p>
                         <p>实名信息：<span>{{ item.real_name ? item.real_name : '无' }}</span></p>
-                        <p>公会ID：<span>{{ item.guild_number ? item.guild_number : "无" }}</span></p>
+                        <p>用户状态: <span>{{ item.statusText ? item.statusText : "无" }}</span></p>
                         <p>公会名称：<span>{{ item.guild_name ? item.guild_name : '无' }}</span></p>
                         <p>注册时间：<span>{{ item.create_time }}</span></p>
                     </div>
@@ -59,7 +59,7 @@
 // 引入api
 import { getUserReportDeal } from '@/api/videoRoom'
 // 引入api
-import { userList } from '@/api/user'
+import { userList,punishStatus } from '@/api/user'
 // 引入抽屉组件
 import drawer from '@/components/drawer/index'
 // 引入api
@@ -142,7 +142,15 @@ export default {
                 } else {
                     res.data.list[0].create_time = moment(res.data.list[0].create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
                     this.userList = res.data.list || []
+                    this.getPunishStatus(res.data.list[0].id)
                 }
+            }
+        },
+         // 用户封禁状态
+         async getPunishStatus(user_id){
+            let res = await punishStatus({ user_id })
+            if(res.code === 2000) {
+                this.userList[0].statusText = res.data.status;
             }
         },
         // 获取数据

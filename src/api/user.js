@@ -37,6 +37,15 @@ export function getUser(data) {
   })
 }
 
+// 用户封禁状态
+export function punishStatus(data) {
+  return request({
+    url: api.user.punishStatus,
+    method: 'post',
+    data
+  })
+}
+
 // 获取公会列表
 export function guildList(data) {
   return request({
