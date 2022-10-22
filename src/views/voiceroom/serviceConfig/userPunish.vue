@@ -97,16 +97,23 @@ export default {
                 url: REQUEST.risk.UserPunish,
                 columns: [
                     {
-                        label: '时间',
+                        label: '处罚时间',
                         prop: 'update_time',
                         minWidth: '100px'
                     },
                     {
-                        label: '用户',
+                        label: '用户ID',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', params.row.nickname),
                                 h('div', params.row.user_number)
+                            ])
+                        }
+                    },
+                    {
+                        label: '用户昵称',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', params.row.nickname)
                             ])
                         }
                     },
@@ -118,18 +125,18 @@ export default {
                         }
                     },
                     {
-                        label: '处罚状态',
-                        render: (h, params) => {
-                            let data = MAPDATA.USERPUNISHSTATUSLIST.find(item => { return item.value === params.row.status })
-                            return h('span', data ? data.name : '无')
-                        }
-                    },
-                    {
                         label: '解除时间',
                         prop: 'remove_time',
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('span', params.row.remove_time || '无')
+                        }
+                    },
+                    {
+                        label: '处罚状态',
+                        render: (h, params) => {
+                            let data = MAPDATA.USERPUNISHSTATUSLIST.find(item => { return item.value === params.row.status })
+                            return h('span', data ? data.name : '无')
                         }
                     },
                     {
