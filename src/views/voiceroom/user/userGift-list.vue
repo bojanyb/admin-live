@@ -51,7 +51,7 @@
 					// 	]
 					// },
 					{
-						name: 'live_user_number',
+						name: 'reveive_user_number',
 						type: 'input',
 						value: '',
 						label: '收礼人ID',
@@ -59,7 +59,7 @@
 						placeholder: '收礼人ID'
 					},
 					{
-						name: 'user_number',
+						name: 'send_user_number',
 						type: 'input',
 						value: '',
 						label: '送礼人ID',
@@ -111,11 +111,11 @@
 						},
 						{
 							label: '收礼人ID',
-							prop: 'live_user_number'
+							prop: 'reveive_user_number'
 						},
 						{
 							label: '送礼人ID',
-							prop: 'user_number'
+							prop: 'send_user_number'
 						},
 						{
 							label: '礼物来源',
@@ -160,6 +160,7 @@
 						name: '私聊'
 					}
 				],
+				id: null,
 				searchParams: {
 					dateTimeParams: []
 				},
@@ -177,20 +178,20 @@
 			// 配置参数
 			beforeSearch(params) {
 				let s = { ...this.searchParams, ...this.dateTimeParams }
-				if(s.inputSelect) {
-					s.live_user_number = s.inputSelect
-					s.user_number = s.inputSelect
-					if(s.iSelect == 'code') {
-						delete s.live_user_number
-					} else if(s.iSelect == 'name') {
-						delete s.user_number
-					}
-				}
+				// if(s.inputSelect) {
+				// 	s.live_user_number = s.inputSelect
+				// 	s.user_number = s.inputSelect
+				// 	if(s.iSelect == 'code') {
+				// 		delete s.live_user_number
+				// 	} else if(s.iSelect == 'name') {
+				// 		delete s.user_number
+				// 	}
+				// }
 				return {
 					page: params.page,
 					pagesize: params.size,
-					user_number: s.user_number || '',
-					live_user_number: s.live_user_number || '',
+					reveive_user_number: s.reveive_user_number || '',
+					send_user_number: s.send_user_number || '',
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
 					end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
 					is_room: s.is_room
