@@ -148,9 +148,11 @@ export default {
         },
          // 用户封禁状态
          async getPunishStatus(user_id){
-            let res = await punishStatus({ user_id })
+            var formdata=new FormData();
+            formdata.append("user_id",user_id);
+            let res = await punishStatus(formdata)
             if(res.code === 2000) {
-                this.userList[0].statusText = res.data.status;
+                this.$set(this.userList[0],'statusText',res.data.status)
             }
         },
         // 获取数据
