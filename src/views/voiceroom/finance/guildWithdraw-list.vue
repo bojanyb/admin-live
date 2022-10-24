@@ -2,10 +2,10 @@
 <template>
     <div class="finance-guildWithdraw-list">
         <div class="model">
-            <span>充值人数{{ ruleForm.count || 0 }}人</span>
-            <span>已支付金额{{ ruleForm.total_money / 100 || 0 }}元</span>
-            <span>已退款金额{{ ruleForm.total_money / 100 || 0 }}元</span>
-            <span>未支付金额{{ ruleForm.total_money / 100 || 0 }}元</span>
+            <span>充值人数{{ ruleForm.recharge_user_count || 0 }}人</span>
+            <span>已支付金额{{ Number(ruleForm.recharge_amount) / 100 || 0 }}元</span>
+            <span>已退款金额{{ Number(ruleForm.refund_amount) / 100 || 0 }}元</span>
+            <span>未支付金额{{ Number(ruleForm.no_recharge_amount) / 100 || 0 }}元</span>
         </div>
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" :show-batch-rurn="true" :showBeforeYesterday="true"  batchRurnName="导出EXCEL" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @BatchRurn="BatchRurn" @beforeYesterday="beforeYesterday"></SearchPanel>
@@ -178,7 +178,14 @@ export default {
                         label: '充值状态',
                         render: (h, params) => {
                             let data = MAPDATA.ORDERSTATUS.find(item => { return item.value.indexOf(params.row.status) !== -1 })
-                            return h('span', data ? data.name : '无')
+                            let text = MAPDATA.ORDERREFUNDSTATUSLIST.find(item => { return item.value === params.row.refund_status })
+                            let name;
+                            if(params.row.status === 1) {
+                                name = data ? data.name + '（' + text.name + '）' : '无'
+                            } else {
+                                name = data ? data.name : '无'
+                            }
+                            return h('span', name)
                         }
                     },
                     // {
@@ -323,6 +330,7 @@ export default {
             if(arr.length <= 0) return this.$warning('当前没有数据可以导出')
             arr = arr.map((item,index) => {
                 let name = MAPDATA.RECHARGEHISTORYTYPELIST.find(a => { return a.value === item.purpose })
+                let text = MAPDATA.ORDERREFUNDSTATUSLIST.find(a => { return a.value === item.refund_status })
                 let status = MAPDATA.ORDERSTATUS.find(a => { return a.value.indexOf(item.status) !== -1 })
                 let params = {
                     create_time: timeFormat(item.create_time, 'YYYY-MM-DD HH:mm:ss', true),
@@ -332,7 +340,7 @@ export default {
                     type: name.name,
                     remark: item.remark,
                     channel: item.channel,
-                    status: status.name,
+                    status: item.status === 1 ? status.name + '（' + text.name + '）' : status.name,
                     trade_no: item.trade_no
                 }
                 return params

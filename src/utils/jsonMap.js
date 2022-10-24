@@ -189,6 +189,18 @@ const ORDERSTATUS = [
     },
 ]
 
+// 充值记录 - 已支付 - 退款状态
+const ORDERREFUNDSTATUSLIST = [
+    {
+        value: 1,
+        name: '未退款'
+    },
+    {
+        value: 2,
+        name: '已退款'
+    }
+]
+
 /*
 *体现记录 - 体现状态
 */
@@ -2114,5 +2126,6 @@ export default {
     GUILDOPERATIONLIST,
     RECHARGEHISTORYTYPELIST,
     USERMANAGEMENTAUTONYMSTATUSLIST,
-    RISKMANAGEMENTMESSAGENUMBERLIST
+    RISKMANAGEMENTMESSAGENUMBERLIST,
+    ORDERREFUNDSTATUSLIST
 }
