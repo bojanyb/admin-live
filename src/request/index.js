@@ -53,6 +53,11 @@ const request = {
             punishLog: `${HTTPHEADER}/Room/punishLog`, // 待处理处罚
             superUserList: `${HTTPHEADER}/User/superUserList`, // 超管列表
             setSuperUser: `${HTTPHEADER}/User/setSuperUser`, // 设置超管
+            officialAccount: `${HTTPHEADER}/OfficialAccount`, // 官方用户-列表
+            add: `${HTTPHEADER}/OfficialAccount/add`, // 官方用户-新增
+            del: `${HTTPHEADER}/OfficialAccount/del`, // 官方用户-删除
+            superMsg: `${HTTPHEADER}/SuperMsg`, // 提示语-列表
+            update: `${HTTPHEADER}/SuperMsg/update`, // 提示语-修改
         },
         menu: {
             addRule: `${HTTPHEADER}/admin/addRule`, // 添加菜单

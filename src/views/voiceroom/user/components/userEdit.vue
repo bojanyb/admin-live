@@ -45,6 +45,11 @@
                             </span>
                         </div>
                     </el-form-item> -->
+                    <el-form-item label="是否为官方用户" prop="sex" :class="{'mustBox': status !== 'see'}">
+                        <el-select v-model="ruleForm.sex" placeholder="请选择性别" :disabled="true">
+                            <el-option v-for="item in sexList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item label="是否已绑卡" prop="is_bindcard" class="isBindCard" :class="{'mustBox': status !== 'see'}">
                         <el-button type="primary" @click="isShowBindcard" :disabled="disabled">{{ ruleForm.is_bindcard ? '是' : '否' }}</el-button>
                     </el-form-item>
