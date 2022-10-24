@@ -267,7 +267,7 @@ export default {
                     now = timeFormat(date - 3600 * 1000 * 24 * 2, 'YYYY-MM-DD', false)
                     break;
                 case 3:
-                    now1 = timeFormat(date, 'YYYY-MM-DD', false)
+                    now1 = timeFormat(date - 3600 * 1000 * 24 * 3, 'YYYY-MM-DD', false)
                     now = timeFormat(date - 3600 * 1000 * 24 * 3, 'YYYY-MM-DD', false)
                     break;
                 case 4:
