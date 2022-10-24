@@ -126,13 +126,13 @@ export default {
             sen_statusList: MAPDATA.RISKMANAGEMENTMESSAGEHISTORYLIST,
             msg_countList: MAPDATA.RISKMANAGEMENTMESSAGENUMBERLIST,
             form: {
-                from_user_number: null,
-                to_user_number: null,
+                from_user_number: '',
+                to_user_number: '',
                 content: '',
-                user_number: null,
-                room_number: null,
+                user_number: '',
+                room_number: '',
                 sen_status: 2,
-                msg_count: null,
+                msg_count: 1000,
                 time: [],
                 keyword: ''
             },
@@ -464,8 +464,8 @@ export default {
             let data = {
                 page: params.page,
                 pagesize: params.size,
-                start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
-				end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
+                start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : '',
+				end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : '',
                 sen_status: s.sen_status,
                 from_user_number: s.from_user_number,
                 to_user_number: s.to_user_number,
@@ -516,6 +516,7 @@ export default {
             this.form = {
                 time: [],
                 sen_status: 2,
+                msg_count: 1000
             }
             this.changeIndex(0)
             this.getList()
