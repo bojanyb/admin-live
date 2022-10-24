@@ -1,57 +1,65 @@
 <template>
     <div class="serviceConfig-userComp-box">
-        <drawer 
-        size="550px"
+        <el-dialog
         :title="title"
-        ref="drawer"
-        @cancel="cancel"
-        @submitForm="submitForm"
-        @closed="closed"
-        :disabled="disabled"
-        @update="update">
-            <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
-                <el-form-item label="用户ID" prop="user_number" class="numberBox">
-                    <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" :disabled="disabled"></el-input>
+        :visible.sync="dialogVisible"
+        width="700px"
+        :before-close="handleClose"
+        @closed="closed">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
+                <div class="inputBox">
+                    <el-form-item label="用户ID" prop="user_number" class="numberBox">
+                        <el-input v-model="ruleForm.user_number" :disabled="disabled" @input="numberInput"></el-input>
 
-                    <el-button type="success" @click="seeUser">查询</el-button>
-                </el-form-item>
-
-                <div class="userBox" v-if="userList.length > 0">
-                    <div class="sunBox" v-for="(item,index) in userList" :key="index">
-                        <div class="leftBox">
-                            <img :src="item.face" alt="">
-                        </div>
+                        <el-button type="success" @click="seeUser">查询</el-button>
+                    </el-form-item>
+                    <el-form-item label="处罚类型" prop="type">
+                        <el-select v-model="ruleForm.type" multiple placeholder="请选择" :disabled="disabled">
+                            <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="处罚时间" prop="ban_duration">
+                        <el-select v-model="ruleForm.ban_duration" placeholder="请选择" :disabled="disabled">
+                            <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="处罚备注" prop="remark">
+                        <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
+                    </el-form-item>
+                </div>
+                <div class="infoBox" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
+                    <div class="upBox">
+                        <img :src="item.face" alt="">
                         <div class="rightBox">
-                            <div class="name">用户昵称： {{ item.nickname }}</div>
-                            <div class="real"><span>实名信息：{{item.real_name ? item.real_name : '无'}}</span> </div>
-                            <div class="guild"><span>公会名称: {{item.guild_name ? item.guild_name : '无'}}</span><span>公会ID: {{ item.guild_number ? item.guild_number : "无" }}</span></div>
-                            <div class="rank"><span>用户等级: {{item.user_rank}}</span><span>魅力等级：{{item.live_rank}}</span></div>
-                            <div class="timer"><span>用户ID: {{ item.user_number }}</span><span style="margin-left:15px">注册时间: {{item.create_time}}</span></div>
+                            <div class="name">{{ item.nickname }}</div>
+                            <div class="id">ID：{{ item.user_number }}</div>
                         </div>
                     </div>
+                    <div class="downBox">
+                        <p>用户等级：<span>{{ item.user_rank }}</span></p>
+                        <p>魅力等级：<span>{{ item.live_rank }}</span></p>
+                        <p>实名信息：<span>{{ item.real_name ? item.real_name : '无' }}</span></p>
+                        <p>用户状态: <span>{{ item.statusText ? item.statusText : "无" }}</span></p>
+                        <p>公会名称：<span>{{ item.guild_name ? item.guild_name : '无' }}</span></p>
+                        <p>注册时间：<span>{{ item.create_time }}</span></p>
+                    </div>
                 </div>
-
-                <el-form-item label="处罚类型" prop="type">
-                    <el-select v-model="ruleForm.type" multiple placeholder="请选择" :disabled="disabled">
-                        <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="处罚时间" prop="ban_duration">
-                    <el-select v-model="ruleForm.ban_duration" placeholder="请选择" :disabled="disabled">
-                        <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="处罚备注" prop="remark">
-                    <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
-                </el-form-item>
+                <div class="infoBox emptyBox" v-if="userList.length <= 0">暂无数据</div>
+                
             </el-form>
-        </drawer>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 // 引入api
-import { userList } from '@/api/user'
+import { getUserReportDeal } from '@/api/videoRoom'
+// 引入api
+import { userList,punishStatus } from '@/api/user'
 // 引入抽屉组件
 import drawer from '@/components/drawer/index'
 // 引入api
@@ -65,6 +73,7 @@ export default {
     },
     data() {
         return {
+            dialogVisible: false,
             timeList: MAPDATA.DURATION, // 处罚时长
             typeList: MAPDATA.USERPUNISHTYPELIST, // 处罚类型
             status: 'add',
@@ -76,6 +85,7 @@ export default {
                 remark: ''
             },
             oldParams: {}, // 老数据
+            form: {},
             rules: {
                 user_number: [
                     { required: true, message: '请输入用户ID', trigger: 'blur' },
@@ -96,7 +106,11 @@ export default {
     computed: {
         title() { // 标题
             if(this.status === 'add') {
-                return '新增用户处罚'
+                if(JSON.stringify(this.form) !== '{}') {
+                    return '处理用户举报'
+                } else {
+                    return '新增用户处罚'
+                }
             } else if(this.status === 'see') {
                 return '查看用户处罚'
             }
@@ -109,6 +123,12 @@ export default {
         }
     },
     methods: {
+        numberInput() {
+            this.ruleForm.user_number = this.ruleForm.user_number.replace(/[^\d]/g, '')
+        },
+        handleClose() {
+            this.dialogVisible = false
+        },
         // 查询用户
         async seeUser() {
             if(!this.ruleForm.user_number) {
@@ -122,12 +142,22 @@ export default {
                 } else {
                     res.data.list[0].create_time = moment(res.data.list[0].create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
                     this.userList = res.data.list || []
+                    this.getPunishStatus(res.data.list[0].id)
                 }
+            }
+        },
+         // 用户封禁状态
+         async getPunishStatus(user_id){
+            var formdata=new FormData();
+            formdata.append("user_id",user_id);
+            let res = await punishStatus(formdata)
+            if(res.code === 2000) {
+                this.$set(this.userList[0],'statusText',res.data.status)
             }
         },
         // 获取数据
         loadParams(status, row) {
-            this.openComp()
+            this.dialogVisible = true
             this.status = status
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
@@ -136,6 +166,17 @@ export default {
                 }
                 params.ban_duration = params.ban_duration ? params.ban_duration : ''
                 this.$set(this.$data, 'ruleForm', params)
+                this.seeUser()
+            } else if(status === 'add' && row) {
+                let params = JSON.parse(JSON.stringify(row))
+                let data = {}
+                data.user_number = params.feedback_user_id
+                data.ban_duration = null
+                data.remark = ''
+                data.type = []
+                this.$set(this.$data, 'ruleForm', data)
+                this.$set(this.$data, 'form', params)
+                this.seeUser()
             }
 
             this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
@@ -147,12 +188,28 @@ export default {
         async submitForm(formName) {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    let params = { ...this.ruleForm }
-                    let res = await save(params)
-                    if(res.code === 2000) {
-                        this.$success('添加成功')
-                        this.openComp(false)
-                        this.$emit('getList')
+                    if(this.status === 'add' && JSON.stringify(this.form) !== '{}') {
+                        let data = { ...this.form, ...this.ruleForm }
+                        let s = {
+                            id: data.id,
+                            ban_duration: data.ban_duration * 24 * 60 * 60,
+                            reply: data.remark,
+                            type: data.type
+                        }
+                        let res = await getUserReportDeal(s)
+                        if(res.code === 2000) {
+                            this.$message.success('处理成功')
+                            this.dialogVisible = false
+                            this.$emit('getList')
+                        }
+                    } else {
+                        let params = { ...this.ruleForm }
+                        let res = await save(params)
+                        if(res.code === 2000) {
+                            this.$success('添加成功')
+                            this.dialogVisible = false
+                            this.$emit('getList')
+                        }
                     }
                 } else {
                     console.log('error submit!!');
@@ -174,10 +231,10 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.openComp(false)
+                    this.dialogVisible = false
                 }).catch(() => {});
             } else {
-                this.openComp(false)
+                this.dialogVisible = false
             }
         },
         // 修改
@@ -193,61 +250,64 @@ export default {
     .el-select {
         width: 305px;
     }
+    .el-textarea {
+        width: 305px;
+    }
 
-    .numberBox {
-        .el-input {
-            width: 215px;
-        }
+    .el-form {
+        display: flex;
+    }
 
-        .el-button {
-            margin-left: 20px;
+    .inputBox {
+        .numberBox {
+            .el-input {
+                width: 215px;
+            }
+
+            .el-button {
+                margin-left: 20px;
+            }
         }
     }
 
-    .userBox {
-        margin-bottom: 20px;
-        .sunBox {
-            box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.15);
+    .infoBox {
+        width: 240px;
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.15);
+        padding: 10px 20px;
+        box-sizing: border-box;
+        margin-left: 20px;
+        height: 270px;
+        .upBox {
             display: flex;
             align-items: center;
-            padding: 10px 20px;
-            box-sizing: border-box;
-            .leftBox {
-                display: flex;
-                img {
-                    width: 60px;
-                    height: 60px;
-                    border-radius: 50%;
-                }
+            >img {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
             }
             .rightBox {
                 margin-left: 20px;
-                .name,
-                .real,
-                .guild,
-                .rank{
-                    margin-bottom: 5px;
+                .name {
+                    font-size: 16px;
                 }
-                .guild{
-                    span:last-child{
-                        margin-left: 15px;
-                    }
-                }
-                .real>span,
-                .guild>span,
-                .rank,
-                .timer,
-                .user {
+                .id {
                     font-size: 14px;
-                    color: #1890ff;
-                }
-                .rank{
-                    span{
-                        margin-right: 15px;
-                    }
+                    margin-top: 5px;
                 }
             }
         }
+        .downBox {
+            margin-top: 20px;
+            p {
+                line-height: 28px;
+            }
+        }
+    }
+
+    .emptyBox {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }
 </style>
