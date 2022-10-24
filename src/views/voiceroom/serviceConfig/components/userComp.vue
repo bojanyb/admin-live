@@ -146,8 +146,8 @@ export default {
                 }
             }
         },
-         // 用户封禁状态
-         async getPunishStatus(user_id){
+        // 用户封禁状态
+        async getPunishStatus(user_id){
             var formdata=new FormData();
             formdata.append("user_id",user_id);
             let res = await punishStatus(formdata)
