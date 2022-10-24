@@ -180,7 +180,7 @@ export default {
             ruleForm: {}, // 储存max_id
             timer: null, // 定时刷新
             time2: new Date(),
-            refreshNum: localStorage.getItem("refreshNum") ? localStorage.getItem("refreshNum") : 5
+            refreshNum: localStorage.getItem("refreshNum") ? localStorage.getItem("refreshNum") : 30
         };
     },
     computed: {
