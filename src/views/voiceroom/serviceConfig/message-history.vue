@@ -488,8 +488,8 @@ export default {
                     break;
             }
             start = new Date(now + ' 00:00:00')
-            if(index === 3) {
-                end = new Date(now1)
+            if(index == 3 || index == 0) {
+                end = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false))
             } else {
                 end = new Date(now1 + ' 23:59:59')
             }
