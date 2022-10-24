@@ -88,6 +88,7 @@
                     <span class="sunBox refreshNum" style="margin-left: 12px;">
                         <el-input v-model="refreshNum" placeholder="最少5秒" @blur="changeRefreshNum"></el-input> 秒刷新
                     </span>
+                    <el-button @click="add" type="success"  v-if="tabIndex == '2'">新增</el-button>
                     <span class="refreshBox" v-if="tabIndex !== '2'">
                         <el-switch
                         v-model="isRefresh"
