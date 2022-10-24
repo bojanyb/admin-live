@@ -1958,6 +1958,22 @@ const RISKMANAGEMENTMESSAGEHISTORYLIST = [
     }
 ]
 
+// 消息记录 - 条数
+const RISKMANAGEMENTMESSAGENUMBERLIST = [
+    {
+        name: '1000',
+        value: 1000
+    },
+    {
+        name: '5000',
+        value: 5000
+    },
+    {
+        name: '10000',
+        value: 10000
+    }
+]
+
 // 图片审核记录 - 图片类型
 const RISKMANAGEMENTIMGTYPELIST = [
     {
@@ -2093,5 +2109,6 @@ export default {
     ROOMBACKGROUNDSELECTLIST,
     GUILDOPERATIONLIST,
     RECHARGEHISTORYTYPELIST,
-    USERMANAGEMENTAUTONYMSTATUSLIST
+    USERMANAGEMENTAUTONYMSTATUSLIST,
+    RISKMANAGEMENTMESSAGENUMBERLIST
 }
