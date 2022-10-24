@@ -46,15 +46,6 @@ const guildAuditRouter = {
 				noCache: true
 			}
 		},
-		{
-			path: 'guildApplication-list',
-			component: () => import('@/views/voiceroom/guildAudit/guildApplication-list'),
-			name: 'guildApplication-list',
-			meta: {
-				title: '牌照管理列表',
-				noCache: true
-			}
-		},
 		// {
 		// 	path: 'guildAudit-list',
 		// 	component: () => import('@/views/voiceroom/guildAudit/guildAudit-list'),

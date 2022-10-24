@@ -58,8 +58,8 @@ export default {
             params = {
                 required: true,
                 validator: (rules, val, cb) => {
-                    if(!this.ruleForm.start) {
-                        cb(new Error('请输入起始流水'))
+                    if(!this.ruleForm.start || this.ruleForm.start == 0) {
+                        cb(new Error('请输入有效起始流水'))
                     } else {
                         if(this.ruleForm.end) {
                             if(Number(this.ruleForm.start) >= Number(this.ruleForm.end)) {
@@ -126,16 +126,16 @@ export default {
                  }
                 ],
                 start: [
-                    { required: true, message: '请输入起始流水', trigger: 'blur' }
+                    { required: true, message: '请输入起始流水', trigger: 'input' }
                 ],
                 end: [
-                    { required: true, message: '请输入结束流水', trigger: 'blur' }
+                    { required: true, message: '请输入结束流水', trigger: 'input' }
                 ],
                 rewards_type: [
                     { required: true, message: '请选择评级奖励类型', trigger: 'change' }
                 ],
                 rewards: [
-                    { required: true, message: '请输入评级奖励', trigger: 'blur' }
+                    { required: true, message: '请输入评级奖励', trigger: 'input' }
                 ]
             }
         };

@@ -12,7 +12,7 @@
                         <el-input v-model="ruleForm.name" maxlength="10" placeholder="仅支持中英文数字"></el-input>
                     </el-form-item>
                     <el-form-item label="周返点比例" prop="rewards" :rules="rewardsRules">
-                        <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.rewards"></el-input>
+                        <el-input onkeydown="this.value=this.value.replace(/[^0-9.]/g,'')" oninput="this.value=this.value.replace(/[^0-9.]/g,'')" v-model="ruleForm.rewards"></el-input>
                     </el-form-item>
                 </div>
                 <div class="formBox">
@@ -50,9 +50,11 @@ export default {
             let params = {}
             params = {
                 required: true,
-                validator: (rules, val, cb) => {
-                    if(!this.ruleForm.start) {
-                        cb(new Error('请输入起始流水'))
+                validator: (rules, value, cb) => {
+                    if(!this.ruleForm.start || this.ruleForm.start == 0) {
+                        cb(new Error('请输入有效起始流水'))
+                    }else if(value.indexOf(".") != -1 && (value.split('.').length > 2 || value.split('.')[1].length > 2)){
+                        callback(new Error('请输入正确格式的起始流水')) //防止输入多个小数点
                     } else {
                         if(this.ruleForm.end) {
                             if(Number(this.ruleForm.start) >= Number(this.ruleForm.end)) {
@@ -96,8 +98,8 @@ export default {
             params = {
                 required: true,
                 validator: (rules, val, cb) => {
-                    if(!this.ruleForm.rewards) {
-                        cb(new Error('请输入周返点比例'))
+                    if(!this.ruleForm.rewards || this.ruleForm.rewards == 0) {
+                        cb(new Error('请输入有效周返点比例'))
                     } else {
                         if(Number(this.ruleForm.rewards) > 15) {
                             cb(new Error('周返点比例最大为15'))
