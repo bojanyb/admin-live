@@ -1989,7 +1989,15 @@ const USERPUNISHSTATUSLISTCOPY = [
         value: ''
     },
     {
-        name: '生效中',
+        name: '待处理',
+        value: 3
+    },
+    {
+        name: '封禁中',
+        value: 4
+    },
+    {
+        name: '已忽略',
         value: 1
     },
     {

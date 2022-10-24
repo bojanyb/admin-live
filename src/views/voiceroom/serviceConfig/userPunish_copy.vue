@@ -52,16 +52,16 @@ export default {
                     isNum: true,
                     placeholder: '请输入用户ID'
                 },
-                {
-                    name: 'type',
-                    type: 'select',
-                    value: '',
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '处罚类型',
-                    placeholder: '请选择',
-                    options: MAPDATA.USERPUNISHTYPELISTCOPY
-                },
+                // {
+                //     name: 'type',
+                //     type: 'select',
+                //     value: '',
+                //     keyName: 'value',
+                //     optionLabel: 'name',
+                //     label: '处罚类型',
+                //     placeholder: '请选择',
+                //     options: MAPDATA.USERPUNISHTYPELISTCOPY
+                // },
                 {
                     name: 'status',
                     type: 'select',
