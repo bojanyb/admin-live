@@ -77,6 +77,16 @@
 					<el-button @click="beforeYesterday" v-if="tabIndex !== '2'">前天</el-button>
 					<el-button @click="recentSeven" v-if="tabIndex !== '2'">七天</el-button>
                     <el-button icon="el-icon-refresh" @click="reset">重置</el-button>
+                    <span class="refreshBox" v-if="tabIndex !== '2'">
+                        <el-switch
+                        v-model="isRefresh"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                        active-text="开启刷新"
+                        inactive-text="关闭刷新"
+                        @change="switchChange">
+                        </el-switch>
+                    </span>
 				</div>
 			</div>
         </div>
@@ -136,6 +146,7 @@ export default {
                 time: [],
                 keyword: ''
             },
+            isRefresh: false, // 是否定时刷新
             menuList: [
                 {
                     name: '私聊会话消息'
@@ -157,7 +168,8 @@ export default {
                 start_time: null,
                 end_time: null
             },
-            ruleForm: {} // 储存max_id
+            ruleForm: {}, // 储存max_id
+            timer: null // 定时刷新
         };
     },
     computed: {
@@ -399,6 +411,20 @@ export default {
         }
     },
     methods: {
+        // 是否启用定时刷新
+        switchChange(v) {
+            if(v) {
+                this.$success('定时刷新启用成功,默认5s刷新一次')
+                this.timer = setInterval(() => {
+                    this.getList()
+                }, 5000);
+            } else {
+                if(this.timer) {
+                    this.$success('定时刷新关闭成功')
+                    clearInterval(this.timer)
+                }
+            }
+        },
         // 更改
         change() {
             this.getList()
@@ -541,6 +567,10 @@ export default {
         },
         // 菜单切换
         tabChange() {
+            if(this.timer) {
+                clearInterval(this.timer)
+                this.isRefresh = false
+            }
             setTimeout(() => {
                 this.today(0)
             }, 0);
@@ -562,6 +592,11 @@ export default {
     },
     created() {
         this.changeIndex(3)
+    },
+    destroyed() {
+        if(this.timer) {
+            clearInterval(this.timer)
+        }
     }
 }
 </script>
@@ -614,6 +649,9 @@ export default {
 				margin-bottom: 20px;
 			}
 		}
+        .refreshBox {
+            margin-left: 10px;
+        }
 	}
 }
 
