@@ -3,7 +3,9 @@
     <div class="finance-guildWithdraw-list">
         <div class="model">
             <span>充值人数{{ ruleForm.count || 0 }}人</span>
-            <span>充值金额{{ ruleForm.total_money / 100 || 0 }}元</span>
+            <span>已支付金额{{ ruleForm.total_money / 100 || 0 }}元</span>
+            <span>已退款金额{{ ruleForm.total_money / 100 || 0 }}元</span>
+            <span>未支付金额{{ ruleForm.total_money / 100 || 0 }}元</span>
         </div>
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" :show-batch-rurn="true" :showBeforeYesterday="true"  batchRurnName="导出EXCEL" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @BatchRurn="BatchRurn" @beforeYesterday="beforeYesterday"></SearchPanel>

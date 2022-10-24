@@ -171,18 +171,22 @@ const SORTLIST = [
 
 // 订单状态
 const ORDERSTATUS = [
-    {
-        value: '',
-        name: '全部'
-    },
-    {
-        value: '3,2',
-        name: '未支付'
-    },
+    // {
+    //     value: '',
+    //     name: '全部'
+    // },
     {
         value: '1',
         name: '已支付'
-    }
+    },
+    {
+        value: '4',
+        name: '已退款'
+    },
+    {
+        value: '3',
+        name: '未支付'
+    },
 ]
 
 /*
