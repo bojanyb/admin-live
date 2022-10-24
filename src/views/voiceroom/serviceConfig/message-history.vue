@@ -85,7 +85,7 @@
 					<el-button @click="yesterday" v-if="tabIndex !== '2' && form.sen_status !== 1">昨日</el-button>
 					<el-button @click="beforeYesterday" v-if="tabIndex !== '2' && form.sen_status !== 1">前天</el-button>
 					<el-button @click="recentSeven" v-if="tabIndex !== '2' && form.sen_status !== 1">七天</el-button>
-                    <span class="sunBox refreshNum" style="margin-left: 12px;">
+                    <span class="sunBox refreshNum" v-if="tabIndex !== '2'" style="margin-left: 12px;">
                         <el-input v-model="refreshNum" placeholder="最少5秒" @blur="changeRefreshNum"></el-input> 秒刷新
                     </span>
                     <el-button @click="add" type="success"  v-if="tabIndex == '2'">新增</el-button>
