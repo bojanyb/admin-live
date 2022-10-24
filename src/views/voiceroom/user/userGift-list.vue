@@ -50,14 +50,7 @@
 					// 		{ key: 'name', label: '收礼人ID' }
 					// 	]
 					// },
-					{
-						name: 'reveive_user_number',
-						type: 'input',
-						value: '',
-						label: '收礼人ID',
-						isNum: true,
-						placeholder: '收礼人ID'
-					},
+					
 					{
 						name: 'send_user_number',
 						type: 'input',
@@ -65,6 +58,14 @@
 						label: '送礼人ID',
 						isNum: true,
 						placeholder: '送礼人ID'
+					},
+					{
+						name: 'reveive_user_number',
+						type: 'input',
+						value: '',
+						label: '收礼人ID',
+						isNum: true,
+						placeholder: '收礼人ID'
 					},
 					{
 						name: 'is_room',
@@ -110,12 +111,12 @@
 							}
 						},
 						{
-							label: '收礼人ID',
-							prop: 'reveive_user_number'
-						},
-						{
 							label: '送礼人ID',
 							prop: 'send_user_number'
+						},
+						{
+							label: '收礼人ID',
+							prop: 'reveive_user_number'
 						},
 						{
 							label: '礼物来源',
