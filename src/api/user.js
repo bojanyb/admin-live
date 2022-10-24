@@ -127,16 +127,6 @@ export function userList(data) {
   })
 }
 
-// 用户封禁状态
-export function punishStatus(data) {
-  return request({
-    url: api.user.punishStatus,
-    method: 'post',
-    data
-  })
-}
-
-
 // 封禁（解封）公会
 export function lockGuild(data) {
   return request({
