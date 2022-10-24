@@ -49,7 +49,7 @@
                         <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.cash_rate"></el-input>
                     </el-form-item>
                     <el-form-item label="支付类型" prop="channel_ways">
-                        <el-select v-model="ruleForm.channel_ways" placeholder="请选择">
+                        <el-select v-model="ruleForm.channel_ways" placeholder="请选择" :disabled="!ruleForm.channel">
                             <el-option v-for="item in payList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
@@ -84,7 +84,7 @@ export default {
             status: 'add', // 当前状态
             dialogVisible: false,
             channelList: MAPDATA.PAYCONFIGURATIONPLATFORMLIST, // 商户平台
-            payList: MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST,
+            // payList: MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST,
             fileList: [],
             ruleForm: {
                 channel: '',
@@ -131,6 +131,14 @@ export default {
                 return '商户配置新增'
             } else if(this.status === 'update') {
                 return '商户配置修改'
+            }
+        },
+        payList() { // 支付类型
+            let arr = JSON.parse(JSON.stringify(MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST))
+            if(this.ruleForm.channel === 3) {
+                return arr.filter((item, index) => { return index < 3 })
+            } else {
+                return arr
             }
         }
     },

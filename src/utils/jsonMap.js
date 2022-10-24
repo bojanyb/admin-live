@@ -1494,22 +1494,22 @@ const PAYCONFIGURATIONPLATFORMTYPELIST = [
         name: 'app支付',
         value: 1
     },
-    // {
-    //     name: 'PC',
-    //     value: 2
-    // },
+    {
+        name: 'PC',
+        value: 2
+    },
     {
         name: 'h5支付',
         value: 3
     },
-    // {
-    //     name: '公众号',
-    //     value: 4
-    // },
-    // {
-    //     name: '小程序',
-    //     value: 5
-    // }
+    {
+        name: '公众号',
+        value: 4
+    },
+    {
+        name: '小程序',
+        value: 5
+    }
 ]
 
 // 商户配置管理 - 支付类型
