@@ -38,7 +38,7 @@ export default {
                 {
                     name: 'type',
                     type: 'select',
-                    value: '',
+                    value: '入会申请',
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '申请类型',
@@ -78,7 +78,7 @@ export default {
                         label: '申请类型',
                         showOverFlow: true,
                         render: (h, params) => {
-                            return h('span', params.row.type == 0 ? '申请加入' : '申请退出' || '无')
+                            return h('span', params.row.type == 0 ? '入会申请' : '退会申请' || '无')
                         }
                     },
                     {
@@ -132,10 +132,10 @@ export default {
                             return h('div', [
                                 h('el-button', { props: { type: 'primary'}, style: {
                                     display: params.row.status === 0 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.clickFunc(params.row.id, 1)}}}, '通过'),
+                                }, on: {click:()=>{this.clickFunc(params.row, 1)}}}, '通过'),
                                 h('el-button', { props: { type: 'danger'}, style: {
                                     display: params.row.status === 0 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.clickFunc(params.row.id, 2)}}}, '拒绝'),
+                                }, on: {click:()=>{this.clickFunc(params.row, 2)}}}, '拒绝'),
                                 h('el-button', { props: { type: 'primary'},style: {
                                     display: params.row.status === 1 ? 'unset' : 'none',
                                 }, on: {click:()=>{}}}, '已通过'),
@@ -162,7 +162,8 @@ export default {
                 pagesize: params.size,
                 guild_number: s.guild_number,
                 user_number: s.user_number,
-                type: s.type ? s.type : 0
+                type: s.type ? s.type : 0,
+                status: 0 // 0未审核1通过2拒绝
             } 
         },
         // 重置
@@ -194,9 +195,10 @@ export default {
             })
         },
         // 操作 - 通过/驳回
-        async clickFunc(id, status) {
+        async clickFunc(row, status) {
             if(status === 1) {
-                let res = await guildUserApplyCheck({ id, status })
+                let params = {id : row.id,status:status}
+                let res = await guildUserApplyCheck(params)
                 if(res.code === 2000) {
                     this.$message.success('操作成功')
                     this.$nextTick(res=>{
@@ -204,12 +206,14 @@ export default {
                     })
                 }
             } else {
-                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                let tipsText = '是否拒绝 【' + row.nickname + '】的退会申请?'
+                this.$confirm(tipsText, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(async () => {
-                    let res = await guildUserApplyCheck({ id, status })
+                    let params = {id : row.id,status:status}
+                    let res = await guildUserApplyCheck(params)
                     if(res.code === 2000) {
                         this.$message.success('操作成功')
                         this.getList()

@@ -155,6 +155,10 @@ export default {
                 this.$set(this.userList[0],'statusText',res.data.status)
             }
         },
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
         // 获取数据
         loadParams(status, row) {
             this.dialogVisible = true

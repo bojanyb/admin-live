@@ -50,12 +50,12 @@
 					{
 						name: 'status',
 						type: 'select',
-						value: '',
+						value: '未处理',
 						keyName: 'value',
 						optionLabel: 'name',
 						label: '状态',
 						placeholder: '请选择',
-						options: MAPDATA.GUILDSTATUSLIST
+						options: MAPDATA.GUILDREPORTSTATUS
 					}
 				]
 			},
@@ -120,7 +120,7 @@
 						{
 							label: '状态',
 							render: (h, params) => {
-								let data = MAPDATA.GUILDSTATUSLIST.find(item => { return item.value === params.row.status })
+								let data = MAPDATA.GUILDREPORTSTATUS.find(item => { return item.value === params.row.status })
 								return h('span', data ? data.name : '无')
 							}
 						},
@@ -173,7 +173,7 @@
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
-					status: s.status
+					status: s.status ? s.status: 1
 				}
 			},
 			// 刷新列表

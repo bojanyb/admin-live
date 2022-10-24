@@ -462,15 +462,15 @@ const GUILDAPPLYLIST = [
 // 公会厅申请列表 - 状态
 const GUILDSTATUSLIST = [
     {
-        name: '未处理',
+        name: '待审核',
         value: 0
     },
     {
-        name: '已通过',
+        name: '审核通过',
         value: 1
     },
     {
-        name: '已拒绝',
+        name: '审核拒绝',
         value: 2
     }
 ]
@@ -2078,6 +2078,22 @@ const RISKMANAGEMENTIMGSTATUSLIST = [
     }
 ]
 
+// 公会举报状态
+const GUILDREPORTSTATUS = [
+    {
+        name: '未处理',
+        value: 1
+    },
+    {
+        name: '已通过',
+        value: 2
+    },
+    {
+        name: '已拒绝',
+        value: 3
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -2177,5 +2193,9 @@ export default {
     GUILDSTATUS,
     GUILDAPPLYTYPE,
     SETTLEMENTSTATUS,
+<<<<<<< HEAD
     RISKMANAGEMENTMESSAGENUMBERLIST
+=======
+    GUILDREPORTSTATUS
+>>>>>>> dev
 }
