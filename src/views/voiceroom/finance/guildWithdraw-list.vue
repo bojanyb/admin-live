@@ -8,7 +8,9 @@
             <span>未支付金额{{ Number(ruleForm.no_recharge_amount) / 100 || 0 }}元</span>
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" :show-batch-rurn="true" :showBeforeYesterday="true"  batchRurnName="导出EXCEL" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @BatchRurn="BatchRurn" @beforeYesterday="beforeYesterday"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showBigBeforeYesterday="true"
+            :showCurrentWeek = "true" :showToday="true" :show-batch-rurn="true" :showBeforeYesterday="true"  batchRurnName="导出EXCEL" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @bigBeforeYesterday = "bigBeforeYesterday"
+            @currentWeek="currentWeek" @today="today" @BatchRurn="BatchRurn" @beforeYesterday="beforeYesterday"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -31,6 +33,7 @@ import REQUEST from '@/request/index.js'
 import { timeFormat, exportTableData } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
+import moment from 'moment'
 
 export default {
     components: {
@@ -238,9 +241,13 @@ export default {
         beforeYesterday() {
             this.changeIndex(2)
         },
-        // 最近七日
-        recentSeven() {
+        // 大前天
+        bigBeforeYesterday(){
             this.changeIndex(3)
+        },
+        // 本周
+        currentWeek(){
+            this.changeIndex(4)
         },
         // 更改日期
         changeIndex(index) {
@@ -261,7 +268,12 @@ export default {
                     break;
                 case 3:
                     now1 = timeFormat(date, 'YYYY-MM-DD', false)
-                    now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 3, 'YYYY-MM-DD', false)
+                    break;
+                case 4:
+                    let week =  this.getCurrWeekDays()
+                    now1 = week.endtime
+                    now = week.starttime
                     break;
             }
             start = new Date(now + ' 00:00:00')
@@ -351,7 +363,17 @@ export default {
             })
             let nameList = [ '充值时间', '用户ID', '用户昵称', '充值金额（元）', '充值类型', '充值说明', '充值平台', '充值状态', '交易单号' ]
             exportTableData(arr, nameList, '充值记录')
-        }
+        },
+         // 获取当前周的开始结束时间
+        getCurrWeekDays() {
+            let obj = {
+                starttime: '',
+                endtime: ''
+            }
+            obj.starttime = moment(moment().week(moment().week()).startOf('week').add(1, 'days').valueOf()).format('YYYY-MM-DD')
+            obj.endtime = moment(moment().week(moment().week()).endOf('week').add(1, 'days').valueOf()).format('YYYY-MM-DD');
+            return obj
+        },
     },
     created() {
         let time = new Date()
