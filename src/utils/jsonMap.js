@@ -171,17 +171,33 @@ const SORTLIST = [
 
 // 订单状态
 const ORDERSTATUS = [
-    {
-        value: '',
-        name: '全部'
-    },
-    {
-        value: '3,2',
-        name: '未支付'
-    },
+    // {
+    //     value: '',
+    //     name: '全部'
+    // },
     {
         value: '1',
         name: '已支付'
+    },
+    {
+        value: '4',
+        name: '已退款'
+    },
+    {
+        value: '3',
+        name: '未支付'
+    },
+]
+
+// 充值记录 - 已支付 - 退款状态
+const ORDERREFUNDSTATUSLIST = [
+    {
+        value: 1,
+        name: '未退款'
+    },
+    {
+        value: 2,
+        name: '已退款'
     }
 ]
 
@@ -2035,6 +2051,14 @@ const RISKMANAGEMENTMESSAGENUMBERLIST = [
     {
         name: '10000',
         value: 10000
+    },
+    {
+        name: '50000',
+        value: 50000
+    },
+    {
+        name: '100000',
+        value: 100000
     }
 ]
 
@@ -2194,5 +2218,7 @@ export default {
     GUILDAPPLYTYPE,
     SETTLEMENTSTATUS,
     RISKMANAGEMENTMESSAGENUMBERLIST,
-    GUILDREPORTSTATUS
+    GUILDREPORTSTATUS,
+    RISKMANAGEMENTMESSAGENUMBERLIST,
+    ORDERREFUNDSTATUSLIST
 }

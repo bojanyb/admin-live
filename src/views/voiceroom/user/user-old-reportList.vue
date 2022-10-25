@@ -32,6 +32,7 @@
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
+	import moment from 'moment'
 	export default {
 		name: 'user-old-reportList',
 		mixins: [mixins],
@@ -187,6 +188,8 @@
 					user_id: '',
 					status: 1
 				},
+				timer2: [],
+				dateTimeParams: [],
 				isDestoryComp: false // 是否销毁组件
 			}
 		},
@@ -249,11 +252,35 @@
 				}
 				this.getList()
 			},
+			// 前3个月
+			beforeThree() {
+				let end_time = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+				let start_time = moment(new Date()).subtract(3, 'months').format('YYYY-MM-DD') +' '+'00:00:00'
+				let date = {}
+				date.start_time = this.dateStrChangeTimeTamp(start_time)
+				date.end_time = this.dateStrChangeTimeTamp(end_time)
+				this.timer2[0] = this.dateStrChangeTimeTamp(start_time)
+				this.timer2[1] = this.dateStrChangeTimeTamp(end_time)
+				this.$nextTick(res=>{
+					document.getElementsByClassName("datePicker")[0].getElementsByClassName("el-range-input")[0].value = start_time
+					document.getElementsByClassName("datePicker")[0].getElementsByClassName("el-range-input")[1].value = end_time
+				})
+				this.$set(this, 'dateTimeParams', date)
+			},
+			// 字符串时间转换时间戳
+			dateStrChangeTimeTamp(dateStr){
+				dateStr = dateStr.substring(0,19);
+				dateStr = dateStr.replace(/-/g,'/');
+				return new Date(dateStr).getTime();
+			},
 			// 销毁组件
 			destoryComp() {
 				this.isDestoryComp = false
 			}
-		}
+		},
+		created(){
+			this.beforeThree()
+		},
 	}
 </script>
 

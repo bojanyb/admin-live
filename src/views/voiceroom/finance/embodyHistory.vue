@@ -258,6 +258,7 @@ export default {
         },
         // 更改日期
         changeIndex(index) {
+            console.log(index)
             let date = new Date()
             let now, now1, start, end;
             switch (index) {
@@ -279,7 +280,11 @@ export default {
                     break;
             }
             start = new Date(now + ' 00:00:00')
-            end = new Date(now1 + ' 23:59:59')
+            if( index == 0) {
+                end = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false))
+            } else {
+                end = new Date(now1 + ' 23:59:59')
+            }
 
             let time = [start.getTime(), end.getTime()]
             this.searchParams.dateTimeParams = time

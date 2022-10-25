@@ -2,11 +2,15 @@
 <template>
     <div class="finance-guildWithdraw-list">
         <div class="model">
-            <span>充值人数{{ ruleForm.count || 0 }}人</span>
-            <span>充值金额{{ ruleForm.total_money / 100 || 0 }}元</span>
+            <span>充值人数{{ ruleForm.recharge_user_count || 0 }}人</span>
+            <span>已支付金额{{ Number(ruleForm.recharge_amount) / 100 || 0 }}元</span>
+            <span>已退款金额{{ Number(ruleForm.refund_amount) / 100 || 0 }}元</span>
+            <span>未支付金额{{ Number(ruleForm.no_recharge_amount) / 100 || 0 }}元</span>
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" :show-batch-rurn="true" :showBeforeYesterday="true"  batchRurnName="导出EXCEL" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @BatchRurn="BatchRurn" @beforeYesterday="beforeYesterday"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true" :showBigBeforeYesterday="true"
+            :showCurrentWeek = "true" :showToday="true" :show-batch-rurn="true" :showBeforeYesterday="true"  batchRurnName="导出EXCEL" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @bigBeforeYesterday = "bigBeforeYesterday"
+            @currentWeek="currentWeek" @today="today" @BatchRurn="BatchRurn" @beforeYesterday="beforeYesterday"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -29,6 +33,7 @@ import REQUEST from '@/request/index.js'
 import { timeFormat, exportTableData } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
+import moment from 'moment'
 
 export default {
     components: {
@@ -176,7 +181,14 @@ export default {
                         label: '充值状态',
                         render: (h, params) => {
                             let data = MAPDATA.ORDERSTATUS.find(item => { return item.value.indexOf(params.row.status) !== -1 })
-                            return h('span', data ? data.name : '无')
+                            let text = MAPDATA.ORDERREFUNDSTATUSLIST.find(item => { return item.value === params.row.refund_status })
+                            let name;
+                            if(params.row.status === 1) {
+                                name = data ? data.name + '（' + text.name + '）' : '无'
+                            } else {
+                                name = data ? data.name : '无'
+                            }
+                            return h('span', name)
                         }
                     },
                     // {
@@ -229,9 +241,13 @@ export default {
         beforeYesterday() {
             this.changeIndex(2)
         },
-        // 最近七日
-        recentSeven() {
+        // 大前天
+        bigBeforeYesterday(){
             this.changeIndex(3)
+        },
+        // 本周
+        currentWeek(){
+            this.changeIndex(4)
         },
         // 更改日期
         changeIndex(index) {
@@ -251,12 +267,21 @@ export default {
                     now = timeFormat(date - 3600 * 1000 * 24 * 2, 'YYYY-MM-DD', false)
                     break;
                 case 3:
-                    now1 = timeFormat(date, 'YYYY-MM-DD', false)
-                    now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
+                    now1 = timeFormat(date - 3600 * 1000 * 24 * 3, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 3, 'YYYY-MM-DD', false)
+                    break;
+                case 4:
+                    let week =  this.getCurrWeekDays()
+                    now1 = week.endtime
+                    now = week.starttime
                     break;
             }
             start = new Date(now + ' 00:00:00')
-            end = new Date(now1 + ' 23:59:59')
+            if( index == 0) {
+                end = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false))
+            } else {
+                end = new Date(now1 + ' 23:59:59')
+            }
 
             let time = [start.getTime(), end.getTime()]
             this.searchParams.dateTimeParams = time
@@ -321,6 +346,7 @@ export default {
             if(arr.length <= 0) return this.$warning('当前没有数据可以导出')
             arr = arr.map((item,index) => {
                 let name = MAPDATA.RECHARGEHISTORYTYPELIST.find(a => { return a.value === item.purpose })
+                let text = MAPDATA.ORDERREFUNDSTATUSLIST.find(a => { return a.value === item.refund_status })
                 let status = MAPDATA.ORDERSTATUS.find(a => { return a.value.indexOf(item.status) !== -1 })
                 let params = {
                     create_time: timeFormat(item.create_time, 'YYYY-MM-DD HH:mm:ss', true),
@@ -330,20 +356,30 @@ export default {
                     type: name.name,
                     remark: item.remark,
                     channel: item.channel,
-                    status: status.name,
+                    status: item.status === 1 ? status.name + '（' + text.name + '）' : status.name,
                     trade_no: item.trade_no
                 }
                 return params
             })
             let nameList = [ '充值时间', '用户ID', '用户昵称', '充值金额（元）', '充值类型', '充值说明', '充值平台', '充值状态', '交易单号' ]
             exportTableData(arr, nameList, '充值记录')
-        }
+        },
+         // 获取当前周的开始结束时间
+        getCurrWeekDays() {
+            let obj = {
+                starttime: '',
+                endtime: ''
+            }
+            obj.starttime = moment(moment().week(moment().week()).startOf('week').add(1, 'days').valueOf()).format('YYYY-MM-DD')
+            obj.endtime = moment(moment().week(moment().week()).endOf('week').add(1, 'days').valueOf()).format('YYYY-MM-DD');
+            return obj
+        },
     },
     created() {
         let time = new Date()
         let date = timeFormat(time, 'YYYY-MM-DD', false)
         let start = new Date(date + ' 00:00:00').getTime()
-        let end = new Date(date + ' 23:59:59').getTime()
+        let end = new Date(timeFormat(time, 'YYYY-MM-DD HH:mm:ss', false))
         this.searchParams.dateTimeParams = [start, end]
         this.dateTimeParams = {
             start_time: start,
