@@ -97,12 +97,12 @@ export default {
                 url: REQUEST.risk.UserPunish,
                 columns: [
                     {
-                        label: '处罚时间',
+                        label: '时间',
                         prop: 'update_time',
                         minWidth: '100px'
                     },
                     {
-                        label: '用户ID',
+                        label: '来源',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.user_number)
@@ -110,7 +110,7 @@ export default {
                         }
                     },
                     {
-                        label: '用户昵称',
+                        label: '用户',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.nickname)
@@ -118,14 +118,21 @@ export default {
                         }
                     },
                     {
-                        label: '处罚类型',
+                        label: '举报类型',
                         render: (h, params) => {
                             let data = MAPDATA.USERPUNISHTYPELIST.find(item => { return item.value === params.row.type })
                             return h('span', data ? data.name : '无')
                         }
                     },
                     {
-                        label: '解除时间',
+                        label: '举报说明',
+                        render: (h, params) => {
+                            let data = MAPDATA.USERPUNISHTYPELIST.find(item => { return item.value === params.row.type })
+                            return h('span', data ? data.name : '无')
+                        }
+                    },
+                    {
+                        label: '举报证据',
                         prop: 'remove_time',
                         minWidth: '100px',
                         render: (h, params) => {
@@ -133,16 +140,31 @@ export default {
                         }
                     },
                     {
-                        label: '处罚状态',
+                        label: '举报用户',
                         render: (h, params) => {
                             let data = MAPDATA.USERPUNISHSTATUSLIST.find(item => { return item.value === params.row.status })
                             return h('span', data ? data.name : '无')
                         }
                     },
                     {
-                        label: '备注',
+                        label: '处理状态',
                         render: (h, params) => {
-                            return h('span', params.row.remark || '无')
+                            let data = MAPDATA.USERPUNISHSTATUSLIST.find(item => { return item.value === params.row.status })
+                            return h('span', data ? data.name : '无')
+                        }
+                    },
+                    {
+                        label: '处罚结果',
+                        render: (h, params) => {
+                            let data = MAPDATA.USERPUNISHSTATUSLIST.find(item => { return item.value === params.row.status })
+                            return h('span', data ? data.name : '无')
+                        }
+                    },
+                    {
+                        label: '解除时间',
+                        render: (h, params) => {
+                            let data = MAPDATA.USERPUNISHSTATUSLIST.find(item => { return item.value === params.row.status })
+                            return h('span', data ? data.name : '无')
                         }
                     },
                     {
@@ -152,10 +174,22 @@ export default {
                         }
                     },
                     {
+                        label: '备注说明',
+                        render: (h, params) => {
+                            return h('span', params.row.remark || '无')
+                        }
+                    },
+                    {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'danger'}, style: {
+                                    display: params.row.status === 1 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '封禁'),
+                                h('el-button', { props: { type: 'primary'}, style: {
+                                    display: params.row.status === 1 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '忽略'),
+                                h('el-button', { props: { type: 'success'}, style: {
                                     display: params.row.status === 1 ? 'unset' : 'none'
                                 }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '解除'),
                                 h('el-button', { props: { type: 'success'}, style: {
