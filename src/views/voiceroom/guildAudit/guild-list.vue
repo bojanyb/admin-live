@@ -1,6 +1,6 @@
 <template>
 	<div class="guild-list-box">
-		<menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex" @tabChange="tabChange"></menuComp>
+		<menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
 		<component :is="comp"></component>
 	</div>
 </template>
