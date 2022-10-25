@@ -69,7 +69,7 @@
                     <span>敏感词</span>
                     <el-input v-model="form.keyword" placeholder="请输入敏感词"></el-input>
                 </div>
-                <div class="sunBox" v-if="form.sen_status == 1">
+                <div class="sunBox" v-if="tabIndex !== '2' && form.sen_status == 1">
                     <span>日期选择</span>
                     <el-date-picker
                         v-model="time2"
