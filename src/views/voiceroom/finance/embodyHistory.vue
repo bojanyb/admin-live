@@ -258,6 +258,7 @@ export default {
         },
         // 更改日期
         changeIndex(index) {
+            console.log(index)
             let date = new Date()
             let now, now1, start, end;
             switch (index) {
