@@ -2,22 +2,14 @@
 	<div class="guildRebate-list-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ (form.status === 1 ? ruleForm.total_flow : ruleForm.total_flow) || 0 }}</span>
-			<span>结算总计：{{ (this.form.status === 1 ? ruleForm.total_settlement : ruleForm.total_settlement) || 0 }}</span>
+			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
+			<span>结算总计：{{ (this.form.status !== 2 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
 		</div>
 
 		<div class="searchParams">
 			<div class="formBox">
 				<div class="sunBox">
 					<span>公会</span>
-					<!-- <el-select v-model="form.guild_number" placeholder="请选择" @change="change">
-						<el-option
-						v-for="item in guildList"
-						:key="item.guild_number"
-						:label="item.nickname"
-						:value="item.guild_number">
-						</el-option>
-					</el-select> -->
 					<el-input v-model="form.guild_number" placeholder="请输入公会ID"></el-input>
 				</div>
 				<div class="sunBox">
@@ -84,7 +76,7 @@
 		},
 		computed: {
 			cfgs() {
-				let name = this.form.status === 1 ? 'settlementLog': 'guildWeekList'
+				let name = this.form.status === 2 ? 'guildWeekList': 'settlementLog'
 				let arr = [
 					{
 						label: '时间',
@@ -128,7 +120,7 @@
 						label: '周返点金额',
 						minWidth: '120px',
 						render: (h, params) => {
-							return h('span', params.row.rewards + '喵粮')
+							return h('span', params.row.settlement + '喵粮')
 						}
 					},
 					{
@@ -209,18 +201,18 @@
 					pagesize: params.size,
 					guild_number: s.guild_number,
 					type: 1,
-					status: s.status,
+					status: s.status ? s.status : 1,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
 				}
-				if(this.form.status === 2) {
+				if(this.form.status === 1) {
 					data.status = 0
 				} else if(this.form.status === 3) {
 					data.status = 1
 				} else if(this.form.status === 4) {
 					data.status = 2
 				}
-				if(s.status === 1) {
+				if(s.status === 2) {
 					delete data.status
 					delete data.start_time,
 					delete data.end_time

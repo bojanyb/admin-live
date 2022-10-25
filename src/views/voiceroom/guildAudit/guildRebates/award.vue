@@ -39,9 +39,7 @@
 				</div>
 			</div>
         </div>
-
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
-
 		<!-- 新增24小时房间组件 -->
 		<homeComp v-if="isDestoryComp" ref="homeComp" @destoryComp="destoryComp"></homeComp>
 	</div>
@@ -75,15 +73,16 @@
 		},
 		computed: {
 			cfgs() {
-				let name = this.form.status === 1 ? 'settlementLog': 'guildWeekList'
+				let name = this.form.status === 2 ? 'getNowRoomOnlineReward': 'settlementLog'
+				// let name = this.form.status === 2 ? 'getNowRoomOnlineReward' : 'getRoomOnlineRewardLog'
 				let arr = [
 					{
 						label: '时间',
 						minWidth: '240px',
 						render: (h, params) => {
-							let start_time = params.row.start ? timeFormat(params.row.start, 'YYYY-MM-DD HH:mm:ss', true) : ''
-							let end_time = params.row.end ? timeFormat(params.row.end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
-							return h('span', `${timeFormat(params.row.start, 'YYYY', true)}年第${params.row.now}周（${start_time}至${end_time}）`)
+							let start_time = params.row.time_start ? timeFormat(params.row.time_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
+							let end_time = params.row.time_end ? timeFormat(params.row.time_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
+							return h('span', `${timeFormat(params.row.time_start, 'YYYY', true)}年第${params.row.now}周（${start_time}至${end_time}）`)
 						}
 					},
 					{
@@ -94,7 +93,7 @@
 					{
 						label: '房间标题',
 						minWidth: '100px',
-						prop: 'title'
+						prop: 'room_title'
 					},
 					{
 						label: '所属公会ID',
@@ -104,15 +103,15 @@
 					{
 						label: '所属公会名称',
 						minWidth: '120px',
-						prop: 'guild_nickname'
+						prop: 'guild_name'
 					},
 					{
 						label: '本周营业时长',
 						minWidth: '140px',
 						prop: 'online',
                         render: (h, params) => {
-                            let data = formatTimeTwo(params.row.online)
-							return h('span', data ? data : '无')
+							let status = params.row.online ?  formatTimeTwo(params.row.online) : '--'
+							return h('span', status)
                         }
 					},
 					{
@@ -151,7 +150,7 @@
 				let arr1 = [
 					{
 						label: '操作',
-						minWidth: '140px',
+						minWidth: '160px',
 						fixed: 'right',
 						render: (h, params) => {
 							return h('div', [
@@ -163,7 +162,8 @@
 				]
 				return {
 					vm: this,
-					url: REQUEST.guild[name],
+					url: this.form.status === 2 ? REQUEST.system.guild[name] : REQUEST.guild[name],
+					// url: REQUEST.system.guild[name],
 					isShowCheckbox: true,
 					isShowIndex: true,
 					columns: this.form.status === 1 ? [ ...arr, ...arr1 ] : [ ...arr ]
@@ -210,18 +210,18 @@
 					pagesize: params.size,
 					guild_number: s.guild_number,
 					type : 4,
-					status: s.closeStatusList,
+					status: s.status,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
 				}
-				if(this.form.status === 2) {
+				if(this.form.status === 1) {
 					data.status = 0
 				} else if(this.form.status === 3) {
 					data.status = 1
 				} else if(this.form.status === 4) {
 					data.status = 2
 				}
-				if(s.status === 1) {
+				if(s.status === 2) {
 					delete data.status
 					delete data.start_time,
 					delete data.end_time

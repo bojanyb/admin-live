@@ -58,8 +58,8 @@ export default {
             params = {
                 required: true,
                 validator: (rules, val, cb) => {
-                    if(!this.ruleForm.start) {
-                        cb(new Error('请输入起始流水'))
+                    if(!this.ruleForm.start || this.ruleForm.start == 0) {
+                        cb(new Error('请输入有效起始流水'))
                     } else {
                         if(this.ruleForm.end) {
                             if(Number(this.ruleForm.start) >= Number(this.ruleForm.end)) {

@@ -40,7 +40,7 @@
 					{
 						name: 'status',
 						type: 'select',
-						value: '',
+						value: '待审核',
 						keyName: 'value',
 						optionLabel: 'name',
 						label: '申请状态',
@@ -150,7 +150,7 @@
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
-					status: s.status,
+					status: s.status ? s.status : 0,
 					type: s.type
 				}
 			},
