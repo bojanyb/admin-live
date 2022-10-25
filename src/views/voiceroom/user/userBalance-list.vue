@@ -236,7 +236,11 @@ export default {
               break;
       }
       start = new Date(now + ' 00:00:00')
-      end = new Date(now1 + ' 23:59:59')
+      if( index == 0) {
+        end = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false))
+      } else {
+        end = new Date(now1 + ' 23:59:59')
+      }
       if(isFirst) {
         setTimeout(() => {
           let time = [start.getTime(), end.getTime()]

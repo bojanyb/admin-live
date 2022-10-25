@@ -51,9 +51,10 @@ export default {
             params = {
                 required: true,
                 validator: (rules, value, cb) => {
+                    let val = JSON.stringify(value)
                     if(!this.ruleForm.start || this.ruleForm.start == 0) {
                         cb(new Error('请输入有效起始流水'))
-                    }else if(value.indexOf(".") != -1 && (value.split('.').length > 2 || value.split('.')[1].length > 2)){
+                    }else if(val && val.indexOf(".") != -1 && (val.split('.').length > 2 || val.split('.')[1].length > 2)){
                         callback(new Error('请输入正确格式的起始流水')) //防止输入多个小数点
                     } else {
                         if(this.ruleForm.end) {

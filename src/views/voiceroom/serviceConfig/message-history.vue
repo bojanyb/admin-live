@@ -69,21 +69,31 @@
                     <span>敏感词</span>
                     <el-input v-model="form.keyword" placeholder="请输入敏感词"></el-input>
                 </div>
-				
+                <div class="sunBox" v-if="tabIndex !== '2' && form.sen_status == 1">
+                    <span>日期选择</span>
+                    <el-date-picker
+                        v-model="time2"
+                        type="date"
+                        placeholder="选择日期"
+                        @change="changeDate"
+                        >
+                    </el-date-picker>
+                </div>
 				<div class="btnBox">
 					<el-button class="seeBox" type="primary" @click="onSearch">查询</el-button>
-					<el-button @click="today" v-if="tabIndex !== '2'">今日</el-button>
-					<el-button @click="yesterday" v-if="tabIndex !== '2'">昨日</el-button>
-					<el-button @click="beforeYesterday" v-if="tabIndex !== '2'">前天</el-button>
-					<el-button @click="recentSeven" v-if="tabIndex !== '2'">七天</el-button>
-                    <el-button icon="el-icon-refresh" @click="reset">重置</el-button>
+					<el-button @click="today" v-if="tabIndex !== '2'  && form.sen_status !== 1">今日</el-button>
+					<el-button @click="yesterday" v-if="tabIndex !== '2' && form.sen_status !== 1">昨日</el-button>
+					<el-button @click="beforeYesterday" v-if="tabIndex !== '2' && form.sen_status !== 1">前天</el-button>
+					<el-button @click="recentSeven" v-if="tabIndex !== '2' && form.sen_status !== 1">七天</el-button>
+                    <span class="sunBox refreshNum" v-if="tabIndex !== '2'" style="margin-left: 12px;">
+                        <el-input v-model="refreshNum" placeholder="最少5秒" @blur="changeRefreshNum"></el-input> 秒刷新
+                    </span>
+                    <el-button @click="add" type="success"  v-if="tabIndex == '2'">新增</el-button>
                     <span class="refreshBox" v-if="tabIndex !== '2'">
                         <el-switch
                         v-model="isRefresh"
                         active-color="#13ce66"
                         inactive-color="#ff4949"
-                        active-text="开启刷新"
-                        inactive-text="关闭刷新"
                         @change="switchChange">
                         </el-switch>
                     </span>
@@ -169,7 +179,9 @@ export default {
                 end_time: null
             },
             ruleForm: {}, // 储存max_id
-            timer: null // 定时刷新
+            timer: null, // 定时刷新
+            time2: new Date(),
+            refreshNum: localStorage.getItem("refreshNum") ? localStorage.getItem("refreshNum") : 30
         };
     },
     computed: {
@@ -293,7 +305,7 @@ export default {
                     }
                 },
                 {
-                    label: '用户ID',
+                    label: '发送用户ID',
                     render: (h, params) => {
                         return h('div', this.tabIndex === '0' ? params.row.from_user_number : params.row.user_number)
                     }
@@ -414,13 +426,14 @@ export default {
         // 是否启用定时刷新
         switchChange(v) {
             if(v) {
-                this.$success('定时刷新启用成功,默认5s刷新一次')
+                let time = this.refreshNum * 1000
+                this.$success('开启定时刷新,'+ this.refreshNum +'S')
                 this.timer = setInterval(() => {
                     this.getList()
-                }, 5000);
+                }, time);
             } else {
                 if(this.timer) {
-                    this.$success('定时刷新关闭成功')
+                    this.$success('定时刷新已关闭')
                     clearInterval(this.timer)
                 }
             }
@@ -476,8 +489,8 @@ export default {
                     break;
             }
             start = new Date(now + ' 00:00:00')
-            if(index === 3) {
-                end = new Date(now1)
+            if(index == 3 || index == 0) {
+                end = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false))
             } else {
                 end = new Date(now1 + ' 23:59:59')
             }
@@ -485,6 +498,24 @@ export default {
             let time = [start.getTime(), end.getTime()]
             this.form.time = time
             this.$set(this.form, 'time', time)
+        },
+        // 命中 -- 更改日期
+        changeDate(val){
+            let date = new Date()
+            let currentDate = timeFormat(date, 'YYYY-MM-DD', false)
+            let currentTime = timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false)
+            let changeDate = timeFormat(val, 'YYYY-MM-DD', false)
+            let start,end
+            if(currentDate == changeDate){ // 当天
+                start = Date.parse(currentDate + ' 00:00:00')
+                end = Date.parse(currentTime)
+            }else{ // 其他时间
+                start = Date.parse(changeDate + ' 00:00:00')
+                end = Date.parse(changeDate + ' 23:59:59')
+            }
+            this.form.time[0] = start
+            this.form.time[1] = end
+            this.getList()
         },
         // 配置参数
         beforeSearch(params) {
@@ -588,6 +619,15 @@ export default {
                     this.getList()
                 }
             }).catch(() => {});
+        },
+        // 刷新秒数设置
+        changeRefreshNum(){
+            if(this.refreshNum < 5){
+                this.refreshNum = 5
+            }else if(this.refreshNum > 60){
+                this.refreshNum = 60
+            }
+            localStorage.setItem("refreshNum",this.refreshNum)
         }
     },
     created() {
@@ -645,6 +685,11 @@ export default {
 					}
 				}
 			}
+            .refreshNum{
+                .el-input{
+                    width: 50px;
+                }
+            }
 			.btnBox {
 				margin-bottom: 20px;
 			}

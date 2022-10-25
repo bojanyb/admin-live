@@ -2035,6 +2035,14 @@ const RISKMANAGEMENTMESSAGENUMBERLIST = [
     {
         name: '10000',
         value: 10000
+    },
+    {
+        name: '50000',
+        value: 50000
+    },
+    {
+        name: '100000',
+        value: 100000
     }
 ]
 
