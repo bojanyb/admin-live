@@ -12,13 +12,13 @@
                 <div class="formBox">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                         <el-form-item label="操作员部门" prop="department">
-                            <el-input v-model="ruleForm.department" :disabled="status !== 'add'"></el-input>
+                            <el-input v-model="ruleForm.department"></el-input>
                         </el-form-item>
                         <el-form-item label="操作员名称" prop="nickname">
-                            <el-input v-model="ruleForm.nickname" :disabled="status !== 'add'"></el-input>
+                            <el-input v-model="ruleForm.nickname"></el-input>
                         </el-form-item>
                         <el-form-item label="成员账号" prop="username">
-                            <el-input v-model="ruleForm.username" :disabled="status !== 'add'"></el-input>
+                            <el-input v-model="ruleForm.username"></el-input>
                         </el-form-item>
                         <el-form-item label="密码" prop="password">
                             <el-input v-model="ruleForm.password"></el-input>
@@ -201,6 +201,7 @@ export default {
                 this.$message.success('修改成功')
             }
             this.dialogVisible = false
+            this.$emit('getList');
         },
         // 新增
         async addUser() {
