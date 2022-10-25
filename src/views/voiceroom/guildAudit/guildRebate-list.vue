@@ -50,10 +50,10 @@ export default {
 		return {
 			menuList: [
 				{
-					name: '公会周流水结算记录'
+					name: '公会周流水结算'
 				},
 				{
-					name: '公会月流水结算记录'
+					name: '公会月奖励结算'
 				},
 				{
 					name: '公会周奖励结算'
