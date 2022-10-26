@@ -80,9 +80,9 @@
 						label: '时间',
 						minWidth: '240px',
 						render: (h, params) => {
-							let start_time = params.row.time_start ? timeFormat(params.row.time_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
-							let end_time = params.row.time_end ? timeFormat(params.row.time_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
-							return h('span', `${timeFormat(params.row.time_start, 'YYYY', true)}年第${params.row.now}周（${start_time}至${end_time}）`)
+							let start_time = this.form.status === 2 ? timeFormat(params.row.start, 'YYYY-MM-DD HH:mm:ss', true) : timeFormat(params.row.time_start, 'YYYY-MM-DD HH:mm:ss', true) 
+							let end_time = this.form.status === 2 ? timeFormat(params.row.end, 'YYYY-MM-DD HH:mm:ss', true) : timeFormat(params.row.time_end, 'YYYY-MM-DD HH:mm:ss', true) 
+							return h('span', `${timeFormat(this.form.status === 2 ? params.row.start : params.row.time_start, 'YYYY', true)}年第${params.row.now}周（${start_time}至${end_time}）`)
 						}
 					},
 					{
@@ -93,7 +93,10 @@
 					{
 						label: '房间标题',
 						minWidth: '100px',
-						prop: 'room_title'
+						render: (h, params) => {
+                            let name = this.form.status === 2 ? params.row.title : params.row.room_title
+                            return h('span', name)
+                        }
 					},
 					{
 						label: '所属公会ID',
@@ -103,7 +106,10 @@
 					{
 						label: '所属公会名称',
 						minWidth: '120px',
-						prop: 'guild_name'
+						render: (h, params) => {
+                            let name = this.form.status === 2 ? params.row.guild_nickname : params.row.guild_name
+                            return h('span', name)
+                        }
 					},
 					{
 						label: '本周营业时长',
