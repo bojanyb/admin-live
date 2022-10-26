@@ -11,6 +11,9 @@
             <div class="contentBox">
                 <div class="formBox">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                        <el-form-item label="操作员ID" prop="sort">
+                            <el-input v-model="ruleForm.sort" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
+                        </el-form-item>
                         <el-form-item label="操作员部门" prop="department">
                             <el-input v-model="ruleForm.department"></el-input>
                         </el-form-item>
@@ -20,7 +23,7 @@
                         <el-form-item label="成员账号" prop="username">
                             <el-input v-model="ruleForm.username"></el-input>
                         </el-form-item>
-                        <el-form-item label="密码" prop="password">
+                        <el-form-item label="密码" prop="password" class="sortBox">
                             <el-input v-model="ruleForm.password"></el-input>
                         </el-form-item>
                     </el-form>
@@ -68,12 +71,17 @@ export default {
                 department: '',
                 username: '',
                 password: '',
-                permission_ids: []
+                permission_ids: [],
+                sort: null
             },
             jurisdictionList: [],
             rules: {
                 department: [
                     { required: true, message: '请输入操作员部门', trigger: 'blur' },
+                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                ],
+                sort: [
+                    { required: true, message: '请输入排序', trigger: 'blur' },
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
                 nickname: [
@@ -222,6 +230,7 @@ export default {
                 nickname: s.nickname,
                 username: s.username,
                 password: s.password,
+                sort: s.sort,
                 permission_ids: []
             }
             let array = []
@@ -271,11 +280,19 @@ export default {
     .contentBox {
         .formBox {
             .el-input {
-                width: 150px;
+                width: 105px;
             }
             .el-form {
                 display: flex;
                 flex-wrap: wrap;
+            }
+            .sortBox {
+                .el-form-item__label {
+                    width: 65px !important;
+                }
+                .el-form-item__content {
+                    margin-left: 65px !important;
+                }
             }
         }
         .jurisdiction {
