@@ -163,6 +163,15 @@ export function check(data) {
   })
 }
 
+// 更改登录密码
+export function updateLoginPwd(data) {
+  return request({
+    url: api.user.updateLoginPwd,
+    method: 'post',
+    data
+  })
+}
+
 
 
 /***********公会v2******************/ 

@@ -176,6 +176,7 @@ const request = {
         musicList: `${HTTPHEADER}/music/index`, // 音乐列表
         check: `${HTTPHEADER}/Verify/check`, // 审核更换实名
         punishStatus: `${HTTPHEADER}/userPunish/punishStatus`, // 用户状态
+        updateLoginPwd: `${HTTPHEADER}/User/updateLoginPwd`, // 更改登录密码
     },
     
     // 审核管理
