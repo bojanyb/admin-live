@@ -147,16 +147,20 @@ export default {
         }
     },
     methods: {
+        // 移除之后
         handleRemove(file, fileList) {
             console.log(file, fileList);
             this.ruleForm.img = ''
         },
+        // 预览
         handlePreview(file) {
             console.log(file);
         },
+        // 超出文件数量最大上传
         handleExceed(files, fileList) {
             this.$warning(`最大上传一个文件`);
         },
+        // 移除文件之前
         beforeRemove(file, fileList) {
             return this.$confirm(`确定移除 ${ file.name }？`);
         },
@@ -170,9 +174,11 @@ export default {
                 this.$message.error(err)
             })
         },
+        // 限制id输入
         numberInput() {
             this.ruleForm.user_number = this.ruleForm.user_number.replace(/[^\d]/g, '')
         },
+        // 关闭弹窗
         handleClose() {
             this.dialogVisible = false
         },

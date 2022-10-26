@@ -5,7 +5,7 @@
             <el-button type="success" @click="add">新增</el-button>
         </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList"></tableList>
+            <tableList :cfgs="cfgs" :isHidePage="true" ref="tableList"></tableList>
         </div>
 
         <add ref="add" v-if="isDestoryComp" @getList="getList" @destoryComp="destoryComp"></add>
@@ -42,7 +42,7 @@ export default {
                 columns: [
                     {
                         label: '操作员ID',
-                        prop: 'id'
+                        prop: 'sort'
                     },
                     {
                         label: '账号',

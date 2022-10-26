@@ -13,6 +13,9 @@
 
 		<!-- 处罚组件 -->
 		<punishComp v-if="isDestoryComp" ref="punishComp" @destoryComp="destoryComp" @getList="getList"></punishComp>
+
+		<!-- 修改密码组件 -->
+		<upatePassComp v-if="isDestoryComp" ref="upatePassComp" @destoryComp="destoryComp" @getList="getList"></upatePassComp>
 	</div>
 </template>
 
@@ -20,6 +23,8 @@
 	import { getUserStatisticalShow } from '@/api/videoRoom'
 	// 卡列表组件
 	import bindStuck from './components/bindStuck.vue'
+	// 引入更改密码组件
+	import upatePassComp from './components/upatePassComp.vue'
 	// 引入处罚组件
 	import punishComp from './components/punishComp.vue'
 	// 引入菜单组件
@@ -45,7 +50,8 @@
 			tableList,
 			SearchPanel,
 			userEdit,
-			punishComp
+			punishComp,
+			upatePassComp
 		},
 		data() {
 			return {
@@ -153,10 +159,17 @@
 							}
 						},
 						{
-							label: '手机号',
+							label: '注册渠道',
 							width: '110px',
 							render: (h, params) => {
-								return h('span', params.row.phone || '无')
+								return h('span', params.row.channel || '无')
+							}
+						},
+						{
+							label: '安全手机/邮箱',
+							width: '110px',
+							render: (h, params) => {
+								return h('span', params.row.safe_number || '无')
 							}
 						},
 						{
@@ -217,12 +230,12 @@
 						},
 						{
 							label: '操作',
-							width : '130px',
+							width : '230px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '修改'),
-									// h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.punishFunc(params.row)}}}, '处罚')
+									h('el-button', { props: { type: ''}, on: {click:()=>{this.updatePass(params.row)}}}, '更改密码')
 								])
 							}
 						}
@@ -264,6 +277,13 @@
 				this.isDestoryComp = true
 				setTimeout(() => {
 					this.$refs.userEdit.loadParams(status, row)
+				}, 50);
+			},
+			// 修改密码
+			updatePass(row) {
+				this.isDestoryComp = true
+				setTimeout(() => {
+					this.$refs.upatePassComp.loadParams(row)
 				}, 50);
 			},
 			// 处罚
