@@ -39,6 +39,23 @@ export default {
                     isNum: true,
                     placeholder: '请输入喵喵ID'
                 },
+                {
+                    name: 'dateTimeParams',
+                    type: 'datePicker',
+                    dateType: 'datetimerange',
+                    format: "yyyy-MM-dd HH:mm:ss",
+                    label: '时间选择',
+                    value: '',
+                    handler: {
+                        change: v => {
+                            this.emptyDateTime()
+                            this.setDateTime(v)
+                        },
+                        selectChange: (v, key) => {
+                            this.emptyDateTime()
+                        }
+                    }
+                }
             ]
         },
         cfgs() {
@@ -119,16 +136,31 @@ export default {
         },
         // 配置参数
         beforeSearch(params) {
-            let s = { ...this.searchParams }
+            let s = { ...this.searchParams, ...this.dateTimeParams }
             return {
                 page: params.page,
                 pagesize: params.size,
-                user_number: s.user_number
+                user_number: s.user_number,
+                start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
+                end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
             }
+        },
+        // 设置时间段
+        setDateTime(arr) {
+            const date = arr ? {
+                start_time: arr[0],
+                end_time: arr[1]
+            } : {}
+            this.$set(this, 'dateTimeParams', date)
+        },
+        // 清空日期选择
+        emptyDateTime() {
+            this.dateTimeParams = {}
         },
         // 重置
         reset() {
             this.searchParams = {}
+            this.dateTimeParams = {}
             this.getList()
         },
         // 查询
