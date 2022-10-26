@@ -42,7 +42,7 @@ export default {
         // 日终数据
         async overviewDayDataFunc(time) {
 			let res = await overviewDayData({ time })
-            this.dataHandle(res.data)
+            this.dataHandle(res.data.log_json)
         },
         // 数据处理
         dataHandle(row) {
