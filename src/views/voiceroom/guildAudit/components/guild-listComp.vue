@@ -88,7 +88,7 @@
 					columns: [
 						{
 							label: '创建时间',
-							minWidth: '150px',
+							minWidth: '130px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
@@ -169,7 +169,7 @@
 						},
 						{
 							label: '操作',
-							minWidth: '260px',
+							minWidth: '270px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
