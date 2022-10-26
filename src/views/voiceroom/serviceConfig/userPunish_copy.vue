@@ -211,7 +211,7 @@ export default {
                                 }, on: {click:()=>{this.neglect(params.row.id)}}}, '忽略'),
                                 h('el-button', { props: { type: 'primary'}, style: {
                                     display: params.row.from === '后台处罚' && params.row.status === 1 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.update(params.row)}}}, '修改')
+                                }, on: {click:()=>{this.update(params.row)}}}, '修改证据')
                             ])
                         }
                     }
