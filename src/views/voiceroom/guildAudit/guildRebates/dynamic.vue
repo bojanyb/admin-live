@@ -115,7 +115,7 @@
 						label: '周奖励金额',
 						minWidth: '120px',
 						render: (h, params) => {
-							return h('span', this.form.status === 2 ? params.row.rewards + '钻石' : params.row.rewards + '钻石')
+							return h('span', this.form.status === 2 ? '无' : params.row.settlement + '喵粮')
 						}
 					},
 					{

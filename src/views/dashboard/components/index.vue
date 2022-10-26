@@ -6,9 +6,9 @@
                 <div class="Con" v-for="(a,b) in item.children" :key="b">
                     <span>{{ a.tit }}</span>
                     <div class="num">
-                        <span class="total" v-if="a.val == 'total_in'" style="font-size: 20px">{{ ruleForm[a.val] || 0 }}</span>
+                        <span class="total" v-if="a.val == 'total_top_up_diamond'" style="font-size: 20px">{{ ruleForm[a.val] || 0 }}</span>
                         <span class="total" v-else v-format="'#,##0'">{{ Number(ruleForm[a.val]) || 0 }}</span>
-                        <span class="unit" v-if="a.val !== 'total_in'">{{ a.unit }}</span>
+                        <span class="unit" v-if="a.val !== 'total_top_up_diamond'">{{ a.unit }}</span>
                     </div>
                 </div>
             </li>
