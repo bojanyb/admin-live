@@ -31,7 +31,7 @@ export default {
 				case '0': // 周流水
 					compText= "guildWeekWater"
 					break;
-				case '1': // 月流水
+				case '1': // 月奖励
 					compText= "guildMonthWater"
 					break;
 				case '2': // 公会周奖励结算

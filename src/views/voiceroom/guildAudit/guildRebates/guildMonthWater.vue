@@ -204,7 +204,7 @@
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
-					type: 2,
+					type: 3,
 					status: s.status,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
