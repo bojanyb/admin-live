@@ -13,7 +13,7 @@
 
 <script>
 // 引入api
-import { removeUser } from '@/api/risk'
+import { removeUser, removeUserPunish, passUserPunish } from '@/api/risk'
 // 引入新增组件
 import userComp from './components/userComp.vue'
 // 引入菜单组件
@@ -37,7 +37,7 @@ export default {
         return {
             isDestoryComp: false, // 是否销毁组件
             searchParams: {
-                status: 1
+                status: 4
             }
         };
     },
@@ -65,7 +65,7 @@ export default {
                 {
                     name: 'status',
                     type: 'select',
-                    value: 1,
+                    value: 4,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '处罚状态',
@@ -94,108 +94,115 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.risk.UserPunish,
+                url: REQUEST.risk.UserPunishLog,
                 columns: [
                     {
                         label: '时间',
-                        prop: 'update_time',
-                        minWidth: '100px'
+                        prop: 'create_time',
+                        minWidth: '150px'
                     },
                     {
                         label: '来源',
+                        minWidth: '100px',
                         render: (h, params) => {
-                            return h('div', [
-                                h('div', params.row.user_number)
-                            ])
+                            return h('span', params.row.from || '- -')
                         }
                     },
                     {
                         label: '用户',
+                        minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', params.row.nickname)
+                                h('div', params.row.punished_user_nickname),
+                                h('div', params.row.punished_user_number || '- -')
                             ])
                         }
                     },
                     {
                         label: '举报类型',
+                        minWidth: '100px',
                         render: (h, params) => {
-                            let data = MAPDATA.USERPUNISHTYPELIST.find(item => { return item.value === params.row.type })
-                            return h('span', data ? data.name : '无')
+                            return h('span', params.row.genre || '- -')
                         }
                     },
                     {
                         label: '举报说明',
-                        render: (h, params) => {
-                            let data = MAPDATA.USERPUNISHTYPELIST.find(item => { return item.value === params.row.type })
-                            return h('span', data ? data.name : '无')
-                        }
-                    },
-                    {
-                        label: '举报证据',
-                        prop: 'remove_time',
                         minWidth: '100px',
                         render: (h, params) => {
-                            return h('span', params.row.remove_time || '无')
-                        }
+                            return h('span', params.row.content || '- -')
+                        },
+                        showOverFlow: true
                     },
                     {
+						label: '举报证据',
+						isimgList: true,
+						prop: 'img_path',
+						propCopy: 'video_path',
+						imgWidth: '70px',
+						imgHeight: '70px',
+						width: '280px'
+					},
+                    {
                         label: '举报用户',
+                        minWidth: '100px',
                         render: (h, params) => {
-                            let data = MAPDATA.USERPUNISHSTATUSLIST.find(item => { return item.value === params.row.status })
-                            return h('span', data ? data.name : '无')
+                            return h('div', [
+                                h('div', params.row.report_user_nickname),
+                                h('div', params.row.report_user_number || '- -')
+                            ])
                         }
                     },
                     {
                         label: '处理状态',
+                        minWidth: '100px',
                         render: (h, params) => {
-                            let data = MAPDATA.USERPUNISHSTATUSLIST.find(item => { return item.value === params.row.status })
+                            let data = MAPDATA.USERPUNISHSTATUSLISTCOPY.find(item => { return item.value === params.row.status })
                             return h('span', data ? data.name : '无')
                         }
                     },
                     {
                         label: '处罚结果',
+                        minWidth: '100px',
                         render: (h, params) => {
-                            let data = MAPDATA.USERPUNISHSTATUSLIST.find(item => { return item.value === params.row.status })
-                            return h('span', data ? data.name : '无')
+                            return h('span', params.row.res || '- -')
                         }
                     },
                     {
                         label: '解除时间',
+                        minWidth: '120px',
                         render: (h, params) => {
-                            let data = MAPDATA.USERPUNISHSTATUSLIST.find(item => { return item.value === params.row.status })
-                            return h('span', data ? data.name : '无')
+                            return h('span', params.row.remove_time || '- -')
                         }
                     },
                     {
                         label: '操作人',
+                        minWidth: '100px',
                         render: (h, params) => {
-                            return h('span', params.row.admin_name || '无')
+                            return h('span', params.row.operator || '- -')
                         }
                     },
                     {
                         label: '备注说明',
+                        minWidth: '100px',
                         render: (h, params) => {
-                            return h('span', params.row.remark || '无')
+                            return h('span', params.row.remark || '- -')
                         }
                     },
                     {
                         label: '操作',
+                        minWidth: '180px',
+                        fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
+                                h('el-button', { props: { type: 'success'}, style: {
+                                    display: params.row.status === 1 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.relieve(params.row.id)}}}, '解除'),
                                 h('el-button', { props: { type: 'danger'}, style: {
-                                    display: params.row.status === 1 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '封禁'),
+                                    display: params.row.status === 0 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.blocked(params.row)}}}, '封禁'),
                                 h('el-button', { props: { type: 'primary'}, style: {
-                                    display: params.row.status === 1 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '忽略'),
-                                h('el-button', { props: { type: 'success'}, style: {
-                                    display: params.row.status === 1 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '解除'),
-                                h('el-button', { props: { type: 'success'}, style: {
-                                    marginLeft: '0px',
-                                    display: params.row.status === 2 ? 'unset' : 'none'
-                                }, on: {click:()=>{}}}, '已解除')
+                                    display: params.row.status === 0 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.neglect(params.row.id)}}}, '忽略')
                             ])
                         }
                     }
@@ -211,7 +218,6 @@ export default {
                 page: params.page,
                 page_size: params.size,
                 user_number: s.user_number,
-                type: s.type,
                 status: s.status,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time
@@ -236,7 +242,7 @@ export default {
         // 重置
         reset() {
             this.searchParams = {
-                status: 1
+                status: 4
             }
             this.dateTimeParams = {}
             this.getList()
@@ -249,6 +255,10 @@ export default {
         add() {
             this.load('add')
         },
+        // 封禁
+        blocked(row) {
+            this.load('blocked', row)
+        },
         load(status, row) {
             this.isDestoryComp = true
             setTimeout(() => {
@@ -256,10 +266,24 @@ export default {
             }, 50);
         },
         // 解除
-        async deleteParams(id) {
-            let res = await removeUser({ id })
+        async relieve(id) {
+            this.$confirm('是否确认解除当前封禁用户?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                let res = await removeUserPunish({ id })
+                if(res.code === 2000) {
+                    this.$success('解除成功')
+                    this.getList()
+                }
+            }).catch(() => {});
+        },
+        // 忽略
+        async neglect(id) {
+            let res = await passUserPunish({ id })
             if(res.code === 2000) {
-                this.$success('解除成功')
+                this.$success('操作成功')
                 this.getList()
             }
         },
