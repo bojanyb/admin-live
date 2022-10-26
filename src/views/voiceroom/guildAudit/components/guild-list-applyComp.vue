@@ -35,9 +35,9 @@ export default {
                     name: 'user_number',
                     type: 'input',
                     value: '',
-                    label: '用户ID',
+                    label: '喵喵ID',
                     isNum: true,
-                    placeholder: '请输入用户ID'
+                    placeholder: '请输入喵喵ID'
                 },
             ]
         },
