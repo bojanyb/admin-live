@@ -921,6 +921,18 @@ const USERSTATUSLIST = [
     }
 ]
 
+// 用户列表 - 用户等级
+const USERRANKLIST = [
+    {
+        name: '10-29',
+        value: 1
+    },
+    {
+        name: '30以上',
+        value: 3
+    }
+]
+
 // 用户音乐上传列表 - 筛选查看
 const USERMUSICUPLIST = [
     {
@@ -2238,5 +2250,6 @@ export default {
     RISKMANAGEMENTMESSAGENUMBERLIST,
     ORDERREFUNDSTATUSLIST,
     DISSOLUTIONTYPELISTCOPY,
-    USERPUNIRESETLISTCOPY
+    USERPUNIRESETLISTCOPY,
+    USERRANKLIST
 }

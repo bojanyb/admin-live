@@ -90,7 +90,17 @@
 						value: '',
 						label: '注册设备',
 						placeholder: '请输入注册设备'
-					}
+					},
+					{
+						name: 'sen_status',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '用户等级',
+						placeholder: '请选择',
+						options: MAPDATA.USERRANKLIST
+					},
 				]
 			},
 			cfgs() {
