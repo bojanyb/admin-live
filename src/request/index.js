@@ -329,6 +329,7 @@ const request = {
         removeUserPunish: `${HTTPHEADER}/UserPunishLog/remove`, // 处罚-解除
         passUserPunish: `${HTTPHEADER}/UserPunishLog/pass`, // 处罚-忽略
         punishStatus: `${HTTPHEADER}/UserPunishLog/punishStatus`, // 用户状态
+        updateSource: `${HTTPHEADER}/UserPunishLog/updateSource`, // 处罚-修改证据
     },
 
     // 心动速配

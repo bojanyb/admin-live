@@ -8,6 +8,9 @@
 
         <!-- 新增组件 -->
         <userComp v-if="isDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList"></userComp>
+
+        <!-- 修改证据弹窗 -->
+        <uploadImg v-if="isDestoryComp" ref="uploadImg" @destoryComp="destoryComp" @getList="getList"></uploadImg>
     </div>
 </template>
 
@@ -16,6 +19,8 @@
 import { removeUser, removeUserPunish, passUserPunish } from '@/api/risk'
 // 引入新增组件
 import userComp from './components/userComp.vue'
+// 引入修改证据弹窗
+import uploadImg from './components/uploadImg.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -31,7 +36,8 @@ export default {
     components: {
         SearchPanel,
         tableList,
-        userComp
+        userComp,
+        uploadImg
     },
     data() {
         return {
@@ -202,7 +208,10 @@ export default {
                                 }, on: {click:()=>{this.blocked(params.row)}}}, '封禁'),
                                 h('el-button', { props: { type: 'primary'}, style: {
                                     display: params.row.status === 0 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.neglect(params.row.id)}}}, '忽略')
+                                }, on: {click:()=>{this.neglect(params.row.id)}}}, '忽略'),
+                                h('el-button', { props: { type: 'primary'}, style: {
+                                    display: params.row.from === '后台处罚' && params.row.status === 1 ? 'unset' : 'none'
+                                }, on: {click:()=>{this.update(params.row)}}}, '修改')
                             ])
                         }
                     }
@@ -258,6 +267,13 @@ export default {
         // 封禁
         blocked(row) {
             this.load('blocked', row)
+        },
+        // 修改
+        update(row) {
+            this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.uploadImg.loadParams(row)
+            }, 50);
         },
         load(status, row) {
             this.isDestoryComp = true

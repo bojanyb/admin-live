@@ -40,6 +40,11 @@
                             <div slot="tip" class="el-upload__tip">只能上传jpg/png/mp4文件</div>
                         </el-upload>
                     </el-form-item>
+                    <el-form-item label="重置资料" prop="reset">
+                        <el-select v-model="ruleForm.reset" multiple placeholder="请选择" :disabled="disabled">
+                            <el-option v-for="item in resetList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item label="备注说明" prop="remark">
                         <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
                     </el-form-item>
@@ -100,13 +105,15 @@ export default {
             dialogVisible: false,
             timeList: MAPDATA.DURATION, // 处罚时长
             typeList: MAPDATA.USERPUNISHTYPELIST, // 处罚类型
+            resetList: MAPDATA.USERPUNIRESETLISTCOPY,
             status: 'add',
             userList: [], // 查询用户
             ruleForm: {
                 user_number: '',
                 type: [],
                 ban_duration: '',
-                remark: ''
+                remark: '',
+                reset: []
             },
             oldParams: {}, // 老数据
             form: {},
@@ -117,6 +124,9 @@ export default {
                 ],
                 type: [
                     { required: true, message: '请选择处罚类型', trigger: 'change' }
+                ],
+                reset: [
+                    { required: true, message: '请选择重置资料', trigger: 'change' }
                 ],
                 ban_duration: [
                     { required: true, message: '请选择处罚时间', trigger: 'change' }
@@ -211,15 +221,18 @@ export default {
         },
         // 获取数据
         loadParams(status, row) {
+            console.log(row, 'row-------------2020')
             this.dialogVisible = true
             this.status = status
             if(status !== 'add' && status !== 'blocked') {
                 let params = JSON.parse(JSON.stringify(row))
-                if(typeof params.type === 'number') {
-                    params.type = [params.type]
-                }
-                params.ban_duration = params.ban_duration ? params.ban_duration : ''
-                this.$set(this.$data, 'ruleForm', params)
+                let data = {}
+                data.user_number = params.punished_user_number
+                data.ban_duration = null
+                data.remark = ''
+                data.type = []
+                this.$set(this.$data, 'ruleForm', data)
+                this.$set(this.$data, 'form', params)
                 this.seeUser()
             } else if(status === 'blocked') {
                 let params = JSON.parse(JSON.stringify(row))
@@ -342,7 +355,7 @@ export default {
         padding: 10px 20px;
         box-sizing: border-box;
         margin-left: 20px;
-        height: 370px;
+        height: 430px;
         .upBox {
             display: flex;
             align-items: center;
@@ -365,7 +378,7 @@ export default {
         .downBox {
             margin-top: 30px;
             p {
-                line-height: 32px;
+                line-height: 36px;
             }
         }
     }

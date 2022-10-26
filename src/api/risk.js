@@ -99,3 +99,12 @@ export function punishStatus(data) {
         data
     })
 }
+
+// 处罚-修改证据
+export function updateSource(data) {
+    return request({
+        url: api.risk.updateSource,
+        method: 'post',
+        data
+    })
+}

@@ -2022,6 +2022,22 @@ const USERPUNISHSTATUSLISTCOPY = [
     }
 ]
 
+// 用户处罚 - 重置资料
+const USERPUNIRESETLISTCOPY = [
+    {
+        name: '重置昵称',
+        value: 11
+    },
+    {
+        name: '重置头像',
+        value: 12
+    },
+    {
+        name: '重置签名',
+        value: 13
+    }
+]
+
 // 消息记录 - 敏感词
 const RISKMANAGEMENTMESSAGEHISTORYLIST = [
     {
@@ -2221,5 +2237,6 @@ export default {
     GUILDREPORTSTATUS,
     RISKMANAGEMENTMESSAGENUMBERLIST,
     ORDERREFUNDSTATUSLIST,
-    DISSOLUTIONTYPELISTCOPY
+    DISSOLUTIONTYPELISTCOPY,
+    USERPUNIRESETLISTCOPY
 }
