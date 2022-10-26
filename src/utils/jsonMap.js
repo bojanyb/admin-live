@@ -2002,23 +2002,23 @@ const USERPUNISHSTATUSLIST = [
 const USERPUNISHSTATUSLISTCOPY = [
     {
         name: '全部',
-        value: ''
-    },
-    {
-        name: '待处理',
-        value: 3
-    },
-    {
-        name: '封禁中',
         value: 4
     },
     {
-        name: '已忽略',
+        name: '待处理',
+        value: 0
+    },
+    {
+        name: '封禁中',
         value: 1
     },
     {
-        name: '已解除',
+        name: '已忽略',
         value: 2
+    },
+    {
+        name: '已解除',
+        value: 3
     }
 ]
 

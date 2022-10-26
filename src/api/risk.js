@@ -54,3 +54,48 @@ export function review(data) {
         data
     })
 }
+
+// 处罚 -新增
+export function addUserPunish(data) {
+    return request({
+        url: api.risk.addUserPunish,
+        method: 'post',
+        data
+    })
+}
+
+// 处罚-封禁
+export function saveUserPunish(data) {
+    return request({
+        url: api.risk.saveUserPunish,
+        method: 'post',
+        data
+    })
+}
+
+// 处罚-解除
+export function removeUserPunish(data) {
+    return request({
+        url: api.risk.removeUserPunish,
+        method: 'post',
+        data
+    })
+}
+
+// 处罚-忽略
+export function passUserPunish(data) {
+    return request({
+        url: api.risk.passUserPunish,
+        method: 'post',
+        data
+    })
+}
+
+// 用户状态
+export function punishStatus(data) {
+    return request({
+        url: api.risk.punishStatus,
+        method: 'post',
+        data
+    })
+}

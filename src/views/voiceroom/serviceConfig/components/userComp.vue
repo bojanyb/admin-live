@@ -3,13 +3,13 @@
         <el-dialog
         :title="title"
         :visible.sync="dialogVisible"
-        width="700px"
+        width="730px"
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <div class="inputBox">
                     <el-form-item label="用户ID" prop="user_number" class="numberBox">
-                        <el-input v-model="ruleForm.user_number" :disabled="disabled" @input="numberInput"></el-input>
+                        <el-input v-model="ruleForm.user_number" :disabled="status === 'blocked'" @input="numberInput"></el-input>
 
                         <el-button type="success" @click="seeUser">查询</el-button>
                     </el-form-item>
@@ -23,7 +23,23 @@
                             <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="处罚备注" prop="remark">
+                    <el-form-item label="违规证据" v-if="status !== 'blocked'">
+                        <el-upload
+                        class="upload-demo"
+                        action="#"
+                        :on-preview="handlePreview"
+                        :on-remove="handleRemove"
+                        :before-remove="beforeRemove"
+                        :limit="1"
+                        accept=".png,.jpg,.jpeg,.mp4"
+                        :on-exceed="handleExceed"
+                        :file-list="fileList"
+                        :http-request="upLoad">
+                            <el-button size="small" type="primary">点击上传</el-button>
+                            <div slot="tip" class="el-upload__tip">只能上传jpg/png/mp4文件</div>
+                        </el-upload>
+                    </el-form-item>
+                    <el-form-item label="备注说明" prop="remark">
                         <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
                     </el-form-item>
                 </div>
@@ -38,9 +54,10 @@
                     <div class="downBox">
                         <p>用户等级：<span>{{ item.user_rank }}</span></p>
                         <p>魅力等级：<span>{{ item.live_rank }}</span></p>
+                        <p>用户状态：<span>{{ item.statusText ? item.statusText : "无" }}</span></p>
+                        <p>违规信息：<span>{{ item.lineText ? item.lineText : "无" }}</span></p>
                         <p>实名信息：<span>{{ item.real_name ? item.real_name : '无' }}</span></p>
-                        <p>用户状态: <span>{{ item.statusText ? item.statusText : "无" }}</span></p>
-                        <p>公会名称：<span>{{ item.guild_name ? item.guild_name : '无' }}</span></p>
+                        <p>所属公会：<span>{{ item.guild_name ? item.guild_name : '无' }}</span></p>
                         <p>注册时间：<span>{{ item.create_time }}</span></p>
                     </div>
                 </div>
@@ -59,20 +76,26 @@
 // 引入api
 import { getUserReportDeal } from '@/api/videoRoom'
 // 引入api
-import { userList,punishStatus } from '@/api/user'
+import { userList } from '@/api/user'
 // 引入抽屉组件
 import drawer from '@/components/drawer/index'
+// 引入上传组件
+import uploadImg from '@/components/uploadImg/index.vue'
 // 引入api
-import { save } from '@/api/risk'
+import { addUserPunish, saveUserPunish, punishStatus } from '@/api/risk'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 import moment from 'moment'
+// 引入oss
+import { uploadOSS } from '@/utils/oss.js'
 export default {
     components: {
-        drawer
+        drawer,
+        uploadImg
     },
     data() {
         return {
+            fileList: [],
             dialogVisible: false,
             timeList: MAPDATA.DURATION, // 处罚时长
             typeList: MAPDATA.USERPUNISHTYPELIST, // 处罚类型
@@ -123,6 +146,29 @@ export default {
         }
     },
     methods: {
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+            this.ruleForm.img = ''
+        },
+        handlePreview(file) {
+            console.log(file);
+        },
+        handleExceed(files, fileList) {
+            this.$warning(`最大上传一个文件`);
+        },
+        beforeRemove(file, fileList) {
+            return this.$confirm(`确定移除 ${ file.name }？`);
+        },
+        // 上传
+        upLoad(file) {
+            uploadOSS(file.file).then(res => {
+                if(res.url) {
+                    this.ruleForm.img = res.url
+                }
+            }).catch(err => {
+                this.$message.error(err)
+            })
+        },
         numberInput() {
             this.ruleForm.user_number = this.ruleForm.user_number.replace(/[^\d]/g, '')
         },
@@ -153,13 +199,14 @@ export default {
             let res = await punishStatus(formdata)
             if(res.code === 2000) {
                 this.$set(this.userList[0],'statusText',res.data.status)
+                this.$set(this.userList[0],'lineText',res.data.stat)
             }
         },
         // 获取数据
         loadParams(status, row) {
             this.dialogVisible = true
             this.status = status
-            if(status !== 'add') {
+            if(status !== 'add' && status !== 'blocked') {
                 let params = JSON.parse(JSON.stringify(row))
                 if(typeof params.type === 'number') {
                     params.type = [params.type]
@@ -167,10 +214,10 @@ export default {
                 params.ban_duration = params.ban_duration ? params.ban_duration : ''
                 this.$set(this.$data, 'ruleForm', params)
                 this.seeUser()
-            } else if(status === 'add' && row) {
+            } else if(status === 'blocked') {
                 let params = JSON.parse(JSON.stringify(row))
                 let data = {}
-                data.user_number = params.feedback_user_id
+                data.user_number = params.punished_user_number
                 data.ban_duration = null
                 data.remark = ''
                 data.type = []
@@ -188,15 +235,15 @@ export default {
         async submitForm(formName) {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    if(this.status === 'add' && JSON.stringify(this.form) !== '{}') {
+                    if(this.status !== 'add') {
                         let data = { ...this.form, ...this.ruleForm }
                         let s = {
                             id: data.id,
-                            ban_duration: data.ban_duration * 24 * 60 * 60,
-                            reply: data.remark,
+                            ban_duration: data.ban_duration === -1 ? data.ban_duration : data.ban_duration * 24 * 60 * 60,
+                            remark: data.remark,
                             type: data.type
                         }
-                        let res = await getUserReportDeal(s)
+                        let res = await saveUserPunish(s)
                         if(res.code === 2000) {
                             this.$message.success('处理成功')
                             this.dialogVisible = false
@@ -204,7 +251,16 @@ export default {
                         }
                     } else {
                         let params = { ...this.ruleForm }
-                        let res = await save(params)
+                        params.ban_duration = params.ban_duration === -1 ? params.ban_duration : params.ban_duration * 24 * 60 * 60
+                        if(params.img) {
+                            if(params.img.indexOf('.mp4') !== -1) {
+                                params.video_path = params.img
+                            } else {
+                                params.img_path = params.img
+                            }
+                            delete params.img
+                        }
+                        let res = await addUserPunish(params)
                         if(res.code === 2000) {
                             this.$success('添加成功')
                             this.dialogVisible = false
@@ -247,6 +303,9 @@ export default {
 
 <style lang="scss">
 .serviceConfig-userComp-box {
+    .el-upload-list__item-name {
+        width: 240px;
+    }
     .el-select {
         width: 305px;
     }
@@ -271,7 +330,7 @@ export default {
     }
 
     .infoBox {
-        width: 240px;
+        width: 270px;
         box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.15);
         padding: 10px 20px;
         box-sizing: border-box;
@@ -297,9 +356,9 @@ export default {
             }
         }
         .downBox {
-            margin-top: 20px;
+            margin-top: 15px;
             p {
-                line-height: 28px;
+                line-height: 26px;
             }
         }
     }

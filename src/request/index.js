@@ -320,6 +320,14 @@ const request = {
         add: `${HTTPHEADER}/Sensitive/add`, // 敏感词-添加
         screenImgLog: `${HTTPHEADER}/ScreenImgLog/index`, // 图片审核-列表
         review: `${HTTPHEADER}/ScreenImgLog/review`, // 图片审核-操作
+
+        // 用户处罚 - 用户举报二合一
+        UserPunishLog: `${HTTPHEADER}/UserPunishLog`, // 处罚-列表
+        addUserPunish: `${HTTPHEADER}/UserPunishLog/add`, // 处罚 -新增
+        saveUserPunish: `${HTTPHEADER}/UserPunishLog/save`, // 处罚-封禁
+        removeUserPunish: `${HTTPHEADER}/UserPunishLog/remove`, // 处罚-解除
+        passUserPunish: `${HTTPHEADER}/UserPunishLog/pass`, // 处罚-忽略
+        punishStatus: `${HTTPHEADER}/UserPunishLog/punishStatus`, // 用户状态
     },
 
     // 心动速配
