@@ -5,6 +5,7 @@
         :visible.sync="dialogVisible"
         width="730px"
         :before-close="handleClose"
+        :close-on-click-modal="false"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <div class="inputBox">
