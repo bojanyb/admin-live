@@ -153,7 +153,14 @@
 							}
 						},
 						{
-							label: '手机号',
+							label: '注册渠道',
+							width: '110px',
+							render: (h, params) => {
+								return h('span', params.row.phone || '无')
+							}
+						},
+						{
+							label: '安全手机/邮箱',
 							width: '110px',
 							render: (h, params) => {
 								return h('span', params.row.phone || '无')
@@ -217,12 +224,12 @@
 						},
 						{
 							label: '操作',
-							width : '130px',
+							width : '230px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '修改'),
-									// h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.punishFunc(params.row)}}}, '处罚')
+									h('el-button', { props: { type: ''}, on: {click:()=>{this.punishFunc(params.row)}}}, '更改密码')
 								])
 							}
 						}
