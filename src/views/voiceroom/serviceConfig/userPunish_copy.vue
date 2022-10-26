@@ -99,7 +99,7 @@ export default {
                     {
                         label: '时间',
                         prop: 'create_time',
-                        minWidth: '150px'
+                        minWidth: '170px'
                     },
                     {
                         label: '来源',
@@ -110,7 +110,7 @@ export default {
                     },
                     {
                         label: '用户',
-                        minWidth: '100px',
+                        minWidth: '130px',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.punished_user_nickname),
@@ -120,7 +120,7 @@ export default {
                     },
                     {
                         label: '举报类型',
-                        minWidth: '100px',
+                        minWidth: '130px',
                         render: (h, params) => {
                             return h('span', params.row.genre || '- -')
                         }
@@ -144,7 +144,7 @@ export default {
 					},
                     {
                         label: '举报用户',
-                        minWidth: '100px',
+                        minWidth: '130px',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.report_user_nickname),
@@ -162,35 +162,35 @@ export default {
                     },
                     {
                         label: '处罚结果',
-                        minWidth: '100px',
+                        minWidth: '180px',
                         render: (h, params) => {
                             return h('span', params.row.res || '- -')
                         }
                     },
                     {
                         label: '解除时间',
-                        minWidth: '120px',
+                        minWidth: '170px',
                         render: (h, params) => {
                             return h('span', params.row.remove_time || '- -')
                         }
                     },
                     {
                         label: '操作人',
-                        minWidth: '100px',
+                        minWidth: '120px',
                         render: (h, params) => {
                             return h('span', params.row.operator || '- -')
                         }
                     },
                     {
                         label: '备注说明',
-                        minWidth: '100px',
+                        minWidth: '180px',
                         render: (h, params) => {
                             return h('span', params.row.remark || '- -')
                         }
                     },
                     {
                         label: '操作',
-                        minWidth: '180px',
+                        minWidth: '200px',
                         fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
