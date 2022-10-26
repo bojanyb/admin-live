@@ -32,15 +32,13 @@ export default {
         forms() {
             return [
                 {
-                    name: 'status',
-                    type: 'select',
+                    name: 'user_number',
+                    type: 'input',
                     value: '',
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '状态',
-                    placeholder: '请选择',
-                    options: MAPDATA.GUILDAPPLYSTATUSLIST
-                }
+                    label: '用户ID',
+                    isNum: true,
+                    placeholder: '请输入用户ID'
+                },
             ]
         },
         cfgs() {
@@ -89,27 +87,27 @@ export default {
                             return h('span', params.row.contact_way || '无')
                         }
                     },
-                    {
-                        label: '操作',
-                        fixed: 'right',
-                        minWidth: '100px',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('el-button', { props: { type: 'primary'}, style: {
-                                    display: params.row.status === 1 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.clickFunc(params.row.id, 2)}}}, '通过'),
-                                h('el-button', { props: { type: 'danger'}, style: {
-                                    display: params.row.status === 1 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.clickFunc(params.row.id, 3)}}}, '驳回'),
-                                h('el-button', { props: { type: 'success'}, style: {
-                                    display: params.row.status === 2 ? 'unset' : 'none'
-                                }, on: {click:()=>{}}}, '已通过'),
-                                h('el-button', { props: { type: 'danger'}, style: {
-                                    display: params.row.status === 3 ? 'unset' : 'none'
-                                }, on: {click:()=>{}}}, '已拒绝')
-                            ])
-                        }
-                    }
+                    // {
+                    //     label: '操作',
+                    //     fixed: 'right',
+                    //     minWidth: '100px',
+                    //     render: (h, params) => {
+                    //         return h('div', [
+                    //             h('el-button', { props: { type: 'primary'}, style: {
+                    //                 display: params.row.status === 1 ? 'unset' : 'none'
+                    //             }, on: {click:()=>{this.clickFunc(params.row.id, 2)}}}, '通过'),
+                    //             h('el-button', { props: { type: 'danger'}, style: {
+                    //                 display: params.row.status === 1 ? 'unset' : 'none'
+                    //             }, on: {click:()=>{this.clickFunc(params.row.id, 3)}}}, '驳回'),
+                    //             h('el-button', { props: { type: 'success'}, style: {
+                    //                 display: params.row.status === 2 ? 'unset' : 'none'
+                    //             }, on: {click:()=>{}}}, '已通过'),
+                    //             h('el-button', { props: { type: 'danger'}, style: {
+                    //                 display: params.row.status === 3 ? 'unset' : 'none'
+                    //             }, on: {click:()=>{}}}, '已拒绝')
+                    //         ])
+                    //     }
+                    // }
                 ]
             }
         }
@@ -125,7 +123,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                status: s.status
+                user_number: s.user_number
             }
         },
         // 重置
