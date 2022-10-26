@@ -2,7 +2,7 @@
     <div class="roomBgEdit-box">
         <drawer 
         size="470px"
-        title="修改房间直播信息"
+        title="修改房间背景图信息"
         ref="drawer"
         :isShowUpdate="true"
         @cancel="cancel"

@@ -134,6 +134,14 @@
 							}
 						},
 						{
+							label: '昨日流水',
+							render: (h, params) => {
+								return h('div', [
+									h('span', (params.row.yestoday_flow  ? params.row.yestoday_flow : 0) + '喵粮'),
+								])
+							}
+						},
+						{
 							label: '本周流水',
 							render: (h, params) => {
 								return h('div', [

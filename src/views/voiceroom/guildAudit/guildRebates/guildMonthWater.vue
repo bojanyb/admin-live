@@ -95,7 +95,7 @@
 						render: (h, params) => {
 							let start_time = params.row.time_start ? timeFormat(params.row.time_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
 							let end_time = params.row.time_end ? timeFormat(params.row.time_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
-							return h('span', `${timeFormat(params.row.time_start, 'YYYY', true)}年第${params.row.now}月（${start_time}至${end_time}）`)
+							return h('span', `${timeFormat(params.row.time_start, 'YYYY', true)}年第${timeFormat(start_time, 'MM')}月（${start_time}至${end_time}）`)
 						}
 					},
 					{
@@ -117,7 +117,7 @@
 						label: '流水',
 						minWidth: '120px',
 						render: (h, params) => {
-							return h('span', this.form.status === 2 ? params.row.week_flow + '钻石' : params.row.flow + '钻石')
+							return h('span', params.row.flow + '钻石')
 						}
 					},
 					{
@@ -204,7 +204,7 @@
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
-					type: 2,
+					type: 3,
 					status: s.status,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0

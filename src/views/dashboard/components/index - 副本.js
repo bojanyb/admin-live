@@ -21,15 +21,15 @@ const dashboardList = [
         children: [
             {
                 tit: '平台总流水:',
-                val: 'platform_total_flow'
+                val: 'gift_total'
             },
             {
                 tit: '礼物总分成:',
-                val: 'platform_gift_income'
+                val: 'commission'
             },
             {
                 tit: '商城总收益:',
-                val: 'goods_income'
+                val: 'buy_goods'
             }
         ]
     },
@@ -37,15 +37,15 @@ const dashboardList = [
         children: [
             {
                 tit: '背包总价值:',
-                val: 'bag_total_value'
+                val: 'ac_out'
             },
             {
                 tit: '背包总流水:',
-                val: 'bag_total_flow'
+                val: 'ac_in'
             },
             {
                 tit: '背包余价值:',
-                val: 'bag_left_value'
+                val: 'gift_bag_value'
             }
         ]
     },
@@ -53,17 +53,17 @@ const dashboardList = [
         children: [
             {
                 tit: '充值总数:',
-                val: 'total_top_up_diamond',
+                val: 'total_in',
                 unit: '（钻石）'
             },
             {
                 tit: '充值笔数:',
-                val: 'total_top_up_count',
+                val: 'recharge_num',
                 unit: '（笔）'
             },
             {
                 tit: '成功笔数:',
-                val: 'total_success_top_up_count',
+                val: 'recharge_succeed_num',
                 unit: '（笔）'
             }
         ]
@@ -77,12 +77,12 @@ const dashboardList = [
             },
             {
                 tit: '提现总数:',
-                val: 'has_cash',
+                val: 'total_cash',
                 unit: '（喵粮）'
             },
             {
                 tit: '手续费:',
-                val: 'has_cash_rate',
+                val: 'total_rate',
                 unit: '（喵粮）'
             }
         ]
