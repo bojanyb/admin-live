@@ -924,12 +924,64 @@ const USERSTATUSLIST = [
 // 用户列表 - 用户等级
 const USERRANKLIST = [
     {
+        name: '全部',
+        value: ''
+    },
+    {
         name: '10-29',
-        value: 1
+        value: '10~29'
     },
     {
         name: '30以上',
-        value: 3
+        value: '>=30'
+    }
+]
+
+// 用户列表 - 魅力等级
+const USERCHARMLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '10-29',
+        value: '10~29'
+    },
+    {
+        name: '30以上',
+        value: '>=30'
+    }
+]
+
+// 用户列表 - 注册类型
+const USERREGISTERTYPELIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '苹果',
+        value: 'apple'
+    },
+    {
+        name: '抖音',
+        value: 'dy'
+    },
+    {
+        name: 'QQ',
+        value: 'qq'
+    },
+    {
+        name: '微博',
+        value: 'weibo'
+    },
+    {
+        name: '微信',
+        value: 'wx'
+    },
+    {
+        name: '手机号',
+        value: 'phone'
     }
 ]
 
@@ -2251,5 +2303,7 @@ export default {
     ORDERREFUNDSTATUSLIST,
     DISSOLUTIONTYPELISTCOPY,
     USERPUNIRESETLISTCOPY,
-    USERRANKLIST
+    USERRANKLIST,
+    USERCHARMLIST,
+    USERREGISTERTYPELIST
 }
