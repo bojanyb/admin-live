@@ -40,7 +40,7 @@
                             <div slot="tip" class="el-upload__tip">只能上传jpg/png/mp4文件</div>
                         </el-upload>
                     </el-form-item>
-                    <el-form-item label="重置资料" prop="reset">
+                    <el-form-item label="重置资料" prop="reset" v-if="status !== 'blocked'">
                         <el-select v-model="ruleForm.reset" multiple placeholder="请选择" :disabled="disabled">
                             <el-option v-for="item in resetList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
