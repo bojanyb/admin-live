@@ -5,6 +5,7 @@
         :visible.sync="dialogVisible"
         width="730px"
         :before-close="handleClose"
+        :close-on-click-modal="false"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <div class="inputBox">
@@ -43,7 +44,7 @@
                         <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
                     </el-form-item>
                 </div>
-                <div class="infoBox" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
+                <div class="infoBox" :class="{'infoBox_hign': status === 'blocked'}" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
                     <div class="upBox">
                         <img :src="item.face" alt="">
                         <div class="rightBox">
@@ -335,7 +336,7 @@ export default {
         padding: 10px 20px;
         box-sizing: border-box;
         margin-left: 20px;
-        height: 270px;
+        height: 370px;
         .upBox {
             display: flex;
             align-items: center;
@@ -355,6 +356,16 @@ export default {
                 }
             }
         }
+        .downBox {
+            margin-top: 30px;
+            p {
+                line-height: 32px;
+            }
+        }
+    }
+
+    .infoBox_hign {
+        height: 270px;
         .downBox {
             margin-top: 15px;
             p {
