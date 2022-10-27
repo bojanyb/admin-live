@@ -209,7 +209,7 @@
 							label: '注册渠道',
 							width: '110px',
 							render: (h, params) => {
-								return h('span', params.row.channel || '无')
+								return h('span', params.row.register_type || '无')
 							}
 						},
 						{
