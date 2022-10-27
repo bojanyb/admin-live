@@ -116,7 +116,7 @@ export default {
                     },
                     {
                         label: '用户',
-                        minWidth: '130px',
+                        minWidth: '160px',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.punished_user_nickname),
@@ -129,7 +129,8 @@ export default {
                         minWidth: '130px',
                         render: (h, params) => {
                             return h('span', params.row.genre || '- -')
-                        }
+                        },
+                        showOverFlow: true
                     },
                     {
                         label: '举报说明',
@@ -150,7 +151,7 @@ export default {
 					},
                     {
                         label: '举报用户',
-                        minWidth: '130px',
+                        minWidth: '160px',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.report_user_nickname),
@@ -192,7 +193,8 @@ export default {
                         minWidth: '180px',
                         render: (h, params) => {
                             return h('span', params.row.remark || '- -')
-                        }
+                        },
+                        showOverFlow: true
                     },
                     {
                         label: '操作',
