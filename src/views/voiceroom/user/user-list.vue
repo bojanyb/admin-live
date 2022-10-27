@@ -21,6 +21,8 @@
 
 <script>
 	import { getUserStatisticalShow } from '@/api/videoRoom'
+	// 引入api
+	import { addRichUser } from '@/api/user.js'
 	// 卡列表组件
 	import bindStuck from './components/bindStuck.vue'
 	// 引入更改密码组件
@@ -101,16 +103,16 @@
 						placeholder: '请选择',
 						options: MAPDATA.USERRANKLIST
 					},
-					{
-						name: 'live_rank',
-						type: 'select',
-						value: '',
-						keyName: 'value',
-						optionLabel: 'name',
-						label: '魅力等级',
-						placeholder: '请选择',
-						options: MAPDATA.USERCHARMLIST
-					},
+					// {
+					// 	name: 'live_rank',
+					// 	type: 'select',
+					// 	value: '',
+					// 	keyName: 'value',
+					// 	optionLabel: 'name',
+					// 	label: '魅力等级',
+					// 	placeholder: '请选择',
+					// 	options: MAPDATA.USERCHARMLIST
+					// },
 					{
 						name: 'register_type',
 						type: 'select',
@@ -223,7 +225,11 @@
 							label: '已联系',
 							width: '110px',
 							render: (h, params) => {
-								return h('el-checkbox', { on: {change:(v)=>{console.log(v, 'v---------2020')}} }, '是否联系' )
+								if(!params.row.maintain_admin) {
+									return h('el-checkbox', { on: {change:(v)=>{this.relationFunc(params.row.id)}} }, '是否联系' )
+								} else {
+									return h('span', params.row.maintain_admin)
+								}
 							}
 						},
 						{
@@ -298,6 +304,14 @@
 			}
 		},
 		methods: {
+			// 设置维护人
+			async relationFunc(user_id) {
+				let res = await addRichUser({ user_id })
+				if(res.code === 2000) {
+					this.$success('设置成功')
+					this.getList()
+				}
+			},
 			// 配置参数
 			beforeSearch(params) {
 				let s = { ...this.searchParams, ...this.dateTimeParams }

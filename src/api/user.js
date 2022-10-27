@@ -172,6 +172,15 @@ export function updateLoginPwd(data) {
   })
 }
 
+// 添加财富用户
+export function addRichUser(data) {
+  return request({
+    url: api.user.addRichUser,
+    method: 'post',
+    data
+  })
+}
+
 
 
 /***********公会v2******************/ 

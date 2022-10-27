@@ -177,6 +177,7 @@ const request = {
         check: `${HTTPHEADER}/Verify/check`, // 审核更换实名
         punishStatus: `${HTTPHEADER}/userPunish/punishStatus`, // 用户状态
         updateLoginPwd: `${HTTPHEADER}/User/updateLoginPwd`, // 更改登录密码
+        addRichUser: `${HTTPHEADER}/User/addRichUser`, // 添加财富用户
     },
     
     // 审核管理
