@@ -220,6 +220,13 @@
 							}
 						},
 						{
+							label: '已联系',
+							width: '110px',
+							render: (h, params) => {
+								return h('el-checkbox', { on: {change:(v)=>{console.log(v, 'v---------2020')}} }, '是否联系' )
+							}
+						},
+						{
 							label: '状态',
 							width: '95px',
 							render: (h, params) => {
