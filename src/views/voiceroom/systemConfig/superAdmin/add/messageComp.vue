@@ -33,7 +33,7 @@ export default {
             rules: {
                 kv_value: [
                     { required: true, message: '请输入文案', trigger: 'blur' },
-                    { min: 1, max: 30, message: '文案最大限制输入30个字符', trigger: 'blur' }
+                    { min: 1, max: 99, message: '文案最大限制输入99个字符', trigger: 'blur' }
                 ]
             }
         };
