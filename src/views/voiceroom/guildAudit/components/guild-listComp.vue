@@ -162,7 +162,7 @@
 							label: '本周流水',
 							render: (h, params) => {
 								return h('div', [
-									h('span', params.row.today_flow + '喵粮'),
+									h('span', params.row.week_flow + '喵粮'),
 								])
 							}
 						},
@@ -170,7 +170,7 @@
 							label: '本月流水',
 							render: (h, params) => {
 								return h('div', [
-									h('span', params.row.today_flow + '喵粮'),
+									h('span', params.row.month_flow + '喵粮'),
 								])
 							}
 						},
