@@ -921,6 +921,70 @@ const USERSTATUSLIST = [
     }
 ]
 
+// 用户列表 - 用户等级
+const USERRANKLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '10-29',
+        value: '10~29'
+    },
+    {
+        name: '30以上',
+        value: '>=30'
+    }
+]
+
+// 用户列表 - 魅力等级
+const USERCHARMLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '10-29',
+        value: '10~29'
+    },
+    {
+        name: '30以上',
+        value: '>=30'
+    }
+]
+
+// 用户列表 - 注册类型
+const USERREGISTERTYPELIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '苹果',
+        value: 'apple'
+    },
+    {
+        name: '抖音',
+        value: 'dy'
+    },
+    {
+        name: 'QQ',
+        value: 'qq'
+    },
+    {
+        name: '微博',
+        value: 'weibo'
+    },
+    {
+        name: '微信',
+        value: 'wx'
+    },
+    {
+        name: '手机号',
+        value: 'phone'
+    }
+]
+
 // 用户音乐上传列表 - 筛选查看
 const USERMUSICUPLIST = [
     {
@@ -2238,5 +2302,8 @@ export default {
     RISKMANAGEMENTMESSAGENUMBERLIST,
     ORDERREFUNDSTATUSLIST,
     DISSOLUTIONTYPELISTCOPY,
-    USERPUNIRESETLISTCOPY
+    USERPUNIRESETLISTCOPY,
+    USERRANKLIST,
+    USERCHARMLIST,
+    USERREGISTERTYPELIST
 }

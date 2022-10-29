@@ -21,6 +21,8 @@
 
 <script>
 	import { getUserStatisticalShow } from '@/api/videoRoom'
+	// 引入api
+	import { addRichUser } from '@/api/user.js'
 	// 卡列表组件
 	import bindStuck from './components/bindStuck.vue'
 	// 引入更改密码组件
@@ -90,6 +92,53 @@
 						value: '',
 						label: '注册设备',
 						placeholder: '请输入注册设备'
+					},
+					{
+						name: 'user_rank',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '用户等级',
+						placeholder: '请选择',
+						options: MAPDATA.USERRANKLIST
+					},
+					// {
+					// 	name: 'live_rank',
+					// 	type: 'select',
+					// 	value: '',
+					// 	keyName: 'value',
+					// 	optionLabel: 'name',
+					// 	label: '魅力等级',
+					// 	placeholder: '请选择',
+					// 	options: MAPDATA.USERCHARMLIST
+					// },
+					{
+						name: 'register_type',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '注册类型',
+						placeholder: '请选择',
+						options: MAPDATA.USERREGISTERTYPELIST
+					},
+					{
+						name: 'dateTimeParams',
+						type: 'datePicker',
+						dateType: 'datetimerange',
+						format: "yyyy-MM-dd HH:mm:ss",
+						label: '时间选择',
+						value: '',
+						handler: {
+							change: v => {
+								this.emptyDateTime()
+								this.setDateTime(v)
+							},
+							selectChange: (v, key) => {
+								this.emptyDateTime()
+							}
+						}
 					}
 				]
 			},
@@ -162,7 +211,7 @@
 							label: '注册渠道',
 							width: '110px',
 							render: (h, params) => {
-								return h('span', params.row.channel || '无')
+								return h('span', params.row.register_type || '无')
 							}
 						},
 						{
@@ -170,6 +219,17 @@
 							width: '110px',
 							render: (h, params) => {
 								return h('span', params.row.safe_number || '无')
+							}
+						},
+						{
+							label: '已联系',
+							width: '110px',
+							render: (h, params) => {
+								if(!params.row.maintain_admin) {
+									return h('el-checkbox', { on: {change:(v)=>{this.relationFunc(params.row.id)}} }, '是否联系' )
+								} else {
+									return h('span', params.row.maintain_admin)
+								}
 							}
 						},
 						{
@@ -244,25 +304,51 @@
 			}
 		},
 		methods: {
+			// 设置维护人
+			async relationFunc(user_id) {
+				let res = await addRichUser({ user_id })
+				if(res.code === 2000) {
+					this.$success('设置成功')
+					this.getList()
+				}
+			},
 			// 配置参数
 			beforeSearch(params) {
-				let s = { ...this.searchParams }
+				let s = { ...this.searchParams, ...this.dateTimeParams }
 				return {
 					page: params.page,
 					pagesize: params.size,
 					user_number: s.user_number,
 					nickname: s.nickname,
 					phone: s.phone,
-					reg_device_id: s.reg_device_id
+					reg_device_id: s.reg_device_id,
+					start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
+                	end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
+					user_rank: s.user_rank,
+					live_rank: s.live_rank,
+					register_type: s.register_type
 				}
 			},
 			// 刷新列表
 			getList() {
 				this.$refs.tableList.getData()
 			},
+			// 设置时间段
+			setDateTime(arr) {
+				const date = arr ? {
+					start_time: arr[0],
+					end_time: arr[1]
+				} : {}
+				this.$set(this, 'dateTimeParams', date)
+			},
+			// 清空日期选择
+			emptyDateTime() {
+				this.dateTimeParams = {}
+			},
 			// 重置
 			reset() {
 				this.searchParams = {}
+				this.dateTimeParams = {}
 				this.getList()
 			},
 			// 查询

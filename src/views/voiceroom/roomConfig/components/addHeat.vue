@@ -12,7 +12,7 @@
         :disabled="disabled">
             <el-form slot="body" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <el-form-item label="房间ID" prop="room_number">
-                    <el-input v-model="ruleForm.room_number" :disabled="disabled"></el-input>
+                    <el-input v-model="ruleForm.room_number" :disabled="disabled" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
                 </el-form-item>
                 <el-form-item label="增加热度" prop="hot_value">
                     <el-input v-model="ruleForm.hot_value" :disabled="disabled"></el-input>
@@ -61,7 +61,7 @@ export default {
             oldParams: {}, // 老数据
             rules: {
                 room_number: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' },
+                    { required: true, message: '请输入房间ID', trigger: 'blur' },
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
                 hot_value: [
