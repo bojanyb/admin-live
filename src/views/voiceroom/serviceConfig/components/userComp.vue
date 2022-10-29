@@ -19,13 +19,13 @@
                             <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="重置资料" prop="reset">
-                        <el-select v-model="ruleForm.reset" multiple placeholder="请选择" :disabled="disabled">
+                    <el-form-item label="重置资料" prop="reset" v-if="!ruleForm.ban_duration">
+                        <el-select v-model="ruleForm.reset" multiple placeholder="请选择" :disabled="disabled" clearable>
                             <el-option v-for="item in resetList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="处罚时间" prop="ban_duration">
-                        <el-select v-model="ruleForm.ban_duration" placeholder="请选择" :disabled="disabled">
+                    <el-form-item label="处罚时间" prop="ban_duration" v-if="ruleForm.reset.length <= 0">
+                        <el-select v-model="ruleForm.ban_duration" placeholder="请选择" :disabled="disabled" clearable>
                             <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
@@ -49,7 +49,7 @@
                         <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
                     </el-form-item>
                 </div>
-                <div class="infoBox" :class="{'infoBox_hign': status === 'blocked'}" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
+                <div class="infoBox" :class="[{'infoBox_hign': status === 'blocked'},{'infoBox_hign_copy': status !== 'blocked' && (ruleForm.reset.length > 0 || ruleForm.ban_duration)},{'infoBox_hign_copy_box': status === 'blocked' && (ruleForm.reset.length > 0 || ruleForm.ban_duration)}]" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
                     <div class="upBox">
                         <img :src="item.face" alt="">
                         <div class="rightBox">
@@ -67,7 +67,7 @@
                         <p>注册时间：<span>{{ item.create_time }}</span></p>
                     </div>
                 </div>
-                <div class="infoBox emptyBox" v-if="userList.length <= 0">暂无数据</div>
+                <div class="infoBox emptyBox" :class="[{'infoBox_hign_copy': ruleForm.reset.length > 0 || ruleForm.ban_duration}]" v-if="userList.length <= 0">暂无数据</div>
                 
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -129,7 +129,7 @@ export default {
                     { required: false, message: '请选择重置资料', trigger: 'change' }
                 ],
                 ban_duration: [
-                    { required: true, message: '请选择处罚时间', trigger: 'change' }
+                    { required: false, message: '请选择处罚时间', trigger: 'change' }
                 ],
                 remark: [
                     { required: true, message: '请输入处罚备注', trigger: 'blur' }
@@ -273,7 +273,6 @@ export default {
                         }
                     } else {
                         let params = { ...this.ruleForm }
-                        params.ban_duration = params.ban_duration
                         if(params.img) {
                             if(params.img.indexOf('.mp4') !== -1) {
                                 params.video_path = params.img
@@ -281,6 +280,12 @@ export default {
                                 params.img_path = params.img
                             }
                             delete params.img
+                        }
+                        if(params.reset && params.reset.length > 0) {
+                            params.ban_duration = 900
+                        } else {
+                            params.ban_duration = params.ban_duration
+                            delete params.reset
                         }
                         let res = await addUserPunish(params)
                         if(res.code === 2000) {
@@ -391,6 +396,26 @@ export default {
             margin-top: 30px;
             p {
                 line-height: 30px;
+            }
+        }
+    }
+
+    .infoBox_hign_copy {
+        height: 370px;
+        .downBox {
+            margin-top: 30px;
+            p {
+                line-height: 30px;
+            }
+        }
+    }
+
+    .infoBox_hign_copy_box {
+        height: 270px;
+        .downBox {
+            margin-top: 10px;
+            p {
+                line-height: 26px;
             }
         }
     }
