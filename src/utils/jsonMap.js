@@ -373,7 +373,7 @@ const DURATIONCOPY = [
     },
     {
         value: 3600,
-        name: '1小时'
+        name: '60分钟'
     },
     {
         value: 86400,
@@ -2090,6 +2090,45 @@ const USERPUNISHTYPELISTCOPY = [
     }
 ]
 
+// 用户处罚 - 处罚类型 - 列表
+const USERPUNISHTYPELISTCOPYTWO = [
+    {
+        name: '封号',
+        value: 1,
+        disabled: false
+    },
+    {
+        name: '封设备',
+        value: 2,
+        disabled: false
+    },
+    {
+        name: '封IP',
+        value: 3,
+        disabled: false
+    },
+    {
+        name: '封实名',
+        value: 4,
+        disabled: false
+    },
+    {
+        name: '重置昵称',
+        value: 11,
+        disabled: false
+    },
+    {
+        name: '重置头像',
+        value: 12,
+        disabled: false
+    },
+    {
+        name: '重置签名',
+        value: 13,
+        disabled: false
+    }
+]
+
 // 用户处罚 - 状态
 const USERPUNISHSTATUSLIST = [
     {
@@ -2310,6 +2349,7 @@ export default {
     SERVICEAUDITTYPELIST,
     USERPUNISHTYPELIST,
     USERPUNISHTYPELISTCOPY,
+    USERPUNISHTYPELISTCOPYTWO,
     USERPUNISHSTATUSLIST,
     USERPUNISHSTATUSLISTCOPY,
     GIFTSHOWTYPELIST,

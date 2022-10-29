@@ -19,12 +19,12 @@
                             <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="重置资料" prop="reset" v-if="!ruleForm.ban_duration">
+                    <!-- <el-form-item label="重置资料" prop="reset" v-if="!ruleForm.ban_duration">
                         <el-select v-model="ruleForm.reset" multiple placeholder="请选择" :disabled="disabled" clearable>
                             <el-option v-for="item in resetList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
-                    </el-form-item>
-                    <el-form-item label="处罚时间" prop="ban_duration" v-if="ruleForm.reset.length <= 0">
+                    </el-form-item> -->
+                    <el-form-item label="处罚时间" prop="ban_duration" v-if="isIncludeReset">
                         <el-select v-model="ruleForm.ban_duration" placeholder="请选择" :disabled="disabled" clearable>
                             <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
                         </el-select>
@@ -49,7 +49,7 @@
                         <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
                     </el-form-item>
                 </div>
-                <div class="infoBox" :class="[{'infoBox_hign': status === 'blocked'},{'infoBox_hign_copy': status !== 'blocked' && (ruleForm.reset.length > 0 || ruleForm.ban_duration)},{'infoBox_hign_copy_box': status === 'blocked' && (ruleForm.reset.length > 0 || ruleForm.ban_duration)}]" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
+                <div class="infoBox" :class="[{'infoBox_hign': status === 'blocked' && isIncludeReset},{'infoBox_hign_copy_box': status !== 'blocked' && isIncludeReset},{'infoBox_hign_copy': status !== 'blocked' && !isIncludeReset},{'infoBox_hign_copy_box_two': status === 'blocked' && !isIncludeReset}]" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
                     <div class="upBox">
                         <img :src="item.face" alt="">
                         <div class="rightBox">
@@ -67,7 +67,7 @@
                         <p>注册时间：<span>{{ item.create_time }}</span></p>
                     </div>
                 </div>
-                <div class="infoBox emptyBox" :class="[{'infoBox_hign_copy': ruleForm.reset.length > 0 || ruleForm.ban_duration}]" v-if="userList.length <= 0">暂无数据</div>
+                <div class="infoBox emptyBox" :class="[{'infoBox_hign_copy': !isIncludeReset}]" v-if="userList.length <= 0">暂无数据</div>
                 
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -104,7 +104,7 @@ export default {
             fileList: [],
             dialogVisible: false,
             timeList: MAPDATA.DURATIONCOPY, // 处罚时长
-            typeList: MAPDATA.USERPUNISHTYPELIST, // 处罚类型
+            // typeList: MAPDATA.USERPUNISHTYPELISTCOPYTWO, // 处罚类型
             resetList: MAPDATA.USERPUNIRESETLISTCOPY,
             status: 'add',
             userList: [], // 查询用户
@@ -129,7 +129,7 @@ export default {
                     { required: false, message: '请选择重置资料', trigger: 'change' }
                 ],
                 ban_duration: [
-                    { required: false, message: '请选择处罚时间', trigger: 'change' }
+                    { required: true, message: '请选择处罚时间', trigger: 'change' }
                 ],
                 remark: [
                     { required: true, message: '请输入处罚备注', trigger: 'blur' }
@@ -154,6 +154,45 @@ export default {
                 return true
             }
             return false
+        },
+        isIncludeReset() { // 是否包含重置资料
+            let arr = JSON.parse(JSON.stringify(MAPDATA.USERPUNIRESETLISTCOPY))
+            let isShow = true
+            arr.forEach(item => {
+                if(this.ruleForm.type.indexOf(item.value) !== -1) {
+                    isShow = false
+                }
+            })
+            console.log(isShow, 'isShow----------------2020')
+            return isShow
+        },
+        typeList() {
+            let arr = JSON.parse(JSON.stringify(MAPDATA.USERPUNISHTYPELISTCOPYTWO))
+            let arr1 = this.ruleForm.type.filter(item => { return item > 10 })
+            let arr2 = arr.map(item => {
+                let params = {
+                    name: item.name,
+                    value: item.value,
+                    disabled: false
+                }
+                if(this.ruleForm.type.length > 0) {
+                    if(arr1.length > 0) {
+                        if(item.value < 10) {
+                            params.disabled = true
+                        } else {
+                            params.disabled = false
+                        }
+                    } else {
+                        if(item.value > 10) {
+                            params.disabled = true
+                        } else {
+                            params.disabled = false
+                        }
+                    }
+                }
+                return params
+            })
+            return arr2
         }
     },
     methods: {
@@ -281,10 +320,17 @@ export default {
                             }
                             delete params.img
                         }
-                        if(params.reset && params.reset.length > 0) {
+                        let arr = JSON.parse(JSON.stringify(params.type))
+                        params.reset = arr.filter(item => { return item > 10 })
+                        params.type = arr.filter(item => { return item < 10 })
+                        if(params.type.length > 0 && params.reset.length > 0) {
                             params.ban_duration = 900
-                        } else {
-                            params.ban_duration = params.ban_duration
+                        }
+                        if(params.type.length <= 0) {
+                            delete params.type
+                            delete params.ban_duration
+                        }
+                        if(params.reset.length <= 0) {
                             delete params.reset
                         }
                         let res = await addUserPunish(params)
@@ -362,7 +408,7 @@ export default {
         padding: 10px 20px;
         box-sizing: border-box;
         margin-left: 20px;
-        height: 430px;
+        height: 370px;
         .upBox {
             display: flex;
             align-items: center;
@@ -391,17 +437,17 @@ export default {
     }
 
     .infoBox_hign {
-        height: 330px;
+        height: 270px;
         .downBox {
-            margin-top: 30px;
+            margin-top: 10px;
             p {
-                line-height: 30px;
+                line-height: 26px;
             }
         }
     }
 
     .infoBox_hign_copy {
-        height: 370px;
+        height: 311px;
         .downBox {
             margin-top: 30px;
             p {
@@ -411,11 +457,21 @@ export default {
     }
 
     .infoBox_hign_copy_box {
-        height: 270px;
+        height: 370px;
         .downBox {
-            margin-top: 10px;
+            margin-top: 30px;
             p {
-                line-height: 26px;
+                line-height: 32px;
+            }
+        }
+    }
+
+    .infoBox_hign_copy_box_two {
+        height: 211px;
+        .downBox {
+            margin-top: 5px;
+            p {
+                line-height: 20px;
             }
         }
     }
