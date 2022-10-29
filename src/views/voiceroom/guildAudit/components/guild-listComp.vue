@@ -88,7 +88,7 @@
 					columns: [
 						{
 							label: '创建时间',
-							minWidth: '130px',
+							minWidth: '105px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
@@ -129,7 +129,7 @@
 							label: '今日流水',
 							render: (h, params) => {
 								return h('div', [
-									h('span', params.row.today_flow + '喵粮'),
+									h('span', params.row.today_flow + '钻石'),
 								])
 							}
 						},
@@ -137,7 +137,7 @@
 							label: '昨日流水',
 							render: (h, params) => {
 								return h('div', [
-									h('span', (params.row.yestoday_flow  ? params.row.yestoday_flow : 0) + '喵粮'),
+									h('span', (params.row.yestoday_flow  ? params.row.yestoday_flow : 0) + '钻石'),
 								])
 							}
 						},
@@ -145,7 +145,7 @@
 							label: '本周流水',
 							render: (h, params) => {
 								return h('div', [
-									h('span', params.row.today_flow + '喵粮'),
+									h('span', params.row.today_flow + '钻石'),
 								])
 							}
 						},
@@ -153,12 +153,13 @@
 							label: '本月流水',
 							render: (h, params) => {
 								return h('div', [
-									h('span', params.row.today_flow + '喵粮'),
+									h('span', params.row.today_flow + '钻石'),
 								])
 							}
 						},
 						{
 							label: '公会状态',
+							minWidth: '60px',
 							render: (h, params) => {
 								return h('div', [
 									h('span',{style: {display :  params.row.status == 1 ? 'unset' : 'none',color: params.row.status == 1 ? '#67C23A' : ''}}, params.row.status == 1 ? '正常' : ''),
@@ -169,7 +170,7 @@
 						},
 						{
 							label: '操作',
-							minWidth: '320px',
+							minWidth: '265px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [

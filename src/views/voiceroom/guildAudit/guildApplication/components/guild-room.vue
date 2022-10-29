@@ -173,6 +173,7 @@
 								type: 'success',
 								message: '新增成功!'
 							});
+							this.isAdd = false
 							this.getList()
 						}
 					}
