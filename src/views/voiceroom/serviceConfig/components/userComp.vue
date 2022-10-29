@@ -19,6 +19,11 @@
                             <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item label="重置资料" prop="reset">
+                        <el-select v-model="ruleForm.reset" multiple placeholder="请选择" :disabled="disabled">
+                            <el-option v-for="item in resetList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item label="处罚时间" prop="ban_duration">
                         <el-select v-model="ruleForm.ban_duration" placeholder="请选择" :disabled="disabled">
                             <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
@@ -39,11 +44,6 @@
                             <el-button size="small" type="primary">点击上传</el-button>
                             <div slot="tip" class="el-upload__tip">只能上传jpg/png/mp4文件</div>
                         </el-upload>
-                    </el-form-item>
-                    <el-form-item label="重置资料" prop="reset">
-                        <el-select v-model="ruleForm.reset" multiple placeholder="请选择" :disabled="disabled">
-                            <el-option v-for="item in resetList" :key="item.value" :label="item.name" :value="item.value"></el-option>
-                        </el-select>
                     </el-form-item>
                     <el-form-item label="备注说明" prop="remark">
                         <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
@@ -103,7 +103,7 @@ export default {
         return {
             fileList: [],
             dialogVisible: false,
-            timeList: MAPDATA.DURATION, // 处罚时长
+            timeList: MAPDATA.DURATIONCOPY, // 处罚时长
             typeList: MAPDATA.USERPUNISHTYPELIST, // 处罚类型
             resetList: MAPDATA.USERPUNIRESETLISTCOPY,
             status: 'add',
@@ -260,7 +260,7 @@ export default {
                         let data = { ...this.form, ...this.ruleForm }
                         let s = {
                             id: data.id,
-                            ban_duration: data.ban_duration === -1 ? data.ban_duration : data.ban_duration * 24 * 60 * 60,
+                            ban_duration: data.ban_duration,
                             remark: data.remark,
                             type: data.type,
                             reset: data.reset
@@ -273,7 +273,7 @@ export default {
                         }
                     } else {
                         let params = { ...this.ruleForm }
-                        params.ban_duration = params.ban_duration === -1 ? params.ban_duration : params.ban_duration * 24 * 60 * 60
+                        params.ban_duration = params.ban_duration
                         if(params.img) {
                             if(params.img.indexOf('.mp4') !== -1) {
                                 params.video_path = params.img

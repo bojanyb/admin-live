@@ -361,6 +361,46 @@ const DURATION = [
     }
 ]
 
+// 赠送时长 - 第二版
+const DURATIONCOPY = [
+    {
+        value: 900,
+        name: '15分钟'
+    },
+    {
+        value: 1800,
+        name: '30分钟'
+    },
+    {
+        value: 3600,
+        name: '1小时'
+    },
+    {
+        value: 86400,
+        name: '1天'
+    },
+    {
+        value: 259200,
+        name: '3天'
+    },
+    {
+        value: 604800,
+        name: '7天'
+    },
+    {
+        value: 1296000,
+        name: '15天'
+    },
+    {
+        value: 2592000,
+        name: '30天'
+    },
+    {
+        value: -1,
+        name: '永久'
+    }
+]
+
 // 优先推荐
 const PRIORITYGIVE = [
     {
@@ -2305,5 +2345,6 @@ export default {
     USERPUNIRESETLISTCOPY,
     USERRANKLIST,
     USERCHARMLIST,
-    USERREGISTERTYPELIST
+    USERREGISTERTYPELIST,
+    DURATIONCOPY
 }
