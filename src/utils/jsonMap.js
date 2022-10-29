@@ -1862,6 +1862,10 @@ const CATEGORYBUSINESSTYPELIST = [
 // 进房记录 - 进房类型
 const JOINHOUSETYPELIST = [
     {
+        name: '全部',
+        value: -1
+    },
+    {
         name: '未知类型',
         value: 0
     },
@@ -1925,6 +1929,10 @@ const JOINHOUSETYPELIST = [
 
 // 进房记录 - 是否首次进房
 const ISFIRSTJOINHOUSELIST = [
+    {
+        name: '全部',
+        value: -1
+    },
     {
         name: '是',
         value: 1

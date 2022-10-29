@@ -24,7 +24,7 @@
                             <el-option v-for="item in resetList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item> -->
-                    <el-form-item label="处罚时间" prop="ban_duration" v-if="isIncludeReset">
+                    <el-form-item label="处罚时间" prop="ban_duration" v-if="!isIncludeReset">
                         <el-select v-model="ruleForm.ban_duration" placeholder="请选择" :disabled="disabled" clearable>
                             <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
                         </el-select>
@@ -49,7 +49,7 @@
                         <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
                     </el-form-item>
                 </div>
-                <div class="infoBox" :class="[{'infoBox_hign': status === 'blocked' && isIncludeReset},{'infoBox_hign_copy_box': status !== 'blocked' && isIncludeReset},{'infoBox_hign_copy': status !== 'blocked' && !isIncludeReset},{'infoBox_hign_copy_box_two': status === 'blocked' && !isIncludeReset}]" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
+                <div class="infoBox" :class="[{'infoBox_hign': status === 'blocked' && !isIncludeReset},{'infoBox_hign_copy_box': status !== 'blocked' && !isIncludeReset},{'infoBox_hign_copy': status !== 'blocked' && isIncludeReset},{'infoBox_hign_copy_box_two': status === 'blocked' && isIncludeReset}]" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
                     <div class="upBox">
                         <img :src="item.face" alt="">
                         <div class="rightBox">
@@ -67,7 +67,7 @@
                         <p>注册时间：<span>{{ item.create_time }}</span></p>
                     </div>
                 </div>
-                <div class="infoBox emptyBox" :class="[{'infoBox_hign_copy': !isIncludeReset}]" v-if="userList.length <= 0">暂无数据</div>
+                <div class="infoBox emptyBox" :class="[{'infoBox_hign_copy': isIncludeReset}]" v-if="userList.length <= 0">暂无数据</div>
                 
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -156,17 +156,20 @@ export default {
             return false
         },
         isIncludeReset() { // 是否包含重置资料
-            let arr = JSON.parse(JSON.stringify(MAPDATA.USERPUNIRESETLISTCOPY))
+            let arr = JSON.parse(JSON.stringify(MAPDATA.USERPUNISHSTATUSLISTCOPY))
             let isShow = true
-            arr.forEach(item => {
-                if(this.ruleForm.type.indexOf(item.value) !== -1) {
-                    isShow = false
-                }
-            })
-            console.log(isShow, 'isShow----------------2020')
+            if(this.ruleForm.type.length > 0) {
+                arr.forEach(item => {
+                    if(this.ruleForm.type.indexOf(item.value) !== -1) {
+                        isShow = false
+                    }
+                })
+            } else {
+                isShow = false
+            }
             return isShow
         },
-        typeList() {
+        typeList() { // 处罚类型
             let arr = JSON.parse(JSON.stringify(MAPDATA.USERPUNISHTYPELISTCOPYTWO))
             let arr1 = this.ruleForm.type.filter(item => { return item > 10 })
             let arr2 = arr.map(item => {
@@ -301,8 +304,18 @@ export default {
                             id: data.id,
                             ban_duration: data.ban_duration,
                             remark: data.remark,
-                            type: data.type,
-                            reset: data.reset
+                        }
+                        let arr = JSON.parse(JSON.stringify(data.type))
+                        s.reset = arr.filter(item => { return item > 10 })
+                        s.type = arr.filter(item => { return item < 10 })
+                        if(s.type.length <= 0 && s.reset.length > 0) {
+                            s.ban_duration = 900
+                        }
+                        if(s.type.length <= 0) {
+                            delete s.type
+                        }
+                        if(s.reset.length <= 0) {
+                            delete s.reset
                         }
                         let res = await saveUserPunish(s)
                         if(res.code === 2000) {
@@ -323,12 +336,11 @@ export default {
                         let arr = JSON.parse(JSON.stringify(params.type))
                         params.reset = arr.filter(item => { return item > 10 })
                         params.type = arr.filter(item => { return item < 10 })
-                        if(params.type.length > 0 && params.reset.length > 0) {
+                        if(params.type.length <= 0 && params.reset.length > 0) {
                             params.ban_duration = 900
                         }
                         if(params.type.length <= 0) {
                             delete params.type
-                            delete params.ban_duration
                         }
                         if(params.reset.length <= 0) {
                             delete params.reset
