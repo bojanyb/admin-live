@@ -190,7 +190,7 @@ export default {
                                             color: '#FF4949',
                                             fontWeight: 600
                                         }
-                                    }, '已退款'),
+                                    }, '全额退款'),
                                     h('span', '）'),
                                 ])
                             } else if(params.row.status === 3) {
