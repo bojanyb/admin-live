@@ -40,7 +40,7 @@ export default {
                     name: '公会月奖励配置'
                 },
                 {
-                    name: '24小时房间奖励结算'
+                    name: '24小时房间配置'
                 }
             ],
             tabIndex: '0'
