@@ -1811,6 +1811,22 @@ const HOUSEMESSAGESTATUSLIST = [
     }
 ]
 
+// 房间信息管理 - 热门推荐
+const HOUSEMESSAGEHOTRECOMMENDLIST = [
+    {
+        name: '全部',
+        value: -1
+    },
+    {
+        name: '是',
+        value: 1
+    },
+    {
+        name: '否',
+        value: 0
+    }
+]
+
 // 房间信息管理 - 房间类型
 const HOUSEMESSAGETYPELIST = [
     {
@@ -2394,5 +2410,6 @@ export default {
     USERRANKLIST,
     USERCHARMLIST,
     USERREGISTERTYPELIST,
-    DURATIONCOPY
+    DURATIONCOPY,
+    HOUSEMESSAGEHOTRECOMMENDLIST
 }
