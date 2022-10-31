@@ -179,6 +179,7 @@ export default {
                     },
                     {
                         label: '充值状态',
+                        minWidth: '100px',
                         render: (h, params) => {
                             if(params.row.status === 1 && params.row.refund_status === 1) {
                                 return h('span', '已支付')
