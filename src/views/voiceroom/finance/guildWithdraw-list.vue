@@ -180,8 +180,15 @@ export default {
                     {
                         label: '充值状态',
                         render: (h, params) => {
-                            let data = MAPDATA.ORDERSTATUS.find(item => { return item.value.indexOf(params.row.status) !== -1 })
-                            return h('span', data ? data.name : '- -')
+                            if(params.row.status === 1 && params.row.refund_status === 1) {
+                                return h('span', '已支付')
+                            } else if(params.row.status === 1 && params.row.refund_status === 2) {
+                                return h('span', '已退款')
+                            } else if(params.row.status === 3) {
+                                return h('span', '未支付')
+                            } else if(params.row.status === 4) {
+                                return h('span', '已退款')
+                            }
                         }
                     },
                     // {
