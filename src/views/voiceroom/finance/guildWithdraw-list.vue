@@ -183,7 +183,16 @@ export default {
                             if(params.row.status === 1 && params.row.refund_status === 1) {
                                 return h('span', '已支付')
                             } else if(params.row.status === 1 && params.row.refund_status === 2) {
-                                return h('span', '已支付（已退款）')
+                                return h('div', [
+                                    h('span', '已支付（'),
+                                    h('span', {
+                                        style: {
+                                            color: '#FF4949',
+                                            fontWeight: 600
+                                        }
+                                    }, '已退款'),
+                                    h('span', '）'),
+                                ])
                             } else if(params.row.status === 3) {
                                 return h('span', '未支付')
                             } else if(params.row.status === 4) {
