@@ -147,8 +147,8 @@ export default {
                         isSwitch: true,
                         isTrueValue: 1,
                         isFalseValue: 0,
-                        activeText: '是',
-                        inactiveText: '否',
+                        activeText: 'ON',
+                        inactiveText: 'OFF',
                         change: (v, row) => {
                             this.hotRecommend(row, v)
                         },

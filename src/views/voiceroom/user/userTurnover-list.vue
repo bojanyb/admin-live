@@ -77,7 +77,7 @@
 						optionLabel: 'name',
 						label: '来源',
 						placeholder: '请选择',
-						options: this.typeList
+						options: MAPDATA.DEALSOURCELIST
 					},
 					{
 						name: 'dateTimeParams',
@@ -141,8 +141,8 @@
 						{
 							label: '来源',
 							render: (h, params) => {
-								let name = params.row.room_number ? '派对' : '私聊'
-								return h('span', name)
+								let data = MAPDATA.DEALSOURCELIST.find(item => { return item.value === params.row.source })
+								return h('span', data ? data.name : '无')
 							}
 						},
 						{
@@ -155,20 +155,6 @@
 		},
 		data() {
 			return {
-				typeList: [
-					{
-						id: 0,
-						name: '全部'
-					},
-					{
-						id: 1,
-						name: '派对'
-					},
-					{
-						id: 2,
-						name: '私聊'
-					}
-				],
 				ruleForm: {},
 				searchParams: {
 					dateTimeParams: []

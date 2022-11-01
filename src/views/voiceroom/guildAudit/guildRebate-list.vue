@@ -31,14 +31,14 @@ export default {
 				case '0': // 周流水
 					compText= "guildWeekWater"
 					break;
-				case '1': // 月奖励
-					compText= "guildMonthWater"
-					break;
-				case '2': // 公会周奖励结算
+				case '1': // 公会周奖励结算
 					compText= "dynamic"
 					break;
-				case '3': // 24小时房间奖励
+				case '2': // 24小时房间奖励
 					compText= "award"
+					break;
+				case '3': // 月奖励
+					compText= "guildMonthWater"
 					break;
 				default:
 					break;
@@ -53,13 +53,13 @@ export default {
 					name: '公会周流水结算'
 				},
 				{
-					name: '公会月奖励结算'
-				},
-				{
 					name: '公会周奖励结算'
 				},
 				{
 					name: '24小时房间奖励结算'
+				},
+				{
+					name: '公会月奖励结算'
 				}
 			],
 			tabIndex: '0',
