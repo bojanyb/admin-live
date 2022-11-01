@@ -44,7 +44,17 @@ export default {
                     optionLabel: 'name',
                     label: '公会等级',
                     placeholder: '公会等级',
-                }
+                },
+                {
+					name: 'guild_type',
+					type: 'select',
+					value: '',
+					keyName: 'value',
+					optionLabel: 'name',
+					label: '公会类型',
+					placeholder: '请选择',
+					options: MAPDATA.GUILDCONFIGTYPELIST
+				},
             ]
         },
         cfgs() {

@@ -103,6 +103,11 @@
 						prop: 'guild_owner_nickname'
 					},
 					{
+						label: '公会类型',
+						minWidth: '120px',
+						prop: 'guild_owner_nickname'
+					},
+					{
 						label: '流水',
 						minWidth: '120px',
 						render: (h, params) => {
