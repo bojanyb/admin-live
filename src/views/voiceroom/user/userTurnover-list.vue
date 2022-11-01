@@ -143,7 +143,7 @@
 						{
 							label: '来源',
 							render: (h, params) => {
-								let data = MAPDATA.DEALSOURCELIST.find(item => { return item.value === params.row.flow_type })
+								let data = MAPDATA.DEALSOURCELIST.find(item => { return item.id === params.row.flow_type })
 								return h('span', data ? data.name : '无')
 							}
 						},
