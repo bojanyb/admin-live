@@ -30,6 +30,13 @@
                         <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.rewards"></el-input>
                     </el-form-item>
                 </div>
+                <div class="formBox">
+                    <el-form-item label="公会类型" prop="guild_type">
+                        <el-select v-model="ruleForm.guild_type" placeholder="请选择公会类型" :disabled="status === 'update'">
+                          <el-option v-for="item in guildTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -41,7 +48,7 @@
 
 <script>
 // 引入api
-import { saveSettlementConfig } from '@/api/videoRoom.js'
+import { saveSettlementConfig, getGuildType } from '@/api/videoRoom.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
@@ -136,9 +143,16 @@ export default {
                 ],
                 rewards: [
                     { required: true, message: '请输入评级奖励', trigger: 'input' }
+                ],
+                guild_type: [
+                    { required: true, message: '请选择公会类型', trigger: 'change' }
                 ]
-            }
+            },
+            guildTypeList: []
         };
+    },
+    created() {
+        this.getTypeList()
     },
     methods: {
         // 关闭弹窗
@@ -182,6 +196,22 @@ export default {
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
+        },
+        // 获取公会类型
+        async getTypeList() {
+         const response = await getGuildType()
+         if(response.code === 2000) {
+            const tempArr =  Array.from(
+              Array.isArray(response.data.list) ? response.data.list : []
+          )
+          this.guildTypeList = tempArr.reduce((prev, curr) => {
+            prev.push({
+                name: curr.remark,
+                value: curr.type
+            })
+            return prev
+          }, []) || []
+         }
         }
     }
 }
