@@ -172,7 +172,7 @@ export default {
                 }
             }).catch(() => {});
         },
-        // 获取工会类型
+        // 获取公会类型
         async getTypeList() {
          const response = await getGuildType()
          if(response.code === 2000) {
