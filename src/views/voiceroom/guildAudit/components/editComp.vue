@@ -33,7 +33,7 @@
 
 <script>
 // 引入api
-import { getGuildCreateV2, getGuildUpdateV2 } from '@/api/videoRoom'
+import { getGuildCreateV2, getGuildUpdateV2, getGuildType } from '@/api/videoRoom'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
@@ -43,7 +43,7 @@ export default {
             status: 'add',
             isEditComp: false,
             rankList: MAPDATA.CLASSLIST,
-            guildTypeList: MAPDATA.GUILDCONFIGTYPELIST,
+            guildTypeList: [],
             ruleForm: {
                 id: null,
                 name: '',
@@ -92,6 +92,9 @@ export default {
             }
             return false
         }
+    },
+    created() {
+        this.getTypeList()
     },
     methods: {
         // 公会返点限制
@@ -175,6 +178,22 @@ export default {
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
+        },
+        // 获取工会类型
+        async getTypeList() {
+         const response = await getGuildType()
+         if(response.code === 2000) {
+            const tempArr =  Array.from(
+              Array.isArray(response.data.list) ? response.data.list : []
+          )
+          this.guildTypeList = tempArr.reduce((prev, curr) => {
+            prev.push({
+                name: curr.remark,
+                value: curr.type
+            })
+            return prev
+          }, []) || []
+         }
         }
     }
 }
