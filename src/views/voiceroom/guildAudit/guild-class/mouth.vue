@@ -116,7 +116,8 @@ export default {
                 page: params.page,
                 pagesize: params.size,
                 code: s.code,
-                type : 3
+                type : 3,
+                guild_type: s.guild_type
             }
         },
         // 刷新列表
