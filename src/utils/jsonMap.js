@@ -1666,12 +1666,24 @@ const RECHARGEHISTORYTYPELIST = [
 // 流水记录 - 来源
 const DEALSOURCELIST = [
     {
-        name: '派对',
-        value: 0
+        id: 0,
+        name: '全部'
     },
     {
-        name: '私聊',
-        value: 1
+        id: 1,
+        name: '公会房间'
+    },
+    {
+        id: 2,
+        name: '个人房间'
+    },
+    {
+        id: 3,
+        name: '公会私聊'
+    },
+    {
+        id: 4,
+        name: '个人私聊'
     }
 ]
 
