@@ -63,6 +63,13 @@ export default {
                 url: REQUEST.guild.settlementConfig,
                 columns: [
                     {
+						label: '公会类型',
+						render: (h, params) => {
+						let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
+						return h('span', data ? data.name : '无')
+						}
+					},
+                    {
                         label: '奖励名称',
                         prop: 'name',
                     },

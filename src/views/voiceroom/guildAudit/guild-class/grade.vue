@@ -24,6 +24,8 @@ import tableList from '@/components/tableList/TableList.vue'
 import REQUEST from '@/request/index.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 export default {
     mixins: [mixins],
     components: {
@@ -60,6 +62,13 @@ export default {
                 vm: this,
                 url: REQUEST.guild.settlementConfig,
                 columns: [
+                    {
+						label: '公会类型',
+						render: (h, params) => {
+						let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
+						return h('span', data ? data.name : '无')
+						}
+					},
                     {
                         label: '公会等级',
                         render: (h, params) => {

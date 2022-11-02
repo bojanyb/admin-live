@@ -10,7 +10,7 @@
                     <el-input v-model="ruleForm.name" placeholder="请输入公会名字"></el-input>
                 </el-form-item>
                 <el-form-item label="公会类型" prop="guild_type">
-                    <el-select v-model="ruleForm.guild_type" placeholder="请选择公会类型">
+                    <el-select v-model="ruleForm.guild_type" placeholder="请选择公会类型" :disabled="status === 'update'">
                         <el-option v-for="item in guildTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
