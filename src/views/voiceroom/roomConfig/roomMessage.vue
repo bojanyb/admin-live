@@ -17,6 +17,7 @@
 <script>
 // 引入api
 import { genreList } from '@/api/house.js'
+import { updateParty } from '@/api/house.js'
 // 引入房间类型详情组件
 import typeComp from './components/typeComp.vue'
 // 引入新增 - 修改组件
@@ -44,7 +45,8 @@ export default {
             isDestoryComp: false, // 是否销毁组件
             classifyList: [],
             searchParams: {
-                party_status: 2
+                party_status: 2,
+                admin_recommend_status: 1
             }
         };
     },
@@ -86,6 +88,16 @@ export default {
                     label: '房间状态',
                     placeholder: '请选择',
                     options: MAPDATA.HOUSEMESSAGESTATUSLIST
+                },
+                {
+                    name: 'admin_recommend_status',
+                    type: 'select',
+                    value: 1,
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '热门推荐',
+                    placeholder: '请选择',
+                    options: MAPDATA.HOUSEMESSAGEHOTRECOMMENDLIST
                 }
             ]
         },
@@ -129,6 +141,22 @@ export default {
                         }
                     },
                     {
+                        minWidth: '100px',
+                        label: '热门推荐',
+                        prop: 'admin_recommend_status',
+                        isSwitch: true,
+                        isTrueValue: 1,
+                        isFalseValue: 0,
+                        activeText: '是',
+                        inactiveText: '否',
+                        change: (v, row) => {
+                            this.hotRecommend(row, v)
+                        },
+                        render: (h, params) => {
+                            return h('span', '')
+                        }
+                    },
+                    {
                         label: '所属公会',
                         minWidth: '100px',
                         render: (h, params) => {
@@ -161,7 +189,8 @@ export default {
                 room_number: s.room_number,
                 party_status: s.party_status,
                 room_category_id: s.room_category_id,
-                guild_number: s.guild_number
+                guild_number: s.guild_number,
+                admin_recommend_status: s.admin_recommend_status
             }
             return {
                 page: params.page,
@@ -176,7 +205,8 @@ export default {
         // 重置
         reset() {
             this.searchParams = {
-                party_status: 2
+                party_status: 2,
+                admin_recommend_status: 1
             }
             this.getList()
         },
@@ -215,6 +245,22 @@ export default {
             setTimeout(() => {
                 this.$refs.typeComp.loadParams(row, this.classifyList)
             }, 50);
+        },
+        // 热门推荐
+        async hotRecommend(row, v) {
+            let params = {
+                room_title: row.room_title,
+                id: row.id,
+                room_cover: row.room_cover,
+                room_category_id: row.room_category_id,
+                room_notice: row.room_notice,
+                admin_recommend_status: v
+            }
+            let res = await updateParty(params)
+            if(res.code === 2000) {
+                this.$success('操作成功')
+                this.getList()
+            }
         }
     },
     created() {

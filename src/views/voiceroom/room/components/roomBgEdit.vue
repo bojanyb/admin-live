@@ -2,7 +2,7 @@
     <div class="roomBgEdit-box">
         <drawer 
         size="470px"
-        title="修改房间直播信息"
+        title="修改房间背景图信息"
         ref="drawer"
         :isShowUpdate="true"
         @cancel="cancel"
@@ -18,7 +18,7 @@
                     <el-input v-model="ruleForm.sort" placeholder="请输入排序权重" oninput="this.value=this.value.replace(/[^\d]/g,'');"></el-input>
                 </el-form-item>
                 <el-form-item label="背景选择" prop="assign_status">
-                    <el-select v-model="ruleForm.assign_status" placeholder="请选择">
+                    <el-select v-model="ruleForm.assign_status" :disabled="status === 'update'" placeholder="请选择">
                         <el-option
                         v-for="item in assignList"
                         :key="item.value"
@@ -28,10 +28,10 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="房间ID" prop="assign_room" v-if="ruleForm.assign_status === 1">
-                    <el-input type="textarea" :rows="4" v-model="ruleForm.assign_room" placeholder="请输入房间ID，输入多个房间ID请用逗号隔开"></el-input>
+                    <el-input type="textarea" :rows="4" v-model="ruleForm.assign_room" placeholder="请输入房间ID，输入多个房间ID请用逗号隔开" @input="roomInput" :disabled="status === 'update'"></el-input>
                 </el-form-item>
                 <el-form-item label="房间背景图" prop="url">
-                    <uploadImg v-model="ruleForm.url" :imgUrl="ruleForm.url" name="url" ref="url" @validateField="validateField"></uploadImg>
+                    <uploadImg v-model="ruleForm.url" accept=".png,.jpg,.jpeg,.svga" :imgUrl="ruleForm.url" name="url" ref="url" @validateField="validateField"></uploadImg>
                 </el-form-item>
                 <!-- <el-form-item label="是否默认" prop="is_default">
                     <el-select v-model="ruleForm.is_default">
@@ -119,6 +119,10 @@ export default {
         }
     },
     methods: {
+        // 限制房间id输入
+        roomInput() {
+            this.ruleForm.assign_room = this.ruleForm.assign_room.replace(/[\u4E00-\u9FA5A-Za-z_^%&'\-\*\ /;.，。、‘；、】【=?$\[\]!@#()\\~]/g, '')
+        },
         // 获取数据
         loadParams(status, row) {
             this.openComp()
@@ -143,10 +147,10 @@ export default {
                         url: s.url,
                         name: s.name,
                         // is_default: s.is_default,
-                        assign_room: s.assign_room,
+                        assign_status: s.assign_status
                     }
                     if(s.assign_status === 1) {
-                        params.assign_status = s.assign_status
+                        params.assign_room = s.assign_room
                     }
                     let res = await getRoomBgAdd(params)
                     if(res.code === 2000) {

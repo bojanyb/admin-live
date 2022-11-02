@@ -42,7 +42,7 @@
 				this.loading = true;
 				getSyetermConfig().then(res => {
 					let arr = []
-                    let arr1 = ['normal_rebate', 'guild_rebate', 'private_chat_rebate', 'personal_rebate', 'host_invitation_sharing', 'user_invitation_sharing']
+                    let arr1 = ['normal_rebate', 'guild_rebate', 'private_chat_rebate', 'personal_rebate', 'host_invitation_sharing', 'user_invitation_sharing', 'guild_private_chat_rebate']
                     if(res.data.config && res.data.config.length > 0) {
                         res.data.config.forEach(item => {
                             arr1.forEach(a => {

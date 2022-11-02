@@ -171,17 +171,33 @@ const SORTLIST = [
 
 // 订单状态
 const ORDERSTATUS = [
-    {
-        value: '',
-        name: '全部'
-    },
-    {
-        value: '3,2',
-        name: '未支付'
-    },
+    // {
+    //     value: '',
+    //     name: '全部'
+    // },
     {
         value: '1',
         name: '已支付'
+    },
+    {
+        value: '4',
+        name: '已退款'
+    },
+    {
+        value: '3',
+        name: '未支付'
+    },
+]
+
+// 充值记录 - 已支付 - 退款状态
+const ORDERREFUNDSTATUSLIST = [
+    {
+        value: 1,
+        name: '未退款'
+    },
+    {
+        value: 2,
+        name: '已退款'
     }
 ]
 
@@ -345,6 +361,46 @@ const DURATION = [
     }
 ]
 
+// 赠送时长 - 第二版
+const DURATIONCOPY = [
+    {
+        value: 900,
+        name: '15分钟'
+    },
+    {
+        value: 1800,
+        name: '30分钟'
+    },
+    {
+        value: 3600,
+        name: '60分钟'
+    },
+    {
+        value: 86400,
+        name: '1天'
+    },
+    {
+        value: 259200,
+        name: '3天'
+    },
+    {
+        value: 604800,
+        name: '7天'
+    },
+    {
+        value: 1296000,
+        name: '15天'
+    },
+    {
+        value: 2592000,
+        name: '30天'
+    },
+    {
+        value: -1,
+        name: '永久'
+    }
+]
+
 // 优先推荐
 const PRIORITYGIVE = [
     {
@@ -433,12 +489,12 @@ const CLASSLIST = [
 
 // 公会列表 - 公会类型
 const GUILDCONFIGTYPELIST = [
-    // {
-    //     name: '主播公会',
-    //     value: 1
-    // },
     {
-        name: '派对公会',
+        name: '交友公会',
+        value: 1
+    },
+    {
+        name: '情感公会',
         value: 2
     }
 ]
@@ -902,6 +958,70 @@ const USERSTATUSLIST = [
     {
         name: '封禁',
         value: 3
+    }
+]
+
+// 用户列表 - 用户等级
+const USERRANKLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '10-29',
+        value: '10~29'
+    },
+    {
+        name: '30以上',
+        value: '>=30'
+    }
+]
+
+// 用户列表 - 魅力等级
+const USERCHARMLIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '10-29',
+        value: '10~29'
+    },
+    {
+        name: '30以上',
+        value: '>=30'
+    }
+]
+
+// 用户列表 - 注册类型
+const USERREGISTERTYPELIST = [
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '苹果',
+        value: 'apple'
+    },
+    {
+        name: '抖音',
+        value: 'dy'
+    },
+    {
+        name: 'QQ',
+        value: 'qq'
+    },
+    {
+        name: '微博',
+        value: 'weibo'
+    },
+    {
+        name: '微信',
+        value: 'wx'
+    },
+    {
+        name: '手机号',
+        value: 'phone'
     }
 ]
 
@@ -1494,22 +1614,22 @@ const PAYCONFIGURATIONPLATFORMTYPELIST = [
         name: 'app支付',
         value: 1
     },
-    // {
-    //     name: 'PC',
-    //     value: 2
-    // },
+    {
+        name: 'PC',
+        value: 2
+    },
     {
         name: 'h5支付',
         value: 3
     },
-    // {
-    //     name: '公众号',
-    //     value: 4
-    // },
-    // {
-    //     name: '小程序',
-    //     value: 5
-    // }
+    {
+        name: '公众号',
+        value: 4
+    },
+    {
+        name: '小程序',
+        value: 5
+    }
 ]
 
 // 商户配置管理 - 支付类型
@@ -1691,6 +1811,22 @@ const HOUSEMESSAGESTATUSLIST = [
     }
 ]
 
+// 房间信息管理 - 热门推荐
+const HOUSEMESSAGEHOTRECOMMENDLIST = [
+    {
+        name: '全部',
+        value: -1
+    },
+    {
+        name: '是',
+        value: 1
+    },
+    {
+        name: '否',
+        value: 0
+    }
+]
+
 // 房间信息管理 - 房间类型
 const HOUSEMESSAGETYPELIST = [
     {
@@ -1741,6 +1877,10 @@ const CATEGORYBUSINESSTYPELIST = [
 
 // 进房记录 - 进房类型
 const JOINHOUSETYPELIST = [
+    {
+        name: '全部',
+        value: -1
+    },
     {
         name: '未知类型',
         value: 0
@@ -1805,6 +1945,10 @@ const JOINHOUSETYPELIST = [
 
 // 进房记录 - 是否首次进房
 const ISFIRSTJOINHOUSELIST = [
+    {
+        name: '全部',
+        value: -1
+    },
     {
         name: '是',
         value: 1
@@ -1970,6 +2114,45 @@ const USERPUNISHTYPELISTCOPY = [
     }
 ]
 
+// 用户处罚 - 处罚类型 - 列表
+const USERPUNISHTYPELISTCOPYTWO = [
+    {
+        name: '封号',
+        value: 1,
+        disabled: false
+    },
+    {
+        name: '封设备',
+        value: 2,
+        disabled: false
+    },
+    {
+        name: '封IP',
+        value: 3,
+        disabled: false
+    },
+    {
+        name: '封实名',
+        value: 4,
+        disabled: false
+    },
+    {
+        name: '重置昵称',
+        value: 11,
+        disabled: false
+    },
+    {
+        name: '重置头像',
+        value: 12,
+        disabled: false
+    },
+    {
+        name: '重置签名',
+        value: 13,
+        disabled: false
+    }
+]
+
 // 用户处罚 - 状态
 const USERPUNISHSTATUSLIST = [
     {
@@ -1986,15 +2169,39 @@ const USERPUNISHSTATUSLIST = [
 const USERPUNISHSTATUSLISTCOPY = [
     {
         name: '全部',
-        value: ''
+        value: 4
     },
     {
-        name: '生效中',
+        name: '待处理',
+        value: 0
+    },
+    {
+        name: '封禁中',
         value: 1
     },
     {
-        name: '已解除',
+        name: '已忽略',
         value: 2
+    },
+    {
+        name: '已解除',
+        value: 3
+    }
+]
+
+// 用户处罚 - 重置资料
+const USERPUNIRESETLISTCOPY = [
+    {
+        name: '重置昵称',
+        value: 11
+    },
+    {
+        name: '重置头像',
+        value: 12
+    },
+    {
+        name: '重置签名',
+        value: 13
     }
 ]
 
@@ -2011,6 +2218,30 @@ const RISKMANAGEMENTMESSAGEHISTORYLIST = [
     {
         name: '通过',
         value: 0
+    }
+]
+
+// 消息记录 - 条数
+const RISKMANAGEMENTMESSAGENUMBERLIST = [
+    {
+        name: '1000',
+        value: 1000
+    },
+    {
+        name: '5000',
+        value: 5000
+    },
+    {
+        name: '10000',
+        value: 10000
+    },
+    {
+        name: '50000',
+        value: 50000
+    },
+    {
+        name: '100000',
+        value: 100000
     }
 ]
 
@@ -2142,6 +2373,7 @@ export default {
     SERVICEAUDITTYPELIST,
     USERPUNISHTYPELIST,
     USERPUNISHTYPELISTCOPY,
+    USERPUNISHTYPELISTCOPYTWO,
     USERPUNISHSTATUSLIST,
     USERPUNISHSTATUSLISTCOPY,
     GIFTSHOWTYPELIST,
@@ -2169,5 +2401,15 @@ export default {
     GUILDSTATUS,
     GUILDAPPLYTYPE,
     SETTLEMENTSTATUS,
-    GUILDREPORTSTATUS
+    RISKMANAGEMENTMESSAGENUMBERLIST,
+    GUILDREPORTSTATUS,
+    RISKMANAGEMENTMESSAGENUMBERLIST,
+    ORDERREFUNDSTATUSLIST,
+    DISSOLUTIONTYPELISTCOPY,
+    USERPUNIRESETLISTCOPY,
+    USERRANKLIST,
+    USERCHARMLIST,
+    USERREGISTERTYPELIST,
+    DURATIONCOPY,
+    HOUSEMESSAGEHOTRECOMMENDLIST
 }

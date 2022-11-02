@@ -15,13 +15,17 @@ import mouthComp from './mouth.vue'
 
 // 引入时长奖励配置组件
 import durationComp from './duration.vue'
+
+// 引入24小时奖励组件
+import awardComp from './components/awardComp.vue'
 export default {
     components: {
         gradeComp,
         weekComp,
         mouthComp,
         durationComp,
-        menuComp
+        menuComp,
+        awardComp
     },
     data() {
         return {
@@ -34,9 +38,10 @@ export default {
                 },
                 {
                     name: '公会月奖励配置'
-                }//, {
-                //     name: '时长奖励配置'
-                // }
+                },
+                {
+                    name: '24小时房间配置'
+                }
             ],
             tabIndex: '0'
         };
@@ -55,7 +60,7 @@ export default {
                     compText = "mouthComp"
                     break;
                 case '3':
-                    compText = "durationComp"
+                    compText = "awardComp"
                     break;
             }
             return compText

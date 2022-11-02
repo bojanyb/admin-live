@@ -86,7 +86,7 @@
 						render: (h, params) => {
 							let start_time = params.row.time_start ? timeFormat(params.row.time_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
 							let end_time = params.row.time_end ? timeFormat(params.row.time_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
-							return h('span', `${timeFormat(params.row.time_start, 'YYYY', true)}年第${params.row.now}月（${start_time}至${end_time}）`)
+							return h('span', `${timeFormat(params.row.time_start, 'YYYY', true)}年第${params.row.now}周（${start_time}至${end_time}）`)
 						}
 					},
 					{
@@ -105,6 +105,15 @@
 						prop: 'guild_owner_nickname'
 					},
 					{
+						label: '公会类型',
+						minWidth: '120px',
+						prop: 'guild_type',
+						render: (h, params) => {
+							let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
+							return h('span', data ? data.name : '无')
+						}
+					},
+					{
 						label: '流水',
 						minWidth: '120px',
 						render: (h, params) => {
@@ -115,7 +124,7 @@
 						label: '周奖励金额',
 						minWidth: '120px',
 						render: (h, params) => {
-							return h('span', this.form.status === 2 ? params.row.rewards + '钻石' : params.row.rewards + '钻石')
+							return h('span', this.form.status === 2 ? '无' : params.row.settlement + '喵粮')
 						}
 					},
 					{
@@ -199,7 +208,7 @@
 					guild_number: s.guild_number,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
-                    type: 3,
+                    type: 2,
 					status: s.status,
 				}
 				if(this.form.status === 1) {

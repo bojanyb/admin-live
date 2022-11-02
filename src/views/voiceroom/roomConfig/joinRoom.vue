@@ -39,8 +39,8 @@ export default {
         return {
             isDestoryComp: false, // 是否销毁组件
             searchParams: {
-                join_type: 2,
-                is_first: 1
+                join_type: -1,
+                is_first: -1
             },
             ruleForm: {
                 join_room_count: 0,
@@ -72,7 +72,7 @@ export default {
                 {
                     name: 'join_type',
                     type: 'select',
-                    value: 2,
+                    value: -1,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '进房类型',
@@ -82,7 +82,7 @@ export default {
                 {
                     name: 'is_first',
                     type: 'select',
-                    value: '',
+                    value: -1,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '是否首次进房',
@@ -198,8 +198,8 @@ export default {
         // 重置
         reset() {
             this.searchParams = {
-                join_type: 2,
-                is_first: 1
+                join_type: -1,
+                is_first: -1
             }
             this.dateTimeParams = {}
             this.getList()

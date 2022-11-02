@@ -53,6 +53,11 @@ const request = {
             punishLog: `${HTTPHEADER}/Room/punishLog`, // 待处理处罚
             superUserList: `${HTTPHEADER}/User/superUserList`, // 超管列表
             setSuperUser: `${HTTPHEADER}/User/setSuperUser`, // 设置超管
+            officialAccount: `${HTTPHEADER}/OfficialAccount`, // 官方用户-列表
+            add: `${HTTPHEADER}/OfficialAccount/add`, // 官方用户-新增
+            del: `${HTTPHEADER}/OfficialAccount/del`, // 官方用户-删除
+            superMsg: `${HTTPHEADER}/SuperMsg`, // 提示语-列表
+            update: `${HTTPHEADER}/SuperMsg/update`, // 提示语-修改
         },
         menu: {
             addRule: `${HTTPHEADER}/admin/addRule`, // 添加菜单
@@ -171,6 +176,8 @@ const request = {
         musicList: `${HTTPHEADER}/music/index`, // 音乐列表
         check: `${HTTPHEADER}/Verify/check`, // 审核更换实名
         punishStatus: `${HTTPHEADER}/userPunish/punishStatus`, // 用户状态
+        updateLoginPwd: `${HTTPHEADER}/User/updateLoginPwd`, // 更改登录密码
+        addRichUser: `${HTTPHEADER}/User/addRichUser`, // 添加财富用户
     },
     
     // 审核管理
@@ -235,6 +242,7 @@ const request = {
         delSettlementConfig: `${HTTPHEADER}/guild/delSettlementConfig`, // 删除周返点配置
         doSettlement: `${HTTPHEADER}/guild/doSettlement`, // 公会批量结算
         getNowRoomOnlineReward: `${HTTPHEADER}/guild/getNowRoomOnlineReward`, // 待结算 24小时房间奖励 
+        guildType: `${HTTPHEADER}/guild/guildType`, // 获取工会类型
     },
 
     // 封禁记录
@@ -315,6 +323,15 @@ const request = {
         add: `${HTTPHEADER}/Sensitive/add`, // 敏感词-添加
         screenImgLog: `${HTTPHEADER}/ScreenImgLog/index`, // 图片审核-列表
         review: `${HTTPHEADER}/ScreenImgLog/review`, // 图片审核-操作
+
+        // 用户处罚 - 用户举报二合一
+        UserPunishLog: `${HTTPHEADER}/UserPunishLog`, // 处罚-列表
+        addUserPunish: `${HTTPHEADER}/UserPunishLog/add`, // 处罚 -新增
+        saveUserPunish: `${HTTPHEADER}/UserPunishLog/save`, // 处罚-封禁
+        removeUserPunish: `${HTTPHEADER}/UserPunishLog/remove`, // 处罚-解除
+        passUserPunish: `${HTTPHEADER}/UserPunishLog/pass`, // 处罚-忽略
+        punishStatus: `${HTTPHEADER}/UserPunishLog/punishStatus`, // 用户状态
+        updateSource: `${HTTPHEADER}/UserPunishLog/updateSource`, // 处罚-修改证据
     },
 
     // 心动速配

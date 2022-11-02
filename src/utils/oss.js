@@ -35,7 +35,7 @@ function uploadOSS(file) {
     // resolve(res)
     // 或者返回如下：
     resolve({
-        url: 'http://photo.aiyi.live/' + fileName
+        url: 'https://photo.aiyi.live/' + fileName
     })
   })
 }

@@ -198,7 +198,7 @@
 						label: '关播时间',
 						minWidth: '180px',
 						render: (h, params) => {
-							return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 						}
 					},
 					// {

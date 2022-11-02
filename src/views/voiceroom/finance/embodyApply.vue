@@ -9,7 +9,7 @@
         </div>
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
         <div class="searchParams" v-if="tabIndex === '0'">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" :show-batch-pass="true" @batchPass="batchPass" :show-batch-rurn="true" @BatchRurn="BatchRurn" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" :show-batch-pass="true" @batchPass="batchPass" :show-batch-rurn="true" :showBeforeYesterday="true" @BatchRurn="BatchRurn" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @beforeYesterday="beforeYesterday"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt"></tableList>
@@ -233,9 +233,13 @@ export default {
         yesterday() {
             this.changeIndex(1)
         },
+        // 前天
+        beforeYesterday() {
+            this.changeIndex(2)
+        },
         // 最近七日
         recentSeven() {
-            this.changeIndex(2)
+            this.changeIndex(3)
         },
         // 更改日期
         changeIndex(index) {
@@ -251,12 +255,20 @@ export default {
                     now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
                     break;
                 case 2:
+                    now1 = timeFormat(date - 3600 * 1000 * 24 * 2, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 2, 'YYYY-MM-DD', false)
+                    break;
+                case 3:
                     now1 = timeFormat(date, 'YYYY-MM-DD', false)
                     now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
                     break;
             }
             start = new Date(now + ' 00:00:00')
-            end = new Date(now1 + ' 23:59:59')
+            if( index == 0) {
+                end = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false))
+            } else {
+                end = new Date(now1 + ' 23:59:59')
+            }
 
             let time = [start.getTime(), end.getTime()]
             this.searchParams.dateTimeParams = time
@@ -355,7 +367,7 @@ export default {
         let time = new Date()
         let date = timeFormat(time, 'YYYY-MM-DD', false)
         let start = new Date(date + ' 00:00:00').getTime()
-        let end = new Date(date + ' 23:59:59').getTime()
+        let end = new Date(timeFormat(time, 'YYYY-MM-DD HH:mm:ss', false))
         this.searchParams.dateTimeParams = [start, end]
         this.dateTimeParams = {
             start_time: start,

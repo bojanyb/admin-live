@@ -31,7 +31,7 @@ export default {
 				case '0': // 周流水
 					compText= "guildWeekWater"
 					break;
-				case '1': // 月流水
+				case '1': // 月奖励
 					compText= "guildMonthWater"
 					break;
 				case '2': // 公会周奖励结算
@@ -50,10 +50,10 @@ export default {
 		return {
 			menuList: [
 				{
-					name: '公会周流水结算记录'
+					name: '公会周流水结算'
 				},
 				{
-					name: '公会月流水结算记录'
+					name: '公会月奖励结算'
 				},
 				{
 					name: '公会周奖励结算'

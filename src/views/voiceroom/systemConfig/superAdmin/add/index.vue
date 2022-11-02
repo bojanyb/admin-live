@@ -2,7 +2,7 @@
 <template>
     <div class="superAdmin-add-box">
         <el-dialog
-            title="新增超管"
+            :title="title"
             :visible.sync="dialogVisible"
             width="500px"
             :before-close="handleClose"
@@ -24,8 +24,23 @@
 <script>
 
 // 引入api
-import { setSuperUser } from '@/api/super'
+import { setSuperUser, add } from '@/api/super'
 export default {
+    props: {
+        tabIndex: { // 当前菜单
+            type: String,
+            default: ''
+        }
+    },
+    computed: {
+        title() { // 标题
+            if(this.tabIndex === '0') {
+                return '新增超管'
+            } else {
+                return '新增官方'
+            }
+        }
+    },
     data() {
         return {
             dialogVisible: false,
@@ -49,16 +64,28 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let s = this.ruleForm
-                    let params = {
-                        user_number: s.user_number,
-                        status: 1
+                    if(this.tabIndex === '0') {
+                        let params = {
+                            user_number: s.user_number,
+                            status: 1
+                        }
+                        let res = await setSuperUser(params)
+                        if(res.code === 2000) {
+                            this.$success('添加成功')
+                        }
+                    } else {
+                        let params = {
+                            user_number: s.user_number
+                        }
+                        let res = await add(params)
+                        if(res.code === 2000) {
+                            this.$success('添加成功')
+                        }
                     }
-                    let res = await setSuperUser(params)
-                    if(res.code === 2000) {
-                        this.$message.success('添加成功')
-                    }
+
                     this.resetForm()
                     this.$emit('getList')
+                    
                 } else {
                     console.log('error submit!!');
                     return false;

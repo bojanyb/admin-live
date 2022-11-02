@@ -42,9 +42,7 @@
 					// 	label: '交易查询',
 					// 	noClear: true,
 					// 	handler: {
-					// 		change: (v) => {
-								
-					// 		}
+					// 		change: (v) => {}
 					// 	},
 					// 	options: [
 					// 		{ key: 'all', label: '全部' },
@@ -52,14 +50,7 @@
 					// 		{ key: 'name', label: '收礼人ID' }
 					// 	]
 					// },
-					{
-						name: 'reveive_user_number',
-						type: 'input',
-						value: '',
-						label: '收礼人ID',
-						isNum: true,
-						placeholder: '收礼人ID'
-					},
+					
 					{
 						name: 'send_user_number',
 						type: 'input',
@@ -67,6 +58,14 @@
 						label: '送礼人ID',
 						isNum: true,
 						placeholder: '送礼人ID'
+					},
+					{
+						name: 'reveive_user_number',
+						type: 'input',
+						value: '',
+						label: '收礼人ID',
+						isNum: true,
+						placeholder: '收礼人ID'
 					},
 					{
 						name: 'is_room',
@@ -112,12 +111,12 @@
 							}
 						},
 						{
-							label: '收礼人ID',
-							prop: 'reveive_user_number'
-						},
-						{
 							label: '送礼人ID',
 							prop: 'send_user_number'
+						},
+						{
+							label: '收礼人ID',
+							prop: 'reveive_user_number'
 						},
 						{
 							label: '礼物来源',
@@ -244,7 +243,11 @@
 						break;
 				}
 				start = new Date(now + ' 00:00:00')
-				end = new Date(now1 + ' 23:59:59')
+				if( index == 0) {
+					end = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false))
+				} else {
+					end = new Date(now1 + ' 23:59:59')
+				}
 
 				let time = [start.getTime(), end.getTime()]
 				this.searchParams.dateTimeParams = time

@@ -7,7 +7,7 @@
             <!-- <span>选择时间内的到账金额：{{ Number((ruleForm.alreadyMoney - ruleForm.deductMoney).toFixed(2)) || 0 }}元</span> -->
         </div>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" :show-batch-rurn="true"  batchRurnName="导出EXCEL" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @BatchRurn="BatchRurn"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" :show-batch-rurn="true" :showBeforeYesterday="true" batchRurnName="导出EXCEL" @onSearch="onSearch" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @BatchRurn="BatchRurn" @beforeYesterday="beforeYesterday"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -248,12 +248,17 @@ export default {
         yesterday() {
             this.changeIndex(1)
         },
+        // 前天
+        beforeYesterday() {
+            this.changeIndex(2)
+        },
         // 最近七日
         recentSeven() {
-            this.changeIndex(2)
+            this.changeIndex(3)
         },
         // 更改日期
         changeIndex(index) {
+            console.log(index)
             let date = new Date()
             let now, now1, start, end;
             switch (index) {
@@ -266,12 +271,20 @@ export default {
                     now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
                     break;
                 case 2:
+                    now1 = timeFormat(date - 3600 * 1000 * 24 * 2, 'YYYY-MM-DD', false)
+                    now = timeFormat(date - 3600 * 1000 * 24 * 2, 'YYYY-MM-DD', false)
+                    break;
+                case 3:
                     now1 = timeFormat(date, 'YYYY-MM-DD', false)
                     now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
                     break;
             }
             start = new Date(now + ' 00:00:00')
-            end = new Date(now1 + ' 23:59:59')
+            if( index == 0) {
+                end = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false))
+            } else {
+                end = new Date(now1 + ' 23:59:59')
+            }
 
             let time = [start.getTime(), end.getTime()]
             this.searchParams.dateTimeParams = time

@@ -37,6 +37,15 @@ export function getUser(data) {
   })
 }
 
+// 用户封禁状态
+export function punishStatus(data) {
+  return request({
+    url: api.user.punishStatus,
+    method: 'post',
+    data
+  })
+}
+
 // 获取公会列表
 export function guildList(data) {
   return request({
@@ -118,16 +127,6 @@ export function userList(data) {
   })
 }
 
-// 用户封禁状态
-export function punishStatus(data) {
-  return request({
-    url: api.user.punishStatus,
-    method: 'post',
-    data
-  })
-}
-
-
 // 封禁（解封）公会
 export function lockGuild(data) {
   return request({
@@ -159,6 +158,24 @@ export function delStatisticsroom(data) {
 export function check(data) {
   return request({
     url: api.user.check,
+    method: 'post',
+    data
+  })
+}
+
+// 更改登录密码
+export function updateLoginPwd(data) {
+  return request({
+    url: api.user.updateLoginPwd,
+    method: 'post',
+    data
+  })
+}
+
+// 添加财富用户
+export function addRichUser(data) {
+  return request({
+    url: api.user.addRichUser,
     method: 'post',
     data
   })

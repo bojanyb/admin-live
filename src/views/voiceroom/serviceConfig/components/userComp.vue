@@ -3,13 +3,14 @@
         <el-dialog
         :title="title"
         :visible.sync="dialogVisible"
-        width="700px"
+        width="730px"
         :before-close="handleClose"
+        :close-on-click-modal="false"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <div class="inputBox">
                     <el-form-item label="用户ID" prop="user_number" class="numberBox">
-                        <el-input v-model="ruleForm.user_number" :disabled="disabled" @input="numberInput"></el-input>
+                        <el-input v-model="ruleForm.user_number" :disabled="status === 'blocked'" @input="numberInput"></el-input>
 
                         <el-button type="success" @click="seeUser">查询</el-button>
                     </el-form-item>
@@ -18,16 +19,37 @@
                             <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="处罚时间" prop="ban_duration">
-                        <el-select v-model="ruleForm.ban_duration" placeholder="请选择" :disabled="disabled">
+                    <!-- <el-form-item label="重置资料" prop="reset" v-if="!ruleForm.ban_duration">
+                        <el-select v-model="ruleForm.reset" multiple placeholder="请选择" :disabled="disabled" clearable>
+                            <el-option v-for="item in resetList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item> -->
+                    <el-form-item label="处罚时间" prop="ban_duration" v-if="!isIncludeReset">
+                        <el-select v-model="ruleForm.ban_duration" placeholder="请选择" :disabled="disabled" clearable>
                             <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="处罚备注" prop="remark">
+                    <el-form-item label="违规证据" v-if="status !== 'blocked'">
+                        <el-upload
+                        class="upload-demo"
+                        action="#"
+                        :on-preview="handlePreview"
+                        :on-remove="handleRemove"
+                        :before-remove="beforeRemove"
+                        :limit="1"
+                        accept=".png,.jpg,.jpeg,.mp4"
+                        :on-exceed="handleExceed"
+                        :file-list="fileList"
+                        :http-request="upLoad">
+                            <el-button size="small" type="primary">点击上传</el-button>
+                            <div slot="tip" class="el-upload__tip">只能上传jpg/png/mp4文件</div>
+                        </el-upload>
+                    </el-form-item>
+                    <el-form-item label="备注说明" prop="remark">
                         <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
                     </el-form-item>
                 </div>
-                <div class="infoBox" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
+                <div class="infoBox" :class="[{'infoBox_hign': status === 'blocked' && !isIncludeReset},{'infoBox_hign_copy_box': status !== 'blocked' && !isIncludeReset},{'infoBox_hign_copy': status !== 'blocked' && isIncludeReset},{'infoBox_hign_copy_box_two': status === 'blocked' && isIncludeReset}]" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
                     <div class="upBox">
                         <img :src="item.face" alt="">
                         <div class="rightBox">
@@ -38,13 +60,14 @@
                     <div class="downBox">
                         <p>用户等级：<span>{{ item.user_rank }}</span></p>
                         <p>魅力等级：<span>{{ item.live_rank }}</span></p>
+                        <p>用户状态：<span>{{ item.statusText ? item.statusText : "无" }}</span></p>
+                        <p>违规信息：<span>{{ item.lineText ? item.lineText : "无" }}</span></p>
                         <p>实名信息：<span>{{ item.real_name ? item.real_name : '无' }}</span></p>
-                        <p>用户状态: <span>{{ item.statusText ? item.statusText : "无" }}</span></p>
-                        <p>公会名称：<span>{{ item.guild_name ? item.guild_name : '无' }}</span></p>
+                        <p>所属公会：<span>{{ item.guild_name ? item.guild_name : '无' }}</span></p>
                         <p>注册时间：<span>{{ item.create_time }}</span></p>
                     </div>
                 </div>
-                <div class="infoBox emptyBox" v-if="userList.length <= 0">暂无数据</div>
+                <div class="infoBox emptyBox" :class="[{'infoBox_hign_copy': isIncludeReset}]" v-if="userList.length <= 0">暂无数据</div>
                 
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -59,30 +82,38 @@
 // 引入api
 import { getUserReportDeal } from '@/api/videoRoom'
 // 引入api
-import { userList,punishStatus } from '@/api/user'
+import { userList } from '@/api/user'
 // 引入抽屉组件
 import drawer from '@/components/drawer/index'
+// 引入上传组件
+import uploadImg from '@/components/uploadImg/index.vue'
 // 引入api
-import { save } from '@/api/risk'
+import { addUserPunish, saveUserPunish, punishStatus } from '@/api/risk'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 import moment from 'moment'
+// 引入oss
+import { uploadOSS } from '@/utils/oss.js'
 export default {
     components: {
-        drawer
+        drawer,
+        uploadImg
     },
     data() {
         return {
+            fileList: [],
             dialogVisible: false,
-            timeList: MAPDATA.DURATION, // 处罚时长
-            typeList: MAPDATA.USERPUNISHTYPELIST, // 处罚类型
+            timeList: MAPDATA.DURATIONCOPY, // 处罚时长
+            // typeList: MAPDATA.USERPUNISHTYPELISTCOPYTWO, // 处罚类型
+            resetList: MAPDATA.USERPUNIRESETLISTCOPY,
             status: 'add',
             userList: [], // 查询用户
             ruleForm: {
                 user_number: '',
                 type: [],
                 ban_duration: '',
-                remark: ''
+                remark: '',
+                reset: []
             },
             oldParams: {}, // 老数据
             form: {},
@@ -93,6 +124,9 @@ export default {
                 ],
                 type: [
                     { required: true, message: '请选择处罚类型', trigger: 'change' }
+                ],
+                reset: [
+                    { required: false, message: '请选择重置资料', trigger: 'change' }
                 ],
                 ban_duration: [
                     { required: true, message: '请选择处罚时间', trigger: 'change' }
@@ -120,12 +154,83 @@ export default {
                 return true
             }
             return false
+        },
+        isIncludeReset() { // 是否包含重置资料
+            let arr = JSON.parse(JSON.stringify(MAPDATA.USERPUNISHSTATUSLISTCOPY))
+            let isShow = true
+            if(this.ruleForm.type.length > 0) {
+                arr.forEach(item => {
+                    if(this.ruleForm.type.indexOf(item.value) !== -1) {
+                        isShow = false
+                    }
+                })
+            } else {
+                isShow = false
+            }
+            return isShow
+        },
+        typeList() { // 处罚类型
+            let arr = JSON.parse(JSON.stringify(MAPDATA.USERPUNISHTYPELISTCOPYTWO))
+            let arr1 = this.ruleForm.type.filter(item => { return item > 10 })
+            let arr2 = arr.map(item => {
+                let params = {
+                    name: item.name,
+                    value: item.value,
+                    disabled: false
+                }
+                if(this.ruleForm.type.length > 0) {
+                    if(arr1.length > 0) {
+                        if(item.value < 10) {
+                            params.disabled = true
+                        } else {
+                            params.disabled = false
+                        }
+                    } else {
+                        if(item.value > 10) {
+                            params.disabled = true
+                        } else {
+                            params.disabled = false
+                        }
+                    }
+                }
+                return params
+            })
+            return arr2
         }
     },
     methods: {
+        // 移除之后
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+            this.ruleForm.img = ''
+        },
+        // 预览
+        handlePreview(file) {
+            console.log(file);
+        },
+        // 超出文件数量最大上传
+        handleExceed(files, fileList) {
+            this.$warning(`最大上传一个文件`);
+        },
+        // 移除文件之前
+        beforeRemove(file, fileList) {
+            return this.$confirm(`确定移除 ${ file.name }？`);
+        },
+        // 上传
+        upLoad(file) {
+            uploadOSS(file.file).then(res => {
+                if(res.url) {
+                    this.ruleForm.img = res.url
+                }
+            }).catch(err => {
+                this.$message.error(err)
+            })
+        },
+        // 限制id输入
         numberInput() {
             this.ruleForm.user_number = this.ruleForm.user_number.replace(/[^\d]/g, '')
         },
+        // 关闭弹窗
         handleClose() {
             this.dialogVisible = false
         },
@@ -146,35 +251,39 @@ export default {
                 }
             }
         },
-        // 用户封禁状态
-        async getPunishStatus(user_id){
+         // 用户封禁状态
+         async getPunishStatus(user_id){
             var formdata=new FormData();
             formdata.append("user_id",user_id);
             let res = await punishStatus(formdata)
             if(res.code === 2000) {
                 this.$set(this.userList[0],'statusText',res.data.status)
+                this.$set(this.userList[0],'lineText',res.data.stat)
             }
         },
-
         // 获取数据
         loadParams(status, row) {
+            console.log(row, 'row-------------2020')
             this.dialogVisible = true
             this.status = status
-            if(status !== 'add') {
-                let params = JSON.parse(JSON.stringify(row))
-                if(typeof params.type === 'number') {
-                    params.type = [params.type]
-                }
-                params.ban_duration = params.ban_duration ? params.ban_duration : ''
-                this.$set(this.$data, 'ruleForm', params)
-                this.seeUser()
-            } else if(status === 'add' && row) {
+            if(status !== 'add' && status !== 'blocked') {
                 let params = JSON.parse(JSON.stringify(row))
                 let data = {}
-                data.user_number = params.feedback_user_id
+                data.user_number = params.punished_user_number
                 data.ban_duration = null
                 data.remark = ''
                 data.type = []
+                this.$set(this.$data, 'ruleForm', data)
+                this.$set(this.$data, 'form', params)
+                this.seeUser()
+            } else if(status === 'blocked') {
+                let params = JSON.parse(JSON.stringify(row))
+                let data = {}
+                data.user_number = params.punished_user_number
+                data.ban_duration = null
+                data.remark = ''
+                data.type = []
+                data.reset = []
                 this.$set(this.$data, 'ruleForm', data)
                 this.$set(this.$data, 'form', params)
                 this.seeUser()
@@ -189,15 +298,26 @@ export default {
         async submitForm(formName) {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    if(this.status === 'add' && JSON.stringify(this.form) !== '{}') {
+                    if(this.status !== 'add') {
                         let data = { ...this.form, ...this.ruleForm }
                         let s = {
                             id: data.id,
-                            ban_duration: data.ban_duration * 24 * 60 * 60,
-                            reply: data.remark,
-                            type: data.type
+                            ban_duration: data.ban_duration,
+                            remark: data.remark,
                         }
-                        let res = await getUserReportDeal(s)
+                        let arr = JSON.parse(JSON.stringify(data.type))
+                        s.reset = arr.filter(item => { return item > 10 })
+                        s.type = arr.filter(item => { return item < 10 })
+                        if(s.type.length <= 0 && s.reset.length > 0) {
+                            s.ban_duration = 900
+                        }
+                        if(s.type.length <= 0) {
+                            delete s.type
+                        }
+                        if(s.reset.length <= 0) {
+                            delete s.reset
+                        }
+                        let res = await saveUserPunish(s)
                         if(res.code === 2000) {
                             this.$message.success('处理成功')
                             this.dialogVisible = false
@@ -205,7 +325,27 @@ export default {
                         }
                     } else {
                         let params = { ...this.ruleForm }
-                        let res = await save(params)
+                        if(params.img) {
+                            if(params.img.indexOf('.mp4') !== -1) {
+                                params.video_path = params.img
+                            } else {
+                                params.img_path = params.img
+                            }
+                            delete params.img
+                        }
+                        let arr = JSON.parse(JSON.stringify(params.type))
+                        params.reset = arr.filter(item => { return item > 10 })
+                        params.type = arr.filter(item => { return item < 10 })
+                        if(params.type.length <= 0 && params.reset.length > 0) {
+                            params.ban_duration = 900
+                        }
+                        if(params.type.length <= 0) {
+                            delete params.type
+                        }
+                        if(params.reset.length <= 0) {
+                            delete params.reset
+                        }
+                        let res = await addUserPunish(params)
                         if(res.code === 2000) {
                             this.$success('添加成功')
                             this.dialogVisible = false
@@ -248,6 +388,9 @@ export default {
 
 <style lang="scss">
 .serviceConfig-userComp-box {
+    .el-upload-list__item-name {
+        width: 240px;
+    }
     .el-select {
         width: 305px;
     }
@@ -272,12 +415,12 @@ export default {
     }
 
     .infoBox {
-        width: 240px;
+        width: 270px;
         box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.15);
         padding: 10px 20px;
         box-sizing: border-box;
         margin-left: 20px;
-        height: 270px;
+        height: 370px;
         .upBox {
             display: flex;
             align-items: center;
@@ -298,9 +441,49 @@ export default {
             }
         }
         .downBox {
-            margin-top: 20px;
+            margin-top: 30px;
             p {
-                line-height: 28px;
+                line-height: 36px;
+            }
+        }
+    }
+
+    .infoBox_hign {
+        height: 270px;
+        .downBox {
+            margin-top: 10px;
+            p {
+                line-height: 26px;
+            }
+        }
+    }
+
+    .infoBox_hign_copy {
+        height: 311px;
+        .downBox {
+            margin-top: 30px;
+            p {
+                line-height: 30px;
+            }
+        }
+    }
+
+    .infoBox_hign_copy_box {
+        height: 370px;
+        .downBox {
+            margin-top: 30px;
+            p {
+                line-height: 32px;
+            }
+        }
+    }
+
+    .infoBox_hign_copy_box_two {
+        height: 211px;
+        .downBox {
+            margin-top: 5px;
+            p {
+                line-height: 20px;
             }
         }
     }

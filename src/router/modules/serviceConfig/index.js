@@ -22,7 +22,7 @@ const serviceConfigRouter = {
 		},
 		{
 			path: 'userPunish',
-			component: () => import('@/views/voiceroom/serviceConfig/userPunish'),
+			component: () => import('@/views/voiceroom/serviceConfig/userPunish_copy'),
 			name: 'userPunish',
 			meta: {
 				title: '用户处罚',

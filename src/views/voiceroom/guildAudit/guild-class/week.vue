@@ -13,7 +13,7 @@
 
 <script>
 // 引入api
-import { delSettlementConfig } from '@/api/videoRoom.js'
+import { delSettlementConfig, getGuildType } from '@/api/videoRoom.js'
 // 引入新增 - 修改组件
 import weekComp from './components/weekComp.vue'
 // 引入菜单组件
@@ -44,7 +44,17 @@ export default {
                     optionLabel: 'name',
                     label: '奖励名称',
                     placeholder: '奖励名称',
-                }
+                },
+                {
+					name: 'guild_type',
+					type: 'select',
+					value: '',
+					keyName: 'value',
+					optionLabel: 'name',
+					label: '公会类型',
+					placeholder: '请选择',
+					options: this.guildTypeList
+				},
             ]
         },
         cfgs() {
@@ -92,7 +102,11 @@ export default {
     data() {
         return {
             isDestoryComp: false, // 是否销毁组件
+            guildTypeList: []
         };
+    },
+    created() {
+        this.getTypeList()
     },
     methods: {
         // 配置参数
@@ -150,6 +164,22 @@ export default {
                     this.getList()
                 }
             }).catch(() => {});
+        },
+        // 获取工会类型
+        async getTypeList() {
+         const response = await getGuildType()
+         if(response.code === 2000) {
+            const tempArr =  Array.from(
+              Array.isArray(response.data.list) ? response.data.list : []
+          )
+          this.guildTypeList = tempArr.reduce((prev, curr) => {
+            prev.push({
+                name: curr.remark,
+                value: curr.type
+            })
+            return prev
+          }, []) || []
+         }
         }
     }
 }
