@@ -242,7 +242,7 @@ const request = {
         delSettlementConfig: `${HTTPHEADER}/guild/delSettlementConfig`, // 删除周返点配置
         doSettlement: `${HTTPHEADER}/guild/doSettlement`, // 公会批量结算
         getNowRoomOnlineReward: `${HTTPHEADER}/guild/getNowRoomOnlineReward`, // 待结算 24小时房间奖励 
-        guildType: `${HTTPHEADER}/guild/guildType`, // 获取工会类型
+        guildType: `${HTTPHEADER}/guild/guildType`, // 获取公会类型
     },
 
     // 封禁记录
