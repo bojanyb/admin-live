@@ -156,7 +156,8 @@ export default {
             return {
                 page: params.page,
                 channel: s.channel,
-                channel_way: s.channel_way
+                channel_way: s.channel_way,
+                purpose: 1
             }
         },
         // 重置

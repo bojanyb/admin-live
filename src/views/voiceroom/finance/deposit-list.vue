@@ -45,6 +45,10 @@ export default {
         };
     },
     computed: {
+        channelList() {
+            let arr = JSON.parse(JSON.stringify(MAPDATA.PAYCONFIGURATIONPLATFORMLIST))
+            return arr.filter(item => { return item.value === 3 })
+        },
         forms() {
             return [
                 {
@@ -55,18 +59,18 @@ export default {
                     optionLabel: 'name',
                     label: '商户平台',
                     placeholder: '请选择',
-                    options: MAPDATA.PAYCONFIGURATIONPLATFORMLIST
+                    options: this.channelList
                 },
-                {
-                    name: 'channel_way',
-                    type: 'select',
-                    value: 1,
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '提现类型',
-                    placeholder: '请选择',
-                    options: MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST
-                }
+                // {
+                //     name: 'channel_way',
+                //     type: 'select',
+                //     value: 1,
+                //     keyName: 'value',
+                //     optionLabel: 'name',
+                //     label: '提现类型',
+                //     placeholder: '请选择',
+                //     options: MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST
+                // }
             ]
         },
         cfgs() {
@@ -81,13 +85,13 @@ export default {
                             return h('span', data ? data.name : '无')
                         }
                     },
-                    {
-                        label: '提现类型',
-                        render: (h, params) => {
-                            let data = MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST.find(a => { return params.row.channel_way === a.value })
-                            return h('span', data ? data.name : '无')
-                        }
-                    },
+                    // {
+                    //     label: '提现类型',
+                    //     render: (h, params) => {
+                    //         let data = MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST.find(a => { return params.row.channel_way === a.value })
+                    //         return h('span', data ? data.name : '无')
+                    //     }
+                    // },
                     
                     {
                         label: '主体名称',
@@ -110,29 +114,29 @@ export default {
                     //         return h('span', params.row.appid || '无')
                     //     }
                     // },
-                    {
-                        label: '商户状态',
-                        minWidth: '100px',
-                        render: (h, params) => {
-                            return h('span', params.row.remark || '无')
-                        }
-                    },
                     // {
+                    //     label: '商户状态',
                     //     minWidth: '100px',
-                    //     label: '使用状态',
-                    //     prop: 'cash_status',
-                    //     isSwitch: true,
-                    //     isTrueValue: 1,
-                    //     isFalseValue: 0,
-                    //     activeText: '启用',
-                    //     inactiveText: '停用',
-                    //     change: (v, row) => {
-                    //         this.payChannelWaySaveFunc(row.id, v)
-                    //     },
                     //     render: (h, params) => {
-                    //         return h('span', '')
+                    //         return h('span', params.row.remark || '无')
                     //     }
                     // },
+                    {
+                        minWidth: '100px',
+                        label: '使用状态',
+                        prop: 'cash_status',
+                        isSwitch: true,
+                        isTrueValue: 1,
+                        isFalseValue: 0,
+                        activeText: '启用',
+                        inactiveText: '停用',
+                        change: (v, row) => {
+                            this.payChannelWaySaveFunc(row.id, v)
+                        },
+                        render: (h, params) => {
+                            return h('span', '')
+                        }
+                    },
                     {
                         label: '操作',
                         render: (h, params) => {
@@ -156,7 +160,8 @@ export default {
             return {
                 page: params.page,
                 channel: s.channel,
-                channel_way: s.channel_way
+                channel_way: s.channel_way,
+                purpose: 2
             }
         },
         // 重置

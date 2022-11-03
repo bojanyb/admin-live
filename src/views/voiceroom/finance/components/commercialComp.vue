@@ -48,7 +48,7 @@
                     <el-form-item label="提现税率" prop="cash_rate" class="allocationBox" v-if="type === 'deposit'">
                         <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.cash_rate"></el-input>
                     </el-form-item>
-                    <el-form-item :label="type === 'payment' ? '支付类型' : '提现类型'" prop="channel_way">
+                    <el-form-item :label="type === 'payment' ? '支付类型' : '提现类型'" prop="channel_way" v-if="type === 'payment'">
                         <el-select v-model="ruleForm.channel_way" placeholder="请选择" :disabled="!ruleForm.channel">
                             <el-option v-for="item in payList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
@@ -89,7 +89,7 @@ export default {
             action: ENV_DOMAINHTTPS + REQUEST.pay.uploadFileZFB,
             status: 'add', // 当前状态
             dialogVisible: false,
-            channelList: MAPDATA.PAYCONFIGURATIONPLATFORMLIST, // 商户平台
+            // channelList: MAPDATA.PAYCONFIGURATIONPLATFORMLIST, // 商户平台
             // payList: MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST,
             fileList: [],
             ruleForm: {
@@ -146,6 +146,13 @@ export default {
             } else {
                 return arr
             }
+        },
+        channelList() { // 商户平台
+            let arr = JSON.parse(JSON.stringify(MAPDATA.PAYCONFIGURATIONPLATFORMLIST))
+            if(this.type !== 'payment') {
+                return arr.filter(item => { return item.value === 3 })
+            }
+            return arr
         }
     },
     methods: {
@@ -180,6 +187,13 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
+                    if(this.type === 'payment') {
+                        params.purpose = 1
+                        delete params.cash_rate
+                    } else {
+                        params.purpose = 2
+                        delete params.channel_way
+                    }
                     let res = await create(params)
                     if(res.code === 2000) {
                         if(this.status === 'add') {
