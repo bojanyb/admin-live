@@ -36,8 +36,16 @@ const userRouter = {
 				title: '用户音乐上传列表',
 				noCache: true
 			}
+		},
+		{
+			path: 'user-logOut-list',
+			component: () => import('@/views/voiceroom/user/user-logOut-list'),
+			name: 'user-logOut-list',
+			meta: {
+				title: '用户注销',
+				noCache: true
+			}
 		}
-		
 	]
 }
 

@@ -32,6 +32,11 @@ import moveDatingRouter from './modules/moveDating/index.js'
 import serviceConfigRouter from './modules/serviceConfig/index.js'
 import roomConfigRouter from './modules/roomConfig/index.js'
 import dynamicRouter from './modules/dynamic/index.js'
+import goodNumRouter from './modules/goodNum/index.js'
+import msgManagerRouter from './modules/msgManager/index.js'
+import activityManagerRouter from './modules/activityManager/index.js'
+
+
 
 
 /**
@@ -116,6 +121,9 @@ export const asyncRoutes = [
 	promoteRouter,
 	// activityRouter,
 	shoppingRouter,
+	goodNumRouter,
+	msgManagerRouter,
+	activityManagerRouter,
 	systemConfigRouter,
 	// 404 page must be placed at the end !!!
 	{

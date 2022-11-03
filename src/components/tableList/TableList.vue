@@ -126,7 +126,6 @@
         headerFixed: false,
         loading: false,
         tableHeight: 0,
-
         oldPage: 0, // 老数据分页  -  用来比对
         oldParams: {}
       };

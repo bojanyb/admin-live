@@ -151,7 +151,7 @@ const request = {
         send: `${HTTPHEADER}/goods/send`,
         sendlog: `${HTTPHEADER}/goods/sendlog`,
     },
-    
+
     // 派对管理
     room: {
         report: `${HTTPHEADER}/Room/feedback`,
@@ -179,7 +179,7 @@ const request = {
         updateLoginPwd: `${HTTPHEADER}/User/updateLoginPwd`, // 更改登录密码
         addRichUser: `${HTTPHEADER}/User/addRichUser`, // 添加财富用户
     },
-    
+
     // 审核管理
     audit: {
         list: `${HTTPHEADER}/user/getUserBgi`,
@@ -354,6 +354,11 @@ const request = {
         delMoments: `${HTTPHEADER}/moments/delMoments`, // 删除动态
         msgList: `${HTTPHEADER}/moments/msgList`, // 评论列表
         deleteMsg: `${HTTPHEADER}/moments/deleteMsg`, // 删除评论
+    },
+
+    // 活动管理
+    activity : {
+        addResourceConfig: `${HTTPHEADER}/activity/addResourceConfig`, // 添加资源位配置
     }
 }
 
