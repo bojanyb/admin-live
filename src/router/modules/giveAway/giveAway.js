@@ -41,7 +41,16 @@ const giveAwayRouter = {
 			component: () => import('@/views/voiceroom/finance/commercial-list'),
 			name: 'commercial-list',
 			meta: {
-				title: '商户配置管理',
+				title: '支付商户配置管理',
+				noCache: true
+			},
+		},
+		{
+			path: 'deposit-list',
+			component: () => import('@/views/voiceroom/finance/deposit-list'),
+			name: 'deposit-list',
+			meta: {
+				title: '提现商户配置管理',
 				noCache: true
 			},
 		},
