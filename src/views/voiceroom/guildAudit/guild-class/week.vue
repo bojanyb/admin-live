@@ -63,6 +63,13 @@ export default {
                 url: REQUEST.guild.settlementConfig,
                 columns: [
                     {
+						label: '公会类型',
+						render: (h, params) => {
+						let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
+						return h('span', data ? data.name : '无')
+						}
+					},
+                    {
                         label: '奖励名称',
                         prop: 'name',
                     },
@@ -116,7 +123,8 @@ export default {
                 page: params.page,
                 pagesize: params.size,
                 code: s.code,
-                type: 2
+                type: 2,
+                guild_type: s.guild_type
             }
         },
         // 刷新列表
@@ -165,7 +173,7 @@ export default {
                 }
             }).catch(() => {});
         },
-        // 获取工会类型
+        // 获取公会类型
         async getTypeList() {
          const response = await getGuildType()
          if(response.code === 2000) {
