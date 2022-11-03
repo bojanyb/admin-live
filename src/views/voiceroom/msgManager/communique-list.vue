@@ -83,6 +83,13 @@ export default {
                         prop: 'target_val'
                     },
                     {
+							label: '消息图片',
+							isimg: true,
+							prop: 'img_path',
+							imgWidth: '50px',
+							imgHeight: '50px'
+						},
+                    {
                         label: '消息标题',
                         render: (h, params) => {
                             return h('span', params.row.title ? params.row.title : '--')
