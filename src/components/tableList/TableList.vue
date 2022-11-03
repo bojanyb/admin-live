@@ -26,7 +26,7 @@
             </div>
           </el-image> -->
 
-          <imgComp 
+          <imgComp
           v-if="item.isimg"
           :src="scope.row[item.prop] || scope.row[item.propCopy]"
           :name="item.nameProp ? scope.row[item.nameProp] : ''"
@@ -37,7 +37,7 @@
           ref="imgComp">
           </imgComp>
 
-          <imgListComp 
+          <imgListComp
           v-if="item.isimgList"
           :srcList="returnImg(scope.row[item.prop] ? scope.row[item.prop] : scope.row[item.propCopy])"
           :type="scope.row[item.type] || item.type"
@@ -60,7 +60,6 @@
             :inactive-text="item.inactiveText || ''"
             @change="(v) => item.change(v, scope.row)">
           </el-switch>
-          
         </template>
       </el-table-column>
     </el-table>

@@ -22,7 +22,7 @@ import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入api
-import { down } from '@/api/shopping.js'
+import { down } from '@/api/system.js'
 // 引入公共方法
 import { timeFormat } from '@/utils/common.js'
 // 引入公共map
@@ -41,7 +41,7 @@ export default {
         forms() {
             return [
                 {
-                name: 'number',
+                name: 'user_number',
                     type: 'input',
                     value: '',
                     label: '用户ID',
@@ -70,64 +70,65 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.shopping.list,
+                url: REQUEST.system.sysList,
                 columns: [
                     {
                         label: '发送时间',
                         render: (h, params) => {
-                            return h('span', params.row.up_time ? timeFormat(params.row.up_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
                         label: '用户',
-                        prop: 'id'
+                        prop: 'target_val'
                     },
-                    {
-                        label: '消息类型',
-                        render: (h, params) => {
-                            let data = MAPDATA.SHOPPING.find(item => { return item.value === params.row.goods_type })
-                            return h('div', { class: { 'bounce_fa': true } }, [
-                                h('span', data ? data.name : '--')
-                            ])
-                        }
-                    },
+                    // {
+                    //     label: '消息类型',
+                    //     render: (h, params) => {
+                    //         let data = MAPDATA.SHOPPING.find(item => { return item.value === params.row.goods_type })
+                    //         return h('div', { class: { 'bounce_fa': true } }, [
+                    //             h('span', data ? data.name : '--')
+                    //         ])
+                    //     }
+                    // },
                     {
                         label: '消息标题',
                         render: (h, params) => {
-                            return h('span', params.row.update_user ? params.row.update_user : '--')
+                            return h('span', params.row.title ? params.row.title : '--')
                         }
                     },
                     {
                         label: '消息内容',
                         render: (h, params) => {
-                            return h('span', params.row.update_user ? params.row.update_user : '--')
+                            return h('span', params.row.content ? params.row.content : '--')
                         }
                     },
                     {
                         label: '跳转类型',
                         render: (h, params) => {
-                            return h('span', params.row.update_user ? params.row.update_user : '--')
+                            let data = MAPDATA.PATHTYPE2.find(item => { return item.value === params.row.push_type })
+                            return h('span', data ? data.name : '--')
                         }
                     },
                     {
                         label: '跳转链接/房间ID',
                         render: (h, params) => {
-                            return h('span', params.row.update_user ? params.row.update_user : '--')
+                            return h('span', params.row.push_val ? params.row.push_val : '--')
                         }
                     },
-                    {
-                        label: '操作',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('el-button', { props: { type: 'primary'}, style: {
-                                    display: params.row.status === 2 ? 'none' : 'unset'
-                                }, on: {click:()=>{this.down(params.row, 2)}}},'修改'),
-                                h('el-button', { props: { type: 'danger'}, style: {
-                                    display: params.row.status === 2 ? 'none' : 'unset'
-                                }, on: {click:()=>{this.down(params.row, 2)}}},'删除')
-                            ])
-                        }
-                    }
+                    // {
+                    //     label: '操作',
+                    //     render: (h, params) => {
+                    //         return h('div', [
+                    //             h('el-button', { props: { type: 'primary'}, style: {
+                    //                 display: params.row.status === 2 ? 'none' : 'unset'
+                    //             }, on: {click:()=>{this.down(params.row, 2)}}},'修改'),
+                    //             h('el-button', { props: { type: 'danger'}, style: {
+                    //                 display: params.row.status === 2 ? 'none' : 'unset'
+                    //             }, on: {click:()=>{this.down(params.row, 2)}}},'删除')
+                    //         ])
+                    //     }
+                    // }
                 ]
             }
         },
@@ -151,14 +152,9 @@ export default {
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
                 page: params.page,
-                status: s.status,
                 user_number: s.user_number,
                 start_time: Math.floor(s.start_time / 1000),
-                end_time: Math.floor(s.end_time / 1000),
-                user_id: s.user_id,
-                order_id: s.order_id,
-                sort: s.sort,
-                goods_type: s.goods_type
+                end_time: Math.floor(s.end_time / 1000)
             }
         },
         // 设置时间段

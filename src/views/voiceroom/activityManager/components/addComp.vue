@@ -14,14 +14,16 @@
                 <el-form-item label="权重排序" prop="sort">
                     <el-input v-model="ruleForm.sort" placeholder="请输入权重排序" clearable/>
                 </el-form-item>
-                <el-form-item label="闪屏图片" v-if="type=='flash_img'" prop="flash_img">
+                <el-form-item label="闪屏图片" prop="flash_img">
                     <uploadImg ref="flash_img" v-model="ruleForm.flash_img" :imgUrl="ruleForm.flash_img" name="flash_img" @validateField="validateField" accept=".png,.jpg,.jpeg" @input="getFileSplash"></uploadImg>
                 </el-form-item>
-                <el-form-item label="banner图片" v-if="type=='banner_img'" prop="banner_img">
+                <el-form-item label="banner图片" prop="banner_img" class="tipsItem">
                     <uploadImg ref="banner_img" v-model="ruleForm.banner_img" :imgUrl="ruleForm.banner_img" name="banner_img" @validateField="validateField" accept=".png" @input="getFileBanner"></uploadImg>
+                    <div class="tipsText">仅允许png格式，建议尺寸690×200</div>
                 </el-form-item>
-                <el-form-item label="房间游标图片" v-if="type=='room_img'" prop="room_img">
+                <el-form-item label="房间游标图片" prop="room_img" class="tipsItem">
                     <uploadImg ref="room_img" v-model="ruleForm.room_img" :imgUrl="ruleForm.room_img" name="room_img" @validateField="validateField" accept=".png" @input="getFilenonius"></uploadImg>
+                    <div class="tipsText">仅允许png格式，建议尺寸130*130</div>
                 </el-form-item>
                 <el-form-item label="落地类型" prop="url">
                     <el-input :placeholder="placeholderText" v-model="ruleForm.url" class="input-with-select">
@@ -119,12 +121,6 @@ export default {
             return params
         },
     },
-    props: {
-        type : {
-            type: String,
-            default: ""
-        }
-    },
     data() {
         return {
             dialogVisible: false,
@@ -134,6 +130,7 @@ export default {
             oldParams: {},
             pathType: MAPDATA.PATHTYPE,
             placeholderText: "请先选择落地类型",
+            navToType: 0,
             ruleForm: {
                 name: '',
                 sort: '',
@@ -142,7 +139,8 @@ export default {
                 room_img: '',
                 jumpType: '',
                 url: '',
-                time: ''
+                time: '',
+                nav_to :''
             },
             rules: {
                 name: [
@@ -150,15 +148,6 @@ export default {
                 ],
                 sort: [
                     { required: true, message: '请输入权重排序', trigger: 'blur' }
-                ],
-                flash_img: [
-                    { required: (this.type=='flash_img' ? true : false), message: '请选择闪屏图片', trigger: 'change' }
-                ],
-                banner_img: [
-                    { required: (this.type=='banner_img' ? true : false), message: '请选择banner图片', trigger: 'change' }
-                ],
-                room_img: [
-                    { required: (this.type=='room_img' ? true : false), message: '请选择房间游标图片', trigger: 'change' }
                 ],
                 url: [
                     { required: true, message: '请输入落地地址', trigger: 'blur' }
@@ -196,11 +185,35 @@ export default {
                     let params = { ...this.ruleForm }
                     params.start_time = Math.floor(params.time[0] / 1000)
                     params.end_time = Math.floor(params.time[1] / 1000)
+                    let type = '',url = '',roomId=''
+                    switch (params.jumpType) {
+                        case 1:
+                            type = 'app'
+                            roomId = params.url
+                            break;
+                        case 2:
+                            type = 'h5'
+                            url = params.url
+                            break;
+                        default:
+                            break;
+                    }
+                    params.nav_to = {
+                        type : type,
+                        uri: url
+                    }
+                    if(roomId !== ""){
+                        params.nav_to.params = {
+                            roomId : roomId
+                        }
+                    }
+                    params.nav_to = JSON.stringify(params.nav_to)
+                    delete params.url
+                    delete params.jumpType
                     delete params.time
-                    console.log("params:",params)
-                    return
                     addResourceConfig(params).then(res => {
                         if(res.code === 2000) {
+                            this.dialogVisible = false
                             this.$emit('onSearch')
                         }
                     }).catch(err => {
@@ -236,7 +249,6 @@ export default {
         },
         // 落地类型选择
         handleNavToType(row){
-            this.navToType = row
             this.placeholderText = row == 1 ? '请输入房间号' : '请输入落地地址'
         },
         // 闪屏图片
@@ -259,6 +271,9 @@ export default {
 
 <style lang="scss">
 .resourceState-add-box {
+    .el-dialog{
+        margin-top: 5vh !important;
+    }
     .el-form {
         .el-form-item__label::before {
             margin-right: 0px !important;
@@ -274,30 +289,28 @@ export default {
                 width: 100px;
             }
         }
-        .limit-content {
-            .el-form-item__content {
-                display: flex;
-                // align-items: center;
-                .el-button {
-                    height: 36px;
-                    margin-left: 10px;
+        .uploadImg{
+            width: 120px;
+            height: 120px;
+            .el-upload{
+                width: 120px;
+                height: 120px;
+                .el-icon-plus{
+                    width: 120px;
+                    height: 120px;
+                    line-height: 120px;
+                }
+                .avatar{
+                    width: 120px;
+                    height: 120px;
                 }
             }
         }
-        .limit-fa {
-            .limit {
-                display: flex;
-                align-items: center;
-                .el-input {
-                    width: 150px;
-                }
-            }
+        .tipsText{
+            font-size: 12px;
         }
-        .goodsImg {
-            .el-form-item__label::before {
-                content: '*';
-                color: #ff4949;
-            }
+        .tipsItem{
+            margin-bottom: 0;
         }
     }
 }

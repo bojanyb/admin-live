@@ -47,6 +47,10 @@ const request = {
         view: `${HTTPHEADER}/admin/view`, // 查看管理员信息
         deleteAdmin: `${HTTPHEADER}/admin/delete`, // 删除用户
         adminStatus: `${HTTPHEADER}/admin/adminStatus`, // 开关用户
+        sysList: `${HTTPHEADER}/NoticeLog/sysList`, // 系统消息 列表
+        addSysNotice: `${HTTPHEADER}/NoticeLog/addSysNotice`, // 系统消息 新增
+        officialList: `${HTTPHEADER}/NoticeLog/officialList`, // 官方消息 列表
+        addOfficialNotice: `${HTTPHEADER}/NoticeLog/addOfficialNotice`, // 官方消息 新增
         super: {
             punishHistory: `${HTTPHEADER}/Room/punishHistory`, // 处理处罚历史
             handlePunish: `${HTTPHEADER}/Room/handlePunish`, // 处理处罚
@@ -358,7 +362,9 @@ const request = {
 
     // 活动管理
     activity : {
+        resourceList: `${HTTPHEADER}/activity/resourceList`, // 资源列表
         addResourceConfig: `${HTTPHEADER}/activity/addResourceConfig`, // 添加资源位配置
+        delResource: `${HTTPHEADER}/activity/delResource`, // 删除资源
     }
 }
 

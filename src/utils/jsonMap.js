@@ -2349,6 +2349,22 @@ const PATHTYPE = [
     },
 ]
 
+// 跳转类型
+const PATHTYPE2 = [
+    {
+        name: '无',
+        value: 0
+    },
+    {
+        name: '进房间',
+        value: 2
+    },
+    {
+        name: 'URL',
+        value: 3
+    },
+]
+
 // 靓号类型
 const GOODNUMTYPE = [
     {
@@ -2572,5 +2588,6 @@ export default {
     SHOWSTATUS,
     CHECKEDSTATUS,
     RACKSATUS,
-    ACTIVESTATUS
+    ACTIVESTATUS,
+    PATHTYPE2
 }

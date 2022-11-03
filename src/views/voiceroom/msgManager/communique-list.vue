@@ -70,65 +70,56 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.shopping.list,
+                url: REQUEST.system.officialList,
                 columns: [
                     {
                         label: '发送时间',
                         render: (h, params) => {
-                            return h('span', params.row.up_time ? timeFormat(params.row.up_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
-                        label: '用户ID',
-                        prop: 'id'
-                    },
-                    {
-                        label: '图标',
-                        isimg: true,
-                        prop: 'face',
-                        imgWidth: '50px',
-                        imgHeight: '50px'
+                        label: '接收用户',
+                        prop: 'target_val'
                     },
                     {
                         label: '消息标题',
                         render: (h, params) => {
-                            return h('span', params.row.update_user ? params.row.update_user : '--')
+                            return h('span', params.row.title ? params.row.title : '--')
                         }
                     },
                     {
                         label: '消息内容',
                         render: (h, params) => {
-                            return h('span', params.row.update_user ? params.row.update_user : '--')
+                            return h('span', params.row.content ? params.row.content : '--')
                         }
                     },
                     {
                         label: '跳转类型',
                         render: (h, params) => {
-                            let data = MAPDATA.SHOPPING.find(item => { return item.value === params.row.goods_type })
-                            return h('div', { class: { 'bounce_fa': true } }, [
-                                h('span', data ? data.name : '--')
-                            ])
+                            let data = MAPDATA.PATHTYPE2.find(item => { return item.value === params.row.push_type })
+                            return h('span', data ? data.name : '--')
                         }
                     },
                     {
                         label: '跳转链接/房间ID',
                         render: (h, params) => {
-                            return h('span', params.row.update_user ? params.row.update_user : '--')
+                            return h('span', params.row.push_val ? params.row.push_val : '--')
                         }
                     },
-                    {
-                        label: '操作',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('el-button', { props: { type: 'primary'}, style: {
-                                    display: params.row.status === 2 ? 'none' : 'unset'
-                                }, on: {click:()=>{this.down(params.row, 2)}}},'修改'),
-                                h('el-button', { props: { type: 'danger'}, style: {
-                                    display: params.row.status === 2 ? 'none' : 'unset'
-                                }, on: {click:()=>{this.down(params.row, 2)}}},'删除')
-                            ])
-                        }
-                    }
+                    // {
+                    //     label: '操作',
+                    //     render: (h, params) => {
+                    //         return h('div', [
+                    //             h('el-button', { props: { type: 'primary'}, style: {
+                    //                 display: params.row.status === 2 ? 'none' : 'unset'
+                    //             }, on: {click:()=>{this.down(params.row, 2)}}},'修改'),
+                    //             h('el-button', { props: { type: 'danger'}, style: {
+                    //                 display: params.row.status === 2 ? 'none' : 'unset'
+                    //             }, on: {click:()=>{this.down(params.row, 2)}}},'删除')
+                    //         ])
+                    //     }
+                    // }
                 ]
             }
         },

@@ -12,29 +12,11 @@ const activityManagerRouter = {
 	},
 	children: [
 		{
-			path: 'banner-list',
-			component: () => import('@/views/voiceroom/activityManager/banner-list'),
-			name: 'banner-list',
+			path: 'resources-list',
+			component: () => import('@/views/voiceroom/activityManager/resources-list'),
+			name: 'resources-list',
 			meta: {
-				title: 'banner图片配置',
-				noCache: true
-			}
-		},
-		{
-			path: 'splash-list',
-			component: () => import('@/views/voiceroom/activityManager/splash-list'),
-			name: 'splash-list',
-			meta: {
-				title: '闪屏图片配置',
-				noCache: true
-			}
-		},
-		{
-			path: 'nonius-list',
-			component: () => import('@/views/voiceroom/activityManager/nonius-list'),
-			name: 'nonius-list',
-			meta: {
-				title: '房间游标配置',
+				title: '资源位配置',
 				noCache: true
 			}
 		}

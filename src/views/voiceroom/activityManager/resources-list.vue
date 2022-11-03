@@ -1,6 +1,6 @@
-<!-- 房间游标图片配置 -->
+<!-- banner图片配置 -->
 <template>
-    <div class="nonius-box">
+    <div class="banner-box">
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
@@ -8,7 +8,7 @@
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
         <!-- 新增/修改 -->
-        <add ref="add" v-if="isDestoryComp" :type="'room_img'" @onSearch="onSearch" @destoryComp="destoryComp"></add>
+        <add ref="add" v-if="isDestoryComp" :type="'banner_img'" @onSearch="onSearch" @destoryComp="destoryComp"></add>
     </div>
 </template>
 
@@ -22,7 +22,7 @@ import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入api
-import { down } from '@/api/shopping.js'
+import { delResource } from '@/api/activity.js'
 // 引入公共方法
 import { timeFormat } from '@/utils/common.js'
 // 引入公共map
@@ -49,7 +49,7 @@ export default {
                     placeholder: '请输入活动名称'
                 },
                 {
-                    name: 'status',
+                    name: 'type',
                     type: 'select',
                     value: null,
                     keyName: 'value',
@@ -64,18 +64,18 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.shopping.list,
+                url: REQUEST.activity.resourceList,
                 columns: [
                     {
                         label: '开始时间',
                         render: (h, params) => {
-                            return h('span', params.row.up_time ? timeFormat(params.row.up_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
                         label: '结束时间',
                         render: (h, params) => {
-                            return h('span', params.row.up_time ? timeFormat(params.row.up_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
@@ -83,22 +83,34 @@ export default {
                         prop: 'name'
                     },
                     {
+                        label: 'banner图片',
+                        isimg: true,
+                        prop: 'banner_img',
+                        imgWidth: '50px',
+                        imgHeight: '50px'
+                    },
+                    {
+                        label: '闪屏图片',
+                        isimg: true,
+                        prop: 'flash_img',
+                        imgWidth: '50px',
+                        imgHeight: '50px'
+                    },
+                    {
                         label: '房间游标图片',
                         isimg: true,
-                        prop: 'face',
+                        prop: 'room_img',
                         imgWidth: '50px',
                         imgHeight: '50px'
                     },
                     {
                         label: '权重',
-                        render: (h, params) => {
-                            return h('span', params.row.update_user ? params.row.update_user : '--')
-                        }
+                        prop: 'sort',
                     },
                     {
                         label: '状态',
                         render: (h, params) => {
-                            let data = MAPDATA.ACTIVESTATUS.find(item => { return item.value === params.row.goods_type })
+                            let data = MAPDATA.ACTIVESTATUS.find(item => { return item.value === params.row.status })
                             return h('div', { class: { 'bounce_fa': true } }, [
                                 h('span', data ? data.name : '--')
                             ])
@@ -137,37 +149,17 @@ export default {
         },
         // 配置参数
         beforeSearch(params) {
-            let s = {...this.searchParams, ...this.dateTimeParams}
+            let s = {...this.searchParams}
             return {
                 page: params.page,
-                status: s.status,
-                user_number: s.user_number,
-                start_time: Math.floor(s.start_time / 1000),
-                end_time: Math.floor(s.end_time / 1000),
-                user_id: s.user_id,
-                order_id: s.order_id,
-                sort: s.sort,
-                goods_type: s.goods_type
+                pagesize: params.pagesize,
+                type: s.type,
+                name: s.name,
             }
-        },
-        // 设置时间段
-        setDateTime(arr) {
-            const date = arr ? {
-                start_time: arr[0],
-                end_time: arr[1]
-            } : {}
-            this.$set(this, 'dateTimeParams', date)
-        },
-        // 清空日期选择
-        emptyDateTime() {
-            this.dateTimeParams = {}
         },
         // 查询
         reset() {
             this.searchParams = {}
-            this.dateTimeParams = {
-                activity_type_id: 1
-            }
             this.getList()
         },
         // 重置
@@ -182,20 +174,22 @@ export default {
         add() {
             this.load('add')
         },
+        // 修改
         update(row) {
             this.load('update', row)
         },
+        // 删除
         down(row, status) {
             let params = {
-                id: row.id,
-                status: status
+                id: row.id
             }
-            down(params).then(res => {
+            delResource(params).then(res => {
                 if(res.code === 2000) {
                     this.onSearch()
                 }
             })
         },
+        // 加载
         load(status,row) {
             this.isDestoryComp = true
             setTimeout(() => {
@@ -212,7 +206,7 @@ export default {
 </script>
 
 <style lang="scss">
-.nonius-box {
+.banner-box {
     padding: 20px;
     box-sizing: border-box;
     .model {
