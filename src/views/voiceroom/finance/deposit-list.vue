@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container finance-commercial-box">
+    <div class="app-container finance-deposit-list-box">
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
@@ -7,7 +7,7 @@
         <tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 新增 - 修改组件 -->
-        <commercialComp v-if="isDestoryComp" ref="commercialComp" @destoryComp="destoryComp" @getList="getList" type="payment"></commercialComp>
+        <commercialComp v-if="isDestoryComp" ref="commercialComp" @destoryComp="destoryComp" @getList="getList" type="deposit"></commercialComp>
     </div>
 </template>
 
@@ -63,7 +63,7 @@ export default {
                     value: 1,
                     keyName: 'value',
                     optionLabel: 'name',
-                    label: '支付类型',
+                    label: '提现类型',
                     placeholder: '请选择',
                     options: MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST
                 }
@@ -82,7 +82,7 @@ export default {
                         }
                     },
                     {
-                        label: '支付类型',
+                        label: '提现类型',
                         render: (h, params) => {
                             let data = MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST.find(a => { return params.row.channel_way === a.value })
                             return h('span', data ? data.name : '无')
@@ -97,12 +97,12 @@ export default {
                         label: '商户名称',
                         prop: 'merchant_name'
                     },
-                    // {
-                    //     label: '提现税率',
-                    //     render: (h, params) => {
-                    //         return h('span', params.row.cash_rate + '%')
-                    //     }
-                    // },
+                    {
+                        label: '提现税率',
+                        render: (h, params) => {
+                            return h('span', params.row.cash_rate + '%')
+                        }
+                    },
                     // {
                     //     label: '商户号',
                     //     minWidth: '100px',
@@ -117,22 +117,22 @@ export default {
                             return h('span', params.row.remark || '无')
                         }
                     },
-                    {
-                        minWidth: '100px',
-                        label: '使用状态',
-                        prop: 'cash_status',
-                        isSwitch: true,
-                        isTrueValue: 1,
-                        isFalseValue: 0,
-                        activeText: '启用',
-                        inactiveText: '停用',
-                        change: (v, row) => {
-                            this.payChannelWaySaveFunc(row.id, v)
-                        },
-                        render: (h, params) => {
-                            return h('span', '')
-                        }
-                    },
+                    // {
+                    //     minWidth: '100px',
+                    //     label: '使用状态',
+                    //     prop: 'cash_status',
+                    //     isSwitch: true,
+                    //     isTrueValue: 1,
+                    //     isFalseValue: 0,
+                    //     activeText: '启用',
+                    //     inactiveText: '停用',
+                    //     change: (v, row) => {
+                    //         this.payChannelWaySaveFunc(row.id, v)
+                    //     },
+                    //     render: (h, params) => {
+                    //         return h('span', '')
+                    //     }
+                    // },
                     {
                         label: '操作',
                         render: (h, params) => {
@@ -210,7 +210,7 @@ export default {
 </script>
 
 <style lang="scss">
-.finance-commercial-box {
+.finance-deposit-list-box {
 
 }
 </style>

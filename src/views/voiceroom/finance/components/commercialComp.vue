@@ -45,10 +45,10 @@
                     </el-upload>
                 </el-form-item>
                 <div class="formBox">
-                    <el-form-item label="提现税率" prop="cash_rate" class="allocationBox">
+                    <el-form-item label="提现税率" prop="cash_rate" class="allocationBox" v-if="type === 'deposit'">
                         <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.cash_rate"></el-input>
                     </el-form-item>
-                    <el-form-item label="支付类型" prop="channel_way">
+                    <el-form-item :label="type === 'payment' ? '支付类型' : '提现类型'" prop="channel_way">
                         <el-select v-model="ruleForm.channel_way" placeholder="请选择" :disabled="!ruleForm.channel">
                             <el-option v-for="item in payList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
@@ -75,6 +75,12 @@ import MAPDATA from '@/utils/jsonMap.js'
 // 引入api
 import REQUEST from '@/request/index.js'
 export default {
+    props: {
+        type: { // 当前类型
+            type: String,
+            default: ''
+        }
+    },
     components: {
         uploadImg
     },
