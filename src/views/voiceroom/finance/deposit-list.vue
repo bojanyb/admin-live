@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container finance-deposit-list-box">
+    <div class="finance-deposit-list-box">
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
