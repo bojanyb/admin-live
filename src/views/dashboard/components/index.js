@@ -36,6 +36,22 @@ const dashboardList = [
     {
         children: [
             {
+                tit: '礼物总分成:',
+                val: 'platform_gift_income'
+            },
+            {
+                tit: '公会总返点:',
+                val: 'guild_rebates'
+            },
+            {
+                tit: '平台流水收益:',
+                val: 'platform_income'
+            }
+        ]
+    },
+    {
+        children: [
+            {
                 tit: '背包总价值:',
                 val: 'bag_total_value'
             },

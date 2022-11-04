@@ -91,3 +91,12 @@ export function regReplenishmentByCsv(data) {
     data
   })
 }
+
+// 修改支付使用状态
+export function changePayStatus(data) {
+  return request({
+    url: REQUEST.finance.changePayStatus,
+    method: 'post',
+    data
+  })
+}

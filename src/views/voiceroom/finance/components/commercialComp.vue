@@ -148,11 +148,10 @@ export default {
             }
         },
         channelList() { // 商户平台
-            let arr = JSON.parse(JSON.stringify(MAPDATA.PAYCONFIGURATIONPLATFORMLIST))
             if(this.type !== 'payment') {
-                return arr.filter(item => { return item.value === 3 })
+                return MAPDATA.DEPOSITCONFIGURATIONPLATFORMLIST
             }
-            return arr
+            return MAPDATA.PAYCONFIGURATIONPLATFORMLIST
         }
     },
     methods: {

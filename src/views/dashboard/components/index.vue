@@ -56,6 +56,7 @@ export default {
             s.total_decGain = Number(s.decDiamond) + Number(s.decGain)
             s.android_top_up_diamond = Number(s.android_top_up_diamond)
             s.apple_top_up_diamond = Number(s.apple_top_up_diamond)
+            s.guild_rebates = Number(s.weekBate1) + Number(s.weekBate2) + Number(s.weekBate3) + Number(s.weekBate4)
             this.ruleForm = row;
         }
     },
