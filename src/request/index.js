@@ -164,6 +164,9 @@ const request = {
         // liveEnd: `${HTTPHEADER}/Room/liveEnd`, // 关闭房间
         liveEnd: `${HTTPHEADER}/v2/room/closeRoom`, // 关闭房间
         genre: `${HTTPHEADER}/Room/genre`, // 房间类型列表
+        broadcastList: `${HTTPHEADER}/broadcast/index`, // 房间广播列表
+        sendBroadcast: `${HTTPHEADER}/Broadcast/send`, // 发送广播
+        setBroadcastPrice: `${HTTPHEADER}/Broadcast/setPrice`, // 发送广播
     },
 
     // 用户管理
