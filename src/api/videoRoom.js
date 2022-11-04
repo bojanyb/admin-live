@@ -938,6 +938,14 @@ export function messageDelete(data) {
   })
 }
 
+// 消息管理 - push推送 - 增加
+export function addPushLog(data) {
+  return request({
+    url: api.message.addPushLog,
+    method: 'post',
+    data
+  })
+}
 
 
 /***********公会v2******************/ 

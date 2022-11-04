@@ -34,10 +34,10 @@ import tableList from "@/components/tableList/TableList.vue";
 import editComp from "./components/editComp.vue";
 // 引入api
 import REQUEST from "@/request/index.js";
-// 引入公共方法
-import { timeFormat } from "@/utils/common.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
+// 引入公共map
+import MAPDATA from "@/utils/jsonMap.js";
 
 export default {
   name: "BroadcastList",
@@ -57,19 +57,18 @@ export default {
     forms() {
       const BroadcastList = [
         {
-          name: "room_number",
+          name: "title",
           type: "input",
           value: "",
-          label: "房间ID",
-          isNum: true,
-          placeholder: "请输入房间ID",
+          label: "消息标题",
+          placeholder: "请输入消息标题",
         },
         {
           name: "dateTimeParams",
           type: "datePicker",
           dateType: "datetimerange",
           format: "yyyy-MM-dd HH:mm:ss",
-          label: "开播时间",
+          label: "创建时间",
           value: "",
           handler: {
             change: (v) => {
@@ -89,92 +88,35 @@ export default {
     cfgs() {
       return {
         vm: this,
-        url: REQUEST.room.liveList,
+        url: REQUEST.message.pushLogList,
         columns: [
           {
             label: "创建时间",
+            prop: 'create_time',
             minWidth: "180px",
-            render: (h, params) => {
-              return h(
-                "span",
-                params.row.start_time
-                  ? timeFormat(
-                      params.row.start_time,
-                      "YYYY-MM-DD HH:mm:ss",
-                      true
-                    )
-                  : "无"
-              );
-            },
-          },
-          {
-            label: "发送时间",
-            minWidth: "180px",
-            render: (h, params) => {
-              return h(
-                "span",
-                params.row.start_time
-                  ? timeFormat(
-                      params.row.start_time,
-                      "YYYY-MM-DD HH:mm:ss",
-                      true
-                    )
-                  : "无"
-              );
-            },
           },
           {
             label: "推送标题",
-            prop: "room_number",
+            prop: "title",
           },
           {
             label: "推送内容",
-            prop: "room_type",
+            prop: "content",
           },
           {
             label: "落地类型",
-            prop: "room_content",
-          },
-          {
-            label: "推送状态",
-            prop: "room_content",
+            prop: "push_type",
+            render: (h, params) => {
+              let data = MAPDATA.PUSHTYPESTATUS.find((item) => {
+                return item.value === params.row.push_type;
+              });
+              return h("span", data ? data.name : "无");
+            },
           },
           {
             label: "操作人",
-            prop: "room_content",
-          },
-          {
-            label: "操作",
-            minWidth: "160px",
-            prop: "room_content",
-            render: (h, params) => {
-              return h("div", [
-                h(
-                  "el-button",
-                  {
-                    props: { type: "primary" },
-                    on: {
-                      click: () => {
-                        this.update(params.row);
-                      },
-                    },
-                  },
-                  "修改"
-                ),
-                h(
-                  "el-button",
-                  {
-                    on: {
-                      click: () => {
-                        this.see(params.row);
-                      },
-                    },
-                  },
-                  "查看"
-                ),
-              ]);
-            },
-          },
+            prop: "admin_user_nickname",
+          }
         ],
       };
     },
@@ -186,9 +128,7 @@ export default {
       return {
         page: params.page,
         pagesize: params.size,
-        room_number: s.room_number,
-        room_category_id: s.room_category_id,
-        guild_number: s.guild_number,
+        title: s.title,
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
       };
