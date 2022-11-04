@@ -9,20 +9,20 @@
         @closed="destoryComp">
             <el-form :model="ruleForm" :rules="rules" label-suffix=":" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <el-form-item label="活动标题" prop="name">
-                    <el-input v-model="ruleForm.name" placeholder="请输入活动标题" clearable/>
+                    <el-input v-model="ruleForm.name" maxlength="20" placeholder="请输入活动标题" clearable/>
                 </el-form-item>
                 <el-form-item label="权重排序" prop="sort">
                     <el-input v-model="ruleForm.sort" placeholder="请输入权重排序" clearable/>
                 </el-form-item>
                 <el-form-item label="闪屏图片" prop="flash_img">
-                    <uploadImg ref="flash_img" v-model="ruleForm.flash_img" :imgUrl="ruleForm.flash_img" name="flash_img" @validateField="validateField" accept=".png,.jpg,.jpeg" @input="getFileSplash"></uploadImg>
+                    <uploadImg ref="flash_img" v-model="ruleForm.flash_img" :imgUrl="ruleForm.flash_img" name="flash_img" @validateField="validateField" @input="getFileSplash"></uploadImg>
                 </el-form-item>
                 <el-form-item label="banner图片" prop="banner_img" class="tipsItem">
-                    <uploadImg ref="banner_img" v-model="ruleForm.banner_img" :imgUrl="ruleForm.banner_img" name="banner_img" @validateField="validateField" accept=".png" @input="getFileBanner"></uploadImg>
+                    <uploadImg ref="banner_img" v-model="ruleForm.banner_img" :imgUrl="ruleForm.banner_img" maxWidth="690" maxHeight="200" name="banner_img" accept=".png" @input="getFileBanner"></uploadImg>
                     <div class="tipsText">仅允许png格式，建议尺寸690×200</div>
                 </el-form-item>
                 <el-form-item label="房间游标图片" prop="room_img" class="tipsItem">
-                    <uploadImg ref="room_img" v-model="ruleForm.room_img" :imgUrl="ruleForm.room_img" name="room_img" @validateField="validateField" accept=".png" @input="getFilenonius"></uploadImg>
+                    <uploadImg ref="room_img" v-model="ruleForm.room_img" :imgUrl="ruleForm.room_img" maxWidth="130" maxHeight="130" name="room_img" accept=".png" @input="getFilenonius"></uploadImg>
                     <div class="tipsText">仅允许png格式，建议尺寸130*130</div>
                 </el-form-item>
                 <el-form-item label="落地类型" prop="url">
@@ -58,7 +58,7 @@ import MAPDATA from '@/utils/jsonMap.js'
 // 引入图片上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
 // 引入api
-import { addResourceConfig } from '@/api/activity.js'
+import { addResourceConfig,editResource } from '@/api/activity.js'
 
 export default {
     components: {
@@ -155,7 +155,7 @@ export default {
                 time: [
                     { required: true, message: '请选择活动时间', trigger: 'change' },
                 ]
-            }
+            },
         };
     },
     methods: {
@@ -169,13 +169,18 @@ export default {
                 let params = JSON.parse(JSON.stringify(row))
                 params.start_time = params.start_time * 1000
                 params.end_time = params.end_time * 1000
-                params.noble_level = params.noble_level ? params.noble_level : null
-                if(params.goods_animation_path) {
-                    this.goodsType = 1
-                } else if(params.goods_image) {
-                    this.goodsType = 2
-                }
+                params.id = params.id
+                params.banner_img = params.banner_img
+                params.flash_img = params.flash_img
+                params.name = params.name
+                params.room_img = params.room_img
+                params.sort = params.sort
+                params.url = params.nav_to.type == 'app' ? params.nav_to.params.roomId : params.nav_to.uri
+                params.jumpType = params.nav_to.type == 'app' ? 1 : 2
                 this.$set(this.$data, 'ruleForm', params)
+                this.ruleForm.time=[]
+                this.ruleForm.time[0] = params.start_time
+                this.ruleForm.time[1] = params.end_time
             }
         },
         // 提交
@@ -186,6 +191,10 @@ export default {
                     params.start_time = Math.floor(params.time[0] / 1000)
                     params.end_time = Math.floor(params.time[1] / 1000)
                     let type = '',url = '',roomId=''
+                    if(params.jumpType == ''){
+                        this.$message.error('请先选择落地类型')
+                        return
+                    }
                     switch (params.jumpType) {
                         case 1:
                             type = 'app'
@@ -206,19 +215,31 @@ export default {
                         params.nav_to.params = {
                             roomId : roomId
                         }
+                        params.nav_to.uri = 'enterRoom'
                     }
                     params.nav_to = JSON.stringify(params.nav_to)
                     delete params.url
                     delete params.jumpType
                     delete params.time
-                    addResourceConfig(params).then(res => {
-                        if(res.code === 2000) {
-                            this.dialogVisible = false
-                            this.$emit('onSearch')
-                        }
-                    }).catch(err => {
-                        this.$message.error(err)
-                    })
+                    if(this.status == 'add'){
+                        addResourceConfig(params).then(res => {
+                            if(res.code === 2000) {
+                                this.dialogVisible = false
+                                this.$emit('onSearch')
+                            }
+                        }).catch(err => {
+                            this.$message.error(err)
+                        })
+                    }else if(this.status == 'update'){
+                        editResource(params).then(res => {
+                            if(res.code === 2000) {
+                                this.dialogVisible = false
+                                this.$emit('onSearch')
+                            }
+                        }).catch(err => {
+                            this.$message.error(err)
+                        })
+                    }
                 } else {
                     return false;
                 }

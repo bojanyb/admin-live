@@ -369,6 +369,7 @@ const request = {
     activity : {
         resourceList: `${HTTPHEADER}/activity/resourceList`, // 资源列表
         addResourceConfig: `${HTTPHEADER}/activity/addResourceConfig`, // 添加资源位配置
+        editResource: `${HTTPHEADER}/activity/editResource`, // 修改资源位配置
         delResource: `${HTTPHEADER}/activity/delResource`, // 删除资源
     }
 }

@@ -45,7 +45,6 @@ export default {
                     type: 'input',
                     value: '',
                     label: '活动名称',
-                    isNum: true,
                     placeholder: '请输入活动名称'
                 },
                 {
