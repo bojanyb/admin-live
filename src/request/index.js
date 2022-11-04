@@ -276,6 +276,8 @@ const request = {
         messageAdd: `${HTTPHEADER}/ActivityPush/add`, // 充值记录
         list: `${HTTPHEADER}/ActivityPush/list`, // 活动通知列表
         delete: `${HTTPHEADER}/ActivityPush/delete`, // 活动通知列表
+        pushLogList: `${HTTPHEADER}/PushLog`, // 活动通知列表
+        addPushLog: `${HTTPHEADER}/pushLog/add`, // 活动通知列表
     },
 
     // 举报管理
