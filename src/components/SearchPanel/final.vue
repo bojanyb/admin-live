@@ -177,6 +177,7 @@
           <el-form-item>
             <el-button v-if="showSearchBtn" type="primary" @click="onSearch">查询</el-button>
             <el-button v-if="showAdd" type="success" @click="add">{{ addName || '新增' }}</el-button>
+            <el-button v-if="showSave" type="success" @click="onSave">保存</el-button>
             <el-button v-if="showToday" @click="today">今天</el-button>
             <el-button v-if="showYesterday" @click="yesterday">昨天</el-button>
             <el-button v-if="showBeforeYesterday" @click="beforeYesterday">前天</el-button>
@@ -248,6 +249,11 @@ export default {
     },
     // 是否显示新增按钮
     showAdd: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示保存按钮
+    showSave: {
       type: Boolean,
       default: false
     },
@@ -514,6 +520,10 @@ export default {
     // 新增
     add() {
       this.$emit('add')
+    },
+    // 保存
+    onSave() {
+      this.$emit('save', this.form)
     },
     // 重置
     reset() {
