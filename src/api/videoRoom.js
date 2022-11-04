@@ -1032,5 +1032,22 @@ export function getGuildType(data) {
   })
 }
 
+/***********广播******************/ 
 
+// 发送广播消息
+export function sendBroadcast(data) {
+  return request({
+    url: api.room.sendBroadcast,
+    method: 'post',
+    data
+  })
+}
 
+// 设置广播价格
+export function setBroadcastPrice(data) {
+  return request({
+    url: api.room.setBroadcastPrice,
+    method: 'post',
+    data
+  })
+}
