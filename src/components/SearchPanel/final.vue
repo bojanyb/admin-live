@@ -523,7 +523,7 @@ export default {
     },
     // 保存
     onSave() {
-      this.$emit('save')
+      this.$emit('save', this.form)
     },
     // 重置
     reset() {

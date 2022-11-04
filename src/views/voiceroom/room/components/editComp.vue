@@ -15,29 +15,25 @@
         label-suffix=":"
         :hide-required-asterisk="status === 'see'"
       >
-        <el-form-item label="用户ID" prop="name">
+        <el-form-item label="用户ID" prop="user_number">
           <el-input
-            v-model="ruleForm.name"
+            v-model="ruleForm.user_number"
             placeholder="请输入公会名字"
           ></el-input>
         </el-form-item>
-        <el-form-item label="房间ID" prop="guild_type">
-          <el-select v-model="ruleForm.guild_type" placeholder="请选择公会类型">
-            <el-option
-              v-for="item in guildTypeList"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-            ></el-option>
-          </el-select>
+        <el-form-item label="房间ID" prop="room_number">
+          <el-input
+            v-model="ruleForm.room_number"
+            placeholder="请输入公会名字"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="广播内容" prop="guild_number">
+        <el-form-item label="广播内容" prop="content">
           <el-input
             type="textarea"
             rows="3"
             resize="none"
             maxlength="30"
-            v-model="ruleForm.guild_number"
+            v-model="ruleForm.content"
             placeholder="请输入广播内容"
           ></el-input>
         </el-form-item>
@@ -52,7 +48,7 @@
 
 <script>
 // 引入api
-import { getGuildCreateV2, getGuildUpdateV2 } from "@/api/videoRoom";
+import { sendBroadcast } from "@/api/videoRoom";
 // 引入公共map
 import MAPDATA from "@/utils/jsonMap.js";
 export default {
@@ -64,35 +60,20 @@ export default {
       rankList: MAPDATA.CLASSLIST,
       guildTypeList: MAPDATA.GUILDCONFIGTYPELIST,
       ruleForm: {
-        id: null,
-        name: "",
-        guild_number: "",
-        rebate: 0,
-        guild_type: null,
+        user_number: null,
+        room_number: "",
+        content: "",
       },
       oldParams: {}, // 老数据
       rules: {
-        name: [
-          { required: true, message: "请输入公会昵称", trigger: "blur" },
-          // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        ],
-        rebate: [
-          { required: true, message: "请输入固定返点", trigger: "blur" },
-        ],
         user_number: [
-          { required: true, message: "请输入公会长ID", trigger: "blur" },
+          { required: true, message: "请输入用户ID", trigger: "blur" },
         ],
-        rank: [
-          { required: true, message: "请选择公会等级", trigger: "change" },
+        room_number: [
+          { required: true, message: "请输入房间ID", trigger: "blur" },
         ],
-        // operator: [
-        //     { required: true, message: '请选择公会运营', trigger: 'change' }
-        // ],
-        guild_type: [
-          { required: true, message: "请选择公会类型", trigger: "change" },
-        ],
-        remark: [
-          { required: false, message: "请输入公会简介", trigger: "blur" },
+        content: [
+          { required: true, message: "请输入广播内容", trigger: "blur" },
         ],
       },
     };
@@ -111,13 +92,6 @@ export default {
     },
   },
   methods: {
-    // 公会返点限制
-    rebateInput() {
-      let num = this.ruleForm.rebate;
-      if (num && Number(num) > 10) {
-        this.ruleForm.rebate = 10;
-      }
-    },
     // 新增 - 修改
     loadParams(status, row) {
       this.openComp();
@@ -125,12 +99,9 @@ export default {
       if (status !== "add") {
         let params = JSON.parse(JSON.stringify(row));
         let para = {};
-        para.guild_type = params.guild_type ? params.guild_type : "";
-        para.id = params.id ? params.id : "";
-        para.name = params.name ? params.name : "";
-        para.guild_number = params.guild_number ? params.guild_number : "";
-        para.status = params.status;
-        para.rebate = params.rebate;
+        para.user_number = params.user_number || "";
+        para.room_number = params.room_number || "";
+        para.content = params.content || "";
         this.$set(this.$data, "ruleForm", para);
       }
 
@@ -165,16 +136,9 @@ export default {
       this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
           let params = { ...this.ruleForm };
-          if (this.status === "add") {
-            let res = await getGuildCreateV2(params);
-            if (res.code === 2000) {
-              this.$success("新增成功");
-            }
-          } else {
-            let res = await getGuildUpdateV2(params);
-            if (res.code === 2000) {
-              this.$success("修改成功");
-            }
+          let res = await sendBroadcast(params);
+          if (res.code === 2000) {
+            this.$success("发送成功");
           }
           this.openComp(false);
           this.$emit("getList");

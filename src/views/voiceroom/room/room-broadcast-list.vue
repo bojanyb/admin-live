@@ -16,13 +16,18 @@
 
     <el-card class="box-card" shadow="always" v-show="tabIndex === '0'">
       <div class="box-card-inner">
-        <span v-for="item in topListFilter" :key="item.type"
-          >{{ item.name }}: {{ item.value }}</span
-        >
+        <span>查询期间: 发送人数:{{ ruleForm.user_count }}人</span>
+        <span>发送条数: {{ ruleForm.count }}条</span>
+        <span>广播内容: {{ ruleForm.total_cost }}钻石</span>
       </div>
     </el-card>
 
-    <tableList v-if="tabIndex === '0'" :cfgs="cfgs" ref="tableList"></tableList>
+    <tableList
+      v-if="tabIndex === '0'"
+      :cfgs="cfgs"
+      ref="tableList"
+      @saleAmunt="saleAmunt"
+    ></tableList>
 
     <!-- 新增or修改组件 -->
     <editComp
@@ -35,6 +40,8 @@
 </template>
 
 <script>
+// 引入api
+import { setBroadcastPrice } from "@/api/videoRoom";
 // 引入tab菜单组件
 import menuComp from "@/components/menuComp/index.vue";
 // 引入菜单组件
@@ -49,6 +56,8 @@ import REQUEST from "@/request/index.js";
 import { timeFormat } from "@/utils/common.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
+// 引入公共map
+import MAPDATA from "@/utils/jsonMap.js";
 
 export default {
   name: "BroadcastList",
@@ -64,38 +73,17 @@ export default {
       tabIndex: "0",
       menuList: [{ name: "房间广播列表" }, { name: "房间广播配置" }],
       isDestoryComp: false, // 是否销毁组件
-      topListFilter: [
-        {
-          name: "查询期间",
-          value: 100,
-          type: 1,
-        },
-        {
-          name: "发送人数",
-          value: 100,
-          type: 2,
-        },
-        {
-          name: "发送条数",
-          value: 100,
-          type: 3,
-        },
-        {
-          name: "广播内容",
-          value: 100,
-          type: 3,
-        },
-      ],
+      ruleForm: {},
     };
   },
   computed: {
     forms() {
       const BroadcastList = [
         {
-          name: "room_number",
+          name: "user_number",
           type: "input",
           value: "",
-          label: "房间ID",
+          label: "用户ID",
           isNum: true,
           placeholder: "请输入房间ID",
         },
@@ -104,7 +92,7 @@ export default {
           type: "datePicker",
           dateType: "datetimerange",
           format: "yyyy-MM-dd HH:mm:ss",
-          label: "开播时间",
+          label: "发送时间",
           value: "",
           handler: {
             change: (v) => {
@@ -121,7 +109,7 @@ export default {
       ];
       const BroadcastOptions = [
         {
-          name: "price",
+          name: "cost",
           type: "input",
           value: "",
           label: "广播单价",
@@ -134,7 +122,7 @@ export default {
     cfgs() {
       return {
         vm: this,
-        url: REQUEST.room.liveList,
+        url: REQUEST.room.broadcastList,
         columns: [
           {
             label: "发送时间",
@@ -142,9 +130,9 @@ export default {
             render: (h, params) => {
               return h(
                 "span",
-                params.row.start_time
+                params.row.create_time
                   ? timeFormat(
-                      params.row.start_time,
+                      params.row.create_time,
                       "YYYY-MM-DD HH:mm:ss",
                       true
                     )
@@ -153,16 +141,22 @@ export default {
             },
           },
           {
-            label: "用户",
-            prop: "room_number",
+            label: "用户ID",
+            prop: "user_number",
           },
           {
             label: "发送类型",
-            prop: "room_type",
+            prop: "from_type",
+            render: (h, params) => {
+              let data = MAPDATA.FROMTYPESTATUS.find((item) => {
+                return item.value === params.row.from_type;
+              });
+              return h("span", data ? data.name : "无");
+            },
           },
           {
             label: "广播内容",
-            prop: "room_content",
+            prop: "content",
           },
         ],
       };
@@ -175,9 +169,7 @@ export default {
       return {
         page: params.page,
         pagesize: params.size,
-        room_number: s.room_number,
-        room_category_id: s.room_category_id,
-        guild_number: s.guild_number,
+        user_number: s.user_number,
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
       };
@@ -205,23 +197,35 @@ export default {
       this.load("add");
     },
     // 保存
-    onSave() {
-      this.$confirm("此操作, 是否继续?", "提示", {
+    onSave(fromData) {
+      if (!fromData.cost) {
+        return false;
+      }
+      this.$confirm("你确定要保存推广单价吗？", "保存提醒", {
+        type: "warning",
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
       })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "保存成功!",
+        .then(async () => {
+          const loading = this.$loading({
+            lock: true,
+            text: "Loading",
+            spinner: "el-icon-loading",
+            background: "rgba(0, 0, 0, 0.7)",
           });
+          let response = await setBroadcastPrice({ cost: +fromData.cost });
+          if (response.code === 2000) {
+            loading.close();
+            this.$message({
+              message:
+                Object.prototype.toString.call(response) ===
+                  "[object Object]" && "保存成功",
+              type: "success",
+            });
+          }
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消保存",
-          });
+          loading.close();
         });
     },
     load(status, row) {
@@ -237,6 +241,11 @@ export default {
     // 销毁组件
     destoryComp() {
       this.isDestoryComp = false;
+    },
+    // 列表返回数据
+    saleAmunt(data) {
+      const { total_cost, user_count, count } = data;
+      this.ruleForm = { total_cost, user_count, count };
     },
   },
 };

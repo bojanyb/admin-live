@@ -2285,6 +2285,22 @@ const GUILDREPORTSTATUS = [
     }
 ]
 
+// 发送类型状态
+const FROMTYPESTATUS = [
+    {
+        name: '用户发送',
+        value: 1
+    },
+    {
+        name: '后台发送',
+        value: 2
+    },
+    {
+        name: '后台帮用户发送',
+        value: 3
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -2394,5 +2410,6 @@ export default {
     USERRANKLIST,
     USERCHARMLIST,
     USERREGISTERTYPELIST,
-    DURATIONCOPY
+    DURATIONCOPY,
+    FROMTYPESTATUS
 }

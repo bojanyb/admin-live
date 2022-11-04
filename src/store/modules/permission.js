@@ -145,11 +145,11 @@ const actions = {
 
           arr.forEach((item,index) => {
             array.push({
-              component: item.params.component,
-              meta: item.params.meta,
-              name: item.params.name,
-              path: item.params.path,
-              redirect: item.params.redirect
+              component: item.params ? item.params.component : Layout,
+              meta: item.params ? item.params.meta : { title: 'default' },
+              name: item.params ? item.params.name : 'default',
+              path: item.params ? item.params.path : `/default${index}`,
+              redirect: item.params ? item.params.redirect : 'noRedirect'
             })
             array[index].meta.title = item.title
             if(item.child && item.child.length > 0) {
