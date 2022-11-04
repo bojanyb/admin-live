@@ -45,10 +45,6 @@ export default {
         };
     },
     computed: {
-        channelList() {
-            let arr = JSON.parse(JSON.stringify(MAPDATA.PAYCONFIGURATIONPLATFORMLIST))
-            return arr.filter(item => { return item.value === 3 })
-        },
         forms() {
             return [
                 {
@@ -59,7 +55,7 @@ export default {
                     optionLabel: 'name',
                     label: '商户平台',
                     placeholder: '请选择',
-                    options: this.channelList
+                    options: MAPDATA.DEPOSITCONFIGURATIONPLATFORMLIST
                 },
                 // {
                 //     name: 'channel_way',
@@ -81,7 +77,7 @@ export default {
                     {
                         label: '商户平台',
                         render: (h, params) => {
-                            let data = MAPDATA.PAYCONFIGURATIONPLATFORMLIST.find(item => { return item.value === params.row.channel })
+                            let data = MAPDATA.DEPOSITCONFIGURATIONPLATFORMLIST.find(item => { return item.value === params.row.channel })
                             return h('span', data ? data.name : '无')
                         }
                     },
