@@ -13,7 +13,7 @@
 
 <script>
 // 引入api
-import { useCash } from '@/api/finance'
+import { changePayStatus } from '@/api/finance'
 // 引入新增 - 修改组件
 import commercialComp from './components/commercialComp.vue'
 // 引入列表组件
@@ -120,7 +120,7 @@ export default {
                     {
                         minWidth: '100px',
                         label: '使用状态',
-                        prop: 'cash_status',
+                        prop: 'status',
                         isSwitch: true,
                         isTrueValue: 1,
                         isFalseValue: 0,
@@ -198,9 +198,9 @@ export default {
         async payChannelWaySaveFunc(id, status) {
             let params = {
                 id: id,
-                cash_status: status
+                status: status
             }
-            let res = await useCash(params)
+            let res = await changePayStatus(params)
             if(res.code === 2000) {
                 this.$success('操作成功')
                 this.getList()
