@@ -51,7 +51,6 @@ const mutations = {
 
 const actions = {
   generateRoutes({ commit }, roles) {
-    
     return new Promise(resolve => {
       let admin_id = Number(localStorage.getItem('admin_id'))
       editAdmin({ admin_id }).then(res => {
@@ -122,7 +121,6 @@ const actions = {
                   redirect: params.redirect
                 }
               }
-              
               if(item.child && item.child.length > 0) {
                 sv(item.child)
               }
@@ -208,7 +206,6 @@ const actions = {
 
         }
       })
-      
     })
   }
 }

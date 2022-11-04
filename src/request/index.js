@@ -47,6 +47,10 @@ const request = {
         view: `${HTTPHEADER}/admin/view`, // 查看管理员信息
         deleteAdmin: `${HTTPHEADER}/admin/delete`, // 删除用户
         adminStatus: `${HTTPHEADER}/admin/adminStatus`, // 开关用户
+        sysList: `${HTTPHEADER}/NoticeLog/sysList`, // 系统消息 列表
+        addSysNotice: `${HTTPHEADER}/NoticeLog/addSysNotice`, // 系统消息 新增
+        officialList: `${HTTPHEADER}/NoticeLog/officialList`, // 官方消息 列表
+        addOfficialNotice: `${HTTPHEADER}/NoticeLog/addOfficialNotice`, // 官方消息 新增
         super: {
             punishHistory: `${HTTPHEADER}/Room/punishHistory`, // 处理处罚历史
             handlePunish: `${HTTPHEADER}/Room/handlePunish`, // 处理处罚
@@ -151,7 +155,7 @@ const request = {
         send: `${HTTPHEADER}/goods/send`,
         sendlog: `${HTTPHEADER}/goods/sendlog`,
     },
-    
+
     // 派对管理
     room: {
         report: `${HTTPHEADER}/Room/feedback`,
@@ -182,7 +186,7 @@ const request = {
         updateLoginPwd: `${HTTPHEADER}/User/updateLoginPwd`, // 更改登录密码
         addRichUser: `${HTTPHEADER}/User/addRichUser`, // 添加财富用户
     },
-    
+
     // 审核管理
     audit: {
         list: `${HTTPHEADER}/user/getUserBgi`,
@@ -357,6 +361,13 @@ const request = {
         delMoments: `${HTTPHEADER}/moments/delMoments`, // 删除动态
         msgList: `${HTTPHEADER}/moments/msgList`, // 评论列表
         deleteMsg: `${HTTPHEADER}/moments/deleteMsg`, // 删除评论
+    },
+
+    // 活动管理
+    activity : {
+        resourceList: `${HTTPHEADER}/activity/resourceList`, // 资源列表
+        addResourceConfig: `${HTTPHEADER}/activity/addResourceConfig`, // 添加资源位配置
+        delResource: `${HTTPHEADER}/activity/delResource`, // 删除资源
     }
 }
 

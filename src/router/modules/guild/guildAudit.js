@@ -91,7 +91,6 @@ const guildAuditRouter = {
 				noCache: true
 			}
 		},
-		
 	]
 }
 
