@@ -50,6 +50,7 @@ export default {
             s.total_num = Number(s.total_diamond) + Number(s.total_gain)
             s.total_incGain = Number(s.incDiamond) + Number(s.incGain)
             s.total_decGain = Number(s.decDiamond) + Number(s.decGain)
+            s.guild_rebates = Number(s.weekBate1) + Number(s.weekBate2) + Number(s.weekBate3) + Number(s.weekBate4)
             this.ruleForm = row;
         }
     },
