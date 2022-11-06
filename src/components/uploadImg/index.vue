@@ -31,6 +31,10 @@ export default {
             type: Boolean,
             default: false
         },
+        isFileType: { // 是否验证文件类型
+            type: Boolean,
+            default: false
+        },
         accept: { // 限制上传文件格式
             type: String,
             default: ''
@@ -92,7 +96,7 @@ export default {
             let fileType = file.file.type
             let accept = JSON.parse(JSON.stringify(this.accept))
             accept = accept.replace(".","")
-            if (fileType.indexOf(accept) == -1) {
+            if (fileType.indexOf(accept) == -1  && this.isFileType == true) {
                 this.$message.error("上传图片只能是" + accept + "格式!");
                 return false;
             }
@@ -103,7 +107,7 @@ export default {
                 });
                 return
             }
-            if(this.maxWidth == ""){
+            if(this.maxWidth == "" && this.isFileType == false){
                 this.uploadImg(file)
             }else{
                 this.limitFileWH(this.maxWidth, this.maxHeight, file.file).then((res) => {

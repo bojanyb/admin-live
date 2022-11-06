@@ -35,7 +35,7 @@
                 <el-form-item label="落地类型" prop="push_val">
                     <el-input placeholder="请输入内容" v-model="ruleForm.push_val" class="input-with-select">
                         <el-select v-model="ruleForm.push_type" slot="prepend"  placeholder="链接选择">
-                            <el-option v-for="item in pathType" :label="item.name" :value="item.value"></el-option>
+                            <el-option v-for="item in pathType" :label="item.name" :value="item.value" :key="item.value"></el-option>
                         </el-select>
                     </el-input>
                 </el-form-item>

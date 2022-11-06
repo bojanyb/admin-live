@@ -21,8 +21,6 @@ import SearchPanel from '@/components/SearchPanel/final.vue'
 import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
-// 引入api
-import { down } from '@/api/system.js'
 // 引入公共方法
 import { timeFormat } from '@/utils/common.js'
 // 引入公共map
@@ -82,15 +80,6 @@ export default {
                         label: '用户',
                         prop: 'target_val'
                     },
-                    // {
-                    //     label: '消息类型',
-                    //     render: (h, params) => {
-                    //         let data = MAPDATA.SHOPPING.find(item => { return item.value === params.row.goods_type })
-                    //         return h('div', { class: { 'bounce_fa': true } }, [
-                    //             h('span', data ? data.name : '--')
-                    //         ])
-                    //     }
-                    // },
                     {
                         label: '消息标题',
                         render: (h, params) => {
@@ -115,20 +104,7 @@ export default {
                         render: (h, params) => {
                             return h('span', params.row.push_val ? params.row.push_val : '--')
                         }
-                    },
-                    // {
-                    //     label: '操作',
-                    //     render: (h, params) => {
-                    //         return h('div', [
-                    //             h('el-button', { props: { type: 'primary'}, style: {
-                    //                 display: params.row.status === 2 ? 'none' : 'unset'
-                    //             }, on: {click:()=>{this.down(params.row, 2)}}},'修改'),
-                    //             h('el-button', { props: { type: 'danger'}, style: {
-                    //                 display: params.row.status === 2 ? 'none' : 'unset'
-                    //             }, on: {click:()=>{this.down(params.row, 2)}}},'删除')
-                    //         ])
-                    //     }
-                    // }
+                    }
                 ]
             }
         },
@@ -191,17 +167,6 @@ export default {
         },
         update(row) {
             this.load('update', row)
-        },
-        down(row, status) {
-            let params = {
-                id: row.id,
-                status: status
-            }
-            down(params).then(res => {
-                if(res.code === 2000) {
-                    this.onSearch()
-                }
-            })
         },
         load(status,row) {
             this.isDestoryComp = true
