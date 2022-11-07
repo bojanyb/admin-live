@@ -110,7 +110,7 @@ export default {
               let data = MAPDATA.PUSHTYPESTATUS.find((item) => {
                 return item.value === params.row.push_type;
               });
-              return h("span", data ? data.name : "无");
+              return h("span", data ? `${data.name}：${params.row.push_val}` : "无");
             },
           },
           {
