@@ -46,6 +46,15 @@ const roomConfigRouter = {
 				title: '进房记录',
 				noCache: true
 			}
+		},
+		{
+			path: 'channelRoom',
+			component: () => import('@/views/voiceroom/roomConfig/channelRoom'),
+			name: 'channelRoom',
+			meta: {
+				title: '渠道进房',
+				noCache: true
+			}
 		}
 	]
 }
