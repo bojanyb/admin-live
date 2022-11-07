@@ -1059,3 +1059,12 @@ export function setBroadcastPrice(data) {
     data
   })
 }
+
+// 设置广播价格
+export function getBroadcastPrice(data) {
+  return request({
+    url: api.room.getBroadcastPrice,
+    method: 'post',
+    data
+  })
+}
