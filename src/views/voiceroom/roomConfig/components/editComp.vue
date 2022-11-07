@@ -38,7 +38,7 @@
 
 <script>
 // 引入api
-import { sendBroadcast } from "@/api/videoRoom";
+import { addAutoJoinConfig } from "@/api/videoRoom";
 // 引入公共map
 import MAPDATA from "@/utils/jsonMap.js";
 export default {
@@ -123,7 +123,7 @@ export default {
       this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
           let params = { ...this.ruleForm };
-          let res = await sendBroadcast(params);
+          let res = await addAutoJoinConfig(params);
           if (res.code === 2000) {
             this.$success("发送成功");
           }

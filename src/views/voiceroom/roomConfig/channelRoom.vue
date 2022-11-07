@@ -1,21 +1,17 @@
 <template>
   <div class="room-livelist">
-    <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
     <div class="searchParams">
       <SearchPanel
         v-model="searchParams"
         :forms="forms"
-        :show-add="tabIndex === '0'"
-        :show-search-btn="tabIndex === '0'"
-        :show-save="tabIndex === '1'"
+        :show-add="true"
+        :show-search-btn="true"
         @add="add"
         @onSearch="onSearch"
-        @save="onSave"
       ></SearchPanel>
     </div>
 
     <tableList
-      v-if="tabIndex === '0'"
       :cfgs="cfgs"
       ref="tableList"
       @saleAmunt="saleAmunt"
@@ -32,8 +28,6 @@
 </template>
 
 <script>
-// 引入api
-import { setBroadcastPrice } from "@/api/videoRoom";
 // 引入tab菜单组件
 import menuComp from "@/components/menuComp/index.vue";
 // 引入菜单组件
@@ -48,11 +42,9 @@ import REQUEST from "@/request/index.js";
 import { timeFormat } from "@/utils/common.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
-// 引入公共map
-import MAPDATA from "@/utils/jsonMap.js";
 
 export default {
-  name: "BroadcastList",
+  name: "channelRoom",
   mixins: [mixins],
   components: {
     SearchPanel,
@@ -62,8 +54,6 @@ export default {
   },
   data() {
     return {
-      tabIndex: "0",
-      menuList: [{ name: "房间广播列表" }, { name: "房间广播配置" }],
       isDestoryComp: false, // 是否销毁组件
       ruleForm: {},
     };
@@ -84,7 +74,7 @@ export default {
     cfgs() {
       return {
         vm: this,
-        url: REQUEST.room.broadcastList,
+        url: REQUEST.room.getAutoJoinConfig,
         columns: [
           {
             label: "添加时间",
@@ -157,38 +147,6 @@ export default {
     // 新增
     add() {
       this.load("add");
-    },
-    // 保存
-    onSave(fromData) {
-      if (!fromData.cost) {
-        return false;
-      }
-      this.$confirm("你确定要保存推广单价吗？", "保存提醒", {
-        type: "warning",
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-      })
-        .then(async () => {
-          const loading = this.$loading({
-            lock: true,
-            text: "Loading",
-            spinner: "el-icon-loading",
-            background: "rgba(0, 0, 0, 0.7)",
-          });
-          let response = await setBroadcastPrice({ cost: +fromData.cost });
-          if (response.code === 2000) {
-            loading.close();
-            this.$message({
-              message:
-                Object.prototype.toString.call(response) ===
-                  "[object Object]" && "保存成功",
-              type: "success",
-            });
-          }
-        })
-        .catch(() => {
-          loading.close();
-        });
     },
     // 修改
     add() {

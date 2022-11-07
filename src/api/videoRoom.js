@@ -947,6 +947,15 @@ export function addPushLog(data) {
   })
 }
 
+// 房间管理 - 渠道进房 - 新增
+export function addAutoJoinConfig(data) {
+  return request({
+    url: api.room.addAutoJoinConfig,
+    method: 'post',
+    data
+  })
+}
+
 
 /***********公会v2******************/ 
 // 新增公会

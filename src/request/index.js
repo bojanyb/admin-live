@@ -167,6 +167,8 @@ const request = {
         broadcastList: `${HTTPHEADER}/broadcast/index`, // 房间广播列表
         sendBroadcast: `${HTTPHEADER}/Broadcast/send`, // 发送广播
         setBroadcastPrice: `${HTTPHEADER}/Broadcast/setPrice`, // 发送广播
+        getAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig`, // 渠道进房列表
+        addAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig/add`, // 新增渠道进房
     },
 
     // 用户管理
