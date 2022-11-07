@@ -88,7 +88,6 @@ export default {
                     //         return h('span', data ? data.name : '无')
                     //     }
                     // },
-                    
                     {
                         label: '主体名称',
                         prop: 'name'
@@ -156,7 +155,7 @@ export default {
             return {
                 page: params.page,
                 channel: s.channel,
-                channel_way: s.channel_way,
+                // channel_way: s.channel_way,
                 purpose: 2
             }
         },
