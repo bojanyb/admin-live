@@ -13,8 +13,6 @@
         label-width="90px"
         class="body_box-line"
         label-suffix=":"
-        :hide-required-asterisk="status === 'see'"
-        :disabled="disabled"
       >
         <el-form-item label="推送标题" prop="title" class="body_box-line">
           <el-input
@@ -122,22 +120,8 @@ export default {
       // 标题
       return "push推送";
     },
-    disabled() {
-      // 是否禁止输入
-      if (this.status === "see") {
-        return true;
-      }
-      return false;
-    },
   },
   methods: {
-    // 公会返点限制
-    rebateInput() {
-      let num = this.ruleForm.rebate;
-      if (num && Number(num) > 10) {
-        this.ruleForm.rebate = 10;
-      }
-    },
     // 新增 - 修改
     loadParams(status, row) {
       this.openComp();
@@ -175,10 +159,6 @@ export default {
       } else {
         this.openComp(false);
       }
-    },
-    // 修改
-    update() {
-      this.status = "update";
     },
     // 提交
     async submitForm() {
