@@ -47,6 +47,10 @@ const request = {
         view: `${HTTPHEADER}/admin/view`, // 查看管理员信息
         deleteAdmin: `${HTTPHEADER}/admin/delete`, // 删除用户
         adminStatus: `${HTTPHEADER}/admin/adminStatus`, // 开关用户
+        sysList: `${HTTPHEADER}/NoticeLog/sysList`, // 系统消息 列表
+        addSysNotice: `${HTTPHEADER}/NoticeLog/addSysNotice`, // 系统消息 新增
+        officialList: `${HTTPHEADER}/NoticeLog/officialList`, // 官方消息 列表
+        addOfficialNotice: `${HTTPHEADER}/NoticeLog/addOfficialNotice`, // 官方消息 新增
         super: {
             punishHistory: `${HTTPHEADER}/Room/punishHistory`, // 处理处罚历史
             handlePunish: `${HTTPHEADER}/Room/handlePunish`, // 处理处罚
@@ -151,7 +155,7 @@ const request = {
         send: `${HTTPHEADER}/goods/send`,
         sendlog: `${HTTPHEADER}/goods/sendlog`,
     },
-    
+
     // 派对管理
     room: {
         report: `${HTTPHEADER}/Room/feedback`,
@@ -185,7 +189,7 @@ const request = {
         updateLoginPwd: `${HTTPHEADER}/User/updateLoginPwd`, // 更改登录密码
         addRichUser: `${HTTPHEADER}/User/addRichUser`, // 添加财富用户
     },
-    
+
     // 审核管理
     audit: {
         list: `${HTTPHEADER}/user/getUserBgi`,
@@ -248,6 +252,7 @@ const request = {
         delSettlementConfig: `${HTTPHEADER}/guild/delSettlementConfig`, // 删除周返点配置
         doSettlement: `${HTTPHEADER}/guild/doSettlement`, // 公会批量结算
         getNowRoomOnlineReward: `${HTTPHEADER}/guild/getNowRoomOnlineReward`, // 待结算 24小时房间奖励 
+        guildType: `${HTTPHEADER}/guild/guildType`, // 获取公会类型
     },
 
     // 封禁记录
@@ -272,6 +277,7 @@ const request = {
         getCashHisityAll: `${HTTPHEADER}/cash/getCashHisityAll`, // 提现导出excel
         diamondRechargeAll: `${HTTPHEADER}/Recharge/diamondRechargeAll`, // 充值记录导出
         regReplenishmentByCsv: `${HTTPHEADER}/Promoter/regReplenishmentByCsv`, // 推广补单通过csv格式
+        changePayStatus: `${HTTPHEADER}/PayManage/changePayStatus`, // 修改支付使用状态
     },
 
     // 消息管理
@@ -361,6 +367,14 @@ const request = {
         delMoments: `${HTTPHEADER}/moments/delMoments`, // 删除动态
         msgList: `${HTTPHEADER}/moments/msgList`, // 评论列表
         deleteMsg: `${HTTPHEADER}/moments/deleteMsg`, // 删除评论
+    },
+
+    // 活动管理
+    activity : {
+        resourceList: `${HTTPHEADER}/activity/resourceList`, // 资源列表
+        addResourceConfig: `${HTTPHEADER}/activity/addResourceConfig`, // 添加资源位配置
+        editResource: `${HTTPHEADER}/activity/editResource`, // 修改资源位配置
+        delResource: `${HTTPHEADER}/activity/delResource`, // 删除资源
     }
 }
 

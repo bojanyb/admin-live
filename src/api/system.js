@@ -73,3 +73,41 @@ export function guildRoomWeekOnline(data) {
         data
     })
 }
+
+
+
+// 系统消息 列表
+export function sysList(data) {
+    return request({
+        url: api.system.sysList,
+        method: 'post',
+        data
+    })
+}
+
+// 系统消息 新增
+export function addSysNotice(data) {
+    return request({
+        url: api.system.addSysNotice,
+        method: 'post',
+        data
+    })
+}
+
+// 官方消息 列表
+export function officialList(data) {
+    return request({
+        url: api.system.officialList,
+        method: 'post',
+        data
+    })
+}
+
+// 系统消息 新增
+export function addOfficialNotice(data) {
+    return request({
+        url: api.system.addOfficialNotice,
+        method: 'post',
+        data
+    })
+}

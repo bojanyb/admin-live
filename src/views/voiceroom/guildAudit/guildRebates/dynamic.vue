@@ -85,7 +85,8 @@
 						minWidth: '240px',
 						render: (h, params) => {
 							let start_time = params.row.time_start ? timeFormat(params.row.time_start, 'YYYY-MM-DD HH:mm:ss', true) : ''
-							let end_time = params.row.time_end ? timeFormat(params.row.time_end, 'YYYY-MM-DD HH:mm:ss', true) : '无'
+							let endTime = this.form.status === 2 ? params.row.time_end : params.row.create_time
+							let end_time = endTime ? timeFormat(endTime, 'YYYY-MM-DD HH:mm:ss', true) : '无'
 							return h('span', `${timeFormat(params.row.time_start, 'YYYY', true)}年第${params.row.now}周（${start_time}至${end_time}）`)
 						}
 					},
@@ -103,6 +104,15 @@
 						label: '公会长昵称',
 						minWidth: '120px',
 						prop: 'guild_owner_nickname'
+					},
+					{
+						label: '公会类型',
+						minWidth: '120px',
+						prop: 'guild_type',
+						render: (h, params) => {
+							let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
+							return h('span', data ? data.name : '无')
+						}
 					},
 					{
 						label: '流水',

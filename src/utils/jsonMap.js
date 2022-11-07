@@ -489,12 +489,12 @@ const CLASSLIST = [
 
 // 公会列表 - 公会类型
 const GUILDCONFIGTYPELIST = [
-    // {
-    //     name: '主播公会',
-    //     value: 1
-    // },
     {
-        name: '派对公会',
+        name: '交友公会',
+        value: 1
+    },
+    {
+        name: '情感公会',
         value: 2
     }
 ]
@@ -1644,6 +1644,14 @@ const COMMERCIALMANAGEMENTPAYTYPELIST = [
     }
 ]
 
+// 支付配置管理 - 支付平台
+const DEPOSITCONFIGURATIONPLATFORMLIST = [
+    {
+        name: '支付宝提现',
+        value: 3
+    }
+]
+
 // 充值记录 - 充值类型
 const RECHARGEHISTORYTYPELIST = [
     {
@@ -1666,12 +1674,24 @@ const RECHARGEHISTORYTYPELIST = [
 // 流水记录 - 来源
 const DEALSOURCELIST = [
     {
-        name: '派对',
-        value: 0
+        id: 0,
+        name: '全部'
     },
     {
-        name: '私聊',
-        value: 1
+        id: 1,
+        name: '公会房间'
+    },
+    {
+        id: 2,
+        name: '个人房间'
+    },
+    {
+        id: 3,
+        name: '公会私聊'
+    },
+    {
+        id: 4,
+        name: '个人私聊'
     }
 ]
 
@@ -1807,6 +1827,22 @@ const HOUSEMESSAGESTATUSLIST = [
     },
     {
         name: '已关播',
+        value: 0
+    }
+]
+
+// 房间信息管理 - 热门推荐
+const HOUSEMESSAGEHOTRECOMMENDLIST = [
+    {
+        name: '全部',
+        value: -1
+    },
+    {
+        name: '是',
+        value: 1
+    },
+    {
+        name: '否',
         value: 0
     }
 ]
@@ -2301,6 +2337,161 @@ const FROMTYPESTATUS = [
     }
 ]
 
+// 消息类型
+const MSGTYPE = [
+    {
+        name: '充值',
+        value: 1
+    },
+    {
+        name: '活动',
+        value: 2
+    },
+]
+
+// 用户选择类型
+const USERSLECTTYPE = [
+    {
+        name: '所有用户',
+        value: 1
+    },
+    {
+        name: '指定用户',
+        value: 2
+    },
+]
+
+// 跳转类型
+const PATHTYPE = [
+    {
+        name: '进房间',
+        value: 1
+    },
+    {
+        name: 'URL',
+        value: 2
+    },
+]
+
+// 跳转类型
+const PATHTYPE2 = [
+    {
+        name: '无',
+        value: 0
+    },
+    {
+        name: '进房间',
+        value: 2
+    },
+    {
+        name: 'URL',
+        value: 3
+    },
+]
+
+// 靓号类型
+const GOODNUMTYPE = [
+    {
+        name: '用户靓号',
+        value: 1
+    },
+    {
+        name: '房间靓号',
+        value: 2
+    },
+] 
+
+// 靓号状态
+const GOODNUMSTATUS = [
+    {
+        name: '售卖中',
+        value: 1
+    },
+    {
+        name: '使用中',
+        value: 2
+    },
+    {
+        name: '可使用',
+        value: 3
+    },
+]
+
+// 靓号分类
+const GOODNUMCLASS = [
+    {
+        name: '全部分类',
+        value: 1
+    },
+    {
+        name: '爱情号',
+        value: 2
+    },
+    {
+        name: '顺子号',
+        value: 3
+    },
+    {
+        name: '对字号',
+        value: 4
+    },
+    {
+        name: '叠字号',
+        value: 5
+    },
+] 
+
+// 显示状态
+const SHOWSTATUS = [
+    {
+        name: '显示',
+        value: 1
+    },
+    {
+        name: '隐藏',
+        value: 2
+    },
+]
+
+// 是否默认选中
+const CHECKEDSTATUS = [
+    {
+        name: '是',
+        value: 1
+    },
+    {
+        name: '否',
+        value: 2
+    },
+]
+
+// 上架状态
+const RACKSATUS = [
+    {
+        name: '上架中',
+        value: 1
+    },
+    {
+        name: '待上架',
+        value: 2
+    },
+    {
+        name: '已下架',
+        value: 3
+    },
+]
+
+// 活动状态
+const ACTIVESTATUS = [
+    {
+        name: '生效中',
+        value: 1
+    },
+    {
+        name: '待生效',
+        value: 2
+    },
+]
 // 落地类型
 const PUSHTYPESTATUS = [
     {
@@ -2459,7 +2650,20 @@ export default {
     USERCHARMLIST,
     USERREGISTERTYPELIST,
     DURATIONCOPY,
+    HOUSEMESSAGEHOTRECOMMENDLIST,
     FROMTYPESTATUS,
+    MSGTYPE,
+    USERSLECTTYPE,
+    PATHTYPE,
+    GOODNUMTYPE,
+    GOODNUMSTATUS,
+    GOODNUMCLASS,
+    SHOWSTATUS,
+    CHECKEDSTATUS,
+    RACKSATUS,
+    ACTIVESTATUS,
+    PATHTYPE2,
     PUSHTYPESTATUS,
-    TARGETTYPESTATUS
+    TARGETTYPESTATUS,
+    DEPOSITCONFIGURATIONPLATFORMLIST
 }

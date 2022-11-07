@@ -1,5 +1,5 @@
 <template>
-  <div class="room-livelist">
+  <div class="push-notice">
     <div class="searchParams">
       <SearchPanel
         v-model="searchParams"
@@ -92,7 +92,7 @@ export default {
         columns: [
           {
             label: "创建时间",
-            prop: 'create_time',
+            prop: "create_time",
             minWidth: "180px",
           },
           {
@@ -116,7 +116,7 @@ export default {
           {
             label: "操作人",
             prop: "admin_user_nickname",
-          }
+          },
         ],
       };
     },
@@ -155,36 +155,15 @@ export default {
     add() {
       this.load("add");
     },
-    // 修改
-    update(row) {
-      this.load("update", row);
-    },
-    // 查看
-    see(row) {
-      this.load("see", row);
-    },
     load(status, row) {
       this.isDestoryComp = true;
       setTimeout(() => {
         this.$refs.editComp.loadParams(status, row);
       }, 50);
     },
-    // 重置
-    reset() {
-      this.searchParams = {};
-      this.dateTimeParams = {};
-      this.getList();
-    },
     // 查询
     onSearch() {
       this.getList();
-    },
-    // 编辑房间
-    liveEditFunc(row) {
-      this.isDestoryComp = true;
-      setTimeout(() => {
-        this.$refs.editComp.loadParams(row);
-      }, 50);
     },
     // 销毁组件
     destoryComp() {
@@ -194,7 +173,7 @@ export default {
 };
 </script>
   <style lang="scss">
-.room-livelist {
+.push-notice {
   padding: 20px;
   box-sizing: border-box;
 }

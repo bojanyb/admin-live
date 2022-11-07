@@ -7,13 +7,13 @@
         <tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 新增 - 修改组件 -->
-        <commercialComp v-if="isDestoryComp" ref="commercialComp" @destoryComp="destoryComp" @getList="getList"></commercialComp>
+        <commercialComp v-if="isDestoryComp" ref="commercialComp" @destoryComp="destoryComp" @getList="getList" type="payment"></commercialComp>
     </div>
 </template>
 
 <script>
 // 引入api
-import { useCash } from '@/api/finance'
+import { changePayStatus } from '@/api/finance'
 // 引入新增 - 修改组件
 import commercialComp from './components/commercialComp.vue'
 // 引入列表组件
@@ -97,12 +97,12 @@ export default {
                         label: '商户名称',
                         prop: 'merchant_name'
                     },
-                    {
-                        label: '提现税率',
-                        render: (h, params) => {
-                            return h('span', params.row.cash_rate + '%')
-                        }
-                    },
+                    // {
+                    //     label: '提现税率',
+                    //     render: (h, params) => {
+                    //         return h('span', params.row.cash_rate + '%')
+                    //     }
+                    // },
                     // {
                     //     label: '商户号',
                     //     minWidth: '100px',
@@ -120,7 +120,7 @@ export default {
                     {
                         minWidth: '100px',
                         label: '使用状态',
-                        prop: 'cash_status',
+                        prop: 'status',
                         isSwitch: true,
                         isTrueValue: 1,
                         isFalseValue: 0,
@@ -156,7 +156,8 @@ export default {
             return {
                 page: params.page,
                 channel: s.channel,
-                channel_way: s.channel_way
+                channel_way: s.channel_way,
+                purpose: 1
             }
         },
         // 重置
@@ -197,9 +198,9 @@ export default {
         async payChannelWaySaveFunc(id, status) {
             let params = {
                 id: id,
-                cash_status: status
+                status: status
             }
-            let res = await useCash(params)
+            let res = await changePayStatus(params)
             if(res.code === 2000) {
                 this.$success('操作成功')
                 this.getList()

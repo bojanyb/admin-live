@@ -13,7 +13,7 @@
 
 <script>
 // 引入api
-import { delSettlementConfig } from '@/api/videoRoom.js'
+import { delSettlementConfig, getGuildType } from '@/api/videoRoom.js'
 // 引入新增 - 修改组件
 import gradeComp from './components/gradeComp.vue'
 // 引入菜单组件
@@ -44,7 +44,17 @@ export default {
                     optionLabel: 'name',
                     label: '公会等级',
                     placeholder: '公会等级',
-                }
+                },
+                {
+					name: 'guild_type',
+					type: 'select',
+					value: '',
+					keyName: 'value',
+					optionLabel: 'name',
+					label: '公会类型',
+					placeholder: '请选择',
+					options: this.guildTypeList
+				},
             ]
         },
         cfgs() {
@@ -52,6 +62,13 @@ export default {
                 vm: this,
                 url: REQUEST.guild.settlementConfig,
                 columns: [
+                    {
+						label: '公会类型',
+						render: (h, params) => {
+						let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
+						return h('span', data ? data.name : '无')
+						}
+					},
                     {
                         label: '公会等级',
                         render: (h, params) => {
@@ -88,7 +105,11 @@ export default {
     data() {
         return {
             isDestoryComp: false, // 是否销毁组件
+            guildTypeList: []
         };
+    },
+    created() {
+        this.getTypeList()
     },
     methods: {
         // 配置参数
@@ -98,7 +119,8 @@ export default {
                 page: params.page,
                 pagesize: params.size,
                 code: s.code,
-                type: 1
+                type: 1,
+                guild_type: s.guild_type
             }
         },
         // 刷新列表
@@ -145,6 +167,22 @@ export default {
                     this.getList()
                 }
             }).catch(() => {});
+        },
+        // 获取公会类型
+        async getTypeList() {
+         const response = await getGuildType()
+         if(response.code === 2000) {
+            const tempArr =  Array.from(
+              Array.isArray(response.data.list) ? response.data.list : []
+          )
+          this.guildTypeList = tempArr.reduce((prev, curr) => {
+            prev.push({
+                name: curr.remark,
+                value: curr.type
+            })
+            return prev
+          }, []) || []
+         }
         }
     }
 }

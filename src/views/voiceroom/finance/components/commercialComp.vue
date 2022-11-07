@@ -45,11 +45,11 @@
                     </el-upload>
                 </el-form-item>
                 <div class="formBox">
-                    <el-form-item label="提现税率" prop="cash_rate" class="allocationBox">
+                    <el-form-item label="提现税率" prop="cash_rate" class="allocationBox" v-if="type === 'deposit'">
                         <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.cash_rate"></el-input>
                     </el-form-item>
-                    <el-form-item label="支付类型" prop="channel_ways">
-                        <el-select v-model="ruleForm.channel_ways" placeholder="请选择" :disabled="!ruleForm.channel">
+                    <el-form-item :label="type === 'payment' ? '支付类型' : '提现类型'" prop="channel_way" v-if="type === 'payment'">
+                        <el-select v-model="ruleForm.channel_way" placeholder="请选择" :disabled="!ruleForm.channel">
                             <el-option v-for="item in payList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
@@ -75,6 +75,12 @@ import MAPDATA from '@/utils/jsonMap.js'
 // 引入api
 import REQUEST from '@/request/index.js'
 export default {
+    props: {
+        type: { // 当前类型
+            type: String,
+            default: ''
+        }
+    },
     components: {
         uploadImg
     },
@@ -83,7 +89,7 @@ export default {
             action: ENV_DOMAINHTTPS + REQUEST.pay.uploadFileZFB,
             status: 'add', // 当前状态
             dialogVisible: false,
-            channelList: MAPDATA.PAYCONFIGURATIONPLATFORMLIST, // 商户平台
+            // channelList: MAPDATA.PAYCONFIGURATIONPLATFORMLIST, // 商户平台
             // payList: MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST,
             fileList: [],
             ruleForm: {
@@ -91,7 +97,7 @@ export default {
                 name: '',
                 config_json: '',
                 cash_rate: '',
-                channel_ways: null,
+                channel_way: null,
                 type: 1,
                 merchant_name: '',
                 file: ''
@@ -104,7 +110,7 @@ export default {
                 channel: [
                     { required: true, message: '请选择商户平台', trigger: 'change' }
                 ],
-                channel_ways: [
+                channel_way: [
                     { required: true, message: '请选择支付类型', trigger: 'change' }
                 ],
                 merchant_name: [
@@ -140,6 +146,12 @@ export default {
             } else {
                 return arr
             }
+        },
+        channelList() { // 商户平台
+            if(this.type !== 'payment') {
+                return MAPDATA.DEPOSITCONFIGURATIONPLATFORMLIST
+            }
+            return MAPDATA.PAYCONFIGURATIONPLATFORMLIST
         }
     },
     methods: {
@@ -174,6 +186,13 @@ export default {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
+                    if(this.type === 'payment') {
+                        params.purpose = 1
+                        delete params.cash_rate
+                    } else {
+                        params.purpose = 2
+                        delete params.channel_way
+                    }
                     let res = await create(params)
                     if(res.code === 2000) {
                         if(this.status === 'add') {

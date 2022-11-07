@@ -179,16 +179,26 @@ export default {
                     },
                     {
                         label: '充值状态',
+                        minWidth: '100px',
                         render: (h, params) => {
-                            let data = MAPDATA.ORDERSTATUS.find(item => { return item.value.indexOf(params.row.status) !== -1 })
-                            let text = MAPDATA.ORDERREFUNDSTATUSLIST.find(item => { return item.value === params.row.refund_status })
-                            let name;
-                            if(params.row.status === 1) {
-                                name = data ? data.name + '（' + text.name + '）' : '无'
-                            } else {
-                                name = data ? data.name : '无'
+                            if(params.row.status === 1 && params.row.refund_status === 1) {
+                                return h('span', '已支付')
+                            } else if(params.row.status === 1 && params.row.refund_status === 2) {
+                                return h('div', [
+                                    h('span', '已支付（'),
+                                    h('span', {
+                                        style: {
+                                            color: '#FF4949',
+                                            fontWeight: 600
+                                        }
+                                    }, '全额退款'),
+                                    h('span', '）'),
+                                ])
+                            } else if(params.row.status === 3) {
+                                return h('span', '未支付')
+                            } else if(params.row.status === 4) {
+                                return h('span', '已退款')
                             }
-                            return h('span', name)
                         }
                     },
                     // {
@@ -220,7 +230,8 @@ export default {
                 allMoney: null
             },
             searchParams: {
-                dateTimeParams: ['', '']
+                dateTimeParams: ['', ''],
+                status: '1'
             },
             dateTimeParams: {
                 start_time: null,
@@ -346,7 +357,6 @@ export default {
             if(arr.length <= 0) return this.$warning('当前没有数据可以导出')
             arr = arr.map((item,index) => {
                 let name = MAPDATA.RECHARGEHISTORYTYPELIST.find(a => { return a.value === item.purpose })
-                let text = MAPDATA.ORDERREFUNDSTATUSLIST.find(a => { return a.value === item.refund_status })
                 let status = MAPDATA.ORDERSTATUS.find(a => { return a.value.indexOf(item.status) !== -1 })
                 let params = {
                     create_time: timeFormat(item.create_time, 'YYYY-MM-DD HH:mm:ss', true),
@@ -356,7 +366,7 @@ export default {
                     type: name.name,
                     remark: item.remark,
                     channel: item.channel,
-                    status: item.status === 1 ? status.name + '（' + text.name + '）' : status.name,
+                    status: status.name,
                     trade_no: item.trade_no
                 }
                 return params

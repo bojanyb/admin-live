@@ -15,7 +15,7 @@
 	// 引入冻结组件
 	import blocked from './blocked.vue'
 	// 引入api
-	import { getGuildUpdateV2 } from '@/api/videoRoom'
+	import { getGuildUpdateV2, getGuildType } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -45,7 +45,8 @@
 				isDestoryComp: false,
 				guildParams: {},
 				status: null,
-				ruleForm: {}
+				ruleForm: {},
+				guildTypeList: [],
 			}
 		},
 		computed: {
@@ -67,7 +68,7 @@
 						optionLabel: 'name',
 						label: '公会类型',
 						placeholder: '请选择',
-						options: MAPDATA.GUILDCONFIGTYPELIST
+						options: this.guildTypeList
 					},
 					{
 						name: 'status',
@@ -207,6 +208,9 @@
 				}
 			}
 		},
+		created() {
+			this.getTypeList()
+		},
 		methods: {
 			// 配置参数
 			beforeSearch(params) {
@@ -217,7 +221,8 @@
 					user_number: s.user_number,
 					guild_number: s.guild_number,
 					status: s.status,
-					operator: s.operator
+					operator: s.operator,
+					guild_type: s.guild_type
 				}
 			},
 			// 刷新列表
@@ -337,6 +342,22 @@
 					this.getList()
 				}
 			},
+            // 获取公会类型
+            async getTypeList() {
+             const response = await getGuildType()
+             if(response.code === 2000) {
+                const tempArr =  Array.from(
+                  Array.isArray(response.data.list) ? response.data.list : []
+              )
+              this.guildTypeList = tempArr.reduce((prev, curr) => {
+                prev.push({
+                    name: curr.remark,
+                    value: curr.type
+                })
+                return prev
+              }, []) || []
+             }
+            }
 		}
 	}
 </script>

@@ -81,7 +81,8 @@
 						minWidth: '240px',
 						render: (h, params) => {
 							let start_time = this.form.status === 2 ? timeFormat(params.row.start, 'YYYY-MM-DD HH:mm:ss', true) : timeFormat(params.row.time_start, 'YYYY-MM-DD HH:mm:ss', true) 
-							let end_time = this.form.status === 2 ? timeFormat(params.row.end, 'YYYY-MM-DD HH:mm:ss', true) : timeFormat(params.row.time_end, 'YYYY-MM-DD HH:mm:ss', true) 
+							let endTime = this.form.status === 2 ? params.row.end : params.row.create_time
+							let end_time = endTime ? timeFormat(endTime, 'YYYY-MM-DD HH:mm:ss', true) : '无'
 							return h('span', `${timeFormat(this.form.status === 2 ? params.row.start : params.row.time_start, 'YYYY', true)}年第${params.row.now}周（${start_time}至${end_time}）`)
 						}
 					},
