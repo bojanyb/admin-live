@@ -6,7 +6,11 @@
                 <div class="Con" v-for="(a,b) in item.children" :key="b">
                     <span>{{ a.tit }}</span>
                     <div class="num">
-                        <span class="total" v-if="a.val == 'total_top_up_diamond'" style="font-size: 20px">{{ ruleForm[a.val] || 0 }}</span>
+                        <span class="total" v-if="a.val == 'total_top_up_diamond'" style="font-size: 18px">
+                            <span v-format="'#,##0'">{{ Number(ruleForm[a.val]) || 0 }}</span>
+                           = 安卓:<span v-format="'#,##0'">{{ Number(ruleForm.android_top_up_diamond) || 0 }}</span>
+                           + 苹果:<span v-format="'#,##0'">{{ Number(ruleForm.apple_top_up_diamond) || 0 }}</span>
+                        </span>
                         <span class="total" v-else v-format="'#,##0'">{{ Number(ruleForm[a.val]) || 0 }}</span>
                         <span class="unit" v-if="a.val !== 'total_top_up_diamond'">{{ a.unit }}</span>
                     </div>
@@ -50,6 +54,9 @@ export default {
             s.total_num = Number(s.total_diamond) + Number(s.total_gain)
             s.total_incGain = Number(s.incDiamond) + Number(s.incGain)
             s.total_decGain = Number(s.decDiamond) + Number(s.decGain)
+            s.android_top_up_diamond = Number(s.android_top_up_diamond)
+            s.apple_top_up_diamond = Number(s.apple_top_up_diamond)
+            s.guild_rebates = Number(s.weekBate1) + Number(s.weekBate2) + Number(s.weekBate3) + Number(s.weekBate4)
             this.ruleForm = row;
         }
     },

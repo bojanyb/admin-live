@@ -1,29 +1,17 @@
 <template>
   <div class="room-livelist">
-    <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
     <div class="searchParams">
       <SearchPanel
         v-model="searchParams"
         :forms="forms"
-        :show-add="tabIndex === '0'"
-        :show-search-btn="tabIndex === '0'"
-        :show-save="tabIndex === '1'"
+        :show-add="true"
+        :show-search-btn="true"
         @add="add"
         @onSearch="onSearch"
-        @save="onSave"
       ></SearchPanel>
     </div>
 
-    <el-card class="box-card" shadow="always" v-show="tabIndex === '0'">
-      <div class="box-card-inner">
-        <span>查询期间: 发送人数:{{ ruleForm.user_count }}人</span>
-        <span>发送条数: {{ ruleForm.count }}条</span>
-        <span>广播内容: {{ ruleForm.total_cost }}钻石</span>
-      </div>
-    </el-card>
-
     <tableList
-      v-if="tabIndex === '0'"
       :cfgs="cfgs"
       ref="tableList"
       @saleAmunt="saleAmunt"
@@ -40,8 +28,6 @@
 </template>
 
 <script>
-// 引入api
-import { setBroadcastPrice, getBroadcastPrice } from "@/api/videoRoom";
 // 引入tab菜单组件
 import menuComp from "@/components/menuComp/index.vue";
 // 引入菜单组件
@@ -56,11 +42,9 @@ import REQUEST from "@/request/index.js";
 import { timeFormat } from "@/utils/common.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
-// 引入公共map
-import MAPDATA from "@/utils/jsonMap.js";
 
 export default {
-  name: "BroadcastList",
+  name: "channelRoom",
   mixins: [mixins],
   components: {
     SearchPanel,
@@ -70,63 +54,30 @@ export default {
   },
   data() {
     return {
-      tabIndex: "0",
-      menuList: [{ name: "房间广播列表" }, { name: "房间广播配置" }],
       isDestoryComp: false, // 是否销毁组件
       ruleForm: {},
-      resultCost: "",
     };
   },
   computed: {
     forms() {
-      const BroadcastList = [
+      return [
         {
           name: "user_number",
           type: "input",
           value: "",
-          label: "用户ID",
+          label: "app渠道",
           isNum: true,
-          placeholder: "请输入房间ID",
-        },
-        {
-          name: "dateTimeParams",
-          type: "datePicker",
-          dateType: "datetimerange",
-          format: "yyyy-MM-dd HH:mm:ss",
-          label: "发送时间",
-          value: "",
-          handler: {
-            change: (v) => {
-              this.emptyDateTime();
-              this.setDateTime(v);
-              this.getList();
-            },
-            selectChange: (v, key) => {
-              this.emptyDateTime();
-              this.getList();
-            },
-          },
+          placeholder: "请输入app渠道",
         },
       ];
-      const BroadcastOptions = [
-        {
-          name: "cost",
-          type: "input",
-          value: this.resultCost,
-          label: "广播单价",
-          isNum: true,
-          placeholder: "请输入推广单价",
-        },
-      ];
-      return this.tabIndex === "1" ? BroadcastOptions : BroadcastList;
     },
     cfgs() {
       return {
         vm: this,
-        url: REQUEST.room.broadcastList,
+        url: REQUEST.room.getAutoJoinConfig,
         columns: [
           {
-            label: "发送时间",
+            label: "添加时间",
             minWidth: "180px",
             render: (h, params) => {
               return h(
@@ -142,29 +93,26 @@ export default {
             },
           },
           {
-            label: "用户ID",
+            label: "渠道",
+            prop: "content",
+          },
+          {
+            label: "房间ID",
             prop: "user_number",
           },
           {
-            label: "发送类型",
-            prop: "from_type",
-            render: (h, params) => {
-              let data = MAPDATA.FROMTYPESTATUS.find((item) => {
-                return item.value === params.row.from_type;
-              });
-              return h("span", data ? data.name : "无");
-            },
-          },
-          {
-            label: "广播内容",
-            prop: "content",
-          },
+						label: '操作',
+						minWidth: '120px',
+						fixed: 'right',
+						render: (h, params) => {
+							return h('div', [
+								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.add()}}}, '删除'),
+							])
+						}
+					}
         ],
       };
     },
-  },
-  created() {
-    this.getResultPrice();
   },
   methods: {
     // 配置参数
@@ -200,37 +148,9 @@ export default {
     add() {
       this.load("add");
     },
-    // 保存
-    onSave(fromData) {
-      if (!fromData.cost) {
-        return false;
-      }
-      this.$confirm("你确定要保存推广单价吗？", "保存提醒", {
-        type: "warning",
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-      })
-        .then(async () => {
-          const loading = this.$loading({
-            lock: true,
-            text: "Loading",
-            spinner: "el-icon-loading",
-            background: "rgba(0, 0, 0, 0.7)",
-          });
-          const response = await setBroadcastPrice({ cost: +fromData.cost });
-          if (response.code === 2000) {
-            loading.close();
-            this.$message({
-              message:
-                Object.prototype.toString.call(response) ===
-                  "[object Object]" && "保存成功",
-              type: "success",
-            });
-          }
-        })
-        .catch(() => {
-          loading.close();
-        });
+    // 修改
+    add() {
+      this.load("add");
     },
     load(status, row) {
       this.isDestoryComp = true;
@@ -250,13 +170,6 @@ export default {
     saleAmunt(data) {
       const { total_cost, user_count, count } = data;
       this.ruleForm = { total_cost, user_count, count };
-    },
-    // 获取广播单价
-    async getResultPrice() {
-      const response = await getBroadcastPrice();
-      if (response.code === 2000) {
-        this.resultCost = response.data.cost;
-      }
     },
   },
 };

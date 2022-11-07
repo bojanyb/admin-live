@@ -10,6 +10,15 @@ export function addResourceConfig(data) {
   })
 }
 
+
+// 修改资源位配置
+export function editResource(data) {
+  return request({
+    url: api.activity.editResource,
+    method: 'post',
+    data
+  })
+}
 // 删除资源
 export function delResource(data) {
   return request({

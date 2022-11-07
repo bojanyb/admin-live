@@ -38,7 +38,7 @@ export default {
                 {
                     name: 'type',
                     type: 'select',
-                    value: '入会申请',
+                    value: 0,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '申请类型',
