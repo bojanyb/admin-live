@@ -18,7 +18,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="消息标题" prop="title">
-                    <el-input v-model="ruleForm.title" placeholder="请输入消息标题" clearable/>
+                    <el-input v-model="ruleForm.title" maxlength="15" placeholder="请输入消息标题" clearable/>
                 </el-form-item>
                 <el-form-item label="消息内容" prop="content">
                     <el-input
@@ -26,6 +26,7 @@
                     :autosize="{ minRows: 2, maxRows: 4}"
                     placeholder="请输入消息内容"
                     maxlength="200"
+                    show-word-limit
                     v-model="ruleForm.content">
                     </el-input>
                 </el-form-item>
@@ -100,15 +101,6 @@ export default {
                 ],
                 content: [
                     { required: true, message: '请输入消息内容', trigger: 'blur' },
-                ],
-                target_val: [
-                    { required: true, message: '请输入用户ID', trigger: 'blur' },
-                ],
-                push_val: [
-                    { required: true, message: '请输入跳转地址', trigger: 'blur' },
-                ],
-                push_type: [
-                    { required: true, message: '请选择跳转类型', trigger: 'change' }
                 ],
             }
         };
