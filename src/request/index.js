@@ -166,7 +166,10 @@ const request = {
         genre: `${HTTPHEADER}/Room/genre`, // 房间类型列表
         broadcastList: `${HTTPHEADER}/broadcast/index`, // 房间广播列表
         sendBroadcast: `${HTTPHEADER}/Broadcast/send`, // 发送广播
-        setBroadcastPrice: `${HTTPHEADER}/Broadcast/setPrice`, // 发送广播
+        setBroadcastPrice: `${HTTPHEADER}/Broadcast/setPrice`, // 设置广播价格
+        getBroadcastPrice: `${HTTPHEADER}/Broadcast/getPrice`, // 获取广播价格
+        getAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig`, // 渠道进房列表
+        addAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig/add`, // 新增渠道进房
     },
 
     // 用户管理
@@ -277,6 +280,8 @@ const request = {
         messageAdd: `${HTTPHEADER}/ActivityPush/add`, // 充值记录
         list: `${HTTPHEADER}/ActivityPush/list`, // 活动通知列表
         delete: `${HTTPHEADER}/ActivityPush/delete`, // 活动通知列表
+        pushLogList: `${HTTPHEADER}/PushLog`, // 活动通知列表
+        addPushLog: `${HTTPHEADER}/pushLog/add`, // 活动通知列表
     },
 
     // 举报管理

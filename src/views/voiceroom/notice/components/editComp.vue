@@ -16,60 +16,62 @@
         :hide-required-asterisk="status === 'see'"
         :disabled="disabled"
       >
-        <el-form-item label="发送时间" prop="aaa" class="body_box-line">
-          <el-date-picker
-            v-model="ruleForm.aaa"
-            type="datetime"
-            placeholder="选择日期时间"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="推送标题" prop="bbb" class="body_box-line">
+        <el-form-item label="推送标题" prop="title" class="body_box-line">
           <el-input
-            v-model="ruleForm.bbb"
+            v-model="ruleForm.title"
             placeholder="请输入push推送标题"
           ></el-input>
         </el-form-item>
-        <el-form-item label="推送内容" prop="ccc" class="body_box-line">
+        <el-form-item label="推送内容" prop="content" class="body_box-line">
           <el-input
             type="textarea"
             rows="3"
             resize="none"
-            v-model="ruleForm.ccc"
+            v-model="ruleForm.content"
             placeholder="请输入推送内容"
           ></el-input>
         </el-form-item>
-        <el-form-item label="落地类型" prop="ddd" class="body_box-line">
+        <el-form-item label="落地类型" prop="push_val" class="body_box-line">
           <el-input
-            placeholder="请输入落地类型"
-            v-model="ruleForm.ddd"
+            placeholder="请选择落地类型"
+            v-model="ruleForm.push_val"
             class="input-with-select"
           >
             <el-select
-              v-model="ruleForm.eee"
+              v-model="ruleForm.push_type"
               slot="prepend"
               placeholder="请选择"
             >
-              <el-option label="打开app" value="1"></el-option>
-              <el-option label="进房间" value="2"></el-option>
-              <el-option label="url" value="3"></el-option>
+              <el-option
+                v-for="item in pushTypeOptinos"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+              ></el-option>
             </el-select>
           </el-input>
         </el-form-item>
         <el-row class="body_box-col">
           <el-col :span="12">
-            <el-form-item label="目标用户">
-              <el-select v-model="ruleForm.fff" placeholder="请选择活动区域">
-                <el-option label="注册" value="1"></el-option>
-                <el-option label="登录" value="2"></el-option>
+            <el-form-item label="目标用户" prop="target_type">
+              <el-select
+                v-model="ruleForm.target_type"
+                placeholder="请选择目标用户"
+              >
+                <el-option
+                  v-for="item in targetTypeOptinos"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="时间范围" prop="name">
+            <el-form-item label="时间范围" prop="days">
               <el-row>
                 <el-col :span="22">
-                  <el-input v-model="ruleForm.ggg" placeholder="天" />
+                  <el-input v-model.number="ruleForm.days" placeholder="天" />
                 </el-col>
                 <el-col :span="2"> 内 </el-col>
               </el-row>
@@ -87,34 +89,38 @@
 
 <script>
 // 引入api
-import { getGuildCreateV2, getGuildUpdateV2 } from "@/api/videoRoom";
+import { addPushLog } from "@/api/videoRoom";
+// 引入公共map
+import MAPDATA from "@/utils/jsonMap.js";
 export default {
   components: {},
   data() {
     return {
       status: "add",
       isEditComp: false,
-      ruleForm: {
-        aaa: null,
-        bbb: "",
-        ccc: "",
-      },
+      ruleForm: {},
       oldParams: {}, // 老数据
       rules: {
-        aaa: [{ required: true, message: "请输入推送时间", trigger: "blur" }],
-        bbb: [{ required: true, message: "请输入推送标题", trigger: "blur" }],
-        ccc: [{ required: true, message: "请输入推送内容", trigger: "blur" }],
+        title: [{ required: true, message: "请输入推送标题", trigger: "blur" }],
+        content: [
+          { required: true, message: "请输入推送内容", trigger: "blur" },
+        ],
+        push_val: [
+          { required: true, message: "请选择落地类型", trigger: "change" },
+        ],
+        target_type: [
+          { required: true, message: "请选择目标用户", trigger: "change" },
+        ],
+        days: [{ required: true, message: "请输入时间范围", trigger: "blur" }],
       },
+      pushTypeOptinos: MAPDATA.PUSHTYPESTATUS,
+      targetTypeOptinos: MAPDATA.TARGETTYPESTATUS,
     };
   },
   computed: {
     title() {
       // 标题
-      if (this.status === "add") {
-        return "新增发送广播消息";
-      } else if (this.status === "update") {
-        return "修改公会";
-      }
+      return "push推送";
     },
     disabled() {
       // 是否禁止输入
@@ -139,12 +145,12 @@ export default {
       if (status !== "add") {
         let params = JSON.parse(JSON.stringify(row));
         let para = {};
-        para.guild_type = params.guild_type ? params.guild_type : "";
-        para.id = params.id ? params.id : "";
-        para.name = params.name ? params.name : "";
-        para.guild_number = params.guild_number ? params.guild_number : "";
-        para.status = params.status;
-        para.rebate = params.rebate;
+        para.title = params.title ? params.title : "";
+        para.content = params.content ? params.content : "";
+        para.push_val = params.push_val ? params.push_val : "";
+        para.push_type = params.push_type ? params.push_type : "";
+        para.target_type = params.target_type;
+        para.days = params.days;
         this.$set(this.$data, "ruleForm", para);
       }
 
@@ -179,16 +185,9 @@ export default {
       this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
           let params = { ...this.ruleForm };
-          if (this.status === "add") {
-            let res = await getGuildCreateV2(params);
-            if (res.code === 2000) {
-              this.$success("新增成功");
-            }
-          } else {
-            let res = await getGuildUpdateV2(params);
-            if (res.code === 2000) {
-              this.$success("修改成功");
-            }
+          let res = await addPushLog(params);
+          if (res.code === 2000) {
+            this.$success("新增成功");
           }
           this.openComp(false);
           this.$emit("getList");

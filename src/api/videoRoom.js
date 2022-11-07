@@ -938,6 +938,23 @@ export function messageDelete(data) {
   })
 }
 
+// 消息管理 - push推送 - 增加
+export function addPushLog(data) {
+  return request({
+    url: api.message.addPushLog,
+    method: 'post',
+    data
+  })
+}
+
+// 房间管理 - 渠道进房 - 新增
+export function addAutoJoinConfig(data) {
+  return request({
+    url: api.room.addAutoJoinConfig,
+    method: 'post',
+    data
+  })
+}
 
 
 /***********公会v2******************/ 
@@ -1047,6 +1064,15 @@ export function sendBroadcast(data) {
 export function setBroadcastPrice(data) {
   return request({
     url: api.room.setBroadcastPrice,
+    method: 'post',
+    data
+  })
+}
+
+// 设置广播价格
+export function getBroadcastPrice(data) {
+  return request({
+    url: api.room.getBroadcastPrice,
     method: 'post',
     data
   })

@@ -41,7 +41,7 @@
 
 <script>
 // 引入api
-import { setBroadcastPrice } from "@/api/videoRoom";
+import { setBroadcastPrice, getBroadcastPrice } from "@/api/videoRoom";
 // 引入tab菜单组件
 import menuComp from "@/components/menuComp/index.vue";
 // 引入菜单组件
@@ -74,6 +74,7 @@ export default {
       menuList: [{ name: "房间广播列表" }, { name: "房间广播配置" }],
       isDestoryComp: false, // 是否销毁组件
       ruleForm: {},
+      resultCost: "",
     };
   },
   computed: {
@@ -111,7 +112,7 @@ export default {
         {
           name: "cost",
           type: "input",
-          value: "",
+          value: this.resultCost,
           label: "广播单价",
           isNum: true,
           placeholder: "请输入推广单价",
@@ -161,6 +162,9 @@ export default {
         ],
       };
     },
+  },
+  created() {
+    this.getResultPrice();
   },
   methods: {
     // 配置参数
@@ -213,7 +217,7 @@ export default {
             spinner: "el-icon-loading",
             background: "rgba(0, 0, 0, 0.7)",
           });
-          let response = await setBroadcastPrice({ cost: +fromData.cost });
+          const response = await setBroadcastPrice({ cost: +fromData.cost });
           if (response.code === 2000) {
             loading.close();
             this.$message({
@@ -246,6 +250,13 @@ export default {
     saleAmunt(data) {
       const { total_cost, user_count, count } = data;
       this.ruleForm = { total_cost, user_count, count };
+    },
+    // 获取广播单价
+    async getResultPrice() {
+      const response = await getBroadcastPrice();
+      if (response.code === 2000) {
+        this.resultCost = response.data.cost;
+      }
     },
   },
 };

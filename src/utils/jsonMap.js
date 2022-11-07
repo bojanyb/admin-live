@@ -2329,6 +2329,54 @@ const FROMTYPESTATUS = [
     }
 ]
 
+// 落地类型
+const PUSHTYPESTATUS = [
+    {
+        name: '打开',
+        value: 0
+    },
+    {
+        name: 'APP',
+        value: 2
+    },
+    {
+        name: 'Url',
+        value: 3
+    }
+]
+
+// 目标类型
+const TARGETTYPESTATUS = [
+    {
+        name: '注册',
+        value: 1
+    },
+    {
+        name: '登录',
+        value: 2
+    },
+    {
+        name: '活跃',
+        value: 3
+    },
+    {
+        name: '充值',
+        value: 4
+    },
+    {
+        name: '宝箱',
+        value: 5
+    },
+    {
+        name: '召回',
+        value: 6
+    },
+    {
+        name: '自定义',
+        value: 7
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -2440,5 +2488,7 @@ export default {
     USERREGISTERTYPELIST,
     DURATIONCOPY,
     HOUSEMESSAGEHOTRECOMMENDLIST,
-    FROMTYPESTATUS
+    FROMTYPESTATUS,
+    PUSHTYPESTATUS,
+    TARGETTYPESTATUS
 }
