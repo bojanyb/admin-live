@@ -114,6 +114,15 @@
 						prop: 'guild_owner_nickname'
 					},
 					{
+						label: '公会类型',
+						minWidth: '120px',
+						prop: 'guild_type',
+						render: (h, params) => {
+							let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
+							return h('span', data ? data.name : '无')
+						}
+					},
+					{
 						label: '流水',
 						minWidth: '120px',
 						render: (h, params) => {

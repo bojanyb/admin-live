@@ -2,6 +2,8 @@
 	<div class="app-container userTurnover-list-box">
 		<div class="model">
             <span>收礼人数：{{ ruleForm.user_count || 0 }}人</span>
+            <span>房间数量：{{ ruleForm.room_count || 0 }}个</span>
+            <span>公会数量：{{ ruleForm.guild_count || 0 }}个</span>
             <span>选择时间内总金额：{{ ruleForm.total_amount || 0 }}喵粮</span>
         </div>
 		<div class="searchParams">
@@ -70,7 +72,7 @@
 						options: MAPDATA.DEALSOURCETYPELIST
 					},
 					{
-						name: 'is_room',
+						name: 'flow_type',
 						type: 'select',
 						value: 0,
 						keyName: 'id',
@@ -141,7 +143,7 @@
 						{
 							label: '来源',
 							render: (h, params) => {
-								let data = MAPDATA.DEALSOURCELIST.find(item => { return item.value === params.row.source })
+								let data = MAPDATA.DEALSOURCELIST.find(item => { return item.id === params.row.flow_type })
 								return h('span', data ? data.name : '无')
 							}
 						},
@@ -157,7 +159,8 @@
 			return {
 				ruleForm: {},
 				searchParams: {
-					dateTimeParams: []
+					dateTimeParams: [],
+					flow_type: 0
 				},
 				dateTimeParams: {
 					start_time: null,
@@ -181,14 +184,16 @@
 					user_number: s.user_number,
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
 					end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
-					is_room: s.is_room,
+					flow_type: s.flow_type,
 					source: s.source
 				}
 			},
 			// 重置
 			reset() {
 				this.changeIndex(0)
-				this.searchParams = {}
+				this.searchParams = {
+					flow_type: 0
+				}
 				// this.dateTimeParams = {}
 				this.getList()
 			},

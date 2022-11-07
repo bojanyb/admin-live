@@ -1023,5 +1023,14 @@ export function rmGuildRoom(data) {
   })
 }
 
+// 获取公会类型
+export function getGuildType(data) {
+  return request({
+    url: api.guild.guildType,
+    method: 'post',
+    data
+  })
+}
+
 
 

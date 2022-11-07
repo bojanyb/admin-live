@@ -489,12 +489,12 @@ const CLASSLIST = [
 
 // 公会列表 - 公会类型
 const GUILDCONFIGTYPELIST = [
-    // {
-    //     name: '主播公会',
-    //     value: 1
-    // },
     {
-        name: '派对公会',
+        name: '交友公会',
+        value: 1
+    },
+    {
+        name: '情感公会',
         value: 2
     }
 ]

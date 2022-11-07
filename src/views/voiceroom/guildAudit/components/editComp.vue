@@ -10,7 +10,7 @@
                     <el-input v-model="ruleForm.name" placeholder="请输入公会名字"></el-input>
                 </el-form-item>
                 <el-form-item label="公会类型" prop="guild_type">
-                    <el-select v-model="ruleForm.guild_type" placeholder="请选择公会类型">
+                    <el-select v-model="ruleForm.guild_type" placeholder="请选择公会类型" :disabled="status === 'update'">
                         <el-option v-for="item in guildTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
@@ -33,7 +33,7 @@
 
 <script>
 // 引入api
-import { getGuildCreateV2, getGuildUpdateV2 } from '@/api/videoRoom'
+import { getGuildCreateV2, getGuildUpdateV2, getGuildType } from '@/api/videoRoom'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
@@ -43,7 +43,7 @@ export default {
             status: 'add',
             isEditComp: false,
             rankList: MAPDATA.CLASSLIST,
-            guildTypeList: MAPDATA.GUILDCONFIGTYPELIST,
+            guildTypeList: [],
             ruleForm: {
                 id: null,
                 name: '',
@@ -92,6 +92,9 @@ export default {
             }
             return false
         }
+    },
+    created() {
+        this.getTypeList()
     },
     methods: {
         // 公会返点限制
@@ -175,6 +178,22 @@ export default {
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
+        },
+        // 获取公会类型
+        async getTypeList() {
+         const response = await getGuildType()
+         if(response.code === 2000) {
+            const tempArr =  Array.from(
+              Array.isArray(response.data.list) ? response.data.list : []
+          )
+          this.guildTypeList = tempArr.reduce((prev, curr) => {
+            prev.push({
+                name: curr.remark,
+                value: curr.type
+            })
+            return prev
+          }, []) || []
+         }
         }
     }
 }
