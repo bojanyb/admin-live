@@ -13,8 +13,6 @@
         label-width="90px"
         class="body_box-line"
         label-suffix=":"
-        :hide-required-asterisk="status === 'see'"
-        :disabled="disabled"
       >
         <el-form-item label="推送标题" prop="title" class="body_box-line">
           <el-input
@@ -31,16 +29,66 @@
             placeholder="请输入推送内容"
           ></el-input>
         </el-form-item>
-        <el-form-item label="落地类型" prop="push_val" class="body_box-line">
+        <el-form-item
+          label="落地类型"
+          prop="push_val"
+          class="body_box-line"
+          :rules="[
+            {
+              required: ruleForm.push_type !== 0,
+              message: '请输入落地类型值',
+              trigger: 'blur',
+            },
+          ]"
+          v-if="ruleForm.push_type === 0 || ruleForm.push_type === 2"
+        >
           <el-input
-            placeholder="请选择落地类型"
+            placeholder="请输入落地类型值"
             v-model="ruleForm.push_val"
             class="input-with-select"
+            :disabled="ruleForm.push_type === 0"
           >
             <el-select
               v-model="ruleForm.push_type"
               slot="prepend"
               placeholder="请选择"
+              @change="typeChange"
+            >
+              <el-option
+                v-for="item in pushTypeOptinos"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-input>
+        </el-form-item>
+        <el-form-item
+          label="落地类型"
+          prop="push_val"
+          class="body_box-line"
+          :rules="[
+            { required: true, message: '请输入落地类型值', trigger: 'blur' },
+            {
+              required: true,
+              pattern: /(http|https):\/\/([\w.]+\/?)\S*/gi,
+              message: '请输入http或者https开头的网络地址',
+              trigger: 'blur',
+            },
+          ]"
+          v-else-if="ruleForm.push_type === 3"
+        >
+          <el-input
+            placeholder="请输入http或者https开头的网络地址"
+            v-model="ruleForm.push_val"
+            class="input-with-select"
+            :disabled="ruleForm.push_type === 0"
+          >
+            <el-select
+              v-model="ruleForm.push_type"
+              slot="prepend"
+              placeholder="请选择"
+              @change="typeChange"
             >
               <el-option
                 v-for="item in pushTypeOptinos"
@@ -98,15 +146,15 @@ export default {
     return {
       status: "add",
       isEditComp: false,
-      ruleForm: {},
+      ruleForm: {
+        push_type: 0,
+        push_val: "",
+      },
       oldParams: {}, // 老数据
       rules: {
         title: [{ required: true, message: "请输入推送标题", trigger: "blur" }],
         content: [
           { required: true, message: "请输入推送内容", trigger: "blur" },
-        ],
-        push_val: [
-          { required: true, message: "请选择落地类型", trigger: "change" },
         ],
         target_type: [
           { required: true, message: "请选择目标用户", trigger: "change" },
@@ -122,22 +170,8 @@ export default {
       // 标题
       return "push推送";
     },
-    disabled() {
-      // 是否禁止输入
-      if (this.status === "see") {
-        return true;
-      }
-      return false;
-    },
   },
   methods: {
-    // 公会返点限制
-    rebateInput() {
-      let num = this.ruleForm.rebate;
-      if (num && Number(num) > 10) {
-        this.ruleForm.rebate = 10;
-      }
-    },
     // 新增 - 修改
     loadParams(status, row) {
       this.openComp();
@@ -176,10 +210,6 @@ export default {
         this.openComp(false);
       }
     },
-    // 修改
-    update() {
-      this.status = "update";
-    },
     // 提交
     async submitForm() {
       this.$refs.ruleForm.validate(async (valid) => {
@@ -208,6 +238,11 @@ export default {
     // 销毁组件
     closed() {
       this.$emit("destoryComp");
+    },
+    typeChange(type) {
+      if (!type) {
+        this.ruleForm.push_val = "";
+      }
     },
   },
 };

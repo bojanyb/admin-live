@@ -1644,6 +1644,14 @@ const COMMERCIALMANAGEMENTPAYTYPELIST = [
     }
 ]
 
+// 支付配置管理 - 支付平台
+const DEPOSITCONFIGURATIONPLATFORMLIST = [
+    {
+        name: '支付宝提现',
+        value: 3
+    }
+]
+
 // 充值记录 - 充值类型
 const RECHARGEHISTORYTYPELIST = [
     {
@@ -2487,11 +2495,11 @@ const ACTIVESTATUS = [
 // 落地类型
 const PUSHTYPESTATUS = [
     {
-        name: '打开',
+        name: '打开APP',
         value: 0
     },
     {
-        name: 'APP',
+        name: '进房间',
         value: 2
     },
     {
@@ -2656,5 +2664,6 @@ export default {
     ACTIVESTATUS,
     PATHTYPE2,
     PUSHTYPESTATUS,
-    TARGETTYPESTATUS
+    TARGETTYPESTATUS,
+    DEPOSITCONFIGURATIONPLATFORMLIST
 }

@@ -170,7 +170,10 @@ const request = {
         genre: `${HTTPHEADER}/Room/genre`, // 房间类型列表
         broadcastList: `${HTTPHEADER}/broadcast/index`, // 房间广播列表
         sendBroadcast: `${HTTPHEADER}/Broadcast/send`, // 发送广播
-        setBroadcastPrice: `${HTTPHEADER}/Broadcast/setPrice`, // 发送广播
+        setBroadcastPrice: `${HTTPHEADER}/Broadcast/setPrice`, // 设置广播价格
+        getBroadcastPrice: `${HTTPHEADER}/Broadcast/getPrice`, // 获取广播价格
+        getAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig`, // 渠道进房列表
+        addAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig/add`, // 新增渠道进房
     },
 
     // 用户管理
@@ -274,6 +277,7 @@ const request = {
         getCashHisityAll: `${HTTPHEADER}/cash/getCashHisityAll`, // 提现导出excel
         diamondRechargeAll: `${HTTPHEADER}/Recharge/diamondRechargeAll`, // 充值记录导出
         regReplenishmentByCsv: `${HTTPHEADER}/Promoter/regReplenishmentByCsv`, // 推广补单通过csv格式
+        changePayStatus: `${HTTPHEADER}/PayManage/changePayStatus`, // 修改支付使用状态
     },
 
     // 消息管理
