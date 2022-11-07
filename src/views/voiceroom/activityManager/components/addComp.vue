@@ -32,15 +32,16 @@
                         </el-select>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="活动时间" prop="time">
+                <el-form-item label="活动时间">
                     <el-date-picker
-					v-model="ruleForm.time"
+					v-model="time"
 					type="datetimerange"
 					range-separator="至"
 					start-placeholder="开始日期"
 					end-placeholder="结束日期"
 					value-format="timestamp"
-					:default-time="['00:00:00', '23:59:59']">
+					:default-time="['00:00:00', '23:59:59']"
+                    @change="handleChangeTime">
 					</el-date-picker>
                 </el-form-item>
             </el-form>
@@ -131,6 +132,7 @@ export default {
             pathType: MAPDATA.PATHTYPE,
             placeholderText: "请先选择落地类型",
             navToType: 0,
+            time : [new Date(),new Date()],
             ruleForm: {
                 name: '',
                 sort: '',
@@ -138,8 +140,8 @@ export default {
                 banner_img: '',
                 room_img: '',
                 jumpType: '',
-                url: '',
                 time: '',
+                url: '',
                 nav_to :''
             },
             rules: {
@@ -152,9 +154,6 @@ export default {
                 url: [
                     { required: true, message: '请输入落地地址', trigger: 'blur' }
                 ],
-                time: [
-                    { required: true, message: '请选择活动时间', trigger: 'change' },
-                ]
             },
         };
     },
@@ -178,9 +177,9 @@ export default {
                 params.url = params.nav_to.type == 'app' ? params.nav_to.params.roomId : params.nav_to.uri
                 params.jumpType = params.nav_to.type == 'app' ? 1 : 2
                 this.$set(this.$data, 'ruleForm', params)
-                this.ruleForm.time=[]
-                this.ruleForm.time[0] = params.start_time
-                this.ruleForm.time[1] = params.end_time
+                this.time=[]
+                this.time[0] = params.start_time
+                this.time[1] = params.end_time
             }
         },
         // 提交
@@ -188,11 +187,19 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
+                    if(params.time == null){
+                        this.$message.error('请先选择活动时间')
+                        return
+                    }
                     params.start_time = Math.floor(params.time[0] / 1000)
                     params.end_time = Math.floor(params.time[1] / 1000)
                     let type = '',url = '',roomId=''
                     if(params.jumpType == ''){
                         this.$message.error('请先选择落地类型')
+                        return
+                    }
+                    if(params.banner_img == "" && params.flash_img == "" && params.room_img == ""){
+                        this.$message.error('请添加资源位素材')
                         return
                     }
                     switch (params.jumpType) {
@@ -284,6 +291,11 @@ export default {
         getFilenonius(url){
             this.ruleForm.room_img = url
         },
+        // 时间选择
+        handleChangeTime(row){
+            this.time = row
+            this.ruleForm.time = row
+        }
     },
     mounted() {
     }
