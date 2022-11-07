@@ -107,16 +107,19 @@ export default {
                 });
                 return
             }
-            if(this.maxWidth == "" && this.isFileType == false){
-                this.uploadImg(file)
-            }else{
-                this.limitFileWH(this.maxWidth, this.maxHeight, file.file).then((res) => {
-                    file.isFlag = res
-                    if (file.isFlag) {
-                        this.uploadImg(file)
-                    }
-                })
-            }
+
+            this.uploadImg(file)
+            
+            // if(this.maxWidth == "" && this.isFileType == false){
+            //     this.uploadImg(file)
+            // }else{
+            //     this.limitFileWH(this.maxWidth, this.maxHeight, file.file).then((res) => {
+            //         file.isFlag = res
+            //         if (file.isFlag) {
+            //             this.uploadImg(file)
+            //         }
+            //     })
+            // }
         },
         uploadImg(file){
             this.isShowSvg = false
