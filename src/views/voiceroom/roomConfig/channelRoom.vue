@@ -1,5 +1,5 @@
 <template>
-  <div class="push-notice">
+  <div class="room-livelist">
     <div class="searchParams">
       <SearchPanel
         v-model="searchParams"
@@ -11,9 +11,13 @@
       ></SearchPanel>
     </div>
 
-    <tableList :cfgs="cfgs" ref="tableList"></tableList>
+    <tableList
+      :cfgs="cfgs"
+      ref="tableList"
+      @saleAmunt="saleAmunt"
+    ></tableList>
 
-    <!-- 房间直播详情组件 -->
+    <!-- 新增or修改组件 -->
     <editComp
       v-if="isDestoryComp"
       ref="editComp"
@@ -22,25 +26,25 @@
     ></editComp>
   </div>
 </template>
-  
-  <script>
+
+<script>
 // 引入tab菜单组件
 import menuComp from "@/components/menuComp/index.vue";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
-// 引入房间直播详情组件
+// 引入新增or修改组件
 import editComp from "./components/editComp.vue";
 // 引入api
 import REQUEST from "@/request/index.js";
+// 引入公共方法
+import { timeFormat } from "@/utils/common.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
-// 引入公共map
-import MAPDATA from "@/utils/jsonMap.js";
 
 export default {
-  name: "BroadcastList",
+  name: "channelRoom",
   mixins: [mixins],
   components: {
     SearchPanel,
@@ -51,72 +55,61 @@ export default {
   data() {
     return {
       isDestoryComp: false, // 是否销毁组件
+      ruleForm: {},
     };
   },
   computed: {
     forms() {
-      const BroadcastList = [
+      return [
         {
-          name: "title",
+          name: "user_number",
           type: "input",
           value: "",
-          label: "消息标题",
-          placeholder: "请输入消息标题",
-        },
-        {
-          name: "dateTimeParams",
-          type: "datePicker",
-          dateType: "datetimerange",
-          format: "yyyy-MM-dd HH:mm:ss",
-          label: "创建时间",
-          value: "",
-          handler: {
-            change: (v) => {
-              this.emptyDateTime();
-              this.setDateTime(v);
-              this.getList();
-            },
-            selectChange: (v, key) => {
-              this.emptyDateTime();
-              this.getList();
-            },
-          },
+          label: "app渠道",
+          isNum: true,
+          placeholder: "请输入app渠道",
         },
       ];
-      return BroadcastList;
     },
     cfgs() {
       return {
         vm: this,
-        url: REQUEST.message.pushLogList,
+        url: REQUEST.room.getAutoJoinConfig,
         columns: [
           {
-            label: "创建时间",
-            prop: "create_time",
+            label: "添加时间",
             minWidth: "180px",
-          },
-          {
-            label: "推送标题",
-            prop: "title",
-          },
-          {
-            label: "推送内容",
-            prop: "content",
-          },
-          {
-            label: "落地类型",
-            prop: "push_type",
             render: (h, params) => {
-              let data = MAPDATA.PUSHTYPESTATUS.find((item) => {
-                return item.value === params.row.push_type;
-              });
-              return h("span", data ? `${data.name}：${params.row.push_val}` : "无");
+              return h(
+                "span",
+                params.row.create_time
+                  ? timeFormat(
+                      params.row.create_time,
+                      "YYYY-MM-DD HH:mm:ss",
+                      true
+                    )
+                  : "无"
+              );
             },
           },
           {
-            label: "操作人",
-            prop: "admin_user_nickname",
+            label: "渠道",
+            prop: "content",
           },
+          {
+            label: "房间ID",
+            prop: "user_number",
+          },
+          {
+						label: '操作',
+						minWidth: '120px',
+						fixed: 'right',
+						render: (h, params) => {
+							return h('div', [
+								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.add()}}}, '删除'),
+							])
+						}
+					}
         ],
       };
     },
@@ -128,7 +121,7 @@ export default {
       return {
         page: params.page,
         pagesize: params.size,
-        title: s.title,
+        user_number: s.user_number,
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
       };
@@ -155,6 +148,10 @@ export default {
     add() {
       this.load("add");
     },
+    // 修改
+    add() {
+      this.load("add");
+    },
     load(status, row) {
       this.isDestoryComp = true;
       setTimeout(() => {
@@ -169,13 +166,34 @@ export default {
     destoryComp() {
       this.isDestoryComp = false;
     },
+    // 列表返回数据
+    saleAmunt(data) {
+      const { total_cost, user_count, count } = data;
+      this.ruleForm = { total_cost, user_count, count };
+    },
   },
 };
 </script>
-  <style lang="scss">
-.push-notice {
+<style lang="scss">
+.room-livelist {
   padding: 20px;
   box-sizing: border-box;
+  .box-card {
+    width: 100%;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    padding: 0px 30px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    .box-card-inner {
+      > span {
+        font-size: 15px;
+        color: #ffffff;
+        margin-right: 100px;
+      }
+    }
+  }
 }
 </style>
-  

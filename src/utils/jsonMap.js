@@ -2495,11 +2495,11 @@ const ACTIVESTATUS = [
 // 落地类型
 const PUSHTYPESTATUS = [
     {
-        name: '打开',
+        name: '打开APP',
         value: 0
     },
     {
-        name: 'APP',
+        name: '进房间',
         value: 2
     },
     {
