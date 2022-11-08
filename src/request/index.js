@@ -174,6 +174,7 @@ const request = {
         getBroadcastPrice: `${HTTPHEADER}/Broadcast/getPrice`, // 获取广播价格
         getAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig`, // 渠道进房列表
         addAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig/add`, // 新增渠道进房
+        delAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig/del`, // 新增渠道进房
     },
 
     // 用户管理

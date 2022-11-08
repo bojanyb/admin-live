@@ -1131,10 +1131,20 @@ export function setBroadcastPrice(data) {
   })
 }
 
-// 设置广播价格
+// 新增渠道进房
 export function addAutoJoinConfig(data) {
   return request({
     url: api.room.addAutoJoinConfig,
+    method: 'post',
+    data
+  })
+}
+
+
+// 删除渠道进房
+export function delAutoJoinConfig(data) {
+  return request({
+    url: api.room.delAutoJoinConfig,
     method: 'post',
     data
   })
