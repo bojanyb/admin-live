@@ -450,7 +450,9 @@ export default {
                 })
               }
             }
-            this.$set(this.form, form.name, form.value)
+            if (!form.linkage) {
+              this.$set(this.form, form.name, form.value)
+            }
           }
         }
       },

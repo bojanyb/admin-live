@@ -36,7 +36,7 @@ export default {
         forms() {
             return [
                 {
-                    name: 'number',
+                    name: 'user_number',
                     type: 'input',
                     value: '',
                     label: '用户ID',
@@ -73,12 +73,12 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.shopping.list,
+                url: REQUEST.prettyNumber.PrettyNumberLog,
                 columns: [
                     {
                         label: '购买时间',
                         render: (h, params) => {
-                            return h('span', params.row.up_time ? timeFormat(params.row.up_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
@@ -89,39 +89,25 @@ export default {
                     },
                     {
                         label: '商品类型',
-                        render: (h, params) => {
-                            let data = MAPDATA.SHOPPING.find(item => { return item.value === params.row.goods_type })
-                            return h('div', { class: { 'bounce_fa': true } }, [
-                                h('span', data ? data.name : '--')
-                            ])
-                        }
+                        prop: 'cate'
                     },
                     {
                         label: '商品分类',
-                        render: (h, params) => {
-                            let data = MAPDATA.SHOPPING.find(item => { return item.value === params.row.goods_type })
-                            return h('div', { class: { 'bounce_fa': true } }, [
-                                h('span', data ? data.name : '--')
-                            ])
-                        }
+                        prop: 'type_name'
                     },
                     {
                         label: '靓号ID',
                         render: (h, params) => {
-                            return h('span', params.row.user_number)
+                            return h('span', params.row.goods_id)
                         }
                     },
                     {
                         label: '使用时长',
-                        render: (h, params) => {
-                            return h('span', params.row.user_number)
-                        }
+                        prop: 'day'
                     },
                     {
                         label: '购买金额',
-                        render: (h, params) => {
-                            return h('span', params.row.user_number)
-                        }
+                        prop: 'price'
                     }
                 ]
             }
@@ -146,6 +132,7 @@ export default {
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
                 page: params.page,
+                pagesize: params.size,
                 status: s.status,
                 user_number: s.user_number,
                 start_time: Math.floor(s.start_time / 1000),

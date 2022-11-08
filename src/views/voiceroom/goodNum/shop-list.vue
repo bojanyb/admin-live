@@ -13,6 +13,8 @@
 </template>
 
 <script>
+// 引入api
+import { delTypePrettyNumber, getTypeOption } from '@/api/videoRoom.js'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -48,79 +50,44 @@ export default {
                     isNum: true,
                     placeholder: '请输入分类名称'
                 },
-                {
-                    name: 'type',
-                    type: 'select',
-                    value: null,
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '一级分类',
-                    placeholder: '请选择',
-                    clearable: true,
-                    options: MAPDATA.GOODNUMTYPE
-                },
-                {
-                    name: 'status',
-                    type: 'select',
-                    value: null,
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '二级分类',
-                    placeholder: '请选择分类',
-                    clearable: true,
-                    options: MAPDATA.GOODNUMCLASS
-                },
             ]
         },
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.shopping.list,
+                url: REQUEST.prettyNumber.prettyNumberType,
                 columns: [
                     {
                         label: '创建时间',
+                        prop: 'create_time'
+                    },
+                    {
+                        label: '商品类别',
+                        prop: 'category',
                         render: (h, params) => {
-                            return h('span', params.row.up_time ? timeFormat(params.row.up_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            let data = MAPDATA.GOODNUMTYPE.find(item => { return item.value === params.row.category })
+                            return h('span', data ? data.name : '无')
                         }
                     },
                     {
-                        label: '一级分类',
-                        render: (h, params) => {
-                            let data = MAPDATA.GOODNUMTYPE.find(item => { return item.value === params.row.goods_type })
-                            return h('div', { class: { 'bounce_fa': true } }, [
-                                h('span', data ? data.name : '--')
-                            ])
-                        }
-                    },
-                    {
-                        label: '二级分类',
-                        render: (h, params) => {
-                            let data = MAPDATA.GOODNUMCLASS.find(item => { return item.value === params.row.goods_type })
-                            return h('div', { class: { 'bounce_fa': true } }, [
-                                h('span', data ? data.name : '--')
-                            ])
-                        }
+                        label: '商品分类',
+                        prop: 'name'
                     },
                     {
                         label: '图标',
                         isimg: true,
-                        prop: 'face',
+                        prop: 'icon',
                         imgWidth: '50px',
                         imgHeight: '50px'
                     },
                     {
                         label: '权重状态',
-                        render: (h, params) => {
-                            let data = MAPDATA.SHOPPING.find(item => { return item.value === params.row.goods_type })
-                            return h('div', { class: { 'bounce_fa': true } }, [
-                                h('span', data ? data.name : '--')
-                            ])
-                        }
+                        prop: 'sort',
                     },
                     {
                         label: '显示状态',
                         render: (h, params) => {
-                            let data = MAPDATA.SHOPPING.find(item => { return item.value === params.row.goods_type })
+                            let data = MAPDATA.SHOWSTATUS.find(item => { return item.value === params.row.status })
                             return h('div', { class: { 'bounce_fa': true } }, [
                                 h('span', data ? data.name : '--')
                             ])
@@ -129,16 +96,18 @@ export default {
                     {
                         label: '是否默认选中',
                         render: (h, params) => {
-                            return h('span', params.row.update_user ? params.row.update_user : '--')
+                            let data = MAPDATA.CHECKEDSTATUS.find(item => { return item.value === params.row.selected })
+                            return h('div', { class: { 'bounce_fa': true } }, [
+                                h('span', data ? data.name : '--')
+                            ])
                         }
                     },
                     {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
-                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
-                            h('el-button', { props: { type: 'danger'}, style: { display: params.row.status === 2 ? 'none' : 'unset'
-                                }, on: {click:()=>{this.down(params.row, 2)}}},'删除')
+                            h('el-button', { props: { type: 'primary', size: 'mini' }, on: {click:()=>{this.update(params.row)}}}, '修改'),
+                            h('el-button', { props: { type: 'danger', size: 'mini' }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除'),
                             ])
                         }
                     }
@@ -165,14 +134,10 @@ export default {
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
                 page: params.page,
-                status: s.status,
-                user_number: s.user_number,
+                pagesize: params.size,
+                number: s.number,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
-                user_id: s.user_id,
-                order_id: s.order_id,
-                sort: s.sort,
-                goods_type: s.goods_type
             }
         },
         // 设置时间段
@@ -220,6 +185,20 @@ export default {
                     this.onSearch()
                 }
             })
+        },
+        // 删除
+        async deleteParams(id) {
+            this.$confirm('确认删除当前靓号吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                let res = await delTypePrettyNumber({ id: id + '' })
+                if(res.code === 2000) {
+                    this.$success('删除成功')
+                    this.getList()
+                }
+            }).catch(() => {});
         },
         load(status,row) {
             this.isDestoryComp = true
