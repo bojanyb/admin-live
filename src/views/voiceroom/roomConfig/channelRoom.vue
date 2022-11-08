@@ -28,6 +28,8 @@
 </template>
 
 <script>
+// 引入api
+import { delAutoJoinConfig } from "@/api/videoRoom";
 // 引入tab菜单组件
 import menuComp from "@/components/menuComp/index.vue";
 // 引入菜单组件
@@ -79,26 +81,15 @@ export default {
           {
             label: "添加时间",
             minWidth: "180px",
-            render: (h, params) => {
-              return h(
-                "span",
-                params.row.create_time
-                  ? timeFormat(
-                      params.row.create_time,
-                      "YYYY-MM-DD HH:mm:ss",
-                      true
-                    )
-                  : "无"
-              );
-            },
+            prop: "create_time"
           },
           {
             label: "渠道",
-            prop: "content",
+            prop: "channel",
           },
           {
             label: "房间ID",
-            prop: "user_number",
+            prop: "room_id",
           },
           {
 						label: '操作',
@@ -106,7 +97,7 @@ export default {
 						fixed: 'right',
 						render: (h, params) => {
 							return h('div', [
-								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.add()}}}, '删除'),
+								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除'),
 							])
 						}
 					}
@@ -170,6 +161,20 @@ export default {
     saleAmunt(data) {
       const { total_cost, user_count, count } = data;
       this.ruleForm = { total_cost, user_count, count };
+    },
+    // 删除
+    async deleteParams(id) {
+        this.$confirm('确认删除当前动态吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then(async () => {
+            let res = await delAutoJoinConfig({ id })
+            if(res.code === 2000) {
+                this.$success('删除成功')
+                this.getList()
+            }
+        }).catch(() => {});
     },
   },
 };
