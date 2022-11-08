@@ -134,11 +134,12 @@ export default {
         // 配置参数
         beforeSearch(params) {
             let s = {...this.searchParams, ...this.dateTimeParams}
+            console.log(s, 's');
             return {
                 page: params.page,
                 pagesize: params.size,
-                number: s.number,
-                user_number: s.user_number,
+                number: s.number ? s.number : '',
+                user_number: s.user_number ? s.user_number : '',
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
             }
