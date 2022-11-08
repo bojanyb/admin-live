@@ -45,9 +45,9 @@
                     </el-upload>
                 </el-form-item>
                 <div class="formBox">
-                    <el-form-item label="提现税率" prop="cash_rate" class="allocationBox" v-if="type === 'deposit'">
+                    <!-- <el-form-item label="提现税率" prop="cash_rate" class="allocationBox" v-if="type === 'deposit'">
                         <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.cash_rate"></el-input>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item :label="type === 'payment' ? '支付类型' : '提现类型'" prop="channel_way" v-if="type === 'payment'">
                         <el-select v-model="ruleForm.channel_way" placeholder="请选择" :disabled="!ruleForm.channel">
                             <el-option v-for="item in payList" :key="item.value" :label="item.name" :value="item.value"></el-option>
@@ -96,7 +96,7 @@ export default {
                 channel: '',
                 name: '',
                 config_json: '',
-                cash_rate: '',
+                // cash_rate: '',
                 channel_way: null,
                 type: 1,
                 merchant_name: '',
@@ -125,9 +125,9 @@ export default {
                 file: [
                     { required: true, message: '请输入签名文件', trigger: 'blur' }
                 ],
-                cash_rate: [
-                    { required: true, message: '请输入提现税率', trigger: 'blur' }
-                ]
+                // cash_rate: [
+                //     { required: true, message: '请输入提现税率', trigger: 'blur' }
+                // ]
             }
         };
     },
@@ -188,7 +188,7 @@ export default {
                     let params = { ...this.ruleForm }
                     if(this.type === 'payment') {
                         params.purpose = 1
-                        delete params.cash_rate
+                        // delete params.cash_rate
                     } else {
                         params.purpose = 2
                         delete params.channel_way

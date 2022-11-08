@@ -38,7 +38,7 @@ export default {
     data() {
         return {
             searchParams: {
-                channel: 3,
+                channel: 0,
                 channel_way: 1
             },
             isDestoryComp: false // 是否销毁组件
@@ -50,7 +50,7 @@ export default {
                 {
                     name: 'channel',
                     type: 'select',
-                    value: 3,
+                    value: 0,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '商户平台',
@@ -96,12 +96,12 @@ export default {
                         label: '商户名称',
                         prop: 'merchant_name'
                     },
-                    {
-                        label: '提现税率',
-                        render: (h, params) => {
-                            return h('span', params.row.cash_rate + '%')
-                        }
-                    },
+                    // {
+                    //     label: '提现税率',
+                    //     render: (h, params) => {
+                    //         return h('span', params.row.cash_rate + '%')
+                    //     }
+                    // },
                     // {
                     //     label: '商户号',
                     //     minWidth: '100px',
@@ -162,7 +162,7 @@ export default {
         // 重置
         reset() {
             this.searchParams = {
-                channel: 3,
+                channel: 0,
                 channel_way: 1
             }
             this.getList()
@@ -173,7 +173,7 @@ export default {
         },
         // 新增
         add() {
-           this.load('add') 
+           this.load('add')
         },
         // 修改
         update(row) {
