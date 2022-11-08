@@ -2491,6 +2491,10 @@ const ACTIVESTATUS = [
         name: '待生效',
         value: 2
     },
+    {
+        name: '已过期',
+        value: 3
+    },
 ]
 // 落地类型
 const PUSHTYPESTATUS = [
