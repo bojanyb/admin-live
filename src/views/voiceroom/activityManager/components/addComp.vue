@@ -14,16 +14,17 @@
                 <el-form-item label="权重排序" prop="sort">
                     <el-input v-model="ruleForm.sort" placeholder="请输入权重排序" clearable/>
                 </el-form-item>
-                <el-form-item label="闪屏图片" prop="flash_img">
-                    <uploadImg ref="flash_img" v-model="ruleForm.flash_img" :imgUrl="ruleForm.flash_img" name="flash_img" @validateField="validateField" @input="getFileSplash"></uploadImg>
+                <el-form-item label="闪屏图片" prop="flash_img" class="tipsItem">
+                    <uploadImg ref="flash_img" v-model="ruleForm.flash_img" :imgUrl="ruleForm.flash_img" name="flash_img" accept=".png" :isFileType="true" @input="getFileSplash"></uploadImg>
+                    <div class="tipsText">仅允许png格式，建议大小不超5MB</div>
                 </el-form-item>
                 <el-form-item label="banner图片" prop="banner_img" class="tipsItem">
-                    <uploadImg ref="banner_img" v-model="ruleForm.banner_img" :imgUrl="ruleForm.banner_img" maxWidth="690" maxHeight="200" name="banner_img" accept=".png" @input="getFileBanner"></uploadImg>
-                    <div class="tipsText">仅允许png格式，建议尺寸690×200</div>
+                    <uploadImg ref="banner_img" v-model="ruleForm.banner_img" :imgUrl="ruleForm.banner_img" maxWidth="690" maxHeight="200" name="banner_img" accept=".png" :isFileType="true" @input="getFileBanner"></uploadImg>
+                    <div class="tipsText">仅允许png格式，建议尺寸690×200，建议大小不超5MB</div>
                 </el-form-item>
                 <el-form-item label="房间游标图片" prop="room_img" class="tipsItem">
-                    <uploadImg ref="room_img" v-model="ruleForm.room_img" :imgUrl="ruleForm.room_img" maxWidth="130" maxHeight="130" name="room_img" accept=".png" @input="getFilenonius"></uploadImg>
-                    <div class="tipsText">仅允许png格式，建议尺寸130*130</div>
+                    <uploadImg ref="room_img" v-model="ruleForm.room_img" :imgUrl="ruleForm.room_img" maxWidth="130" maxHeight="130" name="room_img" accept=".png" :isFileType="true" @input="getFilenonius"></uploadImg>
+                    <div class="tipsText">仅允许png格式，建议尺寸130*130，建议大小不超5MB</div>
                 </el-form-item>
                 <el-form-item label="落地类型" prop="url">
                     <el-input :placeholder="placeholderText" v-model="ruleForm.url" class="input-with-select">

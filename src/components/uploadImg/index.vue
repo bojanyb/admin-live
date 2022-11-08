@@ -100,16 +100,14 @@ export default {
                 this.$message.error("上传图片只能是" + accept + "格式!");
                 return false;
             }
-            if (!isLtXM) {
-                this.$message({
-                    message: '上传文件大小不能超过 5MB!',
-                    type: 'warning'
-                });
-                return
-            }
-
+            // if (!isLtXM) {
+            //     this.$message({
+            //         message: '上传文件大小不能超过 5MB!',
+            //         type: 'warning'
+            //     });
+            //     return
+            // }
             this.uploadImg(file)
-            
             // if(this.maxWidth == "" && this.isFileType == false){
             //     this.uploadImg(file)
             // }else{
