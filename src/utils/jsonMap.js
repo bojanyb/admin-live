@@ -2405,11 +2405,11 @@ const GOODNUMTYPE = [
 const GOODNUMSTATUS = [
     {
         name: '已卖出',
-        value: 1
+        value: -1
     },
     {
         name: '未售出',
-        value: -1
+        value: 1
     },
 ]
 
