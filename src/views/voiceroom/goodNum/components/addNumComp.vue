@@ -8,56 +8,57 @@
         :close-on-click-modal="false"
         @closed="destoryComp">
             <el-form :model="ruleForm" :rules="rules" label-suffix=":" ref="ruleForm" label-width="110px" class="demo-ruleForm">
-                <el-form-item label="商品类型" prop="type">
-                    <el-select v-model="ruleForm.type" placeholder="请选择靓号类型">
+                <el-form-item label="商品类型" prop="category">
+                    <el-select v-model="ruleForm.category" placeholder="请选择靓号类型"  @change="handleChange(ruleForm.category)">
                         <el-option v-for="item in goodsNumTypeList" :label="item.name" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商品分类" prop="class">
-                    <el-select v-model="ruleForm.class" placeholder="请选择商品分类">
+                <el-form-item label="商品分类" prop="type_id">
+                    <el-select v-model="ruleForm.type_id" placeholder="请选择商品分类">
                         <el-option v-for="item in goodsNumClassList" :label="item.name" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商品名称" prop="name">
-                    <el-select v-model="ruleForm.name" placeholder="请选择商品名称">
-                        <el-option v-for="item in shopList" :label="item.name" :key="item.value" :value="item.value"></el-option>
-                    </el-select>
+                <el-form-item label="商品名称" prop="number">
+                    <el-input
+                        v-model="ruleForm.number"
+                        placeholder="请输入商品名称"
+                    ></el-input>
                 </el-form-item>
-                <el-form-item label="是否可购买" prop="isBuy">
-                    <el-radio-group v-model="ruleForm.isBuy">
-                        <el-radio :label="1">是</el-radio>
-                        <el-radio :label="0">否</el-radio>
+                <el-form-item label="备注">
+                    <el-input type="textarea" :rows="4" v-model="ruleForm.desc"></el-input>
+                </el-form-item>
+                <el-form-item label="是否可购买" prop="buy">
+                    <el-radio-group v-model="ruleForm.buy">
+                        <el-radio :label="0">是</el-radio>
+                        <el-radio :label="1">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="商品出售期限">
-                    <div class="sellItem" style="display: flex;" v-for="(item,index) in ruleForm.time_limit" :key="index">
+                    <div class="sellItem" style="display: flex;" v-for="(item,index) in ruleForm.price" :key="index">
                         <el-input v-model="item.day" placeholder="请输入时间" oninput="this.value=this.value.replace(/[^\d]/g,'');" clearable></el-input>
-                        <el-input v-model="item.money" placeholder="请输入价格（钻石）" oninput="this.value=this.value.replace(/[^\d]/g,'');" clearable></el-input>
-                        <el-button type="primary" v-if="(ruleForm.time_limit.length - 1) <= index "  @click="handleAdd">添加</el-button>
-                        <el-button type="danger" v-else-if="(ruleForm.time_limit.length - 1) > index"  @click="handleDel">删除</el-button>
+                        <el-input v-model="item.price" placeholder="请输入价格（钻石）" oninput="this.value=this.value.replace(/[^\d]/g,'');" clearable></el-input>
+                        <el-button type="primary" v-if="(ruleForm.price.length - 1) <= index "  @click="handleAdd">添加</el-button>
+                        <el-button type="danger" v-else-if="(ruleForm.price.length - 1) > index"  @click="handleDel">删除</el-button>
                     </div>
-                </el-form-item>
-                <el-form-item label="商品展示图片">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.face" :imgUrl="ruleForm.face" name="face" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
                 <el-form-item label="商品生效时间">
                     <el-date-picker
-                    v-model="timer"
+                    v-model="ruleForm.start_time"
                     type="datetime"
                     placeholder="选择商品生效时间"
                     format="yyyy-MM-dd HH:mm:ss"
-                    value-format="yyyy-MM-dd HH:mm:ss"
+                    value-format="timestamp"
                     clearable
                     @change="timeChange">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="商品过期时间">
                     <el-date-picker
-                    v-model="timer2"
+                    v-model="ruleForm.end_time"
                     type="datetime"
                     placeholder="选择商品过期时间"
                     format="yyyy-MM-dd HH:mm:ss"
-                    value-format="yyyy-MM-dd HH:mm:ss"
+                    value-format="timestamp"
                     clearable
                     @change="timeChange2">
                     </el-date-picker>
@@ -72,16 +73,11 @@
 </template>
 
 <script>
+// 引入api
+import { addPrettyNumber, updatePrettyNumber, getTypeOption } from '@/api/videoRoom.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
-// 引入图片上传组件
-import uploadImg from '@/components/uploadImg/index.vue'
-// 引入api
-import { add } from '@/api/shopping.js'
 export default {
-    components: {
-        uploadImg
-    },
     computed: {
         title() { // 标题
             if(this.status === 'add') {
@@ -139,7 +135,7 @@ export default {
             return params
         },
         limitRules() { // 商品出售期限 - 必填
-            let array = this.ruleForm.time_limit
+            let array = this.ruleForm.price
             let isStatus = false
             array.forEach((item,index) => {
                 if(!item.day || !item.money) {
@@ -164,37 +160,38 @@ export default {
         return {
             dialogVisible: false,
             goodsNumTypeList: MAPDATA.GOODNUMTYPE,
-            goodsNumClassList: MAPDATA.GOODNUMCLASS,
+            goodsNumClassList: [],
             shopList: [],
-            goodsType: 1,
             status: 'add',
             oldParams: {},
-            timer : null,
-            timer2 : null,
             ruleForm: {
-                type: '',
-                class: '',
-                name: '',
-                isBuy: 1,
-                time_limit: [
+                category: '',
+                type_id: '',
+                number: '',
+                buy: '1',
+                price: [
                     {
                         day: '',
-                        money: ''
+                        price: ''
                     }
                 ],
-                face: '',
+                start_time: null,
+                end_time: null
             },
             rules: {
-                type: [
-                    { required: true, message: '请选择商品类型', trigger: 'change' }
+                category: [
+                    { required: true, message: '请选择商品类别', trigger: 'change' }
                 ],
-                class: [
-                    { required: true, message: '请输入商品分类', trigger: 'change' }
+                type_id: [
+                    { required: true, message: '请选择商品分类', trigger: 'change' }
                 ],
-                name: [
-                    { required: true, message: '请输入商品名称', trigger: 'change' }
+                number: [
+                    { required: true, message: '请输入商品名称', trigger: 'blur' }
+                ],
+                buy: [
+                    { required: true, message: '请选择是否可购买', trigger: 'change' }
                 ]
-            }
+            },
         };
     },
     methods: {
@@ -208,13 +205,8 @@ export default {
                 let params = JSON.parse(JSON.stringify(row))
                 params.start_time = params.start_time * 1000
                 params.end_time = params.end_time * 1000
-                params.noble_level = params.noble_level ? params.noble_level : null
-                if(params.goods_animation_path) {
-                    this.goodsType = 1
-                } else if(params.goods_image) {
-                    this.goodsType = 2
-                }
                 this.$set(this.$data, 'ruleForm', params)
+                this.getPrettyNumTypeList(row.category)
             }
         },
         // 提交
@@ -224,19 +216,36 @@ export default {
                     let params = { ...this.ruleForm }
                     params.start_time = Math.floor(params.start_time / 1000)
                     params.end_time = Math.floor(params.end_time / 1000)
-                    if(this.goodsType === 1) { // 最终选择
-                        params.goods_image = ''
-                    } else if(this.goodsType === 2) {
-                        params.goods_animation_path = ''
+                    const tempData = {
+                        ...params,
+                        price: params.price,
+                        type_id: params.type_id + '',
+                        category: params.category + '',
+                        buy: params.buy + '',
+                        number: params.number + '',
+                        start_time: params.start_time + '',
+                        end_time: params.end_time + ''
                     }
-                    add(params).then(res => {
-                        if(res.code === 2000) {
-                            this.dialogVisible = false
-                            this.$emit('onSearch')
-                        }
-                    }).catch(err => {
-                        this.$message.error(err)
-                    })
+                    if (this.status === 'add') {
+                        addPrettyNumber(tempData).then(res => {
+                           if(res.code === 2000) {
+                               this.dialogVisible = false
+                               this.$emit('onSearch')
+                           }
+                        }).catch(err => {
+                            this.$message.error(err)
+                        })
+                    } else if (this.status === 'update') {
+                        tempData.id = params.id + ''
+                        updatePrettyNumber(tempData).then(res => {
+                            if(res.code === 2000) {
+                               this.dialogVisible = false
+                               this.$emit('onSearch')
+                           }
+                        }).catch(err => {
+                            this.$message.error(err)
+                        })
+                     }
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -246,17 +255,17 @@ export default {
         // 新增商品出售期限
         handleAdd() {
             let s = this.ruleForm
-            if(s.time_limit.length < 3) {
-                s.time_limit.push({
+            if(s.price.length < 3) {
+                s.price.push({
                     day: '',
-                    money: ''
+                    price: ''
                 })
             }
         },
         // 删除商品出售期限 
         handleDel(index){
             let s = this.ruleForm
-            s.time_limit.splice(index, 1)
+            s.price.splice(index, 1)
         },
         // 重置
         resetForm(formName) {
@@ -287,6 +296,26 @@ export default {
         timeChange2(row){
             console.log("失效时间:",row)
         },
+        handleChange(category) {
+            this.getPrettyNumTypeList(category)
+        },
+        // 获取靓号类型
+        async getPrettyNumTypeList(category) {
+         const response = await getTypeOption({ category })
+         if(response.code === 2000) {
+            const tempArr =  Array.from(
+              Array.isArray(response.data) ? response.data : []
+          )
+          this.goodsNumClassList =
+                tempArr.reduce((prev, curr) => {
+                prev.push({
+                    name: curr.name,
+                    value: curr.type_id,
+                });
+                return prev
+                }, []) || []
+         }
+        }
     },
     mounted() {
     }
