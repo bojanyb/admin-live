@@ -142,45 +142,45 @@ export default {
         },
         // 点击提交
         submitForm(formName) {
-            this.$confirm('是否确认发送该消息?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(async () => {
-                this.handleSubmit(formName)
-            }).catch(() => {});
-        },
-        // 提交
-        handleSubmit(formName){
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    let params = { ...this.ruleForm }
-                    params.push_type = JSON.stringify(params.push_type)
-                    if(this.type !== 'desdev'){
-                        delete params.img_path
-                        addSysNotice(params).then(res => {
-                            if(res.code === 2000) {
-                                this.dialogVisible = false
-                                this.$emit('onSearch')
-                            }
-                        }).catch(err => {
-                            this.$message.error(err)
-                        })
-                    }else{
-                        addOfficialNotice(params).then(res => {
-                            if(res.code === 2000) {
-                                this.dialogVisible = false
-                                this.$emit('onSearch')
-                            }
-                        }).catch(err => {
-                            this.$message.error(err)
-                        })
-                    }
+                    this.$confirm('是否确定发送？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(async () => {
+                        this.handleSubmit()
+                    }).catch(() => {});
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
-            });
+            })
+        },
+        // 提交
+        handleSubmit(){
+            let params = { ...this.ruleForm }
+            params.push_type = JSON.stringify(params.push_type)
+            if(this.type !== 'desdev'){
+                delete params.img_path
+                addSysNotice(params).then(res => {
+                    if(res.code === 2000) {
+                        this.dialogVisible = false
+                        this.$emit('onSearch')
+                    }
+                }).catch(err => {
+                    this.$message.error(err)
+                })
+            }else{
+                addOfficialNotice(params).then(res => {
+                    if(res.code === 2000) {
+                        this.dialogVisible = false
+                        this.$emit('onSearch')
+                    }
+                }).catch(err => {
+                    this.$message.error(err)
+                })
+            }
         },
         // 重置
         resetForm(formName) {
