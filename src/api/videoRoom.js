@@ -1019,7 +1019,7 @@ export function updateTypePrettyNumber(data) {
   })
 }
 
-/***********公会v2******************/ 
+/***********公会v2******************/
 // 新增公会
 export function getGuildCreateV2(data) {
   return request({
