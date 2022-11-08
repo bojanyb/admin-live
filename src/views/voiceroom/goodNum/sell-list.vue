@@ -102,7 +102,7 @@ export default {
                     {
                         label: '靓号ID',
                         render: (h, params) => {
-                            return h('span', params.row.goods_id)
+                            return h('span', params.row.number)
                         }
                     },
                     {
