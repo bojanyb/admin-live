@@ -163,10 +163,10 @@ export default {
                                 h('el-button', { props: { type: 'primary', size: 'mini' }, on: {click:()=>{this.update(params.row)}}},'修改'),
                                 h('el-button', { props: { type: 'danger', size: 'mini' }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除'),
                                 h('el-button', { props: { type: 'success', size: 'mini' }, style: {
-                                    display: params.row.buy === 0 ? 'none' : 'unset'
+                                    display: (params.row.status === 1 && params.row.use_status === 1) ? 'unset' : 'none'
                                 }, on: {click:()=>{this.down(params.row, 0)}}},'上架'),
                                 h('el-button', { props: { type: 'info', size: 'mini' }, style: {
-                                    display: params.row.buy === 1 ? 'none' : 'unset'
+                                    display: (params.row.status === 0 && params.row.use_status === -1) ? 'unset' : 'none'
                                 }, on: {click:()=>{this.down(params.row, 1)}}},'下架')
                             ])
                         }
@@ -261,7 +261,7 @@ export default {
                 start_time: row.start_time + '',
                 end_time: row.end_time + '',
                 id: row.id + '',
-                buy: status + ''
+                status: status + ''
             }
             updatePrettyNumber(params).then(res => {
                 if(res.code === 2000) {

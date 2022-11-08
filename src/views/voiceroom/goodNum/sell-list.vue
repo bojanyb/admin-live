@@ -2,11 +2,12 @@
 <template>
     <div class="sell-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-add="true" addName="赠送" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
+        <addNumComp ref="add" v-if="isDestoryComp" @onSearch="onSearch" @destoryComp="destoryComp"></addNumComp>
     </div>
 </template>
 
@@ -25,11 +26,14 @@ import { down } from '@/api/shopping.js'
 import { timeFormat } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
+// 引入新增组件
+import addNumComp from './components/addSellComp.vue'
 
 export default {
     components: {
         tableList,
         SearchPanel,
+        addNumComp
     },
     mixins: [mixins],
     computed: {
@@ -167,6 +171,10 @@ export default {
         onSearch() {
             this.getList()
         },
+        // 赠送
+        add() {
+            this.load('add')
+        },
         // 列表返回数据
         saleAmunt(data) {
             // this.ruleForm.allMoney = data.total_money ? data.total_money / 100 : 0
@@ -187,6 +195,10 @@ export default {
         },
         load(status,row) {
             this.isDestoryComp = true
+            setTimeout(() => {
+                this.$refs.add.dialogVisible = true
+                this.$refs.add.load(status, row)
+            }, 100);
         },
         // 销毁组件
         destoryComp() {

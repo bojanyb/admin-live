@@ -1,4 +1,5 @@
 import request from '@/utils/request2'
+import request1 from '@/utils/request3'
 import api from '@/request/index'
 
 // 登录
@@ -1019,7 +1020,16 @@ export function updateTypePrettyNumber(data) {
   })
 }
 
-/***********公会v2******************/
+// 靓号管理 售卖记录 - 赠送
+export function givePrettyNumber(data) {
+  return request1({
+      url: api.prettyNumber.givePrettyNumber,
+      method: 'post',
+      data
+  })
+}
+
+/***********公会v2******************/ 
 // 新增公会
 export function getGuildCreateV2(data) {
   return request({
