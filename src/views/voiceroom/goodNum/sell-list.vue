@@ -137,14 +137,10 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                status: s.status,
+                number: s.number,
                 user_number: s.user_number,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
-                user_id: s.user_id,
-                order_id: s.order_id,
-                sort: s.sort,
-                goods_type: s.goods_type
             }
         },
         // 设置时间段
