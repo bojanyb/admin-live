@@ -166,7 +166,7 @@ export default {
                                     display: (params.row.status === 1 && params.row.use_status === 1) ? 'unset' : 'none'
                                 }, on: {click:()=>{this.down(params.row, 0)}}},'上架'),
                                 h('el-button', { props: { type: 'info', size: 'mini' }, style: {
-                                    display: (params.row.status === 0 && params.row.use_status === -1) ? 'unset' : 'none'
+                                    display: (params.row.status === 0 && params.row.use_status === 1) ? 'unset' : 'none'
                                 }, on: {click:()=>{this.down(params.row, 1)}}},'下架')
                             ])
                         }
