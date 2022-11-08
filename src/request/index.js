@@ -390,6 +390,7 @@ const request = {
         addTypePrettyNumber: `${HTTPHEADER}/PrettyNumber/typeAdd`, // 新增靓号
         updateTypePrettyNumber: `${HTTPHEADER}/PrettyNumber/typeUpdate`, // 修改靓号
         PrettyNumberLog: `${HTTPHEADER}/PrettyNumber/log`, // 售卖记录
+        givePrettyNumber: `${HTTPHEADER}/v2/PrettyNumber/givePrettyNumber`, // 赠送
     }
 }
 

@@ -1,4 +1,5 @@
 import request from '@/utils/request2'
+import request1 from '@/utils/request3'
 import api from '@/request/index'
 
 // 登录
@@ -1016,6 +1017,15 @@ export function updateTypePrettyNumber(data) {
     url: api.prettyNumber.updateTypePrettyNumber,
     method: 'post',
     data
+  })
+}
+
+// 靓号管理 售卖记录 - 赠送
+export function givePrettyNumber(data) {
+  return request1({
+      url: api.prettyNumber.givePrettyNumber,
+      method: 'post',
+      data
   })
 }
 
