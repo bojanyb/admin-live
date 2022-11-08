@@ -140,8 +140,18 @@ export default {
                 this.$set(this.$data, 'ruleForm', params)
             }
         },
-        // 提交
+        // 点击提交
         submitForm(formName) {
+            this.$confirm('是否确认发送该消息?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                this.handleSubmit(formName)
+            }).catch(() => {});
+        },
+        // 提交
+        handleSubmit(formName){
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
@@ -166,7 +176,6 @@ export default {
                             this.$message.error(err)
                         })
                     }
-                    
                 } else {
                     console.log('error submit!!');
                     return false;
