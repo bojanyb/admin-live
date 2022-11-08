@@ -27,7 +27,6 @@
                     placeholder="请输入消息内容"
                     oninput="if(value.length>200)value=value.slice(0,200)"
                     maxlength="200"
-                    show-word-limit
                     v-model="ruleForm.content">
                     </el-input>
                 </el-form-item>
