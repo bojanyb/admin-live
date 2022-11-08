@@ -947,15 +947,77 @@ export function addPushLog(data) {
   })
 }
 
-// 房间管理 - 渠道进房 - 新增
-export function addAutoJoinConfig(data) {
+// 靓号管理 - 靓号仓库 - 删除
+export function delPrettyNumber(data) {
   return request({
-    url: api.room.addAutoJoinConfig,
+    url: api.prettyNumber.delPrettyNumber,
     method: 'post',
     data
   })
 }
 
+// 靓号管理 - 靓号仓库 - 新增
+export function addPrettyNumber(data) {
+  return request({
+    url: api.prettyNumber.addPrettyNumber,
+    method: 'post',
+    data
+  })
+}
+
+// 靓号管理 - 靓号仓库 - 修改
+export function updatePrettyNumber(data) {
+  return request({
+    url: api.prettyNumber.updatePrettyNumber,
+    method: 'post',
+    data
+  })
+}
+
+// 靓号管理 - 靓号仓库 - 靓号类型
+export function getTypeOption(data) {
+  return request({
+    url: api.prettyNumber.getTypeOption,
+    method: 'post',
+    data
+  })
+}
+
+// 靓号管理 - 商品分类 - 列表
+export function prettyNumberType(data) {
+  return request({
+    url: api.prettyNumber.prettyNumberType,
+    method: 'post',
+    data
+  })
+}
+
+// 靓号管理 - 商品分类 - 删除
+export function delTypePrettyNumber(data) {
+  return request({
+    url: api.prettyNumber.delTypePrettyNumber,
+    method: 'post',
+    data
+  })
+}
+
+// 靓号管理 - 商品分类 - 新增
+export function addTypePrettyNumber(data) {
+  return request({
+    url: api.prettyNumber.addTypePrettyNumber,
+    method: 'post',
+    data
+  })
+}
+
+// 靓号管理 - 商品分类 - 修改
+export function updateTypePrettyNumber(data) {
+  return request({
+    url: api.prettyNumber.updateTypePrettyNumber,
+    method: 'post',
+    data
+  })
+}
 
 /***********公会v2******************/ 
 // 新增公会

@@ -375,6 +375,20 @@ const request = {
         addResourceConfig: `${HTTPHEADER}/activity/addResourceConfig`, // 添加资源位配置
         editResource: `${HTTPHEADER}/activity/editResource`, // 修改资源位配置
         delResource: `${HTTPHEADER}/activity/delResource`, // 删除资源
+    },
+
+    // 靓号管理
+    prettyNumber : {
+        prettyNumber: `${HTTPHEADER}/PrettyNumber`, // 靓号列表
+        delPrettyNumber: `${HTTPHEADER}/PrettyNumber/del`, // 删除靓号
+        addPrettyNumber: `${HTTPHEADER}/PrettyNumber/add`, // 新增靓号
+        updatePrettyNumber: `${HTTPHEADER}/PrettyNumber/update`, // 修改靓号
+        getTypeOption: `${HTTPHEADER}/PrettyNumber/typeOption`, // 靓号类型
+        prettyNumberType: `${HTTPHEADER}/PrettyNumber/typeList`, // 靓号分类
+        delTypePrettyNumber: `${HTTPHEADER}/PrettyNumber/typeDel`, // 删除靓号
+        addTypePrettyNumber: `${HTTPHEADER}/PrettyNumber/typeAdd`, // 新增靓号
+        updateTypePrettyNumber: `${HTTPHEADER}/PrettyNumber/typeUpdate`, // 修改靓号
+        PrettyNumberLog: `${HTTPHEADER}/PrettyNumber/log`, // 售卖记录
     }
 }
 

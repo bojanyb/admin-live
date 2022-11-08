@@ -7,11 +7,13 @@
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
-        <add ref="add" v-if="isDestoryComp" @onSearch="onSearch" @destoryComp="destoryComp"></add>
+        <addNumComp ref="add" v-if="isDestoryComp" @onSearch="onSearch" @destoryComp="destoryComp"></addNumComp>
     </div>
 </template>
 
 <script>
+// 引入api
+import { delPrettyNumber, updatePrettyNumber, getTypeOption } from '@/api/videoRoom.js'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -20,20 +22,16 @@ import SearchPanel from '@/components/SearchPanel/final.vue'
 import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
-// 引入api
-import { down } from '@/api/shopping.js'
-// 引入公共方法
-import { timeFormat } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 // 引入新增组件
-import add from './components/addComp.vue'
+import addNumComp from './components/addNumComp.vue'
 
 export default {
     components: {
         tableList,
         SearchPanel,
-        add
+        addNumComp
     },
     mixins: [mixins],
     computed: {
@@ -43,28 +41,56 @@ export default {
                     name: 'number',
                     type: 'input',
                     value: '',
-                    label: '靓号ID',
+                    label: '商品名称',
                     isNum: true,
                     placeholder: '请输入靓号ID'
                 },
                 {
-                    name: 'type',
+                    name: 'category',
                     type: 'select',
-                    value: null,
+                    value: '',
                     keyName: 'value',
                     optionLabel: 'name',
-                    label: '靓号类型',
+                    label: '商品类别',
                     placeholder: '请选择',
                     clearable: true,
-                    options: MAPDATA.GOODNUMTYPE
+                    linkage: true,
+                    options: MAPDATA.GOODNUMTYPE,
+                    handler: {
+                        change: (v) => {
+                            this.getPrettyNumTypeList(v)
+                        }
+                    }
+                },
+                {
+                    name: 'type_id',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '商品分类',
+                    placeholder: '请选择',
+                    clearable: true,
+                    options: this.goodsNumClassList
                 },
                 {
                     name: 'status',
                     type: 'select',
-                    value: null,
+                    value: '',
                     keyName: 'value',
                     optionLabel: 'name',
-                    label: '状态',
+                    label: '上架状态',
+                    placeholder: '请选择',
+                    clearable: true,
+                    options: MAPDATA.GOODRACKSTATUS
+                },
+                {
+                    name: 'use_status',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '使用状态',
                     placeholder: '请选择',
                     clearable: true,
                     options: MAPDATA.GOODNUMSTATUS
@@ -91,52 +117,64 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.shopping.list,
+                url: REQUEST.prettyNumber.prettyNumber,
                 columns: [
                     {
-                        label: '创建时间',
-                        render: (h, params) => {
-                            return h('span', params.row.up_time ? timeFormat(params.row.up_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
-                        }
-                    },
-                    {
-                        label: '靓号ID',
+                        label: '序号',
                         prop: 'id'
                     },
                     {
-                        label: '靓号类型',
+                        label: '创建时间',
+                        prop: 'create_time'
+                    },
+                    {
+                        label: '商品名称',
+                        prop: 'number'
+                    },
+                    {
+                        label: '商品类型',
+                        prop: 'cate'
+                    },
+                    {
+                        label: '商品分类',
+                        prop: 'type_name'
+                    },
+                    {
+                        label: '上架状态',
+                        prop: 'status',
                         render: (h, params) => {
-                            let data = MAPDATA.SHOPPING.find(item => { return item.value === params.row.goods_type })
-                            return h('div', { class: { 'bounce_fa': true } }, [
-                                h('span', data ? data.name : '--')
-                            ])
+                            let data = MAPDATA.GOODRACKSTATUS.find(item => { return item.value === params.row.status })
+                            return h('span', data ? data.name : '无')
                         }
                     },
                     {
-                        label: '靓号状态',
+                        label: '使用状态',
+                        prop: 'use_status',
                         render: (h, params) => {
-                            let data = MAPDATA.SHOPPING.find(item => { return item.value === params.row.goods_type })
-                            return h('div', { class: { 'bounce_fa': true } }, [
-                                h('span', data ? data.name : '--')
+                            let data = MAPDATA.GOODNUMSTATUS.find(item => { return item.value === params.row.use_status })
+                            return h('span', data ? data.name : '无')
+                        }
+                    },
+                    {
+                        label: '操作',
+                        minWidth: '160px',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('el-button', { props: { type: 'primary', size: 'mini' }, on: {click:()=>{this.update(params.row)}}},'修改'),
+                                h('el-button', { props: { type: 'danger', size: 'mini' }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除'),
+                                h('el-button', { props: { type: 'success', size: 'mini' }, style: {
+                                    display: params.row.buy === 0 ? 'none' : 'unset'
+                                }, on: {click:()=>{this.down(params.row, 0)}}},'上架'),
+                                h('el-button', { props: { type: 'info', size: 'mini' }, style: {
+                                    display: params.row.buy === 1 ? 'none' : 'unset'
+                                }, on: {click:()=>{this.down(params.row, 1)}}},'下架')
                             ])
                         }
                     },
                     {
                         label: '备注说明',
-                        render: (h, params) => {
-                            return h('span', params.row.update_user ? params.row.update_user : '--')
-                        }
+                        prop: 'desc'
                     },
-                    {
-                        label: '操作',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('el-button', { props: { type: 'danger'}, style: {
-                                    display: params.row.status === 2 ? 'none' : 'unset'
-                                }, on: {click:()=>{this.down(params.row, 2)}}},'删除')
-                            ])
-                        }
-                    }
                 ]
             }
         },
@@ -147,7 +185,14 @@ export default {
                 alreadyMoney: null,
                 deductMoney: null
             },
-            isDestoryComp: false // 销毁组件
+            isDestoryComp: false, // 销毁组件
+            searchParams: {
+                category: '',
+                type_id: '',
+                status: '',
+                use_status: ''
+            },
+            goodsNumClassList: []
         };
     },
     methods: {
@@ -159,15 +204,16 @@ export default {
         beforeSearch(params) {
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
-                page: params.page,
                 status: s.status,
+                use_status: s.use_status,
                 user_number: s.user_number,
+                number: s.number,
+                category: s.category,
+                type_id: s.type_id,
+                page: params.page,
+                pagesize: params.size,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
-                user_id: s.user_id,
-                order_id: s.order_id,
-                sort: s.sort,
-                goods_type: s.goods_type
             }
         },
         // 设置时间段
@@ -207,14 +253,35 @@ export default {
         },
         down(row, status) {
             let params = {
-                id: row.id,
-                status: status
+                ...row,
+                type_id: row.type_id + '',
+                category: row.category + '',
+                number: row.number + '',
+                price: row.price,
+                start_time: row.start_time + '',
+                end_time: row.end_time + '',
+                id: row.id + '',
+                buy: status + ''
             }
-            down(params).then(res => {
+            updatePrettyNumber(params).then(res => {
                 if(res.code === 2000) {
                     this.onSearch()
                 }
             })
+        },
+        // 删除
+        async deleteParams(id) {
+            this.$confirm('确认删除当前靓号吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                let res = await delPrettyNumber({ id: id + '' })
+                if(res.code === 2000) {
+                    this.$success('删除成功')
+                    this.getList()
+                }
+            }).catch(() => {});
         },
         load(status,row) {
             this.isDestoryComp = true
@@ -226,7 +293,27 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
+        },
+        // 获取靓号类型
+        async getPrettyNumTypeList(category) {
+        this.goodsNumClassList = []
+        if (category || category === 0) {
+            const response = await getTypeOption({ category })
+            if (response.code === 2000) {
+            const tempArr = Array.from(
+                Array.isArray(response.data) ? response.data : []
+            )
+            this.goodsNumClassList =
+                tempArr.reduce((prev, curr) => {
+                prev.push({
+                    name: curr.name,
+                    value: curr.type_id,
+                });
+                return prev
+                }, []) || []
+            }
         }
+        },
     }
 }
 </script>

@@ -2393,31 +2393,27 @@ const PATHTYPE2 = [
 const GOODNUMTYPE = [
     {
         name: '用户靓号',
-        value: 1
+        value: 0
     },
     {
         name: '房间靓号',
-        value: 2
+        value: 1
     },
 ] 
 
-// 靓号状态
+// 靓号使用状态
 const GOODNUMSTATUS = [
     {
-        name: '售卖中',
+        name: '已卖出',
         value: 1
     },
     {
-        name: '使用中',
-        value: 2
-    },
-    {
-        name: '可使用',
-        value: 3
+        name: '未售出',
+        value: -1
     },
 ]
 
-// 靓号分类
+// 靓号商品分类
 const GOODNUMCLASS = [
     {
         name: '全部分类',
@@ -2441,15 +2437,27 @@ const GOODNUMCLASS = [
     },
 ] 
 
+// 靓号上架状态
+const GOODRACKSTATUS = [
+    {
+        name: '正常',
+        value: 0
+    },
+    {
+        name: '下架',
+        value: 1
+    }
+]
+
 // 显示状态
 const SHOWSTATUS = [
     {
         name: '显示',
-        value: 1
+        value: 0
     },
     {
         name: '隐藏',
-        value: 2
+        value: 1
     },
 ]
 
@@ -2461,7 +2469,7 @@ const CHECKEDSTATUS = [
     },
     {
         name: '否',
-        value: 2
+        value: 0
     },
 ]
 
@@ -2658,6 +2666,7 @@ export default {
     GOODNUMTYPE,
     GOODNUMSTATUS,
     GOODNUMCLASS,
+    GOODRACKSTATUS,
     SHOWSTATUS,
     CHECKEDSTATUS,
     RACKSATUS,
