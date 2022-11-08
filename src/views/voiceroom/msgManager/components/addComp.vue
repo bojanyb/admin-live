@@ -13,19 +13,19 @@
                     type="textarea"
                     :autosize="{ minRows: 2, maxRows: 4}"
                     placeholder="请输入指定用户ID用英文分号隔开"
-                    maxlength="200"
+                    oninput="if(value.length>200)value=value.slice(0,200)"
                     v-model="ruleForm.target_val">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="消息标题" prop="title">
-                    <el-input v-model="ruleForm.title" maxlength="15" placeholder="请输入消息标题" clearable/>
+                    <el-input v-model="ruleForm.title" oninput="if(value.length>15)value=value.slice(0,15)" placeholder="请输入消息标题" clearable/>
                 </el-form-item>
                 <el-form-item label="消息内容" prop="content">
                     <el-input
                     type="textarea"
                     :autosize="{ minRows: 2, maxRows: 4}"
                     placeholder="请输入消息内容"
-                    maxlength="200"
+                    oninput="if(value.length>200)value=value.slice(0,200)"
                     show-word-limit
                     v-model="ruleForm.content">
                     </el-input>
