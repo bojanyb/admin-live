@@ -79,26 +79,15 @@ export default {
           {
             label: "添加时间",
             minWidth: "180px",
-            render: (h, params) => {
-              return h(
-                "span",
-                params.row.create_time
-                  ? timeFormat(
-                      params.row.create_time,
-                      "YYYY-MM-DD HH:mm:ss",
-                      true
-                    )
-                  : "无"
-              );
-            },
+            prop: "create_time"
           },
           {
             label: "渠道",
-            prop: "content",
+            prop: "channel",
           },
           {
             label: "房间ID",
-            prop: "user_number",
+            prop: "room_id",
           },
           {
 						label: '操作',

@@ -15,9 +15,9 @@
         label-suffix=":"
         :hide-required-asterisk="status === 'see'"
       >
-        <el-form-item label="app渠道" prop="user_number">
+        <el-form-item label="app渠道" prop="channel">
           <el-input
-            v-model="ruleForm.user_number"
+            v-model="ruleForm.channel"
             placeholder="请输入app渠道"
           ></el-input>
         </el-form-item>
@@ -50,13 +50,12 @@ export default {
       rankList: MAPDATA.CLASSLIST,
       guildTypeList: MAPDATA.GUILDCONFIGTYPELIST,
       ruleForm: {
-        user_number: null,
+        channel: "",
         room_number: "",
-        content: "",
       },
       oldParams: {}, // 老数据
       rules: {
-        user_number: [
+        channel: [
           { required: true, message: "请输入app渠道", trigger: "blur" },
         ],
         room_number: [
@@ -86,9 +85,8 @@ export default {
       if (status !== "add") {
         let params = JSON.parse(JSON.stringify(row));
         let para = {};
-        para.user_number = params.user_number || "";
+        para.channel = params.channel || "";
         para.room_number = params.room_number || "";
-        para.content = params.content || "";
         this.$set(this.$data, "ruleForm", para);
       }
 
@@ -125,7 +123,7 @@ export default {
           let params = { ...this.ruleForm };
           let res = await addAutoJoinConfig(params);
           if (res.code === 2000) {
-            this.$success("发送成功");
+            this.$success("保存成功");
           }
           this.openComp(false);
           this.$emit("getList");
