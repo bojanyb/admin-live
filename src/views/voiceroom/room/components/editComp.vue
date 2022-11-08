@@ -15,6 +15,12 @@
         label-suffix=":"
         :hide-required-asterisk="status === 'see'"
       >
+         <el-form-item label="活动性质" prop="type">
+          <el-radio-group v-model="ruleForm.type">
+            <el-radio-button :label="1">小喇叭</el-radio-button>
+            <el-radio-button :label="2">大喇叭</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="用户ID" prop="user_number">
           <el-input
             v-model="ruleForm.user_number"
@@ -59,6 +65,7 @@ export default {
       isEditComp: false,
       rankList: MAPDATA.CLASSLIST,
       guildTypeList: MAPDATA.GUILDCONFIGTYPELIST,
+      typeOptions: MAPDATA.BROADCASTTYPESTATUS,
       ruleForm: {
         user_number: null,
         room_number: "",
