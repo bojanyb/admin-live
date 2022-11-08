@@ -14,7 +14,7 @@
 
 <script>
 // 引入api
-import { delTypePrettyNumber, getTypeOption } from '@/api/videoRoom.js'
+import { delTypePrettyNumber, updateTypePrettyNumber } from '@/api/videoRoom.js'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -94,12 +94,17 @@ export default {
                         }
                     },
                     {
+                        minWidth: '100px',
                         label: '是否默认选中',
-                        render: (h, params) => {
-                            let data = MAPDATA.CHECKEDSTATUS.find(item => { return item.value === params.row.selected })
-                            return h('div', { class: { 'bounce_fa': true } }, [
-                                h('span', data ? data.name : '--')
-                            ])
+                        prop: 'selected',
+                        isSwitch: true,
+                        isTrueValue: 1,
+                        isFalseValue: 0,
+                        change: (v, row) => {
+                            this.handleSelectCalculator(row, v)
+                        },
+                        render: (h) => {
+                            return h('span', '')
                         }
                     },
                     {
@@ -210,6 +215,21 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
+        },
+        // 是否默认选中
+        async handleSelectCalculator(row, v) {
+            let params = {
+                ...row,
+                category: row.category + '',
+                status: row.status + '',
+                selected: row.selected + '',
+                id: row.id + ''
+            }
+            let res = await updateTypePrettyNumber(params)
+            if(+res.code === 2000) {
+                this.$success('操作成功')
+                this.getList()
+            }
         }
     }
 }
