@@ -1131,6 +1131,15 @@ export function setBroadcastPrice(data) {
   })
 }
 
+// 获取广播价格
+export function getBroadcastPrice(data) {
+  return request({
+    url: api.room.getBroadcastPrice,
+    method: 'post',
+    data
+  })
+}
+
 // 新增渠道进房
 export function addAutoJoinConfig(data) {
   return request({

@@ -2548,6 +2548,19 @@ const TARGETTYPESTATUS = [
     }
 ]
 
+
+// 目标类型
+const BROADCASTTYPESTATUS = [
+    {
+        name: '小喇叭',
+        value: 'broadcast_for_room'
+    },
+    {
+        name: '大喇叭',
+        value: 'broadcast_big_for_room'
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -2674,5 +2687,6 @@ export default {
     PATHTYPE2,
     PUSHTYPESTATUS,
     TARGETTYPESTATUS,
-    DEPOSITCONFIGURATIONPLATFORMLIST
+    DEPOSITCONFIGURATIONPLATFORMLIST,
+    BROADCASTTYPESTATUS
 }

@@ -1,26 +1,69 @@
 <template>
   <div class="room-livelist">
     <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
-    <div class="searchParams">
+    <div class="searchParams" v-if="tabIndex === '0'">
       <SearchPanel
         v-model="searchParams"
         :forms="forms"
-        :show-add="tabIndex === '0'"
-        :show-search-btn="tabIndex === '0'"
-        :show-save="tabIndex === '1'"
+        :show-add="true"
+        :show-search-btn="true"
         @add="add"
         @onSearch="onSearch"
-        @save="onSave"
       ></SearchPanel>
     </div>
 
-    <el-card class="box-card" shadow="always" v-show="tabIndex === '0'">
+    <el-card class="box-card" shadow="always" v-if="tabIndex === '0'">
       <div class="box-card-inner">
         <span>查询期间: 发送人数:{{ ruleForm.user_count }}人</span>
         <span>发送条数: {{ ruleForm.count }}条</span>
         <span>广播内容: {{ ruleForm.total_cost }}钻石</span>
       </div>
     </el-card>
+
+    <div
+      class="share-filter-grid-box"
+      shadow="always"
+      v-else-if="tabIndex === '1'"
+    >
+      <el-form ref="form" :model="fromData" label-width="90px">
+        <el-form-item label="小喇叭单价">
+          <el-row class="body_box-col" :gutter="20">
+            <el-col :span="14">
+              <el-input
+                oninput="this.value=this.value.replace(/[^\d]/g,'');"
+                v-model="fromData.cost"
+              ></el-input>
+            </el-col>
+            <el-col :span="8">
+              <el-button
+                type="primary"
+                size="mini"
+                @click="onSave(fromData, 'broadcast_for_room')"
+                >保存</el-button
+              >
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item label="大喇叭单价">
+          <el-row class="body_box-col" :gutter="20">
+            <el-col :span="14">
+              <el-input
+                oninput="this.value=this.value.replace(/[^\d]/g,'');"
+                v-model="fromData.bigCost"
+              ></el-input>
+            </el-col>
+            <el-col :span="8">
+              <el-button
+                type="primary"
+                size="mini"
+                @click="onSave(fromData, 'broadcast_big_for_room')"
+                >保存</el-button
+              >
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
+    </div>
 
     <tableList
       v-if="tabIndex === '0'"
@@ -75,6 +118,10 @@ export default {
       isDestoryComp: false, // 是否销毁组件
       ruleForm: {},
       resultCost: "",
+      fromData: {
+        cost: "",
+        bigCost: "",
+      },
     };
   },
   computed: {
@@ -87,6 +134,17 @@ export default {
           label: "用户ID",
           isNum: true,
           placeholder: "请输入房间ID",
+        },
+        {
+          name: "type",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "喇叭类型",
+          placeholder: "请选择",
+          clearable: true,
+          options: MAPDATA.BROADCASTTYPESTATUS,
         },
         {
           name: "dateTimeParams",
@@ -108,17 +166,7 @@ export default {
           },
         },
       ];
-      const BroadcastOptions = [
-        {
-          name: "cost",
-          type: "input",
-          value: this.resultCost,
-          label: "广播单价",
-          isNum: true,
-          placeholder: "请输入推广单价",
-        },
-      ];
-      return this.tabIndex === "1" ? BroadcastOptions : BroadcastList;
+      return this.tabIndex === "0" ? BroadcastList : [];
     },
     cfgs() {
       return {
@@ -144,6 +192,16 @@ export default {
           {
             label: "用户ID",
             prop: "user_number",
+          },
+          {
+            label: "喇叭类型",
+            prop: "from_type",
+            render: (h, params) => {
+              let data = MAPDATA.BROADCASTTYPESTATUS.find((item) => {
+                return item.value === params.row.type;
+              });
+              return h("span", data ? data.name : "无");
+            },
           },
           {
             label: "发送类型",
@@ -174,6 +232,7 @@ export default {
         page: params.page,
         pagesize: params.size,
         user_number: s.user_number,
+        type: s.type,
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
       };
@@ -201,23 +260,29 @@ export default {
       this.load("add");
     },
     // 保存
-    onSave(fromData) {
+    onSave(fromData, fromKey) {
       if (!fromData.cost) {
         return false;
       }
+
+      const loading = this.$loading({
+        lock: true,
+        text: "Loading",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+
       this.$confirm("你确定要保存推广单价吗？", "保存提醒", {
         type: "warning",
         confirmButtonText: "确定",
         cancelButtonText: "取消",
       })
         .then(async () => {
-          const loading = this.$loading({
-            lock: true,
-            text: "Loading",
-            spinner: "el-icon-loading",
-            background: "rgba(0, 0, 0, 0.7)",
-          });
-          const response = await setBroadcastPrice({ cost: +fromData.cost });
+          const tempData = {
+            key: fromKey,
+            value: "broadcast_for_room" ? fromData.cost : fromData.Bigcost,
+          };
+          const response = await setBroadcastPrice(tempData);
           if (response.code === 2000) {
             loading.close();
             this.$message({
@@ -253,10 +318,21 @@ export default {
     },
     // 获取广播单价
     async getResultPrice() {
-      const response = await getBroadcastPrice();
-      if (response.code === 2000) {
-        this.resultCost = response.data.cost;
+      const response = await Promise.all([
+        getBroadcastPrice({ key: "broadcast_for_room" }),
+        getBroadcastPrice({ key: "broadcast_big_for_room" }),
+      ]);
+
+      if (
+        response[0].code + "" !== "2000" ||
+        response[1].code + "" !== "2000"
+      ) {
+        this.$Message.error("请求失败");
+        return;
       }
+
+      this.fromData.cost = response[0].data.value || "";
+      this.fromData.bigCost = response[1].data.value || "";
     },
   },
 };
@@ -279,6 +355,15 @@ export default {
         font-size: 15px;
         color: #ffffff;
         margin-right: 100px;
+      }
+    }
+  }
+  .share-filter-grid-box {
+    .el-input {
+      > input {
+        background: #f5f7fa;
+        border: none;
+        border-radius: 0;
       }
     }
   }
