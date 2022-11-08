@@ -18,7 +18,23 @@
                         <el-option v-for="item in goodsNumClassList" :label="item.name" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商品名称" prop="number">
+                <el-form-item label="商品名称" prop="number" v-if="ruleForm.category === 0"
+                :rules="[
+                    { required: true, message: '请输入商品名称', trigger: 'blur' },
+                    { min: 7, max: 7, message: '长度在7个字符', trigger: 'blur' }
+                ]"
+                >
+                    <el-input
+                        v-model="ruleForm.number"
+                        placeholder="请输入商品名称"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="商品名称" prop="number" v-if="ruleForm.category === 1"
+                :rules="[
+                    { required: true, message: '请输入商品名称', trigger: 'blur' },
+                    { min: 4, max: 4, message: '长度在4个字符', trigger: 'blur' }
+                ]"
+                >
                     <el-input
                         v-model="ruleForm.number"
                         placeholder="请输入商品名称"
@@ -168,7 +184,7 @@ export default {
                 category: '',
                 type_id: '',
                 number: '',
-                buy: '1',
+                buy: 1,
                 price: [
                     {
                         day: '',
