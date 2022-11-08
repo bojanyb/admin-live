@@ -8,31 +8,29 @@
         :close-on-click-modal="false"
         @closed="destoryComp">
             <el-form :model="ruleForm" :rules="rules" label-suffix=":" ref="ruleForm" label-width="110px" class="demo-ruleForm">
-                <el-form-item label="一级分类" prop="type">
-                    <el-select v-model="ruleForm.type" placeholder="请选择一级分类">
+                <el-form-item label="商品类别" prop="category">
+                    <el-select v-model="ruleForm.category" placeholder="请选择商品类别" @change="handleChange(ruleForm.category)" :disabled="status === 'update'">
                         <el-option v-for="item in goodsNumTypeList" :label="item.name" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="二级分类" prop="class">
-                    <el-select v-model="ruleForm.class" placeholder="请选择二级分类">
-                        <el-option v-for="item in goodsNumClassList" :label="item.name" :key="item.value" :value="item.value"></el-option>
-                    </el-select>
+                <el-form-item label="商品分类" prop="name">
+                    <el-input v-model="ruleForm.name" placeholder="请输入商品分类" maxlength="10" clearable/>
                 </el-form-item>
-                <el-form-item label="显示状态" prop="show">
-                    <el-select v-model="ruleForm.show" placeholder="请选择显示状态">
+                <el-form-item label="显示状态" prop="status">
+                    <el-select v-model="ruleForm.status" placeholder="请选择显示状态">
                         <el-option v-for="item in showStatus" :label="item.name" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="是否默认选中" prop="checked">
-                    <el-select v-model="ruleForm.checked" placeholder="请选择是否默认选中">
+                <el-form-item label="是否默认选中" prop="selected">
+                    <el-select v-model="ruleForm.selected" placeholder="请选择是否默认选中">
                         <el-option v-for="item in checkedStatus" :label="item.name" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="权重状态" prop="weightType">
-                    <el-input v-model="ruleForm.goods_name" placeholder="请输入权重状态" oninput="this.value=this.value.replace(/[^\d]/g,'');" clearable/>
+                <el-form-item label="权重状态" prop="sort">
+                    <el-input v-model="ruleForm.sort" placeholder="请输入权重状态" oninput="this.value=this.value.replace(/[^\d]/g,'');" clearable/>
                 </el-form-item>
-                <el-form-item label="icon图片">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.face" :imgUrl="ruleForm.face" name="face" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
+                <el-form-item label="icon图片" prop="icon">
+                    <uploadImg ref="uploadImg" v-model="ruleForm.icon" :imgUrl="ruleForm.icon" name="icon" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -44,6 +42,8 @@
 </template>
 
 <script>
+// 引入api
+import { addTypePrettyNumber, updateTypePrettyNumber, getTypeOption } from '@/api/videoRoom.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 // 引入图片上传组件
@@ -148,37 +148,32 @@ export default {
         return {
             dialogVisible: false,
             goodsNumTypeList: MAPDATA.GOODNUMTYPE,
-            goodsNumClassList: MAPDATA.GOODNUMCLASS,
+            goodsNumClassList: [],
             showStatus: MAPDATA.SHOWSTATUS,
             checkedStatus: MAPDATA.CHECKEDSTATUS,
             goodsType: 1,
             status: 'add',
             oldParams: {},
-            ruleForm: {
-                type: '',
-                class: '',
-                show: '',
-                checked: '',
-                weightType: '',
-                goods_type: '',
-                goods_name: '',
-                goods_describe: '',
-            },
+            ruleForm: {},
             rules: {
-                type: [
-                    { required: true, message: '请选择一级分类', trigger: 'change' }
+                category: [
+                    { required: true, message: '请选择商品类别', trigger: 'change' }
                 ],
-                class: [
-                    { required: true, message: '请选择二级分类', trigger: 'change' }
+                name: [
+                    { required: true, message: '请输入商品分类', trigger: 'blur' },
+                    { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
                 ],
-                show: [
+                status: [
                     { required: true, message: '请选择显示状态', trigger: 'change' }
                 ],
-                checked: [
-                    { required: true, message: '是否默认选中', trigger: 'change' }
+                selected: [
+                    { required: true, message: '请选择是否默认选中', trigger: 'change' }
                 ],
-                weightType: [
+                sort: [
                     { required: true, message: '请输入权重状态', trigger: 'blur' }
+                ],
+                icon: [
+                    { required: true, message: '请上传icon图标', trigger: 'blur' }
                 ],
             }
         };
@@ -232,19 +227,15 @@ export default {
             }
         },
         load(status, row) {
+            console.log(status);
             this.status = status
             if(status !== 'add') {
                 this.oldParams = row
                 let params = JSON.parse(JSON.stringify(row))
                 params.start_time = params.start_time * 1000
                 params.end_time = params.end_time * 1000
-                params.noble_level = params.noble_level ? params.noble_level : null
-                if(params.goods_animation_path) {
-                    this.goodsType = 1
-                } else if(params.goods_image) {
-                    this.goodsType = 2
-                }
                 this.$set(this.$data, 'ruleForm', params)
+                this.getPrettyNumTypeList(this.ruleForm.category)
             }
         },
         // 提交
@@ -259,14 +250,26 @@ export default {
                     } else if(this.goodsType === 2) {
                         params.goods_animation_path = ''
                     }
-                    add(params).then(res => {
-                        if(res.code === 2000) {
-                            this.dialogVisible = false
-                            this.$emit('onSearch')
-                        }
-                    }).catch(err => {
-                        this.$message.error(err)
-                    })
+                    if (this.status === 'add') {
+                        addTypePrettyNumber(params).then(res => {
+                           if(res.code === 2000) {
+                               this.dialogVisible = false
+                               this.$emit('onSearch')
+                           }
+                        }).catch(err => {
+                            this.$message.error(err)
+                        })
+                    } else if (this.status === 'update') {
+                        params.id = params.id + ''
+                        updateTypePrettyNumber(params).then(res => {
+                            if(res.code === 2000) {
+                               this.dialogVisible = false
+                               this.$emit('onSearch')
+                           }
+                        }).catch(err => {
+                            this.$message.error(err)
+                        })
+                     }
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -295,6 +298,29 @@ export default {
         // 重置字段验证
         validateField(name) {
             this.$refs.ruleForm.validateField([name])
+        },
+        handleChange(category) {
+            this.getPrettyNumTypeList(category)
+        },
+        // 获取靓号类型
+        async getPrettyNumTypeList(category) {
+        this.goodsNumClassList = []
+        if (category || category === 0) {
+            const response = await getTypeOption({ category })
+            if (response.code === 2000) {
+            const tempArr = Array.from(
+                Array.isArray(response.data) ? response.data : []
+            )
+            this.goodsNumClassList =
+                tempArr.reduce((prev, curr) => {
+                prev.push({
+                    name: curr.name,
+                    value: curr.type_id,
+                });
+                return prev
+                }, []) || []
+            }
+        }
         },
     },
     mounted() {}
