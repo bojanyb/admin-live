@@ -187,12 +187,12 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
-                    if(params.time == null){
+                    if(this.time.length == 0){
                         this.$message.error('请先选择活动时间')
                         return
                     }
-                    params.start_time = Math.floor(params.time[0] / 1000)
-                    params.end_time = Math.floor(params.time[1] / 1000)
+                    params.start_time = Math.floor(this.time[0] / 1000)
+                    params.end_time = Math.floor(this.time[1] / 1000)
                     let type = '',url = '',roomId=''
                     if(params.jumpType == ''){
                         this.$message.error('请先选择落地类型')
