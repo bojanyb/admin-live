@@ -272,7 +272,7 @@ export default {
         background: "rgba(0, 0, 0, 0.7)",
       });
 
-      this.$confirm("你确定要保存推广单价吗？", "保存提醒", {
+      this.$confirm("你确定要保存广播单价吗？", "保存提醒", {
         type: "warning",
         confirmButtonText: "确定",
         cancelButtonText: "取消",
