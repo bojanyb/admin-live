@@ -12,17 +12,17 @@
                     <el-input v-model="ruleForm.user_number" placeholder="请输入用户ID" clearable/>
                 </el-form-item>
                 <el-form-item label="赠送商品" prop="id">
-                    <el-input v-model="ruleForm.id" placeholder="请输入靓号ID" clearable @blur="handleBlur(ruleForm.id)"/>
-                </el-form-item>
-                <el-form-item label="赠送时长" prop="day">
-                    <el-select v-model="ruleForm.day" filterable placeholder="请输入赠送时长" clearable>
+                    <el-select v-model="ruleForm.id" filterable placeholder="请输入靓号ID" clearable>
                       <el-option
-                      v-for="item in prettyNumberMapOptions.price"
-                      :key="item.price"
-                      :label="item.day"
-                      :value="item.day">
+                      v-for="item in goodsListOfindex"
+                      :key="item.value"
+                      :label="item.name"
+                      :value="item.value">
                       </el-option>
                     </el-select>
+                </el-form-item>
+                <el-form-item label="到期时间" prop="day">
+                    <el-input v-model="ruleForm.day" placeholder="请输入到期时间" clearable/>
                 </el-form-item>
                 <el-form-item label="赠送原因" prop="remark">
                     <el-input
@@ -97,21 +97,24 @@ export default {
             },
             rules: {
                 id: [
-                    { required: true, message: '请输入用户ID', trigger: 'change' }
+                    { required: true, message: '请输入靓号ID', trigger: 'change' }
                 ],
                 day: [
-                    { required: true, message: '请输入靓号ID', trigger: 'blur' }
+                    { required: true, message: '请输入到期时间', trigger: 'blur' }
                 ],
                 user_number: [
-                    { required: true, message: '请输入赠送时长', trigger: 'blur' }
+                    { required: true, message: '请输入用户ID', trigger: 'blur' }
                 ],
                 remark: [
                     { required: true, message: '请输入备注说明', trigger: 'blur' },
                     { min: 1, max: 300, message: '长度在 1 到 300 个字符', trigger: 'blur' }
                 ]
             },
-            prettyNumberMapOptions: {}
+            goodsListOfindex: []
         };
+    },
+    created() {
+        this.searchPrettyNumber()
     },
     methods: {
         handleClose() {
@@ -131,7 +134,6 @@ export default {
                 if (valid) {
                     let params = {
                         ...this.ruleForm,
-                        id: this.prettyNumberMapOptions.id + '',
                         'admin-token': this.$store.getters.token,
                         uid: Number(localStorage.getItem('admin_id'))
                     }
@@ -172,15 +174,20 @@ export default {
         validateField(name) {
             this.$refs.ruleForm.validateField([name])
         },
-        // 失去焦点
-        handleBlur(number) {
-            this.searchPrettyNumber(number)
-        },
-        // 获取靓号类型
-        async searchPrettyNumber(number) {
-         const response = await searchPrettyNumber({ number })
+        // 获取靓号列表
+        async searchPrettyNumber() {
+         const response = await searchPrettyNumber()
          if(response.code === 2000) {
-            this.prettyNumberMapOptions = response.data
+            const tempArr =  Array.from(
+              Array.isArray(response.data) ? response.data : []
+          )
+          this.goodsListOfindex = tempArr.reduce((prev, curr) => {
+            prev.push({
+                name: curr.number,
+                value: curr.id
+            })
+            return prev
+          }, []) || []
          }
         }
     },

@@ -130,13 +130,6 @@ export default {
                         prop: 'create_time'
                     },
                     {
-                        label: '过期时间',
-                        prop: 'end_time',
-                        render: (h, params) => {
-                            return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
-                        }
-                    },
-                    {
                         label: '商品名称',
                         prop: 'number'
                     },
