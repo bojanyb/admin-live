@@ -16,7 +16,7 @@
       <div class="box-card-inner">
         <span>查询期间: 发送人数:{{ ruleForm.user_count }}人</span>
         <span>发送条数: {{ ruleForm.count }}条</span>
-        <span>广播内容: {{ ruleForm.total_cost }}钻石</span>
+        <span>广播流水: {{ ruleForm.total_cost }}钻石</span>
       </div>
     </el-card>
 
@@ -272,7 +272,7 @@ export default {
         background: "rgba(0, 0, 0, 0.7)",
       });
 
-      this.$confirm("你确定要保存推广单价吗？", "保存提醒", {
+      this.$confirm("你确定要保存广播单价吗？", "保存提醒", {
         type: "warning",
         confirmButtonText: "确定",
         cancelButtonText: "取消",
