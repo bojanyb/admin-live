@@ -25,6 +25,7 @@
                 ]"
                 >
                     <el-input
+                        v-input-num="true"
                         v-model="ruleForm.number"
                         placeholder="请输入商品名称"
                     ></el-input>
@@ -36,6 +37,7 @@
                 ]"
                 >
                     <el-input
+                        v-input-num="true"
                         v-model="ruleForm.number"
                         placeholder="请输入商品名称"
                     ></el-input>
@@ -46,6 +48,7 @@
                 ]"
                 >
                     <el-input
+                        v-input-num="true"
                         v-model="ruleForm.number"
                         placeholder="请输入商品名称"
                         disabled
