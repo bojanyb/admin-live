@@ -56,14 +56,14 @@
                 </el-form-item>
                 <el-form-item label="是否可购买" prop="buy">
                     <el-radio-group v-model="ruleForm.buy">
-                        <el-radio :label="0">是</el-radio>
-                        <el-radio :label="1">否</el-radio>
+                        <el-radio label="0">是</el-radio>
+                        <el-radio label="1">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="商品出售期限">
                     <div class="sellItem" style="display: flex;" v-for="(item,index) in ruleForm.price" :key="index">
-                        <el-input v-model="item.day" placeholder="请输入时间" oninput="this.value=this.value.replace(/[^\d]/g,'');" clearable></el-input>
-                        <el-input v-model="item.price" placeholder="请输入价格（钻石）" oninput="this.value=this.value.replace(/[^\d]/g,'');" clearable></el-input>
+                        <el-input v-model="item.day" placeholder="请输入时间" v-input-num="true" clearable></el-input>
+                        <el-input v-model="item.price" placeholder="请输入价格（钻石）" v-input-num="true" clearable></el-input>
                         <el-button type="primary" v-if="(ruleForm.price.length - 1) <= index "  @click="handleAdd">添加</el-button>
                         <el-button type="danger" v-else-if="(ruleForm.price.length - 1) > index"  @click="handleDel">删除</el-button>
                     </div>
@@ -198,7 +198,7 @@ export default {
                 category: '',
                 type_id: '',
                 number: '',
-                buy: 1,
+                buy: '0',
                 price: [
                     {
                         day: '',

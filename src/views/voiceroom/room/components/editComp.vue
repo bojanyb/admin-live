@@ -17,8 +17,8 @@
       >
          <el-form-item label="活动性质" prop="type">
           <el-radio-group v-model="ruleForm.type">
-            <el-radio-button :label="1">小喇叭</el-radio-button>
-            <el-radio-button :label="2">大喇叭</el-radio-button>
+            <el-radio-button label="1">小喇叭</el-radio-button>
+            <el-radio-button label="2">大喇叭</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="用户ID" prop="user_number">
@@ -67,6 +67,7 @@ export default {
       guildTypeList: MAPDATA.GUILDCONFIGTYPELIST,
       typeOptions: MAPDATA.BROADCASTTYPESTATUS,
       ruleForm: {
+        type: "1",
         user_number: null,
         room_number: "",
         content: "",
