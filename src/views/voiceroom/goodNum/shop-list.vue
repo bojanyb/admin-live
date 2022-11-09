@@ -43,11 +43,10 @@ export default {
         forms() {
             return [
                 {
-                    name: 'number',
+                    name: 'name',
                     type: 'input',
                     value: '',
                     label: '分类名称',
-                    isNum: true,
                     placeholder: '请输入分类名称'
                 },
             ]
@@ -140,7 +139,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                number: s.number,
+                name: s.name,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
             }
