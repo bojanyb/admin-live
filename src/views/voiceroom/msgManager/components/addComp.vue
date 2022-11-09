@@ -92,7 +92,7 @@ export default {
                 content : "",
                 target_val : "",
                 push_val : "",
-                push_type : "",
+                push_type : 0,
                 img_path: ""
             },
             rules: {
