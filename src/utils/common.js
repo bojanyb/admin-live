@@ -286,7 +286,7 @@ export function exportTableData(list, nameList, title) {
     for(const key in list[i]){
       // 增加  为了不让表格显示科学计数法或者其他格式
       if(key === 'trade_no' || key === 'order_id') {
-        str+=`<td style="text-align:center;height: 40px;">${ (list[i][key] || '无') + '  '}</td>`;
+        str+=`<td style="text-align:center;height: 40px;">${ ('单号:' + list[i][key] || '无') + '  '}</td>`;
       } else {
         str+=`<td style="text-align:center;height: 40px;">${ (list[i][key] || '无') + '  '}</td>`;
       }
