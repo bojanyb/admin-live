@@ -195,7 +195,7 @@ export default {
           },
           {
             label: "喇叭类型",
-            prop: "from_type",
+            prop: "type",
             render: (h, params) => {
               let data = MAPDATA.BROADCASTTYPESTATUS.find((item) => {
                 return item.value === params.row.type;
