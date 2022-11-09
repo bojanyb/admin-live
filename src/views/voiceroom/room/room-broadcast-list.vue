@@ -16,7 +16,7 @@
       <div class="box-card-inner">
         <span>查询期间: 发送人数:{{ ruleForm.user_count }}人</span>
         <span>发送条数: {{ ruleForm.count }}条</span>
-        <span>广播内容: {{ ruleForm.total_cost }}钻石</span>
+        <span>广播流水: {{ ruleForm.total_cost }}钻石</span>
       </div>
     </el-card>
 
