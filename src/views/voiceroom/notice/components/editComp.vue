@@ -119,7 +119,7 @@
             <el-form-item label="时间范围" prop="days">
               <el-row>
                 <el-col :span="22">
-                  <el-input v-model.number="ruleForm.days" placeholder="天" />
+                  <el-input v-model.number="ruleForm.days" placeholder="天" v-input-num="true" />
                 </el-col>
                 <el-col :span="2"> 内 </el-col>
               </el-row>
