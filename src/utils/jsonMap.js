@@ -2256,6 +2256,10 @@ const RISKMANAGEMENTMESSAGEHISTORYLIST = [
 // 消息记录 - 条数
 const RISKMANAGEMENTMESSAGENUMBERLIST = [
     {
+        name: '100',
+        value: 100
+    },
+    {
         name: '1000',
         value: 1000
     },

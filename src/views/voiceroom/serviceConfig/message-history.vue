@@ -151,7 +151,7 @@ export default {
                 user_number: '',
                 room_number: '',
                 sen_status: 2,
-                msg_count: 1000,
+                msg_count: 100,
                 time: [],
                 keyword: ''
             },
