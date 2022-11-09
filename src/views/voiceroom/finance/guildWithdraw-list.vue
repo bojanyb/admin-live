@@ -129,10 +129,17 @@ export default {
                 url: REQUEST.diamondRecharge.list,
                 columns: [
                     {
-                        label: '充值时间',
+                        label: '下单时间',
                         minWidth: '150px',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                        }
+                    },
+                    {
+                        label: '到账时间',
+                        minWidth: '150px',
+                        render: (h, params) => {
+                            return h('span', params.row.pay_time ? timeFormat(params.row.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
                     },
                     {
