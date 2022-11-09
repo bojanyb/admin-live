@@ -72,28 +72,33 @@ export default {
                 columns: [
                     {
                         label: '发送时间',
+                        minWidth: '50px',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
                         label: '用户',
+                        minWidth: '50px',
                         prop: 'target_val'
                     },
                     {
                         label: '消息标题',
+                        minWidth: '50px',
                         render: (h, params) => {
                             return h('span', params.row.title ? params.row.title : '--')
                         }
                     },
                     {
                         label: '消息内容',
+                        showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.content ? params.row.content : '--')
                         }
                     },
                     {
                         label: '跳转类型',
+                        minWidth: '50px',
                         render: (h, params) => {
                             let data = MAPDATA.PATHTYPE2.find(item => { return item.value === params.row.push_type })
                             return h('span', data ? data.name : '--')
@@ -101,6 +106,8 @@ export default {
                     },
                     {
                         label: '跳转链接/房间ID',
+                        minWidth: '50px',
+                        showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.push_val ? params.row.push_val : '--')
                         }
