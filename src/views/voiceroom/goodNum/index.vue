@@ -26,6 +26,8 @@ import REQUEST from '@/request/index.js'
 import MAPDATA from '@/utils/jsonMap.js'
 // 引入新增组件
 import addNumComp from './components/addNumComp.vue'
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
 
 export default {
     components: {
@@ -126,6 +128,13 @@ export default {
                     {
                         label: '创建时间',
                         prop: 'create_time'
+                    },
+                    {
+                        label: '过期时间',
+                        prop: 'end_time',
+                        render: (h, params) => {
+                            return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                        }
                     },
                     {
                         label: '商品名称',
