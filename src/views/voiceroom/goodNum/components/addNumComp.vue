@@ -56,12 +56,12 @@
                     <el-input type="textarea" :rows="4" v-model="ruleForm.desc"></el-input>
                 </el-form-item>
                 <el-form-item label="是否可购买" prop="buy">
-                    <el-radio-group v-model="ruleForm.buy">
+                    <el-radio-group v-model="ruleForm.buy" @change="handleBuyChange(ruleForm.buy)">
                         <el-radio label="0">是</el-radio>
                         <el-radio label="1">否</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="商品出售期限">
+                <el-form-item label="商品出售期限" v-if="ruleForm.buy === '0'">
                     <div class="sellItem" style="display: flex;" v-for="(item,index) in ruleForm.price" :key="index">
                         <el-input v-model="item.day" placeholder="请输入时间" v-input-num="true" clearable></el-input>
                         <el-input v-model="item.price" placeholder="请输入价格（钻石）" v-input-num="true" clearable></el-input>
@@ -69,7 +69,7 @@
                         <el-button type="danger" v-else-if="(ruleForm.price.length - 1) > index"  @click="handleDel">删除</el-button>
                     </div>
                 </el-form-item>
-                <el-form-item label="商品生效时间" prop="start_time" :rules="StartRules">
+                <!-- <el-form-item label="商品生效时间" prop="start_time" :rules="StartRules">
                     <el-date-picker
                     v-model="ruleForm.start_time"
                     type="datetime"
@@ -92,7 +92,7 @@
                     clearable
                     @change="timeChange2">
                     </el-date-picker>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="resetForm('ruleForm')">取 消</el-button>
@@ -132,39 +132,39 @@ export default {
                 }
             }
         },
-        StartRules() { // 开始时间限制
-            let params = {}
-            let start = this.ruleForm.start_time
-            params = {
-                required: true,
-                validator: (rules, val, cb) => {
-                    if(!start) {
-                        cb(new Error('请选择开始时间'))
-                    } else {
-                        cb()
-                    }
-                }
-            }
-            return params
-        },
-        EndRules() { // 结束时间限制
-            let params = {}
-            let start = this.ruleForm.start_time
-            let end = this.ruleForm.end_time
-            params = {
-                required: true,
-                validator: (rules, val, cb) => {
-                    if(end < new Date().getTime()) {
-                        cb(new Error('结束时间不能小于当前时间!'))
-                    } if(start && end <= start) {
-                        cb(new Error('结束时间不能小于开始时间!'))
-                    } else {
-                        cb()
-                    }
-                }
-            }
-            return params
-        },
+        // StartRules() { // 开始时间限制
+        //     let params = {}
+        //     let start = this.ruleForm.start_time
+        //     params = {
+        //         required: true,
+        //         validator: (rules, val, cb) => {
+        //             if(!start) {
+        //                 cb(new Error('请选择开始时间'))
+        //             } else {
+        //                 cb()
+        //             }
+        //         }
+        //     }
+        //     return params
+        // },
+        // EndRules() { // 结束时间限制
+        //     let params = {}
+        //     let start = this.ruleForm.start_time
+        //     let end = this.ruleForm.end_time
+        //     params = {
+        //         required: true,
+        //         validator: (rules, val, cb) => {
+        //             if(end < new Date().getTime()) {
+        //                 cb(new Error('结束时间不能小于当前时间!'))
+        //             } if(start && end <= start) {
+        //                 cb(new Error('结束时间不能小于开始时间!'))
+        //             } else {
+        //                 cb()
+        //             }
+        //         }
+        //     }
+        //     return params
+        // },
         limitRules() { // 商品出售期限 - 必填
             let array = this.ruleForm.price
             let isStatus = false
@@ -234,6 +234,7 @@ export default {
             if(status !== 'add') {
                 this.oldParams = row
                 let params = JSON.parse(JSON.stringify(row))
+                params.buy = params.buy + ''
                 params.start_time = params.start_time * 1000
                 params.end_time = params.end_time * 1000
                 this.$set(this.$data, 'ruleForm', params)
@@ -247,7 +248,7 @@ export default {
                 isEmpty = item.day === '' || item.price == null || item.price === '' || item.price == null
             })
 
-            if (isEmpty) {
+            if (isEmpty && this.ruleForm.buy === '0') {
                 this.$message.error('请确保商品出售期限没有空值！')
                 return false
             }
@@ -356,6 +357,11 @@ export default {
                 return prev
                 }, []) || []
          }
+        },
+        handleBuyChange(buyStatus) {
+          if (buyStatus === '1') {
+            this.$set(this.ruleForm, 'price', [{day: '', price: ''}])
+          }
         }
     },
     mounted() {
