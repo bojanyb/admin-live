@@ -68,7 +68,6 @@ export default {
           type: "input",
           value: "",
           label: "app渠道",
-          isNum: true,
           placeholder: "请输入app渠道",
         },
       ];
