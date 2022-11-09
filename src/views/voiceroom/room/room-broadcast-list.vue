@@ -261,10 +261,6 @@ export default {
     },
     // 保存
     onSave(fromData, fromKey) {
-      if (!fromData.cost) {
-        return false;
-      }
-
       const loading = this.$loading({
         lock: true,
         text: "Loading",
@@ -280,8 +276,18 @@ export default {
         .then(async () => {
           const tempData = {
             key: fromKey,
-            value: "broadcast_for_room" ? fromData.cost : fromData.Bigcost,
+            value:
+              fromKey === "broadcast_for_room"
+                ? fromData.cost
+                : fromData.Bigcost,
           };
+
+          if (fromKey === "broadcast_for_room") {
+            tempData.value = fromData.cost;
+          } else {
+            tempData.value = fromData.bigCost;
+          }
+
           const response = await setBroadcastPrice(tempData);
           if (response.code === 2000) {
             loading.close();
