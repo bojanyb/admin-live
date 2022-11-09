@@ -2557,11 +2557,11 @@ const TARGETTYPESTATUS = [
 const BROADCASTTYPESTATUS = [
     {
         name: '小喇叭',
-        value: 'broadcast_for_room'
+        value: 1
     },
     {
         name: '大喇叭',
-        value: 'broadcast_big_for_room'
+        value: 2
     }
 ]
 
