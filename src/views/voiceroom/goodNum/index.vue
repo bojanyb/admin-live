@@ -45,7 +45,7 @@ export default {
                     value: '',
                     label: '商品名称',
                     isNum: true,
-                    placeholder: '请输入靓号ID'
+                    placeholder: '请输入商品名称'
                 },
                 {
                     name: 'category',
