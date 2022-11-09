@@ -1029,6 +1029,15 @@ export function givePrettyNumber(data) {
   })
 }
 
+// 靓号管理 售卖记录 - 赠送
+export function searchPrettyNumber(data) {
+  return request({
+      url: api.prettyNumber.searchPrettyNumber,
+      method: 'post',
+      data
+  })
+}
+
 /***********公会v2******************/ 
 // 新增公会
 export function getGuildCreateV2(data) {

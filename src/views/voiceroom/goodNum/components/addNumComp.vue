@@ -9,7 +9,7 @@
         @closed="destoryComp">
             <el-form :model="ruleForm" :rules="rules" label-suffix=":" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <el-form-item label="商品类型" prop="category">
-                    <el-select v-model="ruleForm.category" placeholder="请选择靓号类型"  @change="handleChange(ruleForm.category)">
+                    <el-select v-model="ruleForm.category" placeholder="请选择靓号类型"  @change="handleChange(ruleForm.category)" :disabled="status === 'update'">
                         <el-option v-for="item in goodsNumTypeList" :label="item.name" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
@@ -18,7 +18,7 @@
                         <el-option v-for="item in goodsNumClassList" :label="item.name" :key="item.value" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商品名称" prop="number" v-if="ruleForm.category === 0"
+                <el-form-item label="商品名称" prop="number" v-if="ruleForm.category === 0 && status === 'add'"
                 :rules="[
                     { required: true, message: '请输入商品名称', trigger: 'blur' },
                     { min: 7, max: 7, message: '长度在7个字符', trigger: 'blur' }
@@ -29,7 +29,7 @@
                         placeholder="请输入商品名称"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商品名称" prop="number" v-if="ruleForm.category === 1"
+                <el-form-item label="商品名称" prop="number" v-if="ruleForm.category === 1 && status === 'add'"
                 :rules="[
                     { required: true, message: '请输入商品名称', trigger: 'blur' },
                     { min: 4, max: 4, message: '长度在4个字符', trigger: 'blur' }
@@ -38,6 +38,17 @@
                     <el-input
                         v-model="ruleForm.number"
                         placeholder="请输入商品名称"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="商品名称" prop="number" v-if="status === 'update'"
+                :rules="[
+                    { required: true, message: '请输入商品名称', trigger: 'blur' },
+                ]"
+                >
+                    <el-input
+                        v-model="ruleForm.number"
+                        placeholder="请输入商品名称"
+                        disabled
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="备注">
@@ -57,24 +68,26 @@
                         <el-button type="danger" v-else-if="(ruleForm.price.length - 1) > index"  @click="handleDel">删除</el-button>
                     </div>
                 </el-form-item>
-                <el-form-item label="商品生效时间">
+                <el-form-item label="商品生效时间" prop="start_time" :rules="StartRules">
                     <el-date-picker
                     v-model="ruleForm.start_time"
                     type="datetime"
                     placeholder="选择商品生效时间"
                     format="yyyy-MM-dd HH:mm:ss"
                     value-format="timestamp"
+                    :picker-options="StartPicker"
                     clearable
                     @change="timeChange">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="商品过期时间">
+                <el-form-item label="商品过期时间" prop="end_time" :rules="EndRules">
                     <el-date-picker
                     v-model="ruleForm.end_time"
                     type="datetime"
                     placeholder="选择商品过期时间"
                     format="yyyy-MM-dd HH:mm:ss"
                     value-format="timestamp"
+                    :picker-options="EndPicker"
                     clearable
                     @change="timeChange2">
                     </el-date-picker>
@@ -118,15 +131,14 @@ export default {
                 }
             }
         },
-        startTime() { // 开始时间限制
-            let start = this.ruleForm.start_time
-            let now = new Date().getTime()
+        StartRules() { // 开始时间限制
             let params = {}
+            let start = this.ruleForm.start_time
             params = {
                 required: true,
                 validator: (rules, val, cb) => {
-                    if(start < now && this.status === 'add') {
-                        cb(new Error('商品生效时间不可小于当前时间'))
+                    if(!start) {
+                        cb(new Error('请选择开始时间'))
                     } else {
                         cb()
                     }
@@ -134,15 +146,17 @@ export default {
             }
             return params
         },
-        endTime() { // 结束时间限制
-            let start = this.ruleForm.start_time
-            let now = new Date().getTime()
+        EndRules() { // 结束时间限制
             let params = {}
+            let start = this.ruleForm.start_time
+            let end = this.ruleForm.end_time
             params = {
                 required: true,
                 validator: (rules, val, cb) => {
-                    if(start < now && this.status === 'add') {
-                        cb(new Error('商品生效时间不可小于当前时间'))
+                    if(end < new Date().getTime()) {
+                        cb(new Error('结束时间不能小于当前时间!'))
+                    } if(start && end <= start) {
+                        cb(new Error('结束时间不能小于开始时间!'))
                     } else {
                         cb()
                     }
