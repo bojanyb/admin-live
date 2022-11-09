@@ -241,6 +241,16 @@ export default {
         },
         // 提交
         submitForm(formName) {
+            let isEmpty
+            this.ruleForm.price.forEach(item => {
+                isEmpty = item.day === '' || item.price == null || item.price === '' || item.price == null
+            })
+
+            if (isEmpty) {
+                this.$message.error('请确保商品出售期限没有空值！')
+                return false
+            }
+
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
