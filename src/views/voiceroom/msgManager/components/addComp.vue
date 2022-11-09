@@ -13,6 +13,7 @@
                     type="textarea"
                     :autosize="{ minRows: 2, maxRows: 4}"
                     placeholder="请输入指定用户ID用英文分号隔开"
+                    onkeyup="this.value=this.value.replace(/[^\d\,]/g,'')"
                     oninput="if(value.length>200)value=value.slice(0,200)"
                     v-model="ruleForm.target_val">
                     </el-input>
