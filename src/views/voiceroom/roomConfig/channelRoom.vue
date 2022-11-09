@@ -64,7 +64,7 @@ export default {
     forms() {
       return [
         {
-          name: "user_number",
+          name: "channel",
           type: "input",
           value: "",
           label: "app渠道",
@@ -111,7 +111,7 @@ export default {
       return {
         page: params.page,
         pagesize: params.size,
-        user_number: s.user_number,
+        channel: s.channel,
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
       };
