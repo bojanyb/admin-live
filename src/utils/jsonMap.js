@@ -1595,6 +1595,10 @@ const PAYCONFIGURATIONPLATFORMLIST = [
     //     value: 1
     // },
     {
+        name: '全部',
+        value: 0
+    },
+    {
         name: '微信支付',
         value: 2
     },
@@ -1610,6 +1614,10 @@ const PAYCONFIGURATIONPLATFORMLIST = [
 
 // 支付配置管理 - 支付方式
 const PAYCONFIGURATIONPLATFORMTYPELIST = [
+    {
+        name: '全部',
+        value: 0
+    },
     {
         name: 'app支付',
         value: 1
@@ -1646,6 +1654,10 @@ const COMMERCIALMANAGEMENTPAYTYPELIST = [
 
 // 支付配置管理 - 支付平台
 const DEPOSITCONFIGURATIONPLATFORMLIST = [
+    {
+        name: '全部',
+        value: 0
+    },
     {
         name: '支付宝提现',
         value: 3

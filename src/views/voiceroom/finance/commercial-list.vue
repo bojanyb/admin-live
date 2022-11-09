@@ -38,8 +38,8 @@ export default {
     data() {
         return {
             searchParams: {
-                channel: 3,
-                channel_way: 1
+                channel: 0,
+                channel_way: 0
             },
             isDestoryComp: false // 是否销毁组件
         };
@@ -50,7 +50,7 @@ export default {
                 {
                     name: 'channel',
                     type: 'select',
-                    value: 3,
+                    value: 0,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '商户平台',
@@ -60,7 +60,7 @@ export default {
                 {
                     name: 'channel_way',
                     type: 'select',
-                    value: 1,
+                    value: 0,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '支付类型',
@@ -88,7 +88,6 @@ export default {
                             return h('span', data ? data.name : '无')
                         }
                     },
-                    
                     {
                         label: '主体名称',
                         prop: 'name'
