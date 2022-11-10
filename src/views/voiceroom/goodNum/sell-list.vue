@@ -57,11 +57,14 @@ export default {
                 },
                 {
                     name: 'scene',
-                    type: 'input',
+                    type: 'select',
                     value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
                     label: '发放类型',
-                    isNum: true,
-                    placeholder: '请选择发放类型',
+                    placeholder: '请选择',
+                    clearable: true,
+                    linkage: true,
                     options: MAPDATA.GOODSENDSTATUS
                 },
                 {
@@ -153,6 +156,7 @@ export default {
                 pagesize: params.size,
                 number: s.number ? s.number : '',
                 user_number: s.user_number ? s.user_number : '',
+                scene: s.scene + '',
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
             }
