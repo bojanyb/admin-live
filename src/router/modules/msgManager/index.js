@@ -8,7 +8,7 @@ const msgManagerRouter = {
 	name: 'msgManager',
 	meta: {
 		title: '消息管理',
-		icon: 'el-icon-shopping-cart-2'
+		icon: 'el-icon-chat-line-round'
 	},
 	children: [
 		{
