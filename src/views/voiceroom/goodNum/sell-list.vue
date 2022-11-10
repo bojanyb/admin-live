@@ -56,6 +56,15 @@ export default {
                     placeholder: '请输入靓号ID'
                 },
                 {
+                    name: 'scene',
+                    type: 'input',
+                    value: '',
+                    label: '发放类型',
+                    isNum: true,
+                    placeholder: '请选择发放类型',
+                    options: MAPDATA.GOODSENDSTATUS
+                },
+                {
                     name: 'dateTimeParams',
                     type: 'datePicker',
                     dateType: 'datetimerange',
