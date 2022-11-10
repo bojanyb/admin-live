@@ -42,7 +42,7 @@
                         placeholder="请输入商品名称"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="商品名称" prop="number" v-if="status === 'update'"
+                <el-form-item label="商品名称" prop="number" v-if="ruleForm.category === '' || status === 'update'"
                 :rules="[
                     { required: true, message: '请输入商品名称', trigger: 'blur' },
                 ]"
@@ -51,7 +51,7 @@
                         v-input-num="true"
                         v-model="ruleForm.number"
                         placeholder="请输入商品名称"
-                        disabled
+                        :disabled="status === 'update'"
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="备注">
