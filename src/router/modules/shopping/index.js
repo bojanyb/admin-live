@@ -8,7 +8,7 @@ const userRouter = {
 	name: 'shopping',
 	meta: {
 		title: '商城管理',
-		icon: 'el-icon-shopping-cart-2'
+		icon: 'el-icon-office-building'
 	},
 	children: [
 		{
