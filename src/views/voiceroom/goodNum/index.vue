@@ -111,10 +111,6 @@ export default {
                 url: REQUEST.prettyNumber.prettyNumber,
                 columns: [
                     {
-                        label: '序号',
-                        prop: 'id'
-                    },
-                    {
                         label: '创建时间',
                         prop: 'create_time'
                     },
@@ -143,7 +139,7 @@ export default {
                         minWidth: '160px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary', size: 'mini' }, style: { display: params.row.show_status === 1 || params.row.show_status === 2 ? 'unset' : 'none' }, on: {click:()=>{this.update(params.row)}}},'修改'),
+                                h('el-button', { props: { type: 'primary', size: 'mini' }, style: { display: params.row.show_status === 1 ? 'unset' : 'none' }, on: {click:()=>{this.update(params.row)}}},'修改'),
                                 h('el-button', { props: { type: 'danger', size: 'mini' }, style: { display: params.row.show_status === 1 ? 'unset' : 'none' }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除'),
                                 h('el-button', { props: { type: 'success', size: 'mini' }, style: {
                                     display: params.row.show_status === 1 ? 'unset' : 'none'

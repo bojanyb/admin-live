@@ -21,7 +21,7 @@
                 <el-form-item label="商品名称" prop="number" v-if="ruleForm.category === 0 && status === 'add'"
                 :rules="[
                     { required: true, message: '请输入商品名称', trigger: 'blur' },
-                    { min: 7, max: 7, message: '长度在7个字符', trigger: 'blur' }
+                    { min: 5, max: 5, message: '长度在5个字符', trigger: 'blur' }
                 ]"
                 >
                     <el-input
