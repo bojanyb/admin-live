@@ -24,13 +24,13 @@
         <el-form-item label="用户ID" prop="user_number">
           <el-input
             v-model="ruleForm.user_number"
-            placeholder="请输入公会名字"
+            placeholder="请输入用户ID"
           ></el-input>
         </el-form-item>
         <el-form-item label="房间ID" prop="room_number">
           <el-input
             v-model="ruleForm.room_number"
-            placeholder="请输入公会名字"
+            placeholder="请输入房间ID"
           ></el-input>
         </el-form-item>
         <el-form-item label="广播内容" prop="content">
