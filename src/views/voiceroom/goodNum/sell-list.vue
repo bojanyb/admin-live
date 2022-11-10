@@ -56,6 +56,18 @@ export default {
                     placeholder: '请输入靓号ID'
                 },
                 {
+                    name: 'scene',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '发放类型',
+                    placeholder: '请选择',
+                    clearable: true,
+                    linkage: true,
+                    options: MAPDATA.GOODSENDSTATUS
+                },
+                {
                     name: 'dateTimeParams',
                     type: 'datePicker',
                     dateType: 'datetimerange',
@@ -100,6 +112,10 @@ export default {
                         prop: 'type_name'
                     },
                     {
+                        label: '发放类型',
+                        prop: 'channel'
+                    },
+                    {
                         label: '靓号ID',
                         render: (h, params) => {
                             return h('span', params.row.number)
@@ -140,6 +156,7 @@ export default {
                 pagesize: params.size,
                 number: s.number ? s.number : '',
                 user_number: s.user_number ? s.user_number : '',
+                scene: s.scene + '',
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
             }
