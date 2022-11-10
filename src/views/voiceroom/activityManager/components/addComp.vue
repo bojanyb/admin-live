@@ -12,7 +12,7 @@
                     <el-input v-model="ruleForm.name" maxlength="20" placeholder="请输入活动标题" clearable/>
                 </el-form-item>
                 <el-form-item label="权重排序" prop="sort">
-                    <el-input v-model="ruleForm.sort" placeholder="请输入权重排序" clearable/>
+                    <el-input v-model="ruleForm.sort" v-input-num="true" placeholder="请输入权重排序" clearable/>
                 </el-form-item>
                 <el-form-item label="闪屏图片" prop="flash_img" class="tipsItem">
                     <uploadImg ref="flash_img" v-model="ruleForm.flash_img" :imgUrl="ruleForm.flash_img" name="flash_img" accept=".png" :isFileType="true" @input="getFileSplash"></uploadImg>
