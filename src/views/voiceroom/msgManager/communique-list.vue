@@ -41,7 +41,7 @@ export default {
         forms() {
             return [
                 {
-                    name: 'number',
+                    name: 'user_number',
                     type: 'input',
                     value: '',
                     label: '用户ID',
