@@ -100,6 +100,10 @@ export default {
                         prop: 'type_name'
                     },
                     {
+                        label: '发放类型',
+                        prop: 'channel'
+                    },
+                    {
                         label: '靓号ID',
                         render: (h, params) => {
                             return h('span', params.row.number)
