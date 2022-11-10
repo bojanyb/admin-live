@@ -49,6 +49,18 @@ export default {
                     label: '分类名称',
                     placeholder: '请输入分类名称'
                 },
+                {
+                    name: 'category',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '商品类别',
+                    placeholder: '请选择',
+                    clearable: true,
+                    linkage: true,
+                    options: MAPDATA.GOODNUMTYPE
+                },
             ]
         },
         cfgs() {
@@ -125,6 +137,10 @@ export default {
                 alreadyMoney: null,
                 deductMoney: null
             },
+            searchParams: {
+              category: 0,
+              name: ''
+            },
             isDestoryComp: false // 销毁组件
         };
     },
@@ -140,6 +156,7 @@ export default {
                 page: params.page,
                 pagesize: params.size,
                 name: s.name,
+                category: s.category,
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
             }

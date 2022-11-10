@@ -2404,13 +2404,17 @@ const GOODNUMTYPE = [
 // 靓号使用状态
 const GOODNUMSTATUS = [
     {
-        name: '已卖出',
-        value: -1
-    },
-    {
-        name: '未售出',
+        name: '未上架',
         value: 1
     },
+    {
+        name: '上架中',
+        value: 2
+    },
+    {
+      name: '已使用',
+      value: 3
+  },
 ]
 
 // 靓号商品分类
