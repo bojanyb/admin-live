@@ -2465,6 +2465,18 @@ const GOODRACKSTATUS = [
     }
 ]
 
+// 靓号上架状态
+const GOODSENDSTATUS = [
+  {
+      name: '商城购买',
+      value: 25
+  },
+  {
+      name: '后台发放',
+      value: 27
+  }
+]
+
 // 显示状态
 const SHOWSTATUS = [
     {
@@ -2708,5 +2720,6 @@ export default {
     PUSHTYPESTATUS,
     TARGETTYPESTATUS,
     DEPOSITCONFIGURATIONPLATFORMLIST,
-    BROADCASTTYPESTATUS
+    BROADCASTTYPESTATUS,
+    GOODSENDSTATUS
 }
