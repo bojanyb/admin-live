@@ -40,7 +40,7 @@
                         <p>公会ID：<span>{{ item.guild_number ? item.guild_number : "无" }}</span></p>
                         <p>公会名称：<span>{{ item.guild_name ? item.guild_name : '无' }}</span></p>
                         <p>注册时间：<span>{{ item.create_time }}</span></p>
-                        <p>用户余额：<span style="color: #ff4949;font-size: 17px;">{{ form.balance }}</span></p>
+                        <!-- <p>用户余额：<span style="color: #ff4949;font-size: 17px;">{{ form.balance }}</span></p> -->
                     </div>
                 </div>
                 <div class="right_Con_Box emptyBox" v-if="userList.length <= 0">暂无数据</div>
