@@ -58,7 +58,6 @@ export default {
                     label: '商品类别',
                     placeholder: '请选择',
                     clearable: true,
-                    linkage: true,
                     options: MAPDATA.GOODNUMTYPE
                 },
             ]
@@ -175,7 +174,10 @@ export default {
         },
         // 查询
         reset() {
-            this.searchParams = {}
+            this.searchParams = {
+              category: 0,
+              name: ''
+            }
             this.dateTimeParams = {
                 activity_type_id: 1
             }
