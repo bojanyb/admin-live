@@ -2182,6 +2182,16 @@ const USERPUNISHTYPELISTCOPYTWO = [
         name: '重置签名',
         value: 13,
         disabled: false
+    },
+    {
+        name: '禁言',
+        value: 14,
+        disabled: false
+    },
+    {
+        name: '房间冻结',
+        value: 15,
+        disabled: false
     }
 ]
 

@@ -87,6 +87,16 @@ export default {
                         }
                     },
                     {
+                      label: '是否隐藏特效',
+                      isSwitch: true,
+                      prop: 'status',
+                      isTrueValue: 1,
+                      isFalseValue: 2,
+                      change: (v, row) => {
+                        this.changeSwitch(row.id, v)
+                      }
+                    },
+                    {
                         label: '修改时间',
                         minWidth: '160px',
                         render: (h, params) => {
@@ -212,6 +222,23 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
+        },
+        // 更改
+        async changeSwitch(id, status) {
+          console.log(id, status)
+          // let params = {
+          //   id,
+          //   status: status === 1 ? true : false
+          // }
+          // let res = await getBannerChange(params)
+          // if(res.code === 2000) {
+          //   if(status === 1) {
+          //     this.$message.success('启用成功')
+          //   } else {
+          //     this.$message.success('禁用成功')
+          //   }
+          //   this.getList()
+          // }
         }
     }
 }
