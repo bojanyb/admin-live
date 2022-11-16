@@ -8,7 +8,7 @@ const goodNumRouter = {
 	name: 'goodNum',
 	meta: {
 		title: '靓号管理',
-		icon: 'el-icon-shopping-cart-2'
+		icon: 'el-icon-shopping-bag-1'
 	},
 	children: [
 		{

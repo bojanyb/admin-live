@@ -8,7 +8,7 @@ const activityManagerRouter = {
 	name: 'activityManager',
 	meta: {
 		title: '活动配置',
-		icon: 'el-icon-shopping-cart-2'
+		icon: 'el-icon-bangzhu'
 	},
 	children: [
 		{
