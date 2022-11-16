@@ -22,6 +22,8 @@
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
+  // 引入公共方法
+  import { timeFormat } from '@/utils/common.js'
 	export default {
 		mixins: [mixins],
 		components: {
@@ -90,9 +92,9 @@
 						},
 						{
 							label: '开通时间',
-							render: (h, params) => {
-								return h('span', params.row.create_time || '无')
-							}
+              render: (h, params) => {
+                  return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : "")
+              }
 						},
 						{
 							label: '到期时间',

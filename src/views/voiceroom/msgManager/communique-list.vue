@@ -46,7 +46,7 @@ export default {
                     value: '',
                     label: '用户ID',
                     isNum: true,
-                    placeholder: '请输入靓号ID'
+                    placeholder: '请输入用户ID'
                 },
                 {
                     name: 'dateTimeParams',
