@@ -15,7 +15,7 @@
         label-suffix=":"
         :hide-required-asterisk="status === 'see'"
       >
-         <el-form-item label="活动性质" prop="type">
+         <el-form-item label="广播类型" prop="type">
           <el-radio-group v-model="ruleForm.type">
             <el-radio-button label="1">小喇叭</el-radio-button>
             <el-radio-button label="2">大喇叭</el-radio-button>
@@ -24,13 +24,13 @@
         <el-form-item label="用户ID" prop="user_number">
           <el-input
             v-model="ruleForm.user_number"
-            placeholder="请输入公会名字"
+            placeholder="请输入用户ID"
           ></el-input>
         </el-form-item>
-        <el-form-item label="房间ID" prop="room_number">
+        <el-form-item label="房间ID">
           <el-input
             v-model="ruleForm.room_number"
-            placeholder="请输入公会名字"
+            placeholder="请输入房间ID"
           ></el-input>
         </el-form-item>
         <el-form-item label="广播内容" prop="content">
@@ -76,9 +76,6 @@ export default {
       rules: {
         user_number: [
           { required: true, message: "请输入用户ID", trigger: "blur" },
-        ],
-        room_number: [
-          { required: true, message: "请输入房间ID", trigger: "blur" },
         ],
         content: [
           { required: true, message: "请输入广播内容", trigger: "blur" },

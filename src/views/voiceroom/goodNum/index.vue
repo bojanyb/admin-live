@@ -76,18 +76,7 @@ export default {
                     options: this.goodsNumClassList
                 },
                 {
-                    name: 'status',
-                    type: 'select',
-                    value: '',
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '上架状态',
-                    placeholder: '请选择',
-                    clearable: true,
-                    options: MAPDATA.GOODRACKSTATUS
-                },
-                {
-                    name: 'use_status',
+                    name: 'show_status',
                     type: 'select',
                     value: '',
                     keyName: 'value',
@@ -122,10 +111,6 @@ export default {
                 url: REQUEST.prettyNumber.prettyNumber,
                 columns: [
                     {
-                        label: '序号',
-                        prop: 'id'
-                    },
-                    {
                         label: '创建时间',
                         prop: 'create_time'
                     },
@@ -142,18 +127,10 @@ export default {
                         prop: 'type_name'
                     },
                     {
-                        label: '上架状态',
-                        prop: 'status',
-                        render: (h, params) => {
-                            let data = MAPDATA.GOODRACKSTATUS.find(item => { return item.value === params.row.status })
-                            return h('span', data ? data.name : '无')
-                        }
-                    },
-                    {
                         label: '使用状态',
-                        prop: 'use_status',
+                        prop: 'show_status',
                         render: (h, params) => {
-                            let data = MAPDATA.GOODNUMSTATUS.find(item => { return item.value === params.row.use_status })
+                            let data = MAPDATA.GOODNUMSTATUS.find(item => { return item.value === params.row.show_status })
                             return h('span', data ? data.name : '无')
                         }
                     },
@@ -162,13 +139,13 @@ export default {
                         minWidth: '160px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary', size: 'mini' }, on: {click:()=>{this.update(params.row)}}},'修改'),
-                                h('el-button', { props: { type: 'danger', size: 'mini' }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除'),
+                                h('el-button', { props: { type: 'primary', size: 'mini' }, style: { display: params.row.show_status === 1 ? 'unset' : 'none' }, on: {click:()=>{this.update(params.row)}}},'修改'),
+                                h('el-button', { props: { type: 'danger', size: 'mini' }, style: { display: params.row.show_status === 1 ? 'unset' : 'none' }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除'),
                                 h('el-button', { props: { type: 'success', size: 'mini' }, style: {
-                                    display: (params.row.status === 1 && params.row.use_status === 1) ? 'unset' : 'none'
+                                    display: params.row.show_status === 1 ? 'unset' : 'none'
                                 }, on: {click:()=>{this.down(params.row, 0)}}},'上架'),
                                 h('el-button', { props: { type: 'info', size: 'mini' }, style: {
-                                    display: (params.row.status === 0 && params.row.use_status === 1) ? 'unset' : 'none'
+                                    display: params.row.show_status === 2 ? 'unset' : 'none'
                                 }, on: {click:()=>{this.down(params.row, 1)}}},'下架')
                             ])
                         }
@@ -191,8 +168,7 @@ export default {
             searchParams: {
                 category: '',
                 type_id: '',
-                status: '',
-                use_status: ''
+                show_status: ''
             },
             goodsNumClassList: []
         };
@@ -206,8 +182,7 @@ export default {
         beforeSearch(params) {
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
-                status: s.status,
-                use_status: s.use_status,
+                show_status: s.show_status,
                 user_number: s.user_number,
                 number: s.number,
                 category: s.category,
@@ -315,6 +290,7 @@ export default {
                 }, []) || []
             }
         }
+        this.getList()
         },
     }
 }
