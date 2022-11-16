@@ -133,7 +133,7 @@ export default {
           value: "",
           label: "用户ID",
           isNum: true,
-          placeholder: "请输入房间ID",
+          placeholder: "请输入用户ID",
         },
         {
           name: "type",
