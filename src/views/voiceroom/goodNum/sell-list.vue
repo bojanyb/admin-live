@@ -64,7 +64,6 @@ export default {
                     label: '发放类型',
                     placeholder: '请选择',
                     clearable: true,
-                    linkage: true,
                     options: MAPDATA.GOODSENDSTATUS
                 },
                 {
