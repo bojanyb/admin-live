@@ -98,7 +98,7 @@ export default {
                     render: (h, params) => {
                         return h('div', [
                             h('div', params.row.nickname),
-                            h('div', `(${params.row.user_number})`)
+                            h('div', params.row.user_number)
                         ])
                     }
                 },
