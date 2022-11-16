@@ -129,10 +129,17 @@ export default {
                 url: REQUEST.diamondRecharge.list,
                 columns: [
                     {
-                        label: '充值时间',
-                        minWidth: '150px',
+                        label: '订单时间',
+                        minWidth: '160px',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                        }
+                    },
+                    {
+                        label: '到账时间',
+                        minWidth: '160px',
+                        render: (h, params) => {
+                            return h('span', params.row.pay_time ? timeFormat(params.row.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
                     },
                     {
@@ -351,6 +358,7 @@ export default {
         // 导出excel
         async BatchRurn() {
             let s = this.beforeSearch()
+
             delete s.page
             let res = await diamondRechargeAll(s)
             let arr = JSON.parse(JSON.stringify(res.data.list))
@@ -360,6 +368,7 @@ export default {
                 let status = MAPDATA.ORDERSTATUS.find(a => { return a.value.indexOf(item.status) !== -1 })
                 let params = {
                     create_time: timeFormat(item.create_time, 'YYYY-MM-DD HH:mm:ss', true),
+                    pay_time: timeFormat(item.pay_time, 'YYYY-MM-DD HH:mm:ss', true),
                     user_number: item.user_number,
                     nickname: item.nickname,
                     amount: item.amount / 100,
@@ -371,7 +380,7 @@ export default {
                 }
                 return params
             })
-            let nameList = [ '充值时间', '用户ID', '用户昵称', '充值金额（元）', '充值类型', '充值说明', '充值平台', '充值状态', '交易单号' ]
+            let nameList = [ '订单时间','到账时间', '用户ID', '用户昵称', '充值金额（元）', '充值类型', '充值说明', '充值平台', '充值状态', '交易单号' ]
             exportTableData(arr, nameList, '充值记录')
         },
          // 获取当前周的开始结束时间

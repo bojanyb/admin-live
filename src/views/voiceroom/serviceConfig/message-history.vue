@@ -64,7 +64,6 @@
                     @change="change">
                     </el-date-picker>
                 </div>
-				
                 <div class="sunBox" v-if="tabIndex === '2'">
                     <span>敏感词</span>
                     <el-input v-model="form.keyword" placeholder="请输入敏感词"></el-input>
@@ -152,7 +151,7 @@ export default {
                 user_number: '',
                 room_number: '',
                 sen_status: 2,
-                msg_count: 1000,
+                msg_count: 100,
                 time: [],
                 keyword: ''
             },
