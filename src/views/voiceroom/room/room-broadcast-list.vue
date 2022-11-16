@@ -223,6 +223,15 @@ export default {
   },
   created() {
     this.getResultPrice();
+    let time = new Date()
+    let date = timeFormat(time, 'YYYY-MM-DD', false)
+    let start = new Date(date + ' 00:00:00').getTime()
+    let end = new Date(date + ' 23:59:59').getTime()
+    this.searchParams.dateTimeParams = [start, end]
+    this.dateTimeParams = {
+        start_time: start,
+        end_time: end
+    }
   },
   methods: {
     // 配置参数
