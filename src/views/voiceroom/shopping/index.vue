@@ -92,7 +92,7 @@ export default {
                       label: '是否隐藏特效',
                       isSwitch: true,
                       prop: 'show_special',
-                      isTrueValue: 0,
+                      isTrueValue: 2,
                       isFalseValue: 1,
                       change: (v, row) => {
                         this.changeSwitch(v, row)
