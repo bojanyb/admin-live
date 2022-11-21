@@ -65,8 +65,10 @@
                 </el-form-item>
                 <el-form-item label="商品出售期限" v-if="ruleForm.buy === '0'">
                     <div class="sellItem" style="display: flex;" v-for="(item,index) in ruleForm.price" :key="index">
-                        <el-input v-model="item.day" placeholder="请输入时间" v-input-num="true" clearable></el-input>
-                        <el-input v-model="item.price" placeholder="请输入价格（钻石）" v-input-num="true" clearable></el-input>
+                        <!-- <el-input v-model="item.day" placeholder="请输入时间" v-input-num="true" clearable></el-input> -->
+                        <!-- <el-input v-model="item.price" placeholder="请输入价格（钻石）" v-input-num="true" clearable></el-input> -->
+                        <el-input-number v-model="item.day" placeholder="请输入时间" :min="1" :precision="0" :controls="false" clearable></el-input-number>
+                        <el-input-number v-model="item.price" placeholder="请输入价格（钻石）" :min="1" :precision="0" :controls="false" clearable></el-input-number>
                         <el-button type="primary" v-if="(ruleForm.price.length - 1) <= index "  @click="handleAdd">添加</el-button>
                         <el-button type="danger" v-else-if="(ruleForm.price.length - 1) > index"  @click="handleDel">删除</el-button>
                     </div>
@@ -245,13 +247,21 @@ export default {
         },
         // 提交
         submitForm(formName) {
-            let isEmpty
-            this.ruleForm.price.forEach(item => {
-                isEmpty = item.day === '' || item.price == null || item.price === '' || item.price == null
+            const isEmpty = this.ruleForm.price.some(item => {
+               return item.day === '' || item.day == null || item.price === ''|| item.price == null
+            })
+
+            const isNum = this.ruleForm.price.every((item) => { 
+              return item.price > 0
             })
 
             if (isEmpty && this.ruleForm.buy === '0') {
                 this.$message.error('请确保商品出售期限没有空值！')
+                return false
+            }
+
+            if (!isNum && this.ruleForm.buy === '0') {
+                this.$message.error('请确保商品价格在0以上！')
                 return false
             }
 

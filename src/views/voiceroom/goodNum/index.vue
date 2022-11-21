@@ -290,6 +290,7 @@ export default {
                 }, []) || []
             }
         }
+        this.getList()
         },
     }
 }
