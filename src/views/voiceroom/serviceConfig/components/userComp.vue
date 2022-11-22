@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div class="infoBox emptyBox" :class="[{'infoBox_hign_copy': isIncludeReset}]" v-if="userList.length <= 0">暂无数据</div>
-                
+
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -156,7 +156,7 @@ export default {
             return false
         },
         isIncludeReset() { // 是否包含重置资料
-            let arr = JSON.parse(JSON.stringify(MAPDATA.USERPUNISHSTATUSLISTCOPY))
+          let arr = JSON.parse(JSON.stringify(MAPDATA.TIMEPENALTYSTATUS))
             let isShow = true
             if(this.ruleForm.type.length > 0) {
                 arr.forEach(item => {
