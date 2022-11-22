@@ -41,12 +41,12 @@ export default {
         forms() {
             return [
                 {
-                    name: 'number',
+                    name: 'user_number',
                     type: 'input',
                     value: '',
                     label: '用户ID',
                     isNum: true,
-                    placeholder: '请输入靓号ID'
+                    placeholder: '请输入用户ID'
                 },
                 {
                     name: 'dateTimeParams',
@@ -74,35 +74,42 @@ export default {
                 columns: [
                     {
                         label: '发送时间',
+                        minWidth: '60px',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
                         label: '接收用户',
+                        minWidth: '50px',
                         prop: 'target_val'
                     },
                     {
-							label: '消息图片',
-							isimg: true,
-							prop: 'img_path',
-							imgWidth: '50px',
-							imgHeight: '50px'
-						},
+                        label: '消息图片',
+                        minWidth: '50px',
+                        isimg: true,
+                        prop: 'img_path',
+                        imgWidth: '50px',
+                        imgHeight: '50px'
+                    },
                     {
                         label: '消息标题',
+                        minWidth: '50px',
+                        showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.title ? params.row.title : '--')
                         }
                     },
                     {
                         label: '消息内容',
+                        showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.content ? params.row.content : '--')
                         }
                     },
                     {
                         label: '跳转类型',
+                        minWidth: '50px',
                         render: (h, params) => {
                             let data = MAPDATA.PATHTYPE2.find(item => { return item.value === params.row.push_type })
                             return h('span', data ? data.name : '--')
@@ -110,23 +117,11 @@ export default {
                     },
                     {
                         label: '跳转链接/房间ID',
+                        showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.push_val ? params.row.push_val : '--')
                         }
                     },
-                    // {
-                    //     label: '操作',
-                    //     render: (h, params) => {
-                    //         return h('div', [
-                    //             h('el-button', { props: { type: 'primary'}, style: {
-                    //                 display: params.row.status === 2 ? 'none' : 'unset'
-                    //             }, on: {click:()=>{this.down(params.row, 2)}}},'修改'),
-                    //             h('el-button', { props: { type: 'danger'}, style: {
-                    //                 display: params.row.status === 2 ? 'none' : 'unset'
-                    //             }, on: {click:()=>{this.down(params.row, 2)}}},'删除')
-                    //         ])
-                    //     }
-                    // }
                 ]
             }
         },

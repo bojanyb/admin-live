@@ -8,11 +8,13 @@
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
 
-        <add ref="add" v-if="isDestoryComp" @onSearch="onSearch" @destoryComp="destoryComp"></add>
+        <addCom ref="add" v-if="isDestoryComp" @onSearch="onSearch" @destoryComp="destoryComp"></addCom>
     </div>
 </template>
 
 <script>
+// 引入api
+import { add } from '@/api/shopping.js'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -28,13 +30,13 @@ import { timeFormat } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 // 引入新增组件
-import add from './add/index.vue'
+import addCom from './add/index.vue'
 
 export default {
     components: {
         tableList,
         SearchPanel,
-        add
+        addCom
     },
     mixins: [mixins],
     computed: {
@@ -85,6 +87,16 @@ export default {
                         render: (h, params) => {
                             return h('span', params.row.update_user ? params.row.update_user : '--')
                         }
+                    },
+                    {
+                      label: '是否隐藏特效',
+                      isSwitch: true,
+                      prop: 'show_special',
+                      isTrueValue: 2,
+                      isFalseValue: 1,
+                      change: (v, row) => {
+                        this.changeSwitch(v, row)
+                      }
                     },
                     {
                         label: '修改时间',
@@ -212,6 +224,23 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
+        },
+        // 更改
+        async changeSwitch(show_special, row) {
+          let params = {
+            ...row,
+            show_special,
+            noble_level: row.noble_level ? row.noble_level : null
+          }
+          let res = await add(params)
+          if(res.code === 2000) {
+            if(show_special === 2) {
+              this.$message.success('启用成功')
+            } else {
+              this.$message.success('禁用成功')
+            }
+            this.getList()
+          }
         }
     }
 }

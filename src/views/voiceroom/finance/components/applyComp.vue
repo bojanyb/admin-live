@@ -86,16 +86,25 @@ export default {
         cfgs() {
             let arr = [
                 {
-                    label: '用户ID',
-                    width: '100px',
-                    prop: 'user_id'
-                },
-                {
-                    label: '申请提现时间',
-                    width: '200px',
+                    label: '提现时间',
+                    width: '160px',
                     render: (h, params) => {
                         return h('span', params.row.addtime ? timeFormat(params.row.addtime, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                     }
+                },
+                {
+                    label: '用户',
+                    width: '160px',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('div', params.row.nickname),
+                            h('div', params.row.user_number)
+                        ])
+                    }
+                },
+                {
+                    label: '用户角色',
+                    prop: 'role',
                 },
                 {
                     label: '喵粮',
@@ -122,20 +131,27 @@ export default {
                     }
                 },
                 {
-                    label: '提现卡号',
-                    width: '200px',
+                    label: '提现账号',
+                    width: '160px',
                     prop: 'card_id'
                 },
                 {
-                    label: '状态',
+                    label: '提现状态',
                     render: (h, params) => {
                         let paramsData = MAPDATA.STATUSLIST.find(item => { return item.value === params.row.status })
                         return h('span', paramsData ? paramsData.name : '--')
                     }
                 },
                 {
-                    label: '原因',
-                    minWidth: '100px',
+                    label: '今日次数',
+                    prop: 'today_count',
+                    render: (h, params) => {
+                        return h('span', `第${params.row.today_count}次`)
+                    }
+                },
+                {
+                    label: '备注说明',
+                    width: '160px',
                     render: (h, params) => {
                         return h('span', params.row.remark || '无')
                     },

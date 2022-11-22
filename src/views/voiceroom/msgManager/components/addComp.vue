@@ -13,18 +13,20 @@
                     type="textarea"
                     :autosize="{ minRows: 2, maxRows: 4}"
                     placeholder="请输入指定用户ID用英文分号隔开"
-                    maxlength="200"
+                    onkeyup="this.value=this.value.replace(/[^\d\,]/g,'')"
+                    oninput="if(value.length>200)value=value.slice(0,200)"
                     v-model="ruleForm.target_val">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="消息标题" prop="title">
-                    <el-input v-model="ruleForm.title" placeholder="请输入消息标题" clearable/>
+                    <el-input v-model="ruleForm.title" oninput="if(value.length>15)value=value.slice(0,15)" placeholder="请输入消息标题" clearable/>
                 </el-form-item>
                 <el-form-item label="消息内容" prop="content">
                     <el-input
                     type="textarea"
                     :autosize="{ minRows: 2, maxRows: 4}"
                     placeholder="请输入消息内容"
+                    oninput="if(value.length>200)value=value.slice(0,200)"
                     maxlength="200"
                     v-model="ruleForm.content">
                     </el-input>
@@ -91,7 +93,7 @@ export default {
                 content : "",
                 target_val : "",
                 push_val : "",
-                push_type : "",
+                push_type : 0,
                 img_path: ""
             },
             rules: {
@@ -100,15 +102,6 @@ export default {
                 ],
                 content: [
                     { required: true, message: '请输入消息内容', trigger: 'blur' },
-                ],
-                target_val: [
-                    { required: true, message: '请输入用户ID', trigger: 'blur' },
-                ],
-                push_val: [
-                    { required: true, message: '请输入跳转地址', trigger: 'blur' },
-                ],
-                push_type: [
-                    { required: true, message: '请选择跳转类型', trigger: 'change' }
                 ],
             }
         };
@@ -148,38 +141,47 @@ export default {
                 this.$set(this.$data, 'ruleForm', params)
             }
         },
-        // 提交
+        // 点击提交
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    let params = { ...this.ruleForm }
-                    params.push_type = JSON.stringify(params.push_type)
-                    if(this.type !== 'desdev'){
-                        delete params.img_path
-                        addSysNotice(params).then(res => {
-                            if(res.code === 2000) {
-                                this.dialogVisible = false
-                                this.$emit('onSearch')
-                            }
-                        }).catch(err => {
-                            this.$message.error(err)
-                        })
-                    }else{
-                        addOfficialNotice(params).then(res => {
-                            if(res.code === 2000) {
-                                this.dialogVisible = false
-                                this.$emit('onSearch')
-                            }
-                        }).catch(err => {
-                            this.$message.error(err)
-                        })
-                    }
-                    
+                    this.$confirm('是否确定发送？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(async () => {
+                        this.handleSubmit()
+                    }).catch(() => {});
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
-            });
+            })
+        },
+        // 提交
+        handleSubmit(){
+            let params = { ...this.ruleForm }
+            params.push_type = JSON.stringify(params.push_type)
+            if(this.type !== 'desdev'){
+                delete params.img_path
+                addSysNotice(params).then(res => {
+                    if(res.code === 2000) {
+                        this.dialogVisible = false
+                        this.$emit('onSearch')
+                    }
+                }).catch(err => {
+                    this.$message.error(err)
+                })
+            }else{
+                addOfficialNotice(params).then(res => {
+                    if(res.code === 2000) {
+                        this.dialogVisible = false
+                        this.$emit('onSearch')
+                    }
+                }).catch(err => {
+                    this.$message.error(err)
+                })
+            }
         },
         // 重置
         resetForm(formName) {

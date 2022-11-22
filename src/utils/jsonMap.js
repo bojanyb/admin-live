@@ -1595,6 +1595,10 @@ const PAYCONFIGURATIONPLATFORMLIST = [
     //     value: 1
     // },
     {
+        name: '全部',
+        value: 0
+    },
+    {
         name: '微信支付',
         value: 2
     },
@@ -1610,6 +1614,10 @@ const PAYCONFIGURATIONPLATFORMLIST = [
 
 // 支付配置管理 - 支付方式
 const PAYCONFIGURATIONPLATFORMTYPELIST = [
+    {
+        name: '全部',
+        value: 0
+    },
     {
         name: 'app支付',
         value: 1
@@ -1646,6 +1654,10 @@ const COMMERCIALMANAGEMENTPAYTYPELIST = [
 
 // 支付配置管理 - 支付平台
 const DEPOSITCONFIGURATIONPLATFORMLIST = [
+    {
+        name: '全部',
+        value: 0
+    },
     {
         name: '支付宝提现',
         value: 3
@@ -2170,6 +2182,16 @@ const USERPUNISHTYPELISTCOPYTWO = [
         name: '重置签名',
         value: 13,
         disabled: false
+    },
+    {
+        name: '禁言',
+        value: 14,
+        disabled: false
+    },
+    {
+        name: '房间冻结',
+        value: 15,
+        disabled: false
     }
 ]
 
@@ -2243,6 +2265,10 @@ const RISKMANAGEMENTMESSAGEHISTORYLIST = [
 
 // 消息记录 - 条数
 const RISKMANAGEMENTMESSAGENUMBERLIST = [
+    {
+        name: '100',
+        value: 100
+    },
     {
         name: '1000',
         value: 1000
@@ -2515,6 +2541,10 @@ const ACTIVESTATUS = [
         name: '待生效',
         value: 2
     },
+    {
+        name: '已过期',
+        value: 3
+    },
 ]
 // 落地类型
 const PUSHTYPESTATUS = [
@@ -2679,7 +2709,6 @@ export default {
     SETTLEMENTSTATUS,
     RISKMANAGEMENTMESSAGENUMBERLIST,
     GUILDREPORTSTATUS,
-    RISKMANAGEMENTMESSAGENUMBERLIST,
     ORDERREFUNDSTATUSLIST,
     DISSOLUTIONTYPELISTCOPY,
     USERPUNIRESETLISTCOPY,
