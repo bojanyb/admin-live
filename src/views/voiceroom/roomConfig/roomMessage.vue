@@ -46,7 +46,7 @@ export default {
             classifyList: [],
             searchParams: {
                 party_status: 2,
-                admin_recommend_status: 1
+                admin_recommend_status: -1
             }
         };
     },
@@ -92,7 +92,7 @@ export default {
                 {
                     name: 'admin_recommend_status',
                     type: 'select',
-                    value: 1,
+                    value: -1,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '热门推荐',
@@ -190,7 +190,9 @@ export default {
                 party_status: s.party_status,
                 room_category_id: s.room_category_id,
                 guild_number: s.guild_number,
-                admin_recommend_status: s.admin_recommend_status
+            }
+            if(s.admin_recommend_status > -1){
+                data.admin_recommend_status = s.admin_recommend_status
             }
             return {
                 page: params.page,
@@ -206,7 +208,7 @@ export default {
         reset() {
             this.searchParams = {
                 party_status: 2,
-                admin_recommend_status: 1
+                admin_recommend_status: -1
             }
             this.getList()
         },
