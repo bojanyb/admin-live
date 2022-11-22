@@ -91,6 +91,15 @@ const guildAuditRouter = {
 				noCache: true
 			}
 		},
+		{
+			path: 'guildNews',
+			component: () => import('@/views/voiceroom/guildAudit/guild_new'),
+			name: 'guildNews',
+			meta: {
+				title: '萌新设置',
+				noCache: true
+			}
+		},
 	]
 }
 
