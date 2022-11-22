@@ -234,7 +234,7 @@ export default {
           }
           let res = await add(params)
           if(res.code === 2000) {
-            if(show_special === 0) {
+            if(show_special === 2) {
               this.$message.success('启用成功')
             } else {
               this.$message.success('禁用成功')
