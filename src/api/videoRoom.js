@@ -1177,3 +1177,22 @@ export function delAutoJoinConfig(data) {
     data
   })
 }
+
+// 获取萌新设置参数
+export function greetConfig(data) {
+  return request({
+    url: api.guild.greetConfig,
+    method: 'post',
+    data
+  })
+}
+
+// 设置萌新参数
+export function greetConfigSave(data) {
+  return request({
+    url: api.guild.greetConfigSave,
+    method: 'post',
+    data
+  })
+}
+
