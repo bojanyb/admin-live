@@ -251,7 +251,7 @@ export default {
                return item.day === '' || item.day == null || item.price === ''|| item.price == null
             })
 
-            const isNum = this.ruleForm.price.every((item) => { 
+            const isNum = this.ruleForm.price.every((item) => {
               return item.price > 0
             })
 
@@ -263,6 +263,10 @@ export default {
             if (!isNum && this.ruleForm.buy === '0') {
                 this.$message.error('请确保商品价格在0以上！')
                 return false
+            }
+            // 不可购买时 初始化 price 字段数据，后台接口不兼容空数据
+            if(this.ruleForm.buy === '1'){
+                this.ruleForm.price = []
             }
 
             this.$refs[formName].validate((valid) => {
