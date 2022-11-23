@@ -315,8 +315,8 @@ export default {
             let s = this.ruleForm
             if(s.price.length < 3) {
                 s.price.push({
-                    day: '',
-                    price: ''
+                    day: undefined,
+                    price: undefined
                 })
             }
         },
