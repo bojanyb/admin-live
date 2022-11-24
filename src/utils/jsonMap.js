@@ -2149,6 +2149,16 @@ const USERPUNISHTYPELISTCOPY = [
 // 用户处罚 - 处罚类型 - 列表
 const USERPUNISHTYPELISTCOPYTWO = [
     {
+      name: '禁言',
+      value: 5,
+      disabled: false
+    },
+    {
+      name: '房间冻结',
+      value: 6,
+      disabled: false
+    },
+    {
         name: '封号',
         value: 1,
         disabled: false
@@ -2181,16 +2191,6 @@ const USERPUNISHTYPELISTCOPYTWO = [
     {
         name: '重置签名',
         value: 13,
-        disabled: false
-    },
-    {
-        name: '禁言',
-        value: 5,
-        disabled: false
-    },
-    {
-        name: '房间冻结',
-        value: 6,
         disabled: false
     }
 ]
