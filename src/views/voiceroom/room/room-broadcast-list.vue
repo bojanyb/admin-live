@@ -175,7 +175,6 @@ export default {
         columns: [
           {
             label: "发送时间",
-            minWidth: "120px",
             render: (h, params) => {
               return h(
                 "span",
