@@ -22,11 +22,42 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="房间ID" prop="room_number">
-          <el-input
-            v-model="ruleForm.room_number"
-            placeholder="请输入房间ID"
-          ></el-input>
+          <el-row>
+            <el-col :span="16">
+              <el-input
+                v-model="ruleForm.room_number"
+                placeholder="请输入房间ID"
+              ></el-input>
+            </el-col>
+            <el-col :span="6" style="margin-left: 10px">
+              <el-button type="primary" @click="handlerAdd">添加</el-button>
+            </el-col>
+          </el-row>
         </el-form-item>
+        <div class="body_box-table">
+          <el-table
+            :data="tableData"
+            border
+            style="width: 100%"
+            max-height="250"
+          >
+            <el-table-column fixed prop="date" label="添加时间" width="200">
+            </el-table-column>
+            <el-table-column prop="name" label="直播间ID" width="200">
+            </el-table-column>
+            <el-table-column fixed="right" label="操作">
+              <template slot-scope="scope">
+                <el-button
+                  @click.native.prevent="deleteRow(scope.$index, tableData)"
+                  type="text"
+                  size="small"
+                >
+                  移除
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
@@ -62,6 +93,24 @@ export default {
           { required: true, message: "请输入房间ID", trigger: "blur" },
         ],
       },
+      tableData: [
+        {
+          date: "2016-05-03",
+          name: "王小虎",
+          province: "上海",
+          city: "普陀区",
+          address: "上海市普陀区金沙江路 1518 弄",
+          zip: 200333,
+        },
+        {
+          date: "2016-05-07",
+          name: "王小虎",
+          province: "上海",
+          city: "普陀区",
+          address: "上海市普陀区金沙江路 1518 弄",
+          zip: 200333,
+        },
+      ],
     };
   },
   computed: {
@@ -145,6 +194,28 @@ export default {
     closed() {
       this.$emit("destoryComp");
     },
+    deleteRow(index, rows) {
+      rows.splice(index, 1);
+    },
+    handlerAdd() {
+      this.$confirm("此操作将添加渠道进房, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "添加成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消添加",
+          });
+        });
+    },
   },
 };
 </script>
@@ -154,6 +225,10 @@ export default {
   .el-select,
   .el-input {
     width: 100%;
+  }
+  .body_box-table {
+    width: 100%;
+    margin: 0 auto;
   }
 }
 </style>
