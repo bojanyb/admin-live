@@ -1824,6 +1824,22 @@ const REPORTUSERPUNISHSTATUSLIST = [
     }
 ]
 
+// 注销状态
+const LOGOUTSTATUS = [
+  {
+    name: '待处理',
+    value: 0
+  },
+  {
+    name: '已同意',
+    value: 1
+  },
+  {
+    name: '已拒绝',
+    value: 2
+  }
+]
+
 /*
 *房间管理
 */
@@ -2763,5 +2779,6 @@ export default {
     DEPOSITCONFIGURATIONPLATFORMLIST,
     BROADCASTTYPESTATUS,
     GOODSENDSTATUS,
-    TIMEPENALTYSTATUS
+    TIMEPENALTYSTATUS,
+    LOGOUTSTATUS,
 }
