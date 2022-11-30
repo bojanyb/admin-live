@@ -27,7 +27,7 @@
             placeholder="请输入用户ID"
           ></el-input>
         </el-form-item>
-        <el-form-item label="房间ID">
+        <el-form-item label="房间ID" prop="room_number">
           <el-input
             v-model="ruleForm.room_number"
             placeholder="请输入房间ID"
@@ -80,6 +80,9 @@ export default {
         content: [
           { required: true, message: "请输入广播内容", trigger: "blur" },
         ],
+        room_number: [
+          { required: false, pattern: /^[+]{0,1}(\d+)$/, message: '请输入正整数', trigger: 'blur' },
+        ]
       },
     };
   },
