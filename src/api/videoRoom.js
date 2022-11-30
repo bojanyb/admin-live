@@ -303,7 +303,7 @@ export function getGuildUpdate(data) {
   })
 }
 
-// 公会厅申请信息处理	
+// 公会厅申请信息处理
 export function getGuildJoinApply(data) {
   return request({
     url: 'Guild/joinApply',
@@ -365,7 +365,7 @@ export function getChatRecord(data) {
   })
 }
 
-// 活动列表 
+// 活动列表
 export function getActivetyList(data) {
   return request({
     url: '/Activity/index',
@@ -402,7 +402,7 @@ export function getActivetyDel(data) {
 }
 
 
-// 活动礼物列表 
+// 活动礼物列表
 export function getActivetyGiftList(data) {
   return request({
     url: '/Activity/aclist',
@@ -411,7 +411,7 @@ export function getActivetyGiftList(data) {
   })
 }
 
-// 活动礼物库列表 
+// 活动礼物库列表
 export function getActivetyGiftSource(data) {
   return request({
     url: '/Activity/giftList',
@@ -420,7 +420,7 @@ export function getActivetyGiftSource(data) {
   })
 }
 
-// 新版获取已配置礼物 
+// 新版获取已配置礼物
 export function getActivetyHasGiftList(data) {
   return request({
     url: api.platformActivity.getHasAddGift,
@@ -429,7 +429,7 @@ export function getActivetyHasGiftList(data) {
   })
 }
 
-// 老版获取已配置礼物 
+// 老版获取已配置礼物
 export function oldGetHasAddGift(data) {
   return request({
     url: api.platformActivity.oldGetHasAddGift,
@@ -483,7 +483,7 @@ export function getActivetyDrawLog(data) {
   })
 }
 
-// 打招呼常用语 列表 
+// 打招呼常用语 列表
 export function getDesignateList(data) {
   return request({
     url: '/designate/index',
@@ -492,7 +492,7 @@ export function getDesignateList(data) {
   })
 }
 
-// 打招呼常用语 新增 
+// 打招呼常用语 新增
 export function getDesignateAdd(data) {
   return request({
     url: '/designate/create',
@@ -501,7 +501,7 @@ export function getDesignateAdd(data) {
   })
 }
 
-// 打招呼常用语 修改 
+// 打招呼常用语 修改
 export function getDesignateUpdate(data) {
   return request({
     url: '/designate/update',
@@ -510,7 +510,7 @@ export function getDesignateUpdate(data) {
   })
 }
 
-// 打招呼常用语 删除 
+// 打招呼常用语 删除
 export function getDesignateDelete(data) {
   return request({
     url: '/designate/delete',
@@ -528,7 +528,7 @@ export function getSyetermConfig(data) {
   })
 }
 
-// 打招呼常用语 删除 
+// 打招呼常用语 删除
 export function getSyetermConfigSave(data) {
   return request({
     url: '/system/save',
@@ -656,7 +656,7 @@ export function getRoomBgDel(data) {
   })
 }
 
-// 音乐列表 
+// 音乐列表
 export function getUserMusicList(data) {
   return request({
     url: '/music/index',
@@ -755,7 +755,7 @@ export function getNotGuildFree(data) {
   })
 }
 
-// 动态管理 
+// 动态管理
 export function getMoments(data) {
   return request({
     url: '/moments/getMoments',
@@ -774,7 +774,7 @@ export function getMomentsDown(data) {
 }
 
 
-// 获取banner列表 
+// 获取banner列表
 export function getBanner(data) {
   return request({
     url: '/moments/getBanner',
@@ -783,7 +783,7 @@ export function getBanner(data) {
   })
 }
 
-// 修改或新增banner 
+// 修改或新增banner
 export function getBannerChange(data) {
   return request({
     url: '/moments/setBanner',
@@ -793,7 +793,7 @@ export function getBannerChange(data) {
 }
 
 
-// 删除banner 
+// 删除banner
 export function getBannerDel(data) {
   return request({
     url: '/moments/delBanner',
@@ -866,7 +866,7 @@ export function getGuildWeekList(data) {
   })
 }
 
-// 手动周返点 
+// 手动周返点
 export function getWeekRebate(data) {
   return request({
     url: '/guild/weekRebate',
@@ -876,7 +876,7 @@ export function getWeekRebate(data) {
 }
 
 
-// 返点操作日志 
+// 返点操作日志
 export function getSettlementLog(data) {
   return request({
     url: '/Guild/settlementLog',
@@ -885,7 +885,7 @@ export function getSettlementLog(data) {
   })
 }
 
-// 创建工会审核已联系或者驳回 
+// 创建工会审核已联系或者驳回
 export function newGuildApplyCheck(data) {
   return request({
     url: api.guild.newGuildApplyCheck,
@@ -894,7 +894,7 @@ export function newGuildApplyCheck(data) {
   })
 }
 
-// 获取交易类型 
+// 获取交易类型
 export function getRelationType(data) {
   return request({
     url: '/Statistical/getRelationType',
@@ -903,7 +903,7 @@ export function getRelationType(data) {
   })
 }
 
-// 获取交易类型 
+// 获取交易类型
 export function getAdminRelationType(data) {
   return request({
     url: '/Statistical/getAdminRelationType',
@@ -912,7 +912,7 @@ export function getAdminRelationType(data) {
   })
 }
 
-// 获取交易类型 
+// 获取交易类型
 export function getStuck(data) {
   return request({
     url: '/user/getUserCardList',
@@ -1038,7 +1038,7 @@ export function searchPrettyNumber(data) {
   })
 }
 
-/***********公会v2******************/ 
+/***********公会v2******************/
 // 新增公会
 export function getGuildCreateV2(data) {
   return request({
@@ -1130,7 +1130,7 @@ export function getGuildType(data) {
   })
 }
 
-/***********广播******************/ 
+/***********广播******************/
 
 // 发送广播消息
 export function sendBroadcast(data) {
@@ -1196,3 +1196,38 @@ export function greetConfigSave(data) {
   })
 }
 
+// 根据房间号获取房间ID
+export function checkAutoJoinRule(data) {
+  return request({
+    url: api.room.checkAutoJoinRule,
+    method: 'post',
+    data
+  })
+}
+
+// 添加渠道进房规则
+export function addAutoJoinRule(data) {
+  return request({
+    url: api.room.addAutoJoinRule,
+    method: 'post',
+    data
+  })
+}
+
+// 修改渠道进房规则
+export function updateAutoJoinRule(data) {
+  return request({
+    url: api.room.updateAutoJoinRule,
+    method: 'post',
+    data
+  })
+}
+
+// 删除渠道进房规则
+export function delAutoJoinRule(data) {
+  return request({
+    url: api.room.delAutoJoinRule,
+    method: 'post',
+    data
+  })
+}

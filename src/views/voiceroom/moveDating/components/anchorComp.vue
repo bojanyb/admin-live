@@ -1,6 +1,6 @@
 <template>
     <div class="addMember-box">
-        <drawer 
+        <drawer
         size="470px"
         title="查看心动主播"
         ref="drawer"
@@ -166,7 +166,7 @@ export default {
                     text-overflow: ellipsis;
                 }
             }
-            
+
         }
     }
     .userListBox::-webkit-scrollbar {

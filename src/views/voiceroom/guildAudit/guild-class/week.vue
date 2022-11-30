@@ -51,7 +51,7 @@ export default {
 					value: '',
 					keyName: 'value',
 					optionLabel: 'name',
-					label: '公会类型',
+					label: '房间类型',
 					placeholder: '请选择',
 					options: this.guildTypeList
 				},
@@ -63,7 +63,7 @@ export default {
                 url: REQUEST.guild.settlementConfig,
                 columns: [
                     {
-						label: '公会类型',
+						label: '房间类型',
 						render: (h, params) => {
 						let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
 						return h('span', data ? data.name : '无')
@@ -80,7 +80,7 @@ export default {
                         }
                     },
                     {
-                        label: '评级奖励类型',
+                        label: '奖励类型',
                         prop: 'rebate',
                         render: (h, params) => {
                             let data = MAPDATA.GUILDCONFIGURATIONRATETYPELIST.find(item => { return item.value === params.row.rewards_type })
@@ -88,7 +88,7 @@ export default {
                         }
                     },
                     {
-						label: '评级奖励',
+						label: '奖励数额',
 						prop: 'rewards'
 					},
                     {

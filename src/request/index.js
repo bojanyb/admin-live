@@ -175,6 +175,11 @@ const request = {
         getAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig`, // 渠道进房列表
         addAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig/add`, // 新增渠道进房
         delAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig/del`, // 新增渠道进房
+        getAutoJoinRule: `${HTTPHEADER}/AutoJoinRule`, // 渠道进房规则列表
+        checkAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/checkRoom`, // 根据房间号获取房间ID
+        addAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/addRule`, // 添加渠道进房规则
+        updateAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/updateRule`, // 修改渠道进房规则
+        delAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/delRule`, // 删除渠道进房规则
     },
 
     // 用户管理
