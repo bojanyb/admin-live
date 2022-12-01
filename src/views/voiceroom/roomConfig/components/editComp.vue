@@ -91,7 +91,12 @@
             style="width: 100%"
             max-height="250"
           >
-            <el-table-column fixed prop="date" label="添加时间" width="200">
+            <el-table-column
+              fixed
+              prop="create_time"
+              label="添加时间"
+              width="200"
+            >
             </el-table-column>
             <el-table-column prop="id" label="直播间ID" width="200">
             </el-table-column>
@@ -119,10 +124,17 @@
 
 <script>
 // 引入api
-import { addAutoJoinRule, checkAutoJoinRule } from "@/api/videoRoom";
+import {
+  addAutoJoinRule,
+  updateAutoJoinRule,
+  checkAutoJoinRule,
+  getHasConfigRoom,
+} from "@/api/videoRoom";
 import { param } from "@/utils";
 // 引入公共map
 import MAPDATA from "@/utils/jsonMap.js";
+// 引入格式化时间包
+import moment from "moment";
 export default {
   components: {},
   data() {
@@ -241,17 +253,29 @@ export default {
   },
   methods: {
     // 新增 - 修改
-    loadParams(status, row) {
+    async loadParams(status, row) {
       this.openComp();
       this.status = status;
       if (status !== "add") {
         let params = JSON.parse(JSON.stringify(row));
         let para = {};
         para.channel = params.channel || "";
-        para.sex = params.sex || "";
+        para.sex = params.sex + "" || "";
         para.start_time = params.start_time * 1000;
         para.end_time = params.end_time * 1000;
+        const res = await this.handlerGetHasConfigRoom(params.id);
+        para.room_ids = res.data.rooms.reduce((pev, cur) => {
+          pev.push({
+            id: cur.id + "",
+            create_time: moment(cur.create_time * 1000).format(
+              "YYYY-MM-DD HH:mm:ss"
+            ),
+          });
+          return pev;
+        }, []);
         this.$set(this.$data, "ruleForm", para);
+        this.tableData = para.room_ids;
+        this.ruleForm.id = params.id;
       }
 
       this.oldParams = JSON.parse(JSON.stringify(this.ruleForm));
@@ -295,12 +319,19 @@ export default {
             return false;
           }
 
-          if (params.room_number) {
+          if (params.room_number || params.room_number === "") {
             delete params.room_number;
           }
           params.start_time = Math.floor(params.start_time / 1000);
           params.end_time = Math.floor(params.end_time / 1000);
-          let res = await addAutoJoinRule(params);
+
+          let res;
+          if (this.status === "add") {
+            res = await addAutoJoinRule(params);
+          } else {
+            res = await updateAutoJoinRule(params);
+          }
+
           if (res.code === 2000) {
             this.$success("保存成功");
           }
@@ -337,6 +368,9 @@ export default {
           this.tableData = this.roomIds.map((item) => {
             return {
               id: item,
+              create_time: moment(new Date().getTime()).format(
+                "YYYY-MM-DD HH:mm:ss"
+              ),
             };
           });
           this.$message.success("添加成功");
@@ -360,6 +394,14 @@ export default {
           this.fulfilStatus = true;
         }
       }
+    },
+    handlerGetHasConfigRoom(id) {
+      return new Promise(async (resolve) => {
+        let res = await getHasConfigRoom({ id });
+        if (+res.code === 2000) {
+          resolve(res);
+        }
+      });
     },
   },
 };

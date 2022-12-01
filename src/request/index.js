@@ -180,6 +180,7 @@ const request = {
         addAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/addRule`, // 添加渠道进房规则
         updateAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/updateRule`, // 修改渠道进房规则
         delAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/delRule`, // 删除渠道进房规则
+        getHasConfigRoom: `${HTTPHEADER}/AutoJoinRule/getHasConfigRoom`, // 获取已经配置的房间
     },
 
     // 用户管理

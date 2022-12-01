@@ -1231,3 +1231,12 @@ export function delAutoJoinRule(data) {
     data
   })
 }
+
+// 获取已经配置的房间
+export function getHasConfigRoom(data) {
+  return request({
+    url: api.room.getHasConfigRoom,
+    method: 'post',
+    data
+  })
+}
