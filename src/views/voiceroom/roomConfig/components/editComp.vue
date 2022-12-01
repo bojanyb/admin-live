@@ -76,11 +76,10 @@
               <el-input
                 v-model="ruleForm.room_number"
                 placeholder="请输入房间ID"
-                @blur="hanlderBlur(ruleForm.room_number)"
               ></el-input>
             </el-col>
             <el-col :span="6" style="margin-left: 10px">
-              <el-button type="primary" @click="handlerAdd">添加</el-button>
+              <el-button type="primary" @click="handlerAdd(ruleForm.room_number)">添加</el-button>
             </el-col>
           </el-row>
         </el-form-item>
@@ -177,12 +176,10 @@ export default {
         ],
       },
       tableData: [],
-      roomIds: [],
       sexList: [
         { name: "男", value: "1" },
         { name: "女", value: "2" },
       ],
-      fulfilStatus: true,
     };
   },
   computed: {
@@ -358,43 +355,28 @@ export default {
     deleteRow(index, rows) {
       rows.splice(index, 1);
     },
-    handlerAdd() {
+    handlerAdd(room_number) {
+
+      if (!room_number) {
+        this.$message.error("请检查房间ID是否为空");
+        return false;
+      }
+
       this.$confirm("此操作将添加渠道进房, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      }).then(() => {
-        if (this.fulfilStatus) {
-          this.roomIds.forEach((item) => {
+      }).then(async() => {
+          let res = await checkAutoJoinRule({ room_number });
+          if (+res.code === 2000) {
             this.tableData.push({
-              id: item,
-              create_time: moment(new Date().getTime()).format(
+              id: res.data.id + "",
+              create_time:  moment(new Date().getTime()).format(
                 "YYYY-MM-DD HH:mm:ss"
               ),
             })
-          });
-          console.log(this.tableData);
-          this.$message.success("添加成功");
-        } else {
-          this.$message.info("数据已存在");
-        }
-        this.fulfilStatus = true;
+          }
       });
-    },
-    hanlderBlur(room_number) {
-      if (!room_number) {
-        return false;
-      }
-      this.handlerCheckAutoJoinRule(room_number);
-    },
-    async handlerCheckAutoJoinRule(room_number) {
-      let res = await checkAutoJoinRule({ room_number });
-      if (+res.code === 2000) {
-        // if (this.roomIds.indexOf(res.data.id)) {
-          this.roomIds.push(res.data.id + "");
-          this.fulfilStatus = true;
-        // }
-      }
     },
     handlerGetHasConfigRoom(id) {
       return new Promise(async (resolve) => {
