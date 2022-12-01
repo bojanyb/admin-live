@@ -182,7 +182,7 @@ export default {
         { name: "男", value: "1" },
         { name: "女", value: "2" },
       ],
-      fulfilStatus: false,
+      fulfilStatus: true,
     };
   },
   computed: {
@@ -365,19 +365,20 @@ export default {
         type: "warning",
       }).then(() => {
         if (this.fulfilStatus) {
-          this.tableData = this.roomIds.map((item) => {
-            return {
+          this.roomIds.forEach((item) => {
+            this.tableData.push({
               id: item,
               create_time: moment(new Date().getTime()).format(
                 "YYYY-MM-DD HH:mm:ss"
               ),
-            };
+            })
           });
+          console.log(this.tableData);
           this.$message.success("添加成功");
         } else {
           this.$message.info("数据已存在");
         }
-        this.fulfilStatus = false;
+        this.fulfilStatus = true;
       });
     },
     hanlderBlur(room_number) {
@@ -389,10 +390,10 @@ export default {
     async handlerCheckAutoJoinRule(room_number) {
       let res = await checkAutoJoinRule({ room_number });
       if (+res.code === 2000) {
-        if (this.roomIds.indexOf(res.data.id)) {
+        // if (this.roomIds.indexOf(res.data.id)) {
           this.roomIds.push(res.data.id + "");
           this.fulfilStatus = true;
-        }
+        // }
       }
     },
     handlerGetHasConfigRoom(id) {
