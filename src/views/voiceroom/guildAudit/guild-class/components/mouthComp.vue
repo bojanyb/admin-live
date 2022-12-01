@@ -13,25 +13,25 @@
                     </el-form-item>
                 </div>
                 <div class="formBox">
-                    <el-form-item label="最低流水" prop="start" :rules="startRules">
+                    <el-form-item label="起始流水" prop="start" :rules="startRules">
                         <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.start" maxlength="10" placeholder="起始流水"></el-input>
                     </el-form-item>
-                    <el-form-item label="最高流水" prop="end" :rules="endRules">
+                    <el-form-item label="结束流水" prop="end" :rules="endRules">
                         <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.end" maxlength="10" placeholder="结束流水"></el-input>
                     </el-form-item>
                 </div>
                 <div class="formBox">
-                    <el-form-item label="奖励类型" prop="rewards_type">
+                    <el-form-item label="评级奖励类型" prop="rewards_type">
                         <el-select v-model="ruleForm.rewards_type" placeholder="请选择">
                             <el-option v-for="item in rewards_typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="奖励数额" prop="rewards">
+                    <el-form-item label="评级奖励" prop="rewards">
                         <el-input onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.rewards"></el-input>
                     </el-form-item>
                 </div>
                 <div class="formBox">
-                    <el-form-item label="房间类型" prop="guild_type">
+                    <el-form-item label="公会类型" prop="guild_type">
                         <el-select v-model="ruleForm.guild_type" placeholder="请选择公会类型" :disabled="status === 'update'">
                           <el-option v-for="item in guildTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
