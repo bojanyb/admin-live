@@ -19,7 +19,7 @@ const request = {
         useCash: `${HTTPHEADER}/PayManage/useCash`, // 使用提现
     },
 
-    // 平台活动  
+    // 平台活动
     platformActivity: {
         Activityins: `${HTTPHEADER}/Activityins/index`, // 幸运转盘设置
         configMMLY: `${HTTPHEADER}/activityins/configMMLY`, // 配置喵喵乐园
@@ -175,6 +175,12 @@ const request = {
         getAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig`, // 渠道进房列表
         addAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig/add`, // 新增渠道进房
         delAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig/del`, // 新增渠道进房
+        getAutoJoinRule: `${HTTPHEADER}/AutoJoinRule`, // 渠道进房规则列表
+        checkAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/checkRoom`, // 根据房间号获取房间ID
+        addAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/addRule`, // 添加渠道进房规则
+        updateAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/updateRule`, // 修改渠道进房规则
+        delAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/delRule`, // 删除渠道进房规则
+        getHasConfigRoom: `${HTTPHEADER}/AutoJoinRule/getHasConfigRoom`, // 获取已经配置的房间
     },
 
     // 用户管理
@@ -252,7 +258,7 @@ const request = {
         saveSettlementConfig: `${HTTPHEADER}/guild/saveSettlementConfig`, // 配置周返点
         delSettlementConfig: `${HTTPHEADER}/guild/delSettlementConfig`, // 删除周返点配置
         doSettlement: `${HTTPHEADER}/guild/doSettlement`, // 公会批量结算
-        getNowRoomOnlineReward: `${HTTPHEADER}/guild/getNowRoomOnlineReward`, // 待结算 24小时房间奖励 
+        getNowRoomOnlineReward: `${HTTPHEADER}/guild/getNowRoomOnlineReward`, // 待结算 24小时房间奖励
         guildType: `${HTTPHEADER}/guild/guildType`, // 获取公会类型
         greetConfig: `${HTTPHEADER}/GreetConfig`, // 获取萌新配置项
         greetConfigSave: `${HTTPHEADER}/GreetConfig/save`, // 设置萌新配置项
@@ -300,6 +306,7 @@ const request = {
     // 注销管理
     logout: {
         list: `${HTTPHEADER}/Cancellation/index`, // 注销列表
+        listV2: `${HTTPHEADER}/Cancellation/indexV2`, // 注销列表V2
         hasDeal: `${HTTPHEADER}/Cancellation/hasDeal`, // 已处理列表
     },
 
