@@ -20,9 +20,7 @@
                 </el-form-item>
                 <el-form-item label="商品名称" prop="number" v-if="ruleForm.category === 0 && status === 'add'"
                 :rules="[
-                    { required: true, message: '请输入商品名称', trigger: 'blur' },
-                    { min: 5, max: 5, message: '长度在5个字符', trigger: 'blur' },
-                    { message: '用户靓号请输入偶数', trigger: 'blur', pattern: /^\d*[02468]$/ }
+                    { required: true, validator: validateNumber1, trigger: 'blur' },
                 ]"
                 >
                     <el-input
@@ -33,9 +31,7 @@
                 </el-form-item>
                 <el-form-item label="商品名称" prop="number" v-if="ruleForm.category === 1 && status === 'add'"
                 :rules="[
-                    { required: true, message: '请输入商品名称', trigger: 'blur' },
-                    { min: 4, max: 4, message: '长度在4个字符', trigger: 'blur' },
-                    { message: '房间靓号请输入奇数', trigger: 'blur', pattern: /^\d*[13579]$/ }
+                    { required: true, validator: validateNumber, trigger: 'blur' },
                 ]"
                 >
                     <el-input
@@ -194,6 +190,28 @@ export default {
         },
     },
     data() {
+      const validateNumber = (rule, value, callback) => {
+        let reg = /^\d*[13579]$/
+				if (!value) {
+					callback(new Error('密码不能为空'))
+        } else if (!reg.test(value.length)) {
+          callback(new Error('房间靓号字符长度请输入奇数'))
+        }
+        else {
+					callback()
+				}
+      }
+      const validateNumber1 = (rule, value, callback) => {
+        let reg = /^\d*[2468]$/
+				if (!value) {
+					callback(new Error('密码不能为空'))
+        } else if (!reg.test(value.length)) {
+          callback(new Error('房间靓号字符长度请输入偶数'))
+        }
+        else {
+					callback()
+				}
+			}
         return {
             dialogVisible: false,
             goodsNumTypeList: MAPDATA.GOODNUMTYPE,
@@ -229,6 +247,8 @@ export default {
                     { required: true, message: '请选择是否可购买', trigger: 'change' }
                 ]
             },
+            validateNumber: validateNumber,
+            validateNumber1: validateNumber1
         };
     },
     methods: {
