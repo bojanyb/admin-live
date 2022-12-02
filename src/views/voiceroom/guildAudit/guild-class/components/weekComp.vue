@@ -122,8 +122,8 @@ export default {
             },
             rules: {
                 name: [
-                    {  required: true, 
-                        message: '请输入奖励名称', 
+                    {  required: true,
+                        message: '请输入奖励名称',
                         trigger: 'blur',
                         validator: (rules, val, cb) => {
                             let value = val.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/ig, '')
