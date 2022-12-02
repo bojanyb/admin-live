@@ -105,7 +105,7 @@ export default {
           },
           {
             label: "用户角色",
-            prop: "user_id",
+            prop: "role_name",
           },
           {
             label: "等级",
