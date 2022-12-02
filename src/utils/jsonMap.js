@@ -1789,6 +1789,10 @@ const LOGOUTUNTREATEDSTATUSLIST = [
     {
       name: '已拒绝',
       value: 2
+    },
+    {
+      name: '用户已同意',
+      value: 3
     }
 ]
 
@@ -1837,6 +1841,10 @@ const LOGOUTSTATUS = [
   {
     name: '已拒绝',
     value: 2
+  },
+  {
+    name: '用户已同意',
+    value: 3
   }
 ]
 
