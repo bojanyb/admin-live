@@ -1779,16 +1779,16 @@ const LOGOUTUNTREATEDSORTLIST = [
 // 未处理 - 状态
 const LOGOUTUNTREATEDSTATUSLIST = [
     {
-        name: '未处理',
-        value: 0
+      name: '待处理',
+      value: 0
     },
     {
-        name: '已处理',
-        value: 1
+      name: '已同意',
+      value: 1
     },
     {
-        name: '拒绝',
-        value: 3
+      name: '已拒绝',
+      value: 2
     }
 ]
 

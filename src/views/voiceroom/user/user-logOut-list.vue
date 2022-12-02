@@ -177,6 +177,9 @@ export default {
         start_time: null,
         end_time: null,
       },
+      searchParams: {
+        status: 0
+      }
     };
   },
   methods: {
@@ -190,8 +193,8 @@ export default {
         user_number: s.user_number,
         start_time: s.start_time
           ? Math.floor(s.start_time / 1000)
-          : s.start_time,
-        end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
+          : '',
+        end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
       };
     },
     // 刷新列表
@@ -203,6 +206,7 @@ export default {
       this.searchParams = {
         status: 0,
       };
+      this.dateTimeParams = {}
       this.getList();
     },
     // 查询
