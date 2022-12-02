@@ -108,7 +108,7 @@
               width="200"
             >
             </el-table-column>
-            <el-table-column prop="id" label="直播间ID" width="200">
+            <el-table-column prop="live_number" label="直播间ID" width="200">
             </el-table-column>
             <el-table-column fixed="right" label="操作">
               <template slot-scope="scope">
@@ -276,6 +276,7 @@ export default {
         para.room_ids = res.data.rooms.reduce((pev, cur) => {
           pev.push({
             id: cur.id + "",
+            live_number: cur.room_number + "",
             create_time: moment(cur.create_time * 1000).format(
               "YYYY-MM-DD HH:mm:ss"
             ),
@@ -385,6 +386,7 @@ export default {
           if (+res.code === 2000) {
             this.tableData.push({
               id: res.data.id + "",
+              live_number: res.data.room_number + "",
               create_time:  moment(new Date().getTime()).format(
                 "YYYY-MM-DD HH:mm:ss"
               ),
