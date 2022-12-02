@@ -21,6 +21,7 @@
               <el-input
                 v-model="ruleForm.channel"
                 placeholder="请输入app渠道"
+                :disabled="status === 'update'"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -43,8 +44,8 @@
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="开始时间" prop="start_time">
-              <el-date-picker
+            <el-form-item label="开始时间" prop="start_time" :rules="StartRules">
+              <!-- <el-date-picker
                 :disabled="disabled"
                 v-model="ruleForm.start_time"
                 value-format="timestamp"
@@ -52,12 +53,17 @@
                 :picker-options="StartPicker"
                 placeholder="请选择开始时间"
               >
-              </el-date-picker>
+              </el-date-picker> -->
+              <el-time-picker
+                v-model="ruleForm.start_time"
+                value-format="timestamp"
+                placeholder="请选择开始时间">
+              </el-time-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="结束时间" prop="end_time" :rules="EndRules">
-              <el-date-picker
+              <!-- <el-date-picker
                 :disabled="disabled"
                 v-model="ruleForm.end_time"
                 :picker-options="EndPicker"
@@ -65,7 +71,12 @@
                 type="datetime"
                 placeholder="请选择结束时间"
               >
-              </el-date-picker>
+              </el-date-picker> -->
+              <el-time-picker
+                v-model="ruleForm.end_time"
+                value-format="timestamp"
+                placeholder="请选择结束时间">
+              </el-time-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -256,10 +267,11 @@ export default {
       if (status !== "add") {
         let params = JSON.parse(JSON.stringify(row));
         let para = {};
+        const ZeroPoint = new Date(new Date().toLocaleDateString()).getTime();
         para.channel = params.channel || "";
         para.sex = params.sex + "" || "";
-        para.start_time = params.start_time * 1000;
-        para.end_time = params.end_time * 1000;
+        para.start_time =  ZeroPoint + (params.start_time * 1000);
+        para.end_time = ZeroPoint + (params.end_time * 1000);
         const res = await this.handlerGetHasConfigRoom(params.id);
         para.room_ids = res.data.rooms.reduce((pev, cur) => {
           pev.push({
@@ -319,9 +331,11 @@ export default {
           if (params.room_number || params.room_number === "") {
             delete params.room_number;
           }
-          params.start_time = Math.floor(params.start_time / 1000);
-          params.end_time = Math.floor(params.end_time / 1000);
-
+          const ZeroPoint = new Date(new Date().toLocaleDateString()).getTime() / 1000;
+          const startTime = Math.floor(params.start_time / 1000);
+          const endTime = Math.floor(params.end_time / 1000);
+          params.start_time = startTime - ZeroPoint;
+          params.end_time = endTime - ZeroPoint;
           let res;
           if (this.status === "add") {
             res = await addAutoJoinRule(params);
