@@ -11,11 +11,7 @@
       ></SearchPanel>
     </div>
 
-    <tableList
-      :cfgs="cfgs"
-      ref="tableList"
-      @saleAmunt="saleAmunt"
-    ></tableList>
+    <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
 
     <!-- 新增or修改组件 -->
     <editComp
@@ -29,7 +25,7 @@
 
 <script>
 // 引入api
-import { delAutoJoinConfig } from "@/api/videoRoom";
+import { delAutoJoinRule } from "@/api/videoRoom";
 // 引入tab菜单组件
 import menuComp from "@/components/menuComp/index.vue";
 // 引入菜单组件
@@ -75,31 +71,67 @@ export default {
     cfgs() {
       return {
         vm: this,
-        url: REQUEST.room.getAutoJoinConfig,
+        url: REQUEST.room.getAutoJoinRule,
         columns: [
           {
-            label: "添加时间",
-            minWidth: "180px",
-            prop: "create_time"
-          },
-          {
-            label: "渠道",
+            label: "渠道ID",
             prop: "channel",
           },
           {
-            label: "房间ID",
-            prop: "room_id",
+            label: "进房ID",
+            prop: "room_number",
           },
           {
-						label: '操作',
-						minWidth: '120px',
-						fixed: 'right',
-						render: (h, params) => {
-							return h('div', [
-								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除'),
-							])
-						}
-					}
+            label: "推荐状态",
+            prop: "is_effect",
+            render: (h, params) => {
+              switch (params.row.is_effect) {
+                case 0:
+                  return h("span", "未生效");
+                  break;
+                case 1:
+                  return h("span", "已生效");
+                  break;
+
+                default:
+                  return h("span", "无");
+                  break;
+              }
+            },
+          },
+          {
+            label: "操作",
+            minWidth: "120px",
+            fixed: "right",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "el-button",
+                  {
+                    props: { type: "primary" },
+                    on: {
+                      click: () => {
+                        this.update(params.row);
+                      },
+                    },
+                  },
+                  "修改"
+                ),
+                h(
+                  "el-button",
+                  {
+                    props: { type: "danger" },
+                    on: {
+                      click: () => {
+                        this.deleteParams(params.row.id);
+                      },
+                    },
+                  },
+                  "删除"
+                ),
+              ]);
+            },
+          },
         ],
       };
     },
@@ -139,8 +171,8 @@ export default {
       this.load("add");
     },
     // 修改
-    add() {
-      this.load("add");
+    update(row) {
+      this.load("update", row);
     },
     load(status, row) {
       this.isDestoryComp = true;
@@ -163,17 +195,19 @@ export default {
     },
     // 删除
     async deleteParams(id) {
-        this.$confirm('确认删除当前动态吗?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-        }).then(async () => {
-            let res = await delAutoJoinConfig({ id })
-            if(res.code === 2000) {
-                this.$success('删除成功')
-                this.getList()
-            }
-        }).catch(() => {});
+      this.$confirm("确认删除当前动态吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          let res = await delAutoJoinRule({ id });
+          if (res.code === 2000) {
+            this.$success("删除成功");
+            this.getList();
+          }
+        })
+        .catch(() => {});
     },
   },
 };
