@@ -195,6 +195,7 @@ const request = {
         punishStatus: `${HTTPHEADER}/userPunish/punishStatus`, // 用户状态
         updateLoginPwd: `${HTTPHEADER}/User/updateLoginPwd`, // 更改登录密码
         addRichUser: `${HTTPHEADER}/User/addRichUser`, // 添加财富用户
+        supperUList: `${HTTPHEADER}/user/supperU`, // 添加财富用户
     },
 
     // 审核管理
@@ -341,6 +342,8 @@ const request = {
         remove: `${HTTPHEADER}/UserPunish/remove`, // 解除处罚用户
         chatList: `${HTTPHEADER}/MsgLog/chatList`, // 私聊会话消息-列表
         roomList: `${HTTPHEADER}/MsgLog/roomList`, // 房间会话消息-列表
+        roomTalkList: `${HTTPHEADER}/MsgLog/roomTalkList`, // 房间会话记录-列表
+        chatTalkList: `${HTTPHEADER}/MsgLog/chatTalkList`, // 私聊会话记录-列表
         index: `${HTTPHEADER}/Sensitive/index`, // 敏感词列表
         softDelete: `${HTTPHEADER}/Sensitive/softDelete`, // 敏感词-软删除
         add: `${HTTPHEADER}/Sensitive/add`, // 敏感词-添加
