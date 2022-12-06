@@ -48,7 +48,8 @@
           class="pev-left"
           v-infinite-scroll="onChatLoad"
           infinite-scroll-disabled="chatDisabled"
-          infinite-scroll-distance="10"
+          :infinite-scroll-distance="10"
+          :infinite-scroll-immediate="false"
         >
           <el-card v-for="item in renderChatList" style="margin-bottom: 10px">
             <div class="pev-inner">
@@ -59,10 +60,10 @@
                 </div>
                 <span class="pev-time">{{ item.create_time }}</span>
               </div>
-              <div class="pev-footer">发送：{{ item.content }}</div>
+              <div class="pev-footer">{{ `${+item.reply === 0 ? '发送' : '回复'}: ${item.content}`   }}</div>
             </div>
           </el-card>
-          <p v-if="chatLoading">加载中...</p>
+          <!-- <p v-if="chatLoading">加载中...</p> -->
           <p v-if="chatNoMore">没有更多了</p>
           <div class="empty" v-if="!renderChatList.length">
             <i class="el-icon-document-delete"></i>
@@ -116,7 +117,8 @@
         <div class="pev-right"
           v-infinite-scroll="onRoomLoad"
           infinite-scroll-disabled="roomDisabled"
-          infinite-scroll-distance="10"
+          :infinite-scroll-distance="10"
+          :infinite-scroll-immediate="false"
         >
           <el-card v-for="item in renderRoomList" style="margin-bottom: 10px">
             <div class="pev-inner">
@@ -134,7 +136,7 @@
               <div class="pev-footer">发送：{{ item.content }}</div>
             </div>
           </el-card>
-          <p v-if="roomLoading">加载中...</p>
+          <!-- <p v-if="roomLoading">加载中...</p> -->
           <p v-if="roomNoMore">没有更多了</p>
           <div class="empty" v-if="!renderChatList.length">
             <i class="el-icon-document-delete"></i>
@@ -153,8 +155,8 @@ export default {
   data() {
     return {
       searchChatData: {
-        first_user_number: "100100209",
-        second_user_number: "100229021",
+        first_user_number: "",
+        second_user_number: "",
         start_time: "",
         end_time: "",
       },
@@ -163,14 +165,15 @@ export default {
       chatLoading: false,
       chatNoMore: false,
       chatDisabled: false,
+      chatFlag: false,
       chatPagination: {
         size: 10,
         page: 1,
       },
 
       searchRoomData: {
-        user_number: "100229021",
-        room_number: "121905",
+        user_number: "",
+        room_number: "",
         start_time: "",
         end_time: "",
       },
@@ -179,6 +182,7 @@ export default {
       roomLoading: false,
       roomNoMore: false,
       roomDisabled: false,
+      roomFlag: false,
       roomPagination: {
         size: 10,
         page: 1,
@@ -187,10 +191,10 @@ export default {
   },
   methods: {
     // 获取私聊消息
-    getChatList: throttle(async function () {
-      if (this.chatLoading || this.chatNoMore) {
-        return false;
-      }
+    getChatList: throttle(function () {
+      // if (this.chatLoading || this.chatNoMore) {
+      //   return false;
+      // }
       this.chatLoading = true;
       const isTimeVal = this.chatTimeData && this.chatTimeData.length;
       const temp = {
@@ -199,12 +203,13 @@ export default {
         start_time: isTimeVal ? Math.floor(this.chatTimeData[0] / 1000) : "",
         end_time: isTimeVal ? Math.floor(this.chatTimeData[1] / 1000) : "",
       };
-      const res = await chatTalkList(temp);
+    chatTalkList(temp).then(res => {
       this.chatLoading = false;
 
       if (+res.code !== 2000) {
         this.chatPagination.page = 1;
         this.chatNoMore = false;
+        this.chatFlag = false;
         this.renderChatList = [];
         this.$message.error("请求失败");
         return false;
@@ -218,24 +223,33 @@ export default {
 
         if (this.renderChatList.length < res.data.count) {
           this.chatPagination.page++;
+          this.chatFlag = true;
         } else {
           this.chatNoMore = true;
           this.chatDisabled = true;
+          this.chatFlag = false;
         }
       } else {
         this.chatNoMore = true;
         this.chatDisabled = true;
+        this.chatFlag = false;
       }
+    }).catch(err => {
+      console.log(err, "err");
+      this.chatFlag = false;
+    })
     }, 300),
     // 私聊下拉加载
     onChatLoad() {
-      this.getChatList();
+      if (this.chatFlag) {
+        this.getChatList();
+      }
     },
     // 获取房间消息
-    getRoomList: throttle(async function () {
-      if (this.roomLoading || this.roomNoMore) {
-        return false;
-      }
+    getRoomList: throttle(function () {
+      // if (this.roomLoading || this.roomNoMore) {
+      //   return false;
+      // }
       this.roomLoading = true;
       const isTimeVal = this.roomTimeData && this.roomTimeData.length;
       const temp = {
@@ -244,12 +258,13 @@ export default {
         start_time: isTimeVal ? Math.floor(this.roomTimeData[0] / 1000) : "",
         end_time: isTimeVal ? Math.floor(this.roomTimeData[1] / 1000) : "",
       };
-      const res = await roomTalkList(temp);
+      roomTalkList(temp).then(res => {
       this.roomLoading = false;
 
       if (+res.code !== 2000) {
         this.roomPagination.page = 1;
         this.roomNoMore = false;
+        this.roomFlag = false;
         this.renderRoomList = [];
         this.$message.error("请求失败");
         return false;
@@ -263,18 +278,27 @@ export default {
 
         if (this.renderRoomList.length < res.data.count) {
           this.roomPagination.page++;
+          this.roomFlag = true;
         } else {
           this.roomNoMore = true;
           this.roomDisabled = true;
+          this.roomFlag = false;
         }
       } else {
         this.roomNoMore = true;
         this.roomDisabled = true;
+        this.roomFlag = false;
       }
+    }).catch(err => {
+      console.log(err, "err");
+      this.roomFlag = false;
+    })
     }, 300),
     // 房间下拉加载
     onRoomLoad() {
-      this.getRoomList();
+      if (this.roomFlag) {
+        this.getRoomList();
+      }
     },
     // 私聊信息搜索
     onChatSearch() {
