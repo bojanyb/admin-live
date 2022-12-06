@@ -1779,16 +1779,20 @@ const LOGOUTUNTREATEDSORTLIST = [
 // 未处理 - 状态
 const LOGOUTUNTREATEDSTATUSLIST = [
     {
-        name: '未处理',
-        value: 0
+      name: '待处理',
+      value: 0
     },
     {
-        name: '已处理',
-        value: 1
+      name: '已同意',
+      value: 1
     },
     {
-        name: '拒绝',
-        value: 3
+      name: '已拒绝',
+      value: 2
+    },
+    {
+      name: '用户已同意',
+      value: 3
     }
 ]
 
@@ -1822,6 +1826,26 @@ const REPORTUSERPUNISHSTATUSLIST = [
         name: '已忽略',
         value: 3
     }
+]
+
+// 注销状态
+const LOGOUTSTATUS = [
+  {
+    name: '待处理',
+    value: 0
+  },
+  {
+    name: '已同意',
+    value: 1
+  },
+  {
+    name: '已拒绝',
+    value: 2
+  },
+  {
+    name: '用户已同意',
+    value: 3
+  }
 ]
 
 /*
@@ -2763,5 +2787,6 @@ export default {
     DEPOSITCONFIGURATIONPLATFORMLIST,
     BROADCASTTYPESTATUS,
     GOODSENDSTATUS,
-    TIMEPENALTYSTATUS
+    TIMEPENALTYSTATUS,
+    LOGOUTSTATUS,
 }
