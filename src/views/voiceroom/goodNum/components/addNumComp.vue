@@ -195,7 +195,7 @@ export default {
 				if (!value) {
 					callback(new Error('密码不能为空'))
         } else if (!reg.test(value.length)) {
-          callback(new Error('房间靓号字符长度请输入奇数'))
+          callback(new Error('用户靓号字符长度请输入奇数'))
         }
         else {
 					callback()
