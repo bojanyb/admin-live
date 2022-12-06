@@ -190,6 +190,28 @@ export default {
         },
     },
     data() {
+      const validateNumber = (rule, value, callback) => {
+        let reg = /^\d*[13579]$/
+				if (!value) {
+					callback(new Error('密码不能为空'))
+        } else if (!reg.test(value.length)) {
+          callback(new Error('房间靓号字符长度请输入奇数'))
+        }
+        else {
+					callback()
+				}
+      }
+      const validateNumber1 = (rule, value, callback) => {
+        let reg = /^\d*[2468]$/
+				if (!value) {
+					callback(new Error('密码不能为空'))
+        } else if (!reg.test(value.length)) {
+          callback(new Error('房间靓号字符长度请输入偶数'))
+        }
+        else {
+					callback()
+				}
+			}
         return {
             dialogVisible: false,
             goodsNumTypeList: MAPDATA.GOODNUMTYPE,
@@ -225,6 +247,8 @@ export default {
                     { required: true, message: '请选择是否可购买', trigger: 'change' }
                 ]
             },
+            validateNumber: validateNumber,
+            validateNumber1: validateNumber1
         };
     },
     methods: {
