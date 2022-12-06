@@ -108,3 +108,22 @@ export function updateSource(data) {
         data
     })
 }
+
+
+// 会话消息-房间会话记录
+export function roomTalkList(data) {
+  return request({
+    url: api.risk.roomTalkList,
+    method: 'post',
+    data
+  })
+}
+
+// 会话消息-私聊会话记录
+export function chatTalkList(data) {
+  return request({
+    url: api.risk.chatTalkList,
+    method: 'post',
+    data
+  })
+}
