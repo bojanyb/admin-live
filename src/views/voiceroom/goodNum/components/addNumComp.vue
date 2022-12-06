@@ -196,6 +196,8 @@ export default {
 					callback(new Error('密码不能为空'))
         } else if (!reg.test(value.length)) {
           callback(new Error('用户靓号字符长度请输入奇数'))
+        } else if (value.length + '' === '1') {
+          callback(new Error('长度不能为一位数'))
         }
         else {
 					callback()
