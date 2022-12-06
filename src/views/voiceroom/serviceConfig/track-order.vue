@@ -50,6 +50,7 @@
           infinite-scroll-disabled="chatDisabled"
           :infinite-scroll-distance="10"
           :infinite-scroll-immediate="false"
+          :infinite-scroll-delay="200"
         >
           <el-card v-for="item in renderChatList" style="margin-bottom: 10px">
             <div class="pev-inner">
@@ -119,6 +120,7 @@
           infinite-scroll-disabled="roomDisabled"
           :infinite-scroll-distance="10"
           :infinite-scroll-immediate="false"
+          :infinite-scroll-delay="200"
         >
           <el-card v-for="item in renderRoomList" style="margin-bottom: 10px">
             <div class="pev-inner">
