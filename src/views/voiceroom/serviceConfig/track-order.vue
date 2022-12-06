@@ -140,7 +140,7 @@
           </el-card>
           <!-- <p v-if="roomLoading">加载中...</p> -->
           <p v-if="roomNoMore">没有更多了</p>
-          <div class="empty" v-if="!renderChatList.length">
+          <div class="empty" v-if="!renderRoomList.length">
             <i class="el-icon-document-delete"></i>
             <span>暂无数据</span>
           </div>
@@ -304,10 +304,14 @@ export default {
     },
     // 私聊信息搜索
     onChatSearch() {
+      this.renderChatList = [];
+      this.chatPagination.page = 1;
       this.getChatList();
     },
     // 房间消息搜索
     onRoomSearch() {
+      this.renderRoomList = [];
+      this.roomPagination.page = 1;
       this.getRoomList();
     },
   },

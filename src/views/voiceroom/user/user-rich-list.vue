@@ -14,7 +14,9 @@
               <div class="info-detail">
                 <div class="info-title">{{ item.nickname }}</div>
                 <div class="info-dec">
-                  在{{ item.create_time }}财富等级升级到{{ item.level }}级
+                  在{{ item.create_time | timeFormatMethod }}财富等级升级到{{
+                    item.level
+                  }}级
                 </div>
               </div>
             </div>
@@ -53,6 +55,7 @@ import REQUEST from "@/request/index.js";
 import { timeFormat } from "@/utils/common.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
+import moment from "moment";
 
 export default {
   name: "user-not-logOut-list",
@@ -60,6 +63,12 @@ export default {
   components: {
     SearchPanel,
     tableList,
+  },
+  filters: {
+    timeFormatMethod(val) {
+      const timeVal = val * 1000;
+      return moment(timeVal).format("YYYY-MM-DD HH:mm:ss");
+    },
   },
   computed: {
     forms() {
@@ -131,13 +140,13 @@ export default {
     // 配置参数
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams };
-      return  {
+      return {
         page: params.page,
         pagesize: params.size,
         user_number: s.user_number,
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : "",
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : "",
-      }
+      };
     },
     // 刷新列表
     getList() {
