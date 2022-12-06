@@ -428,6 +428,14 @@ export default {
                 let time = this.refreshNum * 1000
                 this.$success('开启定时刷新,'+ this.refreshNum +'S')
                 this.timer = setInterval(() => {
+                    // 更新当前时间到列表查询
+                    if(this.form.time){
+                        var now = Number(JSON.stringify(new Date().getTime()).substring(0,10)) * 1000;
+                        let time = []
+                        time[0] = this.form.time[0]
+                        time[1] = now
+                        this.$set(this.form, 'time', time)
+                    }
                     this.getList()
                 }, time);
             } else {
@@ -512,8 +520,10 @@ export default {
                 start = Date.parse(changeDate + ' 00:00:00')
                 end = Date.parse(changeDate + ' 23:59:59')
             }
-            this.form.time[0] = start
-            this.form.time[1] = end
+            if(this.form.time){
+                this.form.time[0] = start
+                this.form.time[1] = end
+            }
             this.getList()
         },
         // 配置参数
