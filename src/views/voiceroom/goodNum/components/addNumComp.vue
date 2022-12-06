@@ -20,7 +20,7 @@
                 </el-form-item>
                 <el-form-item label="商品名称" prop="number" v-if="ruleForm.category === 0 && status === 'add'"
                 :rules="[
-                    { required: true, validator: validateNumber1, trigger: 'blur' },
+                    { required: true, validator: validateNumber, trigger: 'blur' },
                 ]"
                 >
                     <el-input
@@ -31,7 +31,7 @@
                 </el-form-item>
                 <el-form-item label="商品名称" prop="number" v-if="ruleForm.category === 1 && status === 'add'"
                 :rules="[
-                    { required: true, validator: validateNumber, trigger: 'blur' },
+                    { required: true, validator: validateNumber1, trigger: 'blur' },
                 ]"
                 >
                     <el-input
