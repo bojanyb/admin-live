@@ -46,7 +46,16 @@ const goodNumRouter = {
 				title: '售卖记录',
 				noCache: true
 			}
-		}
+		},
+		{
+			path: 'use-list',
+			component: () => import('@/views/voiceroom/goodNum/use-list'),
+			name: 'use-list',
+			meta: {
+				title: '使用记录',
+				noCache: true
+			}
+		},
 	]
 }
 
