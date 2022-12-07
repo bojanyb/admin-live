@@ -340,6 +340,7 @@ export default {
       border-radius: 10px;
       padding: 24px;
       margin-right: 20px;
+      // background: #f0f2f5;
       .card {
         margin-bottom: 20px;
         .form-item {
@@ -354,8 +355,9 @@ export default {
       .pev-left {
         width: 414px;
         height: calc(100vh - 400px);
-        border: 1px solid #eff2f5;
-        border-radius: 10px;
+        border: 10px solid #495060;
+        background: #ffffff;
+        border-radius: 15px;
         padding: 24px;
         margin: 0 auto;
         overflow-y: auto;
@@ -419,6 +421,7 @@ export default {
       border: 1px solid #eff2f5;
       border-radius: 10px;
       padding: 24px;
+      // background: #f0f2f5;
       .card {
         margin-bottom: 20px;
         .form-item {
@@ -433,8 +436,9 @@ export default {
       .pev-right {
         width: 414px;
         height: calc(100vh - 400px);
-        border: 1px solid #eff2f5;
-        border-radius: 10px;
+        border: 10px solid #495060;
+        background: #ffffff;
+        border-radius: 15px;
         padding: 24px;
         margin: 0 auto;
         overflow-y: auto;
