@@ -27,3 +27,21 @@ export function delResource(data) {
     data
   })
 }
+/********************************************/
+// 2022/12/6 21：44
+// 获取奖池名
+export function getPoolName(data) {
+  return request({
+    url: api.activity.getPoolName,
+    method: 'post',
+    data
+  })
+}
+// 获取轮数
+export function getRound(data) {
+  return request({
+    url: api.activity.getRound,
+    method: 'post',
+    data
+  })
+}

@@ -112,7 +112,7 @@
         <historyComp v-if="isDestoryComp" ref="historyComp" @destoryComp="destoryComp" @getList="getList"></historyComp>
 
         <!-- 会话记录 -->
-        <trackOrder />
+        <trackOrder v-if="tabIndex === '3'" />
     </div>
 </template>
 
