@@ -150,7 +150,7 @@
             />
             <!--日期控件-->
             <!--日期输入 - 不弹出选择时间弹窗-->
-            <dateControl 
+            <dateControl
             v-else-if="item.type === 'dateControl'"
             v-model="form[item.name]"
             ref="dateControl">

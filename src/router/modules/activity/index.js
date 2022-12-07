@@ -12,15 +12,24 @@ const activityRouter = {
 		icon: 'tree'
 	},
 	children: [
-        {
-			path: 'first-charge',
-			component: () => import('@/views/voiceroom/platformActivity/first-charge/index.vue'),
+		{
+			path: 'lottery-list',
+			component: () => import('@/views/voiceroom/activity/lottery-list.vue'),
 			meta: {
-				title: '首充活动管理',
+				title: '活动抽奖记录',
 				noCache: true
 			},
-			name: 'first-charge'
+			name: 'lottery-list'
 		}
+        // {
+		// 	path: 'first-charge',
+		// 	component: () => import('@/views/voiceroom/platformActivity/first-charge/index.vue'),
+		// 	meta: {
+		// 		title: '首充活动管理',
+		// 		noCache: true
+		// 	},
+		// 	name: 'first-charge'
+		// }
 	]
 }
 

@@ -12,13 +12,13 @@
         :destroy-on-close="true"
         @closed="closed">
             <div class="mainBox">
-                <div class="header">
+                <div class="header" v-if="title">
                     <span>{{ title }}</span>
                 </div>
                 <div class="body">
                     <slot name="body"></slot>
                 </div>
-                <div class="footer">
+                <div class="footer" v-if="isShowFooter == true">
                     <el-button v-show="isCancel" @click="cancel">取消</el-button>
                     <el-button type="primary" v-show="isConfirm && disabled && isShowUpdate" @click="update">修改</el-button>
                     <el-button :disabled="disabled" type="primary" v-show="isConfirm && !disabled" @click="submitForm">确认</el-button>
@@ -74,6 +74,10 @@ export default {
         isShowUpdate: { // 是否需要显示可修改
             type: Boolean,
             default: false
+        },
+        isShowFooter: { // 是否显示底部按钮
+            type: Boolean,
+            default: true
         }
     },
     data() {
