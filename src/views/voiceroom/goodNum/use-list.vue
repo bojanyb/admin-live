@@ -83,7 +83,11 @@ export default {
                 columns: [
                     {
                         label: '使用时间',
-                        prop: 'user_time'
+                        prop: 'user_time',
+                        render: (h, params) => {
+                            let user_time = params.row.user_time !== "" ? params.row.user_time : "--"
+                            return  h('span', user_time ? user_time : '--')
+                        }
                     },
                     {
                         label: '用户ID',
@@ -108,11 +112,19 @@ export default {
                     },
                     {
                         label: '靓号时长',
-                        prop: 'day'
+                        prop: 'day',
+                        render: (h, params) => {
+                            let day = params.row.day !== "" ? params.row.day + "天" : "--"
+                            return  h('span', day ? day : '--')
+                        }
                     },
                     {
                         label: '剩余时长',
-                        prop: 'last_day'
+                        prop: 'last_day',
+                        render: (h, params) => {
+                            let last_day = params.row.last_day !== "" ? params.row.last_day + "天" : "--"
+                            return  h('span', last_day ? last_day : '--')
+                        }
                     },
                 ]
             }
