@@ -1,5 +1,10 @@
 <template>
 	<div class="guildAudit-award-box">
+		<div class="model">
+			<span>总条数：{{ ruleForm.count || 0 }}</span>
+			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
+			<span>结算总计：{{ (this.form.status !== 2 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
+		</div>
 		<div class="searchParams">
 			<div class="formBox">
 				<div class="sunBox">
@@ -308,6 +313,22 @@
 </script>
 <style lang="scss">
 .guildAudit-award-box {
+	.model {
+        width: 100%;
+        height: 40px;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        padding: 0px 30px;
+        box-sizing: border-box;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+        margin-bottom: 20px;
+        >span {
+            font-size: 15px;
+            color: #fff;
+            margin-right: 100px;
+        }
+    }
 	.searchParams {
 		// margin-bottom: 20px;
 		.formBox {

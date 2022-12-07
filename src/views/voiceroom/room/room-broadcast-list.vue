@@ -175,7 +175,6 @@ export default {
         columns: [
           {
             label: "发送时间",
-            minWidth: "180px",
             render: (h, params) => {
               return h(
                 "span",
@@ -215,6 +214,7 @@ export default {
           },
           {
             label: "广播内容",
+            minWidth: "220px",
             prop: "content",
           },
         ],

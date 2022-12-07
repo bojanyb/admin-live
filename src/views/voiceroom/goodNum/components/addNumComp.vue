@@ -206,8 +206,8 @@ export default {
                 buy: '0',
                 price: [
                     {
-                        day: '',
-                        price: ''
+                        day: undefined,
+                        price: undefined
                     }
                 ],
                 start_time: null,
@@ -315,12 +315,12 @@ export default {
             let s = this.ruleForm
             if(s.price.length < 3) {
                 s.price.push({
-                    day: '',
-                    price: ''
+                    day: undefined,
+                    price: undefined
                 })
             }
         },
-        // 删除商品出售期限 
+        // 删除商品出售期限
         handleDel(index){
             let s = this.ruleForm
             s.price.splice(index, 1)
@@ -374,10 +374,12 @@ export default {
                 }, []) || []
          }
         },
-        handleBuyChange(buyStatus) {
-          if (buyStatus === '1') {
-            this.$set(this.ruleForm, 'price', [{day: '', price: ''}])
-          }
+      handleBuyChange(buyStatus) {
+        if (buyStatus === '1') {
+          this.$set(this.ruleForm, 'price', [{ day: undefined, price: undefined }])
+        } else if (buyStatus === '0' && JSON.stringify(this.ruleForm.price) === '[]') {
+          this.$set(this.ruleForm, 'price', [{ day: undefined, price: undefined }])
+        }
         }
     },
     mounted() {

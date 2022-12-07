@@ -1779,16 +1779,20 @@ const LOGOUTUNTREATEDSORTLIST = [
 // 未处理 - 状态
 const LOGOUTUNTREATEDSTATUSLIST = [
     {
-        name: '未处理',
-        value: 0
+      name: '待处理',
+      value: 0
     },
     {
-        name: '已处理',
-        value: 1
+      name: '已同意',
+      value: 1
     },
     {
-        name: '拒绝',
-        value: 3
+      name: '已拒绝',
+      value: 2
+    },
+    {
+      name: '用户已同意',
+      value: 3
     }
 ]
 
@@ -1822,6 +1826,26 @@ const REPORTUSERPUNISHSTATUSLIST = [
         name: '已忽略',
         value: 3
     }
+]
+
+// 注销状态
+const LOGOUTSTATUS = [
+  {
+    name: '待处理',
+    value: 0
+  },
+  {
+    name: '已同意',
+    value: 1
+  },
+  {
+    name: '已拒绝',
+    value: 2
+  },
+  {
+    name: '用户已同意',
+    value: 3
+  }
 ]
 
 /*
@@ -2149,6 +2173,16 @@ const USERPUNISHTYPELISTCOPY = [
 // 用户处罚 - 处罚类型 - 列表
 const USERPUNISHTYPELISTCOPYTWO = [
     {
+      name: '禁言',
+      value: 5,
+      disabled: false
+    },
+    {
+      name: '房间冻结',
+      value: 6,
+      disabled: false
+    },
+    {
         name: '封号',
         value: 1,
         disabled: false
@@ -2181,16 +2215,6 @@ const USERPUNISHTYPELISTCOPYTWO = [
     {
         name: '重置签名',
         value: 13,
-        disabled: false
-    },
-    {
-        name: '禁言',
-        value: 14,
-        disabled: false
-    },
-    {
-        name: '房间冻结',
-        value: 15,
         disabled: false
     }
 ]
@@ -2229,6 +2253,34 @@ const USERPUNISHSTATUSLISTCOPY = [
         name: '已解除',
         value: 3
     }
+]
+
+// 用户处罚 - 处罚时间
+const TIMEPENALTYSTATUS = [
+  {
+    name: '封号',
+    value: 1
+  },
+  {
+    name: '封设备',
+    value: 2
+  },
+  {
+    name: '封IP',
+    value: 3
+  },
+  {
+    name: '封实名',
+    value: 4
+  },
+  {
+    name: '禁言',
+    value: 5
+  },
+  {
+    name: '房间冻结',
+    value: 6
+  },
 ]
 
 // 用户处罚 - 重置资料
@@ -2425,7 +2477,7 @@ const GOODNUMTYPE = [
         name: '房间靓号',
         value: 1
     },
-] 
+]
 
 // 靓号使用状态
 const GOODNUMSTATUS = [
@@ -2465,7 +2517,7 @@ const GOODNUMCLASS = [
         name: '叠字号',
         value: 5
     },
-] 
+]
 
 // 靓号上架状态
 const GOODRACKSTATUS = [
@@ -2734,5 +2786,7 @@ export default {
     TARGETTYPESTATUS,
     DEPOSITCONFIGURATIONPLATFORMLIST,
     BROADCASTTYPESTATUS,
-    GOODSENDSTATUS
+    GOODSENDSTATUS,
+    TIMEPENALTYSTATUS,
+    LOGOUTSTATUS,
 }
