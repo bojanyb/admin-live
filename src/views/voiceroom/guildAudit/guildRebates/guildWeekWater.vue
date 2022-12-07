@@ -23,7 +23,7 @@
 						</el-option>
 					</el-select>
 				</div>
-				<div class="sunBox" v-if="form.status === 1">
+				<div class="sunBox" v-if="form.status !== 2">
 					<span>时间</span>
 					<el-date-picker
 					v-model="form.time"

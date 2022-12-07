@@ -19,7 +19,7 @@ const request = {
         useCash: `${HTTPHEADER}/PayManage/useCash`, // 使用提现
     },
 
-    // 平台活动  
+    // 平台活动
     platformActivity: {
         Activityins: `${HTTPHEADER}/Activityins/index`, // 幸运转盘设置
         configMMLY: `${HTTPHEADER}/activityins/configMMLY`, // 配置喵喵乐园
@@ -38,6 +38,7 @@ const request = {
         Appversion: `${HTTPHEADER}/Appversion`, // 版本列表
         AppversionAChange: `${HTTPHEADER}/appversion/add`, // 新增或者修改
         AppversionDel: `${HTTPHEADER}/appversion/del`, // 删除
+        changeStatus: `${HTTPHEADER}/Appversion/changeStatus`, // 启用或者停止
         getMenuPermissions: `${HTTPHEADER}/admin/getMenuPermissions`, // 菜单列表
         getAllPermission: `${HTTPHEADER}/admin/getAllPermission`, // 获取所有节点
         adminMenu: `${HTTPHEADER}/admin/index`, // 管理员列表
@@ -378,6 +379,10 @@ const request = {
         addResourceConfig: `${HTTPHEADER}/activity/addResourceConfig`, // 添加资源位配置
         editResource: `${HTTPHEADER}/activity/editResource`, // 修改资源位配置
         delResource: `${HTTPHEADER}/activity/delResource`, // 删除资源
+        // 2022/12/6 21：44
+        getPoolName: `${HTTPHEADER}/TwelveLog/getPoolName`, // 获取奖池名
+        getRound: `${HTTPHEADER}/TwelveLog/getRound`, // 获取轮数
+        poolDetail: `${HTTPHEADER}/TwelveLog/poolDetail`, // 奖池详情
     },
 
     // 靓号管理
