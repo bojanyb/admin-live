@@ -19,7 +19,7 @@
 import { genreList } from '@/api/house.js'
 import { updateParty } from '@/api/house.js'
 // 引入房间类型详情组件
-import typeComp from './components/typeComp.vue'
+import typeComp from './components/typeNewComp.vue'
 // 引入新增 - 修改组件
 import roomComp from './components/roomComp.vue'
 // 引入菜单组件
@@ -80,16 +80,6 @@ export default {
                     options: this.classifyList
                 },
                 {
-                    name: 'party_status',
-                    type: 'select',
-                    value: 2,
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '房间状态',
-                    placeholder: '请选择',
-                    options: MAPDATA.HOUSEMESSAGESTATUSLIST
-                },
-                {
                     name: 'admin_recommend_status',
                     type: 'select',
                     value: -1,
@@ -104,18 +94,16 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.house.partyList,
+                url: REQUEST.house.partyListV2,
                 columns: [
                     {
-                        label: '房间ID',
-                        prop: 'room_number',
-                        minWidth: '100px'
-                    },
-                    {
-                        label: '房间标题',
+                        label: '房间',
                         minWidth: '100px',
                         render: (h, params) => {
-                            return h('span', params.row.room_title || '无')
+                            return h('div', [
+                                h('div', params.row.room_title || '无'),
+                                h('div', params.row.room_number || '无'),
+                            ])
                         }
                     },
                     {
@@ -129,15 +117,17 @@ export default {
                         label: '房间类型',
                         minWidth: '100px',
                         render: (h, params) => {
-                            return h('span', params.row.room_type || '无')
+                            return h('span', params.row.room_category_name || '无')
                         }
                     },
                     {
-                        label: '房间状态',
+                        label: '所属公会',
                         minWidth: '100px',
                         render: (h, params) => {
-                            let data = MAPDATA.HOUSEMESSAGESTATUSLIST.find(item => { return params.row.is_live === item.value })
-                            return h('span', data ? data.name : '无')
+                            return h('div', [
+                                h('div', params.row.guild_name),
+                                h('div', params.row.guild_number || '无'),
+                            ])
                         }
                     },
                     {
@@ -154,16 +144,6 @@ export default {
                         },
                         render: (h, params) => {
                             return h('span', '')
-                        }
-                    },
-                    {
-                        label: '所属公会',
-                        minWidth: '100px',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('div', params.row.guild_name),
-                                h('div', params.row.guild_number || '无'),
-                            ])
                         }
                     },
                     {
