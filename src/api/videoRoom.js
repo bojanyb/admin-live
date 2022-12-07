@@ -1038,6 +1038,14 @@ export function searchPrettyNumber(data) {
   })
 }
 
+// 靓号管理 使用记录
+export function usingLog(data) {
+  return request({
+      url: api.prettyNumber.usingLog,
+      method: 'post',
+      data
+  })
+}
 /***********公会v2******************/
 // 新增公会
 export function getGuildCreateV2(data) {
