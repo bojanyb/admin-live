@@ -5,11 +5,11 @@
         </div>
 		<el-card class="box-card" shadow="always" v-if="tabIndex === '0'">
 			<div class="box-card-inner">
-				<div>抽奖人数：{{sumSource.user_count}}人；</div>
-				<div>抽奖次数：{{sumSource.lottery_count}}次；</div>
-				<div>消费金额：{{sumSource.lottery_cost_count}}钻石；</div>
-				<div>产出金额：{{sumSource.lottery_output_count}}钻石；</div>
-				<div>利润率：{{sumSource.profit_margin}}%；</div>
+				<div>抽奖人数：{{sumSource.user_count || 0}}人；</div>
+				<div>抽奖次数：{{sumSource.lottery_count || 0}}次；</div>
+				<div>消费金额：{{sumSource.lottery_cost_count || 0}}钻石；</div>
+				<div>产出金额：{{sumSource.lottery_output_count || 0}}钻石；</div>
+				<div>利润率：{{sumSource.profit_margin || 0}}%；</div>
 			</div>
 		</el-card>
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -31,11 +31,10 @@
 	import mixins from '@/utils/mixins.js'
 
 	export default {
-		name: 'UserList',
 		mixins: [mixins],
 		components: {
 			tableList,
-			SearchPanel
+			SearchPanel,
 		},
 		data() {
 			return {
@@ -53,10 +52,10 @@
 		computed: {
 			forms() {
 				return [
-					{
+				{
 						name: 'user_number',
 						type: 'input',
-						value: this.searchParams.user_number,
+						value: '',
 						label: '用户ID',
 						isNum: true,
 						placeholder: '请输入用户ID'
@@ -64,7 +63,7 @@
 					{
 						name: 'gift_id',
 						type: 'input',
-						value: this.searchParams.gift_id,
+						value: '',
 						label: '奖品ID',
 						isNum: true,
 						placeholder: '请输入奖品ID'
@@ -82,17 +81,24 @@
 					{
 						name: 'type',
 						type: 'select',
-						value: this.searchParams.type,
+						value: '',
 						keyName: 'key',
 						optionLabel: 'value',
 						label: '奖池',
 						placeholder: '请选择',
+						clearable: true,
+                    	linkage: true,
 						options: this.lotteryList,
+						handler: {
+							change: v => {
+								this.getRoundSource(v)
+							},
+						}
 					},
 					{
 						name: 'round',
 						type: 'select',
-						value: this.searchParams.round,
+						value: '',
 						keyName: 'round_number',
 						optionLabel: 'title',
 						label: '轮次',
@@ -137,7 +143,6 @@
 						{
 							label: '用户昵称',
 							prop: 'nickname',
-							showOverFlow: true
 						},
 						{
 							label: '奖品类型',
@@ -180,16 +185,6 @@
 					]
 				}
 			}
-		},
-		watch:{
-			'searchParams.type': {
-				handler(v) {
-					if(v && v !== ""){
-						this.getRoundSource(v)
-					}
-				},
-				immediate: true
-			},
 		},
 		mounted(){
 			this.getPoolNameSource()
@@ -256,6 +251,8 @@
 					this.poolList = []
 					return
 				}
+				// 初始化轮数
+				this.searchParams.round = ""
 				let res = await getRound({type:roundType});
 				if(res.code == 2000){
 					this.poolList = res.data.round
