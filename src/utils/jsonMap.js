@@ -2659,6 +2659,26 @@ const BROADCASTTYPESTATUS = [
     }
 ]
 
+// 使用状态
+const USESTATUS = [
+    {
+        name: '全部 ',
+        value: 0
+    },
+    {
+        name: '使用中',
+        value: 1
+    },
+    {
+        name: '未使用',
+        value: 2
+    },
+    {
+        name: '已过期',
+        value: 3
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -2789,4 +2809,5 @@ export default {
     GOODSENDSTATUS,
     TIMEPENALTYSTATUS,
     LOGOUTSTATUS,
+    USESTATUS
 }

@@ -5,11 +5,11 @@
         </div>
 		<el-card class="box-card" shadow="always" v-if="tabIndex === '0'">
 			<div class="box-card-inner">
-				<div>抽奖人数：{{sumSource.user_count || 0}}人；</div>
-				<div>抽奖次数：{{sumSource.lottery_count || 0}}次；</div>
-				<div>消费金额：{{sumSource.lottery_cost_count || 0}}钻石；</div>
-				<div>产出金额：{{sumSource.lottery_output_count || 0}}钻石；</div>
-				<div>利润率：{{sumSource.profit_margin || 0}}%；</div>
+				<div>抽奖人数：{{sumSource.user_count || 0}}人</div>
+				<div>抽奖次数：{{sumSource.lottery_count || 0}}次</div>
+				<div>消费金额：{{sumSource.lottery_cost_count || 0}}钻石</div>
+				<div>产出金额：{{sumSource.lottery_output_count || 0}}钻石</div>
+				<div>利润率：{{sumSource.profit_margin || 0}}%</div>
 			</div>
 		</el-card>
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
