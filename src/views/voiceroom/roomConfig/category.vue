@@ -37,7 +37,7 @@ export default {
         return {
             isDestoryComp: false, // 是否销毁组件
             searchParams: {
-                belong: 2
+                name: ''
             }
         };
     },
@@ -45,15 +45,12 @@ export default {
         forms() {
             return [
                 {
-                    name: 'belong',
-                    type: 'select',
-                    value: 2,
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '业务类型',
-                    placeholder: '请选择',
-                    options: MAPDATA.CATEGORYBUSINESSTYPELIST
-                }
+                    name: 'name',
+                    type: 'input',
+                    value: '',
+                    label: '房间类型',
+                    placeholder: '请输入房间类型'
+                },
             ]
         },
         cfgs() {
@@ -62,27 +59,30 @@ export default {
                 url: REQUEST.house.genreList,
                 columns: [
                     {
-                        label: '品类ID',
-                        prop: 'id'
-                    },
-                    {
-                        label: '品类名',
+                        label: '房间类型',
                         prop: 'name'
                     },
                     {
-                        label: '品类图标',
+                        label: '类型图片',
                         isimg: true,
                         prop: 'icon',
                         // imgWidth: '50px',
                         imgHeight: '50px'
                     },
                     {
+                        label: '类型色值',
+                        prop: 'color'
+                    },
+                    {
                         label: '权重排序',
                         prop: 'sort'
                     },
                     {
-                        label: '色值',
-                        prop: 'color'
+                        label: '描述',
+                        render: (h, params) => {
+                          let data = MAPDATA.CATEGORYBUSINESSTYPELIST.find(item => { return item.value === params.row.belong })
+                          return h('span', data ? data.name : '无')
+                        }
                     },
                     {
                         label: '操作',
@@ -106,7 +106,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                belong: s.belong
+                name: s.name
             }
         },
         // 刷新列表
@@ -116,7 +116,7 @@ export default {
         // 重置
         reset() {
             this.searchParams = {
-                belong: 2
+                name: ''
             }
             this.getList()
         },
@@ -155,5 +155,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    
+
 </style>
