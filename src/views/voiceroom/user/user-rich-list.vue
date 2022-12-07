@@ -225,7 +225,7 @@ export default {
     display: flex;
     .doc-card-info {
       height: calc(100vh - 130px);
-      min-width: 375px;
+      min-width: 436px;
       flex: 1;
       border: 1px solid #eff2f5;
       border-radius: 10px;
@@ -272,6 +272,17 @@ export default {
       border: 1px solid #eff2f5;
       border-radius: 10px;
       padding: 24px;
+      overflow-x: auto;
+      &::-webkit-scrollbar {
+        height: 10px;
+        width: 10px;
+        background: #e8e8e8;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #c7c7c7;
+        border-radius: 5px;
+      }
     }
   }
 }
