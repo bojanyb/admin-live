@@ -168,6 +168,7 @@ export default {
       chatNoMore: false,
       chatDisabled: false,
       chatFlag: false,
+      chatMaxId: 0,
       chatPagination: {
         size: 10,
         page: 1,
@@ -185,6 +186,7 @@ export default {
       roomNoMore: false,
       roomDisabled: false,
       roomFlag: false,
+      roomMaxId: 0,
       roomPagination: {
         size: 10,
         page: 1,
@@ -204,6 +206,7 @@ export default {
         ...this.chatPagination,
         start_time: isTimeVal ? Math.floor(this.chatTimeData[0] / 1000) : "",
         end_time: isTimeVal ? Math.floor(this.chatTimeData[1] / 1000) : "",
+        max_id: this.chatMaxId
       };
     chatTalkList(temp).then(res => {
       this.chatLoading = false;
@@ -220,6 +223,7 @@ export default {
       if (res.data.list.length) {
         this.chatNoMore = false;
         this.chatDisabled = false;
+        this.chatMaxId = res.data.max_id;
         const list = (res.data && res.data.list) || [];
         this.renderChatList = [...this.renderChatList, ...list];
 
@@ -259,6 +263,7 @@ export default {
         ...this.roomPagination,
         start_time: isTimeVal ? Math.floor(this.roomTimeData[0] / 1000) : "",
         end_time: isTimeVal ? Math.floor(this.roomTimeData[1] / 1000) : "",
+        max_id: this.roomMaxId
       };
       roomTalkList(temp).then(res => {
       this.roomLoading = false;
@@ -275,6 +280,7 @@ export default {
       if (res.data.list.length) {
         this.roomNoMore = false;
         this.roomDisabled = false;
+        this.roomMaxId = res.data.max_id;
         const list = (res.data && res.data.list) || [];
         this.renderRoomList = [...this.renderRoomList, ...list];
 
