@@ -95,7 +95,7 @@ export default {
                     },
                     {
                         label: '商品类型',
-                        prop: 'user_number'
+                        prop: 'cate'
                     },
                     {
                         label: '靓号ID',
