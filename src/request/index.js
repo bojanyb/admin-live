@@ -316,7 +316,8 @@ const request = {
     house: {
         liveList: `${HTTPHEADER}/party/liveList`, // 直播间列表
         // partyList: `${HTTPHEADER}/party/partyList`, // 派对间列表
-        partyList: `${HTTPHEADER}/RoomV2/list`, // 派对间列表
+        // partyList: `${HTTPHEADER}/RoomV2/list`, // 派对间列表
+        partyListV2: `${HTTPHEADER}/RoomV2/listV2`, // 派对间列表
         // updateParty: `${HTTPHEADER}/party/updateParty`, // 修改派对
         updateParty: `${HTTPHEADER}/RoomV2/update`, // 修改派对
         delGenre: `${HTTPHEADER}/party/delGenre`, // 删除类别
