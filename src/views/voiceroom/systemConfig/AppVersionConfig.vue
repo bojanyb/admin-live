@@ -30,15 +30,14 @@
 						<el-radio :label="20">强制升级</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<!-- <el-form-item label="版本号" prop="version">
-					<el-input v-model="Form.version"  placeholder="如: 1.0.1"></el-input>
-				</el-form-item> -->
-				<!-- <el-form-item label="安卓Code" prop="version_code" v-if="platform === '2'"> -->
 				<el-form-item label="下载链接" prop="download_url">
 					<el-input v-model="Form.download_url"  placeholder="输入下载链接"></el-input>
 				</el-form-item>
 				<el-form-item label="版本号" prop="version">
-					<el-input v-model="Form.version"></el-input>
+					<el-input v-model="Form.version"  placeholder="如: 1.0.1"></el-input>
+				</el-form-item>
+				<el-form-item label="安卓Code" prop="version_code" v-if="platform !== '1'">
+					<el-input v-model="Form.version_code"></el-input>
 				</el-form-item>
 				<el-form-item label="更新说明" prop="content">
 					<el-input v-model="Form.content" type="textarea" rows="3" placeholder="输入更新内容"></el-input>
@@ -97,11 +96,11 @@ import moment from 'moment'
 						message: '请输入版本号',
 						trigger: 'blur'
 					}],
-					// version_code: [{
-					// 	required: true,
-					// 	message: '请输入安卓Code',
-					// 	trigger: 'blur'
-					// }],
+					version_code: [{
+						required: (this.platform !== 1 ?  true :false),
+						message: '请输入安卓Code',
+						trigger: 'blur'
+					}],
 					content: [{
 						required: true,
 						message: '请输入更新内容',
