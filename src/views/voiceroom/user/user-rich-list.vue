@@ -22,7 +22,11 @@
             </div>
           </el-card>
           <p v-if="loading">加载中...</p>
-          <p v-if="noMore">没有更多了</p>
+          <p v-if="(noMore && list.length)">没有更多了</p>
+          <div class="empty" v-if="!list.length">
+            <i class="el-icon-document-delete"></i>
+            <span>暂无数据</span>
+          </div>
         </div>
         <div class="doc-card-table">
           <div class="searchParams">
@@ -232,6 +236,7 @@ export default {
       padding: 24px;
       margin-right: 10px;
       overflow-y: auto;
+      position: relative;
       &::-webkit-scrollbar {
         height: 10px;
         width: 10px;
@@ -263,6 +268,13 @@ export default {
       p {
         text-align: center;
         color: #969799;
+      }
+      .empty {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #666;
       }
     }
     .doc-card-table {
