@@ -106,6 +106,7 @@ export default {
       ruleForm: {
         room_number: "",
         room_title: "",
+        room_category_id: "",
         admin_recommend_status: "",
         room_cover: "",
         room_notice: "",
@@ -172,6 +173,7 @@ export default {
           let params = {
             id: s.id,
             room_title: s.room_title,
+            room_category_id: s.room_category_id,
             admin_recommend_status: s.admin_recommend_status,
             room_cover: s.room_cover,
             room_notice: s.room_notice,
