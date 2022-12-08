@@ -38,6 +38,7 @@ const request = {
         Appversion: `${HTTPHEADER}/Appversion`, // 版本列表
         AppversionAChange: `${HTTPHEADER}/appversion/add`, // 新增或者修改
         AppversionDel: `${HTTPHEADER}/appversion/del`, // 删除
+        changeStatus: `${HTTPHEADER}/Appversion/changeStatus`, // 启用或者停止
         getMenuPermissions: `${HTTPHEADER}/admin/getMenuPermissions`, // 菜单列表
         getAllPermission: `${HTTPHEADER}/admin/getAllPermission`, // 获取所有节点
         adminMenu: `${HTTPHEADER}/admin/index`, // 管理员列表
@@ -195,6 +196,7 @@ const request = {
         punishStatus: `${HTTPHEADER}/userPunish/punishStatus`, // 用户状态
         updateLoginPwd: `${HTTPHEADER}/User/updateLoginPwd`, // 更改登录密码
         addRichUser: `${HTTPHEADER}/User/addRichUser`, // 添加财富用户
+        supperUList: `${HTTPHEADER}/user/supperU`, // 添加财富用户
     },
 
     // 审核管理
@@ -314,7 +316,8 @@ const request = {
     house: {
         liveList: `${HTTPHEADER}/party/liveList`, // 直播间列表
         // partyList: `${HTTPHEADER}/party/partyList`, // 派对间列表
-        partyList: `${HTTPHEADER}/RoomV2/list`, // 派对间列表
+        // partyList: `${HTTPHEADER}/RoomV2/list`, // 派对间列表
+        partyListV2: `${HTTPHEADER}/RoomV2/listV2`, // 派对间列表
         // updateParty: `${HTTPHEADER}/party/updateParty`, // 修改派对
         updateParty: `${HTTPHEADER}/RoomV2/update`, // 修改派对
         delGenre: `${HTTPHEADER}/party/delGenre`, // 删除类别
@@ -341,6 +344,8 @@ const request = {
         remove: `${HTTPHEADER}/UserPunish/remove`, // 解除处罚用户
         chatList: `${HTTPHEADER}/MsgLog/chatList`, // 私聊会话消息-列表
         roomList: `${HTTPHEADER}/MsgLog/roomList`, // 房间会话消息-列表
+        roomTalkList: `${HTTPHEADER}/MsgLog/roomTalkList`, // 房间会话记录-列表
+        chatTalkList: `${HTTPHEADER}/MsgLog/chatTalkList`, // 私聊会话记录-列表
         index: `${HTTPHEADER}/Sensitive/index`, // 敏感词列表
         softDelete: `${HTTPHEADER}/Sensitive/softDelete`, // 敏感词-软删除
         add: `${HTTPHEADER}/Sensitive/add`, // 敏感词-添加
@@ -385,6 +390,10 @@ const request = {
         addResourceConfig: `${HTTPHEADER}/activity/addResourceConfig`, // 添加资源位配置
         editResource: `${HTTPHEADER}/activity/editResource`, // 修改资源位配置
         delResource: `${HTTPHEADER}/activity/delResource`, // 删除资源
+        // 2022/12/6 21：44
+        getPoolName: `${HTTPHEADER}/TwelveLog/getPoolName`, // 获取奖池名
+        getRound: `${HTTPHEADER}/TwelveLog/getRound`, // 获取轮数
+        poolDetail: `${HTTPHEADER}/TwelveLog/poolDetail`, // 奖池详情
     },
 
     // 靓号管理
@@ -399,6 +408,7 @@ const request = {
         addTypePrettyNumber: `${HTTPHEADER}/PrettyNumber/typeAdd`, // 新增靓号
         updateTypePrettyNumber: `${HTTPHEADER}/PrettyNumber/typeUpdate`, // 修改靓号
         PrettyNumberLog: `${HTTPHEADER}/PrettyNumber/log`, // 售卖记录
+        usingLog: `${HTTPHEADER}/PrettyNumber/usingLog`, // 售卖记录
         givePrettyNumber: `${HTTPHEADER}/v2/PrettyNumber/givePrettyNumber`, // 赠送靓号
         searchPrettyNumber: `${HTTPHEADER}/PrettyNumber/searchNumber`, // 检测靓号
     }

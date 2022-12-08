@@ -181,9 +181,18 @@ export function addRichUser(data) {
   })
 }
 
+// 大R用户列表
+export function supperUList(data) {
+  return request({
+    url: api.user.supperUList,
+    method: 'post',
+    data
+  })
+}
 
 
-/***********公会v2******************/ 
+
+/***********公会v2******************/
 
 // 主播申请审核
 export function guildUserApplyCheck(data) {

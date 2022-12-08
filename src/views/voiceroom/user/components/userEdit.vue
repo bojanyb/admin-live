@@ -55,7 +55,6 @@
                 </el-form-item>
             </el-form>
         </drawer>
-        
         <!-- 封禁组件 -->
         <blocked ref="blocked" @evaluationFunc="evaluationFunc" @blockedCancel="blockedCancel"></blocked>
         <!-- 绑卡组件 -->

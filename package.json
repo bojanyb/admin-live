@@ -39,6 +39,7 @@
     "js-md5": "^0.7.3",
     "jsonlint": "1.6.3",
     "jszip": "3.2.1",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",

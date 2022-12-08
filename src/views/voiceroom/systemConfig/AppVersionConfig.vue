@@ -10,35 +10,37 @@
 
 		<!--弹窗界面-->
 		<el-dialog :title="title" :visible.sync="FormVisible" :close-on-click-modal="false">
+			<div class="navBox">
+				<div class="navItem" v-for="item in navList" :key="item.key" :class="item.isActive == true ? 'active' : '' " @click="handlerNav(item)">{{item.label}}</div>
+			</div>
 			<el-form :model="Form" label-width="120px" :rules="FormRules" ref="Form">
-				<el-form-item label="平台">
-					<el-select v-model="platform" :disabled="!isAdd">
-						<el-option label="苹果" value="1"></el-option>
-						<el-option label="安卓" value="2"></el-option>
-					</el-select>
+				<el-form-item>
+					<el-radio-group class="platformType" v-model="platform" :disabled="isAdd==false">
+						<el-radio-button label="2">Android</el-radio-button>
+						<el-radio-button label="1">iOS</el-radio-button>
+						<el-radio-button label="3">模拟器</el-radio-button>
+					</el-radio-group>
 				</el-form-item>
-				<el-form-item v-if="platform=='2'">
-					<ossFile :type="'file'" :play_type="3" :picImg="fileUrl" :progress="progress" @getUpLoadImg="getUpLoadFile"/>
-					<div v-if="isUping" class="c-reddd">正在上传 {{persent}}%</div>
-					<div v-if="isUped" class="c-green">上传完成！</div>
-					
+				<el-form-item label="任务名" prop="title">
+					<el-input v-model="Form.title" placeholder="输入任务名"></el-input>
+				</el-form-item>
+				<el-form-item label="升级类型">
+					<el-radio-group v-model="is_mandatory">
+						<el-radio :label="10">建议升级</el-radio>
+						<el-radio :label="20">强制升级</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<!-- <el-form-item label="版本号" prop="version">
+					<el-input v-model="Form.version"  placeholder="如: 1.0.1"></el-input>
+				</el-form-item> -->
+				<!-- <el-form-item label="安卓Code" prop="version_code" v-if="platform === '2'"> -->
+				<el-form-item label="下载链接" prop="download_url">
+					<el-input v-model="Form.download_url"  placeholder="输入下载链接"></el-input>
 				</el-form-item>
 				<el-form-item label="版本号" prop="version">
-					<el-input v-model="Form.version"  placeholder="如: 1.0.1"></el-input>
+					<el-input v-model="Form.version"></el-input>
 				</el-form-item>
-				<el-form-item label="安卓Code" prop="version_code" v-if="platform === '2'">
-					<el-input v-model="Form.version_code"></el-input>
-				</el-form-item>
-				<el-form-item label="文件下载链接" prop="download_url">
-					<el-input v-model="Form.download_url"  placeholder="输入文件链接"></el-input>
-				</el-form-item>
-				<el-form-item label="是否强制更新">
-					<el-select v-model="is_mandatory">
-						<el-option label="是" :value="20"></el-option>
-						<el-option label="否" :value="10"></el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="更新内容" prop="content">
+				<el-form-item label="更新说明" prop="content">
 					<el-input v-model="Form.content" type="textarea" rows="3" placeholder="输入更新内容"></el-input>
 				</el-form-item>
 			</el-form>
@@ -63,14 +65,10 @@ import REQUEST from '@/request/index.js'
 import mixins from '@/utils/mixins'
 // 引入时间插件
 import moment from 'moment'
-// 引入上传文件组件
-import ossFile from './../components/ossFile.vue'
 	export default {
 		mixins: [mixins],
 		data() {
 			return {
-				isUping:false,
-				isUped:false,
 				persent:0,
 				title: '新增',
 				btnTip: '提交',
@@ -86,10 +84,12 @@ import ossFile from './../components/ossFile.vue'
 				is_mandatory: 10, //是否强制更新(0否 1是)
 				Form: {
 					id : '', // 版本id
+					title: '', // 任务名
 					version: '', //版本号
 					content: '', //更新内容
 					download_url: '', //文件下载链接
-					version_code: '' // 安卓code
+					package_name: '', // 包名 喵喵星球、声撩语音
+					// version_code: '' // 安卓code
 				},
 				FormRules: {
 					version: [{
@@ -97,11 +97,11 @@ import ossFile from './../components/ossFile.vue'
 						message: '请输入版本号',
 						trigger: 'blur'
 					}],
-					version_code: [{
-						required: true,
-						message: '请输入安卓Code',
-						trigger: 'blur'
-					}],
+					// version_code: [{
+					// 	required: true,
+					// 	message: '请输入安卓Code',
+					// 	trigger: 'blur'
+					// }],
 					content: [{
 						required: true,
 						message: '请输入更新内容',
@@ -120,50 +120,106 @@ import ossFile from './../components/ossFile.vue'
 				{
 					"label" : "安卓",
 					"key" : "2",
+				},
+				{
+					"label" : "模拟器",
+					"key" : "3",
 				}],
 				searchParams: {
-					version: "",
-					platform: "",
+					title: "",
+					package_name: "",
 				},
 				fileUrl: "",
 				progress: 0,
-
+				navList : [
+					{
+						key : "net.huidapay.live",
+						isActive: true,
+						label : "喵喵星球",
+						value : "net.huidapay.live",
+					},
+					{
+						key : "com.yhjc.oxygen",
+						isActive: false,
+						label : "声撩语音",
+						value : "com.yhjc.oxygen",
+					}
+				],
+				packageName: [
+					{
+						key : "",
+						label : "全部",
+						value : "",
+					},
+					{
+						key : "net.huidapay.live",
+						label : "喵喵星球",
+						value : "net.huidapay.live",
+					},
+					{
+						key : "com.yhjc.oxygen",
+						label : "声撩语音",
+						value : "com.yhjc.oxygen",
+					}
+				],
+				dateTimeParams: {
+					start_time: null,
+					end_time: null
+				},
 			}
 		},
 		components: {
 			tableList,
-			SearchPanel,
-			ossFile
+			SearchPanel
 		},
 		computed: {
 			forms() {
 				return [
 					{
-						name: 'version',
-						type: 'input',
-						value: '',
-						label: '版本号',
+						name: 'package_name',
+						type: 'select',
+						options: this.packageName,
+						label: '应用类型',
 						placeholder: '',
 						handler: {
 							enter: (v) => {
-								this.searchParams.version = v.version
+								this.searchParams.package_name = v.value
+								this.$refs.tableList.getData();
+							},
+						}
+					},
+					{
+						name: 'title',
+						type: 'input',
+						value: '',
+						label: '任务名称',
+						placeholder: '',
+						handler: {
+							enter: (v) => {
+								this.searchParams.title = v.title
 								this.$refs.tableList.getData();
 							}
 						}
 					},
 					{
-						name: 'platform',
-						type: 'select',
-						options: this.platformArr,
-						label: '按平台查询',
-						placeholder: '',
+						name: 'dateTimeParams',
+						type: 'datePicker',
+						dateType: 'datetimerange',
+						format: "yyyy-MM-dd HH:mm:ss",
+						clearable: true,
+						class: 'message-history-dateTimeParams',
+						label: '时间选择',
+						value: '',
 						handler: {
-							enter: (v) => {
-								this.searchParams.platform = v.platform
-								this.$refs.tableList.getData();
+							change: v => {
+								this.emptyDateTime()
+								this.setDateTime(v)
+							},
+							selectChange: (v, key) => {
+								this.emptyDateTime()
 							}
 						}
-					},
+					}
 				]
 			},
        		cfgs() {
@@ -173,25 +229,36 @@ import ossFile from './../components/ossFile.vue'
 					method: "post",
 					columns: [
 						{
-							label: '版本号',
-							prop: 'version',
-							width: '120px',
+							label: '创建时间',
+							prop: 'start_time',
+							width: '180px',
 							render: (h, params) => {
-								return h('span', params.row.version)
+								return h('span', params.row.start_time > 0 ? moment(params.row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "")
 							}
 						},
 						{
-							label: '平台',
+							label: '任务名',
+							prop: 'title',
+							width: '120px',
+							render: (h, params) => {
+								return h('span', params.row.title || '无')
+							}
+						},
+						{
+							label: '设备类型',
 							prop: 'platform',
 							width: '120px',
 							render: (h, params) => {
 								let platformName = ""
 								switch (params.row.platform) {
 									case 1:
-										platformName = "苹果";
+										platformName = "iOS";
 										break;
 									case 2:
-										platformName = "安卓";
+										platformName = "Android";
+										break;
+									case 3:
+										platformName = "模拟器";
 										break;
 									default:
 										platformName = "其他";
@@ -201,12 +268,37 @@ import ossFile from './../components/ossFile.vue'
 							}
 						},
 						{
-							label: '更新内容',
-							prop: 'content',
+							label: '版本号',
+							prop: 'version',
+							width: '120px',
 							render: (h, params) => {
-								return h('span', params.row.content)
+								return h('span', params.row.version)
 							}
 						},
+						{
+							label: '升级类型',
+							prop: 'download_url',
+							width: '120px',
+							render: (h, params) => {
+								let isMandatoryText = ""
+								switch (params.row.is_mandatory) {
+									case 10:
+										isMandatoryText = "建议升级";
+										break;
+									case 20:
+										isMandatoryText = "强制升级";
+										break;
+								}
+								return h('span', isMandatoryText)
+							}
+						},
+						// {
+						// 	label: '更新内容',
+						// 	prop: 'content',
+						// 	render: (h, params) => {
+						// 		return h('span', params.row.content)
+						// 	}
+						// },
 						{
 							label: '文件下载链接',
 							prop: 'download_url',
@@ -215,37 +307,19 @@ import ossFile from './../components/ossFile.vue'
 							}
 						},
 						{
-							label: '是否强制更新',
-							prop: 'download_url',
-							width: '120px',
-							render: (h, params) => {
-								let isMandatoryText = ""
-								switch (params.row.is_mandatory) {
-									case 10:
-										isMandatoryText = "否";
-										break;
-									case 20:
-										isMandatoryText = "是";
-										break;
-								}
-								return h('span', isMandatoryText)
-							}
-						},
-						{
-							label: '创建时间',
-							prop: 'start_time',
-							width: '180px',
-							render: (h, params) => {
-								return h('span', params.row.start_time > 0 ? moment(params.row.start_time * 1000).format('YYYY-MM-DD HH:mm:ss') : "")
-							}
-						},
-						{
                         label: '操作',
                         width: '260',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.handleEdit(params.row)}}},'修改'),
-                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.handleDelete(params.row.id)}}},'删除')])
+								h('el-button', { props: { type: 'success'},
+								style: { display: params.row.status === 0 ? 'unset' : 'none'},
+								on: {click:()=>{this.handleOPenOrClose(params.row)}}},'启动'),
+								h('el-button', { props: { type: 'danger'},
+								style: { display: params.row.status === 1 ? 'unset' : 'none'},
+								on: {click:()=>{this.handleOPenOrClose(params.row)}}},'停止'),
+                                // h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.handleDelete(params.row.id)}}},'删除'),
+							])
                         }
                     },
 					]
@@ -253,12 +327,12 @@ import ossFile from './../components/ossFile.vue'
 			}
 		},
 		watch: {
-			'searchParams.version': {
-				handler(v) {
-					this.$set(this.searchParams, 'version', v.trim())
-				},
-				deep: true
-			},
+			// 'searchParams.version': {
+			// 	handler(v) {
+			// 		this.$set(this.searchParams, 'version', v.trim())
+			// 	},
+			// 	deep: true
+			// },
 			'Form.download_url': {
 				handler(v) {
 					this.$set(this.Form, 'download_url', v.trim())
@@ -267,6 +341,41 @@ import ossFile from './../components/ossFile.vue'
 			}
 		},
 		methods: {
+			// 新增 应用类型切换
+			handlerNav(row){
+				// 修改状态下不可操作
+				if(this.isAdd == false){
+					return
+				}
+				this.navList.map(res=>{
+					res.isActive = false
+					if(res.key == row.key){
+						res.isActive = true
+					}
+				})
+			},
+			// 开启、停止
+			handleOPenOrClose(row){
+				let statusText = row.status == 0 ? "启动" : "停止"
+				let params = {
+					id : row.id,
+					status : row.status == 0 ? 1 : 0
+				}
+				this.$confirm('确认'+ statusText +'吗？', '提示').then(() => {
+					request({
+						url: REQUEST.system.changeStatus,
+						method: "post",
+						data: params
+					}).then(res => {
+						this.$message.success(statusText + "成功");
+						this.$refs.tableList.getData();
+						this.FormVisible = false;
+					}).catch(err=>{
+						this.$message.error(err);
+					})
+				});
+			},
+			// 删除
 			handleDelete(id) {
 				this.$confirm('确认删除吗？', '提示').then(() => {
 					request({
@@ -281,7 +390,6 @@ import ossFile from './../components/ossFile.vue'
 						this.$message.error(err);
 					})
 				});
-
 			},
 			handleEdit(item) {
 				this.Form = JSON.parse(JSON.stringify(item));
@@ -315,7 +423,7 @@ import ossFile from './../components/ossFile.vue'
 					version: '',
 					content: '',
 					download_url: '',
-					version_code: ''
+					// version_code: ''
 				};
 				this.platform = "2";
 				this.FormVisible = true;
@@ -330,6 +438,11 @@ import ossFile from './../components/ossFile.vue'
 							this.Form.platform = this.platform;
 							this.Form.is_mandatory = this.is_mandatory;
 							this.Form.download_url = this.Form.download_url.trim()
+							this.navList.map(res=>{
+								if(res.isActive == true){
+									this.Form.package_name = res.value
+								}
+							})
 							request({
 								url: REQUEST.system.AppversionAChange,
 								method: "post",
@@ -349,29 +462,89 @@ import ossFile from './../components/ossFile.vue'
 			},
 			//传递参数
 			beforeSearch(params) {
+				let s = { ...this.searchParams, ...this.dateTimeParams }
 				return {
 					size: params.size,
 					page: params.page,
-					version: this.searchParams.version,
-					platform: this.searchParams.platform,
+					title: s.title,
+					package_name: s.package_name,
+					start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
+                	end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',	
 				};
 			},
 			// 查询
 			onSearch(val){
-				this.searchParams.version = val.version;
-				this.searchParams.platform = val.platform;
+				this.searchParams.title = val.title;
+				this.searchParams.package_name = val.package_name;
 				this.$refs.tableList.getData();
 			},
 			// 上传文件反馈信息
 			getUpLoadFile(fileRow){
 				this.Form.version = fileRow.fileName;
 				this.Form.download_url = fileRow.url;
+			},
+			// 设置时间段
+			setDateTime(arr) {
+				const date = arr ? {
+					start_time: arr[0],
+					end_time: arr[1]
+				} : {}
+				this.$set(this, 'dateTimeParams', date)
+			},
+			// 清空日期选择
+			emptyDateTime() {
+				this.dateTimeParams = {}
+			},
+			// 获取包名
+			getPackageName(id){
+				this.navList.map(res=>{
+					if(id == res.id){
+						return res.value
+					}
+				})
 			}
 		}
 	};
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+::v-deep.navBox{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 55px;
+	line-height: 55px;
+	font-size: 25px;
+	font-weight: bold;
+	border-bottom: solid 5px #DCDFE6;
+	margin-bottom: 22px;
+	.navItem {
+		width: 150px;
+		text-align: center;
+	}
+	.navItem.active{
+		color: #1890ff;
+	}
+}
+::v-deep.el-radio-group.platformType{
+	.el-radio-button{
+		.el-radio-button__inner{
+			width: 120px;
+		}
+	}
+	.el-radio-button:first-child{
+		.el-radio-button__inner{
+			border-top-left-radius: 20px;
+			border-bottom-left-radius: 20px;
+		}
+	}
+	.el-radio-button:last-child{
+		.el-radio-button__inner{
+			border-top-right-radius: 20px;
+			border-bottom-right-radius: 20px;
+		}
+	}
+}
 	:v-deep .el-upload--text{
 		width: 178px!important;
 		position: relative;

@@ -2,7 +2,7 @@
     <div class="serviceConfig-message-history-box">
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex" @tabChange="tabChange"></menuComp>
 
-        <div class="searchParams">
+        <div class="searchParams" v-if="tabIndex !== '3'">
 			<div class="formBox">
                 <div class="sunBox" v-if="tabIndex === '0'">
                     <span>发送用户ID</span>
@@ -106,10 +106,13 @@
 
 
 
-		<tableList :cfgs="cfgs" ref="tableList" @handlePageChange="handlePageChange" @saleAmunt="saleAmunt"></tableList>
+		<tableList v-if="tabIndex !== '3'" :cfgs="cfgs" ref="tableList" @handlePageChange="handlePageChange" @saleAmunt="saleAmunt"></tableList>
 
         <!-- 详情组件 -->
         <historyComp v-if="isDestoryComp" ref="historyComp" @destoryComp="destoryComp" @getList="getList"></historyComp>
+
+        <!-- 会话记录 -->
+        <trackOrder v-if="tabIndex === '3'" />
     </div>
 </template>
 
@@ -124,6 +127,8 @@ import menuComp from '@/components/menuComp/index.vue'
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
+// 引入会话记录
+import trackOrder from './track-order.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
@@ -138,7 +143,8 @@ export default {
         SearchPanel,
         tableList,
         menuComp,
-        historyComp
+        historyComp,
+        trackOrder
     },
     data() {
         return {
@@ -165,6 +171,9 @@ export default {
                 },
                 {
                     name: '敏感词库'
+                },
+                {
+                    name: '会话消息'
                 }
             ],
             isDestoryComp: false, // 是否销毁组件
