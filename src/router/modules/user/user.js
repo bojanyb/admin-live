@@ -51,7 +51,7 @@ const userRouter = {
       component: () => import('@/views/voiceroom/user/user-rich-list'),
       name: 'user-rich-list',
       meta: {
-        title: '用户注销',
+        title: '大R用户',
         noCache: true
       }
     }
