@@ -22,7 +22,11 @@
             </div>
           </el-card>
           <p v-if="loading">加载中...</p>
-          <p v-if="noMore">没有更多了</p>
+          <p v-if="(noMore && list.length)">没有更多了</p>
+          <div class="empty" v-if="!list.length">
+            <i class="el-icon-document-delete"></i>
+            <span>暂无数据</span>
+          </div>
         </div>
         <div class="doc-card-table">
           <div class="searchParams">
@@ -225,13 +229,14 @@ export default {
     display: flex;
     .doc-card-info {
       height: calc(100vh - 130px);
-      min-width: 375px;
+      min-width: 436px;
       flex: 1;
       border: 1px solid #eff2f5;
       border-radius: 10px;
       padding: 24px;
       margin-right: 10px;
       overflow-y: auto;
+      position: relative;
       &::-webkit-scrollbar {
         height: 10px;
         width: 10px;
@@ -264,6 +269,13 @@ export default {
         text-align: center;
         color: #969799;
       }
+      .empty {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #666;
+      }
     }
     .doc-card-table {
       height: calc(100vh - 130px);
@@ -272,6 +284,17 @@ export default {
       border: 1px solid #eff2f5;
       border-radius: 10px;
       padding: 24px;
+      overflow-x: auto;
+      &::-webkit-scrollbar {
+        height: 10px;
+        width: 10px;
+        background: #e8e8e8;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #c7c7c7;
+        border-radius: 5px;
+      }
     }
   }
 }
