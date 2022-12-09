@@ -87,7 +87,7 @@
 						label: '奖池',
 						placeholder: '请选择',
 						clearable: true,
-                    	linkage: true,
+            linkage: true,
 						options: this.lotteryList,
 						handler: {
 							change: v => {
@@ -104,7 +104,7 @@
 						label: '轮次',
 						placeholder: '请选择',
 						clearable: true,
-                    	linkage: true,
+            linkage: true,
 						options: this.poolList
 					},
 					{
@@ -114,7 +114,7 @@
 						format: "yyyy-MM-dd HH:mm:ss",
 						label: '时间选择',
 						value: '',
-                    	linkage: true,
+            linkage: true,
 						handler: {
 							change: v => {
 								this.emptyDateTime()
@@ -149,7 +149,6 @@
 						},
 						{
 							label: '奖品类型',
-							prop: 'sex',
 							render: (h, params) => {
 								return h('span', params.row.type_desc ? params.row.type_desc : '无')
 							}
@@ -170,19 +169,19 @@
 						{
 							label: '奖品单价',
 							render: (h, params) => {
-								return h('span', params.row.gift_diamond || '无')
+								return h('span', params.row.gift_diamond)
 							}
 						},
 						{
 							label: '抽奖花费',
 							render: (h, params) => {
-								return h('span', params.row.lottery_cost || '无')
+								return h('span', params.row.lottery_cost)
 							}
 						},
 						{
 							label: '利润值',
 							render: (h, params) => {
-								return h('span', params.row.profit || '无')
+								return h('span', params.row.profit)
 							}
 						},
 					]
@@ -249,18 +248,15 @@
 			// 获取轮数
 			async getRoundSource(type) {
 				let roundType = type == -1 ? "" : type
-				// 全部则不获取轮数
-				if(roundType == ""){
-					this.poolList = []
-					return
-				}
 				// 初始化轮数
 				this.searchParams.round = ""
 				let res = await getRound({type:roundType});
 				if(res.code == 2000){
+          // 全部默认选择第一个
+          if(roundType == ""){
+            this.searchParams.round = res.data.round[0].round_number
+          }
 					this.poolList = res.data.round
-					let all = {round_number: -1, title: "全部"}
-					this.poolList.unshift(all)
 				}
 			}
 		}
@@ -293,3 +289,6 @@
 		}
 	}
 </style>
+
+
+
