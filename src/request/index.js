@@ -52,6 +52,11 @@ const request = {
         addSysNotice: `${HTTPHEADER}/NoticeLog/addSysNotice`, // 系统消息 新增
         officialList: `${HTTPHEADER}/NoticeLog/officialList`, // 官方消息 列表
         addOfficialNotice: `${HTTPHEADER}/NoticeLog/addOfficialNotice`, // 官方消息 新增
+        Apprule: `${HTTPHEADER}/Apprule/index`, // 版本审核开关列表
+        AppruleDel: `${HTTPHEADER}/apprule/delete`, // 版本审核删除
+        AppruleAdd: `${HTTPHEADER}/apprule/add`, // 版本审核添加
+        AppruleUpdate: `${HTTPHEADER}/apprule/update`, // 版本审核修改
+        getChannels : `${HTTPHEADER}/index/getChannels`, // 获取渠道
         super: {
             punishHistory: `${HTTPHEADER}/Room/punishHistory`, // 处理处罚历史
             handlePunish: `${HTTPHEADER}/Room/handlePunish`, // 处理处罚
