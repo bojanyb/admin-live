@@ -111,3 +111,39 @@ export function addOfficialNotice(data) {
         data
     })
 }
+
+// 版本设置审核开关 删除
+export function AppruleDel(data) {
+  return request({
+    url: api.system.AppruleDel,
+    method: 'post',
+    data
+  })
+}
+
+// 版本设置审核开关 新增
+export function AppruleAdd(data) {
+  return request({
+    url: api.system.AppruleAdd,
+    method: 'post',
+    data
+  })
+}
+
+// 版本设置审核开关 修改
+export function AppruleUpdate(data) {
+  return request({
+    url: api.system.AppruleUpdate,
+    method: 'post',
+    data
+  })
+}
+
+// 获取渠道
+export function getChannels(data) {
+  return request({
+    url: api.system.getChannels,
+    method: 'post',
+    data
+  })
+}
