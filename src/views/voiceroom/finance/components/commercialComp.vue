@@ -142,7 +142,7 @@ export default {
         payList() { // 支付类型
             let arr = JSON.parse(JSON.stringify(MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST))
             if(this.ruleForm.channel === 3) {
-                return arr.filter((item, index) => { return index < 3 })
+                return arr.filter((item, index) => { return index < 4 })
             } else {
                 return arr
             }
