@@ -99,6 +99,14 @@ export default {
                         }
                     },
                     {
+                        label: '公会类型',
+                        showOverFlow: true,
+                        render: (h, params) => {
+                            let guild = this.guildTypeList.find(item => { return item.value === params.row.guild_type })
+                            return h('span', guild.name || '无')
+                        }
+                    },
+                    {
                         label: '主播数量',
                         showOverFlow: true,
                         render: (h, params) => {
