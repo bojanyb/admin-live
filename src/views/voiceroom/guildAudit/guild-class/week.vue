@@ -12,7 +12,7 @@
 
 <script>
 // 引入api
-import { delSettlementConfig, getGuildType, getGenre } from '@/api/videoRoom.js'
+import { delSettlementConfig, getGuildType, guildRoomType } from '@/api/videoRoom.js'
 // 引入新增 - 修改组件
 import weekComp from './components/weekComp.vue'
 // 引入菜单组件
@@ -80,10 +80,7 @@ export default {
           },
           {
             label: '房间类型',
-            render: (h, params) => {
-              let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
-              return h('span', data ? data.name : '无')
-            }
+            prop: 'room_type_name'
           },
           {
             label: '奖励名称',
@@ -96,16 +93,19 @@ export default {
             }
           },
           {
-            label: '评级奖励类型',
-            prop: 'rebate',
+            label: '奖励类型',
             render: (h, params) => {
               let data = MAPDATA.GUILDCONFIGURATIONRATETYPELIST.find(item => { return item.value === params.row.rewards_type })
               return h('span', data ? data.name : '无')
             }
           },
           {
-            label: '评级奖励',
-            prop: 'rewards'
+            label: '奖励数额',
+            prop: 'rewards',
+            render: (h, params) => {
+              let data = MAPDATA.RENDERGUILDCONFIG.find(item => { return item.value === params.row.rewards_type })
+              return h('span', params.row.rewards_type ? `${params.row.rewards}${data.name}` : '无')
+            }
           },
           {
             label: '操作',
@@ -216,7 +216,7 @@ export default {
     },
     // 获取房间类型
     async getGenreList(){
-      const response = await getGenre()
+      const response = await guildRoomType()
       if(response.code == 2000){
         const tempArr = Array.from(
           Array.isArray(response.data.list) ? response.data.list : []
