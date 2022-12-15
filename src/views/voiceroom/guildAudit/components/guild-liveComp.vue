@@ -7,13 +7,11 @@
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
 		<!-- 新增 - 编辑组件 -->
-		<editComp ref="editComp" v-if="isDestoryComp" @destoryComp="destoryComp" :type="1" @getList="getList"></editComp>
+		<editComp ref="editComp" v-if="isDestoryComp" @destoryComp="destoryComp" :type = "2" @getList="getList"></editComp>
 	</div>
 </template>
 
 <script>
-	// 引入冻结组件
-	import blocked from './blocked.vue'
 	// 引入api
 	import { getGuildUpdateV2, getGuildType } from '@/api/videoRoom'
 	// 引入菜单组件
@@ -38,7 +36,6 @@
 			SearchPanel,
 			tableList,
 			editComp,
-			blocked
 		},
 		data() {
 			return {
@@ -59,16 +56,6 @@
 						label: '公会ID',
 						isNum: true,
 						placeholder: '请输入公会ID'
-					},
-					{
-						name: 'guild_type',
-						type: 'select',
-						value: '',
-						keyName: 'value',
-						optionLabel: 'name',
-						label: '公会类型',
-						placeholder: '请选择',
-						options: this.guildTypeList
 					},
 					{
 						name: 'status',
@@ -99,21 +86,21 @@
 					columns: [
 						{
 							label: '创建时间',
-							minWidth: '130px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
-						{
-							label: '公会类型',
-							render: (h, params) => {
-								let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
-								return h('span', data ? data.name : '无')
-							}
-						},
-						{
+            {
 							label: '公会ID',
 							prop: 'guild_number'
+						},
+            {
+							label: '公会名称',
+							prop: 'name'
+						},
+            {
+							label: '公会长',
+							prop: 'name'
 						},
 						{
 							label: '公会运营',
@@ -123,55 +110,10 @@
 							}
 						},
 						{
-							label: '公会名称',
-							width: '150px',
-							prop: 'name'
-						},
-						{
-							label: '主播数量',
+							label: '主播人数',
 							render: (h, params) => {
 								return h('div', [
 									h('span', params.row.user_count + '人'),
-								])
-							}
-						},
-						{
-							label: '房间数量',
-							render: (h, params) => {
-								return h('div', [
-									h('span', params.row.room_count + '个'),
-								])
-							}
-						},
-						{
-							label: '今日流水',
-							render: (h, params) => {
-								return h('div', [
-									h('span', params.row.today_flow + '钻石'),
-								])
-							}
-						},
-						{
-							label: '昨日流水',
-							render: (h, params) => {
-								return h('div', [
-									h('span', (params.row.yestoday_flow  ? params.row.yestoday_flow : 0) + '钻石'),
-								])
-							}
-						},
-						{
-							label: '本周流水',
-							render: (h, params) => {
-								return h('div', [
-									h('span', params.row.week_flow + '钻石'),
-								])
-							}
-						},
-						{
-							label: '本月流水',
-							render: (h, params) => {
-								return h('div', [
-									h('span', params.row.month_flow + '钻石'),
 								])
 							}
 						},
@@ -187,7 +129,7 @@
 						},
 						{
 							label: '操作',
-							minWidth: '320px',
+							minWidth: '160px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
@@ -248,7 +190,6 @@
 				this.load('update', row)
 			},
 			load(status, row) {
-        // 模拟数据 区分新增修改弹框类型
 				this.isDestoryComp = true
 				setTimeout(() => {
 					this.$refs.editComp.loadParams(status, row)
@@ -343,22 +284,22 @@
 					this.getList()
 				}
 			},
-      // 获取公会类型
-      async getTypeList() {
-        const response = await getGuildType()
-        if(response.code === 2000) {
-          const tempArr =  Array.from(
-            Array.isArray(response.data.list) ? response.data.list : []
-        )
-        this.guildTypeList = tempArr.reduce((prev, curr) => {
-          prev.push({
-              name: curr.remark,
-              value: curr.type
-          })
-          return prev
-        }, []) || []
-        }
-      }
+            // 获取公会类型
+            async getTypeList() {
+             const response = await getGuildType()
+             if(response.code === 2000) {
+                const tempArr =  Array.from(
+                  Array.isArray(response.data.list) ? response.data.list : []
+              )
+              this.guildTypeList = tempArr.reduce((prev, curr) => {
+                prev.push({
+                    name: curr.remark,
+                    value: curr.type
+                })
+                return prev
+              }, []) || []
+             }
+            }
 		}
 	}
 </script>
