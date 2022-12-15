@@ -1248,3 +1248,12 @@ export function getHasConfigRoom(data) {
     data
   })
 }
+
+// 房间类型列表
+export function getGenre(data) {
+  return request({
+    url: api.room.genre,
+    method: 'post',
+    data
+  })
+}
