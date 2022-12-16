@@ -17,10 +17,10 @@
       >
         <el-row>
           <el-col :span="12">
-            <el-form-item label="app渠道" prop="channel">
+            <el-form-item label="渠道编号" prop="code">
               <el-input
-                v-model="ruleForm.channel"
-                placeholder="请输入app渠道"
+                v-model="ruleForm.code"
+                placeholder="请输入渠道编号"
                 :disabled="status === 'update'"
               ></el-input>
             </el-form-item>
@@ -40,10 +40,10 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="渠道名称" prop="channel" v-else>
+            <el-form-item label="渠道名称" prop="name" v-else>
               <el-input
-                v-model="ruleForm.channel"
-                placeholder="请输入app渠道"
+                v-model="ruleForm.name"
+                placeholder="请输入渠道名称"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -123,13 +123,12 @@
           </el-table>
         </div>
 
-        <el-form-item label="渠道ID" prop="channel" v-if="tabIndex === '1'">
+        <el-form-item label="渠道ID" prop="channels" v-if="tabIndex === '1'">
           <el-input
-            v-model="ruleForm.channel"
+            v-model="ruleForm.channels"
             placeholder="请输入渠道ID"
           ></el-input>
         </el-form-item>
-
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
@@ -146,6 +145,8 @@ import {
   updateAutoJoinRule,
   checkAutoJoinRule,
   getHasConfigRoom,
+  insertChannels,
+  updateChannels
 } from "@/api/videoRoom";
 import { param } from "@/utils";
 // 引入公共map
@@ -168,7 +169,7 @@ export default {
       rankList: MAPDATA.CLASSLIST,
       guildTypeList: MAPDATA.GUILDCONFIGTYPELIST,
       ruleForm: {
-        channel: "",
+        code: "",
         sex: "",
         start_time: null,
         end_time: null,
@@ -176,9 +177,7 @@ export default {
       },
       oldParams: {}, // 老数据
       rules: {
-        channel: [
-          { required: true, message: "请输入app渠道", trigger: "blur" },
-        ],
+        code: [{ required: true, message: "请输入渠道编号", trigger: "blur" }],
         room_number: [
           { required: false, message: "请输入房间ID", trigger: "blur" },
         ],
@@ -198,6 +197,10 @@ export default {
             message: "请选择结束时间",
             trigger: "change",
           },
+        ],
+        name: [{ required: true, message: "请输入渠道名称", trigger: "blur" }],
+        channels: [
+          { required: true, message: "请输入渠道ID", trigger: "blur" },
         ],
       },
       tableData: [],
@@ -286,7 +289,9 @@ export default {
         let params = JSON.parse(JSON.stringify(row));
         let para = {};
         const ZeroPoint = new Date(new Date().toLocaleDateString()).getTime();
-        para.channel = params.channel || "";
+        para.code = params.code || "";
+        para.name = params.name || "";
+        para.channels = params.channels || "";
         para.sex = params.sex + "" || "";
         para.start_time = ZeroPoint + params.start_time * 1000;
         para.end_time = ZeroPoint + params.end_time * 1000;
@@ -342,7 +347,7 @@ export default {
             return pev;
           }, []);
 
-          if (!(params.room_ids && params.room_ids.length)) {
+          if (!(params.room_ids && params.room_ids.length) && this.tabIndex === "0") {
             this.$message.error("直播间ID不能为空");
             return false;
           }
@@ -356,11 +361,26 @@ export default {
           const endTime = Math.floor(params.end_time / 1000);
           params.start_time = startTime - ZeroPoint;
           params.end_time = endTime - ZeroPoint;
+          let temp = {
+            code: params.code,
+            name: params.name,
+            channels: params.channels
+          }
           let res;
           if (this.status === "add") {
-            res = await addAutoJoinRule(params);
+            if (this.tabIndex === "0") {
+              res = await addAutoJoinRule(params);
+            } else if (this.tabIndex === "1") {
+              res = await insertChannels(temp);
+            }
+
           } else {
-            res = await updateAutoJoinRule(params);
+            if (this.tabIndex === "0") {
+               res = await updateAutoJoinRule(params);
+            } else if (this.tabIndex === "1") {
+               temp.id = params.id
+               res = await updateChannels(temp);
+            }
           }
 
           if (res.code === 2000) {
