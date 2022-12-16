@@ -26,7 +26,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="用户性别" prop="sex">
+            <el-form-item label="用户性别" prop="sex" v-if="tabIndex === '0'">
               <el-select
                 v-model="ruleForm.sex"
                 :disabled="disabled"
@@ -38,50 +38,45 @@
                   :label="item.name"
                   :value="item.value"
                 ></el-option>
-              </el-select> </el-form-item
-          ></el-col>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="渠道名称" prop="channel" v-else>
+              <el-input
+                v-model="ruleForm.channel"
+                placeholder="请输入app渠道"
+              ></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
 
-        <el-row>
+        <el-row v-if="tabIndex === '0'">
           <el-col :span="12">
-            <el-form-item label="开始时间" prop="start_time" :rules="StartRules">
-              <!-- <el-date-picker
-                :disabled="disabled"
-                v-model="ruleForm.start_time"
-                value-format="timestamp"
-                type="datetime"
-                :picker-options="StartPicker"
-                placeholder="请选择开始时间"
-              >
-              </el-date-picker> -->
+            <el-form-item
+              label="开始时间"
+              prop="start_time"
+              :rules="StartRules"
+            >
               <el-time-picker
                 v-model="ruleForm.start_time"
                 value-format="timestamp"
-                placeholder="请选择开始时间">
+                placeholder="请选择开始时间"
+              >
               </el-time-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="结束时间" prop="end_time" :rules="EndRules">
-              <!-- <el-date-picker
-                :disabled="disabled"
-                v-model="ruleForm.end_time"
-                :picker-options="EndPicker"
-                value-format="timestamp"
-                type="datetime"
-                placeholder="请选择结束时间"
-              >
-              </el-date-picker> -->
               <el-time-picker
                 v-model="ruleForm.end_time"
                 value-format="timestamp"
-                placeholder="请选择结束时间">
+                placeholder="请选择结束时间"
+              >
               </el-time-picker>
             </el-form-item>
           </el-col>
         </el-row>
 
-        <el-form-item label="房间ID" prop="room_number">
+        <el-form-item label="房间ID" prop="room_number" v-if="tabIndex === '0'">
           <el-row>
             <el-col :span="16">
               <el-input
@@ -90,11 +85,15 @@
               ></el-input>
             </el-col>
             <el-col :span="6" style="margin-left: 10px">
-              <el-button type="primary" @click="handlerAdd(ruleForm.room_number)">添加</el-button>
+              <el-button
+                type="primary"
+                @click="handlerAdd(ruleForm.room_number)"
+                >添加</el-button
+              >
             </el-col>
           </el-row>
         </el-form-item>
-        <div class="body_box-table">
+        <div class="body_box-table" v-if="tabIndex === '0'">
           <el-table
             :data="tableData"
             border
@@ -123,6 +122,14 @@
             </el-table-column>
           </el-table>
         </div>
+
+        <el-form-item label="渠道ID" prop="channel" v-if="tabIndex === '1'">
+          <el-input
+            v-model="ruleForm.channel"
+            placeholder="请输入渠道ID"
+          ></el-input>
+        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
@@ -147,6 +154,13 @@ import MAPDATA from "@/utils/jsonMap.js";
 import moment from "moment";
 export default {
   components: {},
+  props: {
+    tabIndex: {
+      // 当前坐标
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       status: "add",
@@ -194,10 +208,6 @@ export default {
     };
   },
   computed: {
-    title() {
-      // 标题
-      return "提示";
-    },
     StartRules() {
       let params = {};
       let start = this.ruleForm.start_time;
@@ -258,6 +268,14 @@ export default {
       }
       return false;
     },
+    title() {
+      // 标题
+      if (this.tabIndex === "0") {
+        return "渠道进房";
+      } else {
+        return "渠道设置";
+      }
+    },
   },
   methods: {
     // 新增 - 修改
@@ -270,8 +288,8 @@ export default {
         const ZeroPoint = new Date(new Date().toLocaleDateString()).getTime();
         para.channel = params.channel || "";
         para.sex = params.sex + "" || "";
-        para.start_time =  ZeroPoint + (params.start_time * 1000);
-        para.end_time = ZeroPoint + (params.end_time * 1000);
+        para.start_time = ZeroPoint + params.start_time * 1000;
+        para.end_time = ZeroPoint + params.end_time * 1000;
         const res = await this.handlerGetHasConfigRoom(params.id);
         para.room_ids = res.data.rooms.reduce((pev, cur) => {
           pev.push({
@@ -332,7 +350,8 @@ export default {
           if (params.room_number || params.room_number === "") {
             delete params.room_number;
           }
-          const ZeroPoint = new Date(new Date().toLocaleDateString()).getTime() / 1000;
+          const ZeroPoint =
+            new Date(new Date().toLocaleDateString()).getTime() / 1000;
           const startTime = Math.floor(params.start_time / 1000);
           const endTime = Math.floor(params.end_time / 1000);
           params.start_time = startTime - ZeroPoint;
@@ -371,7 +390,6 @@ export default {
       rows.splice(index, 1);
     },
     handlerAdd(room_number) {
-
       if (!room_number) {
         this.$message.error("请检查房间ID是否为空");
         return false;
@@ -381,17 +399,17 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      }).then(async() => {
-          let res = await checkAutoJoinRule({ room_number });
-          if (+res.code === 2000) {
-            this.tableData.push({
-              id: res.data.id + "",
-              live_number: res.data.room_number + "",
-              create_time:  moment(new Date().getTime()).format(
-                "YYYY-MM-DD HH:mm:ss"
-              ),
-            })
-          }
+      }).then(async () => {
+        let res = await checkAutoJoinRule({ room_number });
+        if (+res.code === 2000) {
+          this.tableData.push({
+            id: res.data.id + "",
+            live_number: res.data.room_number + "",
+            create_time: moment(new Date().getTime()).format(
+              "YYYY-MM-DD HH:mm:ss"
+            ),
+          });
+        }
       });
     },
     handlerGetHasConfigRoom(id) {
