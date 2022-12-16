@@ -48,7 +48,7 @@ export default {
                 name: '',
                 guild_number: '',
                 rebate: 0,
-                // guild_type: null
+                guild_type: this.type
             },
             oldParams: {}, // 老数据
             rules: {
@@ -78,9 +78,9 @@ export default {
         };
     },
     props: {
-      type : { // 模拟数据  派对公会：1, 直播公会：2
+      type : { // 模拟数据  派对公会：2, 直播公会：1
         type : Number,
-        default: 1
+        default: 2
       }
     },
     computed: {
