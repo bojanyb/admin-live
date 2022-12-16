@@ -132,7 +132,7 @@ export default {
           },
           {
             label: "登录IP属地",
-            prop: "number",
+            prop: "ip_addr",
           },
         ],
       };
