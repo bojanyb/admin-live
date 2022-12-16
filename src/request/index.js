@@ -202,6 +202,9 @@ const request = {
         updateLoginPwd: `${HTTPHEADER}/User/updateLoginPwd`, // 更改登录密码
         addRichUser: `${HTTPHEADER}/User/addRichUser`, // 添加财富用户
         supperUList: `${HTTPHEADER}/user/supperU`, // 添加财富用户
+        userGiftBag: `${HTTPHEADER}/user/userGiftBag`, // 用户礼物
+        userGoods: `${HTTPHEADER}/user/userGoods`, // 用户特效
+        loginLog: `${HTTPHEADER}/user/loginLog`, // 用户登录日志
     },
 
     // 审核管理
