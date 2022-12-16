@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" :isHidePage="true"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
         <!-- 新增 - 修改组件 -->
         <gradeComp v-if="isDestoryComp" ref="gradeComp" :type="'guildGrade'" @destoryComp="destoryComp" @getList="getList"></gradeComp>
@@ -90,7 +90,6 @@ export default {
                     {
 						label: '操作',
 						minWidth: '120px',
-						fixed: 'right',
 						render: (h, params) => {
 							return h('div', [
 								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改'),

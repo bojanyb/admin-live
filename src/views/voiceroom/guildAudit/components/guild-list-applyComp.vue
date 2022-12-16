@@ -9,7 +9,7 @@
 
 <script>
 // 引入api
-import { newGuildApplyCheck } from '@/api/videoRoom'
+import { newGuildApplyCheck, getGuildType } from '@/api/videoRoom'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -23,6 +23,11 @@ import { timeFormat } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
+    data() {
+      return {
+        guildTypeList: [], // 公会类型
+      };
+    },
     components: {
         tableList,
         SearchPanel
@@ -38,6 +43,16 @@ export default {
                     label: '喵喵ID',
                     isNum: true,
                     placeholder: '请输入喵喵ID'
+                },
+                {
+                    name: 'guild_type',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '申请公会类型',
+                    placeholder: '请选择',
+                    options: this.guildTypeList
                 },
                 {
                     name: 'dateTimeParams',
@@ -81,6 +96,13 @@ export default {
                         showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.guild_name || '无')
+                        }
+                    },
+                    {
+                        label: '公会类型',
+                        showOverFlow: true,
+                        render: (h, params) => {
+                            return h('span', params.row.guild_type_name || '无')
                         }
                     },
                     {
@@ -129,6 +151,9 @@ export default {
             }
         }
     },
+    created() {
+      this.getTypeList()
+    },
     methods: {
         // 刷新列表
         getList() {
@@ -141,6 +166,7 @@ export default {
                 page: params.page,
                 pagesize: params.size,
                 user_number: s.user_number,
+                guild_type: s.guild_type,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
             }
@@ -188,7 +214,29 @@ export default {
                     }
                 }).catch(() => {});
             }
-        }
+        },
+        // 获取公会类型
+        async getTypeList() {
+          const response = await getGuildType()
+          if (response.code === 2000) {
+            const tempArr = Array.from(
+              Array.isArray(response.data.list) ? response.data.list : []
+            )
+            this.guildTypeList = tempArr.reduce((prev, curr) => {
+              prev.push({
+                name: curr.remark,
+                value: curr.type
+              })
+              return prev
+            }, []) || []
+            // 模拟全部,避免切换其他之后无法切换查看到全部
+            let all = {
+              name : "全部",
+              value : ""
+            }
+            this.guildTypeList.unshift(all)
+          }
+        },
     }
 }
 </script>

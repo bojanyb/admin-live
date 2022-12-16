@@ -9,7 +9,8 @@
 // 引入tab菜单组件
 import menuComp from '@/components/menuComp/index.vue'
 // 引入api
-import { guildUserApplyCheck } from '@/api/user.js'
+import { changePrivateChat } from '@/api/videoRoom'
+import { rmGuildUser } from '@/api/user.js'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -36,14 +37,12 @@ export default {
         forms() {
             return [
                 {
-                    name: 'type',
-                    type: 'select',
-                    value: 0,
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '申请类型',
-                    placeholder: '请选择',
-                    options: MAPDATA.GUILDAPPLYTYPE
+                    name: 'user_number',
+                    type: 'input',
+                    value: '',
+                    label: '主播ID',
+                    isNum: true,
+                    placeholder: '请输入主播ID'
                 },
                 {
                     name: 'guild_number',
@@ -53,39 +52,24 @@ export default {
                     isNum: true,
                     placeholder: '请输入公会ID'
                 },
-                {
-                    name: 'user_number',
-                    type: 'input',
-                    value: '',
-                    label: '主播ID',
-                    isNum: true,
-                    placeholder: '请输入主播ID'
-                },
             ]
         },
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.guild.guildUserApply,
+                url: REQUEST.guild.getGuildUsers,
                 columns: [
                     {
-                        label: '申请时间',
+                        label: '加入时间',
                         render: (h, params) => {
                             return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-                        }
-                    },
-                    {
-                        label: '申请类型',
-                        showOverFlow: true,
-                        render: (h, params) => {
-                            return h('span', params.row.type == 0 ? '入会申请' : '退会申请' || '无')
                         }
                     },
                     {
                         label: '主播ID',
                         showOverFlow: true,
                         render: (h, params) => {
-                            return h('span', params.row.user_number)
+                            return h('span', params.row.user_number || '无')
                         }
                     },
                     {
@@ -96,39 +80,41 @@ export default {
                         }
                     },
                     {
-                        label: '公会ID',
+                        label: '公会',
                         showOverFlow: true,
                         render: (h, params) => {
-                            return h('span', params.row.guild_number || '无')
+                            return h('div', [
+                              h('div', params.row.guild_nickname || '无'),
+                              h('div', '('+ params.row.guild_number + ')' || '无'),
+                            ])
                         }
                     },
                     {
-                        label: '公会昵称',
+                        label: '主播等级',
                         showOverFlow: true,
                         render: (h, params) => {
-                            return h('span', params.row.guild_nickname || '无')
+                            return h('span', params.row.live_rank || '0')
                         }
                     },
                     {
-                        label: '公会类型',
+                        label: '主播状态',
                         showOverFlow: true,
                         render: (h, params) => {
-                            return h('span', params.row.guild_nickname || '无')
+                            return h('span',{
+                                style: { color: + params.row.status == 1 ? '#67C23A' : (params.row.status == 2 ? '#E6A23C' : '#F56C6C')  }},
+                                params.row.status == 1 ? '正常' : (params.row.status == 2 ? '封禁' : '注销') || '')
                         }
                     },
                     {
-                        label: '主播性别',
-                        showOverFlow: true,
+                        label: "私聊权限",
+                        headIcon : require("./../../../../assets/ask.png"),
                         render: (h, params) => {
-                            return h('span', params.row.sex == 1 ? '男' : (params.row.sex == 2 ? '女' : '未知'))
-                        }
-                    },
-                    {
-                        label: '手机号码',
-                        showOverFlow: true,
-                        render: (h, params) => {
-                            let phone = params.row.phone.substr(0, 3) + '****' + params.row.phone.substr(7) 
-                            return h('span',  phone || '无')
+                            let newArr = []
+                            newArr.push(h('el-switch',{
+                                'props' : { 'value' :params.row.is_private_chat,'activeValue':1},
+                                'on': {change: () => {this.change(params.row)}}
+                            }))
+                            return h('div',newArr)
                         }
                     },
                     {
@@ -137,18 +123,7 @@ export default {
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary'}, style: {
-                                    display: params.row.status === 0 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.clickFunc(params.row, 1)}}}, '通过'),
-                                h('el-button', { props: { type: 'danger'}, style: {
-                                    display: params.row.status === 0 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.clickFunc(params.row, 2)}}}, '拒绝'),
-                                h('el-button', { props: { type: 'primary'},style: {
-                                    display: params.row.status === 1 ? 'unset' : 'none',
-                                }, on: {click:()=>{}}}, '已通过'),
-                                h('el-button', { props: { type: 'danger'}, style: {
-                                    display: params.row.status === 2 ? 'unset' : 'none',
-                                }, on: {click:()=>{}}}, '已拒绝')
+                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.clickDel(params.row, )}}}, '移除'),
                             ])
                         }
                     }
@@ -169,9 +144,8 @@ export default {
                 pagesize: params.size,
                 guild_number: s.guild_number,
                 user_number: s.user_number,
-                type: s.type ? s.type : 0,
-                status: 0 // 0未审核1通过2拒绝
-            } 
+                status: s.status
+            }
         },
         // 重置
         reset() {
@@ -182,7 +156,7 @@ export default {
         onSearch() {
             this.getList()
         },
-        // 公会房间 - 新增
+        // 公会成员 - 新增
         add(){
             this.$prompt('用户ID', '提示', {
             confirmButtonText: '确定',
@@ -193,41 +167,47 @@ export default {
                 console.log(value)
             }).catch(() => {});
         },
-        // 公会房间 - 新增确定
-        handelAdd(){
-            this.$refs.ruleForm.validate(valid => {
-                if (valid) {
-                    this.isAdd = false
+        // 公会成员 - 移除
+        clickDel(row){
+            let title = "确认移除 [ " + row.nickname + " ] 吗？"
+            this.$confirm(title, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                let res = await rmGuildUser({ id: row.id })
+                if(res.code === 2000) {
+                	this.$message({
+                		type: 'success',
+                		message: '移除成功!'
+                	});
+                	this.getList()
                 }
+            }).catch(() => {});
+        },
+        // 私聊权限
+        change(row){
+            let params = {
+                id: row.id,
+                is_private_chat : row.is_private_chat == 0 ? 1 : 0
+            }
+            changePrivateChat(params).then(res=>{
+                let tipsText = "";
+                if(params.is_private_chat == 1){
+                    tipsText = "私聊权限已开启";
+                }else{
+                    tipsText = "私聊权限已关闭";
+                }
+                this.$message({
+                    message: tipsText,
+                    type: 'success'
+                });
+                let page = this.$refs.tableList.search.page;
+                this.$refs.tableList.handlePageChange(page)
+            }).catch(err=>{
+                console.log(err)
             })
         },
-        // 操作 - 通过/驳回
-        async clickFunc(row, status) {
-            if(status === 1) {
-                let params = {id : row.id,status:status}
-                let res = await guildUserApplyCheck(params)
-                if(res.code === 2000) {
-                    this.$message.success('操作成功')
-                    this.$nextTick(res=>{
-                        this.getList()
-                    })
-                }
-            } else {
-                let tipsText = '是否拒绝 【' + row.nickname + '】的退会申请?'
-                this.$confirm(tipsText, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(async () => {
-                    let params = {id : row.id,status:status}
-                    let res = await guildUserApplyCheck(params)
-                    if(res.code === 2000) {
-                        this.$message.success('操作成功')
-                        this.getList()
-                    }
-                }).catch(() => {});
-            }
-        }
     }
 }
 </script>
