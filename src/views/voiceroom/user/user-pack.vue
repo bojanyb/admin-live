@@ -78,7 +78,10 @@ export default {
           {
             label: "礼物",
             render: (h, params) => {
-              return h("span", `${params.row.gift_name}(${params.row.gift_id})`);
+              return h(
+                "span",
+                `${params.row.gift_name}(${params.row.gift_id})`
+              );
             },
           },
           {
@@ -100,7 +103,10 @@ export default {
           {
             label: "特效",
             render: (h, params) => {
-              return h("span", `${params.row.goods_name}(${params.row.goods_id})`);
+              return h(
+                "span",
+                `${params.row.goods_name}(${params.row.goods_id})`
+              );
             },
           },
           {
@@ -108,12 +114,13 @@ export default {
             prop: "goods_leftTime",
             render: (h, params) => {
               let last_day;
-              if (params.row.goods_leftTime + "" === "-1") {
-                last_day = "永久";
-              } else if (params.row.last_day) {
+              if (params.row.goods_leftTime) {
                 last_day = `剩余${params.row.goods_leftTime}天`;
               } else {
                 last_day = "--";
+              }
+              if (params.row.goods_leftTime + "" === "-1") {
+                last_day = "永久";
               }
               return h("span", last_day ? last_day : "--");
             },
