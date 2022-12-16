@@ -88,7 +88,7 @@ import moment from 'moment'
 					content: '', //更新内容
 					download_url: '', //文件下载链接
 					package_name: '', // 包名 喵喵星球、声撩语音
-					// version_code: '' // 安卓code
+					version_code: '' // 安卓code
 				},
 				FormRules: {
 					version: [{

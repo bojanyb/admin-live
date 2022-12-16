@@ -1250,9 +1250,9 @@ export function getHasConfigRoom(data) {
 }
 
 // 房间类型列表
-export function getGenre(data) {
+export function guildRoomType(data) {
   return request({
-    url: api.room.genre,
+    url: api.guild.guildRoomType,
     method: 'post',
     data
   })
