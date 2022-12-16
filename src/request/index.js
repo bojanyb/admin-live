@@ -187,6 +187,10 @@ const request = {
         updateAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/updateRule`, // 修改渠道进房规则
         delAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/delRule`, // 删除渠道进房规则
         getHasConfigRoom: `${HTTPHEADER}/AutoJoinRule/getHasConfigRoom`, // 获取已经配置的房间
+        getChannels: `${HTTPHEADER}/AutoJoinRule/getChannels`, // 渠道设置列表
+        insertChannels: `${HTTPHEADER}/AutoJoinRule/insertChannels`, // 新增渠道
+        updateChannels: `${HTTPHEADER}/AutoJoinRule/updateChannels`, // 修改渠道
+        delChannels: `${HTTPHEADER}/AutoJoinRule/delChannels`, // 删除渠道
     },
 
     // 用户管理
