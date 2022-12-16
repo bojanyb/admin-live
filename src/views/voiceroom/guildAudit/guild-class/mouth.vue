@@ -5,7 +5,7 @@
         @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
     </div>
 
-    <tableList :cfgs="cfgs" ref="tableList" :isHidePage="true"></tableList>
+    <tableList :cfgs="cfgs" ref="tableList"></tableList>
 
     <!-- 新增 - 修改组件 -->
     <mouthComp v-if="isDestoryComp" ref="mouthComp" @destoryComp="destoryComp" @getList="getList"></mouthComp>
