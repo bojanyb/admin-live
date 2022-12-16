@@ -74,7 +74,7 @@ export default {
   },
   computed: {
     forms() {
-      return [
+      let arr = [
         {
           name: "code",
           type: "input",
@@ -83,6 +83,18 @@ export default {
           placeholder: "请输入渠道编号",
         },
       ];
+
+      let arr1 = [
+        {
+          name: "name",
+          type: "input",
+          value: "",
+          label: "渠道名称",
+          placeholder: "请输入渠道名称",
+        },
+      ];
+
+      return this.tabIndex === "0" ? [...arr] : [...arr1];
     },
     cfgs() {
       let arr = [
@@ -238,6 +250,7 @@ export default {
         page: params.page,
         pagesize: params.size,
         code: s.code,
+        name: s.name,
         // start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
         // end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
       };
