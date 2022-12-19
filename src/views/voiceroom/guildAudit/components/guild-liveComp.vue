@@ -100,7 +100,7 @@
 						},
             {
 							label: '公会长',
-							prop: 'name'
+							prop: 'guild_user_nickname'
 						},
 						{
 							label: '公会运营',
@@ -164,7 +164,7 @@
 					guild_number: s.guild_number,
 					status: s.status,
 					operator: s.operator,
-					guild_type: s.guild_type
+					guild_type: 1
 				}
 			},
 			// 刷新列表
@@ -236,7 +236,7 @@
 					this.$message({
 						type: 'info',
 						message: '已取消删除'
-					});          
+					});
 				});
 			},
 			// 销毁组件

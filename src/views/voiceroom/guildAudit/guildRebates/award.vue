@@ -85,7 +85,7 @@
 						label: '时间',
 						minWidth: '240px',
 						render: (h, params) => {
-							let start_time = this.form.status === 2 ? timeFormat(params.row.start, 'YYYY-MM-DD HH:mm:ss', true) : timeFormat(params.row.time_start, 'YYYY-MM-DD HH:mm:ss', true) 
+							let start_time = this.form.status === 2 ? timeFormat(params.row.start, 'YYYY-MM-DD HH:mm:ss', true) : timeFormat(params.row.time_start, 'YYYY-MM-DD HH:mm:ss', true)
 							let endTime = this.form.status === 2 ? params.row.end : params.row.create_time
 							let end_time = endTime ? timeFormat(endTime, 'YYYY-MM-DD HH:mm:ss', true) : '无'
 							return h('span', `${timeFormat(this.form.status === 2 ? params.row.start : params.row.time_start, 'YYYY', true)}年第${params.row.now}周（${start_time}至${end_time}）`)
@@ -224,7 +224,8 @@
 					type : 4,
 					status: s.status,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
-					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
+          end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
+          guild_type: 2
 				}
 				if(this.form.status === 1) {
 					data.status = 0
@@ -278,7 +279,7 @@
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
-				let res = await doSettlement({ ids, status })
+				let res = await doSettlement({ ids, status, guild_type: 2 })
 				if(res.code === 2000) {
 					this.$success("批量操作成功");
 				}
@@ -287,7 +288,7 @@
 			// 单个返点
 			async rebateFunc(id, status) {
 				let ids = [id]
-				let res = await doSettlement({ ids, status })
+				let res = await doSettlement({ ids, status, guild_type: 2 })
 				if(res.code === 2000) {
 					this.$success("操作成功");
 				}

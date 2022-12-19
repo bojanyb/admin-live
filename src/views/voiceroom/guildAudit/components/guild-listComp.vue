@@ -61,16 +61,6 @@
 						placeholder: '请输入公会ID'
 					},
 					{
-						name: 'guild_type',
-						type: 'select',
-						value: '',
-						keyName: 'value',
-						optionLabel: 'name',
-						label: '公会类型',
-						placeholder: '请选择',
-						options: this.guildTypeList
-					},
-					{
 						name: 'status',
 						type: 'select',
 						value: '',
@@ -99,21 +89,21 @@
 					columns: [
 						{
 							label: '创建时间',
-							minWidth: '130px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
-						{
-							label: '公会类型',
-							render: (h, params) => {
-								let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
-								return h('span', data ? data.name : '无')
-							}
-						},
-						{
+            {
 							label: '公会ID',
 							prop: 'guild_number'
+						},
+            {
+							label: '公会名称',
+							prop: 'name'
+						},
+            {
+							label: '公会长',
+							prop: 'guild_user_nickname'
 						},
 						{
 							label: '公会运营',
@@ -123,55 +113,10 @@
 							}
 						},
 						{
-							label: '公会名称',
-							width: '150px',
-							prop: 'name'
-						},
-						{
-							label: '主播数量',
+							label: '主播人数',
 							render: (h, params) => {
 								return h('div', [
 									h('span', params.row.user_count + '人'),
-								])
-							}
-						},
-						{
-							label: '房间数量',
-							render: (h, params) => {
-								return h('div', [
-									h('span', params.row.room_count + '个'),
-								])
-							}
-						},
-						{
-							label: '今日流水',
-							render: (h, params) => {
-								return h('div', [
-									h('span', params.row.today_flow + '钻石'),
-								])
-							}
-						},
-						{
-							label: '昨日流水',
-							render: (h, params) => {
-								return h('div', [
-									h('span', (params.row.yestoday_flow  ? params.row.yestoday_flow : 0) + '钻石'),
-								])
-							}
-						},
-						{
-							label: '本周流水',
-							render: (h, params) => {
-								return h('div', [
-									h('span', params.row.week_flow + '钻石'),
-								])
-							}
-						},
-						{
-							label: '本月流水',
-							render: (h, params) => {
-								return h('div', [
-									h('span', params.row.month_flow + '钻石'),
 								])
 							}
 						},
@@ -222,7 +167,7 @@
 					guild_number: s.guild_number,
 					status: s.status,
 					operator: s.operator,
-					guild_type: s.guild_type
+					guild_type: 2
 				}
 			},
 			// 刷新列表
@@ -295,7 +240,7 @@
 					this.$message({
 						type: 'info',
 						message: '已取消删除'
-					});          
+					});
 				});
 			},
 			// 销毁组件
