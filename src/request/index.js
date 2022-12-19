@@ -347,6 +347,16 @@ const request = {
         joinRoomLog: `${HTTPHEADER}/Room/joinRoomLog`, // 进入房间记录
     },
 
+    // 直播管理
+    live: {
+      anchorRoomList: `${HTTPHEADER}/RoomV2/anchorRoomList`, // 房间列表
+      anchorLiveList: `${HTTPHEADER}/RoomV2/anchorLiveList`, // 直播列表
+      anchorLiveHistoryList: `${HTTPHEADER}/RoomV2/anchorLiveHistoryList`, // 历史列表
+      anchorData: `${HTTPHEADER}/roomV2/anchorData`, // 直播数据
+      effective: `${HTTPHEADER}/RoomV2/effective`, // 有效直播时长
+      saveEff: `${HTTPHEADER}/RoomV2/saveEff`, // 有效直播时长 -- 保存
+    },
+
     // 风控检测
     risk: {
         audioStreamDefyList: `${HTTPHEADER}/Room/audioStreamDefyList`, // 音频违规日志

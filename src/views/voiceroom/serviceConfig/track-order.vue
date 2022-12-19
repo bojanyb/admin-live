@@ -53,7 +53,11 @@
           :infinite-scroll-immediate="false"
           :infinite-scroll-delay="200"
         >
-          <el-card v-for="item in renderChatList" style="margin-bottom: 10px">
+          <el-card
+            v-for="item in renderChatList"
+            :key="item.id"
+            style="margin-bottom: 10px"
+          >
             <div class="pev-inner">
               <div class="pev-header">
                 <div class="pev-user-title">
@@ -62,7 +66,9 @@
                 </div>
                 <span class="pev-time">{{ item.create_time }}</span>
               </div>
-              <div class="pev-footer">{{ `${+item.reply === 0 ? '发送' : '回复'}: ${item.content}`   }}</div>
+              <div class="pev-footer">
+                {{ `${+item.reply === 0 ? "发送" : "回复"}: ${item.content}` }}
+              </div>
             </div>
           </el-card>
           <!-- <p v-if="chatLoading">加载中...</p> -->
@@ -117,14 +123,19 @@
             </el-col>
           </el-row>
         </el-card>
-        <div class="pev-right"
+        <div
+          class="pev-right"
           v-infinite-scroll="onRoomLoad"
           infinite-scroll-disabled="roomDisabled"
           :infinite-scroll-distance="10"
           :infinite-scroll-immediate="false"
           :infinite-scroll-delay="200"
         >
-          <el-card v-for="item in renderRoomList" style="margin-bottom: 10px">
+          <el-card
+            v-for="item in renderRoomList"
+            :key="item.id"
+            style="margin-bottom: 10px"
+          >
             <div class="pev-inner">
               <div class="pev-header">
                 <div class="pev-user-title">
@@ -208,44 +219,46 @@ export default {
         ...this.chatPagination,
         start_time: isTimeVal ? Math.floor(this.chatTimeData[0] / 1000) : "",
         end_time: isTimeVal ? Math.floor(this.chatTimeData[1] / 1000) : "",
-        max_id: this.chatMaxId
+        max_id: this.chatMaxId,
       };
-    chatTalkList(temp).then(res => {
-      this.chatLoading = false;
+      chatTalkList(temp)
+        .then((res) => {
+          this.chatLoading = false;
 
-      if (+res.code !== 2000) {
-        this.chatPagination.page = 1;
-        this.chatNoMore = false;
-        this.chatFlag = false;
-        this.renderChatList = [];
-        this.$message.error("请求失败");
-        return false;
-      }
-      // debugger
-      if (res.data.list.length) {
-        this.chatNoMore = false;
-        this.chatDisabled = false;
-        this.chatMaxId = res.data.max_id;
-        const list = (res.data && res.data.list) || [];
-        this.renderChatList = [...this.renderChatList, ...list];
+          if (+res.code !== 2000) {
+            this.chatPagination.page = 1;
+            this.chatNoMore = false;
+            this.chatFlag = false;
+            this.renderChatList = [];
+            this.$message.error("请求失败");
+            return false;
+          }
+          // debugger
+          if (res.data.list.length) {
+            this.chatNoMore = false;
+            this.chatDisabled = false;
+            this.chatMaxId = res.data.max_id;
+            const list = (res.data && res.data.list) || [];
+            this.renderChatList = [...this.renderChatList, ...list];
 
-        if (this.renderChatList.length < res.data.count) {
-          this.chatPagination.page++;
-          this.chatFlag = true;
-        } else {
-          this.chatNoMore = true;
-          this.chatDisabled = true;
+            if (this.renderChatList.length < res.data.count) {
+              this.chatPagination.page++;
+              this.chatFlag = true;
+            } else {
+              this.chatNoMore = true;
+              this.chatDisabled = true;
+              this.chatFlag = false;
+            }
+          } else {
+            this.chatNoMore = true;
+            this.chatDisabled = true;
+            this.chatFlag = false;
+          }
+        })
+        .catch((err) => {
+          console.log(err, "err");
           this.chatFlag = false;
-        }
-      } else {
-        this.chatNoMore = true;
-        this.chatDisabled = true;
-        this.chatFlag = false;
-      }
-    }).catch(err => {
-      console.log(err, "err");
-      this.chatFlag = false;
-    })
+        });
     }, 300),
     // 私聊下拉加载
     onChatLoad() {
@@ -265,44 +278,46 @@ export default {
         ...this.roomPagination,
         start_time: isTimeVal ? Math.floor(this.roomTimeData[0] / 1000) : "",
         end_time: isTimeVal ? Math.floor(this.roomTimeData[1] / 1000) : "",
-        max_id: this.roomMaxId
+        max_id: this.roomMaxId,
       };
-      roomTalkList(temp).then(res => {
-      this.roomLoading = false;
+      roomTalkList(temp)
+        .then((res) => {
+          this.roomLoading = false;
 
-      if (+res.code !== 2000) {
-        this.roomPagination.page = 1;
-        this.roomNoMore = false;
-        this.roomFlag = false;
-        this.renderRoomList = [];
-        this.$message.error("请求失败");
-        return false;
-      }
+          if (+res.code !== 2000) {
+            this.roomPagination.page = 1;
+            this.roomNoMore = false;
+            this.roomFlag = false;
+            this.renderRoomList = [];
+            this.$message.error("请求失败");
+            return false;
+          }
 
-      if (res.data.list.length) {
-        this.roomNoMore = false;
-        this.roomDisabled = false;
-        this.roomMaxId = res.data.max_id;
-        const list = (res.data && res.data.list) || [];
-        this.renderRoomList = [...this.renderRoomList, ...list];
+          if (res.data.list.length) {
+            this.roomNoMore = false;
+            this.roomDisabled = false;
+            this.roomMaxId = res.data.max_id;
+            const list = (res.data && res.data.list) || [];
+            this.renderRoomList = [...this.renderRoomList, ...list];
 
-        if (this.renderRoomList.length < res.data.count) {
-          this.roomPagination.page++;
-          this.roomFlag = true;
-        } else {
-          this.roomNoMore = true;
-          this.roomDisabled = true;
+            if (this.renderRoomList.length < res.data.count) {
+              this.roomPagination.page++;
+              this.roomFlag = true;
+            } else {
+              this.roomNoMore = true;
+              this.roomDisabled = true;
+              this.roomFlag = false;
+            }
+          } else {
+            this.roomNoMore = true;
+            this.roomDisabled = true;
+            this.roomFlag = false;
+          }
+        })
+        .catch((err) => {
+          console.log(err, "err");
           this.roomFlag = false;
-        }
-      } else {
-        this.roomNoMore = true;
-        this.roomDisabled = true;
-        this.roomFlag = false;
-      }
-    }).catch(err => {
-      console.log(err, "err");
-      this.roomFlag = false;
-    })
+        });
     }, 300),
     // 房间下拉加载
     onRoomLoad() {

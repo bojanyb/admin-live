@@ -36,6 +36,7 @@ import dynamicRouter from './modules/dynamic/index.js'
 import goodNumRouter from './modules/goodNum/index.js'
 import msgManagerRouter from './modules/msgManager/index.js'
 import activityManagerRouter from './modules/activityManager/index.js'
+import liveManageRouter from './modules/liveManage/index.js'
 
 
 
@@ -126,7 +127,8 @@ export const asyncRoutes = [
 	goodNumRouter,
 	msgManagerRouter,
 	activityManagerRouter,
-	systemConfigRouter,
+  systemConfigRouter,
+  liveManageRouter,
 	// 404 page must be placed at the end !!!
 	{
 		path: '/animate',

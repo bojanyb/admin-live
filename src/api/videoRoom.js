@@ -1284,3 +1284,21 @@ export function guildRoomType(data) {
     data
   })
 }
+
+// 有效直播时长
+export function effective(data) {
+  return request({
+    url: api.live.effective,
+    method: 'post',
+    data
+  })
+}
+
+// 有效直播时长 -- 保存
+export function saveEff(data) {
+  return request({
+    url: api.live.saveEff,
+    method: 'post',
+    data
+  })
+}
