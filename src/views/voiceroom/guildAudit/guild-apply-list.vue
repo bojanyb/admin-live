@@ -23,7 +23,7 @@ export default {
       tabIndex: '0',
       menuList: [
         {
-          name: "公会成员",
+          name: "派对主播",
         },
         {
           name: "直播主播",

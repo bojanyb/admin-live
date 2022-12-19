@@ -144,7 +144,8 @@ export default {
                 pagesize: params.size,
                 guild_number: s.guild_number,
                 user_number: s.user_number,
-                status: s.status
+                status: s.status,
+                guild_type: 1
             }
         },
         // 重置
@@ -175,7 +176,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(async () => {
-                let res = await rmGuildUser({ id: row.id })
+                let res = await rmGuildUser({ id: row.id, guild_type: 1 })
                 if(res.code === 2000) {
                 	this.$message({
                 		type: 'success',
@@ -189,7 +190,8 @@ export default {
         change(row){
             let params = {
                 id: row.id,
-                is_private_chat : row.is_private_chat == 0 ? 1 : 0
+                is_private_chat: row.is_private_chat == 0 ? 1 : 0,
+                guild_type: 1
             }
             changePrivateChat(params).then(res=>{
                 let tipsText = "";

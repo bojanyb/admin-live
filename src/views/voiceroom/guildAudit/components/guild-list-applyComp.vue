@@ -40,9 +40,9 @@ export default {
                     name: 'user_number',
                     type: 'input',
                     value: '',
-                    label: '喵喵ID',
+                    label: '用户ID',
                     isNum: true,
-                    placeholder: '请输入喵喵ID'
+                    placeholder: '请输入用户ID'
                 },
                 {
                     name: 'guild_type',
@@ -85,21 +85,21 @@ export default {
                         }
                     },
                     {
-                        label: '喵喵ID',
+                        label: '用户ID',
                         showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.user_number || '无')
                         }
                     },
                     {
-                        label: '公会昵称',
+                        label: '用户昵称',
                         showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.guild_name || '无')
                         }
                     },
                     {
-                        label: '公会类型',
+                        label: '申请公会类型',
                         showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.guild_type_name || '无')

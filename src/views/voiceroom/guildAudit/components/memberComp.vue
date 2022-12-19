@@ -80,17 +80,13 @@ export default {
                         }
                     },
                     {
-                        label: '公会ID',
+                        label: '公会',
                         showOverFlow: true,
                         render: (h, params) => {
-                            return h('span', params.row.guild_number || '无')
-                        }
-                    },
-                    {
-                        label: '公会昵称',
-                        showOverFlow: true,
-                        render: (h, params) => {
-                            return h('span', params.row.guild_nickname || '无')
+                        return h('div', [
+                          h('div', params.row.guild_nickname),
+                          h('div', `(${params.row.guild_number})` || '无')
+                        ])
                         }
                     },
                     {
@@ -104,41 +100,39 @@ export default {
                         label: '主播状态',
                         showOverFlow: true,
                         render: (h, params) => {
-
-                            
-                            return h('span',{ 
-                                style: { color: + params.row.status == 1 ? '#67C23A' : (params.row.status == 2 ? '#E6A23C' : '#F56C6C')  }},
-                                params.row.status == 1 ? '正常' : (params.row.status == 2 ? '封禁' : '注销') || '')
+                        return h('span',{
+                            style: { color: + params.row.status == 1 ? '#67C23A' : (params.row.status == 2 ? '#E6A23C' : '#F56C6C')  }},
+                            params.row.status == 1 ? '正常' : (params.row.status == 2 ? '封禁' : '注销') || '')
                         }
                     },
-                    {
-                        label: '今日收益',
-                        showOverFlow: true,
-                        render: (h, params) => {
-                            return h('span', params.row.today_charm + '喵粮')
-                        }
-                    },
-                    {
-                        label: '本周收益',
-                        showOverFlow: true,
-                        render: (h, params) => {
-                            return h('span', params.row.week_charm + '喵粮')
-                        }
-                    },
-                    {
-                        label: '总收益',
-                        showOverFlow: true,
-                        render: (h, params) => {
-                            return h('span', params.row.total_charm + '喵粮')
-                        }
-                    },
-                    {
-                        label: '私聊消息',
-                        showOverFlow: true,
-                        render: (h, params) => {
-                            return h('span', (params.row.chat_user_count + '人/' +  params.row.chat_count + '条'))
-                        }
-                    },
+                    // {
+                    //     label: '今日收益',
+                    //     showOverFlow: true,
+                    //     render: (h, params) => {
+                    //         return h('span', params.row.today_charm + '喵粮')
+                    //     }
+                    // },
+                    // {
+                    //     label: '本周收益',
+                    //     showOverFlow: true,
+                    //     render: (h, params) => {
+                    //         return h('span', params.row.week_charm + '喵粮')
+                    //     }
+                    // },
+                    // {
+                    //     label: '总收益',
+                    //     showOverFlow: true,
+                    //     render: (h, params) => {
+                    //         return h('span', params.row.total_charm + '喵粮')
+                    //     }
+                    // },
+                    // {
+                    //     label: '私聊消息',
+                    //     showOverFlow: true,
+                    //     render: (h, params) => {
+                    //         return h('span', (params.row.chat_user_count + '人/' +  params.row.chat_count + '条'))
+                    //     }
+                    // },
                     {
                         label: "私聊权限",
                         headIcon : require("./../../../../assets/ask.png"),
@@ -178,7 +172,8 @@ export default {
                 pagesize: params.size,
                 guild_number: s.guild_number,
                 user_number: s.user_number,
-                status: s.status
+                status: s.status,
+                guild_type: 2
             }
         },
         // 重置
@@ -209,7 +204,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(async () => {
-                let res = await rmGuildUser({ id: row.id })
+                let res = await rmGuildUser({ id: row.id, guild_type: 2 })
                 if(res.code === 2000) {
                 	this.$message({
                 		type: 'success',
@@ -223,7 +218,8 @@ export default {
         change(row){
             let params = {
                 id: row.id,
-                is_private_chat : row.is_private_chat == 0 ? 1 : 0
+                is_private_chat: row.is_private_chat == 0 ? 1 : 0,
+                guild_type: 2
             }
             changePrivateChat(params).then(res=>{
                 let tipsText = "";

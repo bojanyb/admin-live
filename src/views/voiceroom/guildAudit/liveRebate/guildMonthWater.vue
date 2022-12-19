@@ -217,7 +217,8 @@
 					type: 3,
 					status: s.status,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
-					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
+          end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
+          guild_type: 1
 				}
 				if(this.form.status === 1) {
 					data.status = 0
@@ -271,7 +272,7 @@
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
-				let res = await doSettlement({ ids, type: 1, status })
+				let res = await doSettlement({ ids, type: 1, status, guild_type: 1 })
 				if(res.code === 2000) {
 					this.$success("批量操作成功");
 				}
@@ -280,7 +281,7 @@
 			// 单个返点
 			async rebateFunc(id, status) {
 				let ids = [id]
-				let res = await doSettlement({ ids, type: 1, status })
+				let res = await doSettlement({ ids, type: 1, status, guild_type: 1 })
 				if(res.code === 2000) {
 					this.$success("操作成功");
 				}
@@ -300,7 +301,7 @@
 					})
 					this.guildList = res.data.list || []
 				}
-				
+
 			}
 		}
 	}
