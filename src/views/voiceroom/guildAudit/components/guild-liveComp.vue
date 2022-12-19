@@ -7,7 +7,7 @@
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
 		<!-- 新增 - 编辑组件 -->
-		<editComp ref="editComp" v-if="isDestoryComp" @destoryComp="destoryComp" :type = "2" @getList="getList"></editComp>
+		<editComp ref="editComp" v-if="isDestoryComp" @destoryComp="destoryComp" :type = "1" @getList="getList"></editComp>
 	</div>
 </template>
 
