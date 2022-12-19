@@ -45,8 +45,9 @@ export default {
             isDestoryComp: false, // 是否销毁组件
             classifyList: [],
             searchParams: {
-                party_status: 2,
-                admin_recommend_status: -1
+                room_number: '',
+                guild_number: '',
+                room_category_id: null
             }
         };
     },
@@ -84,10 +85,10 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.house.partyListV2,
+                url: REQUEST.live.anchorRoomList,
                 columns: [
                     {
-                        label: '房间ID',
+                        label: '直播间ID',
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
@@ -96,7 +97,7 @@ export default {
                         }
                     },
                     {
-                        label: '房间标题',
+                        label: '直播间标题',
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
@@ -112,20 +113,20 @@ export default {
                         minWidth: '100px'
                     },
                     {
-                        label: '直播间ID',
+                        label: '主播ID',
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', params.row.room_number || '无'),
+                                h('div', params.row.room_user_id || '无'),
                             ])
                         }
                     },
                     {
-                        label: '直播昵称',
+                        label: '主播昵称',
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', params.row.room_title || '无'),
+                                h('div', params.row.nickname || '无'),
                             ])
                         }
                     },
@@ -152,7 +153,7 @@ export default {
                         fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary', disabled: !params.row.guild_number }, on: {click:()=>{this.setHouseClassify(params.row)}}}, '设置房间类型'),
+                                h('el-button', { props: { type: 'primary', disabled: !params.row.guild_number }, on: {click:()=>{this.setHouseClassify(params.row)}}}, '设置直播类型'),
                                 h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改')
                             ])
                         }
@@ -167,12 +168,8 @@ export default {
             let s = { ...this.searchParams }
             let data = {
                 room_number: s.room_number,
-                party_status: s.party_status,
-                room_category_id: s.room_category_id,
                 guild_number: s.guild_number,
-            }
-            if(s.admin_recommend_status > -1){
-                data.admin_recommend_status = s.admin_recommend_status
+                room_category_id: s.room_category_id,
             }
             return {
                 page: params.page,
@@ -187,8 +184,10 @@ export default {
         // 重置
         reset() {
             this.searchParams = {
-                party_status: 2,
-                admin_recommend_status: -1
+                room_number: '',
+                guild_number: '',
+                room_category_id: null
+
             }
             this.getList()
         },
@@ -212,7 +211,7 @@ export default {
         },
         // 获取房间分类
         async getHouse() {
-            let res = await genreList({ belong: 2 })
+            let res = await genreList({ belong: 1 })
             if(res.data.list && res.data.list.length > 0) {
                 res.data.list.unshift({
                     name: '全部',

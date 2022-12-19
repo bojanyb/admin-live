@@ -23,14 +23,14 @@
             <el-col :span="14">
               <el-input
                 oninput="this.value=this.value.replace(/[^\d]/g,'');"
-                v-model="fromData.bigCost"
+                v-model="fromData.kv_value"
               ></el-input>
             </el-col>
             <el-col :span="8">
               <el-button
                 type="primary"
                 size="mini"
-                @click="onSave(fromData, 'broadcast_big_for_room')"
+                @click="onSave(fromData)"
                 >设置</el-button
               >
             </el-col>
@@ -47,26 +47,33 @@
     ></tableList>
 
     <!-- 新增or修改组件 -->
-    <editComp
+    <!-- <editComp
       v-if="isDestoryComp"
       ref="editComp"
       @destoryComp="destoryComp"
       @getList="getList"
-    ></editComp>
+    ></editComp> -->
+    <!-- 新增组件 -->
+    <categoryComp
+      v-if="isDestoryComp"
+      ref="categoryComp"
+      @destoryComp="destoryComp"
+      @getList="getList"
+    ></categoryComp>
   </div>
 </template>
 
 <script>
 // 引入api
-import { setBroadcastPrice, getBroadcastPrice } from "@/api/videoRoom";
+import { saveEff, effective } from "@/api/videoRoom";
 // 引入tab菜单组件
 import menuComp from "@/components/menuComp/index.vue";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
-// 引入新增or修改组件
-import editComp from "./components/editComp.vue";
+// // 引入新增or修改组件
+// import editComp from "./components/editComp.vue";
 // 引入api
 import REQUEST from "@/request/index.js";
 // 引入公共方法
@@ -75,6 +82,8 @@ import { timeFormat } from "@/utils/common.js";
 import mixins from "@/utils/mixins.js";
 // 引入公共map
 import MAPDATA from "@/utils/jsonMap.js";
+// 引入新增组件
+import categoryComp from "./components/categoryComp.vue";
 
 export default {
   name: "BroadcastList",
@@ -82,8 +91,9 @@ export default {
   components: {
     SearchPanel,
     tableList,
-    editComp,
+    // editComp,
     menuComp,
+    categoryComp,
   },
   data() {
     return {
@@ -93,8 +103,7 @@ export default {
       ruleForm: {},
       resultCost: "",
       fromData: {
-        cost: "",
-        bigCost: "",
+        kv_value: "",
       },
     };
   },
@@ -102,12 +111,11 @@ export default {
     forms() {
       const BroadcastList = [
         {
-          name: "user_number",
+          name: "name",
           type: "input",
           value: "",
-          label: "类型名称",
-          isNum: true,
-          placeholder: "请输入类型名称",
+          label: "房间类型",
+          placeholder: "请输入房间类型",
         },
       ];
       return this.tabIndex === "0" ? BroadcastList : [];
@@ -115,41 +123,35 @@ export default {
     cfgs() {
       return {
         vm: this,
-        url: REQUEST.room.broadcastList,
+        url: REQUEST.house.genreList,
         columns: [
           {
             label: "房间类型",
-            prop: "user_number",
+            prop: "name",
           },
           {
-            label: "类型名称",
-            prop: "type",
-            render: (h, params) => {
-              let data = MAPDATA.BROADCASTTYPESTATUS.find((item) => {
-                return item.value === params.row.type;
-              });
-              return h("span", data ? data.name : "无");
-            },
-          },
-          {
-            label: "类型图标",
-            prop: "from_type",
-            render: (h, params) => {
-              let data = MAPDATA.FROMTYPESTATUS.find((item) => {
-                return item.value === params.row.from_type;
-              });
-              return h("span", data ? data.name : "无");
-            },
+            label: "类型图片",
+            isimg: true,
+            prop: "icon",
+            // imgWidth: '50px',
+            imgHeight: "50px",
           },
           {
             label: "类型色值",
-            minWidth: "220px",
-            prop: "content",
+            prop: "color",
           },
           {
-            label: "类型色值",
-            minWidth: "220px",
-            prop: "content",
+            label: "权重排序",
+            prop: "sort",
+          },
+          {
+            label: "描述",
+            render: (h, params) => {
+              let data = MAPDATA.CATEGORYBUSINESSTYPELIST.find((item) => {
+                return item.value === params.row.belong;
+              });
+              return h("span", data ? data.name : "无");
+            },
           },
           {
             label: "操作",
@@ -159,12 +161,9 @@ export default {
                   "el-button",
                   {
                     props: { type: "primary" },
-                    style: {
-                      display: params.row.status === 2 ? "unset" : "none",
-                    },
                     on: {
                       click: () => {
-                        this.update(params.row, 2);
+                        this.update(params.row);
                       },
                     },
                   },
@@ -174,9 +173,12 @@ export default {
                   "el-button",
                   {
                     props: { type: "danger" },
+                    style: {
+                      display: params.row.id === 1 ? "none" : "unset",
+                    },
                     on: {
                       click: () => {
-                        this.down(params.row, 2);
+                        this.deleteParams(params.row.id);
                       },
                     },
                   },
@@ -208,8 +210,8 @@ export default {
       return {
         page: params.page,
         pagesize: params.size,
-        user_number: s.user_number,
-        type: s.type,
+        name: s.name,
+        belong: 1,
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
       };
@@ -255,7 +257,7 @@ export default {
     },
 
     // 保存
-    onSave(fromData, fromKey) {
+    onSave(fromData) {
       const loading = this.$loading({
         lock: true,
         text: "Loading",
@@ -270,20 +272,9 @@ export default {
       })
         .then(async () => {
           const tempData = {
-            key: fromKey,
-            value:
-              fromKey === "broadcast_for_room"
-                ? fromData.cost
-                : fromData.Bigcost,
+            kv_value: fromData.kv_value
           };
-
-          if (fromKey === "broadcast_for_room") {
-            tempData.value = fromData.cost;
-          } else {
-            tempData.value = fromData.bigCost;
-          }
-
-          const response = await setBroadcastPrice(tempData);
+          const response = await saveEff(tempData);
           if (response.code === 2000) {
             loading.close();
             this.$message({
@@ -301,7 +292,7 @@ export default {
     load(status, row) {
       this.isDestoryComp = true;
       setTimeout(() => {
-        this.$refs.editComp.loadParams(status, row);
+        this.$refs.categoryComp.loadParams(status, row);
       }, 50);
     },
     // 查询
@@ -319,21 +310,16 @@ export default {
     },
     // 获取广播单价
     async getResultPrice() {
-      const response = await Promise.all([
-        getBroadcastPrice({ key: "broadcast_for_room" }),
-        getBroadcastPrice({ key: "broadcast_big_for_room" }),
-      ]);
+      const response = await effective()
 
       if (
-        response[0].code + "" !== "2000" ||
-        response[1].code + "" !== "2000"
+        response.code + "" !== "2000"
       ) {
         this.$Message.error("请求失败");
         return;
       }
 
-      this.fromData.cost = response[0].data.value || "";
-      this.fromData.bigCost = response[1].data.value || "";
+      this.fromData.kv_value = response.data.kv_value || "";
     },
   },
 };

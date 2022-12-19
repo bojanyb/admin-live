@@ -47,20 +47,20 @@ export default {
     forms() {
       return [
         {
-          name: "number",
+          name: "user_number",
           type: "input",
           value: "",
           label: "主播ID",
           isNum: true,
-          placeholder: "请输入用户ID",
+          placeholder: "请输入主播ID",
         },
         {
-          name: "number",
+          name: "guild_number",
           type: "input",
           value: "",
           label: "公会ID",
           isNum: true,
-          placeholder: "请输入靓号ID",
+          placeholder: "请输入公会ID",
         },
         {
           name: "dateTimeParams",
@@ -84,54 +84,54 @@ export default {
     cfgs() {
       return {
         vm: this,
-        url: REQUEST.shopping.list,
+        url: REQUEST.live.anchorData,
         columns: [
           {
             label: "主播ID",
             render: (h, params) => {
-              return h("span", params.row.user_number);
+              return h("span", params.row.user_id);
             },
           },
           {
             label: "主播昵称",
             render: (h, params) => {
-              return h("span", params.row.user_number);
+              return h("span", params.row.user_nickname);
             },
           },
           {
             label: "所属公会",
             render: (h, params) => {
-              return h("span", params.row.user_number);
+              return h("span", params.row.guild_name || "--");
             },
           },
           {
             label: "直播有效天数",
             render: (h, params) => {
-              return h("span", params.row.user_number);
+              return h("span", params.row.e_times);
             },
           },
           {
             label: "直播时长",
             render: (h, params) => {
-              return h("span", params.row.user_number);
+              return h("span", params.row.l_long);
             },
           },
           {
             label: "直播场次",
             render: (h, params) => {
-              return h("span", params.row.user_number);
+              return h("span", params.row.l_times);
             },
           },
           {
             label: "主播流水",
             render: (h, params) => {
-              return h("span", params.row.user_number);
+              return h("span", params.row.a_total);
             },
           },
           {
             label: "房间流水",
             render: (h, params) => {
-              return h("span", params.row.user_number);
+              return h("span", params.row.r_total);
             },
           },
         ],
@@ -145,6 +145,10 @@ export default {
         deductMoney: null,
       },
       isDestoryComp: false, // 销毁组件
+      searchParams: {
+          guild_number: '',
+          user_number: '',
+      }
     };
   },
   methods: {
@@ -155,16 +159,16 @@ export default {
     // 配置参数
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams };
+      let data = {
+          guild_number: s.guild_number,
+          user_number: s.user_number,
+          start_time: Math.floor(s.start_time / 1000),
+          end_time: Math.floor(s.end_time / 1000),
+      }
       return {
         page: params.page,
-        status: s.status,
-        user_number: s.user_number,
-        start_time: Math.floor(s.start_time / 1000),
-        end_time: Math.floor(s.end_time / 1000),
-        user_id: s.user_id,
-        order_id: s.order_id,
-        sort: s.sort,
-        goods_type: s.goods_type,
+        pagesize: params.size,
+        ...data
       };
     },
     // 设置时间段

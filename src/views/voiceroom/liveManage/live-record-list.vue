@@ -204,7 +204,7 @@
 					{
 						label: '房间封面',
 						minWidth: '120px',
-						prop: 'room_title'
+						prop: 'room_cover'
 					},
 					{
 						label: '房间类型',
@@ -269,13 +269,13 @@
 				]
 				let name;
 				if(this.tabIndex === '0') {
-					name = 'liveList'
+					name = 'anchorLiveList'
 				} else {
-					name = 'liveHistoryList'
+					name = 'anchorLiveHistoryList'
 				}
 				return {
 					vm: this,
-					url: REQUEST.room[name],
+					url: REQUEST.live[name],
 					columns: this.tabIndex === '0' ? [ ...arr ] : [ ...arr1 ]
 				}
 			}
@@ -352,7 +352,7 @@
 			},
 			// 获取房间分类
 			async getHouse() {
-				let res = await genreList({ belong: 2 })
+				let res = await genreList({ belong: 1 })
 				if(res.data.list && res.data.list.length > 0) {
 					res.data.list.unshift({
 						name: '全部',
