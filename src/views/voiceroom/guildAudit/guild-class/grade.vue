@@ -37,7 +37,7 @@ export default {
         forms() {
             return [
                 {
-                    name: 'code',
+                    name: 'name',
                     type: 'input',
                     value: null,
                     keyName: 'value',
@@ -117,7 +117,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                code: s.code,
+                name: s.name,
                 type: 1,
                 guild_type: s.guild_type
             }
