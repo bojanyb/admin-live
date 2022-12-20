@@ -63,7 +63,7 @@
 			forms() {
 				return [
 					{
-						name: 'room_number',
+						name: 'user_number',
 						type: 'input',
 						value: '',
 						label: '主播ID',
@@ -203,8 +203,10 @@
 					},
 					{
 						label: '房间封面',
-						minWidth: '120px',
-						prop: 'room_cover'
+						isimg: true,
+						prop: 'room_cover',
+						imgHeight: '50px',
+						minWidth: '100px'
 					},
 					{
 						label: '房间类型',
@@ -287,7 +289,7 @@
 				return {
 					page: params.page,
 					pagesize: params.size,
-					room_number: s.room_number,
+					user_number: s.user_number,
 					room_category_id: s.room_category_id,
 					guild_number: s.guild_number,
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
