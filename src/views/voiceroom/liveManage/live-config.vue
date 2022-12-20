@@ -19,12 +19,13 @@
     >
       <el-form ref="form" :model="fromData" label-width="100px">
         <el-form-item label="每日直播时间">
-          <el-row class="body_box-col" :gutter="20">
-            <el-col :span="14">
+          <el-row :gutter="20">
+            <el-col :span="14" class="body_box-col">
               <el-input
                 oninput="this.value=this.value.replace(/[^\d]/g,'');"
                 v-model="fromData.kv_value"
               ></el-input>
+              <div class="col-unit">小时</div>
             </el-col>
             <el-col :span="8">
               <el-button
@@ -335,6 +336,14 @@ export default {
         border: none;
         border-radius: 0;
       }
+    }
+  }
+  .body_box-col {
+    position: relative;
+    .col-unit {
+      position: absolute;
+      top: 0;
+      right: 20px;
     }
   }
 }
