@@ -28,6 +28,17 @@
             :disabled="disabled"
           ></el-input>
         </el-form-item>
+        <el-form-item label="业务类型" prop="belong">
+          <el-select v-model="ruleForm.belong" placeholder="请选择">
+            <el-option
+              v-for="item in roomTypeList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="麦位模式" prop="seat_model">
           <el-select
             v-model="ruleForm.seat_model"
@@ -133,7 +144,18 @@ export default {
           { required: true, message: "请上传品类图标", trigger: "change" },
         ],
         img: [{ required: true, message: "请上传类型图标", trigger: "change" }],
+        belong: [{ required: true, message: "请选择业务类型", trigger: "change" }],
       },
+      roomTypeList: [
+        {
+          name: "派对",
+          value: 2,
+        },
+        {
+          name: "直播",
+          value: 1,
+        },
+      ],
     };
   },
   computed: {
@@ -165,6 +187,7 @@ export default {
       this.status = status;
       if (status !== "add") {
         let params = JSON.parse(JSON.stringify(row));
+        params.belong = params.belong
         this.$set(this.$data, "ruleForm", params);
       }
 
@@ -178,7 +201,6 @@ export default {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           let params = { ...this.ruleForm };
-          params.belong = 2;
           if (this.status === "update") {
             delete params.create_time;
           }
