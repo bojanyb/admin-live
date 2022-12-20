@@ -92,7 +92,7 @@ export default {
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', params.row.room_number || '无'),
+                                h('div', params.row.user_number || '无'),
                             ])
                         }
                     },
@@ -117,7 +117,7 @@ export default {
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', params.row.room_number || '无'),
+                                h('div', params.row.user_number || '无'),
                             ])
                         }
                     },
