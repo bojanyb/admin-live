@@ -47,10 +47,10 @@ export default {
 					name: '直播公会周流水结算'
 				},
 				{
-					name: '直播公会周流水奖励'
+					name: '直播公会周奖励'
 				},
 				{
-					name: '直播公会月流水奖励'
+					name: '直播公会月奖励'
 				}
 			],
 			tabIndex: '0',
