@@ -119,13 +119,13 @@
 							return h('span', params.row.flow + '钻石')
 						}
 					},
-					{
-						label: '周返点比例',
-						minWidth: '100px',
-						render: (h, params) => {
-							return h('span', params.row.rebate + '%')
-						}
-					},
+					// {
+					// 	label: '周返点比例',
+					// 	minWidth: '100px',
+					// 	render: (h, params) => {
+					// 		return h('span', params.row.rebate + '%')
+					// 	}
+					// },
 					{
 						label: '周返点金额',
 						minWidth: '120px',
