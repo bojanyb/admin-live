@@ -1,5 +1,11 @@
 <template>
   <div class="room-livelist">
+    <menuComp
+      ref="menuComp"
+      :menuList="menuList"
+      v-model="tabIndex"
+      @tabChange="tabChange"
+    ></menuComp>
     <div class="searchParams">
       <SearchPanel
         v-model="searchParams"
@@ -17,6 +23,7 @@
     <editComp
       v-if="isDestoryComp"
       ref="editComp"
+      :tabIndex="tabIndex"
       @destoryComp="destoryComp"
       @getList="getList"
     ></editComp>
@@ -25,7 +32,7 @@
 
 <script>
 // 引入api
-import { delAutoJoinRule } from "@/api/videoRoom";
+import { delAutoJoinRule, delChannels } from "@/api/videoRoom";
 // 引入tab菜单组件
 import menuComp from "@/components/menuComp/index.vue";
 // 引入菜单组件
@@ -54,85 +61,184 @@ export default {
     return {
       isDestoryComp: false, // 是否销毁组件
       ruleForm: {},
+      tabIndex: "0",
+      menuList: [
+        {
+          name: "渠道进房配置",
+        },
+        {
+          name: "渠道设置",
+        },
+      ],
     };
   },
   computed: {
     forms() {
-      return [
+      let arr = [
         {
-          name: "channel",
+          name: "code",
           type: "input",
           value: "",
-          label: "app渠道",
-          placeholder: "请输入app渠道",
+          label: "渠道编号",
+          placeholder: "请输入渠道编号",
         },
       ];
+
+      let arr1 = [
+        {
+          name: "name",
+          type: "input",
+          value: "",
+          label: "渠道名称",
+          placeholder: "请输入渠道名称",
+        },
+      ];
+
+      return this.tabIndex === "0" ? [...arr] : [...arr1];
     },
     cfgs() {
+      let arr = [
+        {
+          label: "渠道编号",
+          prop: "code",
+        },
+        {
+          label: "渠道名称",
+          prop: "name",
+        },
+        {
+          label: "渠道ID",
+          prop: "channels",
+        },
+        {
+          label: "进房ID",
+          prop: "room_number",
+        },
+        {
+          label: "推荐状态",
+          prop: "is_effect",
+          render: (h, params) => {
+            switch (params.row.is_effect) {
+              case 0:
+                return h("span", "未生效");
+                break;
+              case 1:
+                return h("span", "已生效");
+                break;
+
+              default:
+                return h("span", "无");
+                break;
+            }
+          },
+        },
+        {
+          label: "操作",
+          minWidth: "120px",
+          fixed: "right",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "el-button",
+                {
+                  props: { type: "primary" },
+                  on: {
+                    click: () => {
+                      this.update(params.row);
+                    },
+                  },
+                },
+                "修改"
+              ),
+              h(
+                "el-button",
+                {
+                  props: { type: "danger" },
+                  on: {
+                    click: () => {
+                      this.deleteParams(params.row.id);
+                    },
+                  },
+                },
+                "删除"
+              ),
+            ]);
+          },
+        },
+      ];
+
+      let arr1 = [
+        {
+          label: "添加时间",
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.create_time
+                ? timeFormat(
+                    params.row.create_time,
+                    "YYYY-MM-DD HH:mm:ss",
+                    true
+                  )
+                : "--"
+            );
+          },
+        },
+        {
+          label: "渠道编号",
+          prop: "code",
+        },
+        {
+          label: "渠道名称",
+          prop: "name",
+        },
+        {
+          label: "渠道ID",
+          prop: "channels",
+        },
+        {
+          label: "操作",
+          minWidth: "120px",
+          fixed: "right",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "el-button",
+                {
+                  props: { type: "primary" },
+                  on: {
+                    click: () => {
+                      this.update(params.row);
+                    },
+                  },
+                },
+                "修改"
+              ),
+              h(
+                "el-button",
+                {
+                  props: { type: "danger" },
+                  on: {
+                    click: () => {
+                      this.deleteParams(params.row.id);
+                    },
+                  },
+                },
+                "删除"
+              ),
+            ]);
+          },
+        },
+      ];
+      let name;
+      if (this.tabIndex === "0") {
+        name = "getAutoJoinRule";
+      } else {
+        name = "getChannels";
+      }
       return {
         vm: this,
-        url: REQUEST.room.getAutoJoinRule,
-        columns: [
-          {
-            label: "渠道ID",
-            prop: "channel",
-          },
-          {
-            label: "进房ID",
-            prop: "room_number",
-          },
-          {
-            label: "推荐状态",
-            prop: "is_effect",
-            render: (h, params) => {
-              switch (params.row.is_effect) {
-                case 0:
-                  return h("span", "未生效");
-                  break;
-                case 1:
-                  return h("span", "已生效");
-                  break;
-
-                default:
-                  return h("span", "无");
-                  break;
-              }
-            },
-          },
-          {
-            label: "操作",
-            minWidth: "120px",
-            fixed: "right",
-            render: (h, params) => {
-              return h("div", [
-                h(
-                  "el-button",
-                  {
-                    props: { type: "primary" },
-                    on: {
-                      click: () => {
-                        this.update(params.row);
-                      },
-                    },
-                  },
-                  "修改"
-                ),
-                h(
-                  "el-button",
-                  {
-                    props: { type: "danger" },
-                    on: {
-                      click: () => {
-                        this.deleteParams(params.row.id);
-                      },
-                    },
-                  },
-                  "删除"
-                ),
-              ]);
-            },
-          },
-        ],
+        url: REQUEST.room[name],
+        columns: this.tabIndex === "0" ? [...arr] : [...arr1],
       };
     },
   },
@@ -143,9 +249,10 @@ export default {
       return {
         page: params.page,
         pagesize: params.size,
-        channel: s.channel,
-        start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
-        end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
+        code: s.code,
+        name: s.name,
+        // start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
+        // end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
       };
     },
     // 刷新列表
@@ -201,13 +308,22 @@ export default {
         type: "warning",
       })
         .then(async () => {
-          let res = await delAutoJoinRule({ id });
+          let res;
+          if (this.tabIndex === "0") {
+            res = await delAutoJoinRule({ id });
+          } else if (this.tabIndex === "1") {
+            res = await delChannels({ id });
+          }
+
           if (res.code === 2000) {
             this.$success("删除成功");
             this.getList();
           }
         })
         .catch(() => {});
+    },
+    tabChange() {
+      this.searchParams.code = "";
     },
   },
 };

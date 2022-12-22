@@ -1248,3 +1248,30 @@ export function getHasConfigRoom(data) {
     data
   })
 }
+
+// 新增渠道
+export function insertChannels(data) {
+  return request({
+    url: api.room.insertChannels,
+    method: 'post',
+    data
+  })
+}
+
+// 修改渠道
+export function updateChannels(data) {
+  return request({
+    url: api.room.updateChannels,
+    method: 'post',
+    data
+  })
+}
+
+// 删除渠道
+export function delChannels(data) {
+  return request({
+    url: api.room.delChannels,
+    method: 'post',
+    data
+  })
+}
