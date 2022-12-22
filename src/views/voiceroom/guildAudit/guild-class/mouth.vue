@@ -44,6 +44,7 @@ export default {
           keyName: 'value',
           optionLabel: 'name',
           label: '奖励名称',
+          clearable: true,
           placeholder: '奖励名称',
         },
         {
@@ -54,7 +55,14 @@ export default {
           optionLabel: 'name',
           label: '公会类型',
           placeholder: '请选择',
-          options: this.guildTypeList
+          clearable: true,
+          linkage: true,
+          options: this.guildTypeList,
+          handler: {
+              change: (val) => {
+                  this.getGenreList({ guild_type: val })
+              }
+          }
         },
         {
           name: 'room_type',
@@ -64,6 +72,7 @@ export default {
           optionLabel: 'name',
           label: '房间类型',
           placeholder: '请选择',
+          clearable: true,
           options: this.roomTypeList
         },
       ]
@@ -206,17 +215,11 @@ export default {
           })
           return prev
         }, []) || []
-        // 模拟全部,避免切换其他之后无法切换查看到全部
-        let all = {
-          name : "全部",
-          value : ""
-        }
-        this.guildTypeList.unshift(all)
       }
     },
     // 获取房间类型
-    async getGenreList(){
-      const response = await guildRoomType()
+    async getGenreList(params){
+      const response = await guildRoomType(params)
       if(response.code == 2000){
         const tempArr = Array.from(
           Array.isArray(response.data.list) ? response.data.list : []
@@ -228,12 +231,6 @@ export default {
           })
           return prev
         }, []) || []
-        // 模拟全部,避免切换其他之后无法切换查看到全部
-        let all = {
-          name : "全部",
-          value : ""
-        }
-        this.roomTypeList.unshift(all)
       }
     }
   }
