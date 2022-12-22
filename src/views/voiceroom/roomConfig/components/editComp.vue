@@ -54,7 +54,6 @@
             <el-form-item
               label="开始时间"
               prop="start_time"
-              :rules="StartRules"
             >
               <el-time-picker
                 v-model="ruleForm.start_time"
@@ -65,7 +64,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="结束时间" prop="end_time" :rules="EndRules">
+            <el-form-item label="结束时间" prop="end_time">
               <el-time-picker
                 v-model="ruleForm.end_time"
                 value-format="timestamp"
