@@ -1,46 +1,28 @@
 <template>
   <div class="errPage-container">
     <el-row>
-      <el-col :span="12">
+      <el-col :span="24">
         <h2>当前页 - 首页</h2>
         <h6>或者你可以去</h6>
-        <el-button
-          icon="el-icon-arrow-right"
-          class="pan-back-btn"
-          @click="back"
-        >
+        <el-button class="pan-back-btn" @click="back">
           总览
+          <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
-      </el-col>
-      <el-col :span="12">
-        <img
-          :src="errGif"
-          width="313"
-          height="428"
-          alt="Girl has dropped her ice cream."
-        />
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import errGif from "@/assets/401_images/401.gif";
-
 export default {
-  name: "Page401",
+  name: "Home",
   data() {
-    return {
-      errGif: errGif + "?" + +new Date(),
-      ewizardClap:
-        "https://wpimg.wallstcn.com/007ef517-bafd-4066-aae4-6883632d9646",
-      dialogVisible: false,
-    };
+    return {};
   },
   methods: {
     back() {
       if (this.$route.query.noGoBack) {
-        this.$router.push({ path: "/dashboard" });
+        this.$router.push({ path: "/overview/index" });
       } else {
         this.$router.go(-1);
       }
