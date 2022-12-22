@@ -36,6 +36,7 @@ import dynamicRouter from './modules/dynamic/index.js'
 import goodNumRouter from './modules/goodNum/index.js'
 import msgManagerRouter from './modules/msgManager/index.js'
 import activityManagerRouter from './modules/activityManager/index.js'
+import homeRouter from './modules/home/index.js'
 
 
 
@@ -126,6 +127,7 @@ export const asyncRoutes = [
 	goodNumRouter,
 	msgManagerRouter,
 	activityManagerRouter,
+  homeRouter,
 	systemConfigRouter,
 	// 404 page must be placed at the end !!!
 	{
