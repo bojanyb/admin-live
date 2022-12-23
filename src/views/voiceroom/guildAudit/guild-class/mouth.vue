@@ -60,7 +60,7 @@ export default {
           options: this.guildTypeList,
           handler: {
               change: (val) => {
-                  this.getGenreList({ guild_type: val })
+                  this.getGenreList({ belong: val })
               }
           }
         },
