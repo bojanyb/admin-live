@@ -101,7 +101,10 @@ export default {
           {
             label: "所属公会",
             render: (h, params) => {
-              return h("span", params.row.guild_name || "--");
+              return h("div", [
+                h("div", `${params.row.guild_name || "--"}`),
+                h("div", `${params.row.guild_number}`),
+              ]);
             },
           },
           {
