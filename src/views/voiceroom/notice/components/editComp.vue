@@ -126,6 +126,15 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-form-item label="用户ID" prop="target_val" class="body_box-line" v-if="isUserId">
+          <el-input
+            type="textarea"
+            rows="3"
+            resize="none"
+            v-model="ruleForm.target_val"
+            placeholder="请输入自定义推送用户ID"
+          ></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
@@ -149,6 +158,7 @@ export default {
       ruleForm: {
         push_type: 0,
         push_val: "",
+        target_val: ""
       },
       oldParams: {}, // 老数据
       rules: {
@@ -163,6 +173,7 @@ export default {
       },
       pushTypeOptinos: MAPDATA.PUSHTYPESTATUS,
       targetTypeOptinos: MAPDATA.TARGETTYPESTATUS,
+      isUserId : false
     };
   },
   computed: {
@@ -170,6 +181,18 @@ export default {
       // 标题
       return "push推送";
     },
+  },
+  watch: {
+    "ruleForm.target_type" : {
+      handler(v){
+        if(v == 7){
+          this.isUserId = true
+          this.rules.target_val = [ { required: this.rules, message: "请输入自定义公户ID", trigger: "blur" } ]
+        }else{
+          this.rules.target_val = [{}]
+        }
+      }
+    }
   },
   methods: {
     // 新增 - 修改

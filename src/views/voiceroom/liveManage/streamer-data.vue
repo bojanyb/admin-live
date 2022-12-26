@@ -89,7 +89,7 @@ export default {
           {
             label: "主播ID",
             render: (h, params) => {
-              return h("span", params.row.user_id);
+              return h("span", params.row.user_number);
             },
           },
           {
