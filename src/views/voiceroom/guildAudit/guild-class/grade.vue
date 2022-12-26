@@ -13,7 +13,7 @@
 
 <script>
 // 引入api
-import { delSettlementConfig, getGuildType } from '@/api/videoRoom.js'
+import { delSettlementConfig, getGuildType, guildRoomType } from '@/api/videoRoom.js'
 // 引入新增 - 修改组件
 import gradeComp from './components/gradeComp.vue'
 // 引入菜单组件
@@ -46,15 +46,33 @@ export default {
                     placeholder: '公会等级',
                 },
                 {
-					name: 'guild_type',
-					type: 'select',
-					value: '',
-					keyName: 'value',
-					optionLabel: 'name',
-					label: '公会类型',
-					placeholder: '请选择',
-					options: this.guildTypeList
-				},
+                  name: 'guild_type',
+                  type: 'select',
+                  value: '',
+                  keyName: 'value',
+                  optionLabel: 'name',
+                  label: '公会类型',
+                  placeholder: '请选择',
+                  clearable: true,
+                  linkage: true,
+                  options: this.guildTypeList,
+                  handler: {
+                      change: (val) => {
+                          this.getGenreList({ belong: val })
+                      }
+                  }
+                },
+                {
+                  name: 'room_type',
+                  type: 'select',
+                  value: '',
+                  keyName: 'value',
+                  optionLabel: 'name',
+                  label: '房间类型',
+                  placeholder: '请选择',
+                  clearable: true,
+                  options: this.roomTypeList
+                },
             ]
         },
         cfgs() {
@@ -104,11 +122,13 @@ export default {
     data() {
         return {
             isDestoryComp: false, // 是否销毁组件
-            guildTypeList: []
+            guildTypeList: [], // 公会类型
+            roomTypeList: [] // 房间类型
         };
     },
     created() {
         this.getTypeList()
+        this.getGenreList()
     },
     methods: {
         // 配置参数
@@ -182,8 +202,24 @@ export default {
             return prev
           }, []) || []
          }
+        },
+        // 获取房间类型
+        async getGenreList(params){
+          const response = await guildRoomType(params)
+          if(response.code == 2000){
+            const tempArr = Array.from(
+              Array.isArray(response.data.list) ? response.data.list : []
+            )
+            this.roomTypeList = tempArr.reduce((prev, curr) => {
+              prev.push({
+                name: curr.name,
+                value: curr.id
+              })
+              return prev
+            }, []) || []
+          }
         }
-    }
+        }
 }
 </script>
 
