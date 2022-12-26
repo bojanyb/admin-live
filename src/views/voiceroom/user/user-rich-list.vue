@@ -8,7 +8,11 @@
           infinite-scroll-disabled="disabled"
           infinite-scroll-distance="20"
         >
-          <el-card v-for="item in list" style="margin-bottom: 10px">
+          <el-card
+            v-for="item in list"
+            :key="item.id"
+            style="margin-bottom: 10px"
+          >
             <div class="info-inner">
               <el-avatar :src="item.face"></el-avatar>
               <div class="info-detail">
@@ -22,7 +26,7 @@
             </div>
           </el-card>
           <p v-if="loading">加载中...</p>
-          <p v-if="(noMore && list.length)">没有更多了</p>
+          <p v-if="noMore && list.length">没有更多了</p>
           <div class="empty" v-if="!list.length">
             <i class="el-icon-document-delete"></i>
             <span>暂无数据</span>

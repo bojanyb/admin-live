@@ -9,11 +9,11 @@
                 <el-form-item label="公会名称" prop="name">
                     <el-input v-model="ruleForm.name" placeholder="请输入公会名字"></el-input>
                 </el-form-item>
-                <el-form-item label="公会类型" prop="guild_type">
+                <!-- <el-form-item label="公会类型" prop="guild_type">
                     <el-select v-model="ruleForm.guild_type" placeholder="请选择公会类型" :disabled="status === 'update'">
                         <el-option v-for="item in guildTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="公会长ID" prop="guild_number">
                     <el-input v-model="ruleForm.guild_number" placeholder="请输入公会长ID"></el-input>
                 </el-form-item>
@@ -37,7 +37,6 @@ import { getGuildCreateV2, getGuildUpdateV2, getGuildType } from '@/api/videoRoo
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
-    components: {},
     data() {
         return {
             status: 'add',
@@ -49,7 +48,7 @@ export default {
                 name: '',
                 guild_number: '',
                 rebate: 0,
-                guild_type: null
+                guild_type: this.type
             },
             oldParams: {}, // 老数据
             rules: {
@@ -69,21 +68,28 @@ export default {
                 // operator: [
                 //     { required: true, message: '请选择公会运营', trigger: 'change' }
                 // ],
-                guild_type: [
-                    { required: true, message: '请选择公会类型', trigger: 'change' }
-                ],
+                // guild_type: [
+                //     { required: true, message: '请选择公会类型', trigger: 'change' }
+                // ],
                 remark: [
                     { required: false, message: '请输入公会简介', trigger: 'blur' }
                 ]
-            }
+            },
         };
+    },
+    props: {
+      type : { // 模拟数据  派对公会：2, 直播公会：1
+        type : Number,
+        default: 2
+      }
     },
     computed: {
         title() { // 标题
+            let text =  this.type == 1 ? '派对' : '直播'
             if(this.status === 'add') {
-                return '新增公会'
+                return '新增' + text + '公会'
             } else if(this.status === 'update') {
-                return '修改公会'
+                return '修改'+ text +'公会'
             }
         },
         disabled() { // 是否禁止输入

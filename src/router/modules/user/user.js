@@ -54,6 +54,24 @@ const userRouter = {
         title: '大R用户',
         noCache: true
       }
+    },
+    {
+      path: 'user-pack',
+      component: () => import('@/views/voiceroom/user/user-pack'),
+      name: 'user-pack',
+      meta: {
+        title: '用户背包',
+        noCache: true
+      }
+    },
+    {
+      path: 'user-register',
+      component: () => import('@/views/voiceroom/user/user-register'),
+      name: 'user-register',
+      meta: {
+        title: '登录记录',
+        noCache: true
+      }
     }
 	]
 }

@@ -490,11 +490,11 @@ const CLASSLIST = [
 // 公会列表 - 公会类型
 const GUILDCONFIGTYPELIST = [
     {
-        name: '交友公会',
+        name: '直播公会',
         value: 1
     },
     {
-        name: '情感公会',
+      name: '派对公会',
         value: 2
     }
 ]
@@ -1357,6 +1357,18 @@ const GUILDCONFIGURATIONRATETYPELIST = [
         name: '百分比',
         value: 2
     }
+]
+
+// 公会等级配置管理 - 评级奖励类型
+const RENDERGUILDCONFIG = [
+  {
+    name: '喵粮',
+    value: 1
+  },
+  {
+    name: '%',
+    value: 2
+  }
 ]
 
 // 公会状态
@@ -2764,6 +2776,7 @@ export default {
     GUILDCLOSEANACCOUNTSTATUSLIST,
     GUILDCLOSEANACCOUNTSTATUSLISTCOPY,
     GUILDCONFIGURATIONRATETYPELIST,
+    RENDERGUILDCONFIG,
     PAYCONFIGURATIONPLATFORMLIST,
     PAYCONFIGURATIONPLATFORMTYPELIST,
     COMMERCIALMANAGEMENTPAYTYPELIST,
