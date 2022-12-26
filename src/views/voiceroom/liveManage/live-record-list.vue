@@ -110,7 +110,7 @@
 					},
 					{
 						label: '房间ID',
-						prop: 'room_number'
+						prop: 'user_number'
 					},
 					{
 						label: '房间标题',
@@ -194,7 +194,7 @@
 					{
 						label: '房间ID',
 						minWidth: '100px',
-						prop: 'room_number'
+						prop: 'user_number'
 					},
 					{
 						label: '房间标题',
