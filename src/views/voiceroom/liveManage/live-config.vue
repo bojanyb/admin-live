@@ -67,6 +67,7 @@
 <script>
 // 引入api
 import { saveEff, effective } from "@/api/videoRoom";
+import { delGenre } from "@/api/house.js";
 // 引入tab菜单组件
 import menuComp from "@/components/menuComp/index.vue";
 // 引入菜单组件
@@ -321,6 +322,14 @@ export default {
       }
 
       this.fromData.kv_value = response.data.kv_value || "";
+    },
+    // 删除
+    async deleteParams(id) {
+      let res = await delGenre({ id });
+      if (res.code === 2000) {
+        this.$success("删除成功");
+        this.getList();
+      }
     },
   },
 };
