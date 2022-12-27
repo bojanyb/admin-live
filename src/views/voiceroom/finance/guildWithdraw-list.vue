@@ -89,7 +89,7 @@ export default {
                     placeholder: '请选择',
                     options: MAPDATA.RECHARGEHISTORYTYPELIST
                 },
-                
+
                 {
                     name: 'trade_no',
                     type: 'input',
