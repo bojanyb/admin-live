@@ -1266,3 +1266,13 @@ export function saveEff(data) {
     data
   })
 }
+
+// 直播管理 -- 主播数据
+export function anchorData(data) {
+  return request({
+    url: api.live.anchorData,
+    method: 'post',
+    data
+  })
+}
+
