@@ -147,7 +147,7 @@ export default {
             label: '操作平台',
             prop: 'version',
             render: (h, params) => {
-              return h('span', params.row.platform == "1" ? "安卓" : (params.row.platform == "2" ? "IOS" : "模拟器"))
+              return h('span', params.row.platform == "2" ? "安卓" : (params.row.platform == "1" ? "IOS" : "模拟器"))
             }
           },
           {
