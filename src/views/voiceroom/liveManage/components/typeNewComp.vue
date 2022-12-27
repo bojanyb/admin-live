@@ -22,12 +22,8 @@
         </el-select>
         <el-button
           type="success"
-          :disabled="guild_number == 0 ? true : false"
           @click="bindTypes"
           >新增</el-button
-        >
-        <span style="color: red; margin-left: 15px" v-if="guild_number == 0"
-          >非公会房间,不可添加房间分类</span
         >
       </div>
       <div style="width: 100%">
