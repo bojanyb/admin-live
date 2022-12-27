@@ -54,12 +54,12 @@ export default {
       platformList: [
         {
           key: 1,
-          name: "Android",
+          name: "IOS",
           value: 1,
         },
         {
           key: 2,
-          name: "IOS",
+          name: "Android",
           value: 2,
         }
       ],
