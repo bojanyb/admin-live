@@ -153,7 +153,7 @@ export default {
                         fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary', disabled: !params.row.guild_number }, on: {click:()=>{this.setHouseClassify(params.row)}}}, '设置直播类型'),
+                                h('el-button', { props: { type: 'primary' }, on: {click:()=>{this.setHouseClassify(params.row)}}}, '设置直播类型'),
                                 h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改')
                             ])
                         }

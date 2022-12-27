@@ -9,6 +9,9 @@
         :show-search-btn="true"
         @onReset="reset"
         @onSearch="onSearch"
+        batchRurnName="导出EXCEL"
+        :show-batch-rurn="true"
+        @BatchRurn="BatchRurn"
       ></SearchPanel>
     </div>
     <div class="tableList">
@@ -22,6 +25,8 @@
 </template>
 
 <script>
+// 引入api
+import { anchorData } from '@/api/videoRoom.js'
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
@@ -33,7 +38,7 @@ import REQUEST from "@/request/index.js";
 // 引入api
 import { down } from "@/api/shopping.js";
 // 引入公共方法
-import { timeFormat } from "@/utils/common.js";
+import { timeFormat, exportTableData } from "@/utils/common.js";
 // 引入公共map
 import MAPDATA from "@/utils/jsonMap.js";
 
@@ -169,8 +174,8 @@ export default {
           end_time: Math.floor(s.end_time / 1000),
       }
       return {
-        page: params.page,
-        pagesize: params.size,
+        page: params ? params.page : null,
+        pagesize: params ? params.size : null,
         ...data
       };
     },
@@ -225,6 +230,35 @@ export default {
     destoryComp() {
       this.isDestoryComp = false;
     },
+    // 导出excel
+    async BatchRurn() {
+      let s = this.beforeSearch()
+      const exportData = {
+        ...s,
+        page: s.page || 1,
+        pagesize: s.pagesize || 10,
+        export: 1
+      }
+      let res = await anchorData(exportData)
+        let arr = JSON.parse(JSON.stringify(res.data.list))
+        if(arr.length <= 0) return this.$warning('当前没有数据可以导出')
+        arr = arr.map((item,index) => {
+            let params = {
+                user_number: item.user_number,
+                user_nickname: item.user_nickname,
+                guild_name: item.guild_name,
+                guild_number: item.guild_number,
+                e_times: item.e_times,
+                l_long: item.l_long,
+                l_times: item.l_times,
+                a_total: item.a_total,
+                r_total: item.r_total,
+            }
+            return params
+        })
+        let nameList = [ '主播ID','主播昵称', '所属公会', '公会ID', '直播有效天数','直播时长','直播场次','主播流水','房间流水' ]
+        exportTableData(arr, nameList, '主播数据')
+    }
   },
 };
 </script>
