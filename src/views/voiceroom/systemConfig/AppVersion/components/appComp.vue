@@ -27,7 +27,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="app渠道" prop="channels">
-            <el-checkbox-group v-model="channels" v-if="ruleForm.platform == '2'">
+            <el-checkbox-group v-model="channels" v-if="ruleForm.platform == '1'">
               <el-checkbox v-for="(item,index) in channelsList" v-if="item.channel.indexOf('iOS') > -1" :key="index" :label="item.channel"></el-checkbox>
             </el-checkbox-group>
             <el-checkbox-group v-model="channels" v-else>
