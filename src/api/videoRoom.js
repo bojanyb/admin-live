@@ -1275,3 +1275,40 @@ export function delChannels(data) {
     data
   })
 }
+
+// 房间类型列表
+export function guildRoomType(data) {
+  return request({
+    url: api.guild.guildRoomType,
+    method: 'post',
+    data
+  })
+}
+
+// 有效直播时长
+export function effective(data) {
+  return request({
+    url: api.live.effective,
+    method: 'post',
+    data
+  })
+}
+
+// 有效直播时长 -- 保存
+export function saveEff(data) {
+  return request({
+    url: api.live.saveEff,
+    method: 'post',
+    data
+  })
+}
+
+// 直播管理 -- 主播数据
+export function anchorData(data) {
+  return request({
+    url: api.live.anchorData,
+    method: 'post',
+    data
+  })
+}
+

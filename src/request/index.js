@@ -52,6 +52,11 @@ const request = {
         addSysNotice: `${HTTPHEADER}/NoticeLog/addSysNotice`, // 系统消息 新增
         officialList: `${HTTPHEADER}/NoticeLog/officialList`, // 官方消息 列表
         addOfficialNotice: `${HTTPHEADER}/NoticeLog/addOfficialNotice`, // 官方消息 新增
+        Apprule: `${HTTPHEADER}/Apprule/index`, // 版本审核开关列表
+        AppruleDel: `${HTTPHEADER}/apprule/delete`, // 版本审核删除
+        AppruleAdd: `${HTTPHEADER}/apprule/add`, // 版本审核添加
+        AppruleUpdate: `${HTTPHEADER}/apprule/update`, // 版本审核修改
+        getChannels : `${HTTPHEADER}/index/getChannels`, // 获取渠道
         super: {
             punishHistory: `${HTTPHEADER}/Room/punishHistory`, // 处理处罚历史
             handlePunish: `${HTTPHEADER}/Room/handlePunish`, // 处理处罚
@@ -201,6 +206,9 @@ const request = {
         updateLoginPwd: `${HTTPHEADER}/User/updateLoginPwd`, // 更改登录密码
         addRichUser: `${HTTPHEADER}/User/addRichUser`, // 添加财富用户
         supperUList: `${HTTPHEADER}/user/supperU`, // 添加财富用户
+        userGiftBag: `${HTTPHEADER}/user/userGiftBag`, // 用户礼物
+        userGoods: `${HTTPHEADER}/user/userGoods`, // 用户特效
+        loginLog: `${HTTPHEADER}/user/loginLog`, // 用户登录日志
     },
 
     // 审核管理
@@ -266,6 +274,7 @@ const request = {
         doSettlement: `${HTTPHEADER}/guild/doSettlement`, // 公会批量结算
         getNowRoomOnlineReward: `${HTTPHEADER}/guild/getNowRoomOnlineReward`, // 待结算 24小时房间奖励
         guildType: `${HTTPHEADER}/guild/guildType`, // 获取公会类型
+        guildRoomType: `${HTTPHEADER}/guild/roomType`, // 获取公会类型
         greetConfig: `${HTTPHEADER}/GreetConfig`, // 获取萌新配置项
         greetConfigSave: `${HTTPHEADER}/GreetConfig/save`, // 设置萌新配置项
     },
@@ -336,6 +345,16 @@ const request = {
         delBind: `${HTTPHEADER}/party/delBind`, // 房间移除绑定分类
         endLive: `${HTTPHEADER}/party/endLive`, // 关闭直播
         joinRoomLog: `${HTTPHEADER}/Room/joinRoomLog`, // 进入房间记录
+    },
+
+    // 直播管理
+    live: {
+      anchorRoomList: `${HTTPHEADER}/RoomV2/anchorRoomList`, // 房间列表
+      anchorLiveList: `${HTTPHEADER}/RoomV2/anchorLiveList`, // 直播列表
+      anchorLiveHistoryList: `${HTTPHEADER}/RoomV2/anchorLiveHistoryList`, // 历史列表
+      anchorData: `${HTTPHEADER}/roomV2/anchorData`, // 直播数据
+      effective: `${HTTPHEADER}/RoomV2/effective`, // 有效直播时长
+      saveEff: `${HTTPHEADER}/RoomV2/saveEff`, // 有效直播时长 -- 保存
     },
 
     // 风控检测

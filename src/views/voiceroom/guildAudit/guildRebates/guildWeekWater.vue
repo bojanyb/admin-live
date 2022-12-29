@@ -119,13 +119,13 @@
 							return h('span', params.row.flow + '钻石')
 						}
 					},
-					{
-						label: '周返点比例',
-						minWidth: '100px',
-						render: (h, params) => {
-							return h('span', params.row.rebate + '%')
-						}
-					},
+					// {
+					// 	label: '周返点比例',
+					// 	minWidth: '100px',
+					// 	render: (h, params) => {
+					// 		return h('span', params.row.rebate + '%')
+					// 	}
+					// },
 					{
 						label: '周返点金额',
 						minWidth: '120px',
@@ -213,7 +213,8 @@
 					type: 1,
 					status: s.status ? s.status : 1,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
-					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0
+          end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
+          guild_type: 2
 				}
 				if(this.form.status === 1) {
 					data.status = 0
@@ -267,7 +268,7 @@
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
-				let res = await doSettlement({ ids, type: 1, status })
+				let res = await doSettlement({ ids, type: 1, status, guild_type: 2 })
 				if(res.code === 2000) {
 					this.$success("批量操作成功");
 				}
@@ -276,7 +277,7 @@
 			// 单个返点
 			async rebateFunc(id, status) {
 				let ids = [id]
-				let res = await doSettlement({ ids, type: 1, status })
+				let res = await doSettlement({ ids, type: 1, status, guild_type: 2 })
 				if(res.code === 2000) {
 					this.$success("操作成功");
 				}
