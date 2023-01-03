@@ -299,7 +299,7 @@
 					})
 					this.guildList = res.data.list || []
 				}
-				
+
 			},
 			// 转base64
 			base64(s) {
@@ -339,14 +339,14 @@
 					str+='<tr>';
 					for(const key in arr[i]){
 						// 增加  为了不让表格显示科学计数法或者其他格式
-						str+=`<td style="text-align:center;height: 40px;">${ (arr[i][key] || '无') + '  '}</td>`;    
+						str+=`<td style="text-align:center;height: 40px;">${ (arr[i][key] || '无') + '  '}</td>`;
 					}
 					str+='</tr>';
 				}
 				// Worksheet名
 				const worksheet = 'Sheet1'
 				const uri = 'data:application/vnd.ms-excel;base64,';
-		
+
 				// 下载的表格模板数据
 				const template = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
 				xmlns:x="urn:schemas-microsoft-com:office:excel"
