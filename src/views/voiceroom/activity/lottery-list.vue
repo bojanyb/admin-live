@@ -1,184 +1,294 @@
 <template>
 	<div class="app-container">
-
-		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" @keyup.enter.native="getActivetyDrawLogList()">
-				<el-form-item label="抽奖人ID">
-					<el-input v-model="filters.user_number" v-input-limit="0" placeholder="抽奖人ID" clearable />
-				</el-form-item>
-				<el-form-item label="活动类型">
-					<el-select v-model="filters.activity_type_id" placeholder="请选择" @change="getActivetyDrawLogList">
-						<el-option v-for="item in lotteryType" :key="item.id" :label="item.name" :value="item.id" />
-					</el-select>
-				</el-form-item>
-				<el-form-item label="活动类别">
-					<el-select v-model="filters.activity_type" placeholder="请选择" @change="getActivetyDrawLogList">
-						<el-option v-for="item in activityTypeList" :key="item.value" :label="item.label"
-							:value="item.value" />
-					</el-select>
-				</el-form-item>
-				<el-form-item label="时间选择">
-					<el-date-picker v-model="timer" type="datetimerange" range-separator="至" start-placeholder="开始日期"
-						end-placeholder="结束日期" @change="getActivetyDrawLogList">
-					</el-date-picker>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="getActivetyDrawLogList">查询</el-button>
-				</el-form-item>
-			</el-form>
-		</el-col>
-
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-card class="sumBox">
-				<div class="sumBoxItem fl">活动开箱次数：{{baoxiang.baoxiang_open_count}}</div>
-				<div class="sumBoxItem fl">活动投入：{{baoxiang.baoxiang_in}}</div>
-				<div class="sumBoxItem fl">活动产出：{{baoxiang.baoxiang_out}}</div>
-				<div class="sumBoxItem fl">活动投入产出比：{{baoxiang.output_proportion}}</div>
-			</el-card>
-		</el-col>
-
-		<el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit
-			highlight-current-row>
-			<el-table-column align="center" label="序号" width="95">
-				<template slot-scope="scope">
-					{{ scope.$index + 1 }}
-				</template>
-			</el-table-column>
-			<el-table-column label="用户ID" prop="user_number" align="center" />
-			<el-table-column label="活动类型" prop="activeTypeText" align="center" />
-			<el-table-column label="活动类别" prop="boxTypeText" align="center" />
-			<el-table-column label="开箱次数" prop="user_open_count" align="center" />
-			<el-table-column label="幸运礼物" prop="big_gift_count" align="center" />
-			<el-table-column label="投入" prop="user_out" align="center" />
-			<el-table-column label="产出" prop="user_in" align="center" />
-		</el-table>
-		<!--工具条-->
-		<pagination v-show="total>0" :total="total" :page.sync="page.page" :limit.sync="page.limit"
-			@pagination="getActivetyDrawLogList" />
+		<div class="searchParams">
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+        </div>
+		<el-card class="box-card" shadow="always" v-if="tabIndex === '0'">
+			<div class="box-card-inner">
+				<div>抽奖人数：{{sumSource.user_count || 0}}人</div>
+				<div>抽奖次数：{{sumSource.lottery_count || 0}}次</div>
+				<div>消费金额：{{sumSource.lottery_cost_count || 0}}钻石</div>
+				<div>产出金额：{{sumSource.lottery_output_count || 0}}钻石</div>
+				<div>利润率：{{sumSource.profit_margin || 0}}%</div>
+			</div>
+		</el-card>
+		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
 	</div>
 </template>
 
 <script>
-	import {
-		getActivetyList,
-		getActivetyDrawLog
-	} from '@/api/videoRoom'
-	import Pagination from '@/components/Pagination'
-	import moment from 'moment'
+	// 引入api
+	import { getPoolName,getRound } from '@/api/activity'
+	// 引入菜单组件
+	import SearchPanel from '@/components/SearchPanel/final.vue'
+	// 引入列表组件
+	import tableList from '@/components/tableList/TableList.vue'
+	// 引入api
+	import REQUEST from '@/request/index.js'
+	// 引入公共方法
+	import { timeFormat } from '@/utils/common.js'
+	// 引入公共参数
+	import mixins from '@/utils/mixins.js'
+
 	export default {
-		name: 'lotteryList',
+		mixins: [mixins],
 		components: {
-			Pagination
+			tableList,
+			SearchPanel,
 		},
 		data() {
 			return {
-				list: [],
-				listLoading: true,
-				total: 0,
-				page: {
-					page: 1,
-					limit: 10
-				},
-				filters: {
-					"user_number": "",
-					"start_time": "",
-					"end_time": "",
-					"activity_type": 1,
-					"activity_type_id": ""
-				},
-				lotteryType: [],
-				activityTypeList: [{
-					"value": 1,
-					"label": "背包",
-				}, {
-					"value": 2,
-					"label": "派对",
-				}],
-				timer: "",
-				baoxiang: {},
+				activeList: [
+					{
+						id: 1,
+						name:"萌喵抓娃娃"
+					}
+				], // 活动
+				lotteryList: [], // 奖池
+				poolList: [], // 轮次
+				sumSource: {},
 			}
 		},
-		created() {
-			this.getActivetyListSource();
+		computed: {
+			forms() {
+				return [
+					{
+						name: 'user_number',
+						type: 'input',
+						value: '',
+						label: '用户ID',
+						isNum: true,
+						placeholder: '请输入用户ID'
+					},
+					{
+						name: 'gift_id',
+						type: 'input',
+						value: '',
+						label: '奖品ID',
+						isNum: true,
+						placeholder: '请输入奖品ID'
+					},
+					{
+						name: 'user_rank',
+						type: 'select',
+						value: 1,
+						keyName: 'id',
+						optionLabel: 'name',
+						label: '活动',
+						placeholder: '请选择',
+						options: this.activeList,
+					},
+					{
+						name: 'type',
+						type: 'select',
+						value: '',
+						keyName: 'key',
+						optionLabel: 'value',
+						label: '奖池',
+						placeholder: '请选择',
+						clearable: true,
+            linkage: true,
+						options: this.lotteryList,
+						handler: {
+							change: v => {
+								this.getRoundSource(v)
+							},
+						}
+					},
+					{
+						name: 'round',
+						type: 'select',
+						value: '',
+						keyName: 'round_number',
+						optionLabel: 'title',
+						label: '轮次',
+						placeholder: '请选择',
+						clearable: true,
+            linkage: true,
+						options: this.poolList
+					},
+					{
+						name: 'dateTimeParams',
+						type: 'datePicker',
+						dateType: 'datetimerange',
+						format: "yyyy-MM-dd HH:mm:ss",
+						label: '时间选择',
+						value: '',
+            linkage: true,
+						handler: {
+							change: v => {
+								this.emptyDateTime()
+								this.setDateTime(v)
+							},
+							selectChange: (v, key) => {
+								this.emptyDateTime()
+							}
+						}
+					}
+				]
+			},
+			cfgs() {
+				return {
+					vm: this,
+					url: REQUEST.activity.poolDetail,
+					columns: [
+						{
+							label: '时间',
+							width: '180px',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+						{
+							label: '用户ID',
+							prop: 'user_number'
+						},
+						{
+							label: '用户昵称',
+							prop: 'nickname',
+						},
+						{
+							label: '奖品类型',
+							render: (h, params) => {
+								return h('span', params.row.type_desc ? params.row.type_desc : '无')
+							}
+						},
+						{
+							label: '奖品ID',
+							prop: 'gift_id',
+							showOverFlow: true,
+							render: (h, params) => {
+								return h('span', params.row.gift_id > 0 ? params.row.gift_id : '--')
+							}
+						},
+						{
+							label: '奖品名称',
+							prop: 'remark',
+							showOverFlow: true
+						},
+						{
+							label: '奖品单价',
+							render: (h, params) => {
+								return h('span', params.row.gift_diamond)
+							}
+						},
+						{
+							label: '抽奖花费',
+							render: (h, params) => {
+								return h('span', params.row.lottery_cost)
+							}
+						},
+						{
+							label: '利润值',
+							render: (h, params) => {
+								return h('span', params.row.profit)
+							}
+						},
+					]
+				}
+			}
+		},
+		mounted(){
+			this.getPoolNameSource()
 		},
 		methods: {
-			getActivetyListSource() {
-				this.srcList = []
-				var params = {
-					'page': this.page.page,
-					'pagesize': this.page.limit,
+			// 配置参数
+			beforeSearch(params) {
+				let s = { ...this.searchParams, ...this.dateTimeParams }
+				return {
+					page: params.page,
+					pagesize: params.size,
+					type: (s.type == -1 || s.type == "全部") ? "" : s.type,
+					start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
+                	end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
+					round: (s.round == -1 || s.round == "全部") ? "" : s.round,
+					user_number: s.user_number,
+					gift_id: s.gift_id,
 				}
-				getActivetyList(params).then(response => {
-					response.data.list.map((re, i) => {
-						if (i == 0) {
-							this.filters.activity_type_id = re.id;
-						}
-					})
-					this.lotteryType = response.data.list;
-					this.getActivetyDrawLogList();
-				}).catch(err => {
-					console.log(err);
-				})
 			},
-			getActivetyDrawLogList() {
-				this.listLoading = true
-				this.srcList = []
-				var params = {
-					'page': this.page.page,
-					'pagesize': this.page.limit,
-					"user_number": this.filters.user_number,
-					"start_time": this.timer ? (new Date(this.timer[0]).getTime() / 1000) : "",
-					"end_time": this.timer ? (new Date(this.timer[1]).getTime() / 1000) : "",
-					'activity_type': this.filters.activity_type,
-					'activity_type_id': this.filters.activity_type_id
+			// 刷新列表
+			getList() {
+				this.$refs.tableList.getData()
+			},
+			// 设置时间段
+			setDateTime(arr) {
+				const date = arr ? {
+					start_time: arr[0],
+					end_time: arr[1]
+				} : {}
+				this.$set(this, 'dateTimeParams', date)
+			},
+			// 清空日期选择
+			emptyDateTime() {
+				this.dateTimeParams = {}
+			},
+			// 重置
+			reset() {
+				this.searchParams = {}
+				this.dateTimeParams = {}
+				this.getList()
+			},
+			// 查询
+			onSearch() {
+				this.getList()
+			},
+			// table 返回数据
+			saleAmunt(row){
+				this.sumSource = row.data
+			},
+			// 获取奖池名
+			async getPoolNameSource() {
+				let res = await getPoolName();
+				if(res.code == 2000){
+					this.lotteryList = res.data.pool
+					let all = {key: -1, value: "全部"}
+					this.lotteryList.unshift(all)
 				}
-				getActivetyDrawLog(params).then(response => {
-					this.total = response.data.count
-					this.baoxiang = response.data.baoxiang;
-					let activeTypeText = "";
-					let boxTypeText = "";
-					this.lotteryType.map(res => {
-						if (res.id == this.filters.activity_type_id) {
-							activeTypeText = res.name;
-						}
-					})
-					this.activityTypeList.map(res => {
-						if (res.value == this.filters.activity_type) {
-							boxTypeText = res.label;
-						}
-					})
-					response.data.list.map(re => {
-						re.activeTypeText = activeTypeText;
-						re.boxTypeText = boxTypeText;
-					})
-					this.list = response.data.list
-					this.listLoading = false
-				}).catch(err => {
-					this.$message.error(err);
-					this.listLoading = false
-				})
 			},
+			// 获取轮数
+			async getRoundSource(type) {
+				let roundType = type == -1 ? "" : type
+				// 初始化轮数
+				this.searchParams.round = ""
+				let res = await getRound({type:roundType});
+				if(res.code == 2000){
+          // 全部默认选择第一个
+          if(roundType == ""){
+            this.searchParams.round = res.data.round[0].round_number
+          }
+					this.poolList = res.data.round
+				}
+			}
 		}
 	}
 </script>
-<style scoped="scoped" lang="scss">
-	::v-deep.sumBox {
-		margin-bottom: 20px;
+<style lang="scss">
+	.el-icon-circle-close {
+		color: #FFFFFF;
+	}
+	.box-card {
+		width: 100%;
+		height: 40px;
+		background: rgba(0, 0, 0, 0.7);
 		display: flex;
-
-		.el-card__body {
+		align-items: center;
+		padding: 0px 30px;
+		box-sizing: border-box;
+		margin-bottom: 20px;
+		.el-card__body{
 			width: 100%;
-
-			.sumBoxItem {
-				width: 25%;
-				text-align: center;
-				border-right: solid 1px #DCDCDC;
-			}
-
-			.sumBoxItem:last-child {
-				border-right: none;
+			padding: 0;
+			.box-card-inner {
+				display: flex;
+				justify-content: space-around;
+				div {
+					font-size: 15px;
+					color: #ffffff;
+				}
 			}
 		}
 	}
 </style>
+
+
+

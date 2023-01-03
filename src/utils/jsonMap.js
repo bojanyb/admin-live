@@ -490,11 +490,11 @@ const CLASSLIST = [
 // 公会列表 - 公会类型
 const GUILDCONFIGTYPELIST = [
     {
-        name: '交友公会',
+        name: '直播公会',
         value: 1
     },
     {
-        name: '情感公会',
+      name: '派对公会',
         value: 2
     }
 ]
@@ -1359,6 +1359,18 @@ const GUILDCONFIGURATIONRATETYPELIST = [
     }
 ]
 
+// 公会等级配置管理 - 评级奖励类型
+const RENDERGUILDCONFIG = [
+  {
+    name: '喵粮',
+    value: 1
+  },
+  {
+    name: '%',
+    value: 2
+  }
+]
+
 // 公会状态
 const GUILDSTATUS = [
     {
@@ -1779,16 +1791,20 @@ const LOGOUTUNTREATEDSORTLIST = [
 // 未处理 - 状态
 const LOGOUTUNTREATEDSTATUSLIST = [
     {
-        name: '未处理',
-        value: 0
+      name: '待处理',
+      value: 0
     },
     {
-        name: '已处理',
-        value: 1
+      name: '已同意',
+      value: 1
     },
     {
-        name: '拒绝',
-        value: 3
+      name: '已拒绝',
+      value: 2
+    },
+    {
+      name: '用户已同意',
+      value: 3
     }
 ]
 
@@ -1822,6 +1838,26 @@ const REPORTUSERPUNISHSTATUSLIST = [
         name: '已忽略',
         value: 3
     }
+]
+
+// 注销状态
+const LOGOUTSTATUS = [
+  {
+    name: '待处理',
+    value: 0
+  },
+  {
+    name: '已同意',
+    value: 1
+  },
+  {
+    name: '已拒绝',
+    value: 2
+  },
+  {
+    name: '用户已同意',
+    value: 3
+  }
 ]
 
 /*
@@ -2149,6 +2185,16 @@ const USERPUNISHTYPELISTCOPY = [
 // 用户处罚 - 处罚类型 - 列表
 const USERPUNISHTYPELISTCOPYTWO = [
     {
+      name: '禁言',
+      value: 5,
+      disabled: false
+    },
+    {
+      name: '房间冻结',
+      value: 6,
+      disabled: false
+    },
+    {
         name: '封号',
         value: 1,
         disabled: false
@@ -2219,6 +2265,34 @@ const USERPUNISHSTATUSLISTCOPY = [
         name: '已解除',
         value: 3
     }
+]
+
+// 用户处罚 - 处罚时间
+const TIMEPENALTYSTATUS = [
+  {
+    name: '封号',
+    value: 1
+  },
+  {
+    name: '封设备',
+    value: 2
+  },
+  {
+    name: '封IP',
+    value: 3
+  },
+  {
+    name: '封实名',
+    value: 4
+  },
+  {
+    name: '禁言',
+    value: 5
+  },
+  {
+    name: '房间冻结',
+    value: 6
+  },
 ]
 
 // 用户处罚 - 重置资料
@@ -2337,6 +2411,286 @@ const GUILDREPORTSTATUS = [
     }
 ]
 
+// 发送类型状态
+const FROMTYPESTATUS = [
+    {
+        name: '用户发送',
+        value: 1
+    },
+    {
+        name: '后台发送',
+        value: 2
+    },
+    {
+        name: '后台帮用户发送',
+        value: 3
+    }
+]
+
+// 消息类型
+const MSGTYPE = [
+    {
+        name: '充值',
+        value: 1
+    },
+    {
+        name: '活动',
+        value: 2
+    },
+]
+
+// 用户选择类型
+const USERSLECTTYPE = [
+    {
+        name: '所有用户',
+        value: 1
+    },
+    {
+        name: '指定用户',
+        value: 2
+    },
+]
+
+// 跳转类型
+const PATHTYPE = [
+    {
+        name: '进房间',
+        value: 1
+    },
+    {
+        name: 'URL',
+        value: 2
+    },
+]
+
+// 跳转类型
+const PATHTYPE2 = [
+    {
+        name: '无',
+        value: 0
+    },
+    {
+        name: '进房间',
+        value: 2
+    },
+    {
+        name: 'URL',
+        value: 3
+    },
+]
+
+// 靓号类型
+const GOODNUMTYPE = [
+    {
+        name: '用户靓号',
+        value: 0
+    },
+    {
+        name: '房间靓号',
+        value: 1
+    },
+]
+
+// 靓号使用状态
+const GOODNUMSTATUS = [
+    {
+        name: '未上架',
+        value: 1
+    },
+    {
+        name: '上架中',
+        value: 2
+    },
+    {
+      name: '已使用',
+      value: 3
+  },
+]
+
+// 靓号商品分类
+const GOODNUMCLASS = [
+    {
+        name: '全部分类',
+        value: 1
+    },
+    {
+        name: '爱情号',
+        value: 2
+    },
+    {
+        name: '顺子号',
+        value: 3
+    },
+    {
+        name: '对字号',
+        value: 4
+    },
+    {
+        name: '叠字号',
+        value: 5
+    },
+]
+
+// 靓号上架状态
+const GOODRACKSTATUS = [
+    {
+        name: '正常',
+        value: 0
+    },
+    {
+        name: '下架',
+        value: 1
+    }
+]
+
+// 靓号上架状态
+const GOODSENDSTATUS = [
+  {
+      name: '商城购买',
+      value: 25
+  },
+  {
+      name: '后台发放',
+      value: 27
+  }
+]
+
+// 显示状态
+const SHOWSTATUS = [
+    {
+        name: '显示',
+        value: 0
+    },
+    {
+        name: '隐藏',
+        value: 1
+    },
+]
+
+// 是否默认选中
+const CHECKEDSTATUS = [
+    {
+        name: '是',
+        value: 1
+    },
+    {
+        name: '否',
+        value: 0
+    },
+]
+
+// 上架状态
+const RACKSATUS = [
+    {
+        name: '上架中',
+        value: 1
+    },
+    {
+        name: '待上架',
+        value: 2
+    },
+    {
+        name: '已下架',
+        value: 3
+    },
+]
+
+// 活动状态
+const ACTIVESTATUS = [
+    {
+        name: '生效中',
+        value: 1
+    },
+    {
+        name: '待生效',
+        value: 2
+    },
+    {
+        name: '已过期',
+        value: 3
+    },
+]
+// 落地类型
+const PUSHTYPESTATUS = [
+    {
+        name: '打开APP',
+        value: 0
+    },
+    {
+        name: '进房间',
+        value: 2
+    },
+    {
+        name: 'Url',
+        value: 3
+    }
+]
+
+// 目标类型
+const TARGETTYPESTATUS = [
+    {
+        name: '注册',
+        value: 1
+    },
+    {
+        name: '登录',
+        value: 2
+    },
+    {
+        name: '活跃',
+        value: 3
+    },
+    {
+        name: '充值',
+        value: 4
+    },
+    {
+        name: '宝箱',
+        value: 5
+    },
+    {
+        name: '召回',
+        value: 6
+    },
+    {
+        name: '自定义',
+        value: 7
+    }
+]
+
+
+// 目标类型
+const BROADCASTTYPESTATUS = [
+    {
+        name: '小喇叭',
+        value: 1
+    },
+    {
+        name: '大喇叭',
+        value: 2
+    }
+]
+
+// 使用状态
+const USESTATUS = [
+    {
+        name: '全部 ',
+        value: 0
+    },
+    {
+        name: '使用中',
+        value: 1
+    },
+    {
+        name: '未使用',
+        value: 2
+    },
+    {
+        name: '已过期',
+        value: 3
+    }
+]
+
 export default {
     USERINVITE,
     DOWNLOADSOURCE,
@@ -2422,6 +2776,7 @@ export default {
     GUILDCLOSEANACCOUNTSTATUSLIST,
     GUILDCLOSEANACCOUNTSTATUSLISTCOPY,
     GUILDCONFIGURATIONRATETYPELIST,
+    RENDERGUILDCONFIG,
     PAYCONFIGURATIONPLATFORMLIST,
     PAYCONFIGURATIONPLATFORMTYPELIST,
     COMMERCIALMANAGEMENTPAYTYPELIST,
@@ -2447,5 +2802,25 @@ export default {
     USERREGISTERTYPELIST,
     DURATIONCOPY,
     HOUSEMESSAGEHOTRECOMMENDLIST,
-    DEPOSITCONFIGURATIONPLATFORMLIST
+    FROMTYPESTATUS,
+    MSGTYPE,
+    USERSLECTTYPE,
+    PATHTYPE,
+    GOODNUMTYPE,
+    GOODNUMSTATUS,
+    GOODNUMCLASS,
+    GOODRACKSTATUS,
+    SHOWSTATUS,
+    CHECKEDSTATUS,
+    RACKSATUS,
+    ACTIVESTATUS,
+    PATHTYPE2,
+    PUSHTYPESTATUS,
+    TARGETTYPESTATUS,
+    DEPOSITCONFIGURATIONPLATFORMLIST,
+    BROADCASTTYPESTATUS,
+    GOODSENDSTATUS,
+    TIMEPENALTYSTATUS,
+    LOGOUTSTATUS,
+    USESTATUS
 }

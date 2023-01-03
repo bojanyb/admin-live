@@ -78,7 +78,16 @@ const guildAuditRouter = {
 			component: () => import('@/views/voiceroom/guildAudit/guildRebate-list'),
 			name: 'guildRebate-list',
 			meta: {
-				title: '流水结算',
+				title: '派对结算',
+				noCache: true
+			}
+		},
+    {
+			path: 'liveRebate-list',
+			component: () => import('@/views/voiceroom/guildAudit/liveRebate-list'),
+			name: 'liveRebate-list',
+			meta: {
+				title: '直播结算',
 				noCache: true
 			}
 		},
@@ -91,7 +100,15 @@ const guildAuditRouter = {
 				noCache: true
 			}
 		},
-		
+		{
+			path: 'guildNews',
+			component: () => import('@/views/voiceroom/guildAudit/guild_new'),
+			name: 'guildNews',
+			meta: {
+				title: '萌新设置',
+				noCache: true
+			}
+		},
 	]
 }
 

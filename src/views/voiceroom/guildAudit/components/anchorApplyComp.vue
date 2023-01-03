@@ -110,6 +110,13 @@ export default {
                         }
                     },
                     {
+                        label: '公会类型',
+                        showOverFlow: true,
+                        render: (h, params) => {
+                            return h('span', params.row.guild_nickname || '无')
+                        }
+                    },
+                    {
                         label: '主播性别',
                         showOverFlow: true,
                         render: (h, params) => {

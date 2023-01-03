@@ -19,7 +19,7 @@ const request = {
         useCash: `${HTTPHEADER}/PayManage/useCash`, // 使用提现
     },
 
-    // 平台活动  
+    // 平台活动
     platformActivity: {
         Activityins: `${HTTPHEADER}/Activityins/index`, // 幸运转盘设置
         configMMLY: `${HTTPHEADER}/activityins/configMMLY`, // 配置喵喵乐园
@@ -38,6 +38,7 @@ const request = {
         Appversion: `${HTTPHEADER}/Appversion`, // 版本列表
         AppversionAChange: `${HTTPHEADER}/appversion/add`, // 新增或者修改
         AppversionDel: `${HTTPHEADER}/appversion/del`, // 删除
+        changeStatus: `${HTTPHEADER}/Appversion/changeStatus`, // 启用或者停止
         getMenuPermissions: `${HTTPHEADER}/admin/getMenuPermissions`, // 菜单列表
         getAllPermission: `${HTTPHEADER}/admin/getAllPermission`, // 获取所有节点
         adminMenu: `${HTTPHEADER}/admin/index`, // 管理员列表
@@ -47,6 +48,15 @@ const request = {
         view: `${HTTPHEADER}/admin/view`, // 查看管理员信息
         deleteAdmin: `${HTTPHEADER}/admin/delete`, // 删除用户
         adminStatus: `${HTTPHEADER}/admin/adminStatus`, // 开关用户
+        sysList: `${HTTPHEADER}/NoticeLog/sysList`, // 系统消息 列表
+        addSysNotice: `${HTTPHEADER}/NoticeLog/addSysNotice`, // 系统消息 新增
+        officialList: `${HTTPHEADER}/NoticeLog/officialList`, // 官方消息 列表
+        addOfficialNotice: `${HTTPHEADER}/NoticeLog/addOfficialNotice`, // 官方消息 新增
+        Apprule: `${HTTPHEADER}/Apprule/index`, // 版本审核开关列表
+        AppruleDel: `${HTTPHEADER}/apprule/delete`, // 版本审核删除
+        AppruleAdd: `${HTTPHEADER}/apprule/add`, // 版本审核添加
+        AppruleUpdate: `${HTTPHEADER}/apprule/update`, // 版本审核修改
+        getChannels : `${HTTPHEADER}/index/getChannels`, // 获取渠道
         super: {
             punishHistory: `${HTTPHEADER}/Room/punishHistory`, // 处理处罚历史
             handlePunish: `${HTTPHEADER}/Room/handlePunish`, // 处理处罚
@@ -151,7 +161,7 @@ const request = {
         send: `${HTTPHEADER}/goods/send`,
         sendlog: `${HTTPHEADER}/goods/sendlog`,
     },
-    
+
     // 派对管理
     room: {
         report: `${HTTPHEADER}/Room/feedback`,
@@ -164,6 +174,23 @@ const request = {
         // liveEnd: `${HTTPHEADER}/Room/liveEnd`, // 关闭房间
         liveEnd: `${HTTPHEADER}/v2/room/closeRoom`, // 关闭房间
         genre: `${HTTPHEADER}/Room/genre`, // 房间类型列表
+        broadcastList: `${HTTPHEADER}/broadcast/index`, // 房间广播列表
+        sendBroadcast: `${HTTPHEADER}/Broadcast/send`, // 发送广播
+        setBroadcastPrice: `${HTTPHEADER}/System/setKV`, // 设置广播价格
+        getBroadcastPrice: `${HTTPHEADER}/System/getKV`, // 获取广播价格
+        getAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig`, // 渠道进房列表
+        addAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig/add`, // 新增渠道进房
+        delAutoJoinConfig: `${HTTPHEADER}/AutoJoinConfig/del`, // 新增渠道进房
+        getAutoJoinRule: `${HTTPHEADER}/AutoJoinRule`, // 渠道进房规则列表
+        checkAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/checkRoom`, // 根据房间号获取房间ID
+        addAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/addRule`, // 添加渠道进房规则
+        updateAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/updateRule`, // 修改渠道进房规则
+        delAutoJoinRule: `${HTTPHEADER}/AutoJoinRule/delRule`, // 删除渠道进房规则
+        getHasConfigRoom: `${HTTPHEADER}/AutoJoinRule/getHasConfigRoom`, // 获取已经配置的房间
+        getChannels: `${HTTPHEADER}/AutoJoinRule/getChannels`, // 渠道设置列表
+        insertChannels: `${HTTPHEADER}/AutoJoinRule/insertChannels`, // 新增渠道
+        updateChannels: `${HTTPHEADER}/AutoJoinRule/updateChannels`, // 修改渠道
+        delChannels: `${HTTPHEADER}/AutoJoinRule/delChannels`, // 删除渠道
     },
 
     // 用户管理
@@ -178,8 +205,12 @@ const request = {
         punishStatus: `${HTTPHEADER}/userPunish/punishStatus`, // 用户状态
         updateLoginPwd: `${HTTPHEADER}/User/updateLoginPwd`, // 更改登录密码
         addRichUser: `${HTTPHEADER}/User/addRichUser`, // 添加财富用户
+        supperUList: `${HTTPHEADER}/user/supperU`, // 添加财富用户
+        userGiftBag: `${HTTPHEADER}/user/userGiftBag`, // 用户礼物
+        userGoods: `${HTTPHEADER}/user/userGoods`, // 用户特效
+        loginLog: `${HTTPHEADER}/user/loginLog`, // 用户登录日志
     },
-    
+
     // 审核管理
     audit: {
         list: `${HTTPHEADER}/user/getUserBgi`,
@@ -241,8 +272,11 @@ const request = {
         saveSettlementConfig: `${HTTPHEADER}/guild/saveSettlementConfig`, // 配置周返点
         delSettlementConfig: `${HTTPHEADER}/guild/delSettlementConfig`, // 删除周返点配置
         doSettlement: `${HTTPHEADER}/guild/doSettlement`, // 公会批量结算
-        getNowRoomOnlineReward: `${HTTPHEADER}/guild/getNowRoomOnlineReward`, // 待结算 24小时房间奖励 
+        getNowRoomOnlineReward: `${HTTPHEADER}/guild/getNowRoomOnlineReward`, // 待结算 24小时房间奖励
         guildType: `${HTTPHEADER}/guild/guildType`, // 获取公会类型
+        guildRoomType: `${HTTPHEADER}/guild/roomType`, // 获取公会类型
+        greetConfig: `${HTTPHEADER}/GreetConfig`, // 获取萌新配置项
+        greetConfigSave: `${HTTPHEADER}/GreetConfig/save`, // 设置萌新配置项
     },
 
     // 封禁记录
@@ -275,6 +309,8 @@ const request = {
         messageAdd: `${HTTPHEADER}/ActivityPush/add`, // 充值记录
         list: `${HTTPHEADER}/ActivityPush/list`, // 活动通知列表
         delete: `${HTTPHEADER}/ActivityPush/delete`, // 活动通知列表
+        pushLogList: `${HTTPHEADER}/PushLog`, // 活动通知列表
+        addPushLog: `${HTTPHEADER}/pushLog/add`, // 活动通知列表
     },
 
     // 举报管理
@@ -285,6 +321,7 @@ const request = {
     // 注销管理
     logout: {
         list: `${HTTPHEADER}/Cancellation/index`, // 注销列表
+        listV2: `${HTTPHEADER}/Cancellation/indexV2`, // 注销列表V2
         hasDeal: `${HTTPHEADER}/Cancellation/hasDeal`, // 已处理列表
     },
 
@@ -292,7 +329,8 @@ const request = {
     house: {
         liveList: `${HTTPHEADER}/party/liveList`, // 直播间列表
         // partyList: `${HTTPHEADER}/party/partyList`, // 派对间列表
-        partyList: `${HTTPHEADER}/RoomV2/list`, // 派对间列表
+        // partyList: `${HTTPHEADER}/RoomV2/list`, // 派对间列表
+        partyListV2: `${HTTPHEADER}/RoomV2/listV2`, // 派对间列表
         // updateParty: `${HTTPHEADER}/party/updateParty`, // 修改派对
         updateParty: `${HTTPHEADER}/RoomV2/update`, // 修改派对
         delGenre: `${HTTPHEADER}/party/delGenre`, // 删除类别
@@ -309,6 +347,16 @@ const request = {
         joinRoomLog: `${HTTPHEADER}/Room/joinRoomLog`, // 进入房间记录
     },
 
+    // 直播管理
+    live: {
+      anchorRoomList: `${HTTPHEADER}/RoomV2/anchorRoomList`, // 房间列表
+      anchorLiveList: `${HTTPHEADER}/RoomV2/anchorLiveList`, // 直播列表
+      anchorLiveHistoryList: `${HTTPHEADER}/RoomV2/anchorLiveHistoryList`, // 历史列表
+      anchorData: `${HTTPHEADER}/roomV2/anchorData`, // 直播数据
+      effective: `${HTTPHEADER}/RoomV2/effective`, // 有效直播时长
+      saveEff: `${HTTPHEADER}/RoomV2/saveEff`, // 有效直播时长 -- 保存
+    },
+
     // 风控检测
     risk: {
         audioStreamDefyList: `${HTTPHEADER}/Room/audioStreamDefyList`, // 音频违规日志
@@ -319,6 +367,8 @@ const request = {
         remove: `${HTTPHEADER}/UserPunish/remove`, // 解除处罚用户
         chatList: `${HTTPHEADER}/MsgLog/chatList`, // 私聊会话消息-列表
         roomList: `${HTTPHEADER}/MsgLog/roomList`, // 房间会话消息-列表
+        roomTalkList: `${HTTPHEADER}/MsgLog/roomTalkList`, // 房间会话记录-列表
+        chatTalkList: `${HTTPHEADER}/MsgLog/chatTalkList`, // 私聊会话记录-列表
         index: `${HTTPHEADER}/Sensitive/index`, // 敏感词列表
         softDelete: `${HTTPHEADER}/Sensitive/softDelete`, // 敏感词-软删除
         add: `${HTTPHEADER}/Sensitive/add`, // 敏感词-添加
@@ -355,6 +405,35 @@ const request = {
         delMoments: `${HTTPHEADER}/moments/delMoments`, // 删除动态
         msgList: `${HTTPHEADER}/moments/msgList`, // 评论列表
         deleteMsg: `${HTTPHEADER}/moments/deleteMsg`, // 删除评论
+    },
+
+    // 活动管理
+    activity : {
+        resourceList: `${HTTPHEADER}/activity/resourceList`, // 资源列表
+        addResourceConfig: `${HTTPHEADER}/activity/addResourceConfig`, // 添加资源位配置
+        editResource: `${HTTPHEADER}/activity/editResource`, // 修改资源位配置
+        delResource: `${HTTPHEADER}/activity/delResource`, // 删除资源
+        // 2022/12/6 21：44
+        getPoolName: `${HTTPHEADER}/TwelveLog/getPoolName`, // 获取奖池名
+        getRound: `${HTTPHEADER}/TwelveLog/getRound`, // 获取轮数
+        poolDetail: `${HTTPHEADER}/TwelveLog/poolDetail`, // 奖池详情
+    },
+
+    // 靓号管理
+    prettyNumber : {
+        prettyNumber: `${HTTPHEADER}/PrettyNumber`, // 靓号列表
+        delPrettyNumber: `${HTTPHEADER}/PrettyNumber/del`, // 删除靓号
+        addPrettyNumber: `${HTTPHEADER}/PrettyNumber/add`, // 新增靓号
+        updatePrettyNumber: `${HTTPHEADER}/PrettyNumber/update`, // 修改靓号
+        getTypeOption: `${HTTPHEADER}/PrettyNumber/typeOption`, // 靓号类型
+        prettyNumberType: `${HTTPHEADER}/PrettyNumber/typeList`, // 靓号分类
+        delTypePrettyNumber: `${HTTPHEADER}/PrettyNumber/typeDel`, // 删除靓号
+        addTypePrettyNumber: `${HTTPHEADER}/PrettyNumber/typeAdd`, // 新增靓号
+        updateTypePrettyNumber: `${HTTPHEADER}/PrettyNumber/typeUpdate`, // 修改靓号
+        PrettyNumberLog: `${HTTPHEADER}/PrettyNumber/log`, // 售卖记录
+        usingLog: `${HTTPHEADER}/PrettyNumber/usingLog`, // 售卖记录
+        givePrettyNumber: `${HTTPHEADER}/v2/PrettyNumber/givePrettyNumber`, // 赠送靓号
+        searchPrettyNumber: `${HTTPHEADER}/PrettyNumber/searchNumber`, // 检测靓号
     }
 }
 

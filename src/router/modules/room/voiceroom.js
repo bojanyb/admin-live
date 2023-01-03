@@ -30,6 +30,15 @@ const voiceroomRouter = {
 			}
 		},
 		{
+			path: 'room-broadcast-list',
+			component: () => import('@/views/voiceroom/room/room-broadcast-list'),
+			name: 'room-broadcast-list',
+			meta: {
+				title: '房间广播列表',
+				noCache: true
+			}
+		},
+		{
 			path: 'room-historylist',
 			component: () => import('@/views/voiceroom/room/room-historylist'),
 			name: 'room-historylist',

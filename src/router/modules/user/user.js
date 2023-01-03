@@ -36,8 +36,43 @@ const userRouter = {
 				title: '用户音乐上传列表',
 				noCache: true
 			}
-		}
-		
+		},
+		{
+			path: 'user-logOut-list',
+			component: () => import('@/views/voiceroom/user/user-logOut-list'),
+			name: 'user-logOut-list',
+			meta: {
+				title: '用户注销',
+				noCache: true
+			}
+		},
+		{
+      path: 'user-rich-list',
+      component: () => import('@/views/voiceroom/user/user-rich-list'),
+      name: 'user-rich-list',
+      meta: {
+        title: '大R用户',
+        noCache: true
+      }
+    },
+    {
+      path: 'user-pack',
+      component: () => import('@/views/voiceroom/user/user-pack'),
+      name: 'user-pack',
+      meta: {
+        title: '用户背包',
+        noCache: true
+      }
+    },
+    {
+      path: 'user-register',
+      component: () => import('@/views/voiceroom/user/user-register'),
+      name: 'user-register',
+      meta: {
+        title: '登录记录',
+        noCache: true
+      }
+    }
 	]
 }
 

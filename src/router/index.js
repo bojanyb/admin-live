@@ -16,7 +16,7 @@ import systemConfigRouter from './modules/systemConfig/system'
 import userRouter from './modules/user/user'
 import guildAuditRouter from './modules/guild/guildAudit'
 import giveAwayRouter from './modules/giveAway/giveAway'
-// import activityRouter from "./modules/activity/index"
+import activityRouter from "./modules/activity/index"
 import platformActivityRouter from "./modules/platformActivity/index.js"
 import userActivity from "./modules/userActivity/index.js"
 
@@ -28,10 +28,18 @@ import dealRouter from './modules/deal/index.js'
 import promoteRouter from './modules/promote/index.js'
 import shoppingRouter from './modules/shopping/index.js'
 import messageRouter from './modules/message/index.js'
+import noticeRouter from './modules/notice/index.js'
 import moveDatingRouter from './modules/moveDating/index.js'
 import serviceConfigRouter from './modules/serviceConfig/index.js'
 import roomConfigRouter from './modules/roomConfig/index.js'
 import dynamicRouter from './modules/dynamic/index.js'
+import goodNumRouter from './modules/goodNum/index.js'
+import msgManagerRouter from './modules/msgManager/index.js'
+import activityManagerRouter from './modules/activityManager/index.js'
+import liveManageRouter from './modules/liveManage/index.js'
+import homeRouter from './modules/home/index.js'
+
+
 
 
 /**
@@ -95,6 +103,7 @@ export const constantRoutes = [{
 export const asyncRoutes = [
 	dynamicRouter,
 	messageRouter,
+	noticeRouter,
 	dashboardRouter,
 	moveDatingRouter,
 	serviceConfigRouter,
@@ -114,8 +123,14 @@ export const asyncRoutes = [
 	logOutRouter,
 	auditRouter,
 	promoteRouter,
-	// activityRouter,
+	activityRouter,
 	shoppingRouter,
+	goodNumRouter,
+	msgManagerRouter,
+	activityManagerRouter,
+  systemConfigRouter,
+  liveManageRouter,
+  homeRouter,
 	systemConfigRouter,
 	// 404 page must be placed at the end !!!
 	{

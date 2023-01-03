@@ -73,3 +73,77 @@ export function guildRoomWeekOnline(data) {
         data
     })
 }
+
+
+
+// 系统消息 列表
+export function sysList(data) {
+    return request({
+        url: api.system.sysList,
+        method: 'post',
+        data
+    })
+}
+
+// 系统消息 新增
+export function addSysNotice(data) {
+    return request({
+        url: api.system.addSysNotice,
+        method: 'post',
+        data
+    })
+}
+
+// 官方消息 列表
+export function officialList(data) {
+    return request({
+        url: api.system.officialList,
+        method: 'post',
+        data
+    })
+}
+
+// 系统消息 新增
+export function addOfficialNotice(data) {
+    return request({
+        url: api.system.addOfficialNotice,
+        method: 'post',
+        data
+    })
+}
+
+// 版本设置审核开关 删除
+export function AppruleDel(data) {
+  return request({
+    url: api.system.AppruleDel,
+    method: 'post',
+    data
+  })
+}
+
+// 版本设置审核开关 新增
+export function AppruleAdd(data) {
+  return request({
+    url: api.system.AppruleAdd,
+    method: 'post',
+    data
+  })
+}
+
+// 版本设置审核开关 修改
+export function AppruleUpdate(data) {
+  return request({
+    url: api.system.AppruleUpdate,
+    method: 'post',
+    data
+  })
+}
+
+// 获取渠道
+export function getChannels(data) {
+  return request({
+    url: api.system.getChannels,
+    method: 'post',
+    data
+  })
+}

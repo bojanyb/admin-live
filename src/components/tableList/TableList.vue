@@ -26,7 +26,7 @@
             </div>
           </el-image> -->
 
-          <imgComp 
+          <imgComp
           v-if="item.isimg"
           :src="scope.row[item.prop] || scope.row[item.propCopy]"
           :name="item.nameProp ? scope.row[item.nameProp] : ''"
@@ -37,7 +37,7 @@
           ref="imgComp">
           </imgComp>
 
-          <imgListComp 
+          <imgListComp
           v-if="item.isimgList"
           :srcList="returnImg(scope.row[item.prop] ? scope.row[item.prop] : scope.row[item.propCopy])"
           :type="scope.row[item.type] || item.type"
@@ -60,14 +60,13 @@
             :inactive-text="item.inactiveText || ''"
             @change="(v) => item.change(v, scope.row)">
           </el-switch>
-          
         </template>
       </el-table-column>
     </el-table>
     <div class="pagination" v-if="data.length != 0 && !isHidePage">
       <el-pagination background @size-change="handleSizeChange" @current-change="handlePageChange" :page-size="search.size"
         :current-page="search.page" layout="total, prev, pager, next, jumper" :page-sizes="cfgs.search ? cfgs.search.sizes:search.sizes"
-        :total="search.total" class="fr">
+        :total="search.total" class="fr" :small="isSmall">
       </el-pagination>
     </div>
   </article>
@@ -109,7 +108,11 @@
         default: function() {
           return []
         }
-      }
+      },
+      isSmall: {
+        type: Boolean,
+        default: false
+      },
     },
     data() {
       return {
@@ -126,7 +129,6 @@
         headerFixed: false,
         loading: false,
         tableHeight: 0,
-
         oldPage: 0, // 老数据分页  -  用来比对
         oldParams: {}
       };
