@@ -277,6 +277,7 @@ const request = {
         guildRoomType: `${HTTPHEADER}/guild/roomType`, // 获取公会类型
         greetConfig: `${HTTPHEADER}/GreetConfig`, // 获取萌新配置项
         greetConfigSave: `${HTTPHEADER}/GreetConfig/save`, // 设置萌新配置项
+        guildWeekListV2: `${HTTPHEADER}/guild/guildWeekListV2`, // 公会结算 公会评级（周）（月）未结算
     },
 
     // 封禁记录
