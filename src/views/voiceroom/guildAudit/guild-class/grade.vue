@@ -59,6 +59,7 @@ export default {
                   handler: {
                       change: (val) => {
                           this.getGenreList({ belong: val })
+                          this.searchParams.room_type = ''
                       }
                   }
                 },
@@ -139,7 +140,8 @@ export default {
                 pagesize: params.size,
                 name: s.name,
                 type: 1,
-                guild_type: s.guild_type
+                guild_type: s.guild_type,
+                room_type : s.room_type
             }
         },
         // 刷新列表
