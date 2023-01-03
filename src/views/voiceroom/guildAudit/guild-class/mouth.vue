@@ -61,6 +61,7 @@ export default {
           handler: {
               change: (val) => {
                   this.getGenreList({ belong: val })
+                  this.searchParams.room_type = ''
               }
           }
         },
