@@ -759,7 +759,7 @@ const GUILDOPERATIONLIST = [
         value: ''
     },
     {
-        name: '万坚',
+        name: '赵影',
         value: 1
     },
     {
