@@ -759,7 +759,7 @@ const GUILDOPERATIONLIST = [
         value: ''
     },
     {
-        name: '赵影',
+        name: '赵颖',
         value: 1
     },
     {
