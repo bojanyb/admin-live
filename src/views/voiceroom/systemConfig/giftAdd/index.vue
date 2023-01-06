@@ -10,7 +10,7 @@
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
                 <el-form-item label="礼物名" prop="gift_name">
-                    <el-input v-model="ruleForm.gift_name" placeholder="请输入礼物名" :disabled="status === 'add' ? false : true"></el-input>
+                    <el-input v-model="ruleForm.gift_name" placeholder="请输入礼物名"></el-input>
                 </el-form-item>
                 <el-form-item label="礼物类型" prop="gift_genre">
                     <el-radio-group v-model="ruleForm.gift_genre">
