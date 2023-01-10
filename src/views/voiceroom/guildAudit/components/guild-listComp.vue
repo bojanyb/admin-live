@@ -121,6 +121,38 @@
 							}
 						},
 						{
+							label: '今日流水',
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.today_flow + '钻石'),
+								])
+							}
+						},
+						{
+							label: '昨日流水',
+							render: (h, params) => {
+								return h('div', [
+									h('span', (params.row.yestoday_flow  ? params.row.yestoday_flow : 0) + '钻石'),
+								])
+							}
+						},
+						{
+							label: '本周流水',
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.week_flow + '钻石'),
+								])
+							}
+						},
+						{
+							label: '本月流水',
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.month_flow + '钻石'),
+								])
+							}
+						},
+						{
 							label: '公会状态',
 							render: (h, params) => {
 								return h('div', [
