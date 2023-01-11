@@ -2694,24 +2694,28 @@ const USESTATUS = [
 // 祈福卡片
 const PRAYCARDS = [
   {
+    name: '全部',
+    type: ""
+  },
+  {
     name: '兔',
-    type: 1
+    type: "1"
   },
   {
     name: '年',
-    type: 2
+    type: "2"
   },
   {
     name: '大',
-    type: 3
+    type: "3"
   },
   {
     name: '吉',
-    type: 4
+    type: "4"
   },
   {
     name: '2023',
-    type: 5
+    type: "5"
   },
 ]
 

@@ -418,6 +418,14 @@ const request = {
         getPoolName: `${HTTPHEADER}/TwelveLog/getPoolName`, // 获取奖池名
         getRound: `${HTTPHEADER}/TwelveLog/getRound`, // 获取轮数
         poolDetail: `${HTTPHEADER}/TwelveLog/poolDetail`, // 奖池详情
+
+        // 新年活动
+        fuList: `${HTTPHEADER}/SpringLog/fuList`, // 祈福抽奖记录
+        exchangeLog: `${HTTPHEADER}/SpringLog/exchangeLog`, // 祈福兑换记录
+        puzzleDrawLog: `${HTTPHEADER}/SpringLog/puzzleDrawLog`, // 拼图抽奖记录
+        sourceType: `${HTTPHEADER}/SpringLog/sourceType`, // 碎片来源类型
+        getPuzzleLog: `${HTTPHEADER}/SpringLog/getPuzzleLog`, // 碎片获得记录
+
     },
 
     // 靓号管理

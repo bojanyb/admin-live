@@ -2,24 +2,19 @@
 <template>
     <div class="banner-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" :show-batch-rurn="true" 
-            batchRurnName="导出EXCEL"
-            @BatchRurn="BatchRurn"
-            ></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
         <!-- 汇总数据 -->
         <el-card class="box-card" shadow="always" v-if="tabIndex === '0'">
           <div class="box-card-inner">
             <div>抽奖人数：{{sumSource.user_count || 0}}人</div>
-            <div>抽奖次数：{{sumSource.lottery_count || 0}}次</div>
-            <div>总消耗拼图数量：{{sumSource.lottery_count || 0}}次</div>
+            <div>抽奖次数：{{sumSource.draw_count || 0}}次</div>
+            <div>总消耗拼图数量：{{sumSource.consume_count || 0}}个</div>
           </div>
         </el-card>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
-        <!-- 详情组件 -->
-        <discussComp v-if="isDestoryComp" ref="discussComp" :msg_id="msg_id" @destoryComp="destoryComp"></discussComp>
     </div>
 </template>
 
@@ -32,19 +27,12 @@ import SearchPanel from '@/components/SearchPanel/final.vue'
 import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
-// 引入api
-import { getCashHisityAll } from '@/api/finance.js'
 // 引入公共方法
 import { timeFormat,exportTableData } from '@/utils/common.js'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
-// 详情组件
-import discussComp from './components/jigsawDiscussComp.vue'
 export default {
     components: {
         tableList,
         SearchPanel,
-        discussComp,
     },
     mixins: [mixins],
     computed: {
@@ -59,12 +47,11 @@ export default {
                   placeholder: '请输入用户ID'
                 },
                 {
-                  name: 'user_number',
+                  name: 'prize_name',
                   type: 'input',
                   value: '',
-                  label: '奖品ID',
-                  isNum: true,
-                  placeholder: '请输入奖品ID'
+                  label: '奖品名称',
+                  placeholder: '请输入奖品名称'
                 },
                 {
                   name: 'dateTimeParams',
@@ -89,41 +76,29 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.activity.resourceList,
+                url: REQUEST.activity.puzzleDrawLog,
                 columns: [
                     {
                         label: '抽奖时间',
                         render: (h, params) => {
-                            return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY/MM/DD HH:mm:ss', true) : '--')
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY/MM/DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
                         label: '抽奖人ID',
-                        prop: 'name'
+                        prop: 'user_number'
                     },
                     {
                         label: '抽奖人昵称',
-                        prop: 'name'
-                    },
-                    {
-                        label: '抽奖人次数',
-                        prop: 'sort',
+                        prop: 'nickname'
                     },
                      {
                         label: '奖品名称',
-                        prop: 'sort',
+                        prop: 'remark',
                     },
                      {
                         label: '奖品ID',
-                        prop: 'sort',
-                    },
-                    {
-                        label: '操作',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.detail(params.row)}}},'详情')
-                            ])
-                        }
+                        prop: 'goods_id',
                     }
                 ]
             }
@@ -133,14 +108,13 @@ export default {
         return {
           sumSource: {
             user_count : 0,
-            lottery_count : 0,
-            lottery_count : 0,
+            draw_count : 0,
+            consume_count : 0,
           },
           ruleForm: {
               alreadyMoney: null,
               deductMoney: null
           },
-          isDestoryComp: false, // 销毁组件
           msg_id: "",
         };
     },
@@ -154,10 +128,11 @@ export default {
             let s = { ...this.searchParams, ...this.dateTimeParams }
             return {
                 page: params ? params.page : null,
+                pagesize: 10,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
-                type: s.type,
-                name: s.name,
+                user_number: s.user_number,
+                prize_name: s.prize_name,
             }
         },
         setDateTime(arr) {
@@ -182,50 +157,15 @@ export default {
         },
         // 列表返回数据
         saleAmunt(data) {
-            // this.ruleForm.allMoney = data.total_money ? data.total_money / 100 : 0
+            this.sumSource = data.data
         },
         // 加载
         load(status,row) {
-            this.isDestoryComp = true
             setTimeout(() => {
                 this.$refs.add.dialogVisible = true
                 this.$refs.add.load(status, row)
             }, 100);
         },
-        // 详情
-        detail(row){
-          this.msg_id = row.id
-          this.isDestoryComp = true
-          setTimeout(() => {
-              this.$refs.discussComp.dialogVisible = true
-          }, 50);
-        },
-         // 导出excel
-        async BatchRurn() {
-            let s = this.beforeSearch()
-            delete s.page
-            let res = await getCashHisityAll(s)
-            let arr = JSON.parse(JSON.stringify(res.data.list))
-            if(arr.length <= 0) return this.$warning('当前没有数据可以导出')
-            arr = arr.map((item,index) => {
-                let name = MAPDATA.STATUSLIST.find(a => { return a.value === item.status })
-                let params = {
-                    user_id: item.user_id,
-                    addtime: timeFormat(item.addtime, 'YYYY-MM-DD HH:mm:ss', true),
-                    money: item.money,
-                    applyMoney: item.money / 100,
-                    cash_rate: item.rate_money,
-                    toMoney: item.status != 3 ? item.real_money / 100 : item.money / 100,
-                }
-                return params
-            })
-            let nameList = ['抽奖时间','抽奖人ID','抽奖人昵称', '抽奖人次数','奖品名称','奖品ID']
-            exportTableData(arr, nameList, '拼图抽奖记录')
-        },
-        // 销毁组件
-        destoryComp() {
-            this.isDestoryComp = false
-        }
     }
 }
 </script>

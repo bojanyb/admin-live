@@ -2,17 +2,14 @@
 <template>
     <div class="banner-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" :show-batch-rurn="true"
-            batchRurnName="导出EXCEL"
-            @BatchRurn="BatchRurn"
-            ></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
         <!-- 汇总数据 -->
         <el-card class="box-card" shadow="always" v-if="tabIndex === '0'">
           <div class="box-card-inner">
             <div>获得碎片人数：{{sumSource.user_count || 0}}人</div>
-            <div>获得碎片次数：{{sumSource.lottery_count || 0}}次</div>
-            <div>总获得碎片数量：{{sumSource.lottery_cost_count || 0}}个</div>
+            <div>获得碎片次数：{{sumSource.puzzle_count || 0}}次</div>
+            <div>总获得碎片数量：{{sumSource.puzzle_total_count || 0}}个</div>
           </div>
         </el-card>
         <div class="tableList">
@@ -28,13 +25,11 @@ import tableList from '@/components/tableList/TableList.vue'
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
-// 引入api
-import { getCashHisityAll } from '@/api/finance.js'
 import REQUEST from '@/request/index.js'
+// api 引用
+import { sourceType } from '@/api/activity'
 // 引入公共方法
-import { timeFormat,exportTableData } from '@/utils/common.js'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
+import { timeFormat } from '@/utils/common.js'
 export default {
     components: {
         tableList,
@@ -53,7 +48,7 @@ export default {
                   placeholder: '请输入用户ID'
                 },
                 {
-                    name: 'type',
+                    name: 'type_name',
                     type: 'select',
                     value: null,
                     keyName: 'type',
@@ -61,7 +56,7 @@ export default {
                     label: '碎片来源',
                     placeholder: '请选择',
                     clearable: true,
-                    options: MAPDATA.DEBRISS
+                    options: this.sourceType
                 },
                 {
                   name: 'dateTimeParams',
@@ -86,29 +81,29 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.activity.resourceList,
+                url: REQUEST.activity.getPuzzleLog,
                 columns: [
                     {
                         label: '时间',
                         render: (h, params) => {
-                            return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY/MM/DD HH:mm:ss', true) : '--')
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY/MM/DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
                         label: '用户ID',
-                        prop: 'name'
+                        prop: 'user_number'
                     },
                     {
                         label: '用户昵称',
-                        prop: 'name'
+                        prop: 'nickname'
                     },
                     {
                         label: '碎片来源',
-                        prop: 'sort',
+                        prop: 'remark',
                     },
                      {
                         label: '碎片数量',
-                        prop: 'sort',
+                        prop: 'number',
                     },
                 ]
             }
@@ -118,18 +113,24 @@ export default {
         return {
           sumSource: {
             user_count: 0,
-            lottery_count: 0,
-            lottery_cost_count: 0,
+            puzzle_count: 0,
+            puzzle_total_count: 0,
           },
-          ruleForm: {
-              alreadyMoney: null,
-              deductMoney: null
-          },
-          isDestoryComp: false, // 销毁组件
-          msg_id: "",
+          sourceType: []
         };
     },
+    mounted() {
+      this.getSourceType()
+    },
     methods: {
+        // 碎片来源类型
+        async getSourceType(){
+          let res = await sourceType()
+          if(res.code + "" === "2000"){
+            this.sourceType = res.data.typeArr
+            console.log("🚀 ~ file: jigsawDebris-list.vue:131 ~ getSourceType ~ this.sourceType", this.sourceType)
+          }
+        },
         // 刷新列表
         getList() {
             this.$refs.tableList.getData()
@@ -139,10 +140,11 @@ export default {
             let s = { ...this.searchParams, ...this.dateTimeParams }
             return {
                 page: params ? params.page : null,
+                pagesize: 10,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
-                type: s.type,
-                name: s.name,
+                user_number: s.user_number,
+                type_name: s.type_name,
             }
         },
         setDateTime(arr) {
@@ -167,41 +169,15 @@ export default {
         },
         // 列表返回数据
         saleAmunt(data) {
-            // this.ruleForm.allMoney = data.total_money ? data.total_money / 100 : 0
+            this.sumSource = data.data
         },
         // 加载
         load(status,row) {
-            this.isDestoryComp = true
             setTimeout(() => {
                 this.$refs.add.dialogVisible = true
                 this.$refs.add.load(status, row)
             }, 100);
         },
-        // 导出excel
-        async BatchRurn() {
-            let s = this.beforeSearch()
-            delete s.page
-            let res = await getCashHisityAll(s)
-            let arr = JSON.parse(JSON.stringify(res.data.list))
-            if(arr.length <= 0) return this.$warning('当前没有数据可以导出')
-            arr = arr.map((item,index) => {
-                let name = MAPDATA.STATUSLIST.find(a => { return a.value === item.status })
-                let params = {
-                    addtime: timeFormat(item.addtime, 'YYYY-MM-DD HH:mm:ss', true),
-                    user_id: item.user_id,
-                    money: item.money,
-                    applyMoney: item.money / 100,
-                    cash_rate: item.rate_money,
-                }
-                return params
-            })
-            let nameList = [ '时间','用户ID', '用户昵称', '碎片来源','碎片数量']
-            exportTableData(arr, nameList, '碎片获得记录')
-        },
-        // 销毁组件
-        destoryComp() {
-            this.isDestoryComp = false
-        }
     }
 }
 </script>
