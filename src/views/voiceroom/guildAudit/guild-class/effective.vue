@@ -12,7 +12,7 @@
 
 <script>
 // 引入api
-import { delSettlementConfig, getGuildType, guildRoomType } from '@/api/videoRoom.js'
+import { getGuildType, guildRoomType, effectDelete } from '@/api/videoRoom.js'
 // 引入新增 - 修改组件
 import effectiveComp from './components/effectiveComp.vue'
 // 引入菜单组件
@@ -111,7 +111,7 @@ export default {
             render: (h, params) => {
               return h('div', [
                 h('el-button', { props: { type: 'primary' }, on: { click: () => { this.update(params.row) } } }, '修改'),
-                // h('el-button', { props: { type: 'danger' }, on: { click: () => { this.deleteParams(params.row.id, 1) } } }, '删除')
+                h('el-button', { props: { type: 'danger' }, on: { click: () => { this.deleteParams(params.row.id, 1) } } }, '删除')
               ])
             }
           }
@@ -182,7 +182,7 @@ export default {
         type: 'warning'
       }).then(async () => {
         console.log(id)
-        let res = await delSettlementConfig({ id: id })
+        let res = await effectDelete({ id: id })
         if (res.code === 2000) {
           this.$success('删除成功')
           this.getList()
