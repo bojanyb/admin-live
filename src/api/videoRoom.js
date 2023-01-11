@@ -1138,6 +1138,15 @@ export function getGuildType(data) {
   })
 }
 
+// 移除公会房间
+export function effectSave(data) {
+  return request({
+    url: api.guild.effectSave,
+    method: 'post',
+    data
+  })
+}
+
 /***********广播******************/
 
 // 发送广播消息

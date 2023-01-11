@@ -85,7 +85,7 @@ export default {
     },
     computed: {
         title() { // 标题
-            let text =  this.type == 1 ? '派对' : '直播'
+            let text =  this.type == 1 ? '直播' : '派对'
             if(this.status === 'add') {
                 return '新增' + text + '公会'
             } else if(this.status === 'update') {
