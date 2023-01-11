@@ -105,16 +105,16 @@ export default {
               return h('span', params.row.type ? `${params.row.val}${data.name}` : '无')
             }
           },
-          // {
-          //   label: '操作',
-          //   minWidth: '120px',
-          //   render: (h, params) => {
-          //     return h('div', [
-          //       h('el-button', { props: { type: 'primary' }, on: { click: () => { this.update(params.row) } } }, '修改'),
-          //       h('el-button', { props: { type: 'danger' }, on: { click: () => { this.deleteParams(params.row.id, 1) } } }, '删除')
-          //     ])
-          //   }
-          // }
+          {
+            label: '操作',
+            minWidth: '120px',
+            render: (h, params) => {
+              return h('div', [
+                h('el-button', { props: { type: 'primary' }, on: { click: () => { this.update(params.row) } } }, '修改'),
+                // h('el-button', { props: { type: 'danger' }, on: { click: () => { this.deleteParams(params.row.id, 1) } } }, '删除')
+              ])
+            }
+          }
         ]
       }
     }
