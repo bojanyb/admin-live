@@ -754,18 +754,18 @@ const GUILDCLOSEANACCOUNTSTATUSLISTCOPY = [
 
 // 公会列表 - 公会运营
 const GUILDOPERATIONLIST = [
-  {
-    name: '全部',
-    value: ''
-  },
-  {
-    name: '赵影',
-    value: 1
-  },
-  {
-    name: '刘建民',
-    value: 2
-  }
+    {
+        name: '全部',
+        value: ''
+    },
+    {
+        name: '赵颖',
+        value: 1
+    },
+    {
+        name: '刘建民',
+        value: 2
+    }
 ]
 
 /*
