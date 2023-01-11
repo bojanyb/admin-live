@@ -278,6 +278,8 @@ const request = {
         greetConfig: `${HTTPHEADER}/GreetConfig`, // 获取萌新配置项
         greetConfigSave: `${HTTPHEADER}/GreetConfig/save`, // 设置萌新配置项
         guildWeekListV2: `${HTTPHEADER}/guild/guildWeekListV2`, // 公会结算 公会评级（周）（月）未结算
+        confList: `${HTTPHEADER}/GuildEffReward/confList`, // 获取有效直播周奖励 - 列表
+        effectSave: `${HTTPHEADER}/GuildEffReward/save`, // 获取有效直播周奖励 - 保存
     },
 
     // 封禁记录
