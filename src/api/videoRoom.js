@@ -1138,10 +1138,19 @@ export function getGuildType(data) {
   })
 }
 
-// 移除公会房间
+// 保存有效直播奖励
 export function effectSave(data) {
   return request({
     url: api.guild.effectSave,
+    method: 'post',
+    data
+  })
+}
+
+// 删除有效直播奖励
+export function effectDelete(data) {
+  return request({
+    url: api.guild.effectDelete,
     method: 'post',
     data
   })

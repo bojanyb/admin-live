@@ -14,12 +14,15 @@ import guildWeekWater from './liveRebate/guildWeekWater.vue'
 import guildMonthWater from './liveRebate/guildMonthWater.vue'
 // 引入直播公会评级奖励组件
 import dynamic from './liveRebate/dynamic.vue'
+// 引入直播公会有效直播奖励组件
+import effectDynamic from './liveRebate/effectDynamic.vue'
 export default {
 	components: {
 		guildWeekWater,
 		guildMonthWater,
 		menuComp,
-		dynamic
+    dynamic,
+    effectDynamic
 	},
 	computed: {
 		comp() {
@@ -33,6 +36,9 @@ export default {
 					break;
 				case '2': // 月奖励
 					compText= "guildMonthWater"
+					break;
+				case '3': // 直播公会有效直播奖励
+					compText= "effectDynamic"
 					break;
 				default:
 					break;
@@ -51,6 +57,9 @@ export default {
 				},
 				{
 					name: '直播公会月奖励'
+        },
+				{
+					name: '直播公会有效直播奖励'
 				}
 			],
 			tabIndex: '0',
