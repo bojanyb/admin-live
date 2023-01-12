@@ -143,6 +143,12 @@ export default {
           isActive: false,
           label: "声撩语音",
           value: "com.yhjc.oxygen",
+        },
+        {
+          key: "com.jlsd.duoduo",
+          isActive: false,
+          label: "多多cp",
+          value: "com.jlsd.duoduo",
         }
       ],
       packageName: [
@@ -160,6 +166,11 @@ export default {
           key: "com.yhjc.oxygen",
           label: "声撩语音",
           value: "com.yhjc.oxygen",
+        },
+        {
+          key: "com.jlsd.duoduo",
+          label: "多多cp",
+          value: "com.jlsd.duoduo",
         }
       ],
       dateTimeParams: {
@@ -406,6 +417,12 @@ export default {
       this.progress = 100;
       this.platform = JSON.stringify(item.platform);
       this.addLoading = false;
+      this.navList.map(res=>{
+        res.isActive = false
+        if(res.key == item.package_name){
+          res.isActive = true
+        }
+      })
       this.FormVisible = true;
 
     },
@@ -430,6 +447,12 @@ export default {
         // version_code: ''
       };
       this.platform = "2";
+      this.navList.map((res,i)=>{
+        res.isActive = false
+        if(i == 0){
+          res.isActive = true
+        }
+      })
       this.FormVisible = true;
       this.isAdd = true;
     },

@@ -83,6 +83,11 @@ export default {
           key: "com.yhjc.oxygen",
           name: "声撩语音",
           value: "com.yhjc.oxygen",
+        },
+        {
+          key: "com.jlsd.duoduo",
+          name: "多多cp",
+          value: "com.jlsd.duoduo",
         }
       ],
       channelsList: [],

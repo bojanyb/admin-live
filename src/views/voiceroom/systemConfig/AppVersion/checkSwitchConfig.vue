@@ -44,6 +44,12 @@ export default {
           isActive: false,
           label: "声撩语音",
           value: "com.yhjc.oxygen",
+        },
+        {
+          key: "com.jlsd.duoduo",
+          isActive: false,
+          label: "多多cp",
+          value: "com.jlsd.duoduo",
         }
       ],
       packageName: [
@@ -61,6 +67,12 @@ export default {
           key: "com.yhjc.oxygen",
           label: "声撩语音",
           value: "com.yhjc.oxygen",
+        },
+        {
+          key: "com.jlsd.duoduo",
+          isActive: false,
+          label: "多多cp",
+          value: "com.jlsd.duoduo",
         }
       ],
     }
