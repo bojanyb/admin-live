@@ -114,6 +114,8 @@
 						},
 						{
 							label: '主播人数',
+              prop: 'user_count',
+              sortable: true,
 							render: (h, params) => {
 								return h('div', [
 									h('span', params.row.user_count + '人'),
@@ -122,6 +124,8 @@
 						},
 						{
 							label: '今日流水',
+              prop: 'today_flow',
+              sortable: true,
 							render: (h, params) => {
 								return h('div', [
 									h('span', params.row.today_flow + '钻石'),
@@ -130,6 +134,8 @@
 						},
 						{
 							label: '昨日流水',
+              prop: 'yestoday_flow',
+              sortable: true,
 							render: (h, params) => {
 								return h('div', [
 									h('span', (params.row.yestoday_flow  ? params.row.yestoday_flow : 0) + '钻石'),
@@ -138,6 +144,8 @@
 						},
 						{
 							label: '本周流水',
+              prop: 'week_flow',
+              sortable: true,
 							render: (h, params) => {
 								return h('div', [
 									h('span', params.row.week_flow + '钻石'),
@@ -146,6 +154,8 @@
 						},
 						{
 							label: '本月流水',
+              prop: 'month_flow',
+              sortable: true,
 							render: (h, params) => {
 								return h('div', [
 									h('span', params.row.month_flow + '钻石'),

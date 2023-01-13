@@ -219,6 +219,12 @@
           }
         }
 
+        // 表单顺序、倒序排序
+        if(this.search.sort && this.search.sort !== "") {
+          params.sort_field = this.search.sort.split(",")[0]
+          params.sort = this.search.sort.split(",")[1] === 'asc' ? 'asc' : 'desc'
+        }
+
         // 用来比对分页 - 重置分页
         this.oldPage = params.page
         this.oldParams = params
