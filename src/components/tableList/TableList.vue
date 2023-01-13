@@ -218,7 +218,6 @@
             params.page = 1
           }
         }
-
         // 表单顺序、倒序排序
         if(this.search.sort && this.search.sort !== "") {
           params.sort_field = this.search.sort.split(",")[0]
