@@ -362,7 +362,7 @@ export default {
         }
     },
     created() {
-        this.changeIndex(2)
+        this.changeIndex(1)
     }
 }
 </script>
