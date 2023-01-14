@@ -278,6 +278,9 @@ const request = {
         greetConfig: `${HTTPHEADER}/GreetConfig`, // 获取萌新配置项
         greetConfigSave: `${HTTPHEADER}/GreetConfig/save`, // 设置萌新配置项
         guildWeekListV2: `${HTTPHEADER}/guild/guildWeekListV2`, // 公会结算 公会评级（周）（月）未结算
+        confList: `${HTTPHEADER}/GuildEffReward/confList`, // 获取有效直播周奖励 - 列表
+        effectSave: `${HTTPHEADER}/GuildEffReward/save`, // 获取有效直播周奖励 - 保存
+        effectDelete: `${HTTPHEADER}/GuildEffReward/delete`, // 获取有效直播周奖励 - 删除
     },
 
     // 封禁记录
@@ -418,6 +421,14 @@ const request = {
         getPoolName: `${HTTPHEADER}/TwelveLog/getPoolName`, // 获取奖池名
         getRound: `${HTTPHEADER}/TwelveLog/getRound`, // 获取轮数
         poolDetail: `${HTTPHEADER}/TwelveLog/poolDetail`, // 奖池详情
+
+        // 新年活动
+        fuList: `${HTTPHEADER}/SpringLog/fuList`, // 祈福抽奖记录
+        exchangeLog: `${HTTPHEADER}/SpringLog/exchangeLog`, // 祈福兑换记录
+        puzzleDrawLog: `${HTTPHEADER}/SpringLog/puzzleDrawLog`, // 拼图抽奖记录
+        sourceType: `${HTTPHEADER}/SpringLog/sourceType`, // 碎片来源类型
+        getPuzzleLog: `${HTTPHEADER}/SpringLog/getPuzzleLog`, // 碎片获得记录
+
     },
 
     // 靓号管理

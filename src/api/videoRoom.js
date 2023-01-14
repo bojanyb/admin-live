@@ -1138,6 +1138,24 @@ export function getGuildType(data) {
   })
 }
 
+// 保存有效直播奖励
+export function effectSave(data) {
+  return request({
+    url: api.guild.effectSave,
+    method: 'post',
+    data
+  })
+}
+
+// 删除有效直播奖励
+export function effectDelete(data) {
+  return request({
+    url: api.guild.effectDelete,
+    method: 'post',
+    data
+  })
+}
+
 /***********广播******************/
 
 // 发送广播消息

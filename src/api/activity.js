@@ -45,3 +45,21 @@ export function getRound(data) {
     data
   })
 }
+
+// 祈福抽奖记录
+export function fuList(data) {
+  return request({
+    url: api.activity.fuList,
+    method: 'post',
+    data
+  })
+}
+
+// 碎片来源类型
+export function sourceType(data) {
+  return request({
+    url: api.activity.sourceType,
+    method: 'post',
+    data
+  })
+}

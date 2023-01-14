@@ -18,6 +18,9 @@ import durationComp from './duration.vue'
 
 // 引入24小时奖励组件
 import awardComp from './components/awardComp.vue'
+
+// 引入每周有效人数组件
+import effective from './effective.vue'
 export default {
     components: {
         gradeComp,
@@ -25,7 +28,8 @@ export default {
         mouthComp,
         durationComp,
         menuComp,
-        awardComp
+        awardComp,
+        effective
     },
     data() {
         return {
@@ -42,6 +46,9 @@ export default {
                 // {
                 //     name: '24小时房间配置'
                 // }
+                {
+                    name: '直播公会每周有效人数奖励'
+                }
             ],
             tabIndex: '0'
         };
@@ -60,8 +67,11 @@ export default {
                     compText = "mouthComp"
                     break;
                 case '3':
-                    compText = "awardComp"
+                    compText = "effective"
                     break;
+                // case '3':
+                //     compText = "awardComp"
+                //     break;
             }
             return compText
         }
