@@ -159,6 +159,8 @@ export default {
                     {
                         label: '充值金额（元）',
                         minWidth: '100px',
+                        prop: 'amount',
+                        sortable: "custom",
                         render: (h, params) => {
                             return h('span', params.row.amount / 100)
                         }
