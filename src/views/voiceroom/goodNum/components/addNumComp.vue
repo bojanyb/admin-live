@@ -194,8 +194,6 @@ export default {
         let reg = /^\d*[13579]$/
 				if (!value) {
 					callback(new Error('密码不能为空'))
-        } else if (!reg.test(value.length)) {
-          callback(new Error('用户靓号字符长度请输入奇数'))
         } else if (value.length + '' === '1') {
           callback(new Error('长度不能为一位数'))
         }
@@ -207,10 +205,7 @@ export default {
         let reg = /^\d*[2468]$/
 				if (!value) {
 					callback(new Error('密码不能为空'))
-        } else if (!reg.test(value.length)) {
-          callback(new Error('房间靓号字符长度请输入偶数'))
-        }
-        else {
+        } else {
 					callback()
 				}
 			}
