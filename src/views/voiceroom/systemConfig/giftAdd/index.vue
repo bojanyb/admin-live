@@ -33,7 +33,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="礼物播放类型" prop="play_type">
-                    <el-radio-group v-model="ruleForm.play_type">
+                    <el-radio-group v-model="ruleForm.play_type" @input="handleChangePlayType">
                         <el-radio v-for="item in playTypeList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
                     </el-radio-group>
                 </el-form-item>
@@ -51,7 +51,7 @@
                     <uploadImg ref="uploadImg" v-model="ruleForm.gift_photo" :imgUrl="ruleForm.gift_photo" name="gift_photo" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
                 </el-form-item>
                 <el-form-item label="礼物特效" prop="gift_gif">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.gift_gif" :imgUrl="ruleForm.gift_gif" name="gift_gif" @validateField="validateField" :accept="limitImgType"></uploadImg>
+                    <uploadImg ref="uploadImg" :key="componentKey" v-model="ruleForm.gift_gif" :imgUrl="ruleForm.gift_gif" name="gift_gif" @validateField="validateField" :accept="limitImgType"></uploadImg>
                 </el-form-item>
                 <el-form-item label="礼物版本号" prop="gift_version" v-if="status !== 'add'">
                     <el-input v-model="ruleForm.gift_version" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d.]/g,'');" placeholder="请输入礼物版本号"></el-input>
@@ -191,7 +191,8 @@ export default {
                 gift_desc: [
                     { required: true, message: '请输入礼物说明', trigger: 'blur' }
                 ]
-            }
+            },
+            componentKey: 0
         };
     },
     computed: {
@@ -220,11 +221,13 @@ export default {
                 }
             }
         },
-        limitImgType() { // 限制上传文件类型
+      limitImgType() { // 限制上传文件类型
             if(this.ruleForm.play_type === 1) {
                 return '.zip'
             } else if(this.ruleForm.play_type === 2) {
                 return '.svg,.svga'
+            } else if(this.ruleForm.play_type === 3) {
+                return '.mp4'
             }
         }
     },
@@ -299,7 +302,11 @@ export default {
         async getNobility() {
             let res = await nobilitylist()
             this.nobilityList = res.data.list || []
-        }
+       },
+      handleChangePlayType() {
+        this.componentKey += 1
+        this.ruleForm.gift_gif = ''
+       }
     },
     mounted() {
         this.getNobility()

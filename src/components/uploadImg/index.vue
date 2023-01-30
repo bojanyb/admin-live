@@ -6,7 +6,8 @@
             <svgComp v-if="url && isSpecial === 'svga' && isShowSvg" ref="svgComp" :src="url"
                 :styleObj="{ width: '178px', height: '178px' }"></svgComp>
             <i v-if="!url" class="el-icon-plus avatar-uploader-icon"></i>
-            <span class="fileName" v-if="url && isSpecial === 'zip'">已上传文件</span>
+            <span class="fileName" v-if="url && isSpecial === 'zip'">已上传zip文件</span>
+            <span class="fileName" v-if="url && isSpecial === 'mp4'">已上传mp4文件</span>
         </el-upload>
     </div>
 </template>
@@ -65,7 +66,7 @@ export default {
         },
     },
     computed: {
-        url() { // 返回地址
+      url() { // 返回地址
             if (this.imgUrl) {
                 return this.imgUrl
             }
@@ -79,6 +80,8 @@ export default {
                     return 'svga'
                 } else if (this.url.indexOf('.zip') !== -1 || this.url.indexOf('.mp3') !== -1 || this.url.indexOf('.m4a') !== -1) {
                     return 'zip'
+                } else if (this.url.indexOf('.mp4') !== -1) {
+                    return 'mp4'
                 }
             }
         }
