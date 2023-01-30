@@ -3,9 +3,9 @@
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
-		
+
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
-		
+
 		<!-- 新增 - 修改组件 -->
 		<giftAdd ref="giftAdd" v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList"></giftAdd>
 	</div>
@@ -41,6 +41,13 @@
 		computed: {
 			forms() {
 				return [
+					{
+						name: 'gift_name',
+						type: 'input',
+						value: '',
+						label: '礼物名称',
+						placeholder: '请输入礼物名称'
+					},
 					{
 						name: 'status',
 						type: 'select',
@@ -196,7 +203,8 @@
 				return {
 					page: params.page,
 					pagesize: params.size,
-					status: s.status
+          status: s.status,
+          gift_name: s.gift_name
 				}
 			},
 			// 刷新列表
@@ -206,7 +214,8 @@
 			// 重置
 			reset() {
 				this.searchParams = {
-					status: ''
+          status: '',
+          gift_name: ''
 				}
 				this.getList()
 			},
