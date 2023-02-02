@@ -56,6 +56,24 @@ const activityManagerRouter = {
 				noCache: true
 			}
 		},
+    {
+      path: 'travel-award-record',
+      component: () => import('@/views/voiceroom/activityManager/travel-award-record'),
+      name: 'travel-award-record',
+      meta: {
+        title: '活动抽奖数据',
+        noCache: true
+      }
+    },
+    {
+      path: 'travel-scenic-data',
+      component: () => import('@/views/voiceroom/activityManager/travel-scenic-data'),
+      name: 'travel-scenic-data',
+      meta: {
+        title: '活动景点数据',
+        noCache: true
+      }
+    },
 	]
 }
 
