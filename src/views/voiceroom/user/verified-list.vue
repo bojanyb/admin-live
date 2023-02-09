@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       searchParams: {
-        status: 'C'
+        status: ''
       }
     }
   },
@@ -59,7 +59,7 @@ export default {
         {
           name: 'status',
           type: 'select',
-          value: 'C',
+          value: '',
           keyName: 'value',
           optionLabel: 'name',
           label: '状态',
@@ -182,7 +182,7 @@ export default {
   },
   methods: {
     // 名称脱敏
-    nameDesensitize(val) { 
+    nameDesensitize(val) {
       if(val) {
         let name = ''
         let arr = val.split('')
