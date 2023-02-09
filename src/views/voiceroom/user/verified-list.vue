@@ -228,7 +228,7 @@ export default {
     // 重置
     reset() {
       this.searchParams = {
-        status: 'C'
+        status: ''
       }
       this.dateTimeParams = {}
       this.getList()
