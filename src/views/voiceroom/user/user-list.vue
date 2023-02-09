@@ -87,6 +87,20 @@
 						placeholder: '请输入昵称'
 					},
 					{
+						name: 'real_name',
+						type: 'input',
+						value: '',
+						label: '真实姓名',
+						placeholder: '请输入真实姓名'
+					},
+					{
+						name: 'ip',
+						type: 'input',
+						value: '',
+						label: 'IP',
+						placeholder: '请输入IP'
+					},
+					{
 						name: 'reg_device_id',
 						type: 'input',
 						value: '',
@@ -184,11 +198,25 @@
 								])
 							}
 						},
+						// {
+						// 	label: '个性签名',
+						// 	width: '110px',
+						// 	render: (h, params) => {
+						// 		return h('span', params.row.autograph || '无')
+						// 	}
+						// },
 						{
-							label: '个性签名',
+							label: '真实姓名',
 							width: '110px',
 							render: (h, params) => {
-								return h('span', params.row.autograph || '无')
+								return h('span', params.row.real_name || '无')
+							}
+						},
+						{
+							label: 'IP',
+							width: '110px',
+							render: (h, params) => {
+								return h('span', params.row.ip || '无')
 							}
 						},
 						{
@@ -245,7 +273,7 @@
 							width: '95px',
 							prop: 'is_bindcard',
 							render: (h, params) => {
-								return h('div', { style: { 
+								return h('div', { style: {
 									color: params.row.is_bindcard ? '#ff4949' : '#666666',
 									cursor: params.row.is_bindcard ? 'pointer' : ''
 								}, on: { click:()=>{this.bindcardFunc(params.row)} } }, params.row.is_bindcard ? '是' : '否')
@@ -319,7 +347,9 @@
 					page: params.page,
 					pagesize: params.size,
 					user_number: s.user_number,
-					nickname: s.nickname,
+          nickname: s.nickname,
+          real_name: s.real_name,
+          ip: s.ip,
 					phone: s.phone,
 					reg_device_id: s.reg_device_id,
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
