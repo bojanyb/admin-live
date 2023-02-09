@@ -21,8 +21,8 @@
                       </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="到期时间" prop="day">
-                    <el-input v-model="ruleForm.day" placeholder="请输入到期时间" clearable/>
+                <el-form-item label="赠送天数" prop="day">
+                    <el-input v-model="ruleForm.day" placeholder="请输入赠送天数" clearable/>
                 </el-form-item>
                 <el-form-item label="赠送原因" prop="remark">
                     <el-input
@@ -233,7 +233,7 @@ export default {
                 color: #ff4949;
             }
         }
-        
+
     }
 }
 </style>
