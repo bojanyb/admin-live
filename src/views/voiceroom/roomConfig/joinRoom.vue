@@ -289,7 +289,7 @@ export default {
     },
     // 汇总数据
     add() {
-      if (!(this.searchParams.join_type < 0) || this.searchParams.user_number) {
+      if (this.searchParams.join_type >= 0 || this.searchParams.user_number) {
         this.$message.error("汇总数据不能筛选进房类型和用户ID，请重新选择！");
         return false;
       }
