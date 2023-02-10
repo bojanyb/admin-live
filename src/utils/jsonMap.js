@@ -1280,6 +1280,10 @@ const SYSTEMGIFTPLAYTYPELIST = [
   {
     name: 'SVGA',
     value: 2
+  },
+  {
+    name: 'MP4',
+    value: 3
   }
 ]
 
