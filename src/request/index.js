@@ -349,6 +349,7 @@ const request = {
         delBind: `${HTTPHEADER}/party/delBind`, // 房间移除绑定分类
         endLive: `${HTTPHEADER}/party/endLive`, // 关闭直播
         joinRoomLog: `${HTTPHEADER}/Room/joinRoomLog`, // 进入房间记录
+        statJoin: `${HTTPHEADER}/room/statJoin` // 进房记录汇总
     },
 
     // 直播管理
