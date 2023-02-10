@@ -51,7 +51,7 @@ export default {
                 {
                     name: 'type',
                     type: 'select',
-                    value: null,
+                    value: 1,
                     keyName: 'type',
                     optionLabel: 'name',
                     label: '奖池',
@@ -155,7 +155,7 @@ export default {
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
                 user_number: s.user_number,
-                type: s.type ? s.type : "",
+                type: s.type ? s.type : "1",
             }
         },
         setDateTime(arr) {
