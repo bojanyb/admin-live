@@ -429,6 +429,10 @@ const request = {
         sourceType: `${HTTPHEADER}/SpringLog/sourceType`, // 碎片来源类型
         getPuzzleLog: `${HTTPHEADER}/SpringLog/getPuzzleLog`, // 碎片获得记录
 
+        // 环球之旅
+        getTraveList: `${HTTPHEADER}/HdTravelLog/getTraveList`, // 景点数据
+        getDrawList: `${HTTPHEADER}/HdTravelLog/getDrawList`, // 抽奖数据
+
     },
 
     // 靓号管理

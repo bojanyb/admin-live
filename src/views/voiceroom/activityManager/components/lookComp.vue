@@ -19,27 +19,49 @@
         <el-table-column prop="not_guild_free" label="直刷流水" align="center">
         </el-table-column>
       </el-table>
+      <!--工具条-->
+      <pagination
+        v-show="lookTotal > 0"
+        :total="lookTotal"
+        :page.sync="lookPage.page"
+        :limit.sync="lookPage.limit"
+        @pagination="load"
+      />
     </el-dialog>
   </div>
 </template>
 
 <script>
 // 引入api
-import { getNotGuildFree } from "@/api/videoRoom";
+import { getTraveList } from "@/api/activity";
+// 分页
+import Pagination from "@/components/Pagination";
 export default {
+  components: {
+    Pagination,
+  },
   data() {
     return {
       dialogVisible: false,
       tableData: [],
+      lookTotal: 0,
+      lookPage: {
+        page: 1,
+        pagesize: 10,
+      },
     };
   },
   methods: {
     handleClose() {
       this.dialogVisible = false;
     },
-    async loadParams(params) {
+    async load(row) {
       this.dialogVisible = true;
-      let res = await getNotGuildFree(params);
+      let res = await getTraveList({
+        ...this.lookPage,
+        id: row.id || "",
+      });
+      this.lookTotal = res.data.count;
       this.tableData = res.data.list || [];
     },
     // 销毁组件

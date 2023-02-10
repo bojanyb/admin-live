@@ -8,11 +8,11 @@
         <el-card class="box-card" shadow="always" v-if="tabIndex === '0'">
           <div class="box-card-inner">
             <div>抽奖人数：{{sumSource.user_count || 0}}人</div>
-            <div>抽奖次数：{{sumSource.exchange_count || 0}}个</div>
-            <div>消费金额：{{sumSource.fu_value || 0}}钻石</div>
-            <div>产出金额：{{sumSource.gift_value || 0}}钻石</div>
+            <div>抽奖次数：{{sumSource.lottery_count || 0}}个</div>
+            <div>消费金额：{{sumSource.consume_count || 0}}钻石</div>
+            <div>产出金额：{{sumSource.output_count || 0}}钻石</div>
             <div>利润值：{{sumSource.profit_value || 0}}钻石</div>
-            <div>产出比：{{sumSource.profit_value || 0}}%</div>
+            <div>产出比：{{sumSource.produce || 0}}%</div>
           </div>
         </el-card>
         <div class="tableList">
@@ -82,7 +82,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.activity.exchangeLog,
+                url: REQUEST.activity.getDrawList,
                 columns: [
                     {
                         label: '抽奖时间',
@@ -100,23 +100,23 @@ export default {
                     },
                     {
                         label: '消耗钻石',
-                        prop: 'type_desc',
+                        prop: 'consume_zs',
                     },
                      {
                         label: '奖品名称',
-                        prop: 'fu_number',
+                        prop: 'remark',
                     },
                     {
                         label: '奖品ID',
-                        prop: 'fu_value',
+                        prop: 'ids',
                     },
                     {
                         label: '奖品价值',
-                        prop: 'desc',
+                        prop: 'value',
                     },
                     {
                         label: '利润值',
-                        prop: 'gift_id',
+                        prop: 'profit',
                     },
                 ]
             }
@@ -126,10 +126,11 @@ export default {
         return {
           sumSource: {
             user_count: 0,
-            exchange_count: 0,
-            fu_value: 0,
-            gift_value: 0,
+            lottery_count: 0,
+            consume_count: 0,
+            output_count: 0,
             profit_value: 0,
+            produce: 0
           },
           ruleForm: {
               alreadyMoney: null,
@@ -154,7 +155,7 @@ export default {
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
                 user_number: s.user_number,
-                gift_name: s.gift_name,
+                type: s.type,
             }
         },
         setDateTime(arr) {

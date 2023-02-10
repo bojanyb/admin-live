@@ -63,3 +63,12 @@ export function sourceType(data) {
     data
   })
 }
+
+// 景点数据
+export function getTraveList(data) {
+  return request({
+    url: api.activity.getTraveList,
+    method: 'post',
+    data
+  })
+}
