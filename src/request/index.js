@@ -432,6 +432,7 @@ const request = {
         // 环球之旅
         getTraveList: `${HTTPHEADER}/HdTravelLog/getTraveList`, // 景点数据
         getDrawList: `${HTTPHEADER}/HdTravelLog/getDrawList`, // 抽奖数据
+        getTraveListDetail: `${HTTPHEADER}/HdTravelLog/getTraveListDetail`, // 景点详情
 
     },
 

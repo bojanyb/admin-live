@@ -8,32 +8,30 @@
       @closed="closed"
     >
       <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="room_number" label="团员ID" align="center">
+        <el-table-column prop="user_number" label="团员ID" align="center">
         </el-table-column>
-        <el-table-column prop="not_guild_free" label="团员昵称" align="center">
+        <el-table-column prop="nickname" label="团员昵称" align="center">
         </el-table-column>
-        <el-table-column prop="not_guild_free" label="里程值" align="center">
+        <el-table-column prop="level_value" label="里程值" align="center">
         </el-table-column>
-        <el-table-column prop="not_guild_free" label="背包流水" align="center">
-        </el-table-column>
-        <el-table-column prop="not_guild_free" label="直刷流水" align="center">
+        <el-table-column prop="money_count" label="总流水" align="center">
         </el-table-column>
       </el-table>
       <!--工具条-->
-      <pagination
+      <!-- <pagination
         v-show="lookTotal > 0"
         :total="lookTotal"
         :page.sync="lookPage.page"
         :limit.sync="lookPage.limit"
         @pagination="load"
-      />
+      /> -->
     </el-dialog>
   </div>
 </template>
 
 <script>
 // 引入api
-import { getTraveList } from "@/api/activity";
+import { getTraveListDetail } from "@/api/activity";
 // 分页
 import Pagination from "@/components/Pagination";
 export default {
@@ -57,12 +55,11 @@ export default {
     },
     async load(row) {
       this.dialogVisible = true;
-      let res = await getTraveList({
+      let res = await getTraveListDetail({
         ...this.lookPage,
-        id: row.id || "",
+        group_id: row.id || "",
       });
-      this.lookTotal = res.data.count;
-      this.tableData = res.data.list || [];
+      this.tableData = res.data || [];
     },
     // 销毁组件
     closed() {

@@ -18,8 +18,6 @@
         <div>旅行团总人数：{{ sumSource.users_count || 0 }}人</div>
         <div>打卡人数：{{ sumSource.check_count || 0 }}人</div>
         <div>总里程值：{{ sumSource.level_value_count || 0 }}</div>
-        <div>背包流水：{{ sumSource.money_bag || 0 }}</div>
-        <div>直刷流水：{{ sumSource.money_direct || 0 }}</div>
         <div>总流水：{{ sumSource.money_count || 0 }}</div>
       </div>
     </el-card>
@@ -69,9 +67,9 @@ export default {
           name: "user_number",
           type: "input",
           value: "",
-          label: "用户ID",
+          label: "团长ID",
           isNum: true,
-          placeholder: "请输入用户ID",
+          placeholder: "请输入团长ID",
         },
         {
           name: "level_id",

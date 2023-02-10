@@ -72,3 +72,13 @@ export function getTraveList(data) {
     data
   })
 }
+
+// 景点数据 详情数据
+export function getTraveListDetail(data) {
+  return request({
+    url: api.activity.getTraveListDetail,
+    method: 'post',
+    data
+  })
+}
+

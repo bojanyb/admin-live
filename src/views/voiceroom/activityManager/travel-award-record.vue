@@ -44,12 +44,12 @@ export default {
                   name: 'user_number',
                   type: 'input',
                   value: '',
-                  label: '用户ID',
+                  label: '抽奖人ID',
                   isNum: true,
-                  placeholder: '请输入用户ID'
+                  placeholder: '请输入抽奖人ID'
                 },
                 {
-                    name: 'type_name',
+                    name: 'type',
                     type: 'select',
                     value: null,
                     keyName: 'type',
@@ -138,7 +138,7 @@ export default {
           },
           isDestoryComp: false, // 销毁组件
           msg_id: "",
-          sourceType: [{name: "国内游", value: 1}, {name: "跨国游", value: 2}]
+          sourceType: [{name: "国内游", type: 1}, {name: "跨国游", type: 2}]
         };
     },
     methods: {
