@@ -51,7 +51,7 @@ export default {
                 {
                     name: 'type',
                     type: 'select',
-                    value: 1,
+                    value: 0,
                     keyName: 'type',
                     optionLabel: 'name',
                     label: '奖池',
@@ -138,7 +138,7 @@ export default {
           },
           isDestoryComp: false, // 销毁组件
           msg_id: "",
-          sourceType: [{name: "国内游", type: 1}, {name: "跨国游", type: 2}]
+          sourceType: [{name: "全部", type: 0},{name: "国内游", type: 1}, {name: "跨国游", type: 2}]
         };
     },
     methods: {
@@ -155,7 +155,7 @@ export default {
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
                 user_number: s.user_number,
-                type: s.type ? s.type : "1",
+                type: s.type ? s.type : "",
             }
         },
         setDateTime(arr) {
