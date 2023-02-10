@@ -349,6 +349,7 @@ const request = {
         delBind: `${HTTPHEADER}/party/delBind`, // 房间移除绑定分类
         endLive: `${HTTPHEADER}/party/endLive`, // 关闭直播
         joinRoomLog: `${HTTPHEADER}/Room/joinRoomLog`, // 进入房间记录
+        statJoin: `${HTTPHEADER}/room/statJoin` // 进房记录汇总
     },
 
     // 直播管理
@@ -428,6 +429,11 @@ const request = {
         puzzleDrawLog: `${HTTPHEADER}/SpringLog/puzzleDrawLog`, // 拼图抽奖记录
         sourceType: `${HTTPHEADER}/SpringLog/sourceType`, // 碎片来源类型
         getPuzzleLog: `${HTTPHEADER}/SpringLog/getPuzzleLog`, // 碎片获得记录
+
+        // 环球之旅
+        getTraveList: `${HTTPHEADER}/HdTravelLog/getTraveList`, // 景点数据
+        getDrawList: `${HTTPHEADER}/HdTravelLog/getDrawList`, // 抽奖数据
+        getTraveListDetail: `${HTTPHEADER}/HdTravelLog/getTraveListDetail`, // 景点详情
 
     },
 

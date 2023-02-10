@@ -10,7 +10,7 @@
         @add="add"
         @onSearch="onSearch"
       ></SearchPanel>
-    </div>
+    </div> 
 
     <el-card class="box-card" shadow="always" v-if="tabIndex === '0'">
       <div class="box-card-inner">
