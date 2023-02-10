@@ -297,11 +297,11 @@ export default {
       this.getList();
     },
     resetTimestamp() {
-      let time = new Date()
-      let date = new Date(timeFormat(time, 'YYYY-MM-DD HH:mm:ss', false))
-      let basetime = 24 * 60 * 60 * 1000
-      let start = date - basetime
-      let end = date
+      let baseTime = 24 * 60 * 60 * 1000
+      let time = new Date() - baseTime
+      let date = timeFormat(time, 'YYYY-MM-DD', false)
+      let start = new Date(date + ' 00:00:00').getTime()
+      let end = new Date(date + ' 23:59:59').getTime()
       this.searchParams.dateTimeParams = [start, end]
       this.dateTimeParams = {
           start_time: start,
