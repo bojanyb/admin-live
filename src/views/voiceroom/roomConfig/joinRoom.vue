@@ -188,15 +188,6 @@ export default {
 
       let arr1 = [
         {
-          label: "是否首次进房",
-          render: (h, params) => {
-            let data = MAPDATA.ISFIRSTJOINHOUSELIST.find((item) => {
-              return item.value === params.row.is_first;
-            });
-            return h("span", data ? data.name : "");
-          },
-        },
-        {
           label: "房间ID",
           prop: "room_number",
         },
@@ -275,7 +266,7 @@ export default {
         join_type: -1,
         is_first: -1,
       };
-      this.dateTimeParams = {};
+      this.resetTimestamp()
       this.isSummary = false;
       this.getList();
     },
@@ -305,7 +296,22 @@ export default {
       };
       this.getList();
     },
+    resetTimestamp() {
+      let time = new Date()
+      let date = new Date(timeFormat(time, 'YYYY-MM-DD HH:mm:ss', false))
+      let basetime = 24 * 60 * 60 * 1000
+      let start = date - basetime
+      let end = date
+      this.searchParams.dateTimeParams = [start, end]
+      this.dateTimeParams = {
+          start_time: start,
+          end_time: end
+      }
+    }
   },
+  created() {
+    this.resetTimestamp()
+  }
 };
 </script>
 
