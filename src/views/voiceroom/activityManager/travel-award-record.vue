@@ -155,7 +155,7 @@ export default {
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
                 user_number: s.user_number,
-                type: s.type,
+                type: s.type ? s.type : "",
             }
         },
         setDateTime(arr) {
@@ -169,12 +169,13 @@ export default {
         emptyDateTime() {
           this.dateTimeParams = {}
         },
-        // 查询
+        // 重置
         reset() {
             this.searchParams = {}
+            this.dateTimeParams = {}
             this.getList()
         },
-        // 重置
+        // 查询
         onSearch() {
             this.getList()
         },

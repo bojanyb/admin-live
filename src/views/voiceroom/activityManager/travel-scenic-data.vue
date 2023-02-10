@@ -221,6 +221,7 @@ export default {
     // 配置参数
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams };
+      console.log("🚀 ~ file: travel-scenic-data.vue:224 ~ beforeSearch ~ s", s)
       return {
         page: params ? params.page : null,
         pagesize: 10,
@@ -246,12 +247,13 @@ export default {
     emptyDateTime() {
       this.dateTimeParams = {};
     },
-    // 查询
+     // 重置
     reset() {
       this.searchParams = {};
+      this.dateTimeParams = {};
       this.getList();
     },
-    // 重置
+    // 查询
     onSearch() {
       this.getList();
     },
