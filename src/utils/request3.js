@@ -85,9 +85,11 @@ service.interceptors.response.use(
             isRefreshFail = true;
           }, 2000);
         }
-        store.dispatch('user/resetToken').then(() => {
-          location.reload()
-        })
+        setTimeout(() => {
+          store.dispatch('user/resetToken').then(() => {
+            location.reload()
+          })
+        }, 2000);
 				return
 			}
 			error(res.msg)
