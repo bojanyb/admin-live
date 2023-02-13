@@ -6,6 +6,7 @@ import {
 import store from '@/store'
 import { getToken } from '@/utils/auth' // get token from cookie
 import { error } from '@/utils/common'
+let isRefreshFail = true;
 var baseUrlApi = ENV_DOMAINHTTP;
 // switch (process.env.NODE_ENV) {
 // 	case 'development':
@@ -77,12 +78,18 @@ service.interceptors.response.use(
 					})
 				})
 			}else if(res.code == 3000 && res.msg == "请重新登录"){
-				error(res.msg)
-				setTimeout(res=>{
-					store.dispatch('user/resetToken').then(() => {
-						location.reload()
-					})
-				},2000)
+        if (isRefreshFail) {
+          error(res.msg || '登录过期，请重新登录')
+          isRefreshFail = false
+          setTimeout(() => {
+            isRefreshFail = true;
+          }, 2000);
+        }
+        setTimeout(() => {
+          store.dispatch('user/resetToken').then(() => {
+            location.reload()
+          })
+        }, 2000);
 				return
 			}
 			error(res.msg)
