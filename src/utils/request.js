@@ -9,6 +9,7 @@ import {
 } from '@/utils/auth'
 import { error } from '@/utils/common'
 
+let isRefreshFail = true;
 // create an axios instance
 const service = axios.create({
 	baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -68,14 +69,18 @@ service.interceptors.response.use(
 					})
 				})
 			}
-			
+
 			if(res.code == 3000 && res.msg == "请重新登录"){
-				error(res.msg)
-				setTimeout(res=>{
-					store.dispatch('user/resetToken').then(() => {
-						location.reload()
-					})
-				},2000)
+        if (isRefreshFail) {
+          error(res.msg || '登录过期，请重新登录')
+          isRefreshFail = false
+          setTimeout(() => {
+            isRefreshFail = true;
+          }, 2000);
+        }
+        store.dispatch('user/resetToken').then(() => {
+          location.reload()
+        })
 				return
 			}
 
