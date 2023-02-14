@@ -126,6 +126,15 @@ export default {
                             return  h('span', last_day ? last_day : '--')
                         }
                     },
+                    {
+                      label: '操作',
+                      render: (h, params) => {
+                          return h('div', [
+                          h('el-button', { props: { type: 'danger'}, style: { display: params.row.status === 2 ? 'none' : 'unset'
+                              }, on: {click:()=>{this.recycle(params.row)}}},'回收')
+                          ])
+                      }
+                    }
                 ]
             }
         },
@@ -184,6 +193,10 @@ export default {
         onSearch() {
             this.getList()
         },
+        // 回收
+        recycle(row){
+          console.log("row----:",row);
+        }
     }
 }
 </script>
