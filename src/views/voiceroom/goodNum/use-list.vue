@@ -201,6 +201,7 @@ export default {
         // 回收
         recycle(row){
           this.recycleSource = row;
+          this.$refs["recycleComp"].ruleForm.reason = "";
           this.$refs["recycleComp"].dialogVisible = true
         }
     }
