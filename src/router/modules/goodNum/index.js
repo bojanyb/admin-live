@@ -56,6 +56,15 @@ const goodNumRouter = {
 				noCache: true
 			}
 		},
+    {
+			path: 'recycle-list',
+			component: () => import('@/views/voiceroom/goodNum/recycle-list'),
+			name: 'recycle-list',
+			meta: {
+				title: '回收记录',
+				noCache: true
+			}
+		},
 	]
 }
 

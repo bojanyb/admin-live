@@ -7,6 +7,7 @@
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList"></tableList>
         </div>
+        <recycleComp ref="recycleComp" :recycleSource="recycleSource" @getList="getList"/>
     </div>
 </template>
 
@@ -15,6 +16,8 @@
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
+// 引入菜单组件
+import recycleComp from './components/recycleComp.vue'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 // 引入api
@@ -26,6 +29,7 @@ export default {
     components: {
         tableList,
         SearchPanel,
+        recycleComp
     },
     mixins: [mixins],
     computed: {
@@ -90,7 +94,7 @@ export default {
                         }
                     },
                     {
-                        label: '用户ID',
+                        label: '用户/房间ID',
                         prop: 'user_number'
                     },
                     {
@@ -130,7 +134,7 @@ export default {
                       label: '操作',
                       render: (h, params) => {
                           return h('div', [
-                          h('el-button', { props: { type: 'danger'}, style: { display: params.row.status === 2 ? 'none' : 'unset'
+                          h('el-button', { props: { type: 'danger'}, style: { display: params.row.use_status !== 1 ? 'none' : 'unset'
                               }, on: {click:()=>{this.recycle(params.row)}}},'回收')
                           ])
                       }
@@ -146,6 +150,7 @@ export default {
                 number: "",
                 use_status: ""
             },
+            recycleSource : {}
         };
     },
     methods: {
@@ -195,7 +200,8 @@ export default {
         },
         // 回收
         recycle(row){
-          console.log("row----:",row);
+          this.recycleSource = row;
+          this.$refs["recycleComp"].dialogVisible = true
         }
     }
 }

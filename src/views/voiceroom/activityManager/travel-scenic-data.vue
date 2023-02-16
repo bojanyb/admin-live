@@ -113,12 +113,7 @@ export default {
               return h(
                 "span",
                 params.row.create_time
-                  ? timeFormat(
-                      params.row.create_time,
-                      "YYYY/MM/DD HH:mm:ss",
-                      true
-                    )
-                  : "--"
+                  ? timeFormat(params.row.create_time,"YYYY/MM/DD HH:mm:ss", true ): "--"
               );
             },
           },

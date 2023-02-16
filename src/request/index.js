@@ -452,6 +452,8 @@ const request = {
         usingLog: `${HTTPHEADER}/PrettyNumber/usingLog`, // 售卖记录
         givePrettyNumber: `${HTTPHEADER}/v2/PrettyNumber/givePrettyNumber`, // 赠送靓号
         searchPrettyNumber: `${HTTPHEADER}/PrettyNumber/searchNumber`, // 检测靓号
+        recycle: `${HTTPHEADER}/PrettyNumber/recycle`, // 靓号回收
+        recycleLog: `${HTTPHEADER}/PrettyNumber/recycleLog`, // 回收记录
     }
 }
 

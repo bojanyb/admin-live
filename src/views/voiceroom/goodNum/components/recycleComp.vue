@@ -2,17 +2,17 @@
     <div class="user-recycle-box">
         <el-dialog
         :visible.sync="dialogVisible"
-        width="400px"
+        width="600px"
+        title="靓号回收"
         :before-close="handleClose"
         :show-close="false"
         @closed="closed">
-            <div class="mainBox">
-                <div class="tit">靓号回收</div>
-                <div class="id">（用户ID：{{ form.user_number }}）</div>
-            </div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="95px" class="demo-ruleForm">
-                <el-form-item label="回收原因" prop="password">
-                    <el-input v-model="ruleForm.password" placeholder="请输入回收原因"></el-input>
+                <el-form-item label="回收靓号:">
+                  <div> {{recycleSource.number}} </div>
+                </el-form-item>
+                <el-form-item label="回收原因:" prop="reason">
+                    <el-input type="textarea" :rows="4" v-model="ruleForm.reason" placeholder="请输入回收原因"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -25,23 +25,36 @@
 
 <script>
 // 引入api
-import { updateLoginPwd } from '@/api/user.js'
+import { recycle } from '@/api/videoRoom.js'
 export default {
     data() {
         return {
             dialogVisible: false,
             form: {},
             ruleForm: {
-                password: ''
+                reason: ''
             },
             rules: {
-                password: [
-                    { required: true, message: '请输入回收原因', trigger: 'blur' },
-                    { pattern: /^(?=.*\d)(?=.*[a-zA-Z])[\da-zA-Z~!@#$%^&*]{6,20}$/, required: true, message: '密码只能输入数字和字母, 且只能6-20位之间', trigger: 'blur' },
+                reason: [
+                    { required: true, message: '请输入回收原因', trigger: 'blur',
+                      validator: (rules, value, cb) => {
+                      if (!this.ruleForm.reason || this.ruleForm.reason == "") {
+                        return cb(new Error('回收原因不能为空!'))
+                      }
+                      return cb()
+                    }
+                  },
                 ]
             }
         };
     },
+    props: {
+     recycleSource:{
+        type: Object,
+        default: {}
+    }
+    },
+    mounted(){},
     methods: {
         // 关闭弹窗
         handleClose() {
@@ -56,21 +69,20 @@ export default {
         async submitForm(formName) {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    let res = await updateLoginPwd({ user_id: this.form.id, password: this.ruleForm.password })
-                    if(res.code === 2000) {
-                        this.$success('修改成功')
-                        this.dialogVisible = false
-                        this.$emit('getList')
-                    }
+                  let param = {
+                    number: this.recycleSource.number,
+                    reason: this.ruleForm.reason
+                  }
+                  let res = await recycle(param)
+                  if(res.code === 2000) {
+                      this.$success('回收成功,1分钟之内生效')
+                      this.dialogVisible = false
+                  }
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
             });
-        },
-        // 重置
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
         },
         // 销毁组件
         closed() {
@@ -81,26 +93,4 @@ export default {
 </script>
 
 <style lang="scss">
-.user-recycle-box {
-    .el-dialog__header {
-        display: none;
-    }
-    .el-dialog__body {
-        .mainBox {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 30px;
-            .id {
-                font-size: 14px;
-                font-weight: 600;
-            }
-            .tit {
-                font-weight: 600;
-                font-size: 20px;
-                margin-bottom: 10px;
-            }
-        }
-    }
-}
 </style>
