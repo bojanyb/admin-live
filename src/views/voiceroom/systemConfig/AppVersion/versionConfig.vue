@@ -149,6 +149,12 @@ export default {
           isActive: false,
           label: "多多cp",
           value: "com.jlsd.duoduo",
+        },
+        {
+          key: "com.hdb.kaihei",
+          isActive: false,
+          label: "开黑语音",
+          value: "com.hdb.kaihei",
         }
       ],
       packageName: [
@@ -171,6 +177,11 @@ export default {
           key: "com.jlsd.duoduo",
           label: "多多cp",
           value: "com.jlsd.duoduo",
+        },
+        {
+          key: "com.hdb.kaihei",
+          label: "开黑语音",
+          value: "com.hdb.kaihei",
         }
       ],
       dateTimeParams: {

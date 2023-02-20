@@ -57,6 +57,7 @@ const request = {
         AppruleAdd: `${HTTPHEADER}/apprule/add`, // 版本审核添加
         AppruleUpdate: `${HTTPHEADER}/apprule/update`, // 版本审核修改
         getChannels : `${HTTPHEADER}/index/getChannels`, // 获取渠道
+        getSwitchValue : `${HTTPHEADER}/Apprule/getSwitchValue`, // 功能开关列表
         super: {
             punishHistory: `${HTTPHEADER}/Room/punishHistory`, // 处理处罚历史
             handlePunish: `${HTTPHEADER}/Room/handlePunish`, // 处理处罚

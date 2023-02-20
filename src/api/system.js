@@ -147,3 +147,12 @@ export function getChannels(data) {
     data
   })
 }
+
+// 功能开关列表
+export function getSwitchValue(data) {
+  return request({
+    url: api.system.getSwitchValue,
+    method: 'post',
+    data
+  })
+}

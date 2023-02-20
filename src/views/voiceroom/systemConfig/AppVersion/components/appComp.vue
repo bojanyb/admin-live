@@ -34,6 +34,11 @@
               <el-checkbox v-for="(item,index) in channelsList" v-if="item.channel.indexOf('iOS') == -1" :key="index" :label="item.channel"></el-checkbox>
             </el-checkbox-group>
           </el-form-item>
+          <el-form-item label="模块开关" prop="function_switch">
+            <el-checkbox-group v-model="audits">
+              <el-checkbox v-for="(item,index) in auditList" :key="index" :label="item.value" :value="item.key"></el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
         </div>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -46,7 +51,7 @@
 
 <script>
 // 引入api
-import { getChannels, AppruleAdd, AppruleUpdate } from "@/api/system"
+import { getChannels,getSwitchValue, AppruleAdd, AppruleUpdate } from "@/api/system"
 export default {
   data() {
     return {
@@ -88,10 +93,17 @@ export default {
           key: "com.jlsd.duoduo",
           name: "多多cp",
           value: "com.jlsd.duoduo",
+        },
+        {
+          key: "com.hdb.kaihei",
+          name: "开黑语音",
+          value: "com.hdb.kaihei",
         }
       ],
       channelsList: [],
       channels: [],
+      audits : [],
+      auditList : [],
       status: 'add',
       oldParams: {},
       ruleForm: {
@@ -101,6 +113,7 @@ export default {
         platform: "",
         key: "show_check", //	show_check审核开关
         value: "",
+        function_switch: ""
       },
       rules: {
         version: [
@@ -148,17 +161,42 @@ export default {
             let params = JSON.parse(JSON.stringify(row))
             params.channels = params.channels
             this.channels = params.channels
+            this.audits = params.function_switch
             this.$set(this.$data, 'ruleForm', params)
+        }else{
+          let params = {
+            key: "show_check"
+          }
+          this.$set(this.$data, 'ruleForm', params)
+          this.resetForm("ruleForm")
         }
         this.dialogVisible = true
         this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
         this.getChannelsList()
+        this.getSwitchValueList()
     },
     // 获取渠道
     async getChannelsList(){
       let res = await getChannels()
       if(res.code == 2000){
         this.channelsList = res.data.list
+      }
+    },
+    // 获取功能开关
+    async getSwitchValueList (){
+      let res = await getSwitchValue()
+      if(res.code == 2000){
+        this.auditList = res.data.list
+        if(this.status !== 'add') {
+          let newArr = []
+          this.audits.map((res,i)=>{
+              let row = this.auditList.find(item => { return res === item.key })
+              if(row){
+                newArr.push(row.value)
+              }
+          })
+          this.audits = newArr
+        }
       }
     },
     // 关闭弹窗
@@ -174,11 +212,8 @@ export default {
               this.$message.error("请先选择app渠道")
               return
             }else{
-              let channels = ""
-              this.channels.map((res,i)=>{
-                  channels += res + ","
-              })
-              this.ruleForm.channels = channels.substr(0,channels.length-1)
+              this.changeString(this.channels,"channels")
+              this.changeString(this.audits,"function_switch")
             }
             delete this.ruleForm.create_time
             delete this.ruleForm.update_time
@@ -193,6 +228,7 @@ export default {
                   this.$refs["ruleForm"].resetFields();
               })
               this.channels = []
+              this.audits = []
               this.$emit('getList')
             }
           } else {
@@ -200,11 +236,8 @@ export default {
               this.$message.error("请先选择app渠道")
               return
             }else{
-              let channels = ""
-              this.channels.map((res,i)=>{
-                  channels += res + ","
-              })
-              this.ruleForm.channels = channels.substr(0,channels.length-1)
+              this.changeString(this.channels,"channels")
+              this.changeString(this.audits,"function_switch")
             }
             let params = { ...this.ruleForm }
             let res = await AppruleAdd(params)
@@ -216,6 +249,7 @@ export default {
                   this.$refs["ruleForm"].resetFields();
               })
               this.channels = []
+              this.audits = []
               this.$emit('getList')
             }
           }
@@ -225,7 +259,9 @@ export default {
       });
     },
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      if(this.$refs[formName]){
+        this.$refs[formName].resetFields();
+      }
     },
     // 销毁组件
     closed() {
@@ -247,11 +283,29 @@ export default {
           this.$refs["ruleForm"].resetFields();
       })
       this.channels = []
+      this.audits = []
     },
     // 修改
     update() {
       this.status = 'update'
-    }
+    },
+    // app渠道、审核开关字段 数组拼接字符串
+    changeString(arr,name){
+      let str = ""
+      if(name == "channels"){ // app 渠道
+        arr.map((res,i)=>{
+            str += res + ","
+        })
+      }else if(name == "function_switch"){ // 模块开关
+        arr.map((res,i)=>{
+            let row = this.auditList.find(item => { return res === item.value })
+            if(row){
+              str += row.key + ","
+            }
+        })
+      }
+      this.ruleForm[name] = str.substr(0,str.length-1)
+    },
   }
 }
 </script>

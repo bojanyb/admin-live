@@ -8,22 +8,6 @@ import { getToken } from '@/utils/auth' // get token from cookie
 import { error } from '@/utils/common'
 let isRefreshFail = true;
 var baseUrlApi = ENV_DOMAINHTTPS;
-// switch (process.env.NODE_ENV) {
-// 	case 'development':
-// 		baseUrlApi = 'http://api.huixin.info'
-// 		break
-// 	case 'test':
-// 		baseUrlApi = 'http://api.huida.vip'
-// 		break
-// 	case 'pre':
-// 		baseUrlApi = 'http://api.huidapay.net'
-// 		break
-// 	case 'production':
-// 		baseUrlApi = 'http://api.aiyi.live'
-// 		break
-// 	default:
-// 		break
-// }
 console.log(baseUrlApi);
 
 // create an axios instance
