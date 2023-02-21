@@ -134,8 +134,7 @@ export default {
                       label: '操作',
                       render: (h, params) => {
                           return h('div', [
-                          h('el-button', { props: { type: 'danger'}, style: { display: params.row.use_status !== 1 ? 'none' : 'unset'
-                              }, on: {click:()=>{this.recycle(params.row)}}},'回收')
+                          h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.recycle(params.row)}}},'回收')
                           ])
                       }
                     }
