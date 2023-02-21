@@ -26,6 +26,7 @@
 <script>
 // 引入api
 import { recycle } from '@/api/videoRoom.js'
+import settings from '@/store/modules/settings';
 export default {
     data() {
         return {
@@ -76,7 +77,10 @@ export default {
                   let res = await recycle(param)
                   if(res.code === 2000) {
                       this.$success('回收成功')
-                      this.$emit("getList")
+                      let timer = setTimeout(() => {
+                        this.$emit("getList")
+                        clearTimeout(timer)
+                      }, 1000);
                       this.dialogVisible = false
                   }
                 } else {
