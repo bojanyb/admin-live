@@ -75,7 +75,8 @@ export default {
                   }
                   let res = await recycle(param)
                   if(res.code === 2000) {
-                      this.$success('回收成功,1分钟之内生效')
+                      this.$success('回收成功')
+                      this.$emit("getList")
                       this.dialogVisible = false
                   }
                 } else {
