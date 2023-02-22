@@ -360,10 +360,10 @@ export default {
             let arr3 = [
                 {
                     label: '消息内容',
-                    showOverFlow: true,
-                    render: (h, params) => {
-                        return h('div', params.row.content || '无')
-                    }
+                    isImgOrText: true,
+                    imgWidth: '50px',
+                    imgHeight: '50px',
+                    minWidth: '180px'
                 },
                 {
                     label: '敏感状态',

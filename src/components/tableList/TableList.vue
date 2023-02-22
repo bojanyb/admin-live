@@ -48,6 +48,19 @@
           ref="imgComp">
           </imgListComp>
 
+          <div v-if="item.isImgOrText">
+            <imgComp
+            v-if="+scope.row.msg_type === 2"
+            :src="scope.row.content"
+            :width="item.imgWidth"
+            :height="item.imgHeight"
+            :preview-src-list="scope.row.content"
+            ref="imgComp">
+          </imgComp>
+
+            <div v-else>{{scope.row.content}}</div>
+          </div>
+
           <el-switch
             v-if="item.isSwitch"
             v-model="scope.row[item.prop]"
