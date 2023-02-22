@@ -1038,6 +1038,25 @@ export function searchPrettyNumber(data) {
   })
 }
 
+// 靓号管理 使用记录 - 回收
+export function recycle(data) {
+  return request({
+      url: api.prettyNumber.recycle,
+      method: 'post',
+      data
+  })
+}
+
+// 靓号管理 回收记录
+export function recycleLog(data) {
+  return request({
+      url: api.prettyNumber.recycleLog,
+      method: 'post',
+      data
+  })
+}
+
+
 // 靓号管理 使用记录
 export function usingLog(data) {
   return request({

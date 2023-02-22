@@ -109,6 +109,7 @@
 import { addPrettyNumber, updatePrettyNumber, getTypeOption } from '@/api/videoRoom.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
+import { debounce } from '@/utils'
 export default {
     computed: {
         title() { // 标题
@@ -265,15 +266,26 @@ export default {
             }
         },
         // 提交
-        submitForm(formName) {
+        submitForm : debounce(async function (){
             const isEmpty = this.ruleForm.price.some(item => {
                return item.day === '' || item.day == null || item.price === ''|| item.price == null
             })
-
             const isNum = this.ruleForm.price.every((item) => {
               return item.price > 0
             })
 
+            // 商品类型
+            if(this.ruleForm.category == 0){ // 用户靓号
+              if(this.ruleForm.number.length !== 5 && this.ruleForm.number.length !== 7 && this.ruleForm.number.length !== 9){
+                this.$message.error("用户靓号只支持5位、7位、9位");
+                return
+              }
+            }else if(this.ruleForm.category == 1){ // 房间靓号
+              if(this.ruleForm.number.length !== 4 && this.ruleForm.number.length !== 6 && this.ruleForm.number.length !== 8){
+                this.$message.error("房间靓号只支持4位、6位、8位");
+                return
+              }
+            }
             if (isEmpty && this.ruleForm.buy === '0') {
                 this.$message.error('请确保商品出售期限没有空值！')
                 return false
@@ -288,7 +300,7 @@ export default {
                 this.ruleForm.price = []
             }
 
-            this.$refs[formName].validate((valid) => {
+            this.$refs["ruleForm"].validate((valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
                     params.start_time = Math.floor(params.start_time / 1000)
@@ -328,7 +340,7 @@ export default {
                     return false;
                 }
             });
-        },
+        }, 500),
         // 新增商品出售期限
         handleAdd() {
             let s = this.ruleForm
@@ -345,7 +357,7 @@ export default {
             s.price.splice(index, 1)
         },
         // 重置
-        resetForm(formName) {
+        resetForm() {
             this.close()
         },
         // 关闭弹窗
@@ -393,7 +405,7 @@ export default {
                 }, []) || []
          }
         },
-      handleBuyChange(buyStatus) {
+        handleBuyChange(buyStatus) {
         if (buyStatus === '1') {
           this.$set(this.ruleForm, 'price', [{ day: undefined, price: undefined }])
         } else if (buyStatus === '0' && JSON.stringify(this.ruleForm.price) === '[]') {
@@ -401,8 +413,7 @@ export default {
         }
         }
     },
-    mounted() {
-    }
+    mounted() {}
 }
 </script>
 

@@ -1,10 +1,10 @@
-// 所有的下拉框选择数据
+  // 所有的下拉框选择数据
 
-/*
--用户拉新记录页面
-*/
-// 派对
-const USERINVITE = [
+  /*
+  -用户拉新记录页面
+  */
+  // 派对
+  const USERINVITE = [
   {
     value: 1,
     name: '是'
@@ -13,10 +13,10 @@ const USERINVITE = [
     value: 0,
     name: '否'
   }
-]
+  ]
 
-// 下载渠道
-const DOWNLOADSOURCE = [
+  // 下载渠道
+  const DOWNLOADSOURCE = [
   {
     value: 'ios',
     name: 'IOS'
@@ -25,12 +25,12 @@ const DOWNLOADSOURCE = [
     value: 'android',
     name: '安卓'
   }
-]
+  ]
 
-/*
--礼物库组件 - 指定位置
-*/
-const LOCATIONLIST = [
+  /*
+  -礼物库组件 - 指定位置
+  */
+  const LOCATIONLIST = [
   {
     value: 1
   },
@@ -61,10 +61,10 @@ const LOCATIONLIST = [
   {
     value: 10
   }
-]
+  ]
 
-// 活动类型
-const ACTIVITYLIST = [
+  // 活动类型
+  const ACTIVITYLIST = [
   {
     name: 'mmly',
     min: 9,
@@ -95,10 +95,10 @@ const ACTIVITYLIST = [
     min: 1,
     max: 9999999999999999999
   }
-]
+  ]
 
-// 礼物类型
-const GIFTTYPE = [
+  // 礼物类型
+  const GIFTTYPE = [
   {
     name: '基本礼物',
     value: 1
@@ -131,12 +131,12 @@ const GIFTTYPE = [
     name: '活动礼物',
     value: 8
   }
-]
+  ]
 
-/*
-*用户余额明细 - 交易类型
-*/
-const USERBALANCETYPE = [
+  /*
+  *用户余额明细 - 交易类型
+  */
+  const USERBALANCETYPE = [
   {
     name: '全部',
     value: ''
@@ -149,12 +149,12 @@ const USERBALANCETYPE = [
     name: '支出',
     value: 2
   }
-]
+  ]
 
-/*
-*充值记录 - 排序类型
-*/
-const SORTLIST = [
+  /*
+  *充值记录 - 排序类型
+  */
+  const SORTLIST = [
   {
     value: '',
     name: '全部'
@@ -167,10 +167,10 @@ const SORTLIST = [
     value: 1,
     name: '倒序'
   }
-]
+  ]
 
-// 订单状态
-const ORDERSTATUS = [
+  // 订单状态
+  const ORDERSTATUS = [
   // {
   //     value: '',
   //     name: '全部'
@@ -187,10 +187,10 @@ const ORDERSTATUS = [
     value: '3',
     name: '未支付'
   },
-]
+  ]
 
-// 充值记录 - 已支付 - 退款状态
-const ORDERREFUNDSTATUSLIST = [
+  // 充值记录 - 已支付 - 退款状态
+  const ORDERREFUNDSTATUSLIST = [
   {
     value: 1,
     name: '未退款'
@@ -199,12 +199,12 @@ const ORDERREFUNDSTATUSLIST = [
     value: 2,
     name: '已退款'
   }
-]
+  ]
 
-/*
-*体现记录 - 体现状态
-*/
-const STATUSLIST = [
+  /*
+  *体现记录 - 体现状态
+  */
+  const STATUSLIST = [
   {
     value: 1,
     name: '申请中'
@@ -225,9 +225,9 @@ const STATUSLIST = [
     value: 5,
     name: '提现失败'
   }
-]
+  ]
 
-const STATUSLISTCOPY = [
+  const STATUSLISTCOPY = [
   // {
   //     value: '',
   //     name: '全部'
@@ -240,10 +240,10 @@ const STATUSLISTCOPY = [
     value: 3,
     name: '提现退回'
   }
-]
+  ]
 
-// 充值记录排序
-const EMBODYSORT = [
+  // 充值记录排序
+  const EMBODYSORT = [
   {
     value: 'asc',
     name: '正序'
@@ -252,10 +252,10 @@ const EMBODYSORT = [
     value: 'desc',
     name: '倒序'
   }
-]
+  ]
 
-// 充值页面 - 充值类型
-const INSTITUTION = [
+  // 充值页面 - 充值类型
+  const INSTITUTION = [
   {
     value: '',
     name: '全部'
@@ -280,13 +280,13 @@ const INSTITUTION = [
   //     value: 4,
   //     name: '银联'
   // },
-]
+  ]
 
-/*
-*商城管理 - 商品列表
-*/
-// 商品类型
-const SHOPPING = [
+  /*
+  *商城管理 - 商品列表
+  */
+  // 商品类型
+  const SHOPPING = [
   {
     value: 1,
     name: '头像框'
@@ -307,10 +307,10 @@ const SHOPPING = [
     value: 5,
     name: '麦上光圈'
   }
-]
+  ]
 
-// 商品分类
-const CLASSIFY = [
+  // 商品分类
+  const CLASSIFY = [
   {
     value: 1,
     name: '流行'
@@ -331,10 +331,10 @@ const CLASSIFY = [
     value: 5,
     name: '贵族赠送'
   }
-]
+  ]
 
-// 赠送时长
-const DURATION = [
+  // 赠送时长
+  const DURATION = [
   {
     value: 1,
     name: '1天'
@@ -359,10 +359,10 @@ const DURATION = [
     value: -1,
     name: '永久'
   }
-]
+  ]
 
-// 赠送时长 - 第二版
-const DURATIONCOPY = [
+  // 赠送时长 - 第二版
+  const DURATIONCOPY = [
   {
     value: 900,
     name: '15分钟'
@@ -399,10 +399,10 @@ const DURATIONCOPY = [
     value: -1,
     name: '永久'
   }
-]
+  ]
 
-// 优先推荐
-const PRIORITYGIVE = [
+  // 优先推荐
+  const PRIORITYGIVE = [
   {
     name: '是',
     value: 1
@@ -411,13 +411,13 @@ const PRIORITYGIVE = [
     name: '否',
     value: 0
   }
-]
+  ]
 
-/*
-*用户活动 - 端午活动统计
-*/
-// 礼物类型
-const GIFTLIST = [
+  /*
+  *用户活动 - 端午活动统计
+  */
+  // 礼物类型
+  const GIFTLIST = [
   {
     value: 1,
     name: '粽子'
@@ -430,10 +430,10 @@ const GIFTLIST = [
     value: 3,
     name: '龙舟'
   }
-]
+  ]
 
-// 查看 - 礼物统计
-const GIFTSTATISTICS = [
+  // 查看 - 礼物统计
+  const GIFTSTATISTICS = [
   {
     value: 'live_user_id',
     name: '收到最多'
@@ -442,10 +442,10 @@ const GIFTSTATISTICS = [
     value: 'user_id',
     name: '送出最多'
   }
-]
+  ]
 
-// 端午活动类型
-const DWACTIVITYTYPE = [
+  // 端午活动类型
+  const DWACTIVITYTYPE = [
   {
     name: '原生',
     value: 1
@@ -454,13 +454,13 @@ const DWACTIVITYTYPE = [
     name: 'H5',
     value: 2
   }
-]
+  ]
 
-/*
-*公会管理 - 公会返佣列表
-*/
-// 公会等级
-const CLASSLIST = [
+  /*
+  *公会管理 - 公会返佣列表
+  */
+  // 公会等级
+  const CLASSLIST = [
   {
     name: 'A',
     value: 1
@@ -485,10 +485,10 @@ const CLASSLIST = [
     name: 'AAAAAA',
     value: 6
   }
-]
+  ]
 
-// 公会列表 - 公会类型
-const GUILDCONFIGTYPELIST = [
+  // 公会列表 - 公会类型
+  const GUILDCONFIGTYPELIST = [
   {
     name: '直播公会',
     value: 1
@@ -497,10 +497,10 @@ const GUILDCONFIGTYPELIST = [
     name: '派对公会',
     value: 2
   }
-]
+  ]
 
-// 公会厅申请列表 - 申请目的
-const GUILDAPPLYLIST = [
+  // 公会厅申请列表 - 申请目的
+  const GUILDAPPLYLIST = [
   {
     name: '全部',
     value: 0
@@ -513,10 +513,10 @@ const GUILDAPPLYLIST = [
     name: '解绑',
     value: 2
   }
-]
+  ]
 
-// 公会厅申请列表 - 状态
-const GUILDSTATUSLIST = [
+  // 公会厅申请列表 - 状态
+  const GUILDSTATUSLIST = [
   {
     name: '待审核',
     value: 0
@@ -529,10 +529,10 @@ const GUILDSTATUSLIST = [
     name: '审核拒绝',
     value: 2
   }
-]
+  ]
 
-// 公会管理 - 结算状态
-const SETTLEMENTSTATUS = [
+  // 公会管理 - 结算状态
+  const SETTLEMENTSTATUS = [
   {
     name: '未结算',
     value: 0
@@ -549,10 +549,10 @@ const SETTLEMENTSTATUS = [
     name: '已忽略',
     value: 3
   }
-]
+  ]
 
-// 银行信息
-const BANKLIST = [
+  // 银行信息
+  const BANKLIST = [
   {
     url: require('@/assets/img/img_01020000.png'),
     code: '01020000',
@@ -678,10 +678,10 @@ const BANKLIST = [
     code: '03150000',
     name: '恒丰银行'
   }
-]
+  ]
 
-// 公会申请列表 - 状态
-const GUILDAPPLYSTATUSLIST = [
+  // 公会申请列表 - 状态
+  const GUILDAPPLYSTATUSLIST = [
   {
     name: '全部',
     value: ''
@@ -698,10 +698,10 @@ const GUILDAPPLYSTATUSLIST = [
     name: '已拒绝',
     value: 3
   }
-]
+  ]
 
-// 公会申请 - 是否有线下工作室
-const GUILDISSTUDIO = [
+  // 公会申请 - 是否有线下工作室
+  const GUILDISSTUDIO = [
   {
     name: '是',
     value: 1
@@ -710,10 +710,10 @@ const GUILDISSTUDIO = [
     name: '否',
     value: 0
   }
-]
+  ]
 
-// 公会结算列表 - 结算状态
-const GUILDCLOSEANACCOUNTSTATUSLIST = [
+  // 公会结算列表 - 结算状态
+  const GUILDCLOSEANACCOUNTSTATUSLIST = [
   {
     name: '未结算',
     value: 2
@@ -730,10 +730,10 @@ const GUILDCLOSEANACCOUNTSTATUSLIST = [
     name: '已忽略',
     value: 4
   }
-]
+  ]
 
-// 公会结算列表 - 结算状态
-const GUILDCLOSEANACCOUNTSTATUSLISTCOPY = [
+  // 公会结算列表 - 结算状态
+  const GUILDCLOSEANACCOUNTSTATUSLISTCOPY = [
   {
     name: '未结算',
     value: 2
@@ -750,10 +750,10 @@ const GUILDCLOSEANACCOUNTSTATUSLISTCOPY = [
     name: '已忽略',
     value: 4
   }
-]
+  ]
 
-// 公会列表 - 公会运营
-const GUILDOPERATIONLIST = [
+  // 公会列表 - 公会运营
+  const GUILDOPERATIONLIST = [
     {
         name: '全部',
         value: ''
@@ -766,12 +766,12 @@ const GUILDOPERATIONLIST = [
         name: '刘建民',
         value: 2
     }
-]
+  ]
 
-/*
-*派对管理 - 举报房间
-*/
-const REPORTSTATUS = [
+  /*
+  *派对管理 - 举报房间
+  */
+  const REPORTSTATUS = [
   {
     name: '未核实',
     value: 1
@@ -784,10 +784,10 @@ const REPORTSTATUS = [
     name: '核实不通过',
     value: 3
   }
-]
+  ]
 
-// 直播状态
-const ROOMSTATUSLIST = [
+  // 直播状态
+  const ROOMSTATUSLIST = [
   {
     name: '全部',
     value: ''
@@ -804,10 +804,10 @@ const ROOMSTATUSLIST = [
     name: '已结束',
     value: 2
   }
-]
+  ]
 
-// 状态
-const ROOMCARDSTATUSLIST = [
+  // 状态
+  const ROOMCARDSTATUSLIST = [
   {
     name: '正常绑定',
     value: 1
@@ -824,10 +824,10 @@ const ROOMCARDSTATUSLIST = [
     name: '过期',
     value: 4
   }
-]
+  ]
 
-// 房间类型
-const ROOMTYPELIST = [
+  // 房间类型
+  const ROOMTYPELIST = [
   {
     value: 0,
     name: '不配置'
@@ -844,10 +844,10 @@ const ROOMTYPELIST = [
     value: 3,
     name: '情感'
   }
-]
+  ]
 
-// 封禁 - 状态
-const USERSTATUSLISTTWO = [
+  // 封禁 - 状态
+  const USERSTATUSLISTTWO = [
   {
     name: '正常',
     value: 1
@@ -856,10 +856,10 @@ const USERSTATUSLISTTWO = [
     name: '封禁',
     value: 2
   }
-]
+  ]
 
-// 直播历史记录 - 解散方式
-const DISSOLUTIONTYPELIST = [
+  // 直播历史记录 - 解散方式
+  const DISSOLUTIONTYPELIST = [
   {
     value: 0,
     name: '正常解散'
@@ -872,10 +872,10 @@ const DISSOLUTIONTYPELIST = [
     value: 2,
     name: '强制解散'
   }
-]
+  ]
 
-// 直播历史记录 - 关闭房间方式 - 第二种
-const DISSOLUTIONTYPELISTCOPY = [
+  // 直播历史记录 - 关闭房间方式 - 第二种
+  const DISSOLUTIONTYPELISTCOPY = [
   {
     value: 1,
     name: '正常关播'
@@ -884,12 +884,61 @@ const DISSOLUTIONTYPELISTCOPY = [
     value: 2,
     name: '后台关播'
   }
-]
+  ]
 
-// 游戏配置 - 游戏列表
-const PARTYGAMELIST = [
+  // 游戏配置 - 游戏列表
+  const PARTYGAMELIST = [
   {
     index: 1,
+    nickname: 'billiards',
+    name: '桌球',
+    value: '1582551621189419010',
+    feature: '经典美式桌球',
+    url: require('@/assets/game/billiards.png')
+  },
+  {
+    index: 2,
+    nickname: 'magicDuel',
+    name: '魔法大乐斗',
+    value: '1585556944972623874',
+    feature: '每一回合双方同时通过技能列表选择相应的魔法技能进行对抗',
+    url: require('@/assets/game/magicDuel.png')
+  },
+  {
+    index: 3,
+    nickname: 'mahjongCrush',
+    name: '麻将对对碰',
+    value: '1559030313895714818',
+    feature: '两人为一队找到一样的麻将时，一起对碰可消除相同麻将获得分数',
+    url: require('@/assets/game/mahjongCrush.png')
+  },
+  {
+    index: 4,
+    nickname: 'crazyShopping',
+    name: '疯狂购物',
+    value: '1564814818015264770',
+    feature: '各队伍成员对掉落的商品进行抢夺，拉回自己的大本营得分',
+    url: require('@/assets/game/crazyShopping.png')
+  },
+  {
+    index: 5,
+    nickname: 'scientificCalculator',
+    name: '科学计算器',
+    value: '1564814666005299201',
+    feature: '队伍中的成员需要根据算数的数字要求，分别站立到对应的数字方块上',
+    url: require('@/assets/game/scientificCalculator.png')
+  },
+  {
+    index: 6,
+    nickname: 'crossTheLine',
+    name: '连线激斗',
+    value: '1572529757165293569',
+    feature: '两人为一队拾取能量棒，避免碰到光线被电击',
+    url: require('@/assets/game/crossTheLine.png')
+  },
+
+  {
+    index: 7,
     nickname: 'bumper',
     name: '碰碰我最强',
     value: '1461227817776713818',
@@ -897,7 +946,7 @@ const PARTYGAMELIST = [
     url: require('@/assets/game/bumper.png')
   },
   {
-    index: 2,
+    index: 8,
     name: '飞行棋',
     nickname: 'ludo',
     value: '1468180338417074177',
@@ -905,7 +954,7 @@ const PARTYGAMELIST = [
     url: require('@/assets/game/ludo.png')
   },
   {
-    index: 3,
+    index: 9,
     name: '扫雷',
     nickname: 'mine',
     value: '1468434401847222273',
@@ -913,7 +962,7 @@ const PARTYGAMELIST = [
     url: require('@/assets/game/mine.png')
   },
   {
-    index: 4,
+    index: 10,
     name: '你画我猜',
     nickname: 'drawandguess',
     value: '1461228410184400899',
@@ -921,20 +970,20 @@ const PARTYGAMELIST = [
     url: require('@/assets/game/drawandguess.png')
   },
   {
-    index: 5,
+    index: 11,
     name: '五子棋',
     nickname: 'gobang',
     value: '1461297734886621238',
     feature: '经典玩法，双重操作防误操作',
     url: require('@/assets/game/gobang.png')
   }
-]
+  ]
 
-/*
-*用户管理 - 用户列表
-*/
-// 性别
-const SEXLIST = [
+  /*
+  *用户管理 - 用户列表
+  */
+  // 性别
+  const SEXLIST = [
   {
     name: '男',
     value: 1
@@ -947,10 +996,10 @@ const SEXLIST = [
     name: '女',
     value: 3
   }
-]
+  ]
 
-// 状态
-const USERSTATUSLIST = [
+  // 状态
+  const USERSTATUSLIST = [
   {
     name: '正常',
     value: 1
@@ -959,10 +1008,10 @@ const USERSTATUSLIST = [
     name: '封禁',
     value: 3
   }
-]
+  ]
 
-// 用户列表 - 用户等级
-const USERRANKLIST = [
+  // 用户列表 - 用户等级
+  const USERRANKLIST = [
   {
     name: '全部',
     value: ''
@@ -975,10 +1024,10 @@ const USERRANKLIST = [
     name: '30以上',
     value: '>=30'
   }
-]
+  ]
 
-// 用户列表 - 魅力等级
-const USERCHARMLIST = [
+  // 用户列表 - 魅力等级
+  const USERCHARMLIST = [
   {
     name: '全部',
     value: ''
@@ -991,10 +1040,10 @@ const USERCHARMLIST = [
     name: '30以上',
     value: '>=30'
   }
-]
+  ]
 
-// 用户列表 - 注册类型
-const USERREGISTERTYPELIST = [
+  // 用户列表 - 注册类型
+  const USERREGISTERTYPELIST = [
   {
     name: '全部',
     value: ''
@@ -1023,10 +1072,10 @@ const USERREGISTERTYPELIST = [
     name: '手机号',
     value: 'phone'
   }
-]
+  ]
 
-// 用户音乐上传列表 - 筛选查看
-const USERMUSICUPLIST = [
+  // 用户音乐上传列表 - 筛选查看
+  const USERMUSICUPLIST = [
   {
     name: '全部',
     value: ''
@@ -1039,10 +1088,10 @@ const USERMUSICUPLIST = [
     name: '已下架',
     value: 2
   }
-]
+  ]
 
-// 用户音乐上传列表 - 语种
-const USERLANGUAGELIST = [
+  // 用户音乐上传列表 - 语种
+  const USERLANGUAGELIST = [
   {
     name: '华语'
   },
@@ -1067,10 +1116,10 @@ const USERLANGUAGELIST = [
   {
     name: '法语'
   }
-]
+  ]
 
-// 用户音乐上传列表 - 曲风
-const USERMUSICSTYLELIST = [
+  // 用户音乐上传列表 - 曲风
+  const USERMUSICSTYLELIST = [
   {
     name: '流行'
   },
@@ -1110,10 +1159,10 @@ const USERMUSICSTYLELIST = [
   {
     name: '影视'
   }
-]
+  ]
 
-// 用户音乐上传列表 - 年代
-const USERMUSICAGELIST = [
+  // 用户音乐上传列表 - 年代
+  const USERMUSICAGELIST = [
   {
     name: '经典老歌'
   },
@@ -1123,10 +1172,10 @@ const USERMUSICAGELIST = [
   {
     name: '儿歌'
   }
-]
+  ]
 
-// 用户音乐上传列表 - 铃声
-const USERMUSICBELLSLIST = [
+  // 用户音乐上传列表 - 铃声
+  const USERMUSICBELLSLIST = [
   {
     name: 'DJ铃声'
   },
@@ -1151,10 +1200,10 @@ const USERMUSICBELLSLIST = [
   {
     name: '影视广告铃声'
   }
-]
+  ]
 
-// 实名列表 - 状态
-const USERMANAGEMENTAUTONYMSTATUSLIST = [
+  // 实名列表 - 状态
+  const USERMANAGEMENTAUTONYMSTATUSLIST = [
   {
     name: '全部',
     value: ''
@@ -1171,13 +1220,13 @@ const USERMANAGEMENTAUTONYMSTATUSLIST = [
   //     name: '已拒绝',
   //     value: 'R'
   // }
-]
+  ]
 
-/*
-*审核管理 - 用户图片资料审核列表
-*/
-// 状态
-const AUDITSTATUSLIST = [
+  /*
+  *审核管理 - 用户图片资料审核列表
+  */
+  // 状态
+  const AUDITSTATUSLIST = [
   {
     name: '已通过',
     value: 1
@@ -1186,10 +1235,10 @@ const AUDITSTATUSLIST = [
     name: '已驳回',
     value: 2
   }
-]
+  ]
 
-// 状态 - 仅用于审核管理 - 房间举报记录
-const AUDITSTATUSLISTTWO = [
+  // 状态 - 仅用于审核管理 - 房间举报记录
+  const AUDITSTATUSLISTTWO = [
   {
     name: '已封禁',
     value: 2
@@ -1198,13 +1247,13 @@ const AUDITSTATUSLISTTWO = [
     name: '已驳回',
     value: 3
   }
-]
+  ]
 
-/*
-*系统配置 - 权限管理
-*/
-// 状态
-const SYSTEMSTATUSLIST = [
+  /*
+  *系统配置 - 权限管理
+  */
+  // 状态
+  const SYSTEMSTATUSLIST = [
   {
     name: '正常',
     value: 1
@@ -1213,10 +1262,10 @@ const SYSTEMSTATUSLIST = [
     name: '关闭',
     value: 2
   }
-]
+  ]
 
-// 礼物类型
-const SYSTEMGIFTLIST = [
+  // 礼物类型
+  const SYSTEMGIFTLIST = [
   {
     name: '普通礼物',
     value: 1
@@ -1245,10 +1294,10 @@ const SYSTEMGIFTLIST = [
     name: '全屏礼物',
     value: 7
   }
-]
+  ]
 
-// 礼物分类
-const SYSTEMGIFTCLASSIFYLIST = [
+  // 礼物分类
+  const SYSTEMGIFTCLASSIFYLIST = [
   {
     name: '礼物栏',
     value: 1
@@ -1269,10 +1318,10 @@ const SYSTEMGIFTCLASSIFYLIST = [
     name: '贵族专属',
     value: 16
   }
-]
+  ]
 
-// 播放类型
-const SYSTEMGIFTPLAYTYPELIST = [
+  // 播放类型
+  const SYSTEMGIFTPLAYTYPELIST = [
   {
     name: 'Lottie',
     value: 1
@@ -1285,10 +1334,10 @@ const SYSTEMGIFTPLAYTYPELIST = [
     name: 'MP4',
     value: 3
   }
-]
+  ]
 
-// 礼物列表 - 显示类型
-const GIFTSHOWTYPELIST = [
+  // 礼物列表 - 显示类型
+  const GIFTSHOWTYPELIST = [
   {
     name: '显示',
     value: 1
@@ -1297,10 +1346,10 @@ const GIFTSHOWTYPELIST = [
     name: '隐藏',
     value: 2
   }
-]
+  ]
 
-// 超管管理 - 状态
-const SUPERSTATUSLIST = [
+  // 超管管理 - 状态
+  const SUPERSTATUSLIST = [
   {
     name: '待处理',
     value: 0
@@ -1313,10 +1362,10 @@ const SUPERSTATUSLIST = [
     name: '已驳回',
     value: 2
   }
-]
+  ]
 
-// 菜单管理 - 状态
-const MENUSTATUSLIST = [
+  // 菜单管理 - 状态
+  const MENUSTATUSLIST = [
   {
     name: '正常',
     value: 1
@@ -1325,10 +1374,10 @@ const MENUSTATUSLIST = [
     name: '停用',
     value: 0
   }
-]
+  ]
 
-// 礼物库 - 礼物状态
-const LIBRARYGIFTSLIST = [
+  // 礼物库 - 礼物状态
+  const LIBRARYGIFTSLIST = [
   {
     name: '全部',
     value: ''
@@ -1341,18 +1390,18 @@ const LIBRARYGIFTSLIST = [
     name: '废除',
     value: 2
   }
-]
+  ]
 
-// banner管理 - banner类型
-const BANNERSYSTEMTYPELIST = [
+  // banner管理 - banner类型
+  const BANNERSYSTEMTYPELIST = [
   {
     name: '朋友圈轮播图',
     value: 1
   }
-]
+  ]
 
-// 公会等级配置管理 - 评级奖励类型
-const GUILDCONFIGURATIONRATETYPELIST = [
+  // 公会等级配置管理 - 评级奖励类型
+  const GUILDCONFIGURATIONRATETYPELIST = [
   {
     name: '喵粮',
     value: 1
@@ -1361,10 +1410,10 @@ const GUILDCONFIGURATIONRATETYPELIST = [
     name: '百分比',
     value: 2
   }
-]
+  ]
 
-// 公会等级配置管理 - 评级奖励类型
-const RENDERGUILDCONFIG = [
+  // 公会等级配置管理 - 评级奖励类型
+  const RENDERGUILDCONFIG = [
   {
     name: '喵粮',
     value: 1
@@ -1373,10 +1422,10 @@ const RENDERGUILDCONFIG = [
     name: '%',
     value: 2
   }
-]
+  ]
 
-// 公会状态
-const GUILDSTATUS = [
+  // 公会状态
+  const GUILDSTATUS = [
   {
     name: '正常',
     value: 1
@@ -1389,10 +1438,10 @@ const GUILDSTATUS = [
     name: '已解散',
     value: 3
   }
-]
+  ]
 
-// 公会状态
-const GUILDAPPLYTYPE = [
+  // 公会状态
+  const GUILDAPPLYTYPE = [
   {
     name: '入会申请',
     value: 0
@@ -1401,13 +1450,13 @@ const GUILDAPPLYTYPE = [
     name: '退会申请',
     value: 1
   }
-]
+  ]
 
-/*
-*封禁记录 - 用户封禁记录
-*/
-// 状态
-const USERBLOCKEDSTATUSLIST = [
+  /*
+  *封禁记录 - 用户封禁记录
+  */
+  // 状态
+  const USERBLOCKEDSTATUSLIST = [
   {
     value: 0,
     name: '封禁中'
@@ -1420,13 +1469,13 @@ const USERBLOCKEDSTATUSLIST = [
     value: 2,
     name: '提前解封'
   }
-]
+  ]
 
-/*
-*贵族管理 - 贵族特权设置
-*/
-// 拥有特权
-const NOBILITYPRIVILEGELIST = [
+  /*
+  *贵族管理 - 贵族特权设置
+  */
+  // 拥有特权
+  const NOBILITYPRIVILEGELIST = [
   {
     name: '贵族勋章',
     value: 1
@@ -1487,10 +1536,10 @@ const NOBILITYPRIVILEGELIST = [
     name: '防被踢',
     value: 15
   },
-]
+  ]
 
-// 贵族等级
-const NOBILITYCLASSLIST = [
+  // 贵族等级
+  const NOBILITYCLASSLIST = [
   {
     name: '游侠',
     value: 1
@@ -1527,10 +1576,10 @@ const NOBILITYCLASSLIST = [
     name: '神',
     value: 9
   }
-]
+  ]
 
-// 用户列表 - 是否为贵族
-const ISNOBILITYUSERLIST = [
+  // 用户列表 - 是否为贵族
+  const ISNOBILITYUSERLIST = [
   {
     name: '全部',
     value: ''
@@ -1543,10 +1592,10 @@ const ISNOBILITYUSERLIST = [
     name: '否',
     value: 2
   }
-]
+  ]
 
-// 贵族用户列表 - 排序
-const NOBILITYUSERSORTLIST = [
+  // 贵族用户列表 - 排序
+  const NOBILITYUSERSORTLIST = [
   {
     name: '创建时间倒序',
     value: 'id'
@@ -1555,13 +1604,13 @@ const NOBILITYUSERSORTLIST = [
     name: '等级倒序',
     value: 'level'
   }
-]
+  ]
 
-/*
-*财务管理
-*/
-// 赠送记录 - 赠送类型
-const FINANCEGIVETYPELIST = [
+  /*
+  *财务管理
+  */
+  // 赠送记录 - 赠送类型
+  const FINANCEGIVETYPELIST = [
   {
     name: '全部',
     value: ''
@@ -1574,10 +1623,10 @@ const FINANCEGIVETYPELIST = [
     name: '喵粮',
     value: 2
   }
-]
+  ]
 
-// 支付配置管理 - 支付方式
-const PAYMENTALLOCATIONMANAGEMENTLIST = [
+  // 支付配置管理 - 支付方式
+  const PAYMENTALLOCATIONMANAGEMENTLIST = [
   {
     name: '支付宝支付',
     value: 1
@@ -1586,10 +1635,10 @@ const PAYMENTALLOCATIONMANAGEMENTLIST = [
     name: '微信支付',
     value: 2
   }
-]
+  ]
 
-// 支付配置管理 - 支付类型
-const PAYMENTALLOCATIONMANAGEMENTTYPELIST = [
+  // 支付配置管理 - 支付类型
+  const PAYMENTALLOCATIONMANAGEMENTTYPELIST = [
   {
     name: 'jsapi支付',
     value: 0
@@ -1602,10 +1651,10 @@ const PAYMENTALLOCATIONMANAGEMENTTYPELIST = [
     name: 'h5支付',
     value: 2
   }
-]
+  ]
 
-// 支付配置管理 - 支付平台
-const PAYCONFIGURATIONPLATFORMLIST = [
+  // 支付配置管理 - 支付平台
+  const PAYCONFIGURATIONPLATFORMLIST = [
   // {
   //     name: '苹果支付',
   //     value: 1
@@ -1626,10 +1675,10 @@ const PAYCONFIGURATIONPLATFORMLIST = [
   //     name: '银联支付',
   //     value: 4
   // }
-]
+  ]
 
-// 支付配置管理 - 支付方式
-const PAYCONFIGURATIONPLATFORMTYPELIST = [
+  // 支付配置管理 - 支付方式
+  const PAYCONFIGURATIONPLATFORMTYPELIST = [
   {
     name: '全部',
     value: 0
@@ -1654,10 +1703,10 @@ const PAYCONFIGURATIONPLATFORMTYPELIST = [
     name: '小程序',
     value: 5
   }
-]
+  ]
 
-// 商户配置管理 - 支付类型
-const COMMERCIALMANAGEMENTPAYTYPELIST = [
+  // 商户配置管理 - 支付类型
+  const COMMERCIALMANAGEMENTPAYTYPELIST = [
   {
     name: 'h5支付',
     value: 1
@@ -1666,10 +1715,10 @@ const COMMERCIALMANAGEMENTPAYTYPELIST = [
     name: 'app支付',
     value: 2
   }
-]
+  ]
 
-// 支付配置管理 - 支付平台
-const DEPOSITCONFIGURATIONPLATFORMLIST = [
+  // 支付配置管理 - 支付平台
+  const DEPOSITCONFIGURATIONPLATFORMLIST = [
   {
     name: '全部',
     value: 0
@@ -1678,10 +1727,10 @@ const DEPOSITCONFIGURATIONPLATFORMLIST = [
     name: '支付宝提现',
     value: 3
   }
-]
+  ]
 
-// 充值记录 - 充值类型
-const RECHARGEHISTORYTYPELIST = [
+  // 充值记录 - 充值类型
+  const RECHARGEHISTORYTYPELIST = [
   {
     name: '全部',
     value: ''
@@ -1694,13 +1743,13 @@ const RECHARGEHISTORYTYPELIST = [
     name: '贵族充值',
     value: 2
   }
-]
+  ]
 
-/*
-*交易管理
-*/
-// 流水记录 - 来源
-const DEALSOURCELIST = [
+  /*
+  *交易管理
+  */
+  // 流水记录 - 来源
+  const DEALSOURCELIST = [
   {
     id: 0,
     name: '全部'
@@ -1721,10 +1770,10 @@ const DEALSOURCELIST = [
     id: 4,
     name: '个人私聊'
   }
-]
+  ]
 
-// 流水记录 - 类型
-const DEALSOURCETYPELIST = [
+  // 流水记录 - 类型
+  const DEALSOURCETYPELIST = [
   {
     name: '全部流水',
     value: 0
@@ -1737,13 +1786,13 @@ const DEALSOURCETYPELIST = [
     name: '礼物流水',
     value: 2
   }
-]
+  ]
 
-/*
-*推广管理
-*/
-// 推广列表 - 推荐类型
-const PROMOTIONTYPELIST = [
+  /*
+  *推广管理
+  */
+  // 推广列表 - 推荐类型
+  const PROMOTIONTYPELIST = [
   {
     name: '全部',
     value: ''
@@ -1756,13 +1805,13 @@ const PROMOTIONTYPELIST = [
     name: '用户',
     value: 2
   }
-]
+  ]
 
-/*
-*举报管理
-*/
-// 举报用户 - 被举报状态
-const REPORTSTATUSLIST = [
+  /*
+  *举报管理
+  */
+  // 举报用户 - 被举报状态
+  const REPORTSTATUSLIST = [
   {
     name: '正常',
     value: 1
@@ -1775,13 +1824,13 @@ const REPORTSTATUSLIST = [
     name: '注销',
     value: 3
   },
-]
+  ]
 
-/*
-*注销管理
-*/
-// 未处理 - 排序
-const LOGOUTUNTREATEDSORTLIST = [
+  /*
+  *注销管理
+  */
+  // 未处理 - 排序
+  const LOGOUTUNTREATEDSORTLIST = [
   {
     name: '时间正序',
     value: 0
@@ -1790,10 +1839,10 @@ const LOGOUTUNTREATEDSORTLIST = [
     name: '时间倒序',
     value: 1
   }
-]
+  ]
 
-// 未处理 - 状态
-const LOGOUTUNTREATEDSTATUSLIST = [
+  // 未处理 - 状态
+  const LOGOUTUNTREATEDSTATUSLIST = [
   {
     name: '待处理',
     value: 0
@@ -1810,10 +1859,10 @@ const LOGOUTUNTREATEDSTATUSLIST = [
     name: '用户已同意',
     value: 3
   }
-]
+  ]
 
-// 已处理列表 - 状态
-const PROCESSEDSTATUSLIST = [
+  // 已处理列表 - 状态
+  const PROCESSEDSTATUSLIST = [
   {
     value: 1,
     name: '已通过'
@@ -1826,10 +1875,10 @@ const PROCESSEDSTATUSLIST = [
     value: 3,
     name: '已注销'
   }
-]
+  ]
 
-// 举报用户 - 处罚状态
-const REPORTUSERPUNISHSTATUSLIST = [
+  // 举报用户 - 处罚状态
+  const REPORTUSERPUNISHSTATUSLIST = [
   {
     name: '待处理',
     value: 1
@@ -1842,10 +1891,10 @@ const REPORTUSERPUNISHSTATUSLIST = [
     name: '已忽略',
     value: 3
   }
-]
+  ]
 
-// 注销状态
-const LOGOUTSTATUS = [
+  // 注销状态
+  const LOGOUTSTATUS = [
   {
     name: '待处理',
     value: 0
@@ -1862,13 +1911,13 @@ const LOGOUTSTATUS = [
     name: '用户已同意',
     value: 3
   }
-]
+  ]
 
-/*
-*房间管理
-*/
-// 房间信息管理 - 房间状态
-const HOUSEMESSAGESTATUSLIST = [
+  /*
+  *房间管理
+  */
+  // 房间信息管理 - 房间状态
+  const HOUSEMESSAGESTATUSLIST = [
   {
     name: '全部',
     value: 2
@@ -1881,10 +1930,10 @@ const HOUSEMESSAGESTATUSLIST = [
     name: '已关播',
     value: 0
   }
-]
+  ]
 
-// 房间信息管理 - 热门推荐
-const HOUSEMESSAGEHOTRECOMMENDLIST = [
+  // 房间信息管理 - 热门推荐
+  const HOUSEMESSAGEHOTRECOMMENDLIST = [
   {
     name: '全部',
     value: -1
@@ -1897,10 +1946,10 @@ const HOUSEMESSAGEHOTRECOMMENDLIST = [
     name: '否',
     value: 0
   }
-]
+  ]
 
-// 房间信息管理 - 房间类型
-const HOUSEMESSAGETYPELIST = [
+  // 房间信息管理 - 房间类型
+  const HOUSEMESSAGETYPELIST = [
   {
     name: '公会房间',
     value: 1
@@ -1909,10 +1958,10 @@ const HOUSEMESSAGETYPELIST = [
     name: '个人房间',
     value: 0
   }
-]
+  ]
 
-// 房间信息管理 - 房间分类
-const HOUSEMESSAGECLASSIFYLIST = [
+  // 房间信息管理 - 房间分类
+  const HOUSEMESSAGECLASSIFYLIST = [
   {
     name: '点唱',
     value: 1
@@ -1921,10 +1970,10 @@ const HOUSEMESSAGECLASSIFYLIST = [
     name: '情感',
     value: 2
   }
-]
+  ]
 
-// 房间信息管理 - 房间状态 - 直播间
-const HOUSEMESSAGELIVELIST = [
+  // 房间信息管理 - 房间状态 - 直播间
+  const HOUSEMESSAGELIVELIST = [
   {
     name: '开播中',
     value: 1
@@ -1933,10 +1982,10 @@ const HOUSEMESSAGELIVELIST = [
     name: '已关播',
     value: 0
   }
-]
+  ]
 
-// 房间品类管理 - 业务类型
-const CATEGORYBUSINESSTYPELIST = [
+  // 房间品类管理 - 业务类型
+  const CATEGORYBUSINESSTYPELIST = [
   {
     name: '派对',
     value: 2
@@ -1945,10 +1994,10 @@ const CATEGORYBUSINESSTYPELIST = [
     name: '直播',
     value: 1
   }
-]
+  ]
 
-// 进房记录 - 进房类型
-const JOINHOUSETYPELIST = [
+  // 进房记录 - 进房类型
+  const JOINHOUSETYPELIST = [
   {
     name: '全部',
     value: -1
@@ -2013,10 +2062,10 @@ const JOINHOUSETYPELIST = [
     name: '全服跟随进房',
     value: 14
   }
-]
+  ]
 
-// 进房记录 - 是否首次进房
-const ISFIRSTJOINHOUSELIST = [
+  // 进房记录 - 是否首次进房
+  const ISFIRSTJOINHOUSELIST = [
   {
     name: '全部',
     value: -1
@@ -2029,10 +2078,10 @@ const ISFIRSTJOINHOUSELIST = [
     name: '否',
     value: 0
   }
-]
+  ]
 
-// 房间背景图配置列表 - 背景选择
-const ROOMBACKGROUNDSELECTLIST = [
+  // 房间背景图配置列表 - 背景选择
+  const ROOMBACKGROUNDSELECTLIST = [
   {
     name: '全部',
     value: 2
@@ -2045,13 +2094,13 @@ const ROOMBACKGROUNDSELECTLIST = [
     name: '指定背景',
     value: 1
   }
-]
+  ]
 
-/*
-*风控管理
-*/
-// 风控管理 - 风险类型
-const RISKSYSTEMTYPELIST = [
+  /*
+  *风控管理
+  */
+  // 风控管理 - 风险类型
+  const RISKSYSTEMTYPELIST = [
   {
     name: '涉政',
     value: 100
@@ -2092,10 +2141,10 @@ const RISKSYSTEMTYPELIST = [
     name: '广告',
     value: 300
   }
-]
+  ]
 
-// 风控管理 - 角色
-const RISKSYSTEMROLELIST = [
+  // 风控管理 - 角色
+  const RISKSYSTEMROLELIST = [
   {
     name: '普通用户',
     value: 0
@@ -2112,10 +2161,10 @@ const RISKSYSTEMROLELIST = [
     name: '房主',
     value: 3
   }
-]
+  ]
 
-// 封面审核 - 状态
-const SERVICEAUDITSTATUSLIST = [
+  // 封面审核 - 状态
+  const SERVICEAUDITSTATUSLIST = [
   {
     value: 1,
     name: '审核通过'
@@ -2128,10 +2177,10 @@ const SERVICEAUDITSTATUSLIST = [
     value: 0,
     name: '待审核'
   }
-]
+  ]
 
-// 封面审核 - 封面类型
-const SERVICEAUDITTYPELIST = [
+  // 封面审核 - 封面类型
+  const SERVICEAUDITTYPELIST = [
   {
     name: '派对封面',
     value: 1
@@ -2140,10 +2189,10 @@ const SERVICEAUDITTYPELIST = [
     name: '直播封面',
     value: 2
   }
-]
+  ]
 
-// 用户处罚 - 处罚类型
-const USERPUNISHTYPELIST = [
+  // 用户处罚 - 处罚类型
+  const USERPUNISHTYPELIST = [
   {
     name: '封号',
     value: 1
@@ -2160,10 +2209,10 @@ const USERPUNISHTYPELIST = [
     name: '封实名',
     value: 4
   }
-]
+  ]
 
-// 用户处罚 - 处罚类型 - 列表
-const USERPUNISHTYPELISTCOPY = [
+  // 用户处罚 - 处罚类型 - 列表
+  const USERPUNISHTYPELISTCOPY = [
   {
     name: '全部',
     value: ''
@@ -2184,10 +2233,10 @@ const USERPUNISHTYPELISTCOPY = [
     name: '封实名',
     value: 4
   }
-]
+  ]
 
-// 用户处罚 - 处罚类型 - 列表
-const USERPUNISHTYPELISTCOPYTWO = [
+  // 用户处罚 - 处罚类型 - 列表
+  const USERPUNISHTYPELISTCOPYTWO = [
   {
     name: '禁言',
     value: 5,
@@ -2233,10 +2282,10 @@ const USERPUNISHTYPELISTCOPYTWO = [
     value: 13,
     disabled: false
   }
-]
+  ]
 
-// 用户处罚 - 状态
-const USERPUNISHSTATUSLIST = [
+  // 用户处罚 - 状态
+  const USERPUNISHSTATUSLIST = [
   {
     name: '生效中',
     value: 1
@@ -2245,10 +2294,10 @@ const USERPUNISHSTATUSLIST = [
     name: '已解除',
     value: 2
   }
-]
+  ]
 
-// 用户处罚 - 状态 - 列表
-const USERPUNISHSTATUSLISTCOPY = [
+  // 用户处罚 - 状态 - 列表
+  const USERPUNISHSTATUSLISTCOPY = [
   {
     name: '全部',
     value: 4
@@ -2269,10 +2318,10 @@ const USERPUNISHSTATUSLISTCOPY = [
     name: '已解除',
     value: 3
   }
-]
+  ]
 
-// 用户处罚 - 处罚时间
-const TIMEPENALTYSTATUS = [
+  // 用户处罚 - 处罚时间
+  const TIMEPENALTYSTATUS = [
   {
     name: '封号',
     value: 1
@@ -2297,10 +2346,10 @@ const TIMEPENALTYSTATUS = [
     name: '房间冻结',
     value: 6
   },
-]
+  ]
 
-// 用户处罚 - 重置资料
-const USERPUNIRESETLISTCOPY = [
+  // 用户处罚 - 重置资料
+  const USERPUNIRESETLISTCOPY = [
   {
     name: '重置昵称',
     value: 11
@@ -2313,10 +2362,10 @@ const USERPUNIRESETLISTCOPY = [
     name: '重置签名',
     value: 13
   }
-]
+  ]
 
-// 消息记录 - 敏感词
-const RISKMANAGEMENTMESSAGEHISTORYLIST = [
+  // 消息记录 - 敏感词
+  const RISKMANAGEMENTMESSAGEHISTORYLIST = [
   {
     name: '全部',
     value: 2
@@ -2329,10 +2378,10 @@ const RISKMANAGEMENTMESSAGEHISTORYLIST = [
     name: '通过',
     value: 0
   }
-]
+  ]
 
-// 消息记录 - 条数
-const RISKMANAGEMENTMESSAGENUMBERLIST = [
+  // 消息记录 - 条数
+  const RISKMANAGEMENTMESSAGENUMBERLIST = [
   {
     name: '100',
     value: 100
@@ -2357,10 +2406,10 @@ const RISKMANAGEMENTMESSAGENUMBERLIST = [
     name: '100000',
     value: 100000
   }
-]
+  ]
 
-// 图片审核记录 - 图片类型
-const RISKMANAGEMENTIMGTYPELIST = [
+  // 图片审核记录 - 图片类型
+  const RISKMANAGEMENTIMGTYPELIST = [
   {
     name: '全部',
     value: 4
@@ -2377,10 +2426,10 @@ const RISKMANAGEMENTIMGTYPELIST = [
     name: '房间封面',
     value: 3
   }
-]
+  ]
 
-// 图片审核记录 - 审核状态
-const RISKMANAGEMENTIMGSTATUSLIST = [
+  // 图片审核记录 - 审核状态
+  const RISKMANAGEMENTIMGSTATUSLIST = [
   {
     name: '全部',
     value: 2
@@ -2397,10 +2446,10 @@ const RISKMANAGEMENTIMGSTATUSLIST = [
     name: '已拒绝',
     value: -1
   }
-]
+  ]
 
-// 公会举报状态
-const GUILDREPORTSTATUS = [
+  // 公会举报状态
+  const GUILDREPORTSTATUS = [
   {
     name: '未处理',
     value: 1
@@ -2413,10 +2462,10 @@ const GUILDREPORTSTATUS = [
     name: '已拒绝',
     value: 3
   }
-]
+  ]
 
-// 发送类型状态
-const FROMTYPESTATUS = [
+  // 发送类型状态
+  const FROMTYPESTATUS = [
   {
     name: '用户发送',
     value: 1
@@ -2429,10 +2478,10 @@ const FROMTYPESTATUS = [
     name: '后台帮用户发送',
     value: 3
   }
-]
+  ]
 
-// 消息类型
-const MSGTYPE = [
+  // 消息类型
+  const MSGTYPE = [
   {
     name: '充值',
     value: 1
@@ -2441,10 +2490,10 @@ const MSGTYPE = [
     name: '活动',
     value: 2
   },
-]
+  ]
 
-// 用户选择类型
-const USERSLECTTYPE = [
+  // 用户选择类型
+  const USERSLECTTYPE = [
   {
     name: '所有用户',
     value: 1
@@ -2453,10 +2502,10 @@ const USERSLECTTYPE = [
     name: '指定用户',
     value: 2
   },
-]
+  ]
 
-// 跳转类型
-const PATHTYPE = [
+  // 跳转类型
+  const PATHTYPE = [
   {
     name: '进房间',
     value: 1
@@ -2465,10 +2514,10 @@ const PATHTYPE = [
     name: 'URL',
     value: 2
   },
-]
+  ]
 
-// 跳转类型
-const PATHTYPE2 = [
+  // 跳转类型
+  const PATHTYPE2 = [
   {
     name: '无',
     value: 0
@@ -2481,10 +2530,10 @@ const PATHTYPE2 = [
     name: 'URL',
     value: 3
   },
-]
+  ]
 
-// 靓号类型
-const GOODNUMTYPE = [
+  // 靓号类型
+  const GOODNUMTYPE = [
   {
     name: '用户靓号',
     value: 0
@@ -2493,10 +2542,10 @@ const GOODNUMTYPE = [
     name: '房间靓号',
     value: 1
   },
-]
+  ]
 
-// 靓号使用状态
-const GOODNUMSTATUS = [
+  // 靓号使用状态
+  const GOODNUMSTATUS = [
   {
     name: '未上架',
     value: 1
@@ -2509,10 +2558,10 @@ const GOODNUMSTATUS = [
     name: '已使用',
     value: 3
   },
-]
+  ]
 
-// 靓号商品分类
-const GOODNUMCLASS = [
+  // 靓号商品分类
+  const GOODNUMCLASS = [
   {
     name: '全部分类',
     value: 1
@@ -2533,10 +2582,10 @@ const GOODNUMCLASS = [
     name: '叠字号',
     value: 5
   },
-]
+  ]
 
-// 靓号上架状态
-const GOODRACKSTATUS = [
+  // 靓号上架状态
+  const GOODRACKSTATUS = [
   {
     name: '正常',
     value: 0
@@ -2545,10 +2594,10 @@ const GOODRACKSTATUS = [
     name: '下架',
     value: 1
   }
-]
+  ]
 
-// 靓号上架状态
-const GOODSENDSTATUS = [
+  // 靓号上架状态
+  const GOODSENDSTATUS = [
   {
     name: '商城购买',
     value: 25
@@ -2557,10 +2606,10 @@ const GOODSENDSTATUS = [
     name: '后台发放',
     value: 27
   }
-]
+  ]
 
-// 显示状态
-const SHOWSTATUS = [
+  // 显示状态
+  const SHOWSTATUS = [
   {
     name: '显示',
     value: 0
@@ -2569,10 +2618,10 @@ const SHOWSTATUS = [
     name: '隐藏',
     value: 1
   },
-]
+  ]
 
-// 是否默认选中
-const CHECKEDSTATUS = [
+  // 是否默认选中
+  const CHECKEDSTATUS = [
   {
     name: '是',
     value: 1
@@ -2581,10 +2630,10 @@ const CHECKEDSTATUS = [
     name: '否',
     value: 0
   },
-]
+  ]
 
-// 上架状态
-const RACKSATUS = [
+  // 上架状态
+  const RACKSATUS = [
   {
     name: '上架中',
     value: 1
@@ -2597,10 +2646,10 @@ const RACKSATUS = [
     name: '已下架',
     value: 3
   },
-]
+  ]
 
-// 活动状态
-const ACTIVESTATUS = [
+  // 活动状态
+  const ACTIVESTATUS = [
   {
     name: '生效中',
     value: 1
@@ -2613,9 +2662,9 @@ const ACTIVESTATUS = [
     name: '已过期',
     value: 3
   },
-]
-// 落地类型
-const PUSHTYPESTATUS = [
+  ]
+  // 落地类型
+  const PUSHTYPESTATUS = [
   {
     name: '打开APP',
     value: 0
@@ -2628,10 +2677,10 @@ const PUSHTYPESTATUS = [
     name: 'Url',
     value: 3
   }
-]
+  ]
 
-// 目标类型
-const TARGETTYPESTATUS = [
+  // 目标类型
+  const TARGETTYPESTATUS = [
   {
     name: '注册',
     value: 1
@@ -2660,11 +2709,11 @@ const TARGETTYPESTATUS = [
     name: '自定义',
     value: 7
   }
-]
+  ]
 
 
-// 目标类型
-const BROADCASTTYPESTATUS = [
+  // 目标类型
+  const BROADCASTTYPESTATUS = [
   {
     name: '小喇叭',
     value: 1
@@ -2673,10 +2722,10 @@ const BROADCASTTYPESTATUS = [
     name: '大喇叭',
     value: 2
   }
-]
+  ]
 
-// 使用状态
-const USESTATUS = [
+  // 使用状态
+  const USESTATUS = [
   {
     name: '全部 ',
     value: 0
@@ -2693,10 +2742,10 @@ const USESTATUS = [
     name: '已过期',
     value: 3
   }
-]
+  ]
 
-// 祈福卡片
-const PRAYCARDS = [
+  // 祈福卡片
+  const PRAYCARDS = [
   {
     name: '全部',
     type: ""
@@ -2721,10 +2770,10 @@ const PRAYCARDS = [
     name: '2023',
     type: "5"
   },
-]
+  ]
 
-// 碎片来源
-const DEBRISS= [
+  // 碎片来源
+  const DEBRISS= [
   {
     name: '页面打卡',
     type: 1
@@ -2765,9 +2814,9 @@ const DEBRISS= [
     name: '吉星高照',
     type: 10
   },
-]
+  ]
 
-export default {
+  export default {
   USERINVITE,
   DOWNLOADSOURCE,
   LOCATIONLIST,
@@ -2901,4 +2950,4 @@ export default {
   USESTATUS,
   PRAYCARDS,
   DEBRISS
-}
+  }
