@@ -1771,7 +1771,7 @@ const DEALSOURCELIST = [
   }
 ]
 
-// 流水记录 - 类型
+  // 流水记录 - 类型
 const DEALSOURCETYPELIST = [
   {
     name: '全部流水',
@@ -1784,6 +1784,10 @@ const DEALSOURCETYPELIST = [
   {
     name: '礼物流水',
     value: 2
+  },
+  {
+    name: '宝箱流水',
+    value: 3
   }
 ]
 
