@@ -25,7 +25,6 @@
               <img :src="$store.state.loadingError" />
             </div>
           </el-image> -->
-
           <imgComp
           v-if="item.isimg"
           :src="scope.row[item.prop] || scope.row[item.propCopy]"
@@ -36,7 +35,6 @@
           :preview-src-list="scope.row[item.prop]"
           ref="imgComp">
           </imgComp>
-
           <imgListComp
           v-if="item.isimgList"
           :srcList="returnImg(scope.row[item.prop] ? scope.row[item.prop] : scope.row[item.propCopy])"
@@ -47,8 +45,8 @@
           :preview-src-list="scope.row[item.prop]"
           ref="imgComp">
           </imgListComp>
-
           <div v-if="item.isImgOrText">
+            <!-- 图片 -->
             <imgComp
             v-if="+scope.row.msg_type === 2"
             :src="scope.row.content"
@@ -58,9 +56,23 @@
             ref="imgComp">
           </imgComp>
 
-            <div v-else>{{scope.row.content}}</div>
-          </div>
+            <!-- 视频 -->
+            <div class="videoBox" v-else-if="scope.row.msg_type === 4">
+              <imgListComp
+              :srcList="returnImg(scope.row.content)"
+              :type="2"
+              :type2="'.mp4'"
+              :width="item.imgWidth"
+              :height="item.imgHeight"
+              :preview-src-list="[scope.row.content]"
+              ref="imgComp">
+              </imgListComp>
 
+              <!-- <videoPlayerComp class="videoPlayComp" ref="videoPlayerComp" :style="{width: item.imgWidth,height: item.imgHeight}" :url="scope.row.content" ></videoPlayerComp> -->
+          </div>
+            <!-- 文字 -->
+            <div v-else-if="scope.row.msg_type == 1 || !scope.row.msg_type">{{scope.row.content}}</div>
+          </div>
           <el-switch
             v-if="item.isSwitch"
             v-model="scope.row[item.prop]"
@@ -92,20 +104,21 @@
   // 引入图片/svga组件
   import imgComp from './imgComp.vue'
   import imgListComp from './imgListComp.vue'
-
+  // 引入视频组件
+  import videoPlayerComp from '@/components/videoPlayer/index'
   // 获得元素的top位置
   function getTop(e) {
     let offset = e.offsetTop;
     if (e.offsetParent !== null) offset += getTop(e.offsetParent);
     return offset;
   }
-
   export default {
     name: 'TableList',
     components: {
       WeTableCustomColumn,
       imgComp,
-      imgListComp
+      imgListComp,
+      videoPlayerComp
     },
     props: {
       cfgs: {
@@ -236,7 +249,6 @@
           params.sort_field = this.search.sort.split(",")[0]
           params.sort = this.search.sort.split(",")[1] === 'asc' ? 'asc' : 'desc'
         }
-
         // 用来比对分页 - 重置分页
         this.oldPage = params.page
         this.oldParams = params
