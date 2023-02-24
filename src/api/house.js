@@ -99,3 +99,30 @@ export function endLive(data) {
         data
     })
 }
+
+// 首页房间类型推荐-新增
+export function createRoomHotConf(data) {
+  return request({
+    url: api.house.createRoomHotConf,
+    method: 'post',
+    data
+  })
+}
+
+// 首页房间类型推荐-修改
+export function updateRoomHotConf(data) {
+  return request({
+    url: api.house.updateRoomHotConf,
+    method: 'post',
+    data
+  })
+}
+
+// 首页房间类型推荐-删除
+export function deleteRoomHotConf(data) {
+  return request({
+    url: api.house.deleteRoomHotConf,
+    method: 'post',
+    data
+  })
+}

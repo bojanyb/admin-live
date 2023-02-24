@@ -29,6 +29,24 @@ const roomConfigRouter = {
 				noCache: true
 			}
 		},
+    {
+      path: 'room-recommend',
+      component: () => import('@/views/voiceroom/roomConfig/room-recommend'),
+      name: 'room-recommend',
+      meta: {
+        title: '首页房间类型推荐',
+        noCache: true
+      }
+    },
+    {
+      path: 'room-corner-config',
+      component: () => import('@/views/voiceroom/roomConfig/room-corner-config'),
+      name: 'room-corner-config',
+      meta: {
+        title: '房间角标配置',
+        noCache: true
+      }
+    },
 		{
 			path: 'heat',
 			component: () => import('@/views/voiceroom/roomConfig/heat'),
