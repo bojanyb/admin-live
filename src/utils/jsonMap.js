@@ -888,54 +888,54 @@ const DISSOLUTIONTYPELISTCOPY = [
 
 // 游戏配置 - 游戏列表
 const PARTYGAMELIST = [
-  {
-    index: 1,
-    nickname: 'billiards',
-    name: '桌球',
-    value: '1582551621189419010',
-    feature: '经典美式桌球',
-    url: require('@/assets/game/billiards.png')
-  },
-  {
-    index: 2,
-    nickname: 'magicDuel',
-    name: '魔法大乐斗',
-    value: '1585556944972623874',
-    feature: '每一回合双方同时通过技能列表选择相应的魔法技能进行对抗',
-    url: require('@/assets/game/magicDuel.png')
-  },
-  {
-    index: 3,
-    nickname: 'mahjongCrush',
-    name: '麻将对对碰',
-    value: '1559030313895714818',
-    feature: '两人为一队找到一样的麻将时，一起对碰可消除相同麻将获得分数',
-    url: require('@/assets/game/mahjongCrush.png')
-  },
-  {
-    index: 4,
-    nickname: 'crazyShopping',
-    name: '疯狂购物',
-    value: '1564814818015264770',
-    feature: '各队伍成员对掉落的商品进行抢夺，拉回自己的大本营得分',
-    url: require('@/assets/game/crazyShopping.png')
-  },
-  {
-    index: 5,
-    nickname: 'scientificCalculator',
-    name: '科学计算器',
-    value: '1564814666005299201',
-    feature: '队伍中的成员需要根据算数的数字要求，分别站立到对应的数字方块上',
-    url: require('@/assets/game/scientificCalculator.png')
-  },
-  {
-    index: 6,
-    nickname: 'crossTheLine',
-    name: '连线激斗',
-    value: '1572529757165293569',
-    feature: '两人为一队拾取能量棒，避免碰到光线被电击',
-    url: require('@/assets/game/crossTheLine.png')
-  },
+  // {
+  //   index: 1,
+  //   nickname: 'billiards',
+  //   name: '桌球',
+  //   value: '1582551621189419010',
+  //   feature: '经典美式桌球',
+  //   url: require('@/assets/game/billiards.png')
+  // },
+  // {
+  //   index: 2,
+  //   nickname: 'magicDuel',
+  //   name: '魔法大乐斗',
+  //   value: '1585556944972623874',
+  //   feature: '每一回合双方同时通过技能列表选择相应的魔法技能进行对抗',
+  //   url: require('@/assets/game/magicDuel.png')
+  // },
+  // {
+  //   index: 3,
+  //   nickname: 'mahjongCrush',
+  //   name: '麻将对对碰',
+  //   value: '1559030313895714818',
+  //   feature: '两人为一队找到一样的麻将时，一起对碰可消除相同麻将获得分数',
+  //   url: require('@/assets/game/mahjongCrush.png')
+  // },
+  // {
+  //   index: 4,
+  //   nickname: 'crazyShopping',
+  //   name: '疯狂购物',
+  //   value: '1564814818015264770',
+  //   feature: '各队伍成员对掉落的商品进行抢夺，拉回自己的大本营得分',
+  //   url: require('@/assets/game/crazyShopping.png')
+  // },
+  // {
+  //   index: 5,
+  //   nickname: 'scientificCalculator',
+  //   name: '科学计算器',
+  //   value: '1564814666005299201',
+  //   feature: '队伍中的成员需要根据算数的数字要求，分别站立到对应的数字方块上',
+  //   url: require('@/assets/game/scientificCalculator.png')
+  // },
+  // {
+  //   index: 6,
+  //   nickname: 'crossTheLine',
+  //   name: '连线激斗',
+  //   value: '1572529757165293569',
+  //   feature: '两人为一队拾取能量棒，避免碰到光线被电击',
+  //   url: require('@/assets/game/crossTheLine.png')
+  // },
   {
     index: 7,
     nickname: 'bumper',
