@@ -1779,16 +1779,16 @@
       value: 0
     },
     {
-      name: '背包流水',
-      value: 1
-    },
-    {
       name: '礼物流水',
       value: 2
     },
     {
       name: '宝箱流水',
       value: 3
+    },
+    {
+      name: '背包流水',
+      value: 1
     }
   ]
 
