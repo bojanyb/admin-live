@@ -57,6 +57,7 @@ export default {
       roomTypeList: [],
       searchParams: {
         room_category: 1,
+        room_category_id: null
       },
     };
   },
@@ -64,7 +65,7 @@ export default {
     forms() {
       return [
         {
-          name: "room_category",
+          name: "room_category_id",
           type: "select",
           value: null,
           keyName: "value",
@@ -85,7 +86,7 @@ export default {
             label: "房间类型",
             render: (h, params) => {
               let data = this.roomTypeList.find((item) => {
-                return item.value === params.row.room_category;
+                return item.value === params.row.room_category_id;
               });
               return h("span", data ? data.name : "无");
             },
@@ -181,7 +182,8 @@ export default {
       return {
         page: params.page,
         pagesize: params.size,
-        room_category: s.room_category,
+        room_category: 1,
+        room_category_id: s.room_category_id,
       };
     },
     // 刷新列表
@@ -191,7 +193,8 @@ export default {
     // 重置
     reset() {
       this.searchParams = {
-        room_category: "",
+        room_category: 1,
+        room_category_id: null
       };
       this.getList();
     },
