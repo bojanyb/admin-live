@@ -355,6 +355,11 @@ const request = {
         createRoomHotConf: `${HTTPHEADER}/RoomHotConf/create`, // 首页房间类型推荐-新增
         updateRoomHotConf: `${HTTPHEADER}/RoomHotConf/update`, // 首页房间类型推荐-修改
         deleteRoomHotConf: `${HTTPHEADER}/RoomHotConf/delete`, // 首页房间类型推荐-删除
+
+        RoomHonourList: `${HTTPHEADER}/RoomHonour/list`, // 房间角标-列表
+        createRoomHonour: `${HTTPHEADER}/RoomHonour/create`, // 房间角标-新增
+        updateRoomHonour: `${HTTPHEADER}/RoomHonour/update`, // 房间角标-修改
+        deleteRoomHonour: `${HTTPHEADER}/RoomHonour/delete`, // 房间角标-删除
     },
 
     // 直播管理

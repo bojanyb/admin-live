@@ -15,19 +15,22 @@
         label-suffix=":"
         :hide-required-asterisk="status === 'see'"
       >
-        <el-form-item label="房间类型" prop="room_genre">
-          <el-select v-model="ruleForm.room_genre" placeholder="请选择房间类型">
+        <el-form-item label="房间类型" prop="room_category">
+          <el-select
+            v-model="ruleForm.room_category"
+            placeholder="请选择房间类型"
+          >
             <el-option
-              v-for="item in typeList"
+              v-for="item in roomTypeList"
               :key="item.value"
               :label="item.name"
               :value="item.value"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="房间ID" prop="user_number">
+        <el-form-item label="房间ID" prop="room_number_list">
           <el-input
-            v-model="ruleForm.user_number"
+            v-model="ruleForm.room_number_list"
             placeholder="请输入房间ID"
           ></el-input>
         </el-form-item>
@@ -44,26 +47,20 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="备注说明" prop="describe">
+        <el-form-item label="备注说明" prop="remark">
           <el-input
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4 }"
             placeholder="请输入备注说明"
             maxlength="300"
-            v-model="ruleForm.describe"
+            v-model="ruleForm.remark"
           >
           </el-input>
         </el-form-item>
-        <el-form-item label="首页权重" prop="sort">
-          <el-input
-            v-model="ruleForm.sort"
-            placeholder="请输入首页权重"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="角标" prop="sort">
+        <el-form-item label="角标" prop="honour_icon">
           <Upload
-            v-model="ruleForm.icon"
-            :imgUrl="ruleForm.icon"
+            v-model="ruleForm.honour_icon"
+            :imgUrl="ruleForm.honour_icon"
             @validateField="validateField"
             :disabled="disabled"
             ref="Upload"
@@ -80,9 +77,9 @@
 
 <script>
 // 引入api
-import { sendBroadcast } from "@/api/videoRoom";
-// 引入公共map
-import MAPDATA from "@/utils/jsonMap.js";
+import { createRoomHonour, updateRoomHonour } from "@/api/house.js";
+// 引入api
+import { guildRoomType } from "@/api/videoRoom";
 // 引入上传图片组件
 import Upload from "@/components/uploadImg/index.vue";
 export default {
@@ -93,17 +90,16 @@ export default {
     return {
       status: "add",
       isEditComp: false,
-      typeList: MAPDATA.ROOMTYPELIST,
+      roomTypeList: [],
       ruleForm: {
-        room_genre: "",
+        room_category: null,
         timeRange: [],
-        user_number: null,
-        sort: null,
-        describe: "",
+        room_number_list: "",
+        remark: "",
       },
       oldParams: {}, // 老数据
       rules: {
-        room_genre: [
+        room_category: [
           { required: true, message: "请选择房间类型", trigger: "change" },
         ],
         timeRange: [
@@ -113,9 +109,12 @@ export default {
             message: "请选择日期区间",
           },
         ],
-        sort: [{ required: true, message: "请输入权重排序", trigger: "blur" }],
-        user_number: [
+        room_number_list: [
           { required: true, message: "请输入用户ID", trigger: "blur" },
+        ],
+        remark: [{ required: true, message: "请输入备注", trigger: "blur" }],
+        honour_icon: [
+          { required: true, message: "请上传角标", trigger: "change" },
         ],
       },
     };
@@ -141,10 +140,13 @@ export default {
       if (status !== "add") {
         let params = JSON.parse(JSON.stringify(row));
         let para = {};
-        para.room_genre = params.room_genre || "";
-        para.user_number = params.user_number || "";
-        para.sort = params.sort || "";
-        para.describe = params.describe || "";
+        para.room_category = params.room_category || "";
+        para.room_number_list = params.room_number_list
+          ? params.room_number_list.join(",")
+          : "";
+        para.remark = params.remark || "";
+        para.honour_icon = params.honour_icon || "";
+        para.id = params.id || "";
         if (params.start_time && params.end_time) {
           para.timeRange = [params.start_time * 1000, params.end_time * 1000];
         }
@@ -187,9 +189,14 @@ export default {
             params.end_time = params.timeRange[1] / 1000;
             delete params.timeRange;
           }
-          let res = await sendBroadcast(params);
+          let res;
+          if (this.status === "add") {
+            res = await createRoomHonour(params);
+          } else if (this.status === "update") {
+            res = await updateRoomHonour(params);
+          }
           if (res.code === 2000) {
-            this.$success("发送成功");
+            this.$success("新增成功");
           }
           this.openComp(false);
           this.$emit("getList");
@@ -211,6 +218,28 @@ export default {
     closed() {
       this.$emit("destoryComp");
     },
+    // 获取房间类型
+    async getGenreList(params) {
+      const response = await guildRoomType(params);
+      if (response.code == 2000) {
+        const tempArr = [
+          { name: "直播", id: 1 },
+          { name: "派对", id: 2 },
+          { name: "全部", id: 0 },
+        ];
+        this.roomTypeList =
+          tempArr.reduce((prev, curr) => {
+            prev.push({
+              name: curr.name,
+              value: curr.id,
+            });
+            return prev;
+          }, []) || [];
+      }
+    },
+  },
+  created() {
+    this.getGenreList();
   },
 };
 </script>
