@@ -20,6 +20,15 @@ const activityRouter = {
 				noCache: true
 			},
 			name: 'lottery-list'
+		},
+    {
+			path: 'lottery-list2',
+			component: () => import('@/views/voiceroom/activity/lottery-list2.vue'),
+			meta: {
+				title: '娃娃机2.0',
+				noCache: true
+			},
+			name: 'lottery-list2'
 		}
         // {
 		// 	path: 'first-charge',

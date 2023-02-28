@@ -46,6 +46,24 @@ export function getRound(data) {
   })
 }
 
+/*** 娃娃机2.0 ***/
+export function getPoolNameV2(data) {
+  return request({
+    url: api.activity.getPoolNameV2,
+    method: 'post',
+    data
+  })
+}
+// 获取轮数
+export function getRoundV2(data) {
+  return request({
+    url: api.activity.getRoundV2,
+    method: 'post',
+    data
+  })
+}
+/*** 娃娃机2.0 ***/
+
 // 祈福抽奖记录
 export function fuList(data) {
   return request({
@@ -54,6 +72,7 @@ export function fuList(data) {
     data
   })
 }
+
 
 // 碎片来源类型
 export function sourceType(data) {

@@ -424,6 +424,11 @@ const request = {
         getRound: `${HTTPHEADER}/TwelveLog/getRound`, // 获取轮数
         poolDetail: `${HTTPHEADER}/TwelveLog/poolDetail`, // 奖池详情
 
+        // 2023/2/28  娃娃机2.0
+        getPoolNameV2: `${HTTPHEADER}/TwelveLog/getPoolNameV2`, // 获取奖池名
+        getRoundV2: `${HTTPHEADER}/TwelveLog/getRoundV2`, // 获取轮数
+        poolDetailV2: `${HTTPHEADER}/TwelveLog/poolDetailV2`, // 奖池详情
+
         // 新年活动
         fuList: `${HTTPHEADER}/SpringLog/fuList`, // 祈福抽奖记录
         exchangeLog: `${HTTPHEADER}/SpringLog/exchangeLog`, // 祈福兑换记录
