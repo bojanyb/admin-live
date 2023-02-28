@@ -203,9 +203,6 @@ export default {
                   "el-button",
                   {
                     props: { type: "danger" },
-                    style: {
-                      display: params.row.id === 1 ? "none" : "unset",
-                    },
                     on: {
                       click: () => {
                         this.deleteParams(params.row.id);

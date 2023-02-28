@@ -16,7 +16,7 @@
         :hide-required-asterisk="status === 'see'"
       >
         <el-form-item label="房间类型" prop="room_category_id">
-          <el-select v-model="ruleForm.room_category_id" placeholder="请选择房间类型">
+          <el-select v-model="ruleForm.room_category_id" placeholder="请选择房间类型" :disabled="status === 'update'">
             <el-option
               v-for="item in roomTypeList"
               :key="item.value"

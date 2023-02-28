@@ -19,6 +19,7 @@
           <el-select
             v-model="ruleForm.room_category"
             placeholder="请选择房间类型"
+            :disabled="status === 'update'"
           >
             <el-option
               v-for="item in roomTypeList"
