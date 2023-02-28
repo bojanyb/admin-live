@@ -190,6 +190,13 @@ export default {
             params.end_time = params.timeRange[1] / 1000;
             delete params.timeRange;
           }
+
+          const reg = /^(\d+,?)+$/;
+          if (!reg.test(params.room_number_list)) {
+            this.$error("请输入英文逗号！")
+            return false;
+          }
+
           let res;
           if (this.status === "add") {
             res = await createRoomHonour(params);
