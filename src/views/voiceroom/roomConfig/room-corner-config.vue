@@ -40,8 +40,6 @@ import tableList from "@/components/tableList/TableList.vue";
 import REQUEST from "@/request/index.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
-// 引入公共map
-import MAPDATA from "@/utils/jsonMap.js";
 // 引入公共方法
 import { timeFormat } from "@/utils/common.js";
 export default {
@@ -57,7 +55,8 @@ export default {
       roomTypeList: [],
       statusList: [],
       searchParams: {
-        room_category: 1,
+        room_number: "",
+        room_category: 0,
         status: 0,
       },
     };
@@ -229,8 +228,9 @@ export default {
       return {
         page: params.page,
         pagesize: params.size,
-        room_category: 0,
-        status: 0,
+        room_number: s.room_number,
+        room_category: s.room_category,
+        status: s.status,
       };
     },
     // 刷新列表
@@ -240,6 +240,7 @@ export default {
     // 重置
     reset() {
       this.searchParams = {
+        room_number: "",
         room_category: 0,
         status: 0,
       };
@@ -301,7 +302,7 @@ export default {
   },
   created() {
     this.getGenreList();
-    this.statusList = [{name: "待开始" , value: 1 }, {name: "生效中" , value: 2 }, {name: "已过期" , value: 3 }, {name: "全部" , value: 0 }]
+    this.statusList = [{name: "待生效" , value: 1 }, {name: "生效中" , value: 2 }, {name: "已过期" , value: 3 }, {name: "全部" , value: 0 }]
   },
 };
 </script>

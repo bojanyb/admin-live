@@ -157,9 +157,6 @@ export default {
                   "el-button",
                   {
                     props: { type: "danger" },
-                    style: {
-                      display: params.row.id === 1 ? "none" : "unset",
-                    },
                     on: {
                       click: () => {
                         this.deleteParams(params.row.id);
@@ -237,7 +234,10 @@ export default {
       this.isDestoryComp = false;
     },
     // 获取房间类型
-    async getGenreList(params) {
+    async getGenreList() {
+      const params = {
+        belong: 1
+      }
       const response = await guildRoomType(params);
       if (response.code == 2000) {
         const tempArr = Array.from(
