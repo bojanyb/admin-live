@@ -56,7 +56,7 @@ export default {
                     label: '活动状态',
                     placeholder: '请选择',
                     clearable: true,
-                    options: MAPDATA.ACTIVESTATUS
+                    options: MAPDATA.RESOURCESACTIVESTATUS
                 },
             ]
         },
@@ -109,7 +109,7 @@ export default {
                     {
                         label: '状态',
                         render: (h, params) => {
-                            let data = MAPDATA.ACTIVESTATUS.find(item => { return item.value === params.row.status })
+                            let data = MAPDATA.RESOURCESACTIVESTATUS.find(item => { return item.value === params.row.status })
                             return h('div', { class: { 'bounce_fa': true } }, [
                                 h('span', data ? data.name : '--')
                             ])
