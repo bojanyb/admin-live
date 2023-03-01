@@ -131,7 +131,7 @@ export default {
           {
             label: "状态",
             render: (h, params) => {
-              let data = MAPDATA.ACTIVESTATUS.find((item) => {
+              let data = MAPDATA.RESOURCESACTIVESTATUS.find((item) => {
                 return item.value === params.row.status;
               });
               return h("span", data ? data.name : "无");

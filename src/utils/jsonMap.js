@@ -2672,7 +2672,7 @@ const RACKSATUS = [
 ]
 
 // 活动状态
-const ACTIVESTATUS = [
+const RESOURCESACTIVESTATUS = [
   {
     name: '待生效',
     value: 1
@@ -2688,7 +2688,7 @@ const ACTIVESTATUS = [
 ]
 
 // 活动状态
-const RESOURCESACTIVESTATUS = [
+const ACTIVESTATUS = [
   {
     name: '生效中',
     value: 1
