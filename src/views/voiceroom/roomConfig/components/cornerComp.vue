@@ -233,7 +233,7 @@ export default {
         const tempArr = [
           { name: "直播", id: 1 },
           { name: "派对", id: 2 },
-          { name: "全部", id: 0 },
+          // { name: "全部", id: 0 },
         ];
         this.roomTypeList =
           tempArr.reduce((prev, curr) => {
