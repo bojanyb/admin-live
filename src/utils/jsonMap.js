@@ -765,6 +765,10 @@ const GUILDOPERATIONLIST = [
   {
     name: '刘建民',
     value: 2
+  },
+  {
+    name: '林广顺',
+    value: 3
   }
 ]
 
