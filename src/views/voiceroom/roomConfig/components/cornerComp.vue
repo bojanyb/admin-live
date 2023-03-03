@@ -83,6 +83,7 @@ import { createRoomHonour, updateRoomHonour } from "@/api/house.js";
 import { guildRoomType } from "@/api/videoRoom";
 // 引入上传图片组件
 import Upload from "@/components/uploadImg/index.vue";
+import { debounce } from "lodash";
 export default {
   components: {
     Upload,
@@ -181,7 +182,7 @@ export default {
       this.status = "update";
     },
     // 提交
-    async submitForm() {
+    submitForm: debounce(async function () {
       this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
           let params = { ...this.ruleForm };
@@ -193,7 +194,7 @@ export default {
 
           const reg = /^(\d+,?)+$/;
           if (!reg.test(params.room_number_list)) {
-            this.$error("请输入英文逗号！")
+            this.$error("请输入英文逗号！");
             return false;
           }
 
@@ -213,7 +214,7 @@ export default {
           return false;
         }
       });
-    },
+    }, 300),
     // 重置
     resetForm() {
       this.openComp(false);
