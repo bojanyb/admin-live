@@ -45,6 +45,11 @@
                     @change="handleChangeTime">
 					</el-date-picker>
                 </el-form-item>
+            <el-form-item label="展示位置">
+            <el-select v-model="ruleForm.pos_id" placeholder="请选择展示位置">
+              <el-option v-for="item in postOptions" :label="item.pos_desc" :value="item.pos_id"></el-option>
+            </el-select>
+            </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="resetForm('ruleForm')">取 消</el-button>
@@ -60,7 +65,7 @@ import MAPDATA from '@/utils/jsonMap.js'
 // 引入图片上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
 // 引入api
-import { addResourceConfig,editResource } from '@/api/activity.js'
+import { addResourceConfig, editResource, posList } from '@/api/activity.js'
 
 export default {
     components: {
@@ -143,8 +148,10 @@ export default {
                 jumpType: '',
                 time: '',
                 url: '',
-                nav_to :''
+                nav_to: '',
+                pos_id: ''
             },
+          postOptions: [],
             rules: {
                 name: [
                     { required: true, message: '请输入活动标题', trigger: 'blur' }
@@ -164,6 +171,7 @@ export default {
         },
         load(status, row) {
             this.status = status
+            this.getPosList()
             if(status !== 'add') {
                 this.oldParams = row
                 let params = JSON.parse(JSON.stringify(row))
@@ -296,7 +304,13 @@ export default {
         handleChangeTime(row){
             this.time = row
             this.ruleForm.time = row
+      },
+      async getPosList() {
+        const res = await posList()
+        if (res.code + '' === '2000') {
+          this.postOptions = res.data.list || []
         }
+      }
     },
     mounted() {
     }

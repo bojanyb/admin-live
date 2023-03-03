@@ -38,7 +38,7 @@
             <el-checkbox-group v-model="audits">
               <el-checkbox v-for="(item,index) in auditList" :key="index" :label="item.value" :value="item.key"></el-checkbox>
             </el-checkbox-group>
-          </el-form-item>
+          </el-form-item> 
         </div>
       </el-form>
       <span slot="footer" class="dialog-footer">

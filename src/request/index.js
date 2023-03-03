@@ -419,6 +419,7 @@ const request = {
         addResourceConfig: `${HTTPHEADER}/activity/addResourceConfig`, // 添加资源位配置
         editResource: `${HTTPHEADER}/activity/editResource`, // 修改资源位配置
         delResource: `${HTTPHEADER}/activity/delResource`, // 删除资源
+        posList: `${HTTPHEADER}/activity/posList`, // 资源位列表
         // 2022/12/6 21：44
         getPoolName: `${HTTPHEADER}/TwelveLog/getPoolName`, // 获取奖池名
         getRound: `${HTTPHEADER}/TwelveLog/getRound`, // 获取轮数
