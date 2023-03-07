@@ -147,6 +147,17 @@ export default {
             },
           },
           {
+            label: "查看权限",
+            prop: "bind_status",
+            minWidth: "120px",
+            render: (h, params) => {
+              return h("div", [
+                  h("div", `邀请用户详情: ${params.row.tab_auth.user_detail ? "开启" : "关闭"}`),
+                  h("div", `邀请充值用户权限: ${params.row.tab_auth.recharge_detail ? "开启" : "关闭"}`),
+              ])
+            },
+          },
+          {
             label: "推广单价",
             render: (h, params) => {
               return h("div", [
@@ -182,7 +193,7 @@ export default {
           },
           {
             label: "操作",
-            minWidth: "130px",
+            minWidth: "160px",
             render: (h, params) => {
               return h("div", [
                 h(
