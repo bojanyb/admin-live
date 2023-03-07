@@ -133,6 +133,20 @@ export default {
             },
           },
           {
+            label: "绑定状态",
+            prop: "bind_status",
+            render: (h, params) => {
+              return h(
+                "span",
+                params.row.bind_status === 1
+                  ? "已绑定"
+                  : params.row.bind_status === 2
+                  ? "未绑定"
+                  : "无"
+              );
+            },
+          },
+          {
             label: "推广单价",
             render: (h, params) => {
               return h("div", [
@@ -213,7 +227,15 @@ export default {
                 h(
                   "el-button",
                   {
-                    props: { type: "info" },
+                    props: {
+                      type: `${
+                        params.row.bind_status === 1
+                          ? "info"
+                          : params.row.bind_status === 2
+                          ? "warning"
+                          : ""
+                      }`,
+                    },
                     on: {
                       click: () => {
                         this.handleBind(params.row);
@@ -221,9 +243,9 @@ export default {
                     },
                   },
                   `${
-                    params.row.bind_status === 2
+                    params.row.bind_status === 1
                       ? "解绑"
-                      : params.row.bind_status === 1
+                      : params.row.bind_status === 2
                       ? "绑定"
                       : "未知"
                   }`
