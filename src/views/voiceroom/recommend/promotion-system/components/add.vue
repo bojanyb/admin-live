@@ -6,7 +6,7 @@
             width="500px"
             :before-close="handleClose"
             @closed="closed">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" label-position="left" class="demo-ruleForm">
                 <el-form-item :label="title + 'ID'" prop="user_number">
                     <el-input oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.user_number"></el-input>
                 </el-form-item>
@@ -18,6 +18,12 @@
                 </el-form-item>
                 <el-form-item label="推广单价3" prop="price3">
                     <el-input v-model="ruleForm.price3"></el-input>
+                </el-form-item>
+                <el-form-item label="邀请用户详情" prop="detail" label-width="140px">
+                     <el-switch v-model="ruleForm.detail"></el-switch>
+                </el-form-item>
+                <el-form-item label="邀请充值用户权限" prop="topup" label-width="140px">
+                    <el-switch v-model="ruleForm.topup"></el-switch>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -44,7 +50,9 @@ export default {
                 user_number: '',
                 price1: '',
                 price2: '',
-                price3: ''
+                price3: '',
+                detail: false,
+                topup: false
             },
             oldParams: {}, // 老数据
             rules: {
@@ -59,6 +67,12 @@ export default {
                 ],
                 price3: [
                     { required: true, message: '请输入推广单价3', trigger: 'blur' }
+                ],
+                detail: [
+                    { required: true, message: '请选择是否查看邀请用户详情', trigger: 'change' }
+                ],
+                topup: [
+                    { required: true, message: '请选择是否邀请充值用户权限', trigger: 'change' }
                 ]
             }
         };
@@ -101,6 +115,8 @@ export default {
                         price1: s.price1,
                         price2: s.price2,
                         price3: s.price3,
+                        detail: s.detail,
+                        topup: s.topup,
                         pid: s.pid
                     }
                     if(this.type !== 1 && this.status === 'add') {

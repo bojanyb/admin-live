@@ -126,7 +126,8 @@ export default {
                                 h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row)}}}, '删除'),
                                 h('el-button', { props: { type: 'success'}, style: {
                                     display: params.row.level === 3 ? 'none' : 'unset'
-                                }, on: {click:()=>{this.add(params.row.level + 1, params.row)}}}, '新增')
+                                }, on: {click:()=>{this.add(params.row.level + 1, params.row)}}}, '新增'),
+                                h('el-button', { props: { type: 'info'}, on: {click:()=>{this.handleBind(params.row)}}}, '解绑'),
                             ])
                         }
                     }
@@ -232,6 +233,10 @@ export default {
                     this.getList()
                 }
             }).catch(() => {});
+        },
+        // 绑定
+        handleBind() {
+
         },
         // 销毁组件
         destoryComp() {
