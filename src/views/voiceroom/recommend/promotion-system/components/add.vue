@@ -19,11 +19,11 @@
                 <el-form-item label="推广单价3" prop="price3">
                     <el-input v-model="ruleForm.price3"></el-input>
                 </el-form-item>
-                <el-form-item label="邀请用户详情" prop="detail" label-width="140px">
-                     <el-switch v-model="ruleForm.detail"></el-switch>
+                <el-form-item label="邀请用户详情" prop="user_detail" label-width="140px">
+                     <el-switch v-model="ruleForm.user_detail"></el-switch>
                 </el-form-item>
-                <el-form-item label="邀请充值用户权限" prop="topup" label-width="140px">
-                    <el-switch v-model="ruleForm.topup"></el-switch>
+                <el-form-item label="邀请充值用户权限" prop="recharge_detail" label-width="140px">
+                    <el-switch v-model="ruleForm.recharge_detail"></el-switch>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -51,8 +51,8 @@ export default {
                 price1: '',
                 price2: '',
                 price3: '',
-                detail: false,
-                topup: false
+                user_detail: false,
+                recharge_detail: false
             },
             oldParams: {}, // 老数据
             rules: {
@@ -67,12 +67,6 @@ export default {
                 ],
                 price3: [
                     { required: true, message: '请输入推广单价3', trigger: 'blur' }
-                ],
-                detail: [
-                    { required: true, message: '请选择是否查看邀请用户详情', trigger: 'change' }
-                ],
-                topup: [
-                    { required: true, message: '请选择是否邀请充值用户权限', trigger: 'change' }
                 ]
             }
         };
@@ -94,6 +88,8 @@ export default {
             this.status = status
             this.dialogVisible = true
             this.type = type
+            row.user_detail = !!(row.tab_auth.user_detail)
+            row.recharge_detail = !!(row.tab_auth.recharge_detail)
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
                 this.$set(this.$data, 'ruleForm', params)
@@ -115,9 +111,11 @@ export default {
                         price1: s.price1,
                         price2: s.price2,
                         price3: s.price3,
-                        detail: s.detail,
-                        topup: s.topup,
                         pid: s.pid
+                    }
+                    params.tab_auth = {
+                      user_detail: s.user_detail ? 1 : 0,
+                      recharge_detail: s.recharge_detail ? 1 : 0
                     }
                     if(this.type !== 1 && this.status === 'add') {
                         params.pid = a.id
