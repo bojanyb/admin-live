@@ -99,3 +99,57 @@ export function endLive(data) {
         data
     })
 }
+
+// 首页房间类型推荐-新增
+export function createRoomHotConf(data) {
+  return request({
+    url: api.house.createRoomHotConf,
+    method: 'post',
+    data
+  })
+}
+
+// 首页房间类型推荐-修改
+export function updateRoomHotConf(data) {
+  return request({
+    url: api.house.updateRoomHotConf,
+    method: 'post',
+    data
+  })
+}
+
+// 首页房间类型推荐-删除
+export function deleteRoomHonour(data) {
+  return request({
+    url: api.house.deleteRoomHonour,
+    method: 'post',
+    data
+  })
+}
+
+// 房间角标配置-新增
+export function createRoomHonour(data) {
+  return request({
+    url: api.house.createRoomHonour,
+    method: 'post',
+    data
+  })
+}
+
+// 房间角标配置-修改
+export function updateRoomHonour(data) {
+  return request({
+    url: api.house.updateRoomHonour,
+    method: 'post',
+    data
+  })
+}
+
+// 房间角标配置-删除
+export function deleteRoomHotConf(data) {
+  return request({
+    url: api.house.deleteRoomHotConf,
+    method: 'post',
+    data
+  })
+}

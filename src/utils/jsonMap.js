@@ -2676,6 +2676,22 @@ const RACKSATUS = [
 ]
 
 // 活动状态
+const RESOURCESACTIVESTATUS = [
+  {
+    name: '待生效',
+    value: 1
+  },
+  {
+    name: '生效中',
+    value: 2
+  },
+  {
+    name: '已过期',
+    value: 3
+  },
+]
+
+// 活动状态
 const ACTIVESTATUS = [
   {
     name: '生效中',
@@ -2987,6 +3003,7 @@ export default {
   CHECKEDSTATUS,
   RACKSATUS,
   ACTIVESTATUS,
+  RESOURCESACTIVESTATUS,
   POSSTATUS,
   PATHTYPE2,
   PUSHTYPESTATUS,

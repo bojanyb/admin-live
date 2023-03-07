@@ -47,6 +47,24 @@ const liveManageRouter = {
 				noCache: true
 			}
 		},
+    {
+      path: 'live-recommend',
+      component: () => import('@/views/voiceroom/liveManage/live-recommend'),
+      name: 'live-recommend',
+      meta: {
+        title: '首页房间类型推荐',
+        noCache: true
+      }
+    },
+    {
+      path: 'live-corner-config',
+      component: () => import('@/views/voiceroom/liveManage/live-corner-config'),
+      name: 'live-corner-config',
+      meta: {
+        title: '房间角标配置',
+        noCache: true
+      }
+    },
 	]
 }
 
