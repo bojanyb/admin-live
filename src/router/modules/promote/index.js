@@ -38,6 +38,15 @@ const promoteRouter = {
 				noCache: true
 			},
 		},
+    {
+      path: 'newbie-square',
+      component: () => import('@/views/voiceroom/recommend/newbie-square'),
+      name: 'newbie-square',
+      meta: {
+        title: '新人广场',
+        noCache: true
+      },
+    },
 		{
 			path: '/promotion-system',
 			component: () => import('@/views/voiceroom/recommend/index'),

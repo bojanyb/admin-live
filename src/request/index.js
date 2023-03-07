@@ -139,6 +139,7 @@ const request = {
         replenishment: `${HTTPHEADER}/Promoter/replenishment`, // 补单列表
         regPeplenishment: `${HTTPHEADER}/Promoter/regReplenishment`, // 推广补单
         replenishmentDel: `${HTTPHEADER}/Promoter/replenishmentDel`, // 删除补单
+        NewUserStat: `${HTTPHEADER}/NewUserStat/list`, // 新人广场
     },
 
     // 充值记录
