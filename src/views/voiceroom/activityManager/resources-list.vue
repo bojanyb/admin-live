@@ -107,6 +107,16 @@ export default {
                         prop: 'sort',
                     },
                     {
+                      label: "展示位置",
+                      render: (h, params) => {
+                        console.log(params.row.pos_id);
+                        let data = MAPDATA.POSSTATUS.find((item) => {
+                          return item.value === params.row.pos_id;
+                        });
+                        return h("div", [h("span", data ? data.name : "--")]);
+                      },
+                    },
+                    {
                         label: '状态',
                         render: (h, params) => {
                             let data = MAPDATA.ACTIVESTATUS.find(item => { return item.value === params.row.status })

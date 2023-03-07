@@ -2691,6 +2691,26 @@ const ACTIVESTATUS = [
   },
 ]
 
+// 展示位置
+const POSSTATUS = [
+  {
+    name: '全部',
+    value: -1
+  },
+  {
+    name: '派对列表页',
+    value: 1
+  },
+  {
+    name: '直播列表页',
+    value: 2
+  },
+  {
+    name: '广场主页',
+    value: 3
+  },
+]
+
 // 落地类型
 const PUSHTYPESTATUS = [
   {
@@ -2967,6 +2987,7 @@ export default {
   CHECKEDSTATUS,
   RACKSATUS,
   ACTIVESTATUS,
+  POSSTATUS,
   PATHTYPE2,
   PUSHTYPESTATUS,
   TARGETTYPESTATUS,

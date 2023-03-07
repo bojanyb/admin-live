@@ -27,6 +27,15 @@ export function delResource(data) {
     data
   })
 }
+
+// 资源位列表
+export function posList(data) {
+  return request({
+    url: api.activity.posList,
+    method: 'post',
+    data
+  })
+}
 /********************************************/
 // 2022/12/6 21：44
 // 获取奖池名
