@@ -1,11 +1,11 @@
 <template>
 	<div class="app-container userTurnover-list-box">
 		<div class="model">
-            <span>收礼人数：{{ ruleForm.user_count || 0 }}人</span>
-            <span>房间数量：{{ ruleForm.room_count || 0 }}个</span>
-            <span>公会数量：{{ ruleForm.guild_count || 0 }}个</span>
-            <span>选择时间内总金额：{{ ruleForm.total_amount || 0 }}喵粮</span>
-        </div>
+        <span>收礼人数：{{ ruleForm.user_count || 0 }}人</span>
+        <span>房间数量：{{ ruleForm.room_count || 0 }}个</span>
+        <span>公会数量：{{ ruleForm.guild_count || 0 }}个</span>
+        <span>选择时间内总金额：{{ ruleForm.total_amount || 0 }}喵粮</span>
+    </div>
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>

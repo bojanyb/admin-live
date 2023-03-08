@@ -1,10 +1,14 @@
 <template>
 	<div class="app-container">
+    <div class="model">
+        <span>收礼流水总金额：{{ ruleForm.gift_dot || 0 }}喵粮</span>
+        <span>送礼流水总金额：{{ ruleForm.gift_flow || 0 }}喵粮</span>
+    </div>
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
         </div>
 	</div>
 </template>
@@ -168,7 +172,10 @@
 				dateTimeParams: {
 					start_time: null,
 					end_time: null
-				}
+				},
+        ruleForm: {
+          total_amount: 0
+        }
 			}
 		},
 		methods: {
@@ -207,6 +214,10 @@
 				}
 				// this.dateTimeParams = {}
 				this.getList()
+			},
+      // 列表返回数据
+			saleAmunt(row) {
+				this.ruleForm = { ...row }
 			},
 			// 查询
 			onSearch() {
@@ -260,3 +271,20 @@
 		}
 	}
 </script>
+<style lang="sass" scoped>
+.app-container
+  .model
+    width: 100%
+    height: 40px
+    background: rgba(0,0,0,0.8)
+    display: flex
+    align-items: center
+    padding: 0px 30px
+    box-sizing: border-box
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.15)
+    margin-bottom: 20px
+    >span
+      font-size: 15px
+      color: #fff
+      margin-right: 100px
+</style>
