@@ -3,7 +3,7 @@
         <el-dialog
         title="后台增发"
         :visible.sync="dialogVisible"
-        width="710px"
+        width="750px"
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="90px" class="demo-ruleForm">
@@ -239,7 +239,7 @@ export default {
     }
 
     .right_Con_Box {
-        width: 240px;
+        width: 280px;
         box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.15);
         padding: 10px 20px;
         box-sizing: border-box;
