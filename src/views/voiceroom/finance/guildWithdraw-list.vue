@@ -94,8 +94,8 @@ export default {
                     name: 'trade_no',
                     type: 'input',
                     value: '',
-                    label: '交易单号',
-                    placeholder: '请输入交易单号'
+                    label: '商户/支付单号',
+                    placeholder: '请输入商户/支付单号'
                 },
                 // {
                 //     name: 'time',
@@ -158,7 +158,7 @@ export default {
                     },
                     {
                         label: '充值金额（元）',
-                        minWidth: '100px',
+                        minWidth: '120px',
                         prop: 'amount',
                         sortable: "custom",
                         render: (h, params) => {
@@ -218,9 +218,14 @@ export default {
                     //     }
                     // },
                     {
-                        label: '交易单号',
+                        label: '商户单号',
                         minWidth: '150px',
                         prop: 'trade_no'
+                    },
+                    {
+                        label: '支付单号',
+                        minWidth: '200px',
+                        prop: 'out_trade_no'
                     },
                     // {
                     //     label: '商户单号',
