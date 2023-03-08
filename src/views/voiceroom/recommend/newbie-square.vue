@@ -5,9 +5,7 @@
         v-model="searchParams"
         :forms="forms"
         :show-reset="true"
-        :show-search-btn="true"
         @onReset="reset"
-        @onSearch="onSearch"
       ></SearchPanel>
     </div>
 
@@ -34,18 +32,7 @@ export default {
   mixins: [mixins],
   computed: {
     forms() {
-      return [
-        {
-          name: "is_online",
-          type: "select",
-          value: 1,
-          keyName: "value",
-          optionLabel: "name",
-          label: "在线状态",
-          placeholder: "请选择在线状态",
-          options: this.onlineList,
-        },
-      ];
+      return [];
     },
     cfgs() {
       return {
@@ -143,13 +130,10 @@ export default {
     // 重置
     reset() {
       this.searchParams = {
+        query_id: 0,
         is_online: 1,
       };
-      this.getList();
-    },
-    // 查询
-    onSearch() {
-      this.getList();
+      this.$refs.tableList.handlePageChange(1)
     },
     // table 返回数据
     saleAmunt(row) {
