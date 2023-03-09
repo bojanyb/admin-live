@@ -1,7 +1,7 @@
 <template>
 	<div class="app-container">
     <div class="model">
-        <span>送礼人流水额:{{ ruleForm.gift_flow || 0 }}</span>
+        <span>送礼人贡献值:{{ ruleForm.gift_flow || 0 }}</span>
         <span>收礼人流水额：{{ ruleForm.gift_dot || 0 }}</span>
     </div>
 		<div class="searchParams">
