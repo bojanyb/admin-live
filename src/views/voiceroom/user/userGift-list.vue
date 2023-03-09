@@ -286,5 +286,5 @@
     >span
       font-size: 15px
       color: #fff
-      margin-right: 100px
+      margin-right: 120px
 </style>
