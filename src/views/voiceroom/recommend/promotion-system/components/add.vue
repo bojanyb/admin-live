@@ -6,7 +6,7 @@
             width="500px"
             :before-close="handleClose"
             @closed="closed">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" label-position="left" class="demo-ruleForm">
                 <el-form-item :label="title + 'ID'" prop="user_number">
                     <el-input oninput="this.value=this.value.replace(/[^\d]/g,'');" v-model="ruleForm.user_number"></el-input>
                 </el-form-item>
@@ -18,6 +18,12 @@
                 </el-form-item>
                 <el-form-item label="推广单价3" prop="price3">
                     <el-input v-model="ruleForm.price3"></el-input>
+                </el-form-item>
+                <el-form-item label="邀请用户详情" prop="user_detail" label-width="140px">
+                     <el-switch v-model="ruleForm.user_detail"></el-switch>
+                </el-form-item>
+                <el-form-item label="邀请充值用户权限" prop="recharge_detail" label-width="140px">
+                    <el-switch v-model="ruleForm.recharge_detail"></el-switch>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -44,7 +50,9 @@ export default {
                 user_number: '',
                 price1: '',
                 price2: '',
-                price3: ''
+                price3: '',
+                user_detail: false,
+                recharge_detail: false
             },
             oldParams: {}, // 老数据
             rules: {
@@ -80,6 +88,8 @@ export default {
             this.status = status
             this.dialogVisible = true
             this.type = type
+            row.user_detail = !!(row.tab_auth.user_detail)
+            row.recharge_detail = !!(row.tab_auth.recharge_detail)
             if(status !== 'add') {
                 let params = JSON.parse(JSON.stringify(row))
                 this.$set(this.$data, 'ruleForm', params)
@@ -102,6 +112,10 @@ export default {
                         price2: s.price2,
                         price3: s.price3,
                         pid: s.pid
+                    }
+                    params.tab_auth = {
+                      user_detail: s.user_detail ? 1 : 0,
+                      recharge_detail: s.recharge_detail ? 1 : 0
                     }
                     if(this.type !== 1 && this.status === 'add') {
                         params.pid = a.id

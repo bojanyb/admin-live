@@ -46,3 +46,12 @@ export function replenishmentDel(data) {
         data
     })
 }
+
+// 删除补单
+export function setBindStatus(data) {
+  return request({
+    url: REQUEST.userHistory.setBindStatus,
+    method: 'post',
+    data
+  })
+}
