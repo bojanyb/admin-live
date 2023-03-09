@@ -1,8 +1,8 @@
 <template>
 	<div class="app-container">
     <div class="model">
-        <span>送礼流水额:{{ ruleForm.gift_flow || 0 }}</span>
-        <span>收礼流水额：{{ ruleForm.gift_dot || 0 }}</span>
+        <span>送礼人流水额:{{ ruleForm.gift_flow || 0 }}</span>
+        <span>收礼人流水额：{{ ruleForm.gift_dot || 0 }}</span>
     </div>
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
