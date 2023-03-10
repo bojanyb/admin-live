@@ -120,6 +120,13 @@
 						}
 					},
 					{
+						label: '总流水（含冻结）',
+						minWidth: '130px',
+						render: (h, params) => {
+							return h('span', params.row.t_flow + '钻石')
+						}
+					},
+					{
 						label: '周返点比例',
 						minWidth: '100px',
 						render: (h, params) => {
