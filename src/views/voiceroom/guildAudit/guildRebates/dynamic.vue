@@ -122,6 +122,13 @@
 						}
 					},
 					{
+						label: '总流水（含冻结）',
+						minWidth: '120px',
+						render: (h, params) => {
+							return h('span', params.row.t_flow + '钻石')
+						}
+					},
+					{
 						label: '周奖励金额',
 						minWidth: '120px',
 						render: (h, params) => {
