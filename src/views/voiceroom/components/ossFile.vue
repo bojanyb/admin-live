@@ -118,7 +118,7 @@
 					isUpLoad = true // 静态图 默认为true
 				}
 				if (isUpLoad == true) {
-					
+
 					if(file.name.indexOf(".apk") > -1){
 						this.fileNme = file.name.split('.apk')[0];
 					}
@@ -146,7 +146,7 @@
 						info.name = res.name
 						info.size = _this.size
 						info.videoUrl = _this.videoUrl
-						let imgUrl = "http://photo.aiyi.live/" + info.name;
+						let imgUrl = "//photo.aiyi.live/" + info.name;
 						let params = {
 							"type": this.type,
 							"url": imgUrl,
