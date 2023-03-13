@@ -29,13 +29,13 @@ function uploadOSS(file) {
       accessKeySecret: OSSConfig.ossParams.accessKeySecret,
       bucket: OSSConfig.ossParams.bucket,
     })
-	
+
     const res = await client.multipartUpload(fileName, file)
 
     // resolve(res)
     // 或者返回如下：
     resolve({
-        url: 'https://photo.aiyi.live/' + fileName
+        url: '//photo.aiyi.live/' + fileName
     })
   })
 }
