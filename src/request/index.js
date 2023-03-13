@@ -441,6 +441,11 @@ const request = {
         getRoundV2: `${HTTPHEADER}/TwelveLog/getRoundV2`, // 获取轮数
         poolDetailV2: `${HTTPHEADER}/TwelveLog/poolDetailV2`, // 奖池详情
 
+        // 2023/03/13 农场物语
+        getPoolNameV3: `${HTTPHEADER}/TwelveLog/getPoolNameV3`, // 获取奖池名
+        getRoundV3: `${HTTPHEADER}/TwelveLog/getRoundV3`, // 获取轮数
+        poolDetailV3: `${HTTPHEADER}/TwelveLog/poolDetailV3`, // 获取喂养列表
+
         // 新年活动
         fuList: `${HTTPHEADER}/SpringLog/fuList`, // 祈福抽奖记录
         exchangeLog: `${HTTPHEADER}/SpringLog/exchangeLog`, // 祈福兑换记录
