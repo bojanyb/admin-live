@@ -146,7 +146,7 @@
 						info.name = res.name
 						info.size = _this.size
 						info.videoUrl = _this.videoUrl
-						let imgUrl = "//photo.aiyi.live/" + info.name;
+						let imgUrl = "https://photo.aiyi.live/" + info.name;
 						let params = {
 							"type": this.type,
 							"url": imgUrl,
