@@ -27,9 +27,7 @@
 
 <script>
 // 引入api
-import { deleteRoomHotConf } from "@/api/house.js";
-// 引入api
-import { guildRoomType } from "@/api/videoRoom.js";
+import { deleteRoomPushFlow } from "@/api/house.js";
 // 引入新增组件
 import recommendComp from "./components/recommendComp.vue";
 // 引入菜单组件
@@ -56,22 +54,30 @@ export default {
       isDestoryComp: false, // 是否销毁组件
       roomTypeList: [],
       searchParams: {
-        room_category: 2,
-        room_category_id: null
+        pos_index: null,
+        room_number: ''
       },
     };
   },
   computed: {
     forms() {
       return [
+				{
+					name: 'room_number',
+					type: 'input',
+					value: '',
+					label: '房间ID',
+          isNum: true,
+					placeholder: '请输入房间ID'
+				},
         {
-          name: "room_category_id",
+          name: "pos_index",
           type: "select",
           value: null,
           keyName: "value",
           optionLabel: "name",
-          label: "房间类型",
-          placeholder: "请输入房间类型",
+          label: "首页列表序号",
+          placeholder: "请选择首页列表序号",
           clearable: true,
           options: this.roomTypeList,
         },
@@ -80,24 +86,22 @@ export default {
     cfgs() {
       return {
         vm: this,
-        url: REQUEST.house.RoomHotConfList,
+        url: REQUEST.house.RoomPushFlowList,
         columns: [
           {
-            label: "房间类型",
+            label: "首页列表序号",
+            prop: "pos_index",
             render: (h, params) => {
-              let data = this.roomTypeList.find((item) => {
-                return item.value === params.row.room_category_id;
-              });
-              return h("span", data ? data.name : "无");
+              return h("span", params.row.pos_index ? `首页列表序号${params.row.pos_index}` : "无");
             },
-          },
-          {
-            label: "首页权重",
-            prop: "sort",
           },
           {
             label: "房间ID",
             prop: "room_number",
+          },
+          {
+            label: "房间标题",
+            prop: "room_title",
           },
           {
             label: "有效时间",
@@ -179,8 +183,8 @@ export default {
       return {
         page: params.page,
         pagesize: params.size,
-        room_category: 2,
-        room_category_id: s.room_category_id,
+        pos_index: s.pos_index,
+        room_number: s.room_number
       };
     },
     // 刷新列表
@@ -190,8 +194,8 @@ export default {
     // 重置
     reset() {
       this.searchParams = {
-        room_category: 2,
-        room_category_id: null
+        pos_index: null,
+        room_number: ""
       };
       this.getList();
     },
@@ -221,7 +225,7 @@ export default {
         type: "warning",
       })
         .then(async () => {
-          let res = await deleteRoomHotConf({ id });
+          let res = await deleteRoomPushFlow({ id });
           if (res.code === 2000) {
             this.$success("删除成功");
             this.getList();
@@ -235,22 +239,11 @@ export default {
     },
     // 获取房间类型
     async getGenreList() {
-      const params = {
-        belong: 2
-      }
-      const response = await guildRoomType(params);
-      if (response.code == 2000) {
-        const tempArr = Array.from(
-          Array.isArray(response.data.list) ? response.data.list : []
-        );
-        this.roomTypeList =
-          tempArr.reduce((prev, curr) => {
-            prev.push({
-              name: curr.name,
-              value: curr.id,
-            });
-            return prev;
-          }, []) || [];
+      for (let index = 1; index <= 10; index++) {
+        this.roomTypeList.push({
+          name: `首页房间序号${index}`,
+          value: index
+        })
       }
     },
   },
