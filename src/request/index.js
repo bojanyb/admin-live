@@ -362,6 +362,11 @@ const request = {
         createRoomHonour: `${HTTPHEADER}/RoomHonour/create`, // 房间角标-新增
         updateRoomHonour: `${HTTPHEADER}/RoomHonour/update`, // 房间角标-修改
         deleteRoomHonour: `${HTTPHEADER}/RoomHonour/delete`, // 房间角标-删除
+
+        RoomPushFlowList: `${HTTPHEADER}/RoomPushFlow/list`, // 首页房间推荐-列表
+        createRoomPushFlow: `${HTTPHEADER}/RoomPushFlow/create`, // 首页房间推荐-新增
+        updateRoomPushFlow: `${HTTPHEADER}/RoomPushFlow/update`, // 首页房间推荐-修改
+        deleteRoomPushFlow: `${HTTPHEADER}/RoomPushFlow/delete`, // 首页房间推荐-删除
     },
 
     // 直播管理

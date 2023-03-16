@@ -153,3 +153,30 @@ export function deleteRoomHotConf(data) {
     data
   })
 }
+
+// 首页房间类型推荐-新增
+export function createRoomPushFlow(data) {
+  return request({
+    url: api.house.createRoomPushFlow,
+    method: 'post',
+    data
+  })
+}
+
+// 首页房间类型推荐-修改
+export function updateRoomPushFlow(data) {
+  return request({
+    url: api.house.updateRoomPushFlow,
+    method: 'post',
+    data
+  })
+}
+
+// 首页房间类型推荐-删除
+export function deleteRoomPushFlow(data) {
+  return request({
+    url: api.house.deleteRoomPushFlow,
+    method: 'post',
+    data
+  })
+}
