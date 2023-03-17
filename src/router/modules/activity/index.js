@@ -29,6 +29,15 @@ const activityRouter = {
 				noCache: true
 			},
 			name: 'lottery-list2'
+		},
+    {
+			path: 'lottery-farm-list',
+			component: () => import('@/views/voiceroom/activity/lottery-farm-list.vue'),
+			meta: {
+				title: '农场抽奖记录',
+				noCache: true
+			},
+			name: 'lottery-farm-list'
 		}
         // {
 		// 	path: 'first-charge',

@@ -110,3 +110,28 @@ export function getTraveListDetail(data) {
   })
 }
 
+/***农场物语*****/
+// 获取奖池列表
+export function getPoolNameV3(data) {
+  return request({
+    url: api.activity.getPoolNameV3,
+    method: 'post',
+    data
+  })
+}
+// 获取喂养列表
+export function poolDetailV3(data) {
+  return request({
+    url: api.activity.poolDetailV3,
+    method: 'post',
+    data
+  })
+}
+// 获取轮次
+export function getRoundV3(data) {
+  return request({
+    url: api.activity.getRoundV3,
+    method: 'post',
+    data
+  })
+}
