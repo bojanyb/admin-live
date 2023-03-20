@@ -32,6 +32,11 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="活动礼物" prop="is_activity">
+                    <el-radio-group v-model="ruleForm.is_activity">
+                        <el-radio v-for="item in activityList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
+                    </el-radio-group>
+                </el-form-item>
                 <el-form-item label="礼物播放类型" prop="play_type">
                     <el-radio-group v-model="ruleForm.play_type" @input="handleChangePlayType">
                         <el-radio v-for="item in playTypeList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
@@ -122,6 +127,7 @@ export default {
     data() {
         return {
             dialogVisible: true,
+            activityList: MAPDATA.GIFTACTIVETYLIST, // 是否是活动类型
             playTypeList: MAPDATA.SYSTEMGIFTPLAYTYPELIST, // 播放类型
             classifyList: MAPDATA.SYSTEMGIFTCLASSIFYLIST, // 礼物分类
             nobilityList: [], // 贵族等级
@@ -131,6 +137,7 @@ export default {
                 gift_name: '',
                 gift_genre: 4,
                 play_type: 1,
+                is_activity: 1, // 是否是活动类型
                 gift_photo: '',
                 gift_gif: '',
                 gift_version: '',
@@ -157,6 +164,9 @@ export default {
                 ],
                 noble_level: [
                     { required: true, message: '请选择贵族等级', trigger: 'change' }
+                ],
+                is_activity: [
+                    { required: true, message: '请选择是否是活动礼物', trigger: 'change' }
                 ],
                 play_type: [
                     { required: true, message: '请选择礼物播放类型', trigger: 'change' }
@@ -306,7 +316,7 @@ export default {
       handleChangePlayType() {
         this.componentKey += 1
         this.ruleForm.gift_gif = ''
-       }
+       },
     },
     mounted() {
         this.getNobility()

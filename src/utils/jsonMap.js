@@ -1324,6 +1324,18 @@ const SYSTEMGIFTCLASSIFYLIST = [
 ]
 
 // 播放类型
+const GIFTACTIVETYLIST = [
+  {
+    name: '是',
+    value: 1
+  },
+  {
+    name: '否',
+    value: 2
+  },
+]
+
+// 播放类型
 const SYSTEMGIFTPLAYTYPELIST = [
   {
     name: 'Lottie',
@@ -3015,5 +3027,6 @@ export default {
   LOGOUTSTATUS,
   USESTATUS,
   PRAYCARDS,
-  DEBRISS
+  DEBRISS,
+  GIFTACTIVETYLIST
 }
