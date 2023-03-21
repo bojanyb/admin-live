@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
-        <tableList :cfgs="cfgs" ref="tableList"></tableList>
+        <tableList :cfgs="cfgs" ref="tableList" :isHidePage="true"></tableList>
 
         <!-- 新增 - 修改组件 -->
         <commercialComp v-if="isDestoryComp" ref="commercialComp" @destoryComp="destoryComp" @getList="getList" type="payment"></commercialComp>
