@@ -9,6 +9,12 @@
 
         <!-- 详情组件 -->
         <audioComp v-if="isDestoryComp" ref="audioComp" @destoryComp="destoryComp" :tabIndex="tabIndex"></audioComp>
+
+        <!-- 处罚组件 -->
+        <userComp v-if="isUserDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList" isDetection ></userComp>
+
+        <!-- 警告组件 -->
+        <warnComp v-if="isWarnDestoryComp" ref="warnComp" @destoryComp="destoryComp" @getList="getList"></warnComp>
     </div>
 </template>
 
@@ -21,6 +27,10 @@ import menuComp from '@/components/menuComp/index.vue'
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
+// 引入处罚组件
+import userComp from './components/userComp.vue'
+// 引入警告组件
+import warnComp from './components/warnComp.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
@@ -35,7 +45,9 @@ export default {
         SearchPanel,
         tableList,
         menuComp,
-        audioComp
+        audioComp,
+        userComp,
+        warnComp
     },
     data() {
         return {
@@ -48,12 +60,22 @@ export default {
                 }
             ],
             isDestoryComp: false, // 是否销毁组件
+            isUserDestoryComp: false,
+            isWarnDestoryComp: false,
             tabIndex: '0'
         };
     },
     computed: {
         forms() {
             return [
+                {
+                    name: 'user_number',
+                    type: 'input',
+                    value: '',
+                    label: '用户ID',
+                    isNum: true,
+                    placeholder: '请输入用户ID'
+                },
                 {
                     name: 'room_number',
                     type: 'input',
@@ -114,11 +136,12 @@ export default {
                         }
                     },
                     {
-                        label: '用户角色',
-                        render: (h, params) => {
-                            let data = MAPDATA.RISKSYSTEMROLELIST.find(item => { return item.value === params.row.user_role })
-                            return h('span', data ? data.name : '无')
-                        }
+                        label: '用户麦位',
+                        prop: 'sort_number',
+                        // render: (h, params) => {
+                        //     let data = MAPDATA.RISKSYSTEMROLELIST.find(item => { return item.value === params.row.user_role })
+                        //     return h('span', data ? data.name : '无')
+                        // }
                     },
                     {
                         label: '房间ID',
@@ -143,6 +166,16 @@ export default {
                         minWidth: '120px',
                         render: (h, params) => {
                             return h('span', params.row.content || '无')
+                        }
+                    },
+                    {
+                        label: '操作',
+                        minWidth: '120px',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('el-button', { props: { type: 'warning'}, on: {click:()=>{this.handleOperation('warn', params.row)}}}, '警告'),
+                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.handleOperation('add', params.row)}}}, '封禁')
+                            ])
                         }
                     }
                 ]
@@ -170,7 +203,21 @@ export default {
                 risk_type: s.risk_type,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
-                room_number: s.room_number
+                room_number: s.room_number,
+                user_number: s.user_number
+            }
+        },
+        load(status, row) {
+            if (status === 'add') {
+              this.isUserDestoryComp = true
+              setTimeout(() => {
+                this.$refs.userComp.loadParams(status, row)
+            }, 50);
+            } else if (status === 'warn') {
+              this.isWarnDestoryComp = true
+              setTimeout(() => {
+                this.$refs.warnComp.loadParams(status, row)
+            }, 50);
             }
         },
         // 刷新列表
@@ -201,6 +248,11 @@ export default {
         },
         destoryComp() {
             this.isDestoryComp = false
+            this.isUserDestoryComp = false
+            this.isWarnDestoryComp = false
+        },
+        handleOperation(status, user_number) {
+          this.load(status, user_number);
         }
     }
 }
