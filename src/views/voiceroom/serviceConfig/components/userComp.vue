@@ -95,6 +95,12 @@ import moment from 'moment'
 // 引入oss
 import { uploadOSS } from '@/utils/oss.js'
 export default {
+    props: {
+      isDetection: {
+        type: Boolean,
+        default: false
+      },
+    },
     components: {
         drawer,
         uploadImg
@@ -266,6 +272,11 @@ export default {
             console.log(row, 'row-------------2020')
             this.dialogVisible = true
             this.status = status
+            if (this.isDetection) {
+              let params = JSON.parse(JSON.stringify(row))
+              this.$set(this.ruleForm, 'user_number', params.user_number)
+              this.seeUser()
+            }
             if(status !== 'add' && status !== 'blocked') {
                 let params = JSON.parse(JSON.stringify(row))
                 let data = {}

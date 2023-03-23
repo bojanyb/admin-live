@@ -376,6 +376,18 @@ const DURATIONCOPY = [
     name: '60分钟'
   },
   {
+    value: 10800,
+    name: '3小时'
+  },
+  {
+    value: 21600,
+    name: '6小时'
+  },
+  {
+    value: 43200,
+    name: '12小时'
+  },
+  {
     value: 86400,
     name: '1天'
   },
