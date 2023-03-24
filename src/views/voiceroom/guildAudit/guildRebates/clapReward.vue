@@ -4,6 +4,7 @@
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
 			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
 			<span>结算总计：{{ (this.form.status !== 2 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
+      <span>拍成次数：{{ (this.form.status !== 2 ? ruleForm.cp_stat : ruleForm.cp_stat) || 0 }}</span>
 		</div>
 		<div class="searchParams">
 			<div class="formBox">
@@ -130,7 +131,7 @@
 					},
 					{
 						label: '总流水（含冻结）',
-						minWidth: '120px',
+						minWidth: '140px',
 						render: (h, params) => {
 							return h('span', params.row.t_flow + '钻石')
 						}
