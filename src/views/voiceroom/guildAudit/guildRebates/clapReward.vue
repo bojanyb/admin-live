@@ -2,9 +2,9 @@
 	<div class="guildRebate-dynamic-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
-			<span>结算总计：{{ (this.form.status !== 2 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
-      <span>拍成次数：{{ (this.form.status !== 2 ? ruleForm.cp_stat : ruleForm.cp_stat) || 0 }}</span>
+			<span>流水总计：{{ ruleForm.total_flow || 0 }}</span>
+			<span>结算总计：{{ ruleForm.total_settlement || 0 }}</span>
+      <span>拍成次数：{{ ruleForm.total_cp || 0 }}</span>
 		</div>
 		<div class="searchParams">
 			<div class="formBox">
