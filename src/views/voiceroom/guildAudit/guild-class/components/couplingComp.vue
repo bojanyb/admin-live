@@ -3,7 +3,7 @@
     <el-dialog
       :title="title"
       :visible.sync="dialogVisible"
-      width="610px"
+      width="650px"
       :before-close="handleClose"
       @closed="closed"
     >
@@ -11,74 +11,25 @@
         :model="ruleForm"
         :rules="rules"
         ref="ruleForm"
-        label-width="110px"
+        label-width="120px"
         class="demo-ruleForm"
       >
         <div class="formBox">
-          <el-form-item label="房间类型" prop="room_type">
-            <el-select
-              v-model="ruleForm.room_type"
-              placeholder="请选择公会类型"
-              :disabled="status === 'update'"
-            >
-              <el-option
-                v-for="item in roomTypeList"
-                :key="item.value"
-                :label="item.name"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="公会类型" prop="guild_type">
-            <el-select
-              v-model="ruleForm.guild_type"
-              placeholder="请选择公会类型"
-              :disabled="status === 'update'"
-            >
-              <el-option
-                v-for="item in guildTypeList"
-                :key="item.value"
-                :label="item.name"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </div>
-        <div class="formBox">
-          <el-form-item
-            label="起始流水"
-            prop="start"
-            :rules="startRules"
-            class="form-col"
-          >
+          <el-form-item label="奖励名称" prop="name">
             <el-input
-              onkeydown="this.value=this.value.replace(/^0+/,'');"
-              oninput="this.value=this.value.replace(/[^\d]/g,'');"
-              v-model="ruleForm.start"
+              v-model="ruleForm.name"
               maxlength="10"
-              placeholder="起始流水"
+              placeholder="仅支持中英文数字"
             ></el-input>
-            <div class="unit">元</div>
           </el-form-item>
-          <el-form-item
-            label="结束流水"
-            prop="end"
-            :rules="endRules"
-            class="form-col"
-          >
-            <el-input
-              onkeydown="this.value=this.value.replace(/^0+/,'');"
-              oninput="this.value=this.value.replace(/[^\d]/g,'');"
-              v-model="ruleForm.end"
-              maxlength="10"
-              placeholder="结束流水"
-            ></el-input>
-            <div class="unit">元</div>
+          <el-form-item label="最低成功对数" prop="eff_cp_stat" class="form-col">
+            <el-input v-model="ruleForm.eff_cp_stat"></el-input>
+            <div class="unit">对</div>
           </el-form-item>
         </div>
         <div class="formBox">
           <el-form-item label="奖励类型" prop="rewards_type">
-            <el-select v-model="ruleForm.rewards_type" placeholder="请选择">
+            <el-select v-model="ruleForm.type" placeholder="请选择">
               <el-option
                 v-for="item in rewards_typeList"
                 :key="item.value"
@@ -87,24 +38,15 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="奖励名称" prop="name">
-            <el-input
-              v-model="ruleForm.name"
-              maxlength="10"
-              placeholder="仅支持中英文数字"
-            ></el-input>
-          </el-form-item>
-        </div>
-        <div class="formBox">
           <el-form-item label="奖励数额" prop="rewards" class="form-col">
             <el-input
               onkeydown="this.value=this.value.replace(/^0+/,'');"
               oninput="this.value=this.value.replace(/[^\d]/g,'');"
-              v-model="ruleForm.rewards"
+              v-model="ruleForm.val"
             ></el-input>
             <div class="unit">
-              {{+ruleForm.rewards_type === 2 ? '%' : '喵粮'}}
-              </div>
+              {{ +ruleForm.type === 2 ? "%" : "喵粮" }}
+            </div>
           </el-form-item>
         </div>
       </el-form>
@@ -121,7 +63,7 @@
 <script>
 // 引入api
 import {
-  saveSettlementConfig,
+  couplingSave,
   getGuildType,
   guildRoomType,
 } from "@/api/videoRoom.js";
@@ -132,9 +74,9 @@ export default {
     title() {
       // 标题
       if (this.status === "add") {
-        return "添加月奖励配置";
+        return "添加配置";
       } else if (this.status === "update") {
-        return "修改月奖励配置";
+        return "修改配置";
       }
     },
     startRules() {
@@ -191,13 +133,11 @@ export default {
       codeList: MAPDATA.CLASSLIST, // 公会等级
       rewards_typeList: MAPDATA.GUILDCONFIGURATIONRATETYPELIST, // 评级类型
       ruleForm: {
-        id: null,
-        name: null,
-        start: "",
-        end: "",
-        rewards: "",
-        rewards_type: null,
-        type: 3,
+        id: "",
+        name: "",
+        eff_cp_stat: "",
+        val: "",
+        type: 2,
       },
       rules: {
         name: [
@@ -212,34 +152,14 @@ export default {
             },
           },
         ],
-        start: [
-          { required: true, message: "请输入起始流水", trigger: "input" },
-          {
-            message: "请输入正整数",
-            trigger: "blur",
-            pattern: /^([1-9]\d*|[0]{1,1})$/,
-          },
+        eff_cp_stat: [
+          { required: true, message: "请输入最低成功对数", trigger: "input" },
         ],
-        end: [
-          { required: true, message: "请输入结束流水", trigger: "input" },
-          {
-            message: "请输入正整数",
-            trigger: "blur",
-            pattern: /^([1-9]\d*|[0]{1,1})$/,
-          },
+        type: [
+          { required: true, message: "请选择奖励类型", trigger: "change" },
         ],
-
-        rewards_type: [
-          { required: true, message: "请选择评级奖励类型", trigger: "change" },
-        ],
-        rewards: [
-          { required: true, message: "请输入评级奖励", trigger: "input" },
-        ],
-        guild_type: [
-          { required: true, message: "请选择公会类型", trigger: "change" },
-        ],
-        room_type: [
-          { required: true, message: "请选择房间类型", trigger: "change" },
+        val: [
+          { required: true, message: "请输入奖励数额", trigger: "input" },
         ],
       },
       guildTypeList: [],
@@ -269,7 +189,7 @@ export default {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           let params = { ...this.ruleForm };
-          let res = await saveSettlementConfig(params);
+          let res = await couplingSave(params);
           if (res.code === 2000) {
             if (this.status === "add") {
               this.$success("新增成功");

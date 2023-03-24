@@ -16,13 +16,16 @@ import guildMonthWater from './guildRebates/guildMonthWater.vue'
 import award from './guildRebates/award.vue'
 // 引入公会评级奖励组件
 import dynamic from './guildRebates/dynamic.vue'
+// 引入公会评级奖励组件
+import clapReward from './guildRebates/clapReward.vue'
 export default {
 	components: {
 		guildWeekWater,
 		guildMonthWater,
 		award,
 		menuComp,
-		dynamic
+		dynamic,
+    clapReward
 	},
 	computed: {
 		comp() {
@@ -39,6 +42,9 @@ export default {
 					break;
 				case '3': // 月奖励
 					compText= "guildMonthWater"
+					break;
+				case '4': // 拍一拍房间周奖励结算
+					compText= "clapReward"
 					break;
 				default:
 					break;
@@ -60,6 +66,9 @@ export default {
 				},
 				{
 					name: '公会月奖励结算'
+				},
+				{
+					name: '拍一拍房间周奖励结算'
 				}
 			],
 			tabIndex: '0',

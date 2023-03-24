@@ -1175,6 +1175,25 @@ export function effectDelete(data) {
   })
 }
 
+// 保存有效直播奖励
+export function couplingSave(data) {
+  return request({
+    url: api.guild.couplingSave,
+    method: 'post',
+    data
+  })
+}
+
+// 删除有效直播奖励
+export function couplingDelete(data) {
+  return request({
+    url: api.guild.couplingDelete,
+    method: 'post',
+    data
+  })
+}
+
+
 /***********广播******************/
 
 // 发送广播消息

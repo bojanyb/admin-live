@@ -21,6 +21,9 @@ import awardComp from './components/awardComp.vue'
 
 // 引入每周有效人数组件
 import effective from './effective.vue'
+
+// 引入拍一拍奖励组件
+import coupling from './coupling.vue'
 export default {
     components: {
         gradeComp,
@@ -29,7 +32,8 @@ export default {
         durationComp,
         menuComp,
         awardComp,
-        effective
+        effective,
+        coupling
     },
     data() {
         return {
@@ -48,6 +52,9 @@ export default {
                 // }
                 {
                     name: '直播公会每周有效人数奖励'
+                },
+                {
+                    name: '拍一拍房间奖励配置'
                 }
             ],
             tabIndex: '0'
@@ -68,6 +75,9 @@ export default {
                     break;
                 case '3':
                     compText = "effective"
+                    break;
+                case '4':
+                    compText = "coupling"
                     break;
                 // case '3':
                 //     compText = "awardComp"

@@ -284,6 +284,11 @@ const request = {
         confList: `${HTTPHEADER}/GuildEffReward/confList`, // 获取有效直播周奖励 - 列表
         effectSave: `${HTTPHEADER}/GuildEffReward/save`, // 获取有效直播周奖励 - 保存
         effectDelete: `${HTTPHEADER}/GuildEffReward/delete`, // 获取有效直播周奖励 - 删除
+        couplingList: `${HTTPHEADER}/CouplingReward/list`, // 公会拍一拍周奖励 - 列表
+        couplingSave: `${HTTPHEADER}/CouplingReward/save`, // 公会拍一拍周奖励 - 保存
+        couplingDelete: `${HTTPHEADER}/CouplingReward/delete`, // 公会拍一拍周奖励 - 删除
+        cpSettleLog: `${HTTPHEADER}/guild/cpSettleLog`, // 公会拍一拍周奖励 - 列表
+        cpWeekList: `${HTTPHEADER}/guild/cpWeekList`, // 公会拍一拍周奖励 - 未结算
     },
 
     // 封禁记录
