@@ -396,8 +396,10 @@ export default {
                 starttime: '',
                 endtime: ''
             }
-            obj.starttime = moment(moment().week(moment().week()).startOf('week').add(1, 'days').valueOf()).format('YYYY-MM-DD')
-            obj.endtime = moment(moment().week(moment().week()).endOf('week').add(1, 'days').valueOf()).format('YYYY-MM-DD');
+            // obj.starttime = moment(moment().week(moment().week()).startOf('week').add(1, 'days').valueOf()).format('YYYY-MM-DD')
+            // obj.endtime = moment(moment().week(moment().week()).endOf('week').add(1, 'days').valueOf()).format('YYYY-MM-DD');
+            obj.starttime = moment().startOf('isoWeek').format('YYYY-MM-DD'); //本周一
+            obj.endtime = moment().endOf('isoWeek').format('YYYY-MM-DD') //本周日
             return obj
         },
     },
