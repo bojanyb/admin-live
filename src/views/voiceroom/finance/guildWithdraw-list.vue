@@ -192,15 +192,15 @@ export default {
                         minWidth: '140px',
                         render: (h, params) => {
                           const data = MAPDATA.IDENTIFICATION.find(item => { return item.value ===  params.row.wx_merchant_status })
-                          return data ? <el-tag type={data.type} effect="plain" >{params.row.wx_merchant}</el-tag> : <span>无</span>
+                          return data ? <div title={data.name}><el-tag type={data.type} effect="light">{params.row.wx_merchant}</el-tag></div> : <span>无</span>
                         }
                     },
                     {
                         label: '支付宝标识号',
                         minWidth: '140px',
                         render: (h, params) => {
-                          const data = MAPDATA.IDENTIFICATION.find(item => { return item.value === params.row.ali_merchant_status  })
-                          return data ? <el-tag type={data.type} effect="plain" >{params.row.ali_merchant}</el-tag> : <span>无</span>
+                          const data = MAPDATA.IDENTIFICATION.find(item => { return item.value === params.row.ali_merchant_status })
+                          return data ? <div title={data.name}><el-tag type={data.type} effect="light">{params.row.ali_merchant}</el-tag></div> : <span>无</span>
                         }
                     },
                     {
