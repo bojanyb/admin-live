@@ -150,6 +150,15 @@ export default {
                     }
                 },
                 {
+                    label: '风控等级',
+                    render: (h, params) => {
+                    const data = MAPDATA.IDENTIFICATION.find((item) => {
+                      return item.value === params.row.risk_status;
+                    });
+                      return data ? <el-tag type={data.type}>{data.name}</el-tag> : <div>无</div>
+                    }
+                },
+                {
                     label: '备注说明',
                     width: '160px',
                     render: (h, params) => {
