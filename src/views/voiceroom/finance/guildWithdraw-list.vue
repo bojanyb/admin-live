@@ -240,7 +240,7 @@ export default {
           },
           {
             label: "微信标识号",
-            minWidth: "360px",
+            minWidth: "430px",
             render: (h, params) => {
               const data = MAPDATA.IDENTIFICATION.find((item) => {
                 return item.value === params.row.wx_merchant_status;
@@ -248,7 +248,7 @@ export default {
               return data && params.row.wx_merchant ? (
                 <div style="text-align: left;" title={data.name}>
                   <el-tag type={data.type}>
-                    {params.row.appid ? params.row.appid : "-"}
+                    {params.row.buyer_id ? params.row.buyer_id : "-"}
                     <span>
                       （{params.row.wx_merchant ? params.row.wx_merchant : "-"}
                       ）
@@ -262,7 +262,7 @@ export default {
           },
           {
             label: "支付宝标识号",
-            minWidth: "360px",
+            minWidth: "430px",
             render: (h, params) => {
               const data = MAPDATA.IDENTIFICATION.find((item) => {
                 return item.value === params.row.ali_merchant_status;
@@ -270,7 +270,7 @@ export default {
               return data && params.row.ali_merchant ? (
                 <div style="text-align: left;" title={data.name}>
                   <el-tag type={data.type}>
-                    {params.row.appid ? params.row.appid : "-"}
+                    {params.row.buyer_id ? params.row.buyer_id : "-"}
                     <span>
                       （
                       {params.row.ali_merchant ? params.row.ali_merchant : "-"}
