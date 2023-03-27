@@ -144,21 +144,21 @@ export default {
                     },
                     {
                         label: '用户ID',
-                        minWidth: '100px',
+                        minWidth: '120px',
                         render: (h, params) => {
                             return h('span', params.row.user_number || '无')
                         }
                     },
                     {
                         label: '用户昵称',
-                        minWidth: '100px',
+                        minWidth: '120px',
                         render: (h, params) => {
                             return h('span', params.row.nickname || '无')
                         }
                     },
                     {
                         label: '充值金额（元）',
-                        minWidth: '120px',
+                        minWidth: '150px',
                         prop: 'amount',
                         sortable: "custom",
                         render: (h, params) => {
@@ -175,6 +175,7 @@ export default {
                     },
                     {
                         label: '充值说明',
+                        minWidth: '140px',
                         prop: 'remark',
                         render: (h, params) => {
                             return h('span', params.row.remark || '无')
@@ -184,6 +185,22 @@ export default {
                         label: '充值平台',
                         render: (h, params) => {
                             return h('span', params.row.channel)
+                        }
+                    },
+                    {
+                        label: '微信标识号',
+                        minWidth: '140px',
+                        render: (h, params) => {
+                          const data = MAPDATA.IDENTIFICATION.find(item => { return item.value ===  params.row.wx_merchant_status })
+                          return data ? <el-tag type={data.type} effect="plain" >{params.row.wx_merchant}</el-tag> : <span>无</span>
+                        }
+                    },
+                    {
+                        label: '支付宝标识号',
+                        minWidth: '140px',
+                        render: (h, params) => {
+                          const data = MAPDATA.IDENTIFICATION.find(item => { return item.value === params.row.ali_merchant_status  })
+                          return data ? <el-tag type={data.type} effect="plain" >{params.row.ali_merchant}</el-tag> : <span>无</span>
                         }
                     },
                     {
@@ -219,12 +236,12 @@ export default {
                     // },
                     {
                         label: '商户单号',
-                        minWidth: '150px',
+                        minWidth: '200px',
                         prop: 'trade_no'
                     },
                     {
                         label: '支付单号',
-                        minWidth: '200px',
+                        minWidth: '240px',
                         prop: 'out_trade_no'
                     },
                     // {
