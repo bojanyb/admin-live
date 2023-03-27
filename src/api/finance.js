@@ -100,3 +100,12 @@ export function changePayStatus(data) {
     data
   })
 }
+
+// 修改支付使用状态
+export function getMerchantList(data) {
+  return request({
+    url: REQUEST.finance.getMerchantList,
+    method: 'post',
+    data
+  })
+}

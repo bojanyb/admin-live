@@ -314,6 +314,7 @@ const request = {
         diamondRechargeAll: `${HTTPHEADER}/Recharge/diamondRechargeAll`, // 充值记录导出
         regReplenishmentByCsv: `${HTTPHEADER}/Promoter/regReplenishmentByCsv`, // 推广补单通过csv格式
         changePayStatus: `${HTTPHEADER}/PayManage/changePayStatus`, // 修改支付使用状态
+        getMerchantList: `${HTTPHEADER}/Recharge/getMerchantList`, // 获取商户号
     },
 
     // 消息管理

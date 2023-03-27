@@ -44,7 +44,7 @@
 
 <script>
 // 引入api
-import { diamondRechargeAll } from "@/api/finance.js";
+import { diamondRechargeAll, getMerchantList } from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
@@ -113,7 +113,17 @@ export default {
           placeholder: "请选择",
           options: MAPDATA.RECHARGEHISTORYTYPELIST,
         },
-
+        {
+          name: "appid",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "商户号",
+          clearable: true,
+          placeholder: "请选择",
+          options: this.guildTypeList,
+        },
         {
           name: "trade_no",
           type: "input",
@@ -235,11 +245,14 @@ export default {
               const data = MAPDATA.IDENTIFICATION.find((item) => {
                 return item.value === params.row.wx_merchant_status;
               });
-              return data ? (
+              return data && params.row.wx_merchant ? (
                 <div style="text-align: left;" title={data.name}>
                   <el-tag type={data.type}>
-                    {params.row.appid}
-                    <span>（{params.row.wx_merchant}）</span>
+                    {params.row.appid ? params.row.appid : "-"}
+                    <span>
+                      （{params.row.wx_merchant ? params.row.wx_merchant : "-"}
+                      ）
+                    </span>
                   </el-tag>
                 </div>
               ) : (
@@ -254,11 +267,15 @@ export default {
               const data = MAPDATA.IDENTIFICATION.find((item) => {
                 return item.value === params.row.ali_merchant_status;
               });
-              return data ? (
+              return data && params.row.ali_merchant ? (
                 <div style="text-align: left;" title={data.name}>
                   <el-tag type={data.type}>
-                    {params.row.appid}
-                    <span>（{params.row.ali_merchant}）</span>
+                    {params.row.appid ? params.row.appid : "-"}
+                    <span>
+                      （
+                      {params.row.ali_merchant ? params.row.ali_merchant : "-"}
+                      ）
+                    </span>
                   </el-tag>
                 </div>
               ) : (
@@ -338,6 +355,7 @@ export default {
         start_time: null,
         end_time: null,
       },
+      guildTypeList: [],
     };
   },
   methods: {
@@ -418,6 +436,7 @@ export default {
         end_time: Math.floor(s.end_time / 1000),
         trade_no: s.trade_no,
         purpose: s.purpose,
+        appid: s.appid,
       };
     },
     // 设置时间段
@@ -510,6 +529,29 @@ export default {
       obj.endtime = moment().endOf("isoWeek").format("YYYY-MM-DD"); //本周日
       return obj;
     },
+    // 获取公会类型
+    async getTypeList() {
+      const response = await getMerchantList();
+      if (response.code === 2000) {
+        const tempArr = Array.from(
+          Array.isArray(response.data) ? response.data : []
+        );
+        this.guildTypeList =
+          tempArr.reduce((prev, curr) => {
+            prev.push({
+              name: `${curr.merchant_name}-(${
+                curr.channel + "" === "2"
+                  ? "微信"
+                  : curr.channel + "" === "3"
+                  ? "阿里"
+                  : "无"
+              })`,
+              value: curr.appid,
+            });
+            return prev;
+          }, []) || [];
+      }
+    },
   },
   created() {
     let time = new Date();
@@ -521,6 +563,7 @@ export default {
       start_time: start,
       end_time: end,
     };
+    this.getTypeList();
   },
 };
 </script>
