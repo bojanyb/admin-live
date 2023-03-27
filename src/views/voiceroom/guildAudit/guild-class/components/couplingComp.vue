@@ -28,7 +28,7 @@
           </el-form-item>
         </div>
         <div class="formBox">
-          <el-form-item label="奖励类型" prop="rewards_type">
+          <el-form-item label="奖励类型" prop="type">
             <el-select v-model="ruleForm.type" placeholder="请选择">
               <el-option
                 v-for="item in rewards_typeList"
@@ -38,10 +38,10 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="奖励数额" prop="rewards" class="form-col">
+          <el-form-item label="奖励数额" prop="val" class="form-col">
             <el-input
-              onkeydown="this.value=this.value.replace(/^0+/,'');"
-              oninput="this.value=this.value.replace(/[^\d]/g,'');"
+              onkeydown="this.value=this.value.replace(/(\d*\.\d).*/,'$1');"
+              oninput="this.value=this.value.replace(/(\d*\.\d).*/,'$1');"
               v-model="ruleForm.val"
             ></el-input>
             <div class="unit">
