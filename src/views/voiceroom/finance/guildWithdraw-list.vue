@@ -550,6 +550,11 @@ export default {
             });
             return prev;
           }, []) || [];
+
+          this.guildTypeList.unshift({
+            name: "全部",
+            value: ""
+          })
       }
     },
   },
