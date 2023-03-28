@@ -245,7 +245,7 @@ export default {
               const data = MAPDATA.IDENTIFICATION.find((item) => {
                 return item.value === params.row.wx_merchant_status;
               });
-              return data && params.row.wx_merchant ? (
+              return (data && params.row.buyer_id && params.row.wx_merchant) ? (
                 <div style="text-align: left;" title={data.name}>
                   <el-tag type={data.type}>
                     {params.row.buyer_id ? params.row.buyer_id : "-"}
@@ -267,7 +267,7 @@ export default {
               const data = MAPDATA.IDENTIFICATION.find((item) => {
                 return item.value === params.row.ali_merchant_status;
               });
-              return data && params.row.ali_merchant ? (
+              return (data && params.row.buyer_id && params.row.ali_merchant) ? (
                 <div style="text-align: left;" title={data.name}>
                   <el-tag type={data.type}>
                     {params.row.buyer_id ? params.row.buyer_id : "-"}
