@@ -131,6 +131,16 @@ export default {
           label: "商户/支付单号",
           placeholder: "请输入商户/支付单号",
         },
+        {
+          name: "risk_status",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "风控等级",
+          placeholder: "请选择",
+          options: MAPDATA.IDENTIFICATION,
+        },
         // {
         //     name: 'time',
         //     type: 'dateControl',
@@ -437,6 +447,7 @@ export default {
         trade_no: s.trade_no,
         purpose: s.purpose,
         appid: s.appid,
+        risk_status: s.risk_status,
       };
     },
     // 设置时间段
