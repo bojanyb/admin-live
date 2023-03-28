@@ -123,6 +123,13 @@ export default {
           clearable: true,
           placeholder: "请选择",
           options: this.guildTypeList,
+          handler: {
+            change: (v) => {
+              if (!v) {
+                this.$set(this.searchParams, "risk_status", "");
+              }
+           }
+          }
         },
         {
           name: "trade_no",
@@ -140,6 +147,9 @@ export default {
           label: "风控等级",
           placeholder: "请选择",
           options: MAPDATA.IDENTIFICATION,
+          disabled: () => {
+            return this.searchParams.appid === "";
+          }
         },
         // {
         //     name: 'time',
