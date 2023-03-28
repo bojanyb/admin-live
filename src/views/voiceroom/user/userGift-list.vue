@@ -218,6 +218,8 @@
       // 列表返回数据
 			saleAmunt(row) {
 				this.ruleForm = { ...row }
+        let time = JSON.parse(JSON.stringify(this.dateTimeParams));
+        this.$set(this.searchParams, 'dateTimeParams', [time.start_time,time.end_time]);
 			},
 			// 查询
 			onSearch() {

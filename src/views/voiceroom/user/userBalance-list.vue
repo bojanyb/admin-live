@@ -4,7 +4,6 @@
       <span>用户收入统计：{{ ruleForm.total_income_sum ? Number(ruleForm.total_income_sum) : 0 }}</span>
       <span>用户支出统计：{{ ruleForm.meow_expenditure_sum ? Number(ruleForm.meow_expenditure_sum) : 0 }}</span>
     </div>
-    
     <div class="searchParams">
       <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
     </div>
@@ -158,7 +157,6 @@ export default {
   },
   created() {
     this.getRelationTypeFunc()
-
     this.changeIndex(0, true)
   },
   methods: {
@@ -216,6 +214,8 @@ export default {
     },
     saleAmunt(row) {
       this.ruleForm = { ...row.total_sum }
+      let time = JSON.parse(JSON.stringify(this.dateTimeParams));
+      this.$set(this.searchParams, 'dateTimeParams', [time.start_time,time.end_time]);
     },
     // 更改日期
     changeIndex(index, isFirst) {
@@ -242,11 +242,12 @@ export default {
         end = new Date(now1 + ' 23:59:59')
       }
       if(isFirst) {
-        setTimeout(() => {
+        let timer = setTimeout(() => {
           let time = [start.getTime(), end.getTime()]
           this.searchParams.dateTimeParams = time
           this.dateTimeParams.start_time = time[0]
           this.dateTimeParams.end_time = time[1]
+          clearTimeout(timer)
         }, 200);
       } else {
         let time = [start.getTime(), end.getTime()]
