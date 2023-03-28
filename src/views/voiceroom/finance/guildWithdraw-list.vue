@@ -123,6 +123,13 @@ export default {
           clearable: true,
           placeholder: "请选择",
           options: this.guildTypeList,
+          handler: {
+            change: (v) => {
+              if (!v) {
+                this.$set(this.searchParams, "risk_status", "");
+              }
+           }
+          }
         },
         {
           name: "trade_no",
@@ -130,6 +137,19 @@ export default {
           value: "",
           label: "商户/支付单号",
           placeholder: "请输入商户/支付单号",
+        },
+        {
+          name: "risk_status",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "风控等级",
+          placeholder: "请选择",
+          options: MAPDATA.IDENTIFICATION,
+          disabled: () => {
+            return this.searchParams.appid === "";
+          }
         },
         // {
         //     name: 'time',
@@ -437,6 +457,7 @@ export default {
         trade_no: s.trade_no,
         purpose: s.purpose,
         appid: s.appid,
+        risk_status: s.risk_status,
       };
     },
     // 设置时间段
