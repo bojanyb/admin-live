@@ -282,6 +282,31 @@ const INSTITUTION = [
   // },
 ]
 
+
+// 充值记录标识
+const IDENTIFICATION = [
+  {
+    value: 1,
+    name: '安全',
+    type: 'info',
+  },
+  {
+    value: 2,
+    name: '放行',
+    type: 'success',
+  },
+  {
+    value: 3,
+    name: '可疑',
+    type: 'warning',
+  },
+  {
+    value: 4,
+    name: '异常',
+    type: 'danger',
+  },
+]
+
 /*
 *商城管理 - 商品列表
 */
@@ -2922,6 +2947,7 @@ export default {
   DWACTIVITYTYPE,
   BANKLIST,
   INSTITUTION,
+  IDENTIFICATION,
   ORDERSTATUS,
   PRIORITYGIVE,
   REPORTSTATUS,
