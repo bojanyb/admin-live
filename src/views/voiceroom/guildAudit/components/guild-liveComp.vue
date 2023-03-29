@@ -106,8 +106,8 @@
 						{
 							label: '公会运营',
 							render: (h, params) => {
-								let data = this.operatorList.find(item => { return item.value === params.row.operator })
-								return h('span', data ? data.name : '未知')
+								let data = this.operatorList.find(item => { return item.id === params.row.operator })
+								return h('span', data ? data.username : '未知')
 							}
 						},
 						{
