@@ -15,7 +15,7 @@
 	// 引入冻结组件
 	import blocked from './blocked.vue'
 	// 引入api
-	import { getGuildUpdateV2, getGuildType } from '@/api/videoRoom'
+	import { getGuildUpdateV2, getGuildType,adminUserList } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -47,6 +47,7 @@
 				status: null,
 				ruleForm: {},
 				guildTypeList: [],
+        operatorList: [],
 			}
 		},
 		computed: {
@@ -74,11 +75,11 @@
 						name: 'operator',
 						type: 'select',
 						value: '',
-						keyName: 'value',
-						optionLabel: 'name',
+						keyName: 'id',
+						optionLabel: 'username',
 						label: '公会运营',
 						placeholder: '请选择',
-						options: MAPDATA.GUILDOPERATIONLIST
+						options: this.operatorList
 					},
 				]
 			},
@@ -108,8 +109,8 @@
 						{
 							label: '公会运营',
 							render: (h, params) => {
-								let data = MAPDATA.GUILDOPERATIONLIST.find(item => { return item.value === params.row.operator })
-								return h('span', data ? data.name : '无')
+								let data = this.operatorList.find(item => { return item.id === params.row.operator })
+								return h('span', data ? data.username : '未知')
 							}
 						},
 						{
@@ -196,7 +197,8 @@
 			}
 		},
 		created() {
-			this.getTypeList()
+			this.getTypeList();
+      this.getAdminUserList();
 		},
 		methods: {
 			// 配置参数
@@ -345,8 +347,17 @@
           return prev
         }, []) || []
         }
+      },
+      // 公会运营
+      async getAdminUserList(){
+        let res = await adminUserList();
+        if(res.code === 2000){
+          this.operatorList = res.data.list;
+          let all = { username: '全部',id: ''}
+          this.operatorList.unshift(all);
+        }
       }
-		}
+		},
 	}
 </script>
 

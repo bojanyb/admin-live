@@ -789,26 +789,6 @@ const GUILDCLOSEANACCOUNTSTATUSLISTCOPY = [
   }
 ]
 
-// 公会列表 - 公会运营
-const GUILDOPERATIONLIST = [
-  {
-    name: '全部',
-    value: ''
-  },
-  {
-    name: '赵颖',
-    value: 1
-  },
-  {
-    name: '刘建民',
-    value: 2
-  },
-  {
-    name: '林广顺',
-    value: 3
-  }
-]
-
 /*
 *派对管理 - 举报房间
 */
@@ -3024,7 +3004,6 @@ export default {
   RISKMANAGEMENTIMGTYPELIST,
   RISKMANAGEMENTIMGSTATUSLIST,
   ROOMBACKGROUNDSELECTLIST,
-  GUILDOPERATIONLIST,
   RECHARGEHISTORYTYPELIST,
   USERMANAGEMENTAUTONYMSTATUSLIST,
   GUILDSTATUS,

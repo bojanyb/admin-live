@@ -1368,3 +1368,12 @@ export function anchorData(data) {
   })
 }
 
+// 直播管理 -- 主播数据
+export function adminUserList(data) {
+  return request({
+    url: api.guild.adminUserList,
+    method: 'post',
+    data
+  })
+}
+
