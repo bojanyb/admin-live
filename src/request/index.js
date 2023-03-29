@@ -284,6 +284,7 @@ const request = {
         confList: `${HTTPHEADER}/GuildEffReward/confList`, // 获取有效直播周奖励 - 列表
         effectSave: `${HTTPHEADER}/GuildEffReward/save`, // 获取有效直播周奖励 - 保存
         effectDelete: `${HTTPHEADER}/GuildEffReward/delete`, // 获取有效直播周奖励 - 删除
+        adminUserList: `${HTTPHEADER}/Guild/adminUserList`, // 获取公会运营人员
     },
 
     // 封禁记录
