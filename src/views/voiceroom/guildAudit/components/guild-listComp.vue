@@ -48,11 +48,12 @@
 				ruleForm: {},
 				guildTypeList: [],
         operatorList: [],
+        isAuth: 0,
 			}
 		},
 		computed: {
 			forms() {
-				return [
+        let arr = [
 					{
 						name: 'guild_number',
 						type: 'input',
@@ -82,6 +83,28 @@
 						options: this.operatorList
 					},
 				]
+
+        let arr1 = [
+					{
+						name: 'guild_number',
+						type: 'input',
+						value: '',
+						label: '公会ID',
+						isNum: true,
+						placeholder: '请输入公会ID'
+					},
+					{
+						name: 'status',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '公会状态',
+						placeholder: '请选择',
+						options: MAPDATA.GUILDSTATUS
+					},
+				]
+        return  this.isAuth ? arr : arr1;
 			},
 			cfgs() {
 				return {
@@ -353,6 +376,7 @@
         let res = await adminUserList();
         if(res.code === 2000){
           this.operatorList = res.data.list;
+          this.isAuth = res.data.is_auth;
           let all = { username: '全部',id: ''}
           this.operatorList.unshift(all);
         }

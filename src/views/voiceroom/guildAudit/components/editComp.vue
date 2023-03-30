@@ -225,7 +225,7 @@ export default {
           })
           return prev
         }, []) || []
-        this.isAuth = res.data.is_auth;
+        this.isAuth = response.data.is_auth;
         }
       },
     }
