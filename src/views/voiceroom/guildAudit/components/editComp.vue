@@ -22,7 +22,7 @@
                         <template slot="append">%</template>
                     </el-input>
                 </el-form-item>
-                <el-form-item label="公会运营" prop="operator" v-if="!isAuth && status === 'update'">
+                <el-form-item label="公会运营" prop="operator" v-if="isAuth && status === 'update'">
                     <el-select v-model="ruleForm.operator" placeholder="请选择公会运营">
                         <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
@@ -225,6 +225,7 @@ export default {
           })
           return prev
         }, []) || []
+        this.isAuth = res.data.is_auth;
         }
       },
     }
