@@ -22,6 +22,11 @@
                         <template slot="append">%</template>
                     </el-input>
                 </el-form-item>
+                <el-form-item label="公会运营" prop="operator" v-if="!isAuth && status === 'update'">
+                    <el-select v-model="ruleForm.operator" placeholder="请选择公会运营">
+                        <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">取 消</el-button>
@@ -33,7 +38,7 @@
 
 <script>
 // 引入api
-import { getGuildCreateV2, getGuildUpdateV2, getGuildType } from '@/api/videoRoom'
+import { getGuildCreateV2, getGuildUpdateV2, getGuildType, adminUserList } from '@/api/videoRoom'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
@@ -48,7 +53,8 @@ export default {
                 name: '',
                 guild_number: '',
                 rebate: 0,
-                guild_type: this.type
+                guild_type: this.type,
+                operator: null,
             },
             oldParams: {}, // 老数据
             rules: {
@@ -65,9 +71,9 @@ export default {
                 rank: [
                     { required: true, message: '请选择公会等级', trigger: 'change' }
                 ],
-                // operator: [
-                //     { required: true, message: '请选择公会运营', trigger: 'change' }
-                // ],
+                operator: [
+                    { required: true, message: '请选择公会运营', trigger: 'change' }
+                ],
                 // guild_type: [
                 //     { required: true, message: '请选择公会类型', trigger: 'change' }
                 // ],
@@ -75,6 +81,8 @@ export default {
                     { required: false, message: '请输入公会简介', trigger: 'blur' }
                 ]
             },
+            operatorList: [],
+            isAuth: 0
         };
     },
     props: {
@@ -101,6 +109,7 @@ export default {
     },
     created() {
         this.getTypeList()
+        this.getAdminUserList();
     },
     methods: {
         // 公会返点限制
@@ -118,6 +127,7 @@ export default {
                 let params = JSON.parse(JSON.stringify(row))
                 let para = {}
                 para.guild_type = params.guild_type ? params.guild_type : ''
+                para.operator = params.operator ? params.operator : ''
                 para.id = params.id ? params.id : "";
                 para.name = params.name ? params.name : "";
                 para.guild_number = params.guild_number ? params.guild_number : "" ;
@@ -200,7 +210,23 @@ export default {
             return prev
           }, []) || []
          }
+        },
+      // 获取公会运营
+      async getAdminUserList() {
+        const response = await adminUserList()
+        if(response.code === 2000) {
+          const tempArr =  Array.from(
+            Array.isArray(response.data.list) ? response.data.list : []
+        )
+        this.operatorList = tempArr.reduce((prev, curr) => {
+          prev.push({
+              name: curr.username,
+              value: curr.id
+          })
+          return prev
+        }, []) || []
         }
+      },
     }
 }
 </script>
