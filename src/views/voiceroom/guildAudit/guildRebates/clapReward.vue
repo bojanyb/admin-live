@@ -102,18 +102,14 @@
 						prop: 'guild_name'
 					},
 					{
-						label: '公会长昵称',
+						label: '房间ID',
 						minWidth: '120px',
-						prop: 'guild_owner_nickname'
+						prop: 'room_number',
 					},
 					{
-						label: '公会类型',
+						label: '房间标题',
 						minWidth: '120px',
-						prop: 'guild_type',
-						render: (h, params) => {
-							let data = MAPDATA.GUILDCONFIGTYPELIST.find(item => { return item.value === params.row.guild_type })
-							return h('span', data ? data.name : '无')
-						}
+						prop: 'room_title'
 					},
 					{
 						label: '拍一拍房间流水',
@@ -147,7 +143,7 @@
 						label: '周奖励金额',
 						minWidth: '120px',
 						render: (h, params) => {
-							return h('span', this.form.status === 2 ? '无' : params.row.settlement + '喵粮')
+							return h('span', params.row.settlement ? params.row.settlement + '喵粮' : '无')
 						}
 					},
 					{
