@@ -286,14 +286,14 @@ const INSTITUTION = [
 // 充值记录标识
 const IDENTIFICATION = [
   {
-    value: 1,
-    name: '安全',
+    value: 0,
+    name: '全部',
     type: 'info',
   },
   {
-    value: 2,
-    name: '放行',
-    type: 'success',
+    value: 4,
+    name: '异常',
+    type: 'danger',
   },
   {
     value: 3,
@@ -301,9 +301,14 @@ const IDENTIFICATION = [
     type: 'warning',
   },
   {
-    value: 4,
-    name: '异常',
-    type: 'danger',
+    value: 2,
+    name: '放行',
+    type: 'success',
+  },
+  {
+    value: 1,
+    name: '安全',
+    type: 'info',
   },
 ]
 

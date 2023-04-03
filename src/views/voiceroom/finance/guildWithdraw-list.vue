@@ -114,6 +114,13 @@ export default {
           options: MAPDATA.RECHARGEHISTORYTYPELIST,
         },
         {
+          name: "trade_no",
+          type: "input",
+          value: "",
+          label: "商户/支付单号",
+          placeholder: "请输入商户/支付单号",
+        },
+        {
           name: "appid",
           type: "select",
           value: "",
@@ -132,13 +139,6 @@ export default {
           }
         },
         {
-          name: "trade_no",
-          type: "input",
-          value: "",
-          label: "商户/支付单号",
-          placeholder: "请输入商户/支付单号",
-        },
-        {
           name: "risk_status",
           type: "select",
           value: "",
@@ -147,9 +147,9 @@ export default {
           label: "风控等级",
           placeholder: "请选择",
           options: MAPDATA.IDENTIFICATION,
-          disabled: () => {
-            return this.searchParams.appid === "";
-          }
+          // disabled: () => {
+          //   return this.searchParams.appid === "";
+          // }
         },
         // {
         //     name: 'time',
@@ -259,18 +259,19 @@ export default {
             },
           },
           {
-            label: "微信标识号",
+            label: "微信/支付宝支付标识",
             minWidth: "430px",
             render: (h, params) => {
               const data = MAPDATA.IDENTIFICATION.find((item) => {
                 return item.value === params.row.wx_merchant_status;
               });
-              return (data && params.row.buyer_id && params.row.wx_merchant) ? (
+              // return (data && params.row.buyer_id && params.row.wx_merchant) ? (
+              return (data && params.row.buyer_id) ? (
                 <div style="text-align: left;" title={data.name}>
                   <el-tag type={data.type}>
                     {params.row.buyer_id ? params.row.buyer_id : "-"}
                     <span>
-                      （{params.row.wx_merchant ? params.row.wx_merchant : "-"}
+                      （{params.row.wx_merchant ? params.row.wx_merchant : ( params.row.ali_merchant ? params.row.ali_merchant : "-")}
                       ）
                     </span>
                   </el-tag>
@@ -280,29 +281,29 @@ export default {
               );
             },
           },
-          {
-            label: "支付宝标识号",
-            minWidth: "430px",
-            render: (h, params) => {
-              const data = MAPDATA.IDENTIFICATION.find((item) => {
-                return item.value === params.row.ali_merchant_status;
-              });
-              return (data && params.row.buyer_id && params.row.ali_merchant) ? (
-                <div style="text-align: left;" title={data.name}>
-                  <el-tag type={data.type}>
-                    {params.row.buyer_id ? params.row.buyer_id : "-"}
-                    <span>
-                      （
-                      {params.row.ali_merchant ? params.row.ali_merchant : "-"}
-                      ）
-                    </span>
-                  </el-tag>
-                </div>
-              ) : (
-                <div>无</div>
-              );
-            },
-          },
+          // {
+          //   label: "支付宝标识号",
+          //   minWidth: "430px",
+          //   render: (h, params) => {
+          //     const data = MAPDATA.IDENTIFICATION.find((item) => {
+          //       return item.value === params.row.ali_merchant_status;
+          //     });
+          //     return (data && params.row.buyer_id && params.row.ali_merchant) ? (
+          //       <div style="text-align: left;" title={data.name}>
+          //         <el-tag type={data.type}>
+          //           {params.row.buyer_id ? params.row.buyer_id : "-"}
+          //           <span>
+          //             （
+          //             {params.row.ali_merchant ? params.row.ali_merchant : "-"}
+          //             ）
+          //           </span>
+          //         </el-tag>
+          //       </div>
+          //     ) : (
+          //       <div>无</div>
+          //     );
+          //   },
+          // },
           {
             label: "充值状态",
             minWidth: "100px",
@@ -350,6 +351,9 @@ export default {
             label: "支付单号",
             minWidth: "240px",
             prop: "out_trade_no",
+            render: (h, params) => {
+                return h('span', params.row.out_trade_no || '无')
+            }
           },
           // {
           //     label: '商户单号',
@@ -490,6 +494,10 @@ export default {
     // 列表返回数据
     saleAmunt(data) {
       this.ruleForm = { ...data };
+      let timer = JSON.parse(JSON.stringify(this.dateTimeParams));
+      let start_time = timer.start_time;
+      let end_time = new Date(timer.end_time).getTime();
+      this.$set(this.searchParams, "dateTimeParams", [start_time,end_time]);
     },
     // 导出excel
     async BatchRurn() {
@@ -591,6 +599,7 @@ export default {
     };
     this.getTypeList();
   },
+  mounted(){},
 };
 </script>
 
