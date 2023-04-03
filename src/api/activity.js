@@ -135,3 +135,34 @@ export function getRoundV3(data) {
     data
   })
 }
+
+// 星际穿越
+// 获取奖池列表
+export function getPoolNameV4(data) {
+  return request({
+    url: api.activity.getPoolNameV4,
+    method: 'post',
+    data
+  })
+}
+// 获取喂养列表
+export function poolDetailV4(data) {
+  return request({
+    url: api.activity.poolDetailV4,
+    method: 'post',
+    data
+  })
+}
+// 获取轮次
+export function getRoundV4(data) {
+  return request({
+    url: api.activity.getRoundV4,
+    method: 'post',
+    data
+  })
+}
+
+
+
+
+

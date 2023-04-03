@@ -38,6 +38,24 @@ const activityRouter = {
 				noCache: true
 			},
 			name: 'lottery-farm-list'
+		},
+    {
+			path: 'lottery-interstellar-list',
+			component: () => import('@/views/voiceroom/activity/lottery-interstellar-list.vue'),
+			meta: {
+				title: '星际穿越抽奖记录',
+				noCache: true
+			},
+			name: 'lottery-interstellar-list'
+		},
+    {
+			path: 'lottery-interstellar-exchange-list',
+			component: () => import('@/views/voiceroom/activity/lottery-interstellar-exchange-list.vue'),
+			meta: {
+				title: '星际穿越兑换记录',
+				noCache: true
+			},
+			name: 'lottery-interstellar-exchange-list'
 		}
         // {
 		// 	path: 'first-charge',
