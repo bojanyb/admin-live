@@ -145,7 +145,7 @@ export function getPoolNameV4(data) {
     data
   })
 }
-// 获取喂养列表
+// 获取探索列表
 export function poolDetailV4(data) {
   return request({
     url: api.activity.poolDetailV4,
@@ -162,7 +162,14 @@ export function getRoundV4(data) {
   })
 }
 
-
+// 兑换记录
+export function exchangeLogV4(data) {
+  return request({
+    url: api.activity.exchangeLogV4,
+    method: 'post',
+    data
+  })
+}
 
 
 

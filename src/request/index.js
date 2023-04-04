@@ -473,7 +473,8 @@ const request = {
         // 2023/03/13 星际穿越
         getPoolNameV4: `${HTTPHEADER}/hdExploreLog/getPoolName`, // 获取奖池名
         getRoundV4: `${HTTPHEADER}/hdExploreLog/getRound`, // 获取轮数
-        poolDetailV4: `${HTTPHEADER}/hdExploreLog/poolDetail`, // 获取喂养列表
+        poolDetailV4: `${HTTPHEADER}/hdExploreLog/poolDetail`, // 获取探索列表
+        exchangeLogV4: `${HTTPHEADER}/hdExploreLog/exchangeLog`, // 获取兑换数据
 
     },
 

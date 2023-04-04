@@ -9,7 +9,7 @@
 				<div>抽奖次数：{{sumSource.lottery_count || 0}}次</div>
 				<div>消费金额：{{sumSource.lottery_cost_count || 0}}钻石</div>
 				<div>产出金额：{{sumSource.lottery_output_count || 0}}钻石</div>
-				<div>利润值：{{sumSource.profit_margin || 0}}钻石</div>
+				<div>利润值：{{sumSource.profit_value || 0}}钻石</div>
         <div>产出比：{{sumSource.profit_margin || 0}}%</div>
 			</div>
 		</el-card>
@@ -45,6 +45,28 @@
 						name:"穿越星际"
 					}
 				], // 活动
+        giftTypeList: [
+          {
+            id: 0,
+            name: "全部"
+          },
+          {
+            id: 1,
+            name: "礼物"
+          },
+          {
+            id: 2,
+            name: "兑换"
+          },
+          {
+            id: 3,
+            name: "道具"
+          },
+          {
+            id: 4,
+            name: "钻石"
+          }
+        ],
 				lotteryList: [], // 奖池
 				poolList: [], // 轮次
 				sumSource: {},
@@ -62,7 +84,7 @@
 						placeholder: '请输入用户ID'
 					},
 					{
-						name: 'gift_id',
+						name: 'remark',
 						type: 'input',
 						value: '',
 						label: '奖品名称',
@@ -79,16 +101,16 @@
 						options: this.activeList,
 					},
           {
-						name: 'type',
+						name: 'gift_type',
 						type: 'select',
 						value: '',
-						keyName: 'key',
-						optionLabel: 'value',
+						keyName: 'id',
+						optionLabel: 'name',
 						label: '奖品类型',
 						placeholder: '请选择',
 						clearable: true,
             linkage: true,
-						options: this.lotteryList,
+						options: this.giftTypeList,
 						handler: {
 							change: v => {
 								this.getRoundSource(v)
@@ -217,10 +239,12 @@
 					pagesize: params.size,
 					type: (s.type == -1 || s.type == "全部") ? "" : s.type,
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
-                	end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
+          end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
 					round: (s.round == -1 || s.round == "全部") ? "" : s.round,
 					user_number: s.user_number,
 					gift_id: s.gift_id,
+          gift_type: s.gift_type,
+          remark: s.remark
 				}
 			},
 			// 刷新列表

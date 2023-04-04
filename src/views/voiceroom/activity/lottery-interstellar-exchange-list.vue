@@ -6,10 +6,10 @@
 		<el-card class="box-card" shadow="always" v-if="tabIndex === '0'">
 			<div class="box-card-inner">
 				<div>兑换人数：{{sumSource.user_count || 0}}人</div>
-				<div>兑换奖品数量：{{sumSource.lottery_count || 0}}个</div>
-				<div>消耗兑换道具数量：{{sumSource.lottery_cost_count || 0}}个</div>
-				<div>兑换奖品总价值：{{sumSource.lottery_output_count || 0}}钻石</div>
-				<div>兑换道具总价值：{{sumSource.profit_margin || 0}}钻石</div>
+				<div>兑换奖品数量：{{sumSource.exchange_count || 0}}个</div>
+				<div>消耗兑换道具数量：{{sumSource.debris_number_count || 0}}个</div>
+				<div>兑换奖品总价值：{{sumSource.exchange_diamond_count || 0}}钻石</div>
+				<div>兑换道具总价值：{{sumSource.debris_diamond_count || 0}}钻石</div>
         <div>利润值：{{sumSource.profit_margin || 0}}钻石</div>
 			</div>
 		</el-card>
@@ -45,8 +45,20 @@
 						name:"穿越星际"
 					}
 				], // 活动
-				lotteryList: [], // 奖池
-				poolList: [], // 轮次
+        giftTypeList: [
+          {
+            id: 0,
+            name: "全部"
+          },
+          {
+            id: 1,
+            name: "礼物奖品"
+          },
+          {
+            id: 2,
+            name: "装扮道具"
+          }
+        ],
 				sumSource: {},
 			}
 		},
@@ -62,7 +74,7 @@
 						placeholder: '请输入用户ID'
 					},
 					{
-						name: 'gift_id',
+						name: 'desc',
 						type: 'input',
 						value: '',
 						label: '奖品名称',
@@ -72,18 +84,13 @@
 						name: 'type',
 						type: 'select',
 						value: '',
-						keyName: 'key',
-						optionLabel: 'value',
+						keyName: 'id',
+						optionLabel: 'name',
 						label: '奖品类型',
 						placeholder: '请选择',
 						clearable: true,
             linkage: true,
-						options: this.lotteryList,
-						handler: {
-							change: v => {
-								this.getRoundSource(v)
-							},
-						}
+						options: this.giftTypeList,
 					},
 					{
 						name: 'dateTimeParams',
@@ -108,7 +115,7 @@
 			cfgs() {
 				return {
 					vm: this,
-					url: REQUEST.activity.poolDetailV3,
+					url: REQUEST.activity.exchangeLogV4,
 					columns: [
 						{
 							label: '兑换时间',
@@ -127,60 +134,43 @@
 						},
 						{
 							label: '兑换类型',
-							render: (h, params) => {
-								return h('span', params.row.type_desc ? params.row.type_desc : '无')
-							}
+							prop: 'type_name',
 						},
             {
 							label: '奖品数量',
-							render: (h, params) => {
-								return h('span', params.row.type_desc ? params.row.type_desc : '无')
-							}
+							prop: 'number',
 						},
 						{
 							label: '奖品ID',
 							prop: 'gift_id',
-							showOverFlow: true,
-							render: (h, params) => {
-								return h('span', params.row.gift_id > 0 ? params.row.gift_id : '--')
-							}
+							prop: 'ids',
 						},
 						{
 							label: '奖品名称',
-							prop: 'remark',
+							prop: 'desc',
 							showOverFlow: true
 						},
 						{
 							label: '兑换道具数量',
-							render: (h, params) => {
-								return h('span', params.row.gift_diamond)
-							}
+							prop: 'debris_number',
 						},
 						{
 							label: '兑换奖品价值',
-							render: (h, params) => {
-								return h('span', params.row.lottery_cost)
-							}
+							prop: 'exchange_diamond_count',
 						},
 						{
 							label: '兑换道具价值',
-							render: (h, params) => {
-								return h('span', params.row.profit)
-							}
+							prop: 'debris_diamond_count',
 						},
             {
 							label: '利润值',
-							render: (h, params) => {
-								return h('span', params.row.profit)
-							}
+							prop: 'profit_margin',
 						},
 					]
 				}
 			}
 		},
-		mounted(){
-			this.getPoolNameSource()
-		},
+		mounted(){},
 		methods: {
 			// 配置参数
 			beforeSearch(params) {
@@ -194,6 +184,7 @@
 					round: (s.round == -1 || s.round == "全部") ? "" : s.round,
 					user_number: s.user_number,
 					gift_id: s.gift_id,
+          desc: s.desc
 				}
 			},
 			// 刷新列表
@@ -226,29 +217,6 @@
 			saleAmunt(row){
 				this.sumSource = row.data
 			},
-			// 获取奖池名
-			async getPoolNameSource() {
-				let res = await getPoolNameV3();
-				if(res.code == 2000){
-					this.lotteryList = res.data.pool
-					let all = {key: -1, value: "全部"}
-					this.lotteryList.unshift(all)
-				}
-			},
-			// 获取轮数
-			async getRoundSource(type) {
-				let roundType = type == -1 ? "" : type
-				// 初始化轮数
-				this.searchParams.round = ""
-				let res = await getRoundV3({type:roundType});
-				if(res.code == 2000){
-          // 全部默认选择第一个
-          if(roundType == ""){
-            this.searchParams.round = res.data.round[0].round_number
-          }
-					this.poolList = res.data.round
-				}
-			}
 		}
 	}
 </script>
