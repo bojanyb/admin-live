@@ -10,7 +10,6 @@
 				<div>消耗兑换道具数量：{{sumSource.debris_number_count || 0}}个</div>
 				<div>兑换奖品总价值：{{sumSource.exchange_diamond_count || 0}}钻石</div>
 				<div>兑换道具总价值：{{sumSource.debris_diamond_count || 0}}钻石</div>
-        <div>利润值：{{sumSource.profit_margin || 0}}钻石</div>
 			</div>
 		</el-card>
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -18,8 +17,6 @@
 </template>
 
 <script>
-	// 引入api
-	import { getPoolNameV3,poolDetailV3,getRoundV3 } from '@/api/activity'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -161,11 +158,7 @@
 						{
 							label: '兑换道具价值',
 							prop: 'debris_diamond_count',
-						},
-            {
-							label: '利润值',
-							prop: 'profit_margin',
-						},
+						}
 					]
 				}
 			}
