@@ -154,15 +154,6 @@ export default {
                         }
                     },
                     {
-                        label: '被举报所属公会状态',
-                        minWidth: '90px',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('div', params.row.report_user_guild_status || '无')
-                            ])
-                        }
-                    },
-                    {
                         label: '被举报所属公会',
                         minWidth: '120px',
                         render: (h, params) => {
@@ -174,6 +165,15 @@ export default {
                           }else{
                             return h('div', '无')
                           }
+                        }
+                    },
+                    {
+                        label: '被举报所属公会状态',
+                        minWidth: '90px',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', params.row.report_user_guild_status || '无')
+                            ])
                         }
                     },
                     {
@@ -221,15 +221,6 @@ export default {
                       }
                     },
                     {
-                      label: '举报所属公会状态',
-                      minWidth: '80px',
-                      render: (h, params) => {
-                          return h('div', [
-                              h('div', params.row.report_user_guild_status || '无')
-                          ])
-                      }
-                    },
-                    {
                         label: '举报所属公会',
                         minWidth: '120px',
                         render: (h, params) => {
@@ -242,6 +233,15 @@ export default {
                             return h('div', '无')
                           }
                         }
+                    },
+                    {
+                      label: '举报所属公会状态',
+                      minWidth: '80px',
+                      render: (h, params) => {
+                          return h('div', [
+                              h('div', params.row.report_user_guild_status || '无')
+                          ])
+                      }
                     },
                     {
                       label: '举报所属运营',
@@ -415,17 +415,17 @@ export default {
               from: item.from,
               punished_user_number: item.punished_user_number,
               punished_user_nickname: item.punished_user_nickname,
-              punished_user_guild_status : item.punished_user_guild_status,
               punished_user_guild_number : item.punished_user_guild_number,
               punished_user_guild_name : item.punished_user_guild_name,
+              punished_user_guild_status : item.punished_user_guild_status,
               punished_user_guild_operator_user_name: item.punished_user_guild_operator_user_name,
               genre: item.genre,
               content: item.content,
               report_user_number: item.report_user_number,
               report_user_nickname: item.report_user_nickname,
-              report_user_guild_status: item.report_user_guild_status,
               report_user_guild_number : item.report_user_guild_number,
               report_user_guild_name : item.report_user_guild_name,
+              report_user_guild_status: item.report_user_guild_status,
               report_user_guild_operator_user_name : item.report_user_guild_operator_user_name,
               status : item.status,
               res : item.res,
@@ -440,17 +440,17 @@ export default {
             "来源",
             "用户ID",
             "用户昵称",
-            "被举报所属公会状态",
             "被举报所属公会ID",
             "被举报所属公会昵称",
+            "被举报所属公会状态",
             "被举报所属运营",
             "举报类型",
             "举报说明",
             "举报用户ID",
             "举报用户昵称",
-            "举报所属公会状态",
             "举报所属公会ID",
             "举报所属公会昵称",
+            "举报所属公会状态",
             "举报所属运营",
             "处理状态",
             "处罚结果",
