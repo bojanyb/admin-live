@@ -68,6 +68,7 @@
 						value: '',
 						label: '用户ID',
 						isNum: true,
+            linkage: true,
 						placeholder: '请输入用户ID'
 					},
 					{
@@ -75,6 +76,7 @@
 						type: 'input',
 						value: '',
 						label: '奖品名称',
+            linkage: true,
 						placeholder: '请输入奖品名称'
 					},
           {

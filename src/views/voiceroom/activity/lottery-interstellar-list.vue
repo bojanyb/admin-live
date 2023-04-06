@@ -81,6 +81,7 @@
 						value: '',
 						label: '用户ID',
 						isNum: true,
+            linkage: true,
 						placeholder: '请输入用户ID'
 					},
 					{
@@ -88,6 +89,7 @@
 						type: 'input',
 						value: '',
 						label: '奖品名称',
+            linkage: true,
 						placeholder: '请输入奖品名称'
 					},
 					{
@@ -110,12 +112,7 @@
 						placeholder: '请选择',
 						clearable: true,
             linkage: true,
-						options: this.giftTypeList,
-						handler: {
-							change: v => {
-								this.getRoundSource(v)
-							},
-						}
+						options: this.giftTypeList
 					},
 					{
 						name: 'type',
@@ -288,16 +285,16 @@
 			},
 			// 获取轮数
 			async getRoundSource(type) {
-				let roundType = type == -1 ? "" : type
+        let roundType = type == -1 ? "" : type
 				// 初始化轮数
-				this.searchParams.round = ""
+				this.searchParams.round = "";
 				let res = await getRoundV4({type:roundType});
 				if(res.code == 2000){
           // 全部默认选择第一个
           if(roundType == ""){
             this.searchParams.round = res.data.round[0].round_number
           }
-					this.poolList = res.data.round
+					this.poolList = res.data.round;
 				}
 			}
 		}
