@@ -1,14 +1,11 @@
 <template>
     <div class="app-container serviceConfig-userPunish-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" :show-batch-rurn="true" @onReset="reset" @onSearch="onSearch" @add="add" batchRurnName="导出EXCEL" @BatchRurn="BatchRurn"></SearchPanel>
         </div>
-
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
-
+		    <tableList :cfgs="cfgs" ref="tableList"></tableList>
         <!-- 新增组件 -->
         <userComp v-if="isDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList"></userComp>
-
         <!-- 修改证据弹窗 -->
         <uploadImg v-if="isDestoryComp" ref="uploadImg" @destoryComp="destoryComp" @getList="getList"></uploadImg>
     </div>
@@ -16,7 +13,7 @@
 
 <script>
 // 引入api
-import { removeUser, removeUserPunish, passUserPunish } from '@/api/risk'
+import { removeUser, removeUserPunish, passUserPunish,UserPunishLog } from '@/api/risk'
 // 引入新增组件
 import userComp from './components/userComp.vue'
 // 引入修改证据弹窗
@@ -31,6 +28,8 @@ import REQUEST from '@/request/index.js'
 import mixins from '@/utils/mixins.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
+// 引入公共方法
+import { exportTableData } from "@/utils/common.js";
 export default {
     mixins: [mixins],
     components: {
@@ -43,7 +42,7 @@ export default {
         return {
             isDestoryComp: false, // 是否销毁组件
             searchParams: {
-                status: 4
+              status: 4
             }
         };
     },
@@ -57,6 +56,36 @@ export default {
                     label: '用户ID',
                     isNum: true,
                     placeholder: '请输入用户ID'
+                },
+                {
+                    name: 'guild_number',
+                    type: 'input',
+                    value: '',
+                    label: '公会ID',
+                    isNum: true,
+                    placeholder: '请输入公会ID'
+                },
+                {
+                    name: 'guild_name',
+                    type: 'input',
+                    value: '',
+                    label: '所属公会',
+                    placeholder: '请输入所属公会'
+                },
+                {
+                    name: 'report_user_number',
+                    type: 'input',
+                    value: '',
+                    label: '举报人ID',
+                    isNum: true,
+                    placeholder: '请输入举报人ID'
+                },
+                {
+                    name: 'operator',
+                    type: 'input',
+                    value: '',
+                    label: '操作人',
+                    placeholder: '请输入操作人'
                 },
                 // {
                 //     name: 'type',
@@ -125,97 +154,161 @@ export default {
                         }
                     },
                     {
-                        label: '举报类型',
-                        minWidth: '130px',
-                        render: (h, params) => {
-                            return h('span', params.row.genre || '- -')
-                        },
-                        showOverFlow: true
-                    },
-                    {
-                        label: '举报说明',
-                        minWidth: '100px',
-                        render: (h, params) => {
-                            return h('span', params.row.content || '- -')
-                        },
-                        showOverFlow: true
-                    },
-                    {
-						label: '举报证据',
-						isimgList: true,
-						prop: 'img_path',
-						propCopy: 'video_path',
-						imgWidth: '70px',
-						imgHeight: '70px',
-						width: '280px'
-					},
-                    {
-                        label: '举报用户',
-                        minWidth: '160px',
+                        label: '被举报所属公会状态',
+                        minWidth: '90px',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', params.row.report_user_nickname),
-                                h('div', params.row.report_user_number || '- -')
+                                h('div', params.row.report_user_guild_status || '无')
                             ])
                         }
                     },
                     {
-                        label: '处理状态',
-                        minWidth: '100px',
-                        render: (h, params) => {
-                            let data = MAPDATA.USERPUNISHSTATUSLISTCOPY.find(item => { return item.value === params.row.status })
-                            return h('span', data ? data.name : '无')
-                        }
-                    },
-                    {
-                        label: '处罚结果',
-                        minWidth: '180px',
-                        render: (h, params) => {
-                            return h('span', params.row.res || '- -')
-                        }
-                    },
-                    {
-                        label: '解除时间',
-                        minWidth: '170px',
-                        render: (h, params) => {
-                            return h('span', params.row.remove_time || '- -')
-                        }
-                    },
-                    {
-                        label: '操作人',
+                        label: '被举报所属公会',
                         minWidth: '120px',
                         render: (h, params) => {
-                            return h('span', params.row.operator || '- -')
-                        }
-                    },
-                    {
-                        label: '备注说明',
-                        minWidth: '180px',
-                        render: (h, params) => {
-                            return h('span', params.row.remark || '- -')
-                        },
-                        showOverFlow: true
-                    },
-                    {
-                        label: '操作',
-                        minWidth: '200px',
-                        fixed: 'right',
-                        render: (h, params) => {
+                          if(params.row.punished_user_guild_number && params.row.punished_user_guild_number !== '无' ){
                             return h('div', [
-                                h('el-button', { props: { type: 'success'}, style: {
-                                    display: params.row.status === 1 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.relieve(params.row.id)}}}, '解除'),
-                                h('el-button', { props: { type: 'danger'}, style: {
-                                    display: params.row.status === 0 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.blocked(params.row)}}}, '封禁'),
-                                h('el-button', { props: { type: 'primary'}, style: {
-                                    display: params.row.status === 0 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.neglect(params.row.id)}}}, '忽略'),
-                                h('el-button', { props: { type: 'primary'}, style: {
-                                    display: params.row.from === '后台处罚' && params.row.status === 1 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.update(params.row)}}}, '修改证据')
+                                h('div', params.row.punished_user_guild_name),
+                                h('div', params.row.punished_user_guild_number || '无')
                             ])
+                          }else{
+                            return h('div', '无')
+                          }
                         }
+                    },
+                    {
+                      label: '被举报所属运营',
+                      minWidth: '90px',
+                      render: (h, params) => {
+                          return h('div', [
+                              h('div', params.row.punished_user_guild_operator_user_name || '无')
+                          ])
+                      }
+                    },
+                    {
+                      label: '举报类型',
+                      minWidth: '130px',
+                      render: (h, params) => {
+                          return h('span', params.row.genre || '- -')
+                      },
+                      showOverFlow: true
+                    },
+                    {
+                      label: '举报说明',
+                      minWidth: '100px',
+                      render: (h, params) => {
+                          return h('span', params.row.content || '- -')
+                      },
+                      showOverFlow: true
+                    },
+                    {
+                      label: '举报证据',
+                      isimgList: true,
+                      prop: 'img_path',
+                      propCopy: 'video_path',
+                      imgWidth: '70px',
+                      imgHeight: '70px',
+                      width: '280px'
+                    },
+                    {
+                      label: '举报用户',
+                      minWidth: '160px',
+                      render: (h, params) => {
+                          return h('div', [
+                              h('div', params.row.report_user_nickname),
+                              h('div', params.row.report_user_number || '- -')
+                          ])
+                      }
+                    },
+                    {
+                      label: '举报所属公会状态',
+                      minWidth: '80px',
+                      render: (h, params) => {
+                          return h('div', [
+                              h('div', params.row.report_user_guild_status || '无')
+                          ])
+                      }
+                    },
+                    {
+                        label: '举报所属公会',
+                        minWidth: '120px',
+                        render: (h, params) => {
+                          if(params.row.report_user_guild_number && params.row.report_user_guild_number !== '无'){
+                              return h('div', [
+                                h('div', params.row.report_user_guild_name),
+                                h('div', params.row.report_user_guild_number || '无')
+                            ])
+                          }else{
+                            return h('div', '无')
+                          }
+                        }
+                    },
+                    {
+                      label: '举报所属运营',
+                      minWidth: '80px',
+                      render: (h, params) => {
+                          return h('div', [
+                              h('div', params.row.report_user_guild_operator_user_name || '无')
+                          ])
+                      }
+                    },
+                    {
+                      label: '处理状态',
+                      minWidth: '100px',
+                      render: (h, params) => {
+                          let data = MAPDATA.USERPUNISHSTATUSLISTCOPY.find(item => { return item.value === params.row.status })
+                          return h('span', data ? data.name : '无')
+                      }
+                    },
+                    {
+                      label: '处罚结果',
+                      minWidth: '180px',
+                      render: (h, params) => {
+                          return h('span', params.row.res || '- -')
+                      }
+                    },
+                    {
+                      label: '解除时间',
+                      minWidth: '170px',
+                      render: (h, params) => {
+                          return h('span', params.row.remove_time || '- -')
+                      }
+                    },
+                    {
+                      label: '操作人',
+                      minWidth: '120px',
+                      render: (h, params) => {
+                          return h('span', params.row.operator || '- -')
+                      }
+                    },
+                    {
+                      label: '备注说明',
+                      minWidth: '180px',
+                      render: (h, params) => {
+                          return h('span', params.row.remark || '- -')
+                      },
+                      showOverFlow: true
+                    },
+                    {
+                      label: '操作',
+                      minWidth: '200px',
+                      fixed: 'right',
+                      render: (h, params) => {
+                          return h('div', [
+                              h('el-button', { props: { type: 'success'}, style: {
+                                  display: params.row.status === 1 ? 'unset' : 'none'
+                              }, on: {click:()=>{this.relieve(params.row.id)}}}, '解除'),
+                              h('el-button', { props: { type: 'danger'}, style: {
+                                  display: params.row.status === 0 ? 'unset' : 'none'
+                              }, on: {click:()=>{this.blocked(params.row)}}}, '封禁'),
+                              h('el-button', { props: { type: 'primary'}, style: {
+                                  display: params.row.status === 0 ? 'unset' : 'none'
+                              }, on: {click:()=>{this.neglect(params.row.id)}}}, '忽略'),
+                              h('el-button', { props: { type: 'primary'}, style: {
+                                  display: params.row.from === '后台处罚' && params.row.status === 1 ? 'unset' : 'none'
+                              }, on: {click:()=>{this.update(params.row)}}}, '修改证据')
+                          ])
+                      }
                     }
                 ]
             }
@@ -226,17 +319,21 @@ export default {
         beforeSearch(params) {
             let s = { ...this.searchParams, ...this.dateTimeParams }
             return {
-                page: params.page,
-                page_size: params.size,
+                page: params ? params.page : 1,
+                page_size: params ? params.size : 10,
                 user_number: s.user_number,
                 status: s.status,
+                guild_number:s.guild_number,
+                guild_name:s.guild_name,
+                operator:s.operator,
+                report_user_number:s.report_user_number,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time
             }
         },
         // 刷新列表
         getList() {
-            this.$refs.tableList.getData()
+          this.$refs.tableList.getData()
         },
         // 设置时间段
         setDateTime(arr) {
@@ -304,6 +401,64 @@ export default {
                 this.$success('操作成功')
                 this.getList()
             }
+        },
+        // 导出excel
+        async BatchRurn() {
+          let s = this.beforeSearch();
+          s.is_all = 1; // 导出数据时传1
+          let res = await UserPunishLog(s);
+          let arr = JSON.parse(JSON.stringify(res.data.list));
+          if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
+          arr = arr.map((item, index) => {
+            let params = {
+              create_time: item.create_time,
+              from: item.from,
+              punished_user_number: item.punished_user_number,
+              punished_user_nickname: item.punished_user_nickname,
+              punished_user_guild_status : item.punished_user_guild_status,
+              punished_user_guild_number : item.punished_user_guild_number,
+              punished_user_guild_name : item.punished_user_guild_name,
+              punished_user_guild_operator_user_name: item.punished_user_guild_operator_user_name,
+              genre: item.genre,
+              content: item.content,
+              report_user_number: item.report_user_number,
+              report_user_nickname: item.report_user_nickname,
+              report_user_guild_status: item.report_user_guild_status,
+              report_user_guild_number : item.report_user_guild_number,
+              report_user_guild_name : item.report_user_guild_name,
+              report_user_guild_operator_user_name : item.report_user_guild_operator_user_name,
+              status : item.status,
+              res : item.res,
+              remove_time: item.remove_time,
+              operator : item.operator,
+              remark : item.remark
+            };
+            return params;
+          });
+          let nameList = [
+            "时间",
+            "来源",
+            "用户ID",
+            "用户昵称",
+            "被举报所属公会状态",
+            "被举报所属公会ID",
+            "被举报所属公会昵称",
+            "被举报所属运营",
+            "举报类型",
+            "举报说明",
+            "举报用户ID",
+            "举报用户昵称",
+            "举报所属公会状态",
+            "举报所属公会ID",
+            "举报所属公会昵称",
+            "举报所属运营",
+            "处理状态",
+            "处罚结果",
+            "解除时间",
+            "操作人",
+            "备注说明"
+          ];
+          exportTableData(arr, nameList, "处罚举报记录");
         },
         // 销毁组件
         destoryComp() {

@@ -53,6 +53,29 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
+                    name: 'guild_number',
+                    type: 'input',
+                    value: '',
+                    label: '公会ID',
+                    isNum: true,
+                    placeholder: '请输入公会ID'
+                },
+                {
+                    name: 'guild_name',
+                    type: 'input',
+                    value: '',
+                    label: '所属公会',
+                    placeholder: '请输入所属公会'
+                },
+                {
+                    name: 'report_user_number',
+                    type: 'input',
+                    value: '',
+                    label: '举报人ID',
+                    isNum: true,
+                    placeholder: '请输入举报人ID'
+                },
+                {
                     name: 'type',
                     type: 'select',
                     value: '',
@@ -179,6 +202,9 @@ export default {
                 user_number: s.user_number,
                 type: s.type,
                 status: s.status,
+                guild_number:s.guild_number,
+                guild_name:s.guild_name,
+                report_user_number:s.report_user_number,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time
             }

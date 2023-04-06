@@ -55,6 +55,15 @@ export function review(data) {
     })
 }
 
+// 处罚 -列表
+export function UserPunishLog(data) {
+  return request({
+      url: api.risk.UserPunishLog,
+      method: 'post',
+      data
+  })
+}
+
 // 处罚 -新增
 export function addUserPunish(data) {
     return request({
