@@ -172,7 +172,7 @@ export default {
                         minWidth: '90px',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', params.row.report_user_guild_status || '无')
+                                h('div', params.row.punished_user_guild_status || '无')
                             ])
                         }
                     },
