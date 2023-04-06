@@ -179,9 +179,9 @@
 										})
 									}
 									ri(arr)
-
+                  let newList = [];
 									let sv = (list, params) => { // 为所有的一级以下的所有子菜单添加全路径path
-										list.forEach(item => {
+										list.forEach((item,i) => {
 											if(item.pid && params) {
 												if(item.child && item.child.length > 0) {
 													item.path = params.h5_path + item.h5_path
@@ -191,11 +191,11 @@
 											}
 											if(item.child && item.child.length > 0) {
 												sv(item.child, item)
+                        newList.push(item)
 											}
 										})
 									}
-									sv(arr)
-
+									sv(newList.length > 0 ? newList : arr);
 									let isRouter = false
 									let xs = (list) => { // 判断记录路由是否有权限跳转
 										list.forEach(item => {
@@ -207,8 +207,7 @@
 											}
 										})
 									}
-									xs(arr)
-
+									xs(newList.length > 0 ? newList : arr)
 
 									if(isRouter) {
 										this.$router.push({ // 记录跳转
@@ -217,21 +216,38 @@
 										})
 										localStorage.setItem('jumpPath', this.redirect)
 									} else {
-										if(arr[0].child && arr[0].child.length > 0 && arr[0].child[0].child.length <= 0) {
-											this.$router.push({ // 找不到记录取权限第一个跳转
-												path: arr[0].child[0].path
-											})
-											localStorage.setItem('jumpPath', arr[0].child[0].path) // 存储路由
-										} else {
-											this.$router.push({ // 找不到二级权限往三级查找跳转
-												path: arr[0].child[0].child[0].path
-											})
-											localStorage.setItem('jumpPath', arr[0].child[0].child[0].path) // 存储路由
-										}
-									}
+                    let jumpSource = newList.find(res=>{
+                      if(res.child.length > 0){
+                        let child = res.child
+                        if(child.length >0){
+                          if(child[0].child.length >0){
+                            return child[0].child[0].path;
+                          }else{
+                            return child[0].path;
+                          }
+                        }
+                      }
+                    })
+                    let jumpPath = jumpSource.child[0].path
+                    this.$router.push({ // 找不到二级权限往三级查找跳转
+                      path: jumpPath
+                    })
+                    localStorage.setItem('jumpPath', jumpPath) // 存储路由
 
+
+										// if(arr[0].child && arr[0].child.length > 0 && arr[0].child[0].child.length <= 0) {
+										// 	this.$router.push({ // 找不到记录取权限第一个跳转
+										// 		path: arr[0].child[0].path
+										// 	})
+										// 	localStorage.setItem('jumpPath', arr[0].child[0].path) // 存储路由
+										// } else {
+										// 	this.$router.push({ // 找不到二级权限往三级查找跳转
+										// 		path: arr[0].child[0].child[0].path
+										// 	})
+										// 	localStorage.setItem('jumpPath', arr[0].child[0].child[0].path) // 存储路由
+										// }
+									}
 								})
-								
 								this.loading = false
 							})
 							.catch((err) => {

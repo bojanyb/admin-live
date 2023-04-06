@@ -108,7 +108,7 @@ const actions = {
             })
           }
           as(asyncRoutes)
-
+          let newList = [];
           let sv = (list) => {
             list.forEach((item, index) => {
               let params = asyncArr.find(a => { return item.h5_path === a.path })
@@ -122,11 +122,12 @@ const actions = {
                 }
               }
               if(item.child && item.child.length > 0) {
-                sv(item.child)
+                sv(item.child);
+                newList.push(item)
               }
             })
           }
-          sv(arr, asyncRoutes)
+          sv(newList.length > 0? newList : arr, asyncRoutes)
 
 
           let ax = (list) => {
@@ -139,9 +140,9 @@ const actions = {
               }
             })
           }
-          ax(arr)
+          ax(newList.length > 0? newList : arr)
 
-          arr.forEach((item,index) => {
+          newList.forEach((item,index) => {
             array.push({
               component: item.params ? item.params.component : Layout,
               meta: item.params ? item.params.meta : { title: 'default' },
