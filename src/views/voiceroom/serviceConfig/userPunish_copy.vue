@@ -154,7 +154,7 @@ export default {
                         }
                     },
                     {
-                        label: '被举报所属公会',
+                        label: '被举报用户所属公会',
                         minWidth: '120px',
                         render: (h, params) => {
                           if(params.row.punished_user_guild_number && params.row.punished_user_guild_number !== '无' ){
@@ -168,7 +168,7 @@ export default {
                         }
                     },
                     {
-                        label: '被举报所属公会状态',
+                        label: '被举报用户所属公会状态',
                         minWidth: '90px',
                         render: (h, params) => {
                             return h('div', [
@@ -177,12 +177,12 @@ export default {
                         }
                     },
                     {
-                        label: '被举报人加入公会时间',
+                        label: '被举报用户加入公会时间',
                         prop: 'punished_user_guild_join_time',
                         minWidth: '160px'
                     },
                     {
-                      label: '被举报所属运营',
+                      label: '被举报用户所属运营',
                       minWidth: '90px',
                       render: (h, params) => {
                           return h('div', [
@@ -226,7 +226,7 @@ export default {
                       }
                     },
                     {
-                        label: '举报所属公会',
+                        label: '举报用户所属公会',
                         minWidth: '120px',
                         render: (h, params) => {
                           if(params.row.report_user_guild_number && params.row.report_user_guild_number !== '无'){
@@ -240,7 +240,7 @@ export default {
                         }
                     },
                     {
-                      label: '举报所属公会状态',
+                      label: '举报用户所属公会状态',
                       minWidth: '80px',
                       render: (h, params) => {
                           return h('div', [
@@ -249,7 +249,7 @@ export default {
                       }
                     },
                     {
-                      label: '举报所属运营',
+                      label: '举报用户所属运营',
                       minWidth: '80px',
                       render: (h, params) => {
                           return h('div', [
@@ -446,19 +446,19 @@ export default {
             "来源",
             "用户ID",
             "用户昵称",
-            "被举报所属公会ID",
-            "被举报所属公会昵称",
-            "被举报所属公会状态",
-            "被举报加入公会时间",
-            "被举报所属运营",
+            "被举报用户所属公会ID",
+            "被举报用户所属公会昵称",
+            "被举报用户所属公会状态",
+            "被举报用户加入公会时间",
+            "被举报用户所属运营",
             "举报类型",
             "举报说明",
             "举报用户ID",
             "举报用户昵称",
-            "举报所属公会ID",
-            "举报所属公会昵称",
-            "举报所属公会状态",
-            "举报所属运营",
+            "举报用户所属公会ID",
+            "举报用户所属公会昵称",
+            "举报用户所属公会状态",
+            "举报用户所属运营",
             "处理状态",
             "处罚结果",
             "解除时间",
