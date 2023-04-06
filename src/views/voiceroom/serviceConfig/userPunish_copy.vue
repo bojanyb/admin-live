@@ -134,7 +134,7 @@ export default {
                     {
                         label: '时间',
                         prop: 'create_time',
-                        minWidth: '170px'
+                        minWidth: '160px'
                     },
                     {
                         label: '来源',
@@ -175,6 +175,11 @@ export default {
                                 h('div', params.row.punished_user_guild_status || '无')
                             ])
                         }
+                    },
+                    {
+                        label: '被举报人加入公会时间',
+                        prop: 'punished_user_guild_join_time',
+                        minWidth: '160px'
                     },
                     {
                       label: '被举报所属运营',
@@ -418,6 +423,7 @@ export default {
               punished_user_guild_number : item.punished_user_guild_number,
               punished_user_guild_name : item.punished_user_guild_name,
               punished_user_guild_status : item.punished_user_guild_status,
+              punished_user_guild_join_time: item.punished_user_guild_join_time,
               punished_user_guild_operator_user_name: item.punished_user_guild_operator_user_name,
               genre: item.genre,
               content: item.content,
@@ -443,6 +449,7 @@ export default {
             "被举报所属公会ID",
             "被举报所属公会昵称",
             "被举报所属公会状态",
+            "被举报加入公会时间",
             "被举报所属运营",
             "举报类型",
             "举报说明",
