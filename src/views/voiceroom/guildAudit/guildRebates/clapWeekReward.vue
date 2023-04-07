@@ -78,7 +78,7 @@
 		},
 		computed: {
 			cfgs() {
-				let name = this.form.status === 2 ? 'cpWeekRewardList': 'cpSettleLog'
+				let name = this.form.status === 2 ? 'cpWeekRewardList': 'settlementLog'
 				let arr = [
 					{
 						label: '时间',
