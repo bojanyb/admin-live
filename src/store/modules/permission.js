@@ -123,12 +123,13 @@ const actions = {
               }
               if(item.child && item.child.length > 0) {
                 sv(item.child);
-                newList.push(item)
+                if(item.params.name){
+                  newList.push(item)
+                }
               }
             })
           }
-          sv(newList.length > 0? newList : arr, asyncRoutes)
-
+          sv(newList.length > 0? newList : arr, asyncRoutes);
 
           let ax = (list) => {
             list.forEach((item,index) => {
