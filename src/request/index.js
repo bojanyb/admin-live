@@ -287,9 +287,10 @@ const request = {
         couplingList: `${HTTPHEADER}/CouplingReward/list`, // 公会拍一拍周奖励 - 列表
         couplingSave: `${HTTPHEADER}/CouplingReward/save`, // 公会拍一拍周奖励 - 保存
         couplingDelete: `${HTTPHEADER}/CouplingReward/delete`, // 公会拍一拍周奖励 - 删除
-        cpSettleLog: `${HTTPHEADER}/guild/cpSettleLog`, // 公会拍一拍周奖励 - 列表
-        cpWeekList: `${HTTPHEADER}/guild/cpWeekList`, // 公会拍一拍周奖励 - 未结算
+        cpSettleLog: `${HTTPHEADER}/guild/cpSettleLog`, // 公会拍一拍次数 - 列表
+        cpWeekList: `${HTTPHEADER}/guild/cpWeekList`, // 公会拍一拍次数 - 未结算
         adminUserList: `${HTTPHEADER}/Guild/adminUserList`, // 获取公会运营人员
+        cpWeekRewardList: `${HTTPHEADER}/Guild/cpWeekRewardList`, // 公会拍一拍周奖励 - 未结算
     },
 
     // 封禁记录
