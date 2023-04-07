@@ -157,7 +157,7 @@
 				let arr1 = [
 					{
 						label: '操作',
-						minWidth: '150px',
+						minWidth: '280px',
 						fixed: 'right',
 						render: (h, params) => {
 							return h('div', [

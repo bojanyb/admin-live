@@ -1,16 +1,15 @@
 <template>
-	<div class="guildRebate-list-box">
+	<div class="guildRebate-dynamic-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
 			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
 			<span>结算总计：{{ (this.form.status !== 2 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
 		</div>
-
 		<div class="searchParams">
 			<div class="formBox">
 				<div class="sunBox">
 					<span>公会</span>
-					<el-input v-model="form.guild_number" placeholder="请输入公会ID"></el-input>
+                    <el-input v-model="form.guild_number" placeholder="请输入公会ID"></el-input>
 				</div>
 				<div class="sunBox">
 					<span>结算状态</span>
@@ -45,6 +44,7 @@
 			</div>
             <!-- <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel> -->
         </div>
+
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
 	</div>
 </template>
@@ -66,6 +66,8 @@
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
+	// 引入格式化时间包
+	import moment from 'moment'
 
 	export default {
 		name: 'guildRebate-list',
@@ -76,7 +78,7 @@
 		},
 		computed: {
 			cfgs() {
-				let name = this.form.status === 2 ? 'guildWeekListV2': 'settlementLog'
+				let name = this.form.status === 2 ? 'cpWeekRewardList': 'settlementLog'
 				let arr = [
 					{
 						label: '时间',
@@ -116,7 +118,7 @@
 						label: '流水',
 						minWidth: '120px',
 						render: (h, params) => {
-							return h('span', params.row.flow + '钻石')
+							return h('span', this.form.status === 2 ? params.row.flow + '钻石' : params.row.flow + '钻石')
 						}
 					},
 					{
@@ -126,25 +128,18 @@
 							return h('span', params.row.t_flow + '钻石')
 						}
 					},
-					// {
-					// 	label: '周返点比例',
-					// 	minWidth: '100px',
-					// 	render: (h, params) => {
-					// 		return h('span', params.row.rebate + '%')
-					// 	}
-					// },
 					{
-						label: '周返点金额',
+						label: '周奖励金额',
 						minWidth: '120px',
 						render: (h, params) => {
-							return h('span', params.row.settlement + '喵粮')
+							return h('span', this.form.status === 2 ? '无' : params.row.settlement + '喵粮')
 						}
 					},
 					{
 						label: '结算状态',
 						minWidth: '120px',
 						render: (h, params) => {
-							let name;
+                            let name;
 							if(this.form.status === 1) {
 								name = '待结算'
 							} else if(this.form.status === 2) {
@@ -166,7 +161,7 @@
 						render: (h, params) => {
 							return h('div', [
 								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.rebateFunc(params.row.id, 1)}}}, '结算'),
-								h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.rebateFunc(params.row.id, 2)}}}, '忽略')
+								h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.rebateFunc(params.row.id, 2)}}}, '忽略'),
 							])
 						}
 					}
@@ -180,20 +175,10 @@
 				}
 			}
 		},
-		watch: {
-			'form.status': {
-				handler(n, o) {
-					if((o === 1 || o === 3 || o == 4) && (n === 1 || n === 3 || n === 4)) {
-						this.getList()
-					}
-				},
-				deep: true
-			}
-		},
 		data() {
 			return {
 				guildList: [], // 公会列表
-				closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST, // 结算状态
+				closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLISTCOPY, // 结算状态
 				form: { // 表单数据
 					guild_number: '',
 					status: 1,
@@ -209,6 +194,18 @@
 				}
 			}
 		},
+        watch: {
+			'form.status': {
+				handler(n, o) {
+					if((o === 1 || o === 3 || o === 4) && (n === 1 || n === 3 || n === 4)) {
+						setTimeout(() => {
+							this.getList()
+						}, 50);
+					}
+				},
+				deep: true
+			}
+		},
 		methods: {
 			// 配置参数
 			beforeSearch(params) {
@@ -217,10 +214,10 @@
 					page: params.page,
 					pagesize: params.size,
 					guild_number: s.guild_number,
-					type: 1,
-					status: s.status ? s.status : 1,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
-          end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
+					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
+          type: 7,
+          status: s.status,
           guild_type: 2
 				}
 				if(this.form.status === 1) {
@@ -275,7 +272,7 @@
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
-				let res = await doSettlement({ ids, type: 1, status, guild_type: 2 })
+				let res = await doSettlement({ ids, type: 7, status, guild_type: 2 })
 				if(res.code === 2000) {
 					this.$success("批量操作成功");
 				}
@@ -284,7 +281,7 @@
 			// 单个返点
 			async rebateFunc(id, status) {
 				let ids = [id]
-				let res = await doSettlement({ ids, type: 1, status, guild_type: 2 })
+				let res = await doSettlement({ ids, type: 7, status, guild_type: 2 })
 				if(res.code === 2000) {
 					this.$success("操作成功");
 				}
@@ -304,12 +301,13 @@
 					})
 					this.guildList = res.data.list || []
 				}
+
 			}
 		}
 	}
 </script>
 <style lang="scss">
-.guildRebate-list-box {
+.guildRebate-dynamic-box {
 	.model {
         width: 100%;
         height: 40px;
