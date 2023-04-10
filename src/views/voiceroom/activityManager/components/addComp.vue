@@ -47,7 +47,7 @@
                 </el-form-item>
             <el-form-item label="展示位置">
             <el-select v-model="ruleForm.pos_id" placeholder="请选择展示位置">
-              <el-option v-for="item in postOptions" :label="item.pos_desc" :value="item.pos_id"></el-option>
+              <el-option v-for="item in postOptions" :label="item.pos_desc" :value="item.pos_id" :key="item.pos_id"></el-option>
             </el-select>
             </el-form-item>
             </el-form>

@@ -471,6 +471,12 @@ const request = {
         getDrawList: `${HTTPHEADER}/HdTravelLog/getDrawList`, // 抽奖数据
         getTraveListDetail: `${HTTPHEADER}/HdTravelLog/getTraveListDetail`, // 景点详情
 
+        // 2023/03/13 星际穿越
+        getPoolNameV4: `${HTTPHEADER}/hdExploreLog/getPoolName`, // 获取奖池名
+        getRoundV4: `${HTTPHEADER}/hdExploreLog/getRound`, // 获取轮数
+        poolDetailV4: `${HTTPHEADER}/hdExploreLog/poolDetail`, // 获取探索列表
+        exchangeLogV4: `${HTTPHEADER}/hdExploreLog/exchangeLog`, // 获取兑换数据
+
     },
 
     // 靓号管理
