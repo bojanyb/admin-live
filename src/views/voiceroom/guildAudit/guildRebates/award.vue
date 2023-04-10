@@ -41,6 +41,7 @@
 					<el-button type="success" v-if="form.status === 1" @click="batchFunc(1)">批量通过</el-button>
 					<el-button type="danger" v-if="form.status === 1" @click="batchFunc(2)">批量忽略</el-button>
 					<el-button type="success" @click="addHome">添加24小时房间</el-button>
+          <el-button type="danger" @click="exportFunc()">导出EXCEL</el-button>
 				</div>
 			</div>
         </div>
@@ -312,6 +313,9 @@
 					this.$refs.homeComp.loadParams()
 				}, 50);
 			},
+      exportFunc(){
+        console.log("---317--导出-");
+      },
 			// 销毁组件
 			destoryComp() {
 				this.isDestoryComp = false

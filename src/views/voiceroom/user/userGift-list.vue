@@ -54,7 +54,6 @@
 					// 		{ key: 'name', label: '收礼人ID' }
 					// 	]
 					// },
-					
 					{
 						name: 'send_user_number',
 						type: 'input',
@@ -144,6 +143,18 @@
 							label: '交易流水号',
 							minWidth: '150px',
 							prop: 'relation_trade_no'
+						},
+            {
+							label: '送礼人IP',
+							render: (h, params) => {
+								return h('span', params.row.ip || '无')
+							}
+						},
+            {
+							label: '送礼人地区',
+							render: (h, params) => {
+								return h('span', params.row.addr || '无')
+							}
 						}
 					]
 				}

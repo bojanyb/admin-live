@@ -1,10 +1,29 @@
 <template>
     <div class="serviceConfig-message-history-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :show-reset="true" :showYesterday="true" :showBeforeYesterday="true" :showToday="true" @onSearch="onSearch" @onReset="reset" @yesterday="yesterday" @beforeYesterday="beforeYesterday" @today="today"></SearchPanel>
+            <SearchPanel v-model="searchParams"
+            :forms="forms"
+            :show-search-btn="true"
+            :show-reset="true"
+            :showYesterday="true"
+            :showBeforeYesterday="true"
+            :showToday="true"
+            :showBatchPass="true"
+            :showBatchRurn="true"
+            :batchFuncName = "'一键通过'"
+            :batchRurnName = "'一键拒绝'"
+            @onSearch="onSearch"
+            @onReset="reset"
+            @yesterday="yesterday"
+            @beforeYesterday="beforeYesterday"
+            @today="today"
+            @batchPass="batchPass"
+            @BatchRurn="BatchRurn"
+            >
+            </SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"  @selectionChange="selectionChange"></tableList>
     </div>
 </template>
 
@@ -39,7 +58,8 @@ export default {
             dateTimeParams: {
                 start_time: null,
                 end_time: null
-            }
+            },
+            selectList : [],
         };
     },
     computed: {
@@ -105,6 +125,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
+                isShowCheckbox: true,
                 url: REQUEST.risk.screenImgLog,
                 columns: [
                     {
@@ -291,7 +312,19 @@ export default {
                     this.getList()
                 }
             }).catch(() => {});
-        }
+        },
+        // 选中
+        selectionChange(v){
+          this.selectList = v;
+        },
+        // 一键通过
+        batchPass(){
+          console.log("一键通过");
+        },
+        // 一键拒绝
+        BatchRurn(){
+          console.log("一键拒绝");
+        },
     },
     created() {
         this.changeIndex(0)

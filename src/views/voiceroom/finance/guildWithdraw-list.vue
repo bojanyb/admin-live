@@ -355,6 +355,20 @@ export default {
                 return h('span', params.row.out_trade_no || '无')
             }
           },
+          {
+            label: "IP",
+            minWidth: "80px",
+            render: (h, params) => {
+              return h("span", params.row.ip ? params.row.ip : '无');
+            },
+          },
+          {
+            label: "地区",
+            minWidth: "80px",
+            render: (h, params) => {
+              return h("span", params.row.addr ? params.row.addr : "无");
+            },
+          },
           // {
           //     label: '商户单号',
           //     minWidth: '150px',

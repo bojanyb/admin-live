@@ -1,4 +1,4 @@
-<template>
+  <template>
 	<div class="guildReport-list-box">
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
