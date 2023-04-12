@@ -22,7 +22,6 @@
             >
             </SearchPanel>
         </div>
-
 		<tableList :cfgs="cfgs" ref="tableList"  @selectionChange="selectionChange"></tableList>
     </div>
 </template>
@@ -60,6 +59,7 @@ export default {
                 end_time: null
             },
             selectList : [],
+            ids: []
         };
     },
     computed: {
@@ -181,10 +181,10 @@ export default {
                             return h('div', [
                                 h('el-button', { props: { type: 'primary'}, style: {
                                     display: params.row.status === 0 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.func(params.row.id, 1, '通过')}}}, '通过'),
+                                }, on: {click:()=>{this.func(params.row.id, 1, '通过',1)}}}, '通过'),
                                 h('el-button', { props: { type: 'danger'}, style: {
                                     display: params.row.status === 0 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.func(params.row.id, -1, '拒绝')}}}, '拒绝'),
+                                }, on: {click:()=>{this.func(params.row.id, -1, '拒绝',1)}}}, '拒绝'),
                                 h('el-button', { props: { type: 'success'}, style: {
                                     display: params.row.status === 1 ? 'unset' : 'none'
                                 }, on: {click:()=>{}}}, '已通过'),
@@ -295,18 +295,17 @@ export default {
             this.isDestoryComp = false
         },
         // 通过/拒绝操作
-        async func(id, status, name) {
+        async func(id, status, name,type) {
             this.$confirm(`是否确认${name}?`, '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(async () => {
                 let params = {
-                    id,
+                    ids : type == 1 ? [id] : id,
                     status
                 }
                 let res = await review(params)
-                console.log(res, 'res-----------2020')
                 if(res.code === 2000) {
                     this.$success(name + '成功')
                     this.getList()
@@ -316,14 +315,25 @@ export default {
         // 选中
         selectionChange(v){
           this.selectList = v;
+          let ids = [];
+          this.selectList.forEach(res=>{ if(res.status == 0){ids.push(res.id)}}); // 过滤待审核数据
+          this.ids = ids;
         },
         // 一键通过
         batchPass(){
-          console.log("一键通过");
+          if(this.selectList.length == 0 || this.ids.length == 0){
+            this.$error("请先选择待审核数据");
+            return
+          }
+          this.func(this.ids,1,"一键通过",2)
         },
         // 一键拒绝
         BatchRurn(){
-          console.log("一键拒绝");
+          if(this.selectList.length == 0 || this.ids.length == 0){
+            this.$error("请先选择待审核数据");
+            return
+          }
+          this.func(this.ids,-1,"一键拒绝",2)
         },
     },
     created() {

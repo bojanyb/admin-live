@@ -314,7 +314,7 @@ export default {
             prop: 'hotfix',
             width: '120px',
             render: (h, params) => {
-              return h('span', params.row.version)
+              return h('span', (params.row.is_mandatory == 30 ? params.row.hotfix : "--" ))
             }
           },
           {
@@ -329,6 +329,9 @@ export default {
                   break;
                 case 20:
                   isMandatoryText = "强制升级";
+                  break;
+                case 30:
+                  isMandatoryText = "热更新";
                   break;
               }
               return h('span', isMandatoryText)

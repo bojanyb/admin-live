@@ -284,7 +284,7 @@
 			},
       // 导出
       exportFunc(){
-        console.log("---287--导出-");
+        console.log("公会周流水结算导出");
       },
 			// 单个返点
 			async rebateFunc(id, status) {
