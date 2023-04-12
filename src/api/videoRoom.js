@@ -1193,6 +1193,23 @@ export function couplingDelete(data) {
   })
 }
 
+// 公会批量结算
+export function settlementLog(data) {
+  return request({
+    url: api.guild.settlementLog,
+    method: 'post',
+    data
+  })
+}
+
+// 拍一拍房间次数结算
+export function cpSettleLog(data) {
+  return request({
+    url: api.guild.cpSettleLog,
+    method: 'post',
+    data
+  })
+}
 
 /***********广播******************/
 

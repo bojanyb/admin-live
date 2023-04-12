@@ -41,7 +41,7 @@
 					<el-button type="success" v-if="form.status === 1" @click="batchFunc(1)">批量通过</el-button>
 					<el-button type="danger" v-if="form.status === 1" @click="batchFunc(2)">批量忽略</el-button>
 					<el-button type="success" @click="addHome">添加24小时房间</el-button>
-          <el-button type="danger" @click="exportFunc()">导出EXCEL</el-button>
+          <el-button type="danger" @click="BatchRurn()">导出EXCEL</el-button>
 				</div>
 			</div>
         </div>
@@ -53,7 +53,7 @@
 
 <script>
 	// 引入api
-	import { doSettlement } from '@/api/videoRoom'
+	import { doSettlement,settlementLog } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -61,7 +61,7 @@
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
-	import { formatTimeTwo,timeFormat } from '@/utils/common.js'
+	import { formatTimeTwo,timeFormat,exportTableData } from '@/utils/common.js'
 	// 引入公共参数
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
@@ -101,9 +101,9 @@
 						label: '房间标题',
 						minWidth: '100px',
 						render: (h, params) => {
-                            let name = this.form.status === 2 ? params.row.title : params.row.room_title
-                            return h('span', name)
-                        }
+                let name = this.form.status === 2 ? params.row.title : params.row.room_title
+                return h('span', name)
+            }
 					},
 					{
 						label: '所属公会ID',
@@ -114,18 +114,18 @@
 						label: '所属公会名称',
 						minWidth: '120px',
 						render: (h, params) => {
-                            let name = this.form.status === 2 ? params.row.guild_nickname : params.row.guild_name
-                            return h('span', name)
-                        }
+                let name = this.form.status === 2 ? params.row.guild_nickname : params.row.guild_name
+                return h('span', name)
+            }
 					},
 					{
 						label: '本周营业时长',
 						minWidth: '140px',
 						prop: 'online',
-                        render: (h, params) => {
+            render: (h, params) => {
 							let status = params.row.online ?  formatTimeTwo(params.row.online) : '--'
 							return h('span', status)
-                        }
+            }
 					},
 					{
 						label: '本周流水',
@@ -144,10 +144,10 @@
 					{
 						label: '时长奖励',
 						minWidth: '100px',
-                        render: (h, params) => {
-                            let name = this.form.status === 2 ? '无' : (params.row.settlement || 0) + '喵粮'
-                            return h('span', name)
-                        }
+            render: (h, params) => {
+                let name = this.form.status === 2 ? '无' : (params.row.settlement || 0) + '喵粮'
+                return h('span', name)
+            }
 					},
 					{
 						label: '结算状态',
@@ -226,9 +226,9 @@
 			beforeSearch(params) {
 				let s = { ...this.form, ...this.dateTimeParams }
 				let data = {
-					page: params.page,
-					pagesize: params.size,
-					guild_number: s.guild_number,
+					page: params ? params.page : 1,
+					pagesize: params ? params.size : 10,
+					guild_number: s.guild_number ? s.guild_number : "",
 					type : 4,
 					status: s.status,
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
@@ -313,13 +313,65 @@
 					this.$refs.homeComp.loadParams()
 				}, 50);
 			},
-      exportFunc(){
-        console.log("---317--导出-");
-      },
 			// 销毁组件
 			destoryComp() {
 				this.isDestoryComp = false
-			}
+			},
+      // 导出excel
+      async BatchRurn() {
+        let s = this.beforeSearch();
+        if(s.start_time && s.start_time !== ""){
+          s.is_all = 1;
+        }
+        let res = await settlementLog(s);
+        let arr = JSON.parse(JSON.stringify(res.data.list));
+        if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
+        arr = arr.map((item, index) => {
+          let start_time = item.time_start ? timeFormat(item.time_start, 'YYYY-MM-DD HH:mm:ss', true) : '';
+          let endTime = this.form.status === 2 ? item.time_end : item.create_time;
+          let end_time = endTime ? timeFormat(endTime, 'YYYY-MM-DD HH:mm:ss', true) : '无';
+          let timer = timeFormat(item.time_start, 'YYYY', true) + '年第'+ item.now + "周" + start_time + "至" +end_time;
+          let guild_type =  MAPDATA.GUILDCONFIGTYPELIST.find(it => { return it.value === item.guild_type });
+          let status_name = "";
+          if(this.form.status === 1) {
+            status_name = '待结算'
+          } else if(this.form.status === 2) {
+            status_name = '未结算'
+          } else if(this.form.status === 3) {
+            status_name = '已结算'
+          } else {
+            status_name = '已忽略'
+          }
+          let params = {
+            num: (index+1),
+            timer: timer,
+            room_number: item.room_number,
+            title: this.form.status === 2 ? item.title : item.room_title,
+            guild_number: item.guild_number,
+            guild_nickname:this.form.status === 2 ? item.guild_nickname : item.guild_name,
+            online: item.online ?  formatTimeTwo(item.online) : '--',
+            flow: item.flow + "钻石",
+            t_flow: item.t_flow + "钻石",
+            settlement: item.settlement + "喵粮",
+            status : status_name,
+          };
+          return params;
+        });
+        let nameList = [
+          "序号",
+          "时间",
+          "房间ID",
+          "房间标题",
+          "所属公会ID",
+          "所属公会名称",
+          "本周营业时长",
+          "本周流水",
+          "总流水（含冻结）",
+          "时长奖励",
+          "结算状态",
+        ];
+        exportTableData(arr, nameList, " 24小时房间奖励结算");
+      },
 		}
 	}
 </script>

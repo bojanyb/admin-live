@@ -8,6 +8,7 @@
           :showYesterday="true"
           :showRecentSeven="true"
           :showToday="true"
+          :showBatchRurn="true"
           :batchRurnName = "'一键删除评论'"
           @onReset="reset"
           @onSearch="onSearch"
@@ -23,7 +24,7 @@
 
 <script>
 // 引入api
-import { delMoments } from '@/api/dynamic'
+import { multiDeleteMsg } from '@/api/dynamic'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -41,95 +42,100 @@ export default {
       tableList,
   },
   data() {
-      return {
-          msg_id: null,
-          searchParams: {
-              dateTimeParams: []
-          },
-          dateTimeParams: {
-              start_time: null,
-              end_time: null
-          },
-          delList : []
-      };
+    return {
+        msg_id: null,
+        searchParams: {
+            dateTimeParams: []
+        },
+        dateTimeParams: {
+            start_time: null,
+            end_time: null
+        },
+        delList : [],
+        delIds: []
+    };
   },
   computed: {
-      forms() {
-          return [
-              {
-                  name: 'user_number',
-                  type: 'input',
-                  value: '',
-                  label: '评论者ID',
-                  isNum: true,
-                  placeholder: '请输入评论者ID'
-              },
-              {
-                  name: 'dateTimeParams',
-                  type: 'datePicker',
-                  dateType: 'datetimerange',
-                  format: "yyyy-MM-dd HH:mm:ss",
-                  label: '评论时间',
-                  value: '',
-                  handler: {
-                      change: v => {
-                          this.emptyDateTime()
-                          this.setDateTime(v)
-                      },
-                      selectChange: (v, key) => {
-                          this.emptyDateTime()
-                      }
-                  }
-              }
-          ]
-      },
-      cfgs() {
-          return {
-              vm: this,
-              isShowCheckbox: true,
-              url: REQUEST.dynamic.getMoments,
-              columns: [
-                  {
-                      label: '评论者ID',
-                      prop: 'user_number'
-                  },
-                  {
-                      label: '评论者昵称',
-                      prop: 'user_nickname'
-                  },
-                  {
-                      label: '评论内容',
-                      minWidth: '120px',
-                      showOverFlow: true,
-                      render: (h, params) => {
-                          return h('span', params.row.content || '无')
-                      }
-                  },
-                  {
-                      label: '评论时间',
-                      prop: 'create_time',
-                      minWidth: '100px'
-                  },
-                  {
-                      label: '发布者ID',
-                      prop: 'user_number'
-                  },
-                  {
-                      label: '发布动态内容',
-                      prop: 'user_number'
-                  },
-                  {
-                      label: '操作',
-                      minWidth: '100px',
-                      render: (h, params) => {
-                          return h('div', [
-                              h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
-                          ])
-                      }
-                  }
-              ]
-          }
-      }
+    forms() {
+        return [
+            {
+                name: 'msg_user_number',
+                type: 'input',
+                value: '',
+                label: '评论者ID',
+                isNum: true,
+                placeholder: '请输入评论者ID'
+            },
+            {
+                name: 'dateTimeParams',
+                type: 'datePicker',
+                dateType: 'datetimerange',
+                format: "yyyy-MM-dd HH:mm:ss",
+                label: '评论时间',
+                value: '',
+                handler: {
+                    change: v => {
+                        this.emptyDateTime()
+                        this.setDateTime(v)
+                    },
+                    selectChange: (v, key) => {
+                        this.emptyDateTime()
+                    }
+                }
+            }
+        ]
+    },
+    cfgs() {
+        return {
+            vm: this,
+            isShowCheckbox: true,
+            url: REQUEST.dynamic.msgListAll,
+            columns: [
+                {
+                    label: '评论者ID',
+                    prop: 'user_number'
+                },
+                {
+                    label: '评论者昵称',
+                    prop: 'nickname'
+                },
+                {
+                    label: '评论内容',
+                    Width: '120px',
+                    showOverFlow: true,
+                    render: (h, params) => {
+                        return h('span', params.row.content || '无')
+                    }
+                },
+                {
+                    label: '评论时间',
+                    minWidth: '100px',
+                    render: (h, params) => {
+                      return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                    }
+                },
+                {
+                    label: '发布者ID',
+                    prop: 'moments_publish_User_number'
+                },
+                {
+                    label: '发布动态内容',
+                    Width: '120px',
+                    showOverFlow: true,
+                    prop: 'moments_content'
+                },
+                {
+                    label: '操作',
+                    minWidth: '100px',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
+                        ])
+                    }
+                }
+            ]
+        }
+    }
   },
   methods: {
       // 今日
@@ -181,7 +187,7 @@ export default {
               pagesize: params.size,
               start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
               end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
-              user_number: s.user_number
+              msg_user_number: s.msg_user_number
           }
       },
       // 刷新列表
@@ -208,38 +214,45 @@ export default {
           this.getList()
       },
       // 删除
-      async deleteParams(id) {
+      async deleteParams(id,type) {
           this.$confirm('确认删除当前动态吗?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
           }).then(async () => {
-              let res = await delMoments({ ids: id })
-              if(res.code === 2000) {
-                  this.$success('删除成功')
-                  this.getList()
-              }
+            let params = {
+              msg_ids :( type && type == 'arr') ? id : [id]
+            }
+            let res = await multiDeleteMsg(params)
+            if(res.code === 2000) {
+                this.$success('删除成功')
+                this.getList()
+            }
           }).catch(() => {});
       },
       // 查询
       onSearch() {
-          this.getList()
+        this.getList()
       },
       // 选择
       selectionChange(v){
         this.delList = v;
+        let ids = [];
+        this.delList.forEach(res=>{
+          ids.push(res.id);
+        })
+        this.delIds = ids;
       },
       // 一键删除评论
       BatchRurn(){
-        console.log("一键删除评论");
+       this.deleteParams(this.delIds,'arr');
       },
   },
   created() {
-      this.changeIndex(0)
+    this.changeIndex(0)
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  
 </style>

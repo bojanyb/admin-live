@@ -356,17 +356,15 @@ export default {
             }
           },
           {
-            label: "IP",
-            minWidth: "80px",
+            label: "充值人IP",
             render: (h, params) => {
               return h("span", params.row.ip ? params.row.ip : '无');
             },
           },
           {
             label: "地区",
-            minWidth: "80px",
             render: (h, params) => {
-              return h("span", params.row.addr ? params.row.addr : "无");
+              return h("span", params.row.addr ? params.row.addr : '未知');
             },
           },
           // {

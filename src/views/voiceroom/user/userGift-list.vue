@@ -147,13 +147,13 @@
             {
 							label: '送礼人IP',
 							render: (h, params) => {
-								return h('span', params.row.ip || '无')
+								return h('span', params.row.send_ip || '无')
 							}
 						},
             {
-							label: '送礼人地区',
+							label: '收礼人IP',
 							render: (h, params) => {
-								return h('span', params.row.addr || '无')
+								return h('span', params.row.receive_ip || '无')
 							}
 						}
 					]

@@ -152,17 +152,10 @@
 							prop: 'amount'
 						},
             {
-              label: "IP",
+              label: "收礼人IP",
               minWidth: "80px",
               render: (h, params) => {
-                return h("span", params.row.ip ? params.row.ip : '无');
-              },
-            },
-            {
-              label: "地区",
-              minWidth: "80px",
-              render: (h, params) => {
-                return h("span", params.row.addr ? params.row.addr : "无");
+                return h("span", params.row.receive_ip ? params.row.receive_ip : '无');
               },
             },
 					]
