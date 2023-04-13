@@ -2,8 +2,8 @@
 	<div class="guildRebate-list-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
-			<span>结算总计：{{ (this.form.status !== 2 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
+			<span>流水总计：{{ ruleForm.all_flow || 0 }}</span>
+			<span>结算总计：{{ ruleForm.all_settlement || 0 }}</span>
 		</div>
 
 		<div class="searchParams">
@@ -294,7 +294,18 @@
 			},
 			// 列表返回数据
 			saleAmunt(row) {
-				this.ruleForm = { ...row };
+				let ruleForm = { ...row };
+        if(this.form.status !== 2){
+          ruleForm.all_flow = ruleForm.all_flow;
+          ruleForm.all_settlement= ruleForm.all_settlement;
+        }else{
+          ruleForm.all_flow = ruleForm.total_flow;
+          ruleForm.all_settlement = ruleForm.total_settlement;
+        }
+        let timer = setTimeout(() => {
+          this.$set(this,"ruleForm",ruleForm);
+          clearTimeout(timer);
+        }, 50);
 			},
       // 分页切换 当前页码
       handleSizeChange(val){
