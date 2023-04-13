@@ -47,7 +47,7 @@
             <!-- <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel> -->
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt" @handleSizeChange="handleSizeChange"></tableList>
 	</div>
 </template>
 
@@ -203,7 +203,8 @@
 				dateTimeParams: {
 					start_time: null,
 					end_time: null
-				}
+				},
+        page : 1,
 			}
 		},
     watch: {
@@ -303,6 +304,10 @@
 			saleAmunt(row) {
 				this.ruleForm = { ...row }
 			},
+      // 分页切换 当前页码
+      handleSizeChange(val){
+        this.page = val;
+      },
 			// 获取公会列表
 			async guildListFunc() {
 				let res = await guildList()
@@ -317,9 +322,16 @@
 			},
       // 导出
       async BatchRurn() {
+        if(this.ruleForm.list.length == 0){
+          this.$warning("当前没有数据可以导出");
+          return
+        }
         let s = this.beforeSearch();
         if(s.start_time && s.start_time !== ""){
           s.is_all = 1;
+        }
+        if(this.page > 1){
+          s.page = this.page;
         }
         let res = await cpSettleLog(s);
         let arr = JSON.parse(JSON.stringify(res.data.list));

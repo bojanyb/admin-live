@@ -45,7 +45,7 @@
 				</div>
 			</div>
         </div>
-		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt" @handleSizeChange="handleSizeChange"></tableList>
 		<!-- 新增24小时房间组件 -->
 		<homeComp v-if="isDestoryComp" ref="homeComp" @destoryComp="destoryComp"></homeComp>
 	</div>
@@ -206,7 +206,8 @@
 					start_time: null,
 					end_time: null
 				},
-				isDestoryComp: false // 是否销毁组件
+				isDestoryComp: false, // 是否销毁组件
+        page : 1,
 			}
 		},
 		watch: {
@@ -306,6 +307,10 @@
 			saleAmunt(row) {
 				this.ruleForm = { ...row }
 			},
+      // 分页切换 当前页码
+      handleSizeChange(val){
+        this.page = val;
+      },
 			// 添加24小时房间
 			addHome() {
 				this.isDestoryComp = true
@@ -319,9 +324,16 @@
 			},
       // 导出excel
       async BatchRurn() {
+        if(this.ruleForm.list.length == 0){
+          this.$warning("当前没有数据可以导出");
+          return
+        }
         let s = this.beforeSearch();
         if(s.start_time && s.start_time !== ""){
           s.is_all = 1;
+        }
+        if(this.page > 1){
+          s.page = this.page;
         }
         let res = await settlementLog(s);
         let arr = JSON.parse(JSON.stringify(res.data.list));
