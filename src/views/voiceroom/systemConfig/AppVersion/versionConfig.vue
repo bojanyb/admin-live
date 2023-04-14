@@ -167,6 +167,12 @@ export default {
           isActive: false,
           label: "开黑语音",
           value: "com.hdb.kaihei",
+        },
+        {
+          key: "com.aiyi.lemon",
+          isActive: false,
+          label: "柠檬语音",
+          value: "com.aiyi.lemon",
         }
       ],
       packageName: [
