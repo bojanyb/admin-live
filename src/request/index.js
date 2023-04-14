@@ -496,6 +496,7 @@ const request = {
         searchPrettyNumber: `${HTTPHEADER}/PrettyNumber/searchNumber`, // 检测靓号
         recycle: `${HTTPHEADER}/PrettyNumber/recycle`, // 靓号回收
         recycleLog: `${HTTPHEADER}/PrettyNumber/recycleLog`, // 回收记录
+        refund: `${HTTPHEADER}/PrettyNumber/refund`, // 退款
     }
 }
 

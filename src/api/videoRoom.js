@@ -1056,6 +1056,15 @@ export function recycleLog(data) {
   })
 }
 
+// 靓号管理 退款
+export function refund(data) {
+  return request({
+    url: api.prettyNumber.refund,
+    method: 'post',
+    data
+  })
+}
+
 
 // 靓号管理 使用记录
 export function usingLog(data) {

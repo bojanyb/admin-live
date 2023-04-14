@@ -2669,6 +2669,22 @@ const GOODSENDSTATUS = [
   }
 ]
 
+// 退款状态
+const SELLLOGSTATUS = [
+  {
+    name: '使用中',
+    value: 1
+  },
+  {
+    name: '已过期',
+    value: 2
+  },
+  {
+    name: '已退款',
+    value: 3
+  }
+]
+
 // 显示状态
 const SHOWSTATUS = [
   {
@@ -3045,6 +3061,7 @@ export default {
   DEPOSITCONFIGURATIONPLATFORMLIST,
   BROADCASTTYPESTATUS,
   GOODSENDSTATUS,
+  SELLLOGSTATUS,
   TIMEPENALTYSTATUS,
   LOGOUTSTATUS,
   USESTATUS,
