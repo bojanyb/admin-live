@@ -44,7 +44,7 @@
 
 <script>
 // 引入api
-import { diamondRechargeAll, getMerchantList } from "@/api/finance.js";
+import { diamondRechargeAll, getMerchantList, wxMerchantList } from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
@@ -126,7 +126,7 @@ export default {
           value: "",
           keyName: "value",
           optionLabel: "name",
-          label: "商户号",
+          label: "APPID",
           clearable: true,
           placeholder: "请选择",
           options: this.guildTypeList,
@@ -174,6 +174,24 @@ export default {
               this.getList();
             },
           },
+        },
+        {
+          name: "wx_merchant_id",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "商户号",
+          clearable: true,
+          placeholder: "请选择",
+          options: this.merchantIdList,
+          handler: {
+            change: (v) => {
+              if (!v) {
+                this.$set(this.searchParams, "risk_status", "");
+              }
+           }
+          }
         },
       ];
     },
@@ -380,6 +398,7 @@ export default {
         end_time: null,
       },
       guildTypeList: [],
+      merchantIdList: [],
     };
   },
   methods: {
@@ -462,6 +481,7 @@ export default {
         purpose: s.purpose,
         appid: s.appid,
         risk_status: s.risk_status,
+        wx_merchant_id: s.wx_merchant_id,
       };
     },
     // 设置时间段
@@ -586,6 +606,28 @@ export default {
           })
       }
     },
+    // 获取商户号
+    async getWXMerchantList() {
+      const response = await wxMerchantList();
+      if (response.code === 2000) {
+        const tempArr = Array.from(
+          Array.isArray(response.data) ? response.data : []
+        );
+        this.merchantIdList =
+          tempArr.reduce((prev, curr) => {
+            prev.push({
+              name: curr.merchant_name,
+              value: curr.merchant_id,
+            });
+            return prev;
+          }, []) || [];
+
+          this.merchantIdList.unshift({
+            name: "全部",
+            value: ""
+          })
+      }
+    },
   },
   created() {
     let time = new Date();
@@ -598,6 +640,7 @@ export default {
       end_time: end,
     };
     this.getTypeList();
+    this.getWXMerchantList();
   },
   mounted(){},
 };
