@@ -2,8 +2,8 @@
 	<div class="guildRebate-list-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
-			<span>结算总计：{{ (this.form.status !== 2 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
+			<span>流水总计：{{ ruleForm.all_flow || ruleForm.total_flow || 0 }}</span>
+			<span>结算总计：{{ ruleForm.all_settlement || ruleForm.total_settlement || 0 }}</span>
 		</div>
 
 		<div class="searchParams">
@@ -63,7 +63,7 @@
 	// 引入公会列表接口
 	import { guildList } from '@/api/user'
 	// 引入api
-	import { doSettlement,settlementLog } from '@/api/videoRoom'
+	import { doSettlement,settlementLog,guildWeekListV2 } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -299,6 +299,7 @@
 			// 列表返回数据
 			saleAmunt(row) {
 				this.ruleForm = { ...row }
+        this.page = this.ruleForm.page;
 			},
       // 分页切换 当前页码
       handleSizeChange(val){
@@ -329,7 +330,12 @@
         if(this.page > 1){
           s.page = this.page;
         }
-        let res = await settlementLog(s);
+        let res = {}
+        if(this.form.status === 2){
+          res = await guildWeekListV2(s);
+        }else{
+          res = await settlementLog(s);
+        }
         let arr = JSON.parse(JSON.stringify(res.data.list));
         if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
         arr = arr.map((item, index) => {

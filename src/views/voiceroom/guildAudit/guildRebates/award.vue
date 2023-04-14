@@ -2,8 +2,8 @@
 	<div class="guildAudit-award-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
-			<span>结算总计：{{ (this.form.status !== 2 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
+      <span>流水总计：{{ ruleForm.all_flow || ruleForm.total_flow || 0 }}</span>
+			<span>结算总计：{{ ruleForm.all_settlement || ruleForm.total_settlement || 0 }}</span>
 		</div>
 		<div class="searchParams">
 			<div class="formBox">
@@ -53,7 +53,7 @@
 
 <script>
 	// 引入api
-	import { doSettlement,settlementLog } from '@/api/videoRoom'
+	import { doSettlement,settlementLog,getNowRoomOnlineReward } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -68,7 +68,6 @@
 	import MAPDATA from '@/utils/jsonMap.js'
 	// 引入新增24小时房间组件
 	import homeComp from './components/homeComp.vue'
-
 	export default {
 		name: 'guildRebate-list',
 		mixins: [mixins],
@@ -138,7 +137,7 @@
 						label: '总流水（含冻结）',
 						minWidth: '130px',
 						render: (h, params) => {
-							return h('span', params.row.t_flow + '钻石')
+							return h('span', this.form.status === 2  ? params.row.flow + "钻石" : params.row.t_flow + '钻石')
 						}
 					},
 					{
@@ -305,7 +304,19 @@
 			},
 			// 列表返回数据
 			saleAmunt(row) {
-				this.ruleForm = { ...row }
+				let ruleForm = { ...row };
+        this.page = ruleForm.page;
+        if(this.form.status !== 2){
+          ruleForm.all_flow = row.all_flow;
+          ruleForm.all_settlement= row.all_settlement;
+        }else{
+          ruleForm.total_flow = ruleForm.total_flow;
+          ruleForm.total_settlement = ruleForm.total_settlement;
+        }
+        let timer = setTimeout(() => {
+          this.$set(this,"ruleForm",ruleForm);
+          clearTimeout(timer);
+        }, 50);
 			},
       // 分页切换 当前页码
       handleSizeChange(val){
@@ -335,15 +346,19 @@
         if(this.page > 1){
           s.page = this.page;
         }
-        let res = await settlementLog(s);
+        let res = {}
+        if(this.form.status === 2){
+          res = await getNowRoomOnlineReward(s);
+        }else{
+          res = await settlementLog(s);
+        }
         let arr = JSON.parse(JSON.stringify(res.data.list));
         if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
         arr = arr.map((item, index) => {
-          let start_time = item.time_start ? timeFormat(item.time_start, 'YYYY-MM-DD HH:mm:ss', true) : '';
-          let endTime = this.form.status === 2 ? item.time_end : item.create_time;
-          let end_time = endTime ? timeFormat(endTime, 'YYYY-MM-DD HH:mm:ss', true) : '无';
-          let timer = timeFormat(item.time_start, 'YYYY', true) + '年第'+ item.now + "周" + start_time + "至" +end_time;
-          let guild_type =  MAPDATA.GUILDCONFIGTYPELIST.find(it => { return it.value === item.guild_type });
+          let start_time = this.form.status === 2 ? timeFormat(item.start, 'YYYY-MM-DD HH:mm:ss', true) : timeFormat(item.time_start, 'YYYY-MM-DD HH:mm:ss', true)
+          let endTime = this.form.status === 2 ? item.end : item.create_time
+          let end_time = endTime ? timeFormat(endTime, 'YYYY-MM-DD HH:mm:ss', true) : '无'
+          let timer = timeFormat(this.form.status === 2 ? item.start : item.time_start, 'YYYY', true) + "年第" + item.now + "周" + start_time + "至" + end_time
           let status_name = "";
           if(this.form.status === 1) {
             status_name = '待结算'
@@ -363,8 +378,8 @@
             guild_nickname:this.form.status === 2 ? item.guild_nickname : item.guild_name,
             online: item.online ?  formatTimeTwo(item.online) : '--',
             flow: item.flow + "钻石",
-            t_flow: item.t_flow + "钻石",
-            settlement: item.settlement + "喵粮",
+            t_flow: this.form.status === 2  ? item.flow + '钻石' : item.t_flow + '钻石',
+            settlement: this.form.status === 2 ? '无' : (item.settlement || 0) + '喵粮',
             status : status_name,
           };
           return params;

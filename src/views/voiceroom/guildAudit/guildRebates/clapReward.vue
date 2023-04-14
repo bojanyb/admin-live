@@ -55,7 +55,7 @@
 	// 引入公会列表接口
 	import { guildList } from '@/api/user'
 	// 引入api
-	import { doSettlement,cpSettleLog } from '@/api/videoRoom'
+	import { doSettlement,cpSettleLog,cpWeekList } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -302,7 +302,8 @@
 			},
 			// 列表返回数据
 			saleAmunt(row) {
-				this.ruleForm = { ...row }
+				this.ruleForm = { ...row };
+        this.page = this.ruleForm.page;
 			},
       // 分页切换 当前页码
       handleSizeChange(val){
@@ -333,7 +334,12 @@
         if(this.page > 1){
           s.page = this.page;
         }
-        let res = await cpSettleLog(s);
+        let res = {}
+        if(this.form.status === 2){
+          res = await cpWeekList(s);
+        }else{
+          res = await cpSettleLog(s);
+        }
         let arr = JSON.parse(JSON.stringify(res.data.list));
         if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
         arr = arr.map((item, index) => {

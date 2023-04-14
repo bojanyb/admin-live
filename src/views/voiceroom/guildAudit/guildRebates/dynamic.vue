@@ -2,14 +2,14 @@
 	<div class="guildRebate-dynamic-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
-			<span>结算总计：{{ (this.form.status !== 2 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
+			<span>流水总计：{{ ruleForm.all_flow || ruleForm.total_flow || 0 }}</span>
+			<span>结算总计：{{ ruleForm.all_settlement || ruleForm.total_settlement || 0 }}</span>
 		</div>
 		<div class="searchParams">
 			<div class="formBox">
 				<div class="sunBox">
 					<span>公会</span>
-                    <el-input v-model="form.guild_number" placeholder="请输入公会ID"></el-input>
+          <el-input v-model="form.guild_number" placeholder="请输入公会ID"></el-input>
 				</div>
 				<div class="sunBox">
 					<span>结算状态</span>
@@ -54,7 +54,7 @@
 	// 引入公会列表接口
 	import { guildList } from '@/api/user'
 	// 引入api
-	import { doSettlement,settlementLog } from '@/api/videoRoom'
+	import { doSettlement,settlementLog,guildWeekListV2 } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -291,7 +291,20 @@
 			},
 			// 列表返回数据
 			saleAmunt(row) {
-				this.ruleForm = { ...row }
+				let ruleForm = { ...row };
+        this.page = ruleForm.page;
+        if(this.form.status !== 2){
+          ruleForm.all_flow = row.all_flow;
+          ruleForm.all_settlement= row.all_settlement;
+        }else{
+          ruleForm.total_flow = ruleForm.total_flow;
+          ruleForm.total_settlement = ruleForm.total_settlement;
+        }
+        console.log("ruleForm:",ruleForm);
+        let timer = setTimeout(() => {
+          this.$set(this,"ruleForm",ruleForm);
+          clearTimeout(timer);
+        }, 50);
 			},
       // 分页切换 当前页码
       handleSizeChange(val){
@@ -322,7 +335,12 @@
         if(this.page > 1){
           s.page = this.page;
         }
-        let res = await settlementLog(s);
+        let res = {}
+        if(this.form.status === 2){
+          res = await guildWeekListV2(s);
+        }else{
+          res = await settlementLog(s);
+        }
         let arr = JSON.parse(JSON.stringify(res.data.list));
         if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
         arr = arr.map((item, index) => {
@@ -350,7 +368,7 @@
             guild_type : guild_type.name,
             flow : item.flow + "钻石",
             t_flow : item.t_flow + "钻石",
-            settlement : item.settlement + "喵粮",
+            settlement : this.form.status === 2 ? '无' : item.settlement + "喵粮",
             status : status_name,
           };
           return params;

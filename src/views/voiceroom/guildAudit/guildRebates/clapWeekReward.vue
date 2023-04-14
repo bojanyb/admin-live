@@ -54,7 +54,7 @@
 	// 引入公会列表接口
 	import { guildList } from '@/api/user'
 	// 引入api
-	import { doSettlement,settlementLog } from '@/api/videoRoom'
+	import { doSettlement,settlementLog,cpWeekRewardList } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -140,7 +140,7 @@
 						label: '结算状态',
 						minWidth: '120px',
 						render: (h, params) => {
-                            let name;
+              let name;
 							if(this.form.status === 1) {
 								name = '待结算'
 							} else if(this.form.status === 2) {
@@ -291,7 +291,8 @@
 			},
 			// 列表返回数据
 			saleAmunt(row) {
-				this.ruleForm = { ...row }
+				this.ruleForm = { ...row };
+        this.page = this.ruleForm.page;
 			},
       // 分页切换 当前页码
       handleSizeChange(val){
@@ -322,7 +323,12 @@
         if(this.page > 1){
           s.page = this.page;
         }
-        let res = await settlementLog(s);
+        let res = {}
+        if(this.form.status === 2){
+          res = await cpWeekRewardList(s);
+        }else{
+          res = await settlementLog(s);
+        }
         let arr = JSON.parse(JSON.stringify(res.data.list));
         if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
         arr = arr.map((item, index) => {
@@ -350,7 +356,7 @@
             guild_type : guild_type.name,
             flow : item.flow + "钻石",
             t_flow : item.t_flow + "钻石",
-            settlement : item.settlement + "喵粮",
+            settlement : this.form.status === 2 ? '无' : item.settlement + '喵粮',
             status : status_name,
           };
           return params;

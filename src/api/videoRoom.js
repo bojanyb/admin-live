@@ -1202,6 +1202,23 @@ export function settlementLog(data) {
   })
 }
 
+// 公会批量结算
+export function guildWeekListV2(data) {
+  return request({
+    url: api.guild.guildWeekListV2,
+    method: 'post',
+    data
+  })
+}
+
+export function getNowRoomOnlineReward(data) {
+  return request({
+    url: api.guild.getNowRoomOnlineReward,
+    method: 'post',
+    data
+  })
+}
+
 // 拍一拍房间次数结算
 export function cpSettleLog(data) {
   return request({
@@ -1211,6 +1228,21 @@ export function cpSettleLog(data) {
   })
 }
 
+export function cpWeekList(data) {
+  return request({
+    url: api.guild.cpWeekList,
+    method: 'post',
+    data
+  })
+}
+
+export function cpWeekRewardList(data) {
+  return request({
+    url: '/Guild/cpWeekRewardList',
+    method: 'post',
+    data
+  })
+}
 /***********广播******************/
 
 // 发送广播消息
