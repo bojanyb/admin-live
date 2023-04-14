@@ -109,3 +109,12 @@ export function getMerchantList(data) {
     data
   })
 }
+
+// 修改商户号
+export function wxMerchantList(data) {
+  return request({
+    url: REQUEST.finance.getWXMerchantList,
+    method: 'post',
+    data
+  })
+}
