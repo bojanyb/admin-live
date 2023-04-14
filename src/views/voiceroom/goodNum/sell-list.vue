@@ -67,6 +67,17 @@ export default {
                     options: MAPDATA.GOODSENDSTATUS
                 },
                 {
+                    name: 'log_status',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '状态',
+                    placeholder: '请选择',
+                    clearable: true,
+                    options: MAPDATA.SELLLOGSTATUS
+                },
+                {
                     name: 'dateTimeParams',
                     type: 'datePicker',
                     dateType: 'datetimerange',
@@ -127,6 +138,14 @@ export default {
                     {
                         label: '购买金额',
                         prop: 'price'
+                    },
+                    {
+                        label: '状态',
+                        prop: 'log_status',
+                        render: (h, params) => {
+                          let data = MAPDATA.SELLLOGSTATUS.find(item => { return item.value === params.row.log_status })
+                          return h('span', data ? data.name : '无')
+                        }
                     }
                 ]
             }
@@ -158,6 +177,7 @@ export default {
                 scene: s.scene + '',
                 start_time: Math.floor(s.start_time / 1000),
                 end_time: Math.floor(s.end_time / 1000),
+                log_status: s.log_status ? s.log_status : ''
             }
         },
         // 设置时间段

@@ -12,6 +12,8 @@
 </template>
 
 <script>
+// 引入api
+import { refund } from '@/api/videoRoom.js'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -132,9 +134,11 @@ export default {
                     },
                     {
                       label: '操作',
+                      minWidth: '120px',
                       render: (h, params) => {
                           return h('div', [
-                          h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.recycle(params.row)}}},'回收')
+                            h('el-button', { props: { type: 'danger' }, on: { click: () => { this.recycle(params.row) } } }, '回收'),
+                            h('el-button', { props: { type: 'info'}, style:{display: params.row.cate === '房间靓号' ? 'unset' : 'none'}, on: {click:()=>{this.handleRefund(params.row)}}},'退款')
                           ])
                       }
                     }
@@ -202,7 +206,32 @@ export default {
           this.recycleSource = row;
           this.$refs["recycleComp"].ruleForm.reason = "";
           this.$refs["recycleComp"].dialogVisible = true
-        }
+        },
+      // 退款
+      handleRefund(row) {
+        this.$confirm("此操作将进行退款, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(async () => {
+            const response = await refund({ id: row.id });
+            const { code } = response;
+            if (code + "" === "2000") {
+              this.$message({
+                type: "success",
+                message: "退款成功!",
+              });
+              this.getList();
+            }
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消退款",
+            });
+          });
+      },
     }
 }
 </script>
