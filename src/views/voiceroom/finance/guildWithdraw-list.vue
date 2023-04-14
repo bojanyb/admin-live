@@ -139,24 +139,6 @@ export default {
           }
         },
         {
-          name: "wx_merchant_id",
-          type: "select",
-          value: "",
-          keyName: "value",
-          optionLabel: "name",
-          label: "商户号",
-          clearable: true,
-          placeholder: "请选择",
-          options: this.merchantIdList,
-          handler: {
-            change: (v) => {
-              if (!v) {
-                this.$set(this.searchParams, "risk_status", "");
-              }
-           }
-          }
-        },
-        {
           name: "risk_status",
           type: "select",
           value: "",
@@ -192,6 +174,24 @@ export default {
               this.getList();
             },
           },
+        },
+        {
+          name: "wx_merchant_id",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "商户号",
+          clearable: true,
+          placeholder: "请选择",
+          options: this.merchantIdList,
+          handler: {
+            change: (v) => {
+              if (!v) {
+                this.$set(this.searchParams, "risk_status", "");
+              }
+           }
+          }
         },
       ];
     },
