@@ -88,7 +88,8 @@ export default {
                     { required: true, message: '请输入增发说明', trigger: 'blur' },
                     { min: 1, max: 100, message: '增发说明最大限制为100个字符', trigger: 'blur' }
                 ]
-            }
+            },
+            isSubmit: false,
         };
     },
     computed: {
@@ -158,23 +159,28 @@ export default {
         },
         // 提交
         async submitForm(formName) {
-            this.$refs[formName].validate(async (valid) => {
-                if (valid) {
-                    let res = await getUserAddMoney(this.ruleForm)
-                    if(res.code === 2000) {
-                        if(this.ruleForm.amount.indexOf('-') !== -1) {
-                            this.$success('扣除成功')
-                        } else {
-                            this.$success('增发成功')
-                        }
-                        this.dialogVisible = false
-                        this.$emit('getList')
-                    }
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+          if(this.isSubmit == false){
+            this.isSubmit = true
+          }else{
+            return
+          }
+          this.$refs[formName].validate(async (valid) => {
+              if (valid) {
+                  let res = await getUserAddMoney(this.ruleForm)
+                  if(res.code === 2000) {
+                      if(this.ruleForm.amount.indexOf('-') !== -1) {
+                          this.$success('扣除成功')
+                      } else {
+                          this.$success('增发成功')
+                      }
+                      this.dialogVisible = false
+                      this.$emit('getList')
+                  }
+              } else {
+                  this.isSubmit = false;
+                  return false;
+              }
+          });
         },
         // 重置
         resetForm(formName) {

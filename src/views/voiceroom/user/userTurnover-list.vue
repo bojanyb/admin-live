@@ -67,7 +67,7 @@
 						value: 0,
 						keyName: 'value',
 						optionLabel: 'name',
-						label: '类型',
+						label: '流水类型',
 						placeholder: '请选择',
 						options: MAPDATA.DEALSOURCETYPELIST
 					},
@@ -77,9 +77,19 @@
 						value: 0,
 						keyName: 'id',
 						optionLabel: 'name',
-						label: '来源',
+						label: '房间来源',
 						placeholder: '请选择',
 						options: MAPDATA.DEALSOURCELIST
+					},
+          {
+						name: 'guild_type',
+						type: 'select',
+						value: 0,
+						keyName: 'id',
+						optionLabel: 'name',
+						label: '房间类型',
+						placeholder: '请选择',
+						options: this.roomTypeList
 					},
 					{
 						name: 'dateTimeParams',
@@ -134,23 +144,38 @@
 							}
 						},
 						{
-							label: '类型',
+							label: '流水类型',
 							render: (h, params) => {
 								let data = MAPDATA.DEALSOURCETYPELIST.find(item => { return item.value === params.row.source })
 								return h('span', data ? data.name : '无')
 							}
 						},
 						{
-							label: '来源',
+							label: '房间来源',
 							render: (h, params) => {
 								let data = MAPDATA.DEALSOURCELIST.find(item => { return item.id === params.row.flow_type })
+								return h('span', data ? data.name : '无')
+							}
+						},
+            {
+							label: '房间类型',
+							prop: 'amount',
+              render: (h, params) => {
+								let data = this.roomTypeList.find(item => { return item.id === params.row.guild_type })
 								return h('span', data ? data.name : '无')
 							}
 						},
 						{
 							label: '金额',
 							prop: 'amount'
-						}
+						},
+            {
+              label: "收礼人IP",
+              minWidth: "80px",
+              render: (h, params) => {
+                return h("span", params.row.receive_ip ? params.row.receive_ip : '无');
+              },
+            },
 					]
 				}
 			}
@@ -165,7 +190,21 @@
 				dateTimeParams: {
 					start_time: null,
 					end_time: null
-				}
+				},
+        roomTypeList : [
+          {
+            id : 0,
+            name : "全部"
+          },
+          {
+            id : 1,
+            name : "直播房间"
+          },
+          {
+            id : 2,
+            name : "派对房间"
+          }
+        ]
 			}
 		},
 		methods: {
@@ -185,6 +224,7 @@
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
 					end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
 					flow_type: s.flow_type,
+          guild_type: s.guild_type,
 					source: s.source
 				}
 			},

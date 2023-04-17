@@ -373,6 +373,18 @@ export default {
                 return h('span', params.row.out_trade_no || '无')
             }
           },
+          {
+            label: "充值人IP",
+            render: (h, params) => {
+              return h("span", params.row.ip ? params.row.ip : '无');
+            },
+          },
+          {
+            label: "地区",
+            render: (h, params) => {
+              return h("span", params.row.addr ? params.row.addr : '未知');
+            },
+          },
           // {
           //     label: '商户单号',
           //     minWidth: '150px',

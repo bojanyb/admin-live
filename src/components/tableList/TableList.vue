@@ -216,8 +216,10 @@
         this.search.size = val;
         this.search.page = 1;
         this.getData();
+        this.$emit('handleSizeChange', val);
       },
       handlePageChange(val) {
+        this.$emit('handleSizeChange', val);
         if(window.location.href.indexOf('/serviceConfig/message-history') !== -1) { // 如果页面是消息记录 - 需要去当前页处理
           this.$emit('handlePageChange', val)
         } else {

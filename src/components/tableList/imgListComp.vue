@@ -1,9 +1,14 @@
 <template>
     <div class="imgListComp-box">
-        
         <div class="imgBox" v-if="type === 1 || isShowImg">
-            <el-image v-for="(item,index) in srcList" :key="index" :src="item || item"
+            <!-- <el-image v-for="(item,index) in srcList" :key="index" :src="item || item"
             :preview-src-list="[item||imgUrl]">
+                <div slot="error" class="image-slot">
+                    <img :src="imgUrl" />
+                </div>
+            </el-image> -->
+            <el-image v-for="(item,index) in srcList" :key="index" :src="item || item"
+            :preview-src-list="srcList">
                 <div slot="error" class="image-slot">
                     <img :src="imgUrl" />
                 </div>
@@ -71,6 +76,7 @@ export default {
             imgUrl: require('@/assets/error.png')
         };
     },
+    mounted(){},
     methods: {
         // 放大
         zoomClick() {

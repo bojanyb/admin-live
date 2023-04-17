@@ -41,12 +41,13 @@
 					<el-button icon="el-icon-refresh" @click="reset">重置</el-button>
 					<el-button type="success" v-if="form.status === 1" @click="batchFunc(1)">批量通过</el-button>
 					<el-button type="danger" v-if="form.status === 1" @click="batchFunc(2)">批量忽略</el-button>
+          <el-button type="danger" @click="BatchRurn()">导出EXCEL</el-button>
 				</div>
 			</div>
             <!-- <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel> -->
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt" @handleSizeChange="handleSizeChange"></tableList>
 	</div>
 </template>
 
@@ -54,7 +55,7 @@
 	// 引入公会列表接口
 	import { guildList } from '@/api/user'
 	// 引入api
-	import { doSettlement } from '@/api/videoRoom'
+	import { doSettlement,cpSettleLog,cpWeekList } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -62,7 +63,7 @@
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
-	import { timeFormat } from '@/utils/common.js'
+	import { timeFormat,exportTableData } from '@/utils/common.js'
 	// 引入公共参数
 	import mixins from '@/utils/mixins.js'
 	// 引入公共map
@@ -202,10 +203,11 @@
 				dateTimeParams: {
 					start_time: null,
 					end_time: null
-				}
+				},
+        page : 1,
 			}
 		},
-        watch: {
+    watch: {
 			'form.status': {
 				handler(n, o) {
 					if((o === 1 || o === 3 || o === 4) && (n === 1 || n === 3 || n === 4)) {
@@ -215,16 +217,16 @@
 					}
 				},
 				deep: true
-			}
+		}
 		},
 		methods: {
 			// 配置参数
 			beforeSearch(params) {
 				let s = { ...this.form, ...this.dateTimeParams }
 				let data = {
-					page: params.page,
-					pagesize: params.size,
-					guild_number: s.guild_number,
+					page: params ? params.page : 1,
+					pagesize: params ? params.size : 10,
+					guild_number: s.guild_number ? s.guild_number : "",
 					start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
 					end_time: s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
           type: 6,
@@ -300,8 +302,13 @@
 			},
 			// 列表返回数据
 			saleAmunt(row) {
-				this.ruleForm = { ...row }
+				this.ruleForm = { ...row };
+        this.page = this.ruleForm.page;
 			},
+      // 分页切换 当前页码
+      handleSizeChange(val){
+        this.page = val;
+      },
 			// 获取公会列表
 			async guildListFunc() {
 				let res = await guildList()
@@ -313,7 +320,76 @@
 					this.guildList = res.data.list || []
 				}
 
-			}
+			},
+      // 导出
+      async BatchRurn() {
+        if(this.ruleForm.list.length == 0){
+          this.$warning("当前没有数据可以导出");
+          return
+        }
+        let s = this.beforeSearch();
+        if(s.start_time && s.start_time !== ""){
+          s.is_all = 1;
+        }
+        if(this.page > 1){
+          s.page = this.page;
+        }
+        let res = {}
+        if(this.form.status === 2){
+          res = await cpWeekList(s);
+        }else{
+          res = await cpSettleLog(s);
+        }
+        let arr = JSON.parse(JSON.stringify(res.data.list));
+        if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
+        arr = arr.map((item, index) => {
+          let start_time = item.time_start ? timeFormat(item.time_start, 'YYYY-MM-DD HH:mm:ss', true) : '';
+          let endTime = this.form.status === 2 ? item.time_end : item.create_time;
+          let end_time = endTime ? timeFormat(endTime, 'YYYY-MM-DD HH:mm:ss', true) : '无';
+          let timer = timeFormat(item.time_start, 'YYYY', true) + '年第'+ item.now + "周" + start_time + "至" +end_time;
+          let guild_type =  MAPDATA.GUILDCONFIGTYPELIST.find(it => { return it.value === item.guild_type });
+          let status_name = "";
+          if(this.form.status === 1) {
+            status_name = '待结算'
+          } else if(this.form.status === 2) {
+            status_name = '未结算'
+          } else if(this.form.status === 3) {
+            status_name = '已结算'
+          } else {
+            status_name = '已忽略'
+          }
+          let params = {
+            num: (index+1),
+            timer: timer,
+            guild_number : item.guild_number,
+            guild_name : item.guild_name,
+            room_number : item.room_number,
+            room_title : item.room_title,
+            room_flow : (item.room_flow ? item.room_flow + '钻石' : '无'),
+            cp_stat : item.cp_stat + "次",
+            t_flow : item.t_flow + "钻石",
+            reward_name : item.reward_name,
+            settlement : (item.settlement ? item.settlement + '喵粮' : '无'),
+            status : status_name,
+          };
+          return params;
+        });
+        let nameList = [
+          "序号",
+          "时间",
+          "公会ID",
+          "公会名称",
+          "房间ID",
+          "房间标题",
+          "拍一拍房间流水",
+          "拍成次数",
+          "总流水（含冻结）",
+          "奖励名称",
+          "周奖励金额",
+          "结算状态",
+        ];
+        exportTableData(arr, nameList, "拍一拍房间次数结算");
+      },
 		}
 	}
 </script>

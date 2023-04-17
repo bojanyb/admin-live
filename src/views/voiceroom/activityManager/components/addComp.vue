@@ -35,21 +35,34 @@
                 </el-form-item>
                 <el-form-item label="活动时间">
                     <el-date-picker
-					v-model="time"
-					type="datetimerange"
-					range-separator="至"
-					start-placeholder="开始日期"
-					end-placeholder="结束日期"
-					value-format="timestamp"
-					:default-time="['00:00:00', '23:59:59']"
+                    v-model="time"
+                    type="datetimerange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    value-format="timestamp"
+                    :default-time="['00:00:00', '23:59:59']"
                     @change="handleChangeTime">
-					</el-date-picker>
+					        </el-date-picker>
                 </el-form-item>
-            <el-form-item label="展示位置">
-            <el-select v-model="ruleForm.pos_id" placeholder="请选择展示位置">
-              <el-option v-for="item in postOptions" :label="item.pos_desc" :value="item.pos_id" :key="item.pos_id"></el-option>
-            </el-select>
-            </el-form-item>
+                <el-form-item label="展示位置">
+                <el-select v-model="ruleForm.pos_id" placeholder="请选择展示位置">
+                  <el-option v-for="item in postOptions" :label="item.pos_desc" :value="item.pos_id" :key="item.pos_id"></el-option>
+                </el-select>
+                </el-form-item>
+                <el-form-item label="是否全屏" prop="is_half">
+                    <el-radio-group v-model="ruleForm.is_half" @change="handleBuyChange(ruleForm.is_half)">
+                      <el-radio label="0">是</el-radio>
+                      <el-radio label="1">否</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="屏幕尺寸" prop="height">
+                    <el-input v-model="ruleForm.height" v-input-limit="2" placeholder="请输入屏幕高度" clearable>
+                      <template slot="append">
+                          <span class="unit">dp</span>
+                      </template>
+                    </el-input>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="resetForm('ruleForm')">取 消</el-button>
@@ -149,7 +162,9 @@ export default {
                 time: '',
                 url: '',
                 nav_to: '',
-                pos_id: ''
+                pos_id: '',
+                is_half: "0",
+                height: 0,
             },
           postOptions: [],
             rules: {
@@ -161,6 +176,12 @@ export default {
                 ],
                 url: [
                     { required: true, message: '请输入落地地址', trigger: 'blur' }
+                ],
+                is_half: [
+                    { required: true, message: '请选择是否全屏', trigger: 'change' }
+                ],
+                height: [
+                    { required: true, message: '请输入屏幕尺寸', trigger: 'blur' }
                 ],
             },
         };
@@ -225,7 +246,9 @@ export default {
                     }
                     params.nav_to = {
                         type : type,
-                        uri: url
+                        uri: url,
+                        is_half: params.is_half,
+                        height : params.height
                     }
                     if(roomId !== ""){
                         params.nav_to.params = {
@@ -237,6 +260,8 @@ export default {
                     delete params.url
                     delete params.jumpType
                     delete params.time
+                    delete params.is_half
+                    delete params.height
                     if(this.status == 'add'){
                         addResourceConfig(params).then(res => {
                             if(res.code === 2000) {
@@ -323,6 +348,8 @@ export default {
         margin-top: 5vh !important;
     }
     .el-form {
+        max-height: 73vh !important;
+        overflow-y: scroll;
         .el-form-item__label::before {
             margin-right: 0px !important;
         }
@@ -360,6 +387,15 @@ export default {
         .tipsItem{
             margin-bottom: 0;
         }
+    }
+    .el-form::-webkit-scrollbar {
+      width: 5px;
+      background-color: #F5F5F5;
+    }
+    .el-form::-webkit-scrollbar-thumb {
+      border-radius:5px;
+      background:rgba(0,0,0,0.1);
+      -webkit-box-shadow:inset006pxrgba(0,0,0,0.5);
     }
 }
 </style>
