@@ -121,12 +121,30 @@ export default {
           placeholder: "请输入商户/支付单号",
         },
         {
+          name: "wx_merchant_id",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "商户",
+          clearable: true,
+          placeholder: "请选择",
+          options: this.merchantIdList,
+          handler: {
+            change: (v) => {
+              if (!v) {
+                this.$set(this.searchParams, "risk_status", "");
+              }
+           }
+          }
+        },
+        {
           name: "appid",
           type: "select",
           value: "",
           keyName: "value",
           optionLabel: "name",
-          label: "APPID",
+          label: "场景",
           clearable: true,
           placeholder: "请选择",
           options: this.guildTypeList,
@@ -174,24 +192,6 @@ export default {
               this.getList();
             },
           },
-        },
-        {
-          name: "wx_merchant_id",
-          type: "select",
-          value: "",
-          keyName: "value",
-          optionLabel: "name",
-          label: "商户号",
-          clearable: true,
-          placeholder: "请选择",
-          options: this.merchantIdList,
-          handler: {
-            change: (v) => {
-              if (!v) {
-                this.$set(this.searchParams, "risk_status", "");
-              }
-           }
-          }
         },
       ];
     },
