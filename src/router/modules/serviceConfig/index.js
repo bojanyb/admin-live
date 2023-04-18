@@ -65,15 +65,15 @@ const serviceConfigRouter = {
 				noCache: true
 			}
 		},
-    {
-			path: 'discuss-list',
-			component: () => import('@/views/voiceroom/serviceConfig/discuss-list'),
-			name: 'discuss-list',
-			meta: {
-				title: '动态评论记录',
-				noCache: true
-			}
-		},
+    // {
+		// 	path: 'discuss-list',
+		// 	component: () => import('@/views/voiceroom/serviceConfig/discuss-list'),
+		// 	name: 'discuss-list',
+		// 	meta: {
+		// 		title: '动态评论记录',
+		// 		noCache: true
+		// 	}
+		// },
 	]
 }
 

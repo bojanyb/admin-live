@@ -81,16 +81,16 @@
 						placeholder: '请选择',
 						options: MAPDATA.DEALSOURCELIST
 					},
-          {
-						name: 'guild_type',
-						type: 'select',
-						value: 0,
-						keyName: 'id',
-						optionLabel: 'name',
-						label: '房间类型',
-						placeholder: '请选择',
-						options: this.roomTypeList
-					},
+          // {
+					// 	name: 'guild_type',
+					// 	type: 'select',
+					// 	value: 0,
+					// 	keyName: 'id',
+					// 	optionLabel: 'name',
+					// 	label: '房间类型',
+					// 	placeholder: '请选择',
+					// 	options: this.roomTypeList
+					// },
 					{
 						name: 'dateTimeParams',
 						type: 'datePicker',
@@ -157,14 +157,14 @@
 								return h('span', data ? data.name : '无')
 							}
 						},
-            {
-							label: '房间类型',
-							prop: 'amount',
-              render: (h, params) => {
-								let data = this.roomTypeList.find(item => { return item.id === params.row.guild_type })
-								return h('span', data ? data.name : '无')
-							}
-						},
+            // {
+						// 	label: '房间类型',
+						// 	prop: 'amount',
+            //   render: (h, params) => {
+						// 		let data = this.roomTypeList.find(item => { return item.id === params.row.guild_type })
+						// 		return h('span', data ? data.name : '无')
+						// 	}
+						// },
 						{
 							label: '金额',
 							prop: 'amount'
