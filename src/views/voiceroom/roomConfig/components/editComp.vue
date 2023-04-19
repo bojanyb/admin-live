@@ -48,8 +48,33 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+           <el-col :span="24">
+              <el-form-item label="是否限时" prop="rule_type">
+                <el-radio-group v-model="ruleForm.rule_type">
+                  <el-radio label="2">否</el-radio>
+                  <el-radio label="1">是</el-radio>
+                </el-radio-group>
+              </el-form-item>
+          </el-col>
+        </el-row>
 
-        <el-row v-if="tabIndex === '0'">
+        <el-row v-if="ruleForm.rule_type === '1'">
+           <el-col :span="24">
+              <el-form-item label="生效日期" prop="effect_time">
+                <el-date-picker
+                  v-model="ruleForm.effect_time"
+                  type="datetimerange"
+                  value-format="timestamp"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期">
+                </el-date-picker>
+              </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row v-if="tabIndex === '0' && ruleForm.rule_type === '1'">
           <el-col :span="12">
             <el-form-item
               label="开始时间"
@@ -173,6 +198,8 @@ export default {
         start_time: null,
         end_time: null,
         room_ids: [],
+        rule_type: "1",
+        effect_time: []
       },
       oldParams: {}, // 老数据
       rules: {
@@ -201,6 +228,8 @@ export default {
         channels: [
           { required: true, message: "请输入渠道ID", trigger: "blur" },
         ],
+        rule_type: [{ required: true, message: "请选择是否限时", trigger: "blur" }],
+        effect_time: [{ required: true, message: "请选择生效日期", trigger: "change" }],
       },
       tableData: [],
       sexList: [
@@ -292,8 +321,16 @@ export default {
         para.name = params.name || "";
         para.channels = params.channels || "";
         para.sex = params.sex + "" || "";
-        para.start_time = ZeroPoint + params.start_time * 1000;
-        para.end_time = ZeroPoint + params.end_time * 1000;
+
+        // 是否限时
+        para.rule_type = params.rule_type + "" || "2";
+        // 生效时间
+        if (para.rule_type === "1") {
+          para.start_time = ZeroPoint + params.start_time * 1000;
+          para.end_time = ZeroPoint + params.end_time * 1000;
+          para.effect_time = [params.valid_at * 1000, params.invalid_at * 1000]
+        }
+
         const res = await this.handlerGetHasConfigRoom(params.id);
         para.room_ids = res.data.rooms.reduce((pev, cur) => {
           pev.push({
@@ -358,8 +395,16 @@ export default {
             new Date(new Date().toLocaleDateString()).getTime() / 1000;
           const startTime = Math.floor(params.start_time / 1000);
           const endTime = Math.floor(params.end_time / 1000);
-          params.start_time = startTime - ZeroPoint;
-          params.end_time = endTime - ZeroPoint;
+          params.start_time = (startTime - ZeroPoint - 1) >= 0  ? startTime - ZeroPoint - 1 : 0;
+          params.end_time = (endTime - ZeroPoint - 1) >= 0 ? endTime - ZeroPoint - 1 : 0;
+          // 生效时间
+          if (params && params.effect_time) {
+             params.valid_at = params.effect_time[0] / 1000;
+             params.invalid_at = params.effect_time[1] / 1000;
+          }
+          delete params.effect_time;
+
+          console.log(params.start_time, params.end_time);
           let temp = {
             code: params.code,
             name: params.name,
