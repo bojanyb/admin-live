@@ -20,3 +20,12 @@ export function deleteMsg(data) {
         data
     })
 }
+
+// 删除评论
+export function multiDeleteMsg(data) {
+  return request({
+      url: api.dynamic.multiDeleteMsg,
+      method: 'post',
+      data
+  })
+}
