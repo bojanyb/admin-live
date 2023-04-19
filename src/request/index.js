@@ -436,6 +436,8 @@ const request = {
         delMoments: `${HTTPHEADER}/moments/delMoments`, // 删除动态
         msgList: `${HTTPHEADER}/moments/msgList`, // 评论列表
         deleteMsg: `${HTTPHEADER}/moments/deleteMsg`, // 删除评论
+        msgListAll: `${HTTPHEADER}/moments/msgListAll`, // 评论列表
+        multiDeleteMsg: `${HTTPHEADER}/moments/multiDeleteMsg`, // 批量删评论文案
     },
 
     // 活动管理
