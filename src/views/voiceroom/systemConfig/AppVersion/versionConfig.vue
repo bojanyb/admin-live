@@ -29,10 +29,9 @@
           <el-radio-group v-model="is_mandatory">
             <el-radio :label="10">建议升级</el-radio>
             <el-radio :label="20">强制升级</el-radio>
-            <el-radio :label="30" v-if="platform !== '1'">热更新</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="下载链接" prop="download_url" v-if="is_mandatory !== 30">
+        <el-form-item label="下载链接" prop="download_url">
           <el-input v-model="Form.download_url" placeholder="输入下载链接"></el-input>
         </el-form-item>
         <el-form-item label="版本号" prop="version">
@@ -40,11 +39,6 @@
         </el-form-item>
         <el-form-item label="安卓Code" prop="version_code" v-if="platform !== '1'">
           <el-input v-model="Form.version_code"></el-input>
-        </el-form-item>
-        <el-form-item label="热更新code" prop="hotfix" v-if="is_mandatory === 30 && platform !== '1'"
-        :rules="[ { required: true, pattern: /^[0-9]+([.]{1}[0-9]{1,2})?$/, message: '请输入正整数', trigger: 'blur' }]"
-        >
-          <el-input v-model="Form.hotfix" placeholder="如: 1.0.1"></el-input>
         </el-form-item>
         <el-form-item label="更新说明" prop="content">
           <el-input v-model="Form.content" type="textarea" rows="3" placeholder="输入更新内容"></el-input>
@@ -95,8 +89,7 @@ export default {
         content: '', //更新内容
         download_url: '', //文件下载链接
         package_name: '', // 包名 喵喵星球、声撩语音
-        version_code: '', // 安卓code
-        hotfix: "" // 热更新code
+        version_code: '' // 安卓code
       },
       FormRules: {
         version: [{
@@ -109,18 +102,13 @@ export default {
           message: '请输入安卓Code',
           trigger: 'blur'
         }],
-        // hotfix:[{
-        //   required: true,
-        //   message: '请输入热更新Code',
-        //   trigger: 'blur'
-        // }],
         content: [{
           required: true,
           message: '请输入更新内容',
           trigger: 'blur'
         }],
         download_url: [{
-          required: (this.is_mandatory !== 30 ? true : false),
+          required: true,
           message: '请输入文件下载链接',
           trigger: 'blur'
         }]
@@ -167,13 +155,7 @@ export default {
           isActive: false,
           label: "开黑语音",
           value: "com.hdb.kaihei",
-        },
-        // {
-        //   key: "com.aiyi.lemon",
-        //   isActive: false,
-        //   label: "柠檬语音",
-        //   value: "com.aiyi.lemon",
-        // }
+        }
       ],
       packageName: [
         {
@@ -316,14 +298,6 @@ export default {
             }
           },
           {
-            label: '热更新code',
-            prop: 'hotfix',
-            width: '120px',
-            render: (h, params) => {
-              return h('span', (params.row.is_mandatory == 30 ? params.row.hotfix : "--" ))
-            }
-          },
-          {
             label: '升级类型',
             prop: 'download_url',
             width: '120px',
@@ -335,9 +309,6 @@ export default {
                   break;
                 case 20:
                   isMandatoryText = "强制升级";
-                  break;
-                case 30:
-                  isMandatoryText = "热更新";
                   break;
               }
               return h('span', isMandatoryText)
