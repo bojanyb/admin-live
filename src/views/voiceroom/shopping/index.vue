@@ -62,6 +62,13 @@ export default {
                         prop: 'id'
                     },
                     {
+                        label: '商品图片',
+                        isimg: true,
+                        prop: 'goods_image',
+                        imgWidth: '50px',
+                        imgHeight: '50px'
+                    },
+                    {
                         label: '商品名称',
                         prop: 'goods_name'
                     },
@@ -136,6 +143,21 @@ export default {
                     clearable: true,
                     options: MAPDATA.SHOPPING
                 },
+                {
+                  name: 'goods_id',
+                  type: 'input',
+                  value: '',
+                  label: '商品ID',
+                  isNum: true,
+                  placeholder: '请输入商品ID'
+                },
+                {
+                  name: 'goods_name',
+                  type: 'input',
+                  value: '',
+                  label: '商品名称',
+                  placeholder: '请输入商品名称'
+                },
             ]
         },
     },
@@ -165,7 +187,9 @@ export default {
                 user_id: s.user_id,
                 order_id: s.order_id,
                 sort: s.sort,
-                goods_type: s.goods_type
+                goods_type: s.goods_type,
+                goods_id: s.goods_id,
+                goods_name: s.goods_name
             }
         },
         // 设置时间段
