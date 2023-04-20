@@ -171,5 +171,23 @@ export function exchangeLogV4(data) {
   })
 }
 
+/*******最强周星**********/
 
+// 获取礼物
+export function getGiftList(data) {
+  return request({
+    url: api.activity.getGiftList,
+    method: 'post',
+    data
+  })
+}
+
+// 获取轮次
+export function getRoundList(data) {
+  return request({
+    url: api.activity.getRoundList,
+    method: 'post',
+    data
+  })
+}
 
