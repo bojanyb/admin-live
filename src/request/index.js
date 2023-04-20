@@ -480,6 +480,12 @@ const request = {
         poolDetailV4: `${HTTPHEADER}/hdExploreLog/poolDetail`, // 获取探索列表
         exchangeLogV4: `${HTTPHEADER}/hdExploreLog/exchangeLog`, // 获取兑换数据
 
+        // 最强周星活动
+        giftLogList: `${HTTPHEADER}/hdWeekstarLog/giftLog`, // 周星活动数据
+        getGiftList: `${HTTPHEADER}/hdWeekstarLog/getGift`, // 获取礼物
+        getRoundList: `${HTTPHEADER}/hdWeekstarLog/getRound`, // 获取轮次
+        getRankingList: `${HTTPHEADER}/hdWeekstarLog/getRanking`, // 周星活动榜单排名
+
     },
 
     // 靓号管理
