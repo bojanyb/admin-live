@@ -8,18 +8,18 @@
             :showYesterday="true"
             :showBeforeYesterday="true"
             :showToday="true"
+            :showBatchPass="true"
+            :showBatchRurn="true"
+            :batchFuncName = "'一键通过'"
+            :batchRurnName = "'一键拒绝'"
+            @batchPass="batchPass"
+            @BatchRurn="BatchRurn"
             @onSearch="onSearch"
             @onReset="reset"
             @yesterday="yesterday"
             @beforeYesterday="beforeYesterday"
             @today="today"
             >
-            <!-- :showBatchPass="true"
-            :showBatchRurn="true"
-            :batchFuncName = "'一键通过'"
-            :batchRurnName = "'一键拒绝'"
-            @batchPass="batchPass"
-            @BatchRurn="BatchRurn" -->
             </SearchPanel>
         </div>
 		<tableList :cfgs="cfgs" ref="tableList"  @selectionChange="selectionChange"></tableList>
@@ -125,7 +125,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                // isShowCheckbox: true,
+                isShowCheckbox: true,
                 url: REQUEST.risk.screenImgLog,
                 columns: [
                     {

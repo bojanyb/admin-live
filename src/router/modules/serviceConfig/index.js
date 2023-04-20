@@ -56,7 +56,7 @@ const serviceConfigRouter = {
 				noCache: true
 			}
 		},
-    {
+    	{
 			path: 'imgAudit_history',
 			component: () => import('@/views/voiceroom/serviceConfig/imgAudit_history'),
 			name: 'imgAudit_history',
@@ -65,15 +65,15 @@ const serviceConfigRouter = {
 				noCache: true
 			}
 		},
-    // {
-		// 	path: 'discuss-list',
-		// 	component: () => import('@/views/voiceroom/serviceConfig/discuss-list'),
-		// 	name: 'discuss-list',
-		// 	meta: {
-		// 		title: '动态评论记录',
-		// 		noCache: true
-		// 	}
-		// },
+    	{
+			path: 'discuss-list',
+			component: () => import('@/views/voiceroom/serviceConfig/discuss-list'),
+			name: 'discuss-list',
+			meta: {
+				title: '动态评论记录',
+				noCache: true
+			}
+		},
 	]
 }
 
