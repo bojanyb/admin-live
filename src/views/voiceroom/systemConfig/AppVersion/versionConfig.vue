@@ -109,11 +109,11 @@ export default {
           message: '请输入安卓Code',
           trigger: 'blur'
         }],
-        // hotfix:[{
-        //   required: true,
-        //   message: '请输入热更新Code',
-        //   trigger: 'blur'
-        // }],
+        hotfix:[{
+          required: true,
+          message: '请输入热更新Code',
+          trigger: 'blur'
+        }],
         content: [{
           required: true,
           message: '请输入更新内容',
@@ -168,12 +168,12 @@ export default {
           label: "开黑语音",
           value: "com.hdb.kaihei",
         },
-        // {
-        //   key: "com.aiyi.lemon",
-        //   isActive: false,
-        //   label: "柠檬语音",
-        //   value: "com.aiyi.lemon",
-        // }
+        {
+          key: "com.aiyi.lemon",
+          isActive: false,
+          label: "柠檬语音",
+          value: "com.aiyi.lemon",
+        }
       ],
       packageName: [
         {
