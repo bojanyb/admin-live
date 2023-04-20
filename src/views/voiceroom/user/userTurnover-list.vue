@@ -81,16 +81,16 @@
 						placeholder: '请选择',
 						options: MAPDATA.DEALSOURCELIST
 					},
-          // {
-					// 	name: 'guild_type',
-					// 	type: 'select',
-					// 	value: 0,
-					// 	keyName: 'id',
-					// 	optionLabel: 'name',
-					// 	label: '房间类型',
-					// 	placeholder: '请选择',
-					// 	options: this.roomTypeList
-					// },
+          			{
+						name: 'guild_type',
+						type: 'select',
+						value: 0,
+						keyName: 'id',
+						optionLabel: 'name',
+						label: '房间类型',
+						placeholder: '请选择',
+						options: this.roomTypeList
+					},
 					{
 						name: 'dateTimeParams',
 						type: 'datePicker',
@@ -157,25 +157,31 @@
 								return h('span', data ? data.name : '无')
 							}
 						},
-            // {
-						// 	label: '房间类型',
-						// 	prop: 'amount',
-            //   render: (h, params) => {
-						// 		let data = this.roomTypeList.find(item => { return item.id === params.row.guild_type })
-						// 		return h('span', data ? data.name : '无')
-						// 	}
-						// },
+            			{
+							label: '房间类型',
+							prop: 'amount',
+              				render: (h, params) => {
+								let data = this.roomTypeList.find(item => { return item.id === params.row.guild_type })
+								let name = "";
+								if(data.id == 0){
+									name = "无"
+								}else {
+									name = data.name
+								}
+								return h('span', name ? name : '无')
+							}
+						},
 						{
 							label: '金额',
 							prop: 'amount'
 						},
-            {
-              label: "收礼人IP",
-              minWidth: "80px",
-              render: (h, params) => {
-                return h("span", params.row.receive_ip ? params.row.receive_ip : '无');
-              },
-            },
+						{
+						label: "收礼人IP",
+						minWidth: "80px",
+							render: (h, params) => {
+								return h("span", params.row.receive_ip ? params.row.receive_ip : '无');
+							},
+						},
 					]
 				}
 			}
@@ -224,7 +230,7 @@
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
 					end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
 					flow_type: s.flow_type,
-          guild_type: s.guild_type,
+          			guild_type: s.guild_type,
 					source: s.source
 				}
 			},
@@ -234,7 +240,7 @@
 				this.searchParams = {
 					flow_type: 0
 				}
-				// this.dateTimeParams = {}
+				this.dateTimeParams = {}
 				this.getList()
 			},
 			// 查询
