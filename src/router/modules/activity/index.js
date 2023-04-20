@@ -56,7 +56,25 @@ const activityRouter = {
 				noCache: true
 			},
 			name: 'lottery-interstellar-exchange-list'
-		}
+		},
+    {
+			path: 'week-star-list',
+			component: () => import('@/views/voiceroom/activity/week-star-list.vue'),
+			meta: {
+				title: '周星活动数据',
+				noCache: true
+			},
+			name: 'week-star-list'
+		},
+    {
+			path: 'week-rank-list',
+			component: () => import('@/views/voiceroom/activity/week-rank-list.vue'),
+			meta: {
+				title: '周星榜单排名数据',
+				noCache: true
+			},
+			name: 'week-rank-list'
+		},
         // {
 		// 	path: 'first-charge',
 		// 	component: () => import('@/views/voiceroom/platformActivity/first-charge/index.vue'),
