@@ -275,13 +275,14 @@ export default {
             })
 
             // 商品类型
+            const number = this.ruleForm.number.toString();
             if(this.ruleForm.category == 0){ // 用户靓号
-              if(this.ruleForm.number.length !== 5 && this.ruleForm.number.length !== 7 && this.ruleForm.number.length !== 9){
+              if(number.length !== 5 && number.length !== 7 && number.length !== 9){
                 this.$message.error("用户靓号只支持5位、7位、9位");
                 return
               }
             }else if(this.ruleForm.category == 1){ // 房间靓号
-              if(this.ruleForm.number.length !== 4 && this.ruleForm.number.length !== 6 && this.ruleForm.number.length !== 8){
+              if(number.length !== 4 && number.length !== 6 && number.length !== 8){
                 this.$message.error("房间靓号只支持4位、6位、8位");
                 return
               }
