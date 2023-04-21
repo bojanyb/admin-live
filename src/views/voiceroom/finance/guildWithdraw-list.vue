@@ -281,7 +281,7 @@ export default {
             minWidth: "430px",
             render: (h, params) => {
               const data = MAPDATA.IDENTIFICATION.find((item) => {
-                return item.value === (params.row.wx_merchant_status >= 0) ? params.row.wx_merchant_status : params.row.ali_merchant_status;
+                return item.value === ((params.row.wx_merchant_status >= 0) ? params.row.wx_merchant_status : params.row.ali_merchant_status);
               });
               return (data && params.row.buyer_id) ? (
                 <div style="text-align: left;" title={data.name}>
