@@ -139,24 +139,6 @@ export default {
           }
         },
         {
-          name: "appid",
-          type: "select",
-          value: "",
-          keyName: "value",
-          optionLabel: "name",
-          label: "场景",
-          clearable: true,
-          placeholder: "请选择",
-          options: this.guildTypeList,
-          handler: {
-            change: (v) => {
-              if (!v) {
-                this.$set(this.searchParams, "risk_status", "");
-              }
-           }
-          }
-        },
-        {
           name: "risk_status",
           type: "select",
           value: "",
@@ -490,7 +472,6 @@ export default {
         end_time: Math.floor(s.end_time / 1000),
         trade_no: s.trade_no,
         purpose: s.purpose,
-        appid: s.appid,
         risk_status: s.risk_status,
         wx_merchant_id: s.wx_merchant_id,
       };
