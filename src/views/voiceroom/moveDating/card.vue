@@ -180,6 +180,8 @@ export default {
 
 <style lang="scss">
 .moveDating-box {
-
+    audio{
+        height: 40px;
+    }
 }
 </style>

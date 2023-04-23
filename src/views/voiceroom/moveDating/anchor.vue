@@ -35,7 +35,7 @@ export default {
     },
     data() {
         return {
-            sexList : MAPDATA.SEXLIST,
+            sexList : [],
             sound_tagList: [], // 音色分类
             isDestoryComp: false // 是否销毁组件
         }
@@ -193,6 +193,7 @@ export default {
         }
     },
     mounted() {
+        this.sexList = JSON.parse(JSON.stringify(MAPDATA.SEXLIST));
         this.sexList.unshift({name: '全部',value: 0});
         this.serachTagFunc();
     }
