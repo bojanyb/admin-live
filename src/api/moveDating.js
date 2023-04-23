@@ -37,6 +37,15 @@ export function addHeartAnchor(data) {
     })
 }
 
+// 编辑心动主播
+export function editHeartAnchor(data) {
+    return request({
+        url: api.move.editHeartAnchor,
+        method: 'post',
+        data
+    })
+}
+
 // 添加/修改音色卡片
 export function save(data) {
     return request({
