@@ -54,18 +54,18 @@ export default {
                 {
                     name: 'sound_tag',
                     type: 'select',
-                    value: '',
+                    value: '全部',
                     keyName: 'id',
                     optionLabel: 'sound_tag',
-                    label: '音色分类名称',
-                    placeholder: '请选择音色分类名称',
+                    label: '音色分类名',
+                    placeholder: '请选择音色分类名',
                     options: this.sound_tagList,
                     clearable: true,
                 },
                 {
                     name: 'sex',
                     type: 'select',
-                    value: '',
+                    value: '全部',
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '用户性别',
@@ -85,7 +85,7 @@ export default {
                         prop: 'user_number'
                     },
                     {
-                        label: '音色分类名称',
+                        label: '音色分类名',
                         render: (h, params) => {
                             return h('span', params.row.sound_tag ? params.row.sound_tag : '无')
                         }
@@ -136,8 +136,8 @@ export default {
                 page: params.page,
                 page_size: params.size,
                 user_number: s.user_number,
-                card_id: s.sound_tag,
-                sex: s.sex
+                card_id: s.sound_tag == "全部" ? "" : s.sound_tag,
+                sex: s.sex == "全部" ? "" : s.sex
             }
         },
         // 刷新列表

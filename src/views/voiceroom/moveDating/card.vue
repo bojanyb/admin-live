@@ -45,7 +45,7 @@ export default {
                 {
                     name: 'sound_tag',
                     type: 'select',
-                    value: '',
+                    value: '全部',
                     keyName: 'id',
                     optionLabel: 'sound_tag',
                     label: '音色分类名',
@@ -117,7 +117,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                sound_tag: s.sound_tag
+                sound_tag: s.sound_tag == "全部" ? "" : s.sound_tag
             }
         },
         // 刷新列表
