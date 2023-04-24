@@ -1015,10 +1015,6 @@ const SEXLIST = [
   {
     name: '女',
     value: 2
-  },
-  {
-    name: '女',
-    value: 3
   }
 ]
 
