@@ -49,6 +49,14 @@
 						placeholder: '请输入礼物名称'
 					},
 					{
+						name: 'id',
+						type: 'input',
+						value: '',
+						label: '礼物ID',
+						isNum: true,
+						placeholder: '请输入礼物ID'
+					},
+					{
 						name: 'status',
 						type: 'select',
 						value: '',
@@ -77,6 +85,11 @@
 							label: '礼物名称',
 							width: '95px',
 							prop: 'gift_name'
+						},
+						{
+							label: '礼物ID',
+							width: '95px',
+							prop: 'id'
 						},
 						{
 							label: '礼物图片',
@@ -204,7 +217,8 @@
 					page: params.page,
 					pagesize: params.size,
           status: s.status,
-          gift_name: s.gift_name
+          gift_name: s.gift_name,
+          id: s.id,
 				}
 			},
 			// 刷新列表
