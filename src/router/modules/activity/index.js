@@ -21,7 +21,7 @@ const activityRouter = {
 			},
 			name: 'lottery-list'
 		},
-    {
+    	{
 			path: 'lottery-list2',
 			component: () => import('@/views/voiceroom/activity/lottery-list2.vue'),
 			meta: {
@@ -30,7 +30,7 @@ const activityRouter = {
 			},
 			name: 'lottery-list2'
 		},
-    {
+    	{
 			path: 'lottery-farm-list',
 			component: () => import('@/views/voiceroom/activity/lottery-farm-list.vue'),
 			meta: {
@@ -39,7 +39,7 @@ const activityRouter = {
 			},
 			name: 'lottery-farm-list'
 		},
-    {
+    	{
 			path: 'lottery-interstellar-list',
 			component: () => import('@/views/voiceroom/activity/lottery-interstellar-list.vue'),
 			meta: {
@@ -48,7 +48,7 @@ const activityRouter = {
 			},
 			name: 'lottery-interstellar-list'
 		},
-    {
+    	{
 			path: 'lottery-interstellar-exchange-list',
 			component: () => import('@/views/voiceroom/activity/lottery-interstellar-exchange-list.vue'),
 			meta: {
@@ -56,7 +56,25 @@ const activityRouter = {
 				noCache: true
 			},
 			name: 'lottery-interstellar-exchange-list'
-		}
+		},
+    	{
+			path: 'week-star-list',
+			component: () => import('@/views/voiceroom/activity/week-star-list.vue'),
+			meta: {
+				title: '周星活动数据',
+				noCache: true
+			},
+			name: 'week-star-list'
+		},
+    	{
+			path: 'week-rank-list',
+			component: () => import('@/views/voiceroom/activity/week-rank-list.vue'),
+			meta: {
+				title: '周星榜单排名数据',
+				noCache: true
+			},
+			name: 'week-rank-list'
+		},
         // {
 		// 	path: 'first-charge',
 		// 	component: () => import('@/views/voiceroom/platformActivity/first-charge/index.vue'),
