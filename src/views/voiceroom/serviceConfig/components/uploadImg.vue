@@ -102,23 +102,26 @@ export default {
         // 提交
         async submitForm(formName) {
             this.$refs[formName].validate(async (valid) => {
-                if (valid) {
-                    let params = {
-                        id: this.form.id
-                    }
-                    if(this.ruleForm.img) {
-                        if(this.ruleForm.img.indexOf('.mp4') !== -1) {
-                            params.video_path = this.ruleForm.img
-                        } else {
-                            params.img_path = this.ruleForm.img
-                        }
-                    }
-                    let res = await updateSource(params)
-                    if(res.code === 2000) {
-                        this.$success('修改成功')
-                        this.dialogVisible = false
-                        this.$emit('getList')
-                    }
+              if (valid) {
+                  let params = {}
+                  if (this.form.id_array.length > 1) {
+                    params.ids = this.form.id_array;
+                  } else {
+                    params.id = this.form.id_array.join();
+                  }
+                  if(this.ruleForm.img) {
+                      if(this.ruleForm.img.indexOf('.mp4') !== -1) {
+                          params.video_path = this.ruleForm.img
+                      } else {
+                          params.img_path = this.ruleForm.img
+                      }
+                  }
+                  let res = await updateSource(params)
+                  if(res.code === 2000) {
+                      this.$success('修改成功')
+                      this.dialogVisible = false
+                      this.$emit('getList')
+                  }
                 } else {
                     console.log('error submit!!');
                     return false;
