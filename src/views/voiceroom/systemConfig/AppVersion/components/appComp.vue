@@ -2,7 +2,7 @@
   <div class="checkConfig--box">
     <el-dialog :title="title" :visible.sync="dialogVisible" width="730px" :before-close="handleClose"
       :close-on-click-modal="false" @closed="closed">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":"
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-suffix=":"
         :hide-required-asterisk="status === 'see'">
         <div class="inputBox">
           <el-form-item label="应用类型" prop="package_name">
@@ -19,6 +19,9 @@
           </el-form-item>
           <el-form-item label="版本号" prop="version">
             <el-input v-model="ruleForm.version" style="width:305px;" placeholder="如: 1.0.1"></el-input>
+          </el-form-item>
+          <el-form-item label="安卓Code" prop="version_code" v-if="ruleForm.platform !== 1">
+            <el-input v-model="ruleForm.version_code"></el-input>
           </el-form-item>
           <el-form-item label="开关状态" prop="value">
             <el-select v-model="ruleForm.value" placeholder="请选择">
@@ -38,7 +41,7 @@
             <el-checkbox-group v-model="audits">
               <el-checkbox v-for="(item,index) in auditList" :key="index" :label="item.value" :value="item.key"></el-checkbox>
             </el-checkbox-group>
-          </el-form-item> 
+          </el-form-item>
         </div>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -109,6 +112,7 @@ export default {
       ruleForm: {
         package_name: "",
         version: "",
+        version_code: "",
         channels: "",
         platform: "",
         key: "show_check", //	show_check审核开关
@@ -145,6 +149,11 @@ export default {
         value: [
           { required: true, message: '请选择开关状态', trigger: 'change' }
         ],
+        version_code: [{
+          required: true,
+          message: '请输入安卓Code',
+          trigger: 'blur'
+        }],
       }
     };
   },
@@ -317,6 +326,9 @@ export default {
   }
   .el-form {
     display: flex;
+  }
+  .el-input{
+    width: 305px;
   }
 }
 </style>

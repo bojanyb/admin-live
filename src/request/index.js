@@ -425,6 +425,7 @@ const request = {
         saveCardConfig: `${HTTPHEADER}/Heartbeat/saveCardConfig`, // 设置心动卡片配置
         heartAnchor: `${HTTPHEADER}/Heartbeat/heartAnchor`, // 心动主播
         addHeartAnchor: `${HTTPHEADER}/Heartbeat/addHeartAnchor`, // 添加心动主播
+        editHeartAnchor: `${HTTPHEADER}/Heartbeat/editHeartAnchor`, // 编辑心动主播
         rmHeartAnchor: `${HTTPHEADER}/Heartbeat/rmHeartAnchor`, // 移除心动主播
         heartOrder: `${HTTPHEADER}/Heartbeat/heartOrder`, // 心动记录
         serachTag: `${HTTPHEADER}/Heartbeat/serachTag`, // 获取音色分类

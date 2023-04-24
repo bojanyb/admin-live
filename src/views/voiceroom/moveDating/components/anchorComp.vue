@@ -36,13 +36,27 @@
         :show-close="false"
         @closed="closed">
             <div class="formBox">
-                <div class="inputBox">
-                    <el-input v-model="user_number" placeholder="请输入用户ID"></el-input>
-                    <el-button type="success" @keyup.native.enter="addAnchor" @click="addAnchor">添加</el-button>
+                <div class="formItem">
+                    <div class="formName">用户ID:</div>
+                    <div class="inputBox">
+                        <el-input v-model="user_number" :disabled="status !=='add' ? true : false " placeholder="请输入用户ID"></el-input>
+                    </div>
+                </div>
+                <div class="formItem">
+                    <div class="formName">音色分类名称:</div>
+                    <el-select v-model="sound_tag" clearable placeholder="请选择" >
+                        <el-option
+                        v-for="item in sound_tagList"
+                        :key="item.id"
+                        :label="item.sound_tag"
+                        :value="item.id">
+                        </el-option>
+                    </el-select>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @keyup.native.enter="addAnchor" @click="addAnchor">添加</el-button>
             </span>
         </el-dialog>
     </div>
@@ -52,7 +66,7 @@
 // 引入抽屉组件
 import drawer from '@/components/drawer/index'
 // 引入api
-import { addHeartAnchor } from '@/api/moveDating.js'
+import { addHeartAnchor,serachTag,editHeartAnchor } from '@/api/moveDating.js'
 // 引入上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
 // 引入公共map
@@ -68,9 +82,14 @@ export default {
             status: 'add', // 当前状态
             dialogVisible: false,
             user_number: null,
+            sound_tag: null,
             ruleForm: {},
             rules: {},
-            sexList: MAPDATA.SEXLIST
+            sexList: MAPDATA.SEXLIST,
+            sound_tagList: [],
+            card_id: "",
+            id: "",
+            editTitle: "添加心动主播"
         };
     },
     computed: {
@@ -81,35 +100,69 @@ export default {
             return false
         }
     },
+    mounted(){
+        this.serachTagFunc();
+    },
     methods: {
         handleClose() {
             this.dialogVisible = false
         },
         // 获取数据
         loadParams(status, row) {
-            this.status = status
-            if(status !== 'add') {
-                this.openComp()
-                let params = JSON.parse(JSON.stringify(row))
-                this.$set(this.$data, 'ruleForm', params)
-            } else {
+            this.status = status;
+            if(status == 'upload') {
+                this.editTitle = "修改心动主播"
+                let params = JSON.parse(JSON.stringify(row));
+                this.user_number = params.user_number;
+                this.sound_tag = params.sound_tag;
+                this.card_id = params.card_id;
+                this.id = params.id;
                 this.dialogVisible = true
+            } else if(status == 'add'){
+                this.editTitle = "添加心动主播";
+                this.user_number = "";
+                this.sound_tag = "";
+                this.card_id = "";
+                this.dialogVisible = true
+            } else {
+                this.openComp()
             }
         },
         openComp(status = true) {
             this.$refs.drawer.loadParams(status)
         },
-        // 添加心动主播
+        // 添加/修改心动主播
         async addAnchor() {
             if(!this.user_number) {
                 this.$warning('请输入用户ID')
                 return false
             }
-            let res = await addHeartAnchor({ user_number: this.user_number })
-            if(res.code === 2000) {
-                this.$success('新增成功')
-                this.user_number = ''
-                this.$emit('getList')
+            if(!this.sound_tag) {
+                this.$warning('请先选择音色分类')
+                return
+            }
+            let params = {
+                user_number: this.user_number,
+                card_id: this.sound_tag
+            }
+            if(this.status == 'add'){
+                let res = await addHeartAnchor(params)
+                if(res.code === 2000) {
+                    this.handleClose()
+                    this.$success('新增成功')
+                    this.user_number = ''
+                    this.$emit('getList')
+                }
+            }else if( this.status == "upload"){
+                params.id = this.id
+                params.card_id = this.sound_tag
+                let res = await editHeartAnchor(params)
+                if(res.code === 2000) {
+                    this.handleClose()
+                    this.$success('修改成功')
+                    this.user_number = ''
+                    this.$emit('getList')
+                }
             }
         },
         // 关闭弹窗
@@ -119,6 +172,11 @@ export default {
         // 销毁组件
         closed() {
             this.$emit('destoryComp')
+        },
+        // 获取音色分类
+        async serachTagFunc() {
+            let res = await serachTag()
+            this.sound_tagList = res.data
         }
     }
 }
@@ -127,6 +185,24 @@ export default {
 <style lang="scss">
 .addMember-box {
     .formBox {
+        .formItem {
+            margin-bottom: 22px;
+            .formName{
+                text-align: right;
+                vertical-align: middle;
+                float: left;
+                font-size: 14px;
+                color: #606266;
+                line-height: 40px;
+                padding: 0 12px 0 0;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+                font-weight: 700;
+                line-height: 36px;
+                width: 120px;
+            }
+        }
+
         .inputBox {
             display: flex;
             .el-input {
