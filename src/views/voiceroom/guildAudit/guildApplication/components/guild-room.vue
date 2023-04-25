@@ -127,13 +127,15 @@
 					columns: [
 						{
 							label: '添加时间',
+              width: '160px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
 						{
 							label: '时间',
-							prop: 'date'
+              width: '200px',
+              prop: 'date',
 						},
 						{
 							label: '房间ID',
@@ -145,6 +147,7 @@
 						},
 						{
 							label: '房间标题',
+              width: '120px',
 							prop: 'room_title'
 						},
 						{
@@ -153,46 +156,57 @@
 						},
 						{
 							label: '所属公会ID',
+              width: '100px',
 							prop: 'guild_number'
 						},
 						{
 							label: '所属公会名称',
+              minWidth: '120px',
 							prop: 'guild_nickname'
 						},
 						{
 							label: '新用户进厅',
+              minWidth: '100px',
 							prop: 'first_join'
 						},
 						{
 							label: '进厅总人数',
+              minWidth: '100px',
 							prop: 'stat_join'
 						},
 						{
 							label: '进厅总人次',
+              minWidth: '100px',
 							prop: 'times_join'
 						},
 						{
 							label: '消费总人数',
+              minWidth: '100px',
 							prop: 'stat_consume'
 						},
 						{
 							label: '消费转化率',
+              minWidth: '100px',
 							prop: 'rate'
 						},
 						{
 							label: '成员上麦总人数',
+              minWidth: '120px',
 							prop: 'anchor'
 						},
 						{
 							label: '成员上麦总时长',
+              minWidth: '120px',
 							prop: 'stat_anchor_time'
 						},
 						{
 							label: '成员私聊用户人数',
+              minWidth: '120px',
 							prop: 'chat'
 						},
 						{
 							label: '成员私聊用户次数',
+              minWidth: '120px',
 							prop: 'times_chat'
 						},
 						{
