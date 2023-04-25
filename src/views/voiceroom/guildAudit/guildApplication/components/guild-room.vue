@@ -204,7 +204,10 @@
 						{
 							label: '成员上麦总时长',
               minWidth: '120px',
-							prop: 'stat_anchor_time'
+              prop: 'stat_anchor_time',
+              render: (h, params) => {
+                  return h('span', params.row.stat_anchor_time || '0')
+              }
 						},
 						{
 							label: '成员私聊用户人数',
