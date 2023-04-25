@@ -487,6 +487,11 @@ const request = {
         getRoundList: `${HTTPHEADER}/hdWeekstarLog/getRound`, // 获取轮次
         getRankingList: `${HTTPHEADER}/hdWeekstarLog/getRanking`, // 周星活动榜单排名
 
+        // 五一劳模
+        getLabourGiftList: `${HTTPHEADER}/hdMaydayLog/getGift`, // 五一劳模获取礼物
+        getLabourGiftLog: `${HTTPHEADER}/hdMaydayLog/giftLog`, // 五一劳模榜单排名
+        getLabourRankingList: `${HTTPHEADER}/hdMaydayLog/getRanking`, // 五一劳模榜单排名
+
     },
 
     // 靓号管理
