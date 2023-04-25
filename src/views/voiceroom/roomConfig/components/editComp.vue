@@ -48,7 +48,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row v-if="tabIndex === '0'">
            <el-col :span="24">
               <el-form-item label="是否限时" prop="rule_type">
                 <el-radio-group v-model="ruleForm.rule_type">
@@ -59,7 +59,7 @@
           </el-col>
         </el-row>
 
-        <el-row v-if="ruleForm.rule_type === '1'">
+        <el-row v-if="tabIndex === '0' && ruleForm.rule_type === '1'">
            <el-col :span="24">
               <el-form-item label="生效日期" prop="effect_time">
                 <el-date-picker
