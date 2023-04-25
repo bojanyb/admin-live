@@ -8,9 +8,11 @@
       :show-search-btn="true"
 
       :showYesterday="true"
-      :showBigBeforeYesterday="true"
       :showCurrentWeek="true"
-      :showToday="true"
+      :showLastWeek="true"
+      :showCurrentMonth="true"
+      :showLastMonth="true"
+
       :show-batch-rurn="true"
       :showBeforeYesterday="true"
       batchRurnName="导出EXCEL"
@@ -20,9 +22,11 @@
       @add="add"
 
       @yesterday="yesterday"
-      @bigBeforeYesterday="bigBeforeYesterday"
       @currentWeek="currentWeek"
-      @today="today"
+      @lastWeek="lastWeek"
+      @currentMonth="currentMonth"
+      @lastMonth="lastMonth"
+
       @BatchRurn="BatchRurn"
       @beforeYesterday="beforeYesterday"
 
@@ -187,7 +191,10 @@
 						{
 							label: '消费转化率',
               minWidth: '100px',
-							prop: 'rate'
+							prop: 'rate',
+              render: (h, params) => {
+                  return h('span', params.row.rate + '%')
+              }
 						},
 						{
 							label: '成员上麦总人数',
@@ -273,10 +280,6 @@
         this.getGenreList()
     },
 		methods: {
-      // 今日
-      today() {
-        this.changeIndex(0);
-      },
       // 昨日
       yesterday() {
         this.changeIndex(1);
@@ -285,13 +288,21 @@
       beforeYesterday() {
         this.changeIndex(2);
       },
-      // 大前天
-      bigBeforeYesterday() {
-        this.changeIndex(3);
-      },
       // 本周
       currentWeek() {
         this.changeIndex(4);
+      },
+      // 上周
+      lastWeek() {
+        this.changeIndex(5);
+      },
+      // 本月
+      currentMonth() {
+        this.changeIndex(6);
+      },
+      // 上月
+      lastMonth() {
+        this.changeIndex(7);
       },
       // 更改日期
       changeIndex(index) {
@@ -315,9 +326,20 @@
             now = timeFormat(date - 3600 * 1000 * 24 * 3, "YYYY-MM-DD", false);
             break;
           case 4:
-            let week = this.getCurrWeekDays();
-            now1 = week.endtime;
-            now = week.starttime;
+            now1 = moment().endOf("isoWeek").format("YYYY-MM-DD"); //本周日
+            now = moment().startOf("isoWeek").format("YYYY-MM-DD"); //本周一
+            break;
+          case 5:
+            now1 = moment().week(moment().week() - 1).endOf("week").format("YYYY-MM-DD"); //上周日
+            now = moment().week(moment().week() - 1).startOf("week").format("YYYY-MM-DD"); //上周一
+            break;
+          case 6:
+            now1 = moment().endOf("month").format("YYYY-MM-DD"); //本月末
+            now = moment().startOf("month").format("YYYY-MM-DD"); //本月初
+            break;
+          case 7:
+            now1 = moment().month(moment().month() - 1).endOf("month").format("YYYY-MM-DD"); //上月末
+            now = moment().month(moment().month() - 1).startOf("month").format("YYYY-MM-DD"); //上月初
             break;
         }
         start = new Date(now + " 00:00:00");
@@ -332,18 +354,6 @@
         this.dateTimeParams.start_date = time[0];
         this.dateTimeParams.end_date = time[1];
         this.getList();
-      },
-      // 获取当前周的开始结束时间
-      getCurrWeekDays() {
-        let obj = {
-          starttime: "",
-          endtime: "",
-        };
-        // obj.starttime = moment(moment().week(moment().week()).startOf('week').add(1, 'days').valueOf()).format('YYYY-MM-DD')
-        // obj.endtime = moment(moment().week(moment().week()).endOf('week').add(1, 'days').valueOf()).format('YYYY-MM-DD');
-        obj.starttime = moment().startOf("isoWeek").format("YYYY-MM-DD"); //本周一
-        obj.endtime = moment().endOf("isoWeek").format("YYYY-MM-DD"); //本周日
-        return obj;
       },
 			// 配置参数
 			beforeSearch(params) {
@@ -481,7 +491,7 @@
           stat_join: item.stat_join || "0",
           times_join: item.times_join || "0",
           stat_consume: item.stat_consume || "0",
-          rate: item.rate || "0",
+          rate: item.rate ? item.rate + "%" : "0%",
           anchor: item.anchor || "0",
           stat_anchor_time: item.stat_anchor_time || "0",
           chat: item.chat || "0",
