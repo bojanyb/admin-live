@@ -1356,6 +1356,22 @@ const GIFTACTIVETYLIST = [
   },
 ]
 
+// 是否活动礼物
+const ISACTIVETYLIST = [
+  {
+    name: '全部',
+    value: 0
+  },
+  {
+    name: '是',
+    value: 1
+  },
+  {
+    name: '否',
+    value: 2
+  },
+]
+
 // 播放类型
 const SYSTEMGIFTPLAYTYPELIST = [
   {
@@ -3065,5 +3081,6 @@ export default {
   USESTATUS,
   PRAYCARDS,
   DEBRISS,
-  GIFTACTIVETYLIST
+  GIFTACTIVETYLIST,
+  ISACTIVETYLIST
 }
