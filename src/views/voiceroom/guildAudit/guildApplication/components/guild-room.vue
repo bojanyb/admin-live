@@ -268,10 +268,9 @@
 			}
 		},
     created() {
-        let time = new Date();
-        let date = timeFormat(time, "YYYY-MM-DD", false);
+        let date = timeFormat(new Date() - 3600 * 1000 * 24 * 1, "YYYY-MM-DD", false);
         let start = new Date(date + " 00:00:00").getTime();
-        let end = new Date(timeFormat(time, "YYYY-MM-DD HH:mm:ss", false));
+        let end = new Date(date + " 23:59:59").getTime();
         this.searchParams.dateTimeParams = [start, end];
         this.dateTimeParams = {
           start_date: start,
@@ -380,7 +379,7 @@
       reset() {
         this.searchParams = {};
         this.dateTimeParams = {};
-        this.changeIndex(0);
+        this.changeIndex(1);
         this.getList();
       },
 			// 查询
