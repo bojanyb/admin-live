@@ -427,8 +427,8 @@
 				}).catch(() => {});
 			},
       // 获取房间类型
-      async getGenreList(params){
-        const response = await guildRoomType(params)
+      async getGenreList(){
+        const response = await guildRoomType({ belong: 2 })
         if(response.code == 2000){
           const tempArr = Array.from(
             Array.isArray(response.data.list) ? response.data.list : []
@@ -464,63 +464,75 @@
       console.log(s, 's');
       delete s.page;
       s.is_all = "1";
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       let res = await guildRooms(s);
-      let arr = JSON.parse(JSON.stringify(res.data.list));
-      if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
-      arr = arr.map((item, index) => {
-        // let name = MAPDATA.RECHARGEHISTORYTYPELIST.find((a) => {
-        //   return a.value === item.purpose;
-        // });
-        // let status = MAPDATA.ORDERSTATUS.find((a) => {
-        //   return a.value.indexOf(item.status) !== -1;
-        // });
-        let params = {
-          create_time: timeFormat(
-            item.create_time,
-            "YYYY-MM-DD HH:mm:ss",
-            true
-          ),
-          date: item.date,
-          room_number: item.room_number,
-          room_type: item.room_type,
-          room_title: item.room_title,
-          flow: item.flow || "0",
-          guild_number: item.guild_number,
-          guild_nickname: item.guild_nickname,
-          first_join: item.first_join || "0",
-          stat_join: item.stat_join || "0",
-          times_join: item.times_join || "0",
-          stat_consume: item.stat_consume || "0",
-          rate: item.rate ? item.rate + "%" : "0%",
-          anchor: item.anchor || "0",
-          stat_anchor_time: item.stat_anchor_time || "0",
-          chat: item.chat || "0",
-          times_chat: item.times_chat || "0",
-        };
-        return params;
-      });
-      let nameList = [
-        "添加时间",
-        "时间",
-        "房间ID",
-        "房间类型",
-        "房间标题",
-        "房间流水",
-        "所属公会ID",
-        "所属公会名称",
-        "新用户进厅",
-        "进厅总人数",
+      try {
+         let arr = JSON.parse(JSON.stringify(res.data.list));
+          if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
+          arr = arr.map((item, index) => {
+            // let name = MAPDATA.RECHARGEHISTORYTYPELIST.find((a) => {
+            //   return a.value === item.purpose;
+            // });
+            // let status = MAPDATA.ORDERSTATUS.find((a) => {
+            //   return a.value.indexOf(item.status) !== -1;
+            // });
+          let params = {
+            create_time: timeFormat(
+              item.create_time,
+              "YYYY-MM-DD HH:mm:ss",
+              true
+            ),
+            date: item.date,
+            room_number: item.room_number,
+            room_type: item.room_type,
+            room_title: item.room_title,
+            flow: item.flow || "0",
+            guild_number: item.guild_number,
+            guild_nickname: item.guild_nickname,
+            first_join: item.first_join || "0",
+            stat_join: item.stat_join || "0",
+            times_join: item.times_join || "0",
+            stat_consume: item.stat_consume || "0",
+            rate: item.rate ? item.rate + "%" : "0%",
+            anchor: item.anchor || "0",
+            stat_anchor_time: item.stat_anchor_time || "0",
+            chat: item.chat || "0",
+            times_chat: item.times_chat || "0",
+          };
+          return params;
+        });
+        let nameList = [
+          "添加时间",
+          "时间",
+          "房间ID",
+          "房间类型",
+          "房间标题",
+          "房间流水",
+          "所属公会ID",
+          "所属公会名称",
+          "新用户进厅",
+          "进厅总人数",
 
-        "进厅总人次",
-        "消费总人数",
-        "消费转化率",
-        "成员上麦总人数",
+          "进厅总人次",
+          "消费总人数",
+          "消费转化率",
+          "成员上麦总人数",
 
-        "成员上麦总时长",
-        "成员私聊用户人数",
-        "成员私聊用户次数",
-      ];
-      exportTableData(arr, nameList, "公会房间列表");
+          "成员上麦总时长",
+          "成员私聊用户人数",
+          "成员私聊用户次数",
+        ];
+        exportTableData(arr, nameList, "公会房间列表");
+        loading.close();
+      } catch (error) {
+        console.log(error);
+        loading.close();
+      }
     },
 		}
 	}
