@@ -75,6 +75,24 @@ const activityRouter = {
 			},
 			name: 'week-rank-list'
 		},
+		{
+			path: 'labour-star-list',
+			component: () => import('@/views/voiceroom/activity/labour-star-list.vue'),
+			meta: {
+				title: '五一劳模活动数据',
+				noCache: true
+			},
+			name: 'labour-star-list'
+		},
+    	{
+			path: 'labour-rank-list',
+			component: () => import('@/views/voiceroom/activity/labour-rank-list.vue'),
+			meta: {
+				title: '五一榜单排名表',
+				noCache: true
+			},
+			name: 'labour-rank-list'
+		},
         // {
 		// 	path: 'first-charge',
 		// 	component: () => import('@/views/voiceroom/platformActivity/first-charge/index.vue'),
