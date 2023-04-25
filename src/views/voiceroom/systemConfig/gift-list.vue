@@ -68,7 +68,17 @@
 						handler: {
 							change: (v) => {}
 						}
-					}
+          },
+          {
+            name: "is_activity",
+            type: "select",
+            value: 0,
+            keyName: "value",
+            optionLabel: "name",
+            label: "是否活动礼物",
+            placeholder: "请选择",
+            options: MAPDATA.ISACTIVETYLIST,
+          },
 				]
 			},
 			cfgs() {
@@ -105,6 +115,14 @@
 							width: '110px',
 							render: (h, params) => {
 								let data = MAPDATA.SYSTEMGIFTLIST.find(item => { return item.value === params.row.gift_genre })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '是否活动礼物',
+							width: '110px',
+							render: (h, params) => {
+								let data = MAPDATA.GIFTACTIVETYLIST.find(item => { return item.value === params.row.is_activity })
 								return h('span', data ? data.name : '无')
 							}
 						},
@@ -219,6 +237,7 @@
           status: s.status,
           gift_name: s.gift_name,
           id: s.id,
+          is_activity: s.is_activity,
 				}
 			},
 			// 刷新列表
