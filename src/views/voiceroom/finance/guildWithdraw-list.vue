@@ -10,9 +10,11 @@
       >
     </div>
     <div class="searchParams">
+      <!-- 当前时间前6个月 不包含当前月 preMonth -->
       <SearchPanel
         v-model="searchParams"
         :forms="forms"
+        :preMonth="6"
         :show-reset="true"
         :show-search-btn="true"
         :showYesterday="true"
