@@ -184,6 +184,9 @@
             <el-button v-if="showRecentSeven" @click="recentSeven">七天</el-button>
             <el-button v-if="showBigBeforeYesterday" @click="bigBeforeYesterday">大前天</el-button>
             <el-button v-if="showCurrentWeek" @click="currentWeek">本周</el-button>
+            <el-button v-if="showLastWeek" @click="lastWeek">上周</el-button>
+            <el-button v-if="showCurrentMonth" @click="currentMonth">本月</el-button>
+            <el-button v-if="showLastMonth" @click="lastMonth">上月</el-button>
             <el-button v-if="showReset" icon="el-icon-refresh" @click="reset">重置</el-button>
             <el-button v-if="showBatchPass" type="success" @click="batchPass">{{ batchFuncName || '批量通过' }}</el-button>
             <el-button v-if="showBatchRurn" type="danger" @click="BatchRurn">{{ batchRurnName || '批量拒绝' }}</el-button>
@@ -319,6 +322,21 @@ export default {
     },
     // 本周 - 操作
     showCurrentWeek :{
+      type: Boolean,
+      default: false
+    },
+    // 上周 - 操作
+    showLastWeek :{
+      type: Boolean,
+      default: false
+    },
+    // 本月 - 操作
+    showCurrentMonth :{
+      type: Boolean,
+      default: false
+    },
+    // 上月 - 操作
+    showLastMonth :{
       type: Boolean,
       default: false
     },
@@ -510,6 +528,18 @@ export default {
     // 本周
     currentWeek() {
       this.$emit('currentWeek')
+    },
+    // 上周
+    lastWeek() {
+      this.$emit('lastWeek')
+    },
+    // 本月
+    currentMonth() {
+      this.$emit('currentMonth')
+    },
+    // 上月
+    lastMonth() {
+      this.$emit('lastMonth')
     },
     // 批量通过
     batchPass() {
