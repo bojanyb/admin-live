@@ -2,7 +2,7 @@
 <template>
     <div class="shopping-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="curBtnArr.includes('Goods@save')" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -41,10 +41,7 @@ export default {
     mixins: [mixins],
     computed: {
         cfgs() {
-            return {
-                vm: this,
-                url: REQUEST.shopping.list,
-                columns: [
+            const arr = [
                     {
                         label: '商品类型',
                         render: (h, params) => {
@@ -110,17 +107,35 @@ export default {
                         minWidth: '180px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}},'修改'),
-                                h('el-button', { props: { type: 'danger'}, style: {
-                                    display: params.row.status === 1 ? 'none' : 'unset'
-                                }, on: {click:()=>{this.down(params.row, 1)}}},'上架'),
-                                h('el-button', { props: { type: 'danger'}, style: {
-                                    display: params.row.status === 2 ? 'none' : 'unset'
-                                }, on: {click:()=>{this.down(params.row, 2)}}},'下架')
+                              h('el-button', {
+                                props: { type: 'primary' },
+                                style: {
+                                    display: curBtnArr.includes('Goods@save') ? 'none' : 'unset'
+                                },
+                                on: { click: () => { this.update(params.row) } }
+                              }, '修改'),
+                              h('el-button', {
+                                props: { type: 'danger' },
+                                style: {
+                                    display: (params.row.status === 1 && curBtnArr.includes('Goods@down') ) ? 'none' : 'unset'
+                                },
+                                on: { click: () => { this.down(params.row, 1) } }
+                              }, '上架'),
+                              h('el-button', {
+                                props: { type: 'danger' },
+                                style: {
+                                    display: (params.row.status === 2 && curBtnArr.includes('Goods@down')) ? 'none' : 'unset'
+                                },
+                                on: { click: () => { this.down(params.row, 2) } }
+                              }, '下架')
                             ])
                         }
                     }
                 ]
+            return {
+                vm: this,
+                url: REQUEST.shopping.list,
+                columns: this.curBtnArr.includes('Goods@index') ? arr : []
             }
         },
         forms() {
