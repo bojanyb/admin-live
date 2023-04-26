@@ -54,11 +54,8 @@ export default {
                 },
             ]
         },
-        cfgs() {
-            return {
-                vm: this,
-                url: REQUEST.guild.getGuildUsers,
-                columns: [
+      cfgs() {
+            const arr = [
                     {
                         label: '加入时间',
                         render: (h, params) => {
@@ -114,7 +111,7 @@ export default {
                                 'props' : { 'value' :params.row.is_private_chat,'activeValue':1},
                                 'on': {change: () => {this.change(params.row)}}
                             }))
-                            return h('div',newArr)
+                            return h('div', { style: { display: this.curBtnArr.includes('Guild@changePrivateChat') ? 'unset' : 'none' } }, newArr)
                         }
                     },
                     {
@@ -123,11 +120,15 @@ export default {
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.clickDel(params.row, )}}}, '移除'),
+                               h('el-button', { props: { type: 'danger' }, style: { display: this.curBtnArr.includes('Guild@rmGuildUser') ? 'unset' : 'none' }, on: {click:()=>{this.clickDel(params.row, )}}}, '移除'),
                             ])
                         }
                     }
                 ]
+            return {
+                vm: this,
+                url: REQUEST.guild.getGuildUsers,
+                columns: this.curBtnArr.includes('Guild@guildUsers') ? arr : []
             }
         },
     },

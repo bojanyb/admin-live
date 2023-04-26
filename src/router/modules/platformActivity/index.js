@@ -50,7 +50,6 @@ const platformActivityRouter = {
 			meta: {
 				title: '喵喵乐园'
 			},
-			name: 'mmly',
 			children: [
 				{
 					path: 'paradiseSet',

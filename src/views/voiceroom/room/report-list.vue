@@ -65,10 +65,7 @@ export default {
       ]
     },
     cfgs() {
-      return {
-        vm: this,
-        url: REQUEST.room.report,
-        columns: [
+      const arr = [
           {
             label: '被举报房主ID',
             prop: 'live_user_number',
@@ -134,6 +131,10 @@ export default {
             }
           }
         ]
+      return {
+        vm: this,
+        url: REQUEST.room.report,
+        columns: arr
       }
     }
   },

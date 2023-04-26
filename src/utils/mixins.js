@@ -1,3 +1,4 @@
+import { mapState } from 'vuex'
 const mixins = {
     data() {
         return {
@@ -9,6 +10,16 @@ const mixins = {
             dataParams: {}, // 时间参数
         };
     },
+  computed: {
+    ...mapState({
+      curBtnArr: state => state.permission.curBtnArr,
+    }),
+  },
+  mounted() {
+    const { fullPath } = this.$route;
+    this.$store.commit('permission/SET_CUR_BTN', fullPath)
+    console.log(this.curBtnArr, 'curBtnArr');
+  },
 }
 
 export default mixins
