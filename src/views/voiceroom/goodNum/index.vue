@@ -2,7 +2,7 @@
 <template>
     <div class="depot-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="curBtnArr.includes('PrettyNumber@add')" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -105,11 +105,8 @@ export default {
                 }
             ]
         },
-        cfgs() {
-            return {
-                vm: this,
-                url: REQUEST.prettyNumber.prettyNumber,
-                columns: [
+      cfgs() {
+            const arr = [
                     {
                         label: '创建时间',
                         prop: 'create_time'
@@ -139,14 +136,30 @@ export default {
                         minWidth: '160px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary', size: 'mini' }, style: { display: params.row.show_status === 1 ? 'unset' : 'none' }, on: {click:()=>{this.update(params.row)}}},'修改'),
-                                h('el-button', { props: { type: 'danger', size: 'mini' }, style: { display: params.row.show_status === 1 ? 'unset' : 'none' }, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除'),
-                                h('el-button', { props: { type: 'success', size: 'mini' }, style: {
-                                    display: params.row.show_status === 1 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.down(params.row, 0)}}},'上架'),
-                                h('el-button', { props: { type: 'info', size: 'mini' }, style: {
-                                    display: params.row.show_status === 2 ? 'unset' : 'none'
-                                }, on: {click:()=>{this.down(params.row, 1)}}},'下架')
+                              h('el-button', {
+                                props: { type: 'primary', size: 'mini' },
+                                style: { display: (params.row.show_status === 1 && this.curBtnArr.includes('PrettyNumber@update')) ? 'unset' : 'none' },
+                                on: { click: () => { this.update(params.row) } }
+                              }, '修改'),
+                              h('el-button', {
+                                props: { type: 'danger', size: 'mini' },
+                                style: { display: (params.row.show_status === 1 && this.curBtnArr.includes('PrettyNumber@del') ) ? 'unset' : 'none' },
+                                on: { click: () => { this.deleteParams(params.row.id) } }
+                              }, '删除'),
+                              h('el-button', {
+                                props: { type: 'success', size: 'mini' },
+                                style: {
+                                    display: (params.row.show_status === 1 && this.curBtnArr.includes('PrettyNumber@update')) ? 'unset' : 'none'
+                                },
+                                on: { click: () => { this.down(params.row, 0) } }
+                              }, '上架'),
+                              h('el-button', {
+                                props: { type: 'info', size: 'mini' },
+                                style: {
+                                    display: (params.row.show_status === 2 && this.curBtnArr.includes('PrettyNumber@update')) ? 'unset' : 'none'
+                                },
+                                on: { click: () => { this.down(params.row, 1) } }
+                              }, '下架')
                             ])
                         }
                     },
@@ -155,6 +168,10 @@ export default {
                         prop: 'desc'
                     },
                 ]
+            return {
+                vm: this,
+                url: REQUEST.prettyNumber.prettyNumber,
+                columns: this.curBtnArr.includes('PrettyNumber@index') ? arr : []
             }
         },
     },

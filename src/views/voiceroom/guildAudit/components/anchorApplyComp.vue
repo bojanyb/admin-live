@@ -64,10 +64,7 @@ export default {
             ]
         },
         cfgs() {
-            return {
-                vm: this,
-                url: REQUEST.guild.guildUserApply,
-                columns: [
+          const arr = [
                     {
                         label: '申请时间',
                         render: (h, params) => {
@@ -127,7 +124,7 @@ export default {
                         label: '手机号码',
                         showOverFlow: true,
                         render: (h, params) => {
-                            let phone = params.row.phone.substr(0, 3) + '****' + params.row.phone.substr(7) 
+                            let phone = params.row.phone.substr(0, 3) + '****' + params.row.phone.substr(7)
                             return h('span',  phone || '无')
                         }
                     },
@@ -138,10 +135,10 @@ export default {
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'primary'}, style: {
-                                    display: params.row.status === 0 ? 'unset' : 'none'
+                                    display: (params.row.status === 0 && this.curBtnArr.includes('Guild@guildUserApplyCheck')) ? 'unset' : 'none'
                                 }, on: {click:()=>{this.clickFunc(params.row, 1)}}}, '通过'),
                                 h('el-button', { props: { type: 'danger'}, style: {
-                                    display: params.row.status === 0 ? 'unset' : 'none'
+                                    display: (params.row.status === 0 && this.curBtnArr.includes('Guild@guildUserApplyCheck')) ? 'unset' : 'none'
                                 }, on: {click:()=>{this.clickFunc(params.row, 2)}}}, '拒绝'),
                                 h('el-button', { props: { type: 'primary'},style: {
                                     display: params.row.status === 1 ? 'unset' : 'none',
@@ -153,6 +150,10 @@ export default {
                         }
                     }
                 ]
+            return {
+                vm: this,
+                url: REQUEST.guild.guildUserApply,
+                columns: this.curBtnArr.includes('Guild@guildUsers') ? arr : []
             }
         },
     },
@@ -171,7 +172,7 @@ export default {
                 user_number: s.user_number,
                 type: s.type ? s.type : 0,
                 status: 0 // 0未审核1通过2拒绝
-            } 
+            }
         },
         // 重置
         reset() {
