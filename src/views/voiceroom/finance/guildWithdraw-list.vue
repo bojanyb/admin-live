@@ -541,6 +541,8 @@ export default {
           channel: item.channel,
           status: status.name,
           trade_no: item.trade_no,
+          ip: item.ip,
+          addr: item.addr,
         };
         return params;
       });
@@ -555,6 +557,8 @@ export default {
         "充值平台",
         "充值状态",
         "交易单号",
+        "充值人IP",
+        "地区"
       ];
       exportTableData(arr, nameList, "充值记录");
     },
