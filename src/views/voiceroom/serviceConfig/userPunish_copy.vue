@@ -126,11 +126,8 @@ export default {
                 }
             ]
         },
-        cfgs() {
-            return {
-                vm: this,
-                url: REQUEST.risk.UserPunishLog,
-                columns: [
+      cfgs() {
+          const arr = [
                     {
                         label: '时间',
                         prop: 'create_time',
@@ -318,9 +315,17 @@ export default {
                           ])
                       }
                     }
-                ]
+                  ]
+            return {
+                vm: this,
+                url: REQUEST.risk.UserPunishLog,
+                columns: this.$store.state.permission.curBtnArr.includes('列表') ? arr : []
             }
         }
+    },
+    mounted() {
+      const { fullPath } = this.$route;
+      this.$store.commit('permission/SET_CUR_BTN', fullPath)
     },
     methods: {
         // 配置参数

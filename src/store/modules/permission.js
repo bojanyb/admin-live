@@ -39,14 +39,27 @@ export function filterAsyncRoutes(routes, roles) {
 
 const state = {
   routes: [],
-  addRoutes: []
+  addRoutes: [],
+  btnArr: [],
+  curBtnArr: []
 }
 
 const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)
-  }
+  },
+  SET_BTN: (state, btnArr) => {
+    state.btnArr = btnArr
+  },
+  SET_CUR_BTN: (state, fullPath) => {
+    state.curBtnArr = state.btnArr.reduce((pev, cur) => {
+      if (fullPath === cur.h5_path) {
+        pev.push(cur.title);
+      }
+      return pev;
+    }, [])
+  },
 }
 
 const actions = {
@@ -57,10 +70,11 @@ const actions = {
         let array = []
         let arr = JSON.parse(JSON.stringify(res.data.list))
         let user_pids = res.data.user_pids
+        let btnArr = []
         if(arr && arr.length > 0) { // 递归删除所有不需要展示的菜单
           let prv = (list, params) => {
             list.forEach((item,index) => {
-              if(user_pids.indexOf(item.id) === -1 || item.status === 0) {
+              if (user_pids.indexOf(item.id) === -1 || item.is_menu === 0) {
                 if(item.pid === 0) {
                   arr.splice(index, 1)
                   prv(arr)
@@ -75,6 +89,11 @@ const actions = {
                   }
                 }
               }
+
+              if (item.is_menu === 0) {
+                btnArr.push(item)
+                commit('SET_BTN', btnArr)
+               }
               if(item.child && item.child.length > 0) {
                 prv(item.child, item)
               }
@@ -84,7 +103,7 @@ const actions = {
 
           let ri = (list, params) => {
             list.forEach((item, index) => {
-              if(user_pids.indexOf(item.id) === -1 || item.status === 0) {
+              if (user_pids.indexOf(item.id) === -1 || item.is_menu === 0) {
                 if(params) {
                   params.child.splice(index, 1)
                   ri(params.child, params)
