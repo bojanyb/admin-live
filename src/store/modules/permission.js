@@ -39,14 +39,33 @@ export function filterAsyncRoutes(routes, roles) {
 
 const state = {
   routes: [],
-  addRoutes: []
+  addRoutes: [],
+  btnArr: [],
+  curBtnArr: [],
+  userPids: []
 }
 
 const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)
-  }
+  },
+  SET_BTN: (state, btnArr) => {
+    state.btnArr = btnArr
+  },
+  SET_CUR_BTN: (state, fullPath) => {
+    state.curBtnArr = state.btnArr.reduce((pev, cur) => {
+      if ((fullPath === cur.h5_path)) {
+        if (state.userPids.indexOf(cur.id) !== -1) {
+          pev.push(cur.api_controller);
+        }
+      }
+      return pev;
+    }, [])
+  },
+  SET_USER_PIDS: (state, userPids) => {
+    state.userPids = userPids
+  },
 }
 
 const actions = {
@@ -57,10 +76,12 @@ const actions = {
         let array = []
         let arr = JSON.parse(JSON.stringify(res.data.list))
         let user_pids = res.data.user_pids
+        commit('SET_USER_PIDS', user_pids)
+        let btnArr = []
         if(arr && arr.length > 0) { // 递归删除所有不需要展示的菜单
           let prv = (list, params) => {
             list.forEach((item,index) => {
-              if(user_pids.indexOf(item.id) === -1 || item.status === 0) {
+              if(user_pids.indexOf(item.id) === -1 || item.status === 0 || item.is_menu === 0) {
                 if(item.pid === 0) {
                   arr.splice(index, 1)
                   prv(arr)
@@ -75,6 +96,11 @@ const actions = {
                   }
                 }
               }
+
+              if (item.is_menu === 0) {
+                btnArr.push(item)
+                commit('SET_BTN', btnArr)
+               }
               if(item.child && item.child.length > 0) {
                 prv(item.child, item)
               }
@@ -84,7 +110,7 @@ const actions = {
 
           let ri = (list, params) => {
             list.forEach((item, index) => {
-              if(user_pids.indexOf(item.id) === -1 || item.status === 0) {
+              if (user_pids.indexOf(item.id) === -1 || item.status === 0 || item.is_menu === 0) {
                 if(params) {
                   params.child.splice(index, 1)
                   ri(params.child, params)
@@ -114,11 +140,11 @@ const actions = {
               let params = asyncArr.find(a => { return item.h5_path === a.path })
               if(params) {
                 item.params = {
-                  component: params.component,
-                  meta: params.meta,
-                  name: params.name,
-                  path: params.path,
-                  redirect: params.redirect
+                  component: params ? params.component : Layout,
+                  meta: params ? params.meta : { title: 'default' },
+                  name: params ? params.name : 'default',
+                  path: params ? params.path : `/default${index}`,
+                  redirect: params ? params.redirect : 'noRedirect'
                 }
               }
               if(item.child && item.child.length > 0) {
@@ -157,10 +183,10 @@ const actions = {
               item.child.forEach((a,b) => {
                if(a.params){
                 array[index].children.push({
-                  component: a.params.component,
-                  meta: a.params.meta,
-                  name: a.params.name,
-                  path: a.params.path,
+                  component: a.params ? a.params.component : Layout,
+                  meta: a.params ? a.params.meta : { title: 'default' },
+                  name: a.params ? a.params.name : 'default',
+                  path: a.params ? a.params.path : `/default${index}`,
                 })
                 if(array[index].children[b]){
                   array[index].children[b].meta.title = a.title
@@ -170,10 +196,10 @@ const actions = {
                   array[index].children[b].children = []
                   a.child.forEach((x,s) => {
                     array[index].children[b].children.push({
-                      component: x.params.component,
-                      meta: x.params.meta,
-                      path: x.params.path,
-                      name: x.params.name,
+                      component: x.params ? x.params.component : Layout,
+                      meta: x.params ? x.params.meta : { title: 'default' },
+                      path: x.params ? x.params.name : 'default',
+                      name: x.params ? x.params.path : `/default${index}`,
                     })
                     array[index].children[b].children[s].meta.title = x.title
                   })

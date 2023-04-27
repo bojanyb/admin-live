@@ -1,7 +1,7 @@
 <template>
     <div class="app-container serviceConfig-userPunish-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="true" :show-batch-rurn="true" @onReset="reset" @onSearch="onSearch" @add="add" batchRurnName="导出EXCEL" @BatchRurn="BatchRurn"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="curBtnArr.includes('UserPunishLog@add')" :show-batch-rurn="true" @onReset="reset" @onSearch="onSearch" @add="add" batchRurnName="导出EXCEL" @BatchRurn="BatchRurn"></SearchPanel>
         </div>
 		    <tableList :cfgs="cfgs" ref="tableList"></tableList>
         <!-- 新增组件 -->
@@ -30,6 +30,7 @@ import mixins from '@/utils/mixins.js'
 import MAPDATA from '@/utils/jsonMap.js'
 // 引入公共方法
 import { exportTableData } from "@/utils/common.js";
+import { mapState } from 'vuex'
 export default {
     mixins: [mixins],
     components: {
@@ -47,6 +48,9 @@ export default {
         };
     },
     computed: {
+        ...mapState({
+          curBtnArr: state => state.permission.curBtnArr,
+        }),
         forms() {
             return [
                 {
@@ -126,11 +130,8 @@ export default {
                 }
             ]
         },
-        cfgs() {
-            return {
-                vm: this,
-                url: REQUEST.risk.UserPunishLog,
-                columns: [
+      cfgs() {
+          const arr = [
                     {
                         label: '时间',
                         prop: 'create_time',
@@ -305,23 +306,32 @@ export default {
                       render: (h, params) => {
                           return h('div', [
                               h('el-button', { props: { type: 'success'}, style: {
-                                  display: params.row.status === 1 ? 'unset' : 'none'
+                                  display: (params.row.status === 1 && this.curBtnArr.includes('UserPunishLog@remove')) ? 'unset' : 'none'
                               }, on: {click:()=>{this.relieve(params.row)}}}, '解除'),
                               h('el-button', { props: { type: 'danger'}, style: {
-                                  display: params.row.status === 0 ? 'unset' : 'none'
+                                  display: (params.row.status === 0 && this.curBtnArr.includes('UserPunishLog@save')) ? 'unset' : 'none'
                               }, on: {click:()=>{this.blocked(params.row)}}}, '封禁'),
                               h('el-button', { props: { type: 'primary'}, style: {
-                                  display: params.row.status === 0 ? 'unset' : 'none'
+                                  display: (params.row.status === 0 && this.curBtnArr.includes('UserPunishLog@pass')) ? 'unset' : 'none'
                               }, on: {click:()=>{this.neglect(params.row.id)}}}, '忽略'),
                               h('el-button', { props: { type: 'primary'}, style: {
-                                  display: params.row.from === '后台处罚' && params.row.status === 1 ? 'unset' : 'none'
+                                  display: (params.row.from === '后台处罚' && params.row.status === 1 && this.curBtnArr.includes('UserPunishLog@updateSource')) ? 'unset' : 'none'
                               }, on: {click:()=>{this.update(params.row)}}}, '修改证据')
                           ])
                       }
                     }
-                ]
+                  ]
+            return {
+                vm: this,
+                url: REQUEST.risk.UserPunishLog,
+                columns: this.curBtnArr.includes('UserPunishLog@index') ? arr : []
             }
         }
+    },
+    mounted() {
+      const { fullPath } = this.$route;
+      this.$store.commit('permission/SET_CUR_BTN', fullPath)
+      console.log(this.curBtnArr, 'curBtnArr');
     },
     methods: {
         // 配置参数
@@ -486,12 +496,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-.serviceConfig-userPunish-box {
-  ::v-deep .share-table-list-box .el-table__body-wrapper  {
-    max-height: none !important;
-    overflow-y: none !important;
-}
-}
 
 </style>

@@ -157,10 +157,7 @@
 				]
 			},
 			cfgs() {
-				return {
-					vm: this,
-					url: REQUEST.user.list,
-					columns: [
+        const arr = [
 						{
 							label: '用户ID',
 							width: '95px',
@@ -322,12 +319,24 @@
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '修改'),
-									h('el-button', { props: { type: ''}, on: {click:()=>{this.updatePass(params.row)}}}, '更改密码')
+                  h('el-button', {
+                    props: { type: 'primary' },
+                    style: { display: (this.curBtnArr.includes('User@userEdit')) ? 'unset' : 'none' },
+                    on: { click: () => { this.editFunc(params.row) } }
+                  }, '修改'),
+                  h('el-button', {
+                    props: { type: '' },
+                    style: { display: (this.curBtnArr.includes('User@updateLoginPwd')) ? 'unset' : 'none' },
+                    on: { click: () => { this.updatePass(params.row) } }
+                  }, '更改密码')
 								])
 							}
 						}
 					]
+				return {
+					vm: this,
+					url: REQUEST.user.list,
+					columns: this.curBtnArr.includes('User@index') ? arr : []
 				}
 			}
 		},
