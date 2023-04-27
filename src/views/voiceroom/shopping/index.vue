@@ -110,21 +110,21 @@ export default {
                               h('el-button', {
                                 props: { type: 'primary' },
                                 style: {
-                                    display: this.curBtnArr.includes('Goods@save') ? 'none' : 'unset'
+                                    display: !this.curBtnArr.includes('Goods@save') ? 'none' : 'unset'
                                 },
                                 on: { click: () => { this.update(params.row) } }
                               }, '修改'),
                               h('el-button', {
                                 props: { type: 'danger' },
                                 style: {
-                                    display: (params.row.status === 1 && this.curBtnArr.includes('Goods@down') ) ? 'none' : 'unset'
+                                    display: (params.row.status === 1 && !this.curBtnArr.includes('Goods@down') ) ? 'none' : 'unset'
                                 },
                                 on: { click: () => { this.down(params.row, 1) } }
                               }, '上架'),
                               h('el-button', {
                                 props: { type: 'danger' },
                                 style: {
-                                    display: (params.row.status === 2 && this.curBtnArr.includes('Goods@down')) ? 'none' : 'unset'
+                                    display: (params.row.status === 2 && !this.curBtnArr.includes('Goods@down')) ? 'none' : 'unset'
                                 },
                                 on: { click: () => { this.down(params.row, 2) } }
                               }, '下架')
