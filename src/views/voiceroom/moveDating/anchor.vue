@@ -13,7 +13,7 @@
 
 <script>
 // 引入api
-import { rmHeartAnchor } from '@/api/moveDating'
+import { rmHeartAnchor,serachTag } from '@/api/moveDating'
 // 引入新增组件
 import anchorComp from './components/anchorComp.vue'
 // 引入菜单组件
@@ -35,6 +35,8 @@ export default {
     },
     data() {
         return {
+            sexList : [],
+            sound_tagList: [], // 音色分类
             isDestoryComp: false // 是否销毁组件
         }
     },
@@ -48,7 +50,29 @@ export default {
                     label: '用户ID',
                     isNum: true,
                     placeholder: '请输入用户ID'
-                }
+                },
+                {
+                    name: 'sound_tag',
+                    type: 'select',
+                    value: '全部',
+                    keyName: 'id',
+                    optionLabel: 'sound_tag',
+                    label: '音色分类名',
+                    placeholder: '请选择音色分类名',
+                    options: this.sound_tagList,
+                    clearable: true,
+                },
+                {
+                    name: 'sex',
+                    type: 'select',
+                    value: '全部',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '用户性别',
+                    placeholder: '请选择用户性别',
+                    options: this.sexList,
+                    clearable: true,
+                },
             ]
         },
         cfgs() {
@@ -59,6 +83,12 @@ export default {
                     {
                         label: '用户ID',
                         prop: 'user_number'
+                    },
+                    {
+                        label: '音色分类名',
+                        render: (h, params) => {
+                            return h('span', params.row.sound_tag ? params.row.sound_tag : '无')
+                        }
                     },
                     {
                         label: '用户昵称',
@@ -80,6 +110,7 @@ export default {
                     },
                     {
                         label: '个性签名',
+                        showOverFlow: true,
                         render: (h, params) => {
                             return h('span', params.row.autograph || '无')
                         }
@@ -88,6 +119,7 @@ export default {
                         label: '操作',
                         render: (h, params) => {
                             return h('div', [
+                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editParams(params.row)}}}, '编辑'),
                                 h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.user_number)}}}, '移除')
                             ])
                         }
@@ -103,7 +135,9 @@ export default {
             return {
                 page: params.page,
                 page_size: params.size,
-                user_number: s.user_number
+                user_number: s.user_number,
+                card_id: s.sound_tag == "全部" ? "" : s.sound_tag,
+                sex: s.sex == "全部" ? "" : s.sex
             }
         },
         // 刷新列表
@@ -133,6 +167,10 @@ export default {
         destoryComp() {
             this.isDestoryComp = false
         },
+        // 编辑
+        editParams(row){
+            this.load('upload',row)
+        },
         // 移除
         async deleteParams(user_number) {
             this.$confirm('确认移除当前心动主播?', '提示', {
@@ -146,7 +184,18 @@ export default {
                     this.getList()
                 }
             }).catch(() => {});
+        },
+        // 获取音色分类
+        async serachTagFunc() {
+            let res = await serachTag()
+            this.sound_tagList = res.data
+            this.sound_tagList.unshift({sound_tag: '全部',id: 0});
         }
+    },
+    mounted() {
+        this.sexList = JSON.parse(JSON.stringify(MAPDATA.SEXLIST));
+        this.sexList.unshift({name: '全部',value: 0});
+        this.serachTagFunc();
     }
 }
 </script>

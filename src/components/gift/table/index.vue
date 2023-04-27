@@ -24,7 +24,7 @@
                     <span>{{ scope.row.gift_diamond }}喵粮</span>
                 </template>
             </el-table-column>
-            <el-table-column
+            <el-table-columnshopping-list
                 label="数量">
                 <template slot-scope="scope">
                     <div class="numBox">
@@ -32,7 +32,7 @@
                     </div>
                     <div class="errorMsg" v-if="!scope.row.gift_number">请填写数量</div>
                 </template>
-            </el-table-column>
+            </el-table-columnshopping-list>
             <el-table-column label="礼物位置" v-if="isShowLocation">
                 <template slot-scope="scope">
                     <el-select v-model="scope.row.sort" clearable placeholder="请选择" :disabled="disabled">

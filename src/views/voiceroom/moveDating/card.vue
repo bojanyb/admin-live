@@ -24,6 +24,8 @@ import tableList from '@/components/tableList/TableList.vue'
 import REQUEST from '@/request/index.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 export default {
     mixins: [mixins],
     components: {
@@ -34,7 +36,7 @@ export default {
     data() {
         return {
             isDestoryComp: false, // 是否销毁组件
-            sound_tagList: [] // 音色分类
+            sound_tagList: [], // 音色分类
         }
     },
     computed: {
@@ -43,10 +45,11 @@ export default {
                 {
                     name: 'sound_tag',
                     type: 'select',
-                    value: '',
-                    keyName: 'name',
-                    optionLabel: 'name',
+                    value: '全部',
+                    keyName: 'id',
+                    optionLabel: 'sound_tag',
                     label: '音色分类名',
+                    clearable: true,
                     placeholder: '请选择音色分类名',
                     options: this.sound_tagList
                 },
@@ -64,6 +67,14 @@ export default {
                     {
                         label: '音色分类名',
                         prop: 'sound_tag'
+                    },
+                    {
+                        label: '性别',
+                        prop: 'sex',
+                        render: (h, params) => {
+                            let sex = MAPDATA.SEXLIST.find(item=> item.value == params.row.sex);
+                            return h('div', sex ? sex.name : '男')
+                        }
                     },
                     {
                         label: '封面',
@@ -106,7 +117,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                sound_tag: s.sound_tag
+                sound_tag: s.sound_tag == "全部" ? "" : s.sound_tag
             }
         },
         // 刷新列表
@@ -157,15 +168,8 @@ export default {
         // 获取音色分类
         async serachTagFunc() {
             let res = await serachTag()
-            if(res.data.tag && res.data.tag.length > 0) {
-                let list = []
-                res.data.tag.forEach(item => {
-                    list.push({
-                        name: item
-                    })
-                })
-                this.sound_tagList = list
-            }
+            this.sound_tagList = res.data
+            this.sound_tagList.unshift({id: 0, sound_tag: "全部"})
         }
     },
     created() {
@@ -176,6 +180,8 @@ export default {
 
 <style lang="scss">
 .moveDating-box {
-
+    audio{
+        height: 40px;
+    }
 }
 </style>
