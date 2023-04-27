@@ -35,8 +35,8 @@
                         <span class="add">新增</span>
                         <li>
                             <!-- 第二级树 -->
-                            <div :style="{'width': a.child && a.child.length > 0 ? '100%' : 'auto'}" v-if="item.child" v-for="(a,b) in item.child" :key="b">
-                                <el-checkbox :class="{'tree_two': a.child && a.child.length > 0}" v-model="a.checked" :disabled="disabled" @change="changeStatus(a, index, 2, b)">{{ a.title }}</el-checkbox>
+                            <div class="tree_two" :style="{'width': '100%'}" v-if="item.child" v-for="(a,b) in item.child" :key="b">
+                                <el-checkbox v-model="a.checked" :disabled="disabled" @change="changeStatus(a, index, 2, b)">{{ a.title }}</el-checkbox>
                                 <!-- 第三级树 -->
                                 <div class="tree_three">
                                     <div v-if="a.child" v-for="(x,s) in a.child" :key="s">
@@ -136,7 +136,7 @@ export default {
                 })
             }
             prv(row.list, row.user_pids)
-            
+
             if(status !== 'add') {
                 row.user.password = row.user.password_word
                 this.$set(this.$data, 'ruleForm', row.user)
@@ -332,8 +332,7 @@ export default {
                             display: flex;
                             margin-top: 5px;
                             >div {
-                                margin-bottom: 20px;
-                                margin-right: 30px;
+                                margin: 12px;
                             }
                         }
 
@@ -349,6 +348,9 @@ export default {
         // .jurisdiction::-webkit-scrollbar {
         //     display: none;
         // }
+        .el-checkbox__input.is-checked + .el-checkbox__label {
+          color: #606266 !important;
+        }
     }
 }
 </style>
