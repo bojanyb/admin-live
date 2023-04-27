@@ -146,7 +146,7 @@ export default {
                     },
                     {
                         label: '用户',
-                        minWidth: '160px',
+                        minWidth: '120px',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.punished_user_nickname),
@@ -156,7 +156,7 @@ export default {
                     },
                     {
                         label: '被举报用户所属公会',
-                        minWidth: '120px',
+                        minWidth: '150px',
                         render: (h, params) => {
                           if(params.row.punished_user_guild_number && params.row.punished_user_guild_number !== '无' ){
                             return h('div', [
@@ -170,7 +170,7 @@ export default {
                     },
                     {
                         label: '被举报用户所属公会状态',
-                        minWidth: '90px',
+                        minWidth: '180px',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.punished_user_guild_status || '无')
@@ -180,11 +180,11 @@ export default {
                     {
                         label: '被举报用户加入公会时间',
                         prop: 'punished_user_guild_join_time',
-                        minWidth: '160px'
+                        minWidth: '180px'
                     },
                     {
                       label: '被举报用户所属运营',
-                      minWidth: '90px',
+                      minWidth: '150px',
                       render: (h, params) => {
                           return h('div', [
                               h('div', params.row.punished_user_guild_operator_user_name || '无')
@@ -214,7 +214,7 @@ export default {
                       propCopy: 'video_path',
                       imgWidth: '70px',
                       imgHeight: '70px',
-                      width: '280px'
+                      width: '200px'
                     },
                     {
                       label: '举报用户',
@@ -228,7 +228,7 @@ export default {
                     },
                     {
                         label: '举报用户所属公会',
-                        minWidth: '120px',
+                        minWidth: '140px',
                         render: (h, params) => {
                           if(params.row.report_user_guild_number && params.row.report_user_guild_number !== '无'){
                               return h('div', [
@@ -242,7 +242,7 @@ export default {
                     },
                     {
                       label: '举报用户所属公会状态',
-                      minWidth: '80px',
+                      minWidth: '160px',
                       render: (h, params) => {
                           return h('div', [
                               h('div', params.row.report_user_guild_status || '无')
@@ -251,7 +251,7 @@ export default {
                     },
                     {
                       label: '举报用户所属运营',
-                      minWidth: '80px',
+                      minWidth: '140px',
                       render: (h, params) => {
                           return h('div', [
                               h('div', params.row.report_user_guild_operator_user_name || '无')
@@ -268,13 +268,14 @@ export default {
                     },
                     {
                       label: '处罚结果',
-                      minWidth: '180px',
+                      minWidth: '520px',
                       render: (h, params) => {
                         const vnode = params.row.res && params.row.res.length && params.row.res.map(item => {
-                          return h('div', item || '--')
+                          return h('span', `${item};` || '--')
                         })
                         return h('div', vnode || '--')
-                      }
+                      },
+                      showOverFlow: true
                     },
                     {
                       label: '解除时间',
@@ -495,11 +496,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .share-table-list-box {
-  height: calc(100vh - 280px);
-  .el-table {
-    height: calc(100vh - 280px);
-  }
-}
 
 </style>
