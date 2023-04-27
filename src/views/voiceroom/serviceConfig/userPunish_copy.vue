@@ -269,7 +269,10 @@ export default {
                       label: '处罚结果',
                       minWidth: '180px',
                       render: (h, params) => {
-                          return h('span', params.row.res || '- -')
+                        const vnode = params.row.res && params.row.res.length && params.row.res.map(item => {
+                          return h('div', item || '--')
+                        })
+                        return h('div', vnode || '--')
                       }
                     },
                     {
@@ -302,7 +305,7 @@ export default {
                           return h('div', [
                               h('el-button', { props: { type: 'success'}, style: {
                                   display: params.row.status === 1 ? 'unset' : 'none'
-                              }, on: {click:()=>{this.relieve(params.row.id)}}}, '解除'),
+                              }, on: {click:()=>{this.relieve(params.row)}}}, '解除'),
                               h('el-button', { props: { type: 'danger'}, style: {
                                   display: params.row.status === 0 ? 'unset' : 'none'
                               }, on: {click:()=>{this.blocked(params.row)}}}, '封禁'),
@@ -386,19 +389,25 @@ export default {
             }, 50);
         },
         // 解除
-        async relieve(id) {
-            this.$confirm('是否确认解除当前封禁用户?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(async () => {
-                let res = await removeUserPunish({ id })
-                if(res.code === 2000) {
-                    this.$success('解除成功')
-                    this.getList()
-                }
-            }).catch(() => {});
-        },
+      async relieve(row) {
+        const temp = {}
+        if (row.id_array.length > 1) {
+          temp.ids = row.id_array;
+        } else {
+          temp.id = row.id_array.join();
+        }
+        this.$confirm('是否确认解除当前封禁用户?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then(async () => {
+            let res = await removeUserPunish(temp)
+            if(res.code === 2000) {
+                this.$success('解除成功')
+                this.getList()
+            }
+        }).catch(() => {});
+      },
         // 忽略
         async neglect(id) {
             let res = await passUserPunish({ id })
@@ -476,5 +485,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    
+::v-deep .share-table-list-box {
+  height: calc(100vh - 280px);
+  .el-table {
+    height: calc(100vh - 280px);
+  }
+}
+
 </style>
