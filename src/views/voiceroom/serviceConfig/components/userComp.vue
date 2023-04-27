@@ -94,6 +94,7 @@ import MAPDATA from '@/utils/jsonMap.js'
 import moment from 'moment'
 // 引入oss
 import { uploadOSS } from '@/utils/oss.js'
+import { debounce } from "lodash";
 export default {
     props: {
       isDetection: {
@@ -306,7 +307,7 @@ export default {
             this.$refs.drawer.loadParams(status)
         },
         // 提交
-        async submitForm(formName) {
+      submitForm: debounce(async function (formName) {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     if(this.status !== 'add') {
@@ -368,7 +369,7 @@ export default {
                     return false;
                 }
             });
-        },
+        }, 300),
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
