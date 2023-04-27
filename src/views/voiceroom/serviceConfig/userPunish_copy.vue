@@ -306,7 +306,7 @@ export default {
                           return h('div', [
                               h('el-button', { props: { type: 'success'}, style: {
                                   display: (params.row.status === 1 && this.curBtnArr.includes('UserPunishLog@remove')) ? 'unset' : 'none'
-                              }, on: {click:()=>{this.relieve(params.row.id)}}}, '解除'),
+                              }, on: {click:()=>{this.relieve(params.row)}}}, '解除'),
                               h('el-button', { props: { type: 'danger'}, style: {
                                   display: (params.row.status === 0 && this.curBtnArr.includes('UserPunishLog@save')) ? 'unset' : 'none'
                               }, on: {click:()=>{this.blocked(params.row)}}}, '封禁'),
