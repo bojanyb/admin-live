@@ -49,6 +49,14 @@
 						placeholder: '请输入礼物名称'
 					},
 					{
+						name: 'id',
+						type: 'input',
+						value: '',
+						label: '礼物ID',
+						isNum: true,
+						placeholder: '请输入礼物ID'
+					},
+					{
 						name: 'status',
 						type: 'select',
 						value: '',
@@ -60,7 +68,17 @@
 						handler: {
 							change: (v) => {}
 						}
-					}
+          },
+          {
+            name: "is_activity",
+            type: "select",
+            value: 0,
+            keyName: "value",
+            optionLabel: "name",
+            label: "是否活动礼物",
+            placeholder: "请选择",
+            options: MAPDATA.ISACTIVETYLIST,
+          },
 				]
 			},
 			cfgs() {
@@ -79,6 +97,11 @@
 							prop: 'gift_name'
 						},
 						{
+							label: '礼物ID',
+							width: '95px',
+							prop: 'id'
+						},
+						{
 							label: '礼物图片',
 							isimg: true,
 							prop: 'gift_photo',
@@ -92,6 +115,14 @@
 							width: '110px',
 							render: (h, params) => {
 								let data = MAPDATA.SYSTEMGIFTLIST.find(item => { return item.value === params.row.gift_genre })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '是否活动礼物',
+							width: '110px',
+							render: (h, params) => {
+								let data = MAPDATA.GIFTACTIVETYLIST.find(item => { return item.value === params.row.is_activity })
 								return h('span', data ? data.name : '无')
 							}
 						},
@@ -204,7 +235,9 @@
 					page: params.page,
 					pagesize: params.size,
           status: s.status,
-          gift_name: s.gift_name
+          gift_name: s.gift_name,
+          id: s.id,
+          is_activity: s.is_activity,
 				}
 			},
 			// 刷新列表
