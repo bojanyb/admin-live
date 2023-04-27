@@ -485,5 +485,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .share-table-list-box {
+  height: calc(100vh - 280px);
+  .el-table {
+    height: calc(100vh - 280px);
+  }
+}
 
 </style>
