@@ -146,7 +146,7 @@
 									let user_pids = res.data.user_pids
 									let prv = (list, params) => { // 获取当前权限的所有菜单
 										list.forEach((item,index) => {
-											if(user_pids.indexOf(item.id) === -1 || item.status === 0) {
+											if(user_pids.indexOf(item.id) === -1 || item.status === 0 || item.is_menu === 0) {
 												if(item.pid === 0) {
 													arr.splice(index, 1)
 													prv(arr)
@@ -166,7 +166,7 @@
 
 									let ri = (list, params) => {
 										list.forEach((item, index) => {
-										if(user_pids.indexOf(item.id) === -1 || item.status === 0) {
+										if(user_pids.indexOf(item.id) === -1 || item.status === 0 || item.is_menu === 0) {
 											if(params) {
 											params.child.splice(index, 1)
 											ri(params.child, params)
