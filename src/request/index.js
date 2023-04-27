@@ -198,7 +198,7 @@ const request = {
 
     // 用户管理
     user: {
-        list: `${HTTPHEADER}/User`,
+        list: `${HTTPHEADER}/User/getUserInfo`,
         defaultFace: `${HTTPHEADER}/user/defaultFace`,
         autonymlist: `${HTTPHEADER}/Verify`,
         edit: `${HTTPHEADER}/User/userEdit`, // 编辑用户
