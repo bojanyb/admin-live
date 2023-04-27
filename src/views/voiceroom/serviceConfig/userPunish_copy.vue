@@ -497,4 +497,11 @@ export default {
 
 <style lang="scss" scoped>
 
+.serviceConfig-userPunish-box {
+  ::v-deep .share-table-list-box .el-table__body-wrapper  {
+    max-height: none !important;
+    overflow-y: none !important;
+}
+}
+
 </style>
