@@ -10,7 +10,6 @@
         <div class="svgaBox" v-else-if="isSpecial === 'svga'" @click="zoomClick">
             <svgComp ref="svgComp" :src="src" :styleObj="{ width: width, height: height }" ></svgComp>
         </div>
-
         <div class="audioBox" v-else-if="isSpecial === 'mp3'">
             <div class="audio-name" v-if="name" :title="name">{{ name }}</div>
             <audio ref="audio" :src="src" controls="controls"></audio>
@@ -80,7 +79,7 @@ export default {
                     return 'svga'
                 } else if(this.src.indexOf('mp4') !== -1) {
                     return 'mp4'
-                }  else if(this.src.indexOf('mp3') !== -1 || this.src.indexOf('m4a') !== -1) {
+                }  else if(this.src.indexOf('mp3') !== -1 || this.src.indexOf('MP3') !== -1 || this.src.indexOf('m4a') !== -1) {
                     return 'mp3'
                 } else {
                     return 'png'
