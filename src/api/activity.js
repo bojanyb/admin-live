@@ -191,3 +191,13 @@ export function getRoundList(data) {
   })
 }
 
+/*******五一劳模**********/
+// 获取礼物
+export function getLabourGiftList(data) {
+  return request({
+    url: api.activity.getLabourGiftList,
+    method: 'post',
+    data
+  })
+}
+

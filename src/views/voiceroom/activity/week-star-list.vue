@@ -50,7 +50,7 @@
 						value: '',
 						label: '送礼人ID',
 						isNum: true,
-            linkage: true,
+            			linkage: true,
 						placeholder: '请输入送礼人ID'
 					},
 					{
@@ -58,7 +58,7 @@
 						type: 'input',
 						value: '',
 						label: '收礼人ID',
-            linkage: true,
+            			linkage: true,
 						placeholder: '请输入收礼人ID'
 					},
 					{
@@ -80,7 +80,7 @@
 						label: '活动轮次',
 						placeholder: '请选择',
 						clearable: true,
-            linkage: true,
+            			linkage: true,
 						options: this.poolList
 					},
 					{
@@ -90,7 +90,7 @@
 						format: "yyyy-MM-dd HH:mm:ss",
 						label: '时间选择',
 						value: '',
-            linkage: true,
+            			linkage: true,
 						handler: {
 							change: v => {
 								this.emptyDateTime()
