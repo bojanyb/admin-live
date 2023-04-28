@@ -83,6 +83,11 @@ export default {
           key: "com.hdb.kaihei",
           label: "开黑语音",
           value: "com.hdb.kaihei",
+        },
+        {
+          key: "com.aiyi.lemon",
+          label: "柠檬语音",
+          value: "com.aiyi.lemon",
         }
       ],
     }
