@@ -267,6 +267,14 @@ export default {
                       }
                     },
                     {
+                      label: '处罚类别',
+                      minWidth: '100px',
+                      render: (h, params) => {
+                          let data = MAPDATA.USERPUNISHSTATUSLISTCOPY.find(item => { return item.value === params.row.status })
+                          return h('span', data ? data.name : '无')
+                      }
+                    },
+                    {
                       label: '处罚结果',
                       minWidth: '520px',
                       render: (h, params) => {

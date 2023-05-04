@@ -14,6 +14,11 @@
 
                         <el-button type="success" @click="seeUser">查询</el-button>
                     </el-form-item>
+                    <el-form-item label="处罚类别" prop="punish_type">
+                        <el-select v-model="ruleForm.punish_type" multiple placeholder="请选择" :disabled="disabled">
+                            <el-option v-for="item in punishTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item label="处罚类型" prop="type">
                         <el-select v-model="ruleForm.type" multiple placeholder="请选择" :disabled="disabled">
                             <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
@@ -80,7 +85,7 @@
 
 <script>
 // 引入api
-import { getUserReportDeal } from '@/api/videoRoom'
+import { getUserReportDeal, getUserReportDeal2 } from '@/api/videoRoom'
 // 引入api
 import { userList } from '@/api/user'
 // 引入抽屉组件
@@ -120,7 +125,8 @@ export default {
                 type: [],
                 ban_duration: '',
                 remark: '',
-                reset: []
+                reset: [],
+                punish_type: []
             },
             oldParams: {}, // 老数据
             form: {},
@@ -128,6 +134,9 @@ export default {
                 user_number: [
                     { required: true, message: '请输入用户ID', trigger: 'blur' },
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                ],
+                punish_type: [
+                    { required: true, message: '请选择处罚类别', trigger: 'change' }
                 ],
                 type: [
                     { required: true, message: '请选择处罚类型', trigger: 'change' }
@@ -141,7 +150,8 @@ export default {
                 remark: [
                     { required: true, message: '请输入处罚备注', trigger: 'blur' }
                 ]
-            }
+            },
+            punishTypeList: []
         };
     },
     computed: {
@@ -285,6 +295,7 @@ export default {
                 data.ban_duration = null
                 data.remark = ''
                 data.type = []
+                data.punish_type = []
                 this.$set(this.$data, 'ruleForm', data)
                 this.$set(this.$data, 'form', params)
                 this.seeUser()
@@ -296,6 +307,7 @@ export default {
                 data.remark = ''
                 data.type = []
                 data.reset = []
+                data.punish_type = []
                 this.$set(this.$data, 'ruleForm', data)
                 this.$set(this.$data, 'form', params)
                 this.seeUser()
@@ -393,8 +405,28 @@ export default {
         // 修改
         update() {
             this.status = 'update'
-        }
-    }
+      },
+    // 获取房间类型
+    async getGenreList(params) {
+      const response = await getUserReportDeal2(params);
+      if (response.code == 2000) {
+        const tempArr = Array.from(
+          Array.isArray(response.data.list) ? response.data.list : []
+        );
+        this.punishTypeList =
+          tempArr.reduce((prev, curr) => {
+            prev.push({
+              name: curr.name,
+              value: curr.id,
+            });
+            return prev;
+          }, []) || [];
+      }
+    },
+  },
+  created() {
+   this.getGenreList();
+  },
 }
 </script>
 
