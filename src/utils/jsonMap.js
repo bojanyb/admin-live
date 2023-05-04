@@ -2191,6 +2191,10 @@ const RISKSYSTEMTYPELIST = [
   {
     name: '广告',
     value: 300
+  },
+  {
+    name: '其他',
+    value: 320
   }
 ]
 
