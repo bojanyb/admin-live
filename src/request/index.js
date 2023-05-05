@@ -405,6 +405,7 @@ const request = {
         add: `${HTTPHEADER}/Sensitive/add`, // 敏感词-添加
         screenImgLog: `${HTTPHEADER}/ScreenImgLog/index`, // 图片审核-列表
         review: `${HTTPHEADER}/ScreenImgLog/review`, // 图片审核-操作
+        getPunishTypeList: `${HTTPHEADER}/UserPunishLog/getPunishTypeList`, // 处罚举报-处罚类型
 
         // 用户处罚 - 用户举报二合一
         UserPunishLog: `${HTTPHEADER}/UserPunishLog`, // 处罚-列表

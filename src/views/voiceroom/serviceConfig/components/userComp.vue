@@ -14,6 +14,11 @@
 
                         <el-button type="success" @click="seeUser">查询</el-button>
                     </el-form-item>
+                    <el-form-item label="处罚类别" prop="punish_type_id">
+                        <el-select v-model="ruleForm.punish_type_id" placeholder="请选择" :disabled="disabled">
+                            <el-option v-for="item in punishTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item label="处罚类型" prop="type">
                         <el-select v-model="ruleForm.type" multiple placeholder="请选择" :disabled="disabled">
                             <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
@@ -46,7 +51,7 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="备注说明" prop="remark">
-                        <el-input type="textarea" :rows="4" v-model="ruleForm.remark" :disabled="disabled"></el-input>
+                        <el-input type="textarea" :rows="4" maxlength="20" show-word-limit v-model="ruleForm.remark" :disabled="disabled"></el-input>
                     </el-form-item>
                 </div>
                 <div class="infoBox" :class="[{'infoBox_hign': status === 'blocked' && !isIncludeReset},{'infoBox_hign_copy_box': status !== 'blocked' && !isIncludeReset},{'infoBox_hign_copy': status !== 'blocked' && isIncludeReset},{'infoBox_hign_copy_box_two': status === 'blocked' && isIncludeReset}]" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
@@ -80,7 +85,7 @@
 
 <script>
 // 引入api
-import { getUserReportDeal } from '@/api/videoRoom'
+import { getUserReportDeal, getPunishTypeList } from '@/api/videoRoom'
 // 引入api
 import { userList } from '@/api/user'
 // 引入抽屉组件
@@ -120,7 +125,8 @@ export default {
                 type: [],
                 ban_duration: '',
                 remark: '',
-                reset: []
+                reset: [],
+                punish_type_id: null
             },
             oldParams: {}, // 老数据
             form: {},
@@ -128,6 +134,9 @@ export default {
                 user_number: [
                     { required: true, message: '请输入用户ID', trigger: 'blur' },
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                ],
+                punish_type_id: [
+                    { required: true, message: '请选择处罚类别', trigger: 'change' }
                 ],
                 type: [
                     { required: true, message: '请选择处罚类型', trigger: 'change' }
@@ -141,7 +150,8 @@ export default {
                 remark: [
                     { required: true, message: '请输入处罚备注', trigger: 'blur' }
                 ]
-            }
+            },
+            punishTypeList: []
         };
     },
     computed: {
@@ -285,6 +295,7 @@ export default {
                 data.ban_duration = null
                 data.remark = ''
                 data.type = []
+                data.punish_type_id = null
                 this.$set(this.$data, 'ruleForm', data)
                 this.$set(this.$data, 'form', params)
                 this.seeUser()
@@ -296,6 +307,7 @@ export default {
                 data.remark = ''
                 data.type = []
                 data.reset = []
+                data.punish_type_id = null
                 this.$set(this.$data, 'ruleForm', data)
                 this.$set(this.$data, 'form', params)
                 this.seeUser()
@@ -393,8 +405,28 @@ export default {
         // 修改
         update() {
             this.status = 'update'
-        }
-    }
+      },
+    // 获取处罚类别
+    async getPunishType(params) {
+      const response = await getPunishTypeList(params);
+      if (response.code == 2000) {
+        const tempArr = Array.from(
+          Array.isArray(response.data) ? response.data : []
+        );
+        this.punishTypeList =
+          tempArr.reduce((prev, curr) => {
+            prev.push({
+              name: curr.name,
+              value: curr.id,
+            });
+            return prev;
+          }, []) || [];
+      }
+    },
+  },
+  created() {
+   this.getPunishType();
+  },
 }
 </script>
 

@@ -267,6 +267,11 @@ export default {
                       }
                     },
                     {
+                      label: '处罚类别',
+                      minWidth: '100px',
+                      prop: 'punish_type_str'
+                    },
+                    {
                       label: '处罚结果',
                       minWidth: '520px',
                       render: (h, params) => {
