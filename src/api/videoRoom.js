@@ -612,9 +612,9 @@ export function getUserCancellationList(data) {
 }
 
 // 处罚举报 - 处罚类型
-export function getUserReportDeal2(data) {
+export function getPunishTypeList(data) {
   return request({
-    url: api.risk.getUserReportDeal2,
+    url: api.risk.getPunishTypeList,
     method: 'post',
     data
   })

@@ -269,10 +269,7 @@ export default {
                     {
                       label: '处罚类别',
                       minWidth: '100px',
-                      render: (h, params) => {
-                          let data = MAPDATA.USERPUNISHSTATUSLISTCOPY.find(item => { return item.value === params.row.status })
-                          return h('span', data ? data.name : '无')
-                      }
+                      prop: 'punish_type_str'
                     },
                     {
                       label: '处罚结果',
