@@ -101,6 +101,11 @@ export default {
           key: "com.hdb.kaihei",
           name: "开黑语音",
           value: "com.hdb.kaihei",
+        },
+        {
+          key: "com.aiyi.lemon",
+          name: "柠檬语音",
+          value: "com.aiyi.lemon",
         }
       ],
       channelsList: [],
