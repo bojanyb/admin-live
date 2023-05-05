@@ -221,8 +221,7 @@ export default {
                       minWidth: '160px',
                       render: (h, params) => {
                           return h('div', [
-                              h('div', params.row.report_user_nickname),
-                              h('div', params.row.report_user_number || '- -')
+                              h('div', params.row.report_user_nickname)
                           ])
                       }
                     },
