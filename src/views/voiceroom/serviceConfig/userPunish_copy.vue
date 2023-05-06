@@ -14,6 +14,8 @@
 <script>
 // 引入api
 import { removeUser, removeUserPunish, passUserPunish,UserPunishLog } from '@/api/risk'
+// 引入api
+import { getPunishTypeList } from '@/api/videoRoom'
 // 引入新增组件
 import userComp from './components/userComp.vue'
 // 引入修改证据弹窗
@@ -44,7 +46,8 @@ export default {
             isDestoryComp: false, // 是否销毁组件
             searchParams: {
               status: 4
-            }
+            },
+            punishTypeList: []
         };
     },
     computed: {
@@ -101,6 +104,16 @@ export default {
                 //     placeholder: '请选择',
                 //     options: MAPDATA.USERPUNISHTYPELISTCOPY
                 // },
+                {
+                    name: 'punish_type_id',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '处罚类别',
+                    placeholder: '请选择',
+                    options: this.punishTypeList
+                },
                 {
                     name: 'status',
                     type: 'select',
@@ -221,8 +234,7 @@ export default {
                       minWidth: '160px',
                       render: (h, params) => {
                           return h('div', [
-                              h('div', params.row.report_user_nickname),
-                              h('div', params.row.report_user_number || '- -')
+                              h('div', params.row.report_user_nickname)
                           ])
                       }
                     },
@@ -265,6 +277,11 @@ export default {
                           let data = MAPDATA.USERPUNISHSTATUSLISTCOPY.find(item => { return item.value === params.row.status })
                           return h('span', data ? data.name : '无')
                       }
+                    },
+                    {
+                      label: '处罚类别',
+                      minWidth: '100px',
+                      prop: 'punish_type_str'
                     },
                     {
                       label: '处罚结果',
@@ -347,7 +364,8 @@ export default {
                 operator:s.operator,
                 report_user_number:s.report_user_number,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
-                end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time
+                end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
+                punish_type_id: s.punish_type_id
             }
         },
         // 刷新列表
@@ -490,8 +508,29 @@ export default {
         // 销毁组件
         destoryComp() {
             this.isDestoryComp = false
-        }
-    }
+        },
+        // 获取处罚类别
+        async getPunishType(params) {
+          const response = await getPunishTypeList(params);
+          if (response.code == 2000) {
+            const tempArr = Array.from(
+              Array.isArray(response.data) ? response.data : []
+            );
+            this.punishTypeList =
+              tempArr.reduce((prev, curr) => {
+                prev.push({
+                  name: curr.name,
+                  value: curr.id,
+                });
+                return prev;
+              }, []) || [];
+            this.punishTypeList.unshift({ name: "全部", value: '' })
+          }
+        },
+    },
+    created() {
+      this.getPunishType();
+    },
 }
 </script>
 

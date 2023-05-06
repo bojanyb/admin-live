@@ -611,6 +611,15 @@ export function getUserCancellationList(data) {
   })
 }
 
+// 处罚举报 - 处罚类型
+export function getPunishTypeList(data) {
+  return request({
+    url: api.risk.getPunishTypeList,
+    method: 'post',
+    data
+  })
+}
+
 // 注销管理 已处理
 export function getUserCancellationHasDeal(data) {
   return request({
@@ -1434,4 +1443,5 @@ export function adminUserList(data) {
     data
   })
 }
+
 
