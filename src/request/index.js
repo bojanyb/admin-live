@@ -493,6 +493,13 @@ const request = {
         getLabourGiftLog: `${HTTPHEADER}/hdMaydayLog/giftLog`, // 五一劳模榜单排名
         getLabourRankingList: `${HTTPHEADER}/hdMaydayLog/getRanking`, // 五一劳模榜单排名
 
+        // 奇妙跳跳屋
+        getPoolNameV5: `${HTTPHEADER}/hdWonderfulLog/getPoolName`, // 获取奖池列表
+        poolDetailV5: `${HTTPHEADER}/hdWonderfulLog/poolDetail`, // 获取抽奖数据
+        getRoundV5: `${HTTPHEADER}/hdWonderfulLog/getRound`, // 获取轮次
+        luckyListV5: `${HTTPHEADER}/hdWonderfulLog/luckyList`, // 榜单排名表
+        luckyConfigV5: `${HTTPHEADER}/hdWonderfulLog/luckyConfig`, // 榜单配置
+
     },
 
     // 靓号管理

@@ -201,3 +201,46 @@ export function getLabourGiftList(data) {
   })
 }
 
+/*******跳跳屋**********/
+// 获取奖池列表
+export function getPoolNameV5(data) {
+  return request({
+    url: api.activity.getPoolNameV5,
+    method: 'post',
+    data
+  })
+}
+// 获取抽奖数据
+export function poolDetailV5(data) {
+  return request({
+    url: api.activity.poolDetailV5,
+    method: 'post',
+    data
+  })
+}
+// 获取轮次
+export function getRoundV5(data) {
+  return request({
+    url: api.activity.getRoundV5,
+    method: 'post',
+    data
+  })
+}
+// 榜单排名表
+export function luckyListV5(data) {
+  return request({
+    url: api.activity.luckyListV5,
+    method: 'post',
+    data
+  })
+}
+
+// 榜单配置
+export function luckyConfigV5(data) {
+  return request({
+    url: api.activity.luckyConfigV5,
+    method: 'post',
+    data
+  })
+}
+
