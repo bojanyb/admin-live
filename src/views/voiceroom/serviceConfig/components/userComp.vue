@@ -328,6 +328,7 @@ export default {
                             id: data.id,
                             ban_duration: data.ban_duration,
                             remark: data.remark,
+                            punish_type_id: data.punish_type_id,
                         }
                         let arr = JSON.parse(JSON.stringify(data.type))
                         s.reset = arr.filter(item => { return item > 10 })
