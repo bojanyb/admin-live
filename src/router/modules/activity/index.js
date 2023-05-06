@@ -93,6 +93,24 @@ const activityRouter = {
 			},
 			name: 'labour-rank-list'
 		},
+		{
+			path: 'jump-star-list',
+			component: () => import('@/views/voiceroom/activity/jump-star-list.vue'),
+			meta: {
+				title: '奇妙跳跳屋抽奖数据',
+				noCache: true
+			},
+			name: 'jump-star-list'
+		},
+    	{
+			path: 'jump-rank-list',
+			component: () => import('@/views/voiceroom/activity/jump-rank-list.vue'),
+			meta: {
+				title: '奇妙跳跳屋榜单排名表',
+				noCache: true
+			},
+			name: 'jump-rank-list'
+		},
         // {
 		// 	path: 'first-charge',
 		// 	component: () => import('@/views/voiceroom/platformActivity/first-charge/index.vue'),
