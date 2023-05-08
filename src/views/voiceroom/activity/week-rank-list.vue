@@ -4,7 +4,7 @@
 		<div class="searchParams">
         <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
     </div>
-		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" :isHidePage="true" @saleAmunt="saleAmunt"></tableList>
 	</div>
 </template>
 
