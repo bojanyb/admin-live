@@ -44,22 +44,22 @@ export default {
         columns: [
           {
             label: "排名",
-			width: "180px",
+			      width: "180px",
             prop: "ranking",
           },
           {
             label: "派对ID",
-			width: "180px",
+			      width: "180px",
             prop: "room_number",
           },
           {
             label: "公会ID",
-			width: "180px",
+			      width: "180px",
             prop: "guild_number",
           },
           {
             label: "礼物总价值",
-			width: "180px",
+			      width: "180px",
             render: (h, params) => {
               return h("span", params.row.value);
             },

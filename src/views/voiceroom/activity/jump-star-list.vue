@@ -98,13 +98,19 @@ export default {
         {
           name: "type",
           type: "select",
-          value: "全部",
+          value: "",
           keyName: "key",
           optionLabel: "value",
           label: "奖池类型",
           placeholder: "请选择",
           options: this.lotteryTypeList,
 		      clearable: true,
+					linkage: true,
+          handler: {
+						change: v => {
+							this.getRoundSource(v)
+						},
+					}
         },
         {
           name: "round",
@@ -245,12 +251,18 @@ export default {
       }
     },
     // 获取奖池类型
-    async getRoundSource() {
-      let res = await getRoundV5();
+    async getRoundSource(type) {
+      let params = {}
+      if(type){
+        params.type = type;
+      }
+      let res = await getRoundV5(params);
       if (res.code == 2000) {
         this.roundList = res.data.round;
-        let all = { round_number: 0, title: "全部" };
-        this.roundList.unshift(all);
+        if(!type){
+          let all = { round_number: 0, title: "全部" };
+          this.roundList.unshift(all);
+        }
       }
     },
   },
