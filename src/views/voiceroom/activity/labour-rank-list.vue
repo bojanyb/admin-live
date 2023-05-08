@@ -6,7 +6,7 @@
       v-model="tabIndex"
       @tabChange="tabChange"
     ></menuComp>
-    <tableList :cfgs="cfgs" ref="tableList"></tableList>
+    <tableList :cfgs="cfgs" ref="tableList" :isHidePage="true"></tableList>
   </div>
 </template>
 
