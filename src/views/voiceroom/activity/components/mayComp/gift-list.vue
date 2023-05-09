@@ -197,7 +197,7 @@ export default {
 	}
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .el-icon-circle-close {
 	color: #FFFFFF;
 }
@@ -226,6 +226,9 @@ export default {
 			}
 		}
 	}
+}
+::v-deep .share-table-list-box .el-table__body-wrapper {
+    height: 33rem !important;
 }
 </style>
 
