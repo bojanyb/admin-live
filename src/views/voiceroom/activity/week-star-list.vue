@@ -113,7 +113,7 @@
 							width: '180px',
 							prop: 'create_time'
 						},
-            {
+            			{
 							label: '活动轮次',
 							prop: 'round'
 						},
@@ -125,7 +125,7 @@
 							label: '送礼人昵称',
 							prop: 'nickname',
 						},
-            {
+            			{
 							label: '收礼人ID',
 							prop: 'live_user_number'
 						},
@@ -159,10 +159,10 @@
 					page: params.page,
 					pagesize: params.size,
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
-          end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
+          			end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
 					round: (s.round == -1 || s.round == "全部") ? "" : s.round,
 					user_number: s.user_number,
-          live_user_number: s.live_user_number,
+          			live_user_number: s.live_user_number,
 					gift_id: (s.gift_id == -1 || s.gift_id == "全部") ? "" : s.gift_id,
 				}
 			},
@@ -201,7 +201,7 @@
 				let res = await getGiftList();
 				if(res.code == 2000){
 					this.giftNameList = res.data.list;
-          let all = {gift_id: 0, gift_name: "全部"}
+          			let all = {gift_id: 0, gift_name: "全部"}
 					this.giftNameList.unshift(all)
 				}
 			},

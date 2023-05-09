@@ -81,7 +81,7 @@
 						value: '',
 						label: '用户ID',
 						isNum: true,
-            linkage: true,
+            			linkage: true,
 						placeholder: '请输入用户ID'
 					},
 					{
@@ -89,7 +89,7 @@
 						type: 'input',
 						value: '',
 						label: '奖品名称',
-            linkage: true,
+            			linkage: true,
 						placeholder: '请输入奖品名称'
 					},
 					{
@@ -111,7 +111,7 @@
 						label: '奖品类型',
 						placeholder: '请选择',
 						clearable: true,
-            linkage: true,
+            			linkage: true,
 						options: this.giftTypeList
 					},
 					{
@@ -123,7 +123,7 @@
 						label: '奖池类型',
 						placeholder: '请选择',
 						clearable: true,
-            linkage: true,
+            			linkage: true,
 						options: this.lotteryList,
 						handler: {
 							change: v => {
@@ -140,7 +140,7 @@
 						label: '轮次',
 						placeholder: '请选择',
 						clearable: true,
-            linkage: true,
+            			linkage: true,
 						options: this.poolList
 					},
 					{
@@ -150,7 +150,7 @@
 						format: "yyyy-MM-dd HH:mm:ss",
 						label: '时间选择',
 						value: '',
-            linkage: true,
+            			linkage: true,
 						handler: {
 							change: v => {
 								this.emptyDateTime()

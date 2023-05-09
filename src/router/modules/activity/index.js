@@ -93,6 +93,15 @@ const activityRouter = {
 			},
 			name: 'labour-rank-list'
 		},
+		{
+			path: 'may-list',
+			component: () => import('@/views/voiceroom/activity/may-list.vue'),
+			meta: {
+				title: '520活动数据',
+				noCache: true
+			},
+			name: 'may-list'
+		}
         // {
 		// 	path: 'first-charge',
 		// 	component: () => import('@/views/voiceroom/platformActivity/first-charge/index.vue'),

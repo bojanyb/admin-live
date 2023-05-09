@@ -87,7 +87,7 @@
 						label: '奖池',
 						placeholder: '请选择',
 						clearable: true,
-            linkage: true,
+            			linkage: true,
 						options: this.lotteryList,
 						handler: {
 							change: v => {
