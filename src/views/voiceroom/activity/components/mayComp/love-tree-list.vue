@@ -57,7 +57,7 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
-                    name: 'live_user_number',
+                    name: 'gift_name',
                     type: 'input',
                     value: '',
                     label: '奖品名称',
@@ -75,7 +75,7 @@ export default {
                     options: this.giftNameList,
                 },
                 {
-                    name: 'gift_id',
+                    name: 'round',
                     type: 'select',
                     value: "全部",
                     keyName: 'gift_id',
@@ -124,11 +124,11 @@ export default {
                     },
                     {
                         label: '奖品ID',
-                        prop: 'live_user_number'
+                        prop: 'gift_id'
                     },
                     {
-                        label: '奖品昵称',
-                        prop: 'live_nickname',
+                        label: '奖品名称',
+                        prop: 'gift_name',
                     },
                     {
                         label: '抽奖消耗',
@@ -161,7 +161,8 @@ export default {
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
                 user_number: s.user_number,
-                live_user_number: s.live_user_number,
+                gift_name: s.gift_name,
+                round: (s.round == -1 || s.round == "全部") ? "" : s.round,
                 gift_id: (s.gift_id == -1 || s.gift_id == "全部") ? "" : s.gift_id,
             }
 		},
