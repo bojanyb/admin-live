@@ -493,6 +493,12 @@ const request = {
         getLabourGiftLog: `${HTTPHEADER}/hdMaydayLog/giftLog`, // 五一劳模榜单排名
         getLabourRankingList: `${HTTPHEADER}/hdMaydayLog/getRanking`, // 五一劳模榜单排名
 
+        // 520活动 浪漫520
+        getPoolNameV520: `${HTTPHEADER}/hdRomanticLog/getPoolName`, // 奖池列表
+        poolDetailV520: `${HTTPHEADER}/hdRomanticLog/poolDetail`, // 获取抽奖数据
+        getRoundV520: `${HTTPHEADER}/hdRomanticLog/getRound`, // 获取轮次
+
+
     },
 
     // 靓号管理

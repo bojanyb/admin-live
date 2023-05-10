@@ -40,7 +40,7 @@ export default {
 				},
 				{
 					id: 4,
-					name: '手动绑定CP'
+					name: '绑定CP记录'
 				}
 			],
 			tabIndex: '0',

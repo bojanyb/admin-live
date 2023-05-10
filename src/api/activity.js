@@ -201,3 +201,21 @@ export function getLabourGiftList(data) {
   })
 }
 
+/*******520活动**********/
+// 奖池列表
+export function getPoolNameV520(data){
+  return request({
+    url: api.activity.getPoolNameV520,
+    method: 'post',
+    data
+  })
+}
+
+// 获取轮次
+export function getRoundV520(data){
+  return request({
+    url : api.activity.getRoundV520,
+    method: 'post',
+    data
+  })
+}

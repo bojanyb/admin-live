@@ -20,7 +20,7 @@
 
 <script>
 // 引入api
-import { getGiftList } from '@/api/activity'
+import { getGiftList,getRoundV520,getPoolNameV520 } from '@/api/activity'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -41,7 +41,9 @@ export default {
 			tabIndex: '0',
 			giftNameList: [], // 礼物名称
             dateTimeParams: {},
-            sumSource: {}
+            sumSource: {},
+            roundList: [], // 轮次列表
+            poolList: [] // 奖池列表
 		}
 	},
 	computed: {
@@ -82,7 +84,7 @@ export default {
                     optionLabel: 'gift_name',
                     label: '奖池轮次',
                     placeholder: '请选择',
-                    options: this.giftNameList,
+                    options: this.roundList,
                 },
                 {
                     name: 'dateTimeParams',
@@ -150,6 +152,8 @@ export default {
 	},
 	mounted() {
         this.getPoolNameSource();
+        this.getRoundSource();
+        this.getPoolSource();
     },
 	methods: {
 		// 配置参数
@@ -202,6 +206,24 @@ export default {
                 this.giftNameList = res.data.list;
                 let all = {gift_id: 0, gift_name: "全部"}
                 this.giftNameList.unshift(all)
+            }
+        },
+        // 获取轮次
+        async getRoundSource() {
+            let res = await getRoundV520();
+            if(res.code == 2000){
+                this.roundList = res.data.round;
+                let all = {round_number: 0, gift_name: "全部"}
+                this.roundList.unshift(all)
+            }
+        },
+        // 奖池类型
+        async getPoolSource() {
+            let res = await getPoolNameV520();
+            if(res.code == 2000){
+                this.poolList = res.data.list;
+                let all = {round_number: 0, gift_name: "全部"}
+                this.poolList.unshift(all)
             }
         },
 	}
