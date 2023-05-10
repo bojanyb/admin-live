@@ -19,6 +19,10 @@
 </template>
 
 <script>
+// 引入api
+import {
+  guildRoomType
+} from "@/api/videoRoom.js";
 // 引入详情组件
 import audioComp from './components/audioComp.vue'
 // 引入tab菜单组件
@@ -62,7 +66,8 @@ export default {
             isDestoryComp: false, // 是否销毁组件
             isUserDestoryComp: false,
             isWarnDestoryComp: false,
-            tabIndex: '0'
+            tabIndex: '0',
+            roomTypeList: [] // 房间类型
         };
     },
     computed: {
@@ -83,6 +88,24 @@ export default {
                     label: '房间ID',
                     isNum: true,
                     placeholder: '请输入房间ID'
+                },
+                {
+                    name: 'word',
+                    type: 'input',
+                    value: '',
+                    label: '音转文关键词',
+                    placeholder: '请输入关键词'
+                },
+                {
+                  name: 'room_type',
+                  type: 'select',
+                  value: '',
+                  keyName: 'value',
+                  optionLabel: 'name',
+                  label: '房间类型',
+                  placeholder: '请选择',
+                  clearable: true,
+                  options: this.roomTypeList
                 },
                 {
                     name: 'risk_type',
@@ -132,6 +155,24 @@ export default {
                             return h('div', [
                                 h('div', params.row.nickname),
                                 h('div', params.row.user_number)
+                            ])
+                        }
+                    },
+                    {
+                        label: '用户所属公会',
+                        minWidth: '90px',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', params.row.nickname),
+                            ])
+                        }
+                    },
+                    {
+                        label: '用户当前状态',
+                        minWidth: '90px',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', params.row.nickname),
                             ])
                         }
                     },
@@ -201,6 +242,8 @@ export default {
                 pagesize: params.size,
                 type: this.tabIndex === '0' ? 2 : 1,
                 risk_type: s.risk_type,
+                room_type: s.room_type,
+                word: s.word,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
                 room_number: s.room_number,
@@ -253,8 +296,28 @@ export default {
         },
         handleOperation(status, user_number) {
           this.load(status, user_number);
+      },
+      // 获取房间类型
+      async getRoomTypeList() {
+        const response = await guildRoomType();
+        if (response.code + "" === "2000") {
+          const tempArr = Array.from(
+            Array.isArray(response.data.list) ? response.data.list : []
+          );
+          this.roomTypeList =
+            tempArr.reduce((prev, curr) => {
+              prev.push({
+                name: curr.name,
+                value: curr.id,
+              });
+              return prev;
+            }, []) || [];
         }
-    }
+      },
+  },
+    created() {
+        this.getRoomTypeList()
+    },
 }
 </script>
 
