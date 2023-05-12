@@ -226,16 +226,11 @@ export default {
                         minWidth: '80px',
                     },
                     {
-                        label: '违规行为',
-                        prop: 'risk_type_desc',
-                        minWidth: '80px',
-                    },
-                    {
                         label: '风险类型',
                         minWidth: '120px',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', `${params.row.label}-${params.row.sub_label}`),
+                                h('div', `${params.row.label}/${params.row.sub_label}`),
                             ])
                         }
                     },
