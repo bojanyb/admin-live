@@ -230,7 +230,7 @@ export default {
                         minWidth: '120px',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', `${params.row.label}-${params.row.sub_label}`),
+                                h('div', `${params.row.label}/${params.row.sub_label}`),
                             ])
                         }
                     },
