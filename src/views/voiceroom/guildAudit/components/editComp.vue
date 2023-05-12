@@ -17,10 +17,13 @@
                 <el-form-item label="公会长ID" prop="guild_number">
                     <el-input v-model="ruleForm.guild_number" placeholder="请输入公会长ID"></el-input>
                 </el-form-item>
-                <el-form-item label="实时返点" prop="rebate">
+                <!-- <el-form-item label="实时返点" prop="rebate">
                     <el-input v-model="ruleForm.rebate" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" @input="rebateInput" placeholder="请输入实时返点">
                         <template slot="append">%</template>
                     </el-input>
+                </el-form-item> -->
+                <el-form-item label="公司主体" prop="sss">
+                    <el-input v-model="ruleForm.sss" placeholder="请输入公司主体"></el-input>
                 </el-form-item>
                 <el-form-item label="公会运营" prop="operator" v-if="isAuth && status === 'update'">
                     <el-select v-model="ruleForm.operator" placeholder="请选择公会运营">
@@ -52,7 +55,8 @@ export default {
                 id: null,
                 name: '',
                 guild_number: '',
-                rebate: 0,
+                sss: '',
+                // rebate: 0,
                 guild_type: this.type,
                 operator: null,
             },
@@ -62,10 +66,10 @@ export default {
                     { required: true, message: '请输入公会昵称', trigger: 'blur' },
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ],
-                rebate: [
-                    { required: true, message: '请输入固定返点', trigger: 'blur' }
-                ],
-                user_number: [
+                // rebate: [
+                //     { required: true, message: '请输入固定返点', trigger: 'blur' }
+                // ],
+                guild_number: [
                     { required: true, message: '请输入公会长ID', trigger: 'blur' }
                 ],
                 rank: [
@@ -113,12 +117,12 @@ export default {
     },
     methods: {
         // 公会返点限制
-        rebateInput() {
-            let num = this.ruleForm.rebate
-            if(num && Number(num) > 10) {
-                this.ruleForm.rebate = 10
-            }
-        },
+        // rebateInput() {
+        //     let num = this.ruleForm.rebate
+        //     if(num && Number(num) > 10) {
+        //         this.ruleForm.rebate = 10
+        //     }
+        // },
         // 新增 - 修改
         loadParams(status, row) {
             this.openComp()
@@ -130,9 +134,10 @@ export default {
                 para.operator = params.operator ? params.operator : ''
                 para.id = params.id ? params.id : "";
                 para.name = params.name ? params.name : "";
-                para.guild_number = params.guild_number ? params.guild_number : "" ;
+                para.guild_number = params.guild_number ? params.guild_number : "";
+                para.sss = params.sss ? params.sss : "";
                 para.status = params.status;
-                para.rebate = params.rebate;
+                // para.rebate = params.rebate;
                 this.$set(this.$data, 'ruleForm', para)
             }
 
