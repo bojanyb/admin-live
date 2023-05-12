@@ -253,6 +253,7 @@ const request = {
         addStatisticsroom: `${HTTPHEADER}/guild/addStatisticsroom`, // 添加24小时房间统计集合
         statisticsroomS: `${HTTPHEADER}/guild/statisticsroomS`, // 统计24小时房间列表
         delStatisticsroom: `${HTTPHEADER}/guild/delStatisticsroom`, // 移除24小时房间统计
+        roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 移除24小时房间统计
 
 
         // v2

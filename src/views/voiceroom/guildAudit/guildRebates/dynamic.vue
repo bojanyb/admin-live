@@ -47,6 +47,8 @@
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt" @handleSizeChange="handleSizeChange"></tableList>
+    <!-- 详情组件 -->
+    <lookComp ref="lookComp"></lookComp>
 	</div>
 </template>
 
@@ -69,6 +71,8 @@
 	import MAPDATA from '@/utils/jsonMap.js'
 	// 引入格式化时间包
 	import moment from 'moment'
+    // 引入详情组件
+  import lookComp from "./components/lookComp.vue";
 
 	export default {
 		name: 'guildRebate-list',
@@ -76,6 +80,7 @@
 		components: {
 			SearchPanel,
 			tableList,
+      lookComp
 		},
 		computed: {
 			cfgs() {
@@ -152,27 +157,40 @@
 							}
 							return h('span', name)
 						}
-					}
-				]
-				let arr1 = [
+          },
+        ]
+        let arr1 = [
 					{
 						label: '操作',
 						minWidth: '280px',
 						fixed: 'right',
 						render: (h, params) => {
 							return h('div', [
-								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.rebateFunc(params.row.id, 1)}}}, '结算'),
-								h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.rebateFunc(params.row.id, 2)}}}, '忽略'),
+                h('el-button', {
+                  props: { type: 'primary' },
+                  style: { display: this.form.status === 1 ? 'unset' : 'none' },
+                  on: { click: () => { this.rebateFunc(params.row.id, 1) }}
+                }, '结算'),
+
+                h('el-button', {
+                  props: { type: 'danger' },
+                  style: { display: this.form.status === 1 ? 'unset' : 'none' },
+                  on: { click: () => { this.rebateFunc(params.row.id, 2) } }
+                }, '忽略'),
+                h('el-button', {
+                  props: { type: 'info' },
+                  on: { click: () => { this.handleLook(params.row) } }
+                }, '详情'),
 							])
 						}
 					}
-				]
+        ]
 				return {
 					vm: this,
 					url: REQUEST.guild[name],
 					isShowCheckbox: this.form.status === 1,
 					isShowIndex: true,
-					columns: this.form.status === 1 ? [ ...arr, ...arr1 ] : [ ...arr ]
+					columns: (this.form.status === 1 || this.form.status === 3) ? [...arr, ...arr1] : arr
 				}
 			}
 		},
@@ -289,6 +307,11 @@
 				}
 				this.getList()
 			},
+      handleLook(row) {
+        setTimeout(() => {
+          this.$refs.lookComp.load(row);
+        }, 100);
+      },
 			// 列表返回数据
 			saleAmunt(row) {
 				let ruleForm = { ...row };
