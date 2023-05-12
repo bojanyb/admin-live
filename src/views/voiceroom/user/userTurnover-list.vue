@@ -49,9 +49,9 @@
 						name: 'room_number',
 						type: 'input',
 						value: '',
-						label: '派对ID',
+						label: '房间ID',
 						isNum: true,
-						placeholder: '请输入派对ID'
+						placeholder: '请输入房间ID'
 					},
 					{
 						name: 'user_number',
@@ -132,7 +132,7 @@
 							prop: 'live_user_number'
 						},
 						{
-							label: '派对ID',
+							label: '房间ID',
 							render: (h, params) => {
 								return h('span', params.row.room_number || '无')
 							}
