@@ -22,8 +22,8 @@
                         <template slot="append">%</template>
                     </el-input>
                 </el-form-item> -->
-                <el-form-item label="公司主体" prop="sss">
-                    <el-input v-model="ruleForm.sss" placeholder="请输入公司主体"></el-input>
+                <el-form-item label="公司主体" prop="company">
+                    <el-input v-model="ruleForm.company" placeholder="请输入公司主体"></el-input>
                 </el-form-item>
                 <el-form-item label="公会运营" prop="operator" v-if="isAuth && status === 'update'">
                     <el-select v-model="ruleForm.operator" placeholder="请选择公会运营">
@@ -55,7 +55,7 @@ export default {
                 id: null,
                 name: '',
                 guild_number: '',
-                sss: '',
+                company: '',
                 // rebate: 0,
                 guild_type: this.type,
                 operator: null,
@@ -135,7 +135,7 @@ export default {
                 para.id = params.id ? params.id : "";
                 para.name = params.name ? params.name : "";
                 para.guild_number = params.guild_number ? params.guild_number : "";
-                para.sss = params.sss ? params.sss : "";
+                para.company = params.company ? params.company : "";
                 para.status = params.status;
                 // para.rebate = params.rebate;
                 this.$set(this.$data, 'ruleForm', para)
