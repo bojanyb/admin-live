@@ -67,7 +67,28 @@ export default {
             isUserDestoryComp: false,
             isWarnDestoryComp: false,
             tabIndex: '0',
-            roomTypeList: [] // 房间类型
+            roomTypeList: [], // 房间类型
+    options: [{
+          value: 'zhinan',
+          label: '指南',
+          children: [{
+            value: 'shejiyuanze',
+            label: '设计原则',
+          },
+          {
+              value: 'yizhi',
+              label: '一致'
+            }, {
+              value: 'fankui',
+              label: '反馈'
+            }, {
+              value: 'xiaolv',
+              label: '效率'
+            }, {
+              value: 'kekong',
+              label: '可控'
+            }]
+    }]
         };
     },
     computed: {
@@ -90,11 +111,22 @@ export default {
                     placeholder: '请输入房间ID'
                 },
                 {
-                    name: 'word',
+                    name: 'keyWords',
                     type: 'input',
                     value: '',
                     label: '音转文关键词',
                     placeholder: '请输入关键词'
+                },
+                {
+                    name: 'risk_type',
+                    type: 'cascader',
+                    value: null,
+                    keyName: 'value',
+                    optionLabel: 'label',
+                    label: '风险类型',
+                    placeholder: '请选择',
+                    filterable: true,
+                    options: this.options,
                 },
                 {
                   name: 'room_type',
@@ -107,16 +139,16 @@ export default {
                   clearable: true,
                   options: this.roomTypeList
                 },
-                {
-                    name: 'risk_type',
-                    type: 'select',
-                    value: null,
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '风险类型',
-                    placeholder: '请选择',
-                    options: MAPDATA.RISKSYSTEMTYPELIST
-                },
+                // {
+                //     name: 'risk_type',
+                //     type: 'select',
+                //     value: null,
+                //     keyName: 'value',
+                //     optionLabel: 'name',
+                //     label: '风险类型',
+                //     placeholder: '请选择',
+                //     options: MAPDATA.RISKSYSTEMTYPELIST
+                // },
                 {
                     name: 'dateTimeParams',
                     type: 'datePicker',
@@ -206,8 +238,15 @@ export default {
                         showOverFlow: true,
                         minWidth: '120px',
                         render: (h, params) => {
-                            return h('span', params.row.content || '无')
-                        }
+                          return (
+                            <span
+                              domPropsInnerHTML={this.replaceReplyMethod(
+                                params.row.content,
+                                "二八"
+                              )}
+                            />
+                          );
+                        },
                     },
                     {
                         label: '操作',
@@ -241,9 +280,11 @@ export default {
                 page: params.page,
                 pagesize: params.size,
                 type: this.tabIndex === '0' ? 2 : 1,
-                risk_type: s.risk_type,
+                // risk_type: s.risk_type,
+                label: s.risk_type ? s.risk_type[0] : '',
+                sub_label: s.risk_type ? s.risk_type[1] : '',
                 room_type: s.room_type,
-                word: s.word,
+                keyWords: s.keyWords,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
                 room_number: s.room_number,
@@ -313,6 +354,28 @@ export default {
               return prev;
             }, []) || [];
         }
+      },
+      // 关键词高亮
+      replaceReplyMethod(value, keywords) {
+        let replyList = value.split("");
+        let quickWord = keywords.split("");
+
+        if (keywords && keywords !== "") {
+          for (let index = 0; index < replyList.length; index++) {
+            quickWord.forEach((item) => {
+              let replaceString = "" + `(${item})`;
+              let replaceReg = new RegExp(replaceString, "gi");
+
+              if (replyList[index].indexOf("span") === -1) {
+                replyList[index] = replyList[index].replace(
+                  replaceReg,
+                  "<span style='color: red;'>$1</span>"
+                );
+              }
+            });
+          }
+        }
+        return replyList.join("");
       },
   },
     created() {

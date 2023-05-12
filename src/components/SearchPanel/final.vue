@@ -146,6 +146,7 @@
               :disabled="cDisabled(item)"
               :placeholder="item.placeholder"
               :clearable="item.clearable || false"
+              :filterable="item.filterable || false"
               @change="mergeEvent(arguments, item)"
             />
             <!--日期控件-->
@@ -618,7 +619,7 @@ export default {
       const val = arg[0][0]
       const argOpt = arg[1]
       const { handler, onSearch, type, options } = argOpt
-      const evTypeArr = ['datePicker', 'select', 'searchCode']
+      const evTypeArr = ['datePicker', 'select', 'searchCode', 'cascader']
       if (!onSearch && !evTypeArr.includes(type)) return
       const event = arg[2] || 'change'
       const focusLockArr = ['change', 'blur']
