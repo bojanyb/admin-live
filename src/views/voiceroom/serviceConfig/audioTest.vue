@@ -252,7 +252,7 @@ export default {
                             <span
                               domPropsInnerHTML={this.replaceReplyMethod(
                                 params.row.content,
-                                params.row.keywords ? params.row.keywords[0] : ''
+                                params.row.keywords ? params.row.keywords : ''
                               )}
                             />
                           );
@@ -368,23 +368,23 @@ export default {
       },
       // 关键词高亮
       replaceReplyMethod(value, keywords) {
-        if (keywords && keywords !== "") {
+        if (keywords && keywords.length) {
           let replyList = value.split("");
-          let quickWord = keywords.split("");
-
-          for (let index = 0; index < replyList.length; index++) {
-            quickWord.forEach((item) => {
-              let replaceString = "" + `(${item})`;
-              let replaceReg = new RegExp(replaceString, "gi");
-
-              if (replyList[index].indexOf("span") === -1) {
-                replyList[index] = replyList[index].replace(
-                  replaceReg,
-                  "<span style='color: red;'>$1</span>"
-                );
-              }
-            });
-          }
+          keywords.forEach(item => {
+            let quickWord = item.split("");
+            for (let index = 0; index < replyList.length; index++) {
+              quickWord.forEach((subItem) => {
+                let replaceString = "" + `(${subItem})`;
+                let replaceReg = new RegExp(replaceString, "gi");
+                if (replyList[index].indexOf("span") === -1) {
+                  replyList[index] = replyList[index].replace(
+                    replaceReg,
+                    "<span style='color: red;'>$1</span>"
+                  );
+                }
+              });
+            }
+          })
           return replyList.join("");
         } else {
           return value
