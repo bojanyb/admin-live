@@ -21,7 +21,8 @@
 <script>
 // 引入api
 import {
-  guildRoomType
+  guildRoomType,
+  getTencentLabel
 } from "@/api/videoRoom.js";
 // 引入详情组件
 import audioComp from './components/audioComp.vue'
@@ -191,6 +192,15 @@ export default {
                         }
                     },
                     {
+                      label: "房间类型",
+                      render: (h, params) => {
+                        let data = this.roomTypeList.find((item) => {
+                          return item.value === params.row.room_category_id;
+                        });
+                        return h("span", data ? data.name : "");
+                      },
+                    },
+                    {
                         label: '用户所属公会',
                         minWidth: '90px',
                         render: (h, params) => {
@@ -204,7 +214,7 @@ export default {
                         minWidth: '90px',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', params.row.nickname),
+                                h('div', params.row.punish_status),
                             ])
                         }
                     },
@@ -222,7 +232,7 @@ export default {
                     },
                     {
                         label: '违规行为',
-                        prop: 'risk_type_desc'
+                        prop: 'risk_type_desc',
                     },
                     {
                         label: '音频',
@@ -250,7 +260,7 @@ export default {
                     },
                     {
                         label: '操作',
-                        minWidth: '120px',
+                        minWidth: '160px',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'warning'}, on: {click:()=>{this.handleOperation('warn', params.row)}}}, '警告'),
@@ -377,9 +387,15 @@ export default {
         }
         return replyList.join("");
       },
+      // 获取风险类型
+      async getRiskLabel() {
+        const response = await getTencentLabel();
+        console.log(response);
+      }
   },
     created() {
-        this.getRoomTypeList()
+      this.getRoomTypeList()
+      this.getRiskLabel()
     },
 }
 </script>
