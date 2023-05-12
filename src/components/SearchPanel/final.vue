@@ -70,9 +70,17 @@
               :clearable="item.clearable || false" :type="item.selectType || 'number'" :min="item.min"
               @input="mergeEvent(arguments, item)" />
             <!--级联选择器-->
-            <el-cascader v-else-if="item.type === 'cascader'" v-model="form[item.name]" :options="item.options"
-              :props="item.props" :disabled="cDisabled(item)" :placeholder="item.placeholder"
-              :clearable="item.clearable || false" @change="mergeEvent(arguments, item)" />
+            <el-cascader
+              v-else-if="item.type === 'cascader'"
+              v-model="form[item.name]"
+              :options="item.options"
+              :props="item.props"
+              :disabled="cDisabled(item)"
+              :placeholder="item.placeholder"
+              :clearable="item.clearable || false"
+              :filterable="item.filterable || false"
+              @change="mergeEvent(arguments, item)"
+            />
             <!--日期控件-->
             <!--日期输入 - 不弹出选择时间弹窗-->
             <dateControl v-else-if="item.type === 'dateControl'" v-model="form[item.name]" ref="dateControl">
@@ -552,7 +560,7 @@ export default {
       const val = arg[0][0]
       const argOpt = arg[1]
       const { handler, onSearch, type, options } = argOpt
-      const evTypeArr = ['datePicker', 'select', 'searchCode']
+      const evTypeArr = ['datePicker', 'select', 'searchCode', 'cascader']
       if (!onSearch && !evTypeArr.includes(type)) return
       const event = arg[2] || 'change'
       const focusLockArr = ['change', 'blur']
