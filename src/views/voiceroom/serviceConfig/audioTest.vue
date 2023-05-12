@@ -69,27 +69,7 @@ export default {
             isWarnDestoryComp: false,
             tabIndex: '0',
             roomTypeList: [], // 房间类型
-    options: [{
-          value: 'zhinan',
-          label: '指南',
-          children: [{
-            value: 'shejiyuanze',
-            label: '设计原则',
-          },
-          {
-              value: 'yizhi',
-              label: '一致'
-            }, {
-              value: 'fankui',
-              label: '反馈'
-            }, {
-              value: 'xiaolv',
-              label: '效率'
-            }, {
-              value: 'kekong',
-              label: '可控'
-            }]
-    }]
+            options: []
         };
     },
     computed: {
@@ -112,7 +92,7 @@ export default {
                     placeholder: '请输入房间ID'
                 },
                 {
-                    name: 'keyWords',
+                    name: 'keywords',
                     type: 'input',
                     value: '',
                     label: '音转文关键词',
@@ -127,10 +107,11 @@ export default {
                     label: '风险类型',
                     placeholder: '请选择',
                     filterable: true,
+                    clearable: true,
                     options: this.options,
                 },
                 {
-                  name: 'room_type',
+                  name: 'room_category_id',
                   type: 'select',
                   value: '',
                   keyName: 'value',
@@ -176,14 +157,14 @@ export default {
                 columns: [
                     {
                         label: '时间',
-                        minWidth: '120px',
+                        width: '160px',
                         render: (h, params) => {
                             return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
                     },
                     {
                         label: '用户',
-                        minWidth: '90px',
+                        width: '100px',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.nickname),
@@ -193,6 +174,7 @@ export default {
                     },
                     {
                       label: "房间类型",
+                      width: '80px',
                       render: (h, params) => {
                         let data = this.roomTypeList.find((item) => {
                           return item.value === params.row.room_category_id;
@@ -201,17 +183,28 @@ export default {
                       },
                     },
                     {
-                        label: '用户所属公会',
-                        minWidth: '90px',
+                        label: '用户等级',
+                        width: '100px',
+                        showOverFlow: true,
                         render: (h, params) => {
                             return h('div', [
-                                h('div', params.row.nickname),
+                                h('div', `用户等级: ${params.row.user_rank}`),
+                                h('div', `魅力等级: ${params.row.live_rank}`),
+                            ])
+                        }
+                    },
+                    {
+                        label: '用户所属公会',
+                        width: '100px',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', params.row.guild_name),
                             ])
                         }
                     },
                     {
                         label: '用户当前状态',
-                        minWidth: '90px',
+                        width: '100px',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.punish_status),
@@ -221,6 +214,7 @@ export default {
                     {
                         label: '用户麦位',
                         prop: 'sort_number',
+                        minWidth: '80px',
                         // render: (h, params) => {
                         //     let data = MAPDATA.RISKSYSTEMROLELIST.find(item => { return item.value === params.row.user_role })
                         //     return h('span', data ? data.name : '无')
@@ -228,11 +222,22 @@ export default {
                     },
                     {
                         label: '房间ID',
-                        prop: 'room_number'
+                        prop: 'room_number',
+                        minWidth: '80px',
                     },
                     {
                         label: '违规行为',
                         prop: 'risk_type_desc',
+                        minWidth: '80px',
+                    },
+                    {
+                        label: '风险类型',
+                        minWidth: '120px',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', `${params.row.label}-${params.row.sub_label}`),
+                            ])
+                        }
                     },
                     {
                         label: '音频',
@@ -240,19 +245,19 @@ export default {
                         prop: 'url',
                         imgWidth: '50px',
                         imgHeight: '50px',
-                        minWidth: '220px'
+                        minWidth: '260px'
                     },
                     {
                         label: '音转文',
                         prop: 'content',
                         showOverFlow: true,
-                        minWidth: '120px',
+                        minWidth: '160px',
                         render: (h, params) => {
                           return (
                             <span
                               domPropsInnerHTML={this.replaceReplyMethod(
                                 params.row.content,
-                                "二八"
+                                params.row.keywords ? params.row.keywords[0] : ''
                               )}
                             />
                           );
@@ -260,7 +265,8 @@ export default {
                     },
                     {
                         label: '操作',
-                        minWidth: '160px',
+                        width: '180px',
+                        fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'warning'}, on: {click:()=>{this.handleOperation('warn', params.row)}}}, '警告'),
@@ -293,8 +299,8 @@ export default {
                 // risk_type: s.risk_type,
                 label: s.risk_type ? s.risk_type[0] : '',
                 sub_label: s.risk_type ? s.risk_type[1] : '',
-                room_type: s.room_type,
-                keyWords: s.keyWords,
+                room_category_id: s.room_category_id,
+                keywords: s.keywords,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
                 room_number: s.room_number,
@@ -367,10 +373,10 @@ export default {
       },
       // 关键词高亮
       replaceReplyMethod(value, keywords) {
-        let replyList = value.split("");
-        let quickWord = keywords.split("");
-
         if (keywords && keywords !== "") {
+          let replyList = value.split("");
+          let quickWord = keywords.split("");
+
           for (let index = 0; index < replyList.length; index++) {
             quickWord.forEach((item) => {
               let replaceString = "" + `(${item})`;
@@ -384,13 +390,17 @@ export default {
               }
             });
           }
+          return replyList.join("");
+        } else {
+          return value
         }
-        return replyList.join("");
       },
       // 获取风险类型
       async getRiskLabel() {
         const response = await getTencentLabel();
-        console.log(response);
+        if (response.code + "" === "2000") {
+          this.options = response.data;
+        }
       }
   },
     created() {
@@ -404,5 +414,8 @@ export default {
 .serviceConfig-audioTest-box {
     padding: 10px 20px 20px 20px;
     box-sizing: border-box;
+    .share-table-list-box .el-table__body-wrapper {
+      max-height: none  !important;
+    }
 }
 </style>
