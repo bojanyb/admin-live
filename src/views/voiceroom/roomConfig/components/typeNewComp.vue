@@ -20,17 +20,17 @@
           >
           </el-option>
         </el-select>
-        <!-- <el-button
+        <el-button
           type="success"
           :disabled="guild_number == 0 ? true : false"
           @click="bindTypes"
           >新增</el-button
         >
         <span style="color: red; margin-left: 15px" v-if="guild_number == 0"
-          >非公会房间,不可修改房间分类</span
-        > -->
+          >非公会房间,不可添加房间分类</span
+        >
       </div>
-      <!-- <div style="width: 100%">
+      <div style="width: 100%">
         <el-tag
           v-for="tag in tagsData"
           :key="tag.name"
@@ -41,10 +41,9 @@
         >
           {{ tag.name }}
         </el-tag>
-      </div> -->
+      </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="success" @click="bindTypes">确 定</el-button>
-        <!-- <el-button @click="dialogVisible = false">取 消</el-button> -->
+        <el-button @click="dialogVisible = false">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -57,7 +56,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      // tagsData: [],
+      tagsData: [],
       typeList: [],
       type_id: null,
       room_number: null,
@@ -69,11 +68,11 @@ export default {
       this.dialogVisible = false;
     },
     // 获取参数
-    loadParams(row, list) {
+    async loadParams(row, list) {
       this.dialogVisible = true;
       this.room_number = row.room_number;
       this.guild_number = row.guild_number;
-      // await this.getTypes(row.room_number);
+      await this.getTypes(row.room_number);
       if (list && list.length > 0) {
         this.typeList = list.filter((item) => {
           return item.name != "全部";
@@ -84,35 +83,28 @@ export default {
     closed() {
       this.$emit("destoryComp");
     },
-    // // 获取分类
-    // async getTypes(room_number) {
-    //   let res = await roomTypes({ room_number });
-    //   this.tagsData = res.data.list || [];
-    // },
+    // 获取分类
+    async getTypes(room_number) {
+      let res = await roomTypes({ room_number });
+      this.tagsData = res.data.list || [];
+    },
     // 绑定分类
     async bindTypes() {
-
-      if (this.guild_number + "" === "0") {
-        this.$error("非公会房间,不可修改房间分类");
-        return false;
-      }
-
       let { room_number, type_id } = this.$data;
       let res = await roomBindType({ room_number, type_id });
       if (res.code === 2000) {
         this.$success("添加成功");
-        this.dialogVisible = false;
-        // this.getTypes(this.room_number);
+        this.getTypes(this.room_number);
       }
     },
-    // // 移除分类
-    // async deleteTypes(id) {
-    //   let res = await delBind({ id });
-    //   if (res.code === 2000) {
-    //     this.$success("移除成功");
-    //     this.getTypes(this.room_number);
-    //   }
-    // },
+    // 移除分类
+    async deleteTypes(id) {
+      let res = await delBind({ id });
+      if (res.code === 2000) {
+        this.$success("移除成功");
+        this.getTypes(this.room_number);
+      }
+    },
   },
 };
 </script>
