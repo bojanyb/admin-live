@@ -502,6 +502,15 @@ const request = {
         luckyListV5: `${HTTPHEADER}/hdWonderfulLog/luckyList`, // 榜单排名表
         luckyConfigV5: `${HTTPHEADER}/hdWonderfulLog/luckyConfig`, // 榜单配置
 
+        // 520活动 浪漫520
+        getPoolNameV520: `${HTTPHEADER}/hdRomanticLog/getPoolName`, // 奖池列表
+        poolDetailV520: `${HTTPHEADER}/hdRomanticLog/poolDetail`, // 获取抽奖数据
+        getRoundV520: `${HTTPHEADER}/hdRomanticLog/getRound`, // 获取轮次
+        getGiftV520: `${HTTPHEADER}/hdRomanticLog/getGift`, // 获取礼物
+        giftLogV520: `${HTTPHEADER}/hdRomanticLog/giftLog`, // 礼物数据
+        getCpRankingV520: `${HTTPHEADER}/hdRomanticLog/cpRanking`, // cp榜排名
+        getCpLogV520: `${HTTPHEADER}/hdRomanticLog/cpLog`, // 绑定cp记录
+        getBindCpV520: `${HTTPHEADER}/hdRomanticLog/bindCp`, // 手动绑定cp
     },
 
     // 靓号管理
