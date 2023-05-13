@@ -264,10 +264,10 @@ const request = {
         guildUserApply: `${HTTPHEADER}/guild/guildUserApply`, // 主播申请列表
         guildUserApplyCheck: `${HTTPHEADER}/guild/guildUserApplyCheck`, // 主播申请审核
         guildRooms: `${HTTPHEADER}/guild/guildRooms`, // 公会房间列表
-        guildRoomApply: `${HTTPHEADER}/guild/guildRoomUpdateApply`, // 公会房间申请列表
+        guildRoomApply: `${HTTPHEADER}/guild/guildRoomApply`, // 公会房间申请列表
         addGuildRoom: `${HTTPHEADER}/guild/addGuildRoom`, // 添加公会房间
         rmGuildRoom: `${HTTPHEADER}/guild/rmGuildRoom`, // 移除公会房间
-        guildRoomApplyCheck: `${HTTPHEADER}/guild/guildRoomTypeUpdateCheck`, // 审核公会申请
+        guildRoomApplyCheck: `${HTTPHEADER}/guild/guildRoomApplyCheck`, // 审核公会申请
         rebateConfig: `${HTTPHEADER}/guild/rebateConfig`, // 获取周返点
         delConfigRebate: `${HTTPHEADER}/guild/delConfigRebate`, // 获取周返点
         configRebate: `${HTTPHEADER}/guild/configRebate`, // 获取周返点
