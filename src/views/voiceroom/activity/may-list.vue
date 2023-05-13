@@ -47,7 +47,7 @@ export default {
 		}
 	},
 	computed: {},
-	mounted() { },
+	mounted() {},
 	methods: {
 		// 菜单切换
 		tabChange() {

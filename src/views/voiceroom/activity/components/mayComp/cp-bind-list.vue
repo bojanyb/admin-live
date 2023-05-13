@@ -5,7 +5,7 @@
 				@onSearch="onSearch" @add="add"></SearchPanel>
 		</div>
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
-		<addBind ref="addBind" v-if="isAdd"/>
+		<addBind ref="addBind" v-if="isAdd" @handleBind="handleBind"/>
 	</div>
 </template>
 
@@ -31,7 +31,7 @@ export default {
 			isAdd: false,
 			tabIndex: '0',
 			giftNameList: [], // 礼物名称
-			searchParams: {}
+			searchParams: {},
 		}
 	},
 	computed: {
@@ -41,17 +41,26 @@ export default {
                     name: 'user_number',
                     type: 'input',
                     value: '',
-                    label: '用户ID',
+                    label: '发起方ID',
                     isNum: true,
                     linkage: true,
-                    placeholder: '请输入用户ID'
+                    placeholder: '请输入发起方ID'
+                },
+				{
+                    name: 'to_user_number',
+                    type: 'input',
+                    value: '',
+                    label: '接收方ID',
+                    isNum: true,
+                    linkage: true,
+                    placeholder: '请输入接收方ID'
                 }
 			]
 		},
 		cfgs() {
 			return {
 				vm: this,
-				url: REQUEST.activity.giftLogList,
+				url: REQUEST.activity.getCpLogV520,
 				columns: [
 					{
 						label: '绑定时间',
@@ -59,24 +68,34 @@ export default {
                         prop: 'create_time'
 					},
 					{
-                        label: '用户1ID',
-                        prop: 'user_number'
+                        label: '发起方ID',
+                        render: (h, params) => {
+                            return h('span', params.row.user.user_number ? params.row.user.user_number : '--')
+                        }
                     },
                     {
-                        label: '用户1昵称',
-                        prop: 'nickname'
+                        label: '发起方昵称',
+                        render: (h, params) => {
+                            return h('span', params.row.user.nickname ? params.row.user.nickname : '--')
+                        }
                     },
                     {
-                        label: '用户2ID',
-                        prop: 'live_user_number'
+                        label: '接收方ID',
+                        render: (h, params) => {
+                            return h('span', params.row.to_user.user_number ? params.row.to_user.user_number : '--')
+                        }
                     },
                     {
-                        label: '用户2昵称',
-                        prop: 'live_nickname'
+                        label: '接收方昵称',
+                        render: (h, params) => {
+                            return h('span', params.row.to_user.nickname ? params.row.to_user.nickname : '--')
+                        }
                     },
                     {
                         label: '类型',
-                        prop: 'gift_name'
+                        render: (h, params) => {
+                            return h('span', params.row.type.nickn == 0 ? '邀请绑定' : '后台绑定')
+                        }
                     }
 				]
 			}
@@ -90,7 +109,8 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                user_number: s.user_number
+                user_number: s.user_number,
+				to_user_number: s.to_user_number
             }
 		},
 		// 刷新列表
@@ -112,6 +132,10 @@ export default {
 			setTimeout(() => {
 				this.$refs.addBind.loadParams()
 			}, 50);
+		},
+		// 绑定CP
+		handleBind(){
+			this.getList();
 		},
 	}
 }

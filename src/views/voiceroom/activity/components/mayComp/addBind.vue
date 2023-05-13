@@ -3,39 +3,41 @@
         <el-dialog
         title="CP绑定"
         :visible.sync="dialogVisible"
-        width="400px"
+        width="500px"
         :before-close="handleClose">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="用户1 ID:" prop="user_number">
-                    <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入用户ID"></el-input>
+                <el-form-item label="发起方ID:" prop="user_number">
+                    <el-input v-model="ruleForm.user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入发起方ID"></el-input>
                 </el-form-item>
-                <el-form-item label="用户2 ID:" prop="user_number2">
-                    <el-input v-model="ruleForm.user_number2" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入用户ID"></el-input>
+                <el-form-item label="接收方ID:" prop="to_user_number">
+                    <el-input v-model="ruleForm.to_user_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入接收方ID"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="resetForm('ruleForm')">绑 定</el-button>
+                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">邀请绑定</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
+// 引入api
+import { getBindCpV520 } from '@/api/activity'
 export default {
     data() {
         return {
             dialogVisible: false,
             ruleForm: {
                 user_number: '',
-                user_number2: '',
+                to_user_number: '',
             },
             rules: {
                 user_number: [
-                    { required: true, message: '请输入用户1 ID', trigger: 'blur' }
+                    { required: true, message: '请输入发起方ID', trigger: 'blur' }
                 ],
-                user_number2: [
-                    { required: true, message: '请输入用户2 ID', trigger: 'blur' }
+                to_user_number: [
+                    { required: true, message: '请输入接收方ID', trigger: 'blur' }
                 ]
             }
         };
@@ -55,17 +57,19 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    alert('submit!');
+                    let res = getBindCpV520(this.ruleForm);
+                    if(res.code === 2000){
+                        console.log("绑定CP成功");
+                        this.$success("绑定CP成功");
+                    }
+                    this.dialogVisible = false;
+                    this.$emit("handleBind");
                 } else {
-                    console.log('error submit!!');
+                    this.dialogVisible = false;
                     return false;
                 }
             });
         },
-        // 重置
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-        }
     }
 }
 </script>

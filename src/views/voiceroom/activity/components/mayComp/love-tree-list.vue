@@ -7,11 +7,11 @@
         <el-card class="box-card" shadow="always" v-if="tabIndex === '0'">
 			<div class="box-card-inner">
 				<div>抽奖人数：{{sumSource.user_count || 0}}人</div>
-                <div>抽奖次数：{{sumSource.user_count || 0}}次</div>
-				<div>消费金额：{{sumSource.live_user_count || 0}}钻石</div>
-                <div>产出金额：{{sumSource.live_user_count || 0}}钻石</div>
-                <div>利润值：{{sumSource.live_user_count || 0}}钻石</div>
-				<div>产出比：{{sumSource.gift_diamond_total || 0}}%</div>
+                <div>抽奖次数：{{sumSource.lottery_count || 0}}次</div>
+				<div>消费金额：{{sumSource.lottery_cost_count || 0}}钻石</div>
+                <div>产出金额：{{sumSource.lottery_output_count || 0}}钻石</div>
+                <div>利润值：{{sumSource.profit_value || 0}}钻石</div>
+				<div>产出比：{{sumSource.profit_margin || 0}}%</div>
 			</div>
 		</el-card>
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -20,7 +20,7 @@
 
 <script>
 // 引入api
-import { getGiftList,getRoundV520,getPoolNameV520 } from '@/api/activity'
+import { getGiftV520,getRoundV520,getPoolNameV520 } from '@/api/activity'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -29,6 +29,8 @@ import tableList from '@/components/tableList/TableList.vue'
 import REQUEST from '@/request/index.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
 
 export default {
 	mixins: [mixins],
@@ -59,7 +61,7 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
-                    name: 'gift_name',
+                    name: 'remark',
                     type: 'input',
                     value: '',
                     label: '奖品名称',
@@ -67,21 +69,21 @@ export default {
                     placeholder: '请输入奖品名称'
                 },
                 {
-                    name: 'gift_id',
+                    name: 'type',
                     type: 'select',
                     value: "全部",
-                    keyName: 'gift_id',
-                    optionLabel: 'gift_name',
+                    keyName: 'key',
+                    optionLabel: 'value',
                     label: '奖池类型',
                     placeholder: '请选择',
-                    options: this.giftNameList,
+                    options: this.poolList,
                 },
                 {
                     name: 'round',
                     type: 'select',
                     value: "全部",
-                    keyName: 'gift_id',
-                    optionLabel: 'gift_name',
+                    keyName: 'round_number',
+                    optionLabel: 'title',
                     label: '奖池轮次',
                     placeholder: '请选择',
                     options: this.roundList,
@@ -109,12 +111,14 @@ export default {
 		cfgs() {
 			return {
 				vm: this,
-				url: REQUEST.activity.giftLogList,
+				url: REQUEST.activity.poolDetailV520,
 				columns: [
 					{
 						label: '时间',
 						width: '180px',
-                        prop: 'create_time'
+                        render: (h, params) => {
+                            return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                        }
 					},
 					{
                         label: '用户ID',
@@ -122,7 +126,7 @@ export default {
                     },
                     {
                         label: '用户昵称',
-                        prop: 'nickname',
+                        prop: 'user_number',
                     },
                     {
                         label: '奖品ID',
@@ -130,11 +134,11 @@ export default {
                     },
                     {
                         label: '奖品名称',
-                        prop: 'gift_name',
+                        prop: 'remark',
                     },
                     {
                         label: '抽奖消耗',
-                        prop: 'gift_num',
+                        prop: 'lottery_cost',
                     },
                     {
                         label: '奖品价值',
@@ -142,9 +146,7 @@ export default {
                     },
                     {
                         label: '利润值',
-                        render: (h, params) => {
-                            return h('span', params.row.gift_diamond * params.row.gift_num)
-                        }
+                        prop: 'profit',
                     }
 				]
 			}
@@ -165,9 +167,9 @@ export default {
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
                 user_number: s.user_number,
-                gift_name: s.gift_name,
+                remark: s.remark,
                 round: (s.round == -1 || s.round == "全部") ? "" : s.round,
-                gift_id: (s.gift_id == -1 || s.gift_id == "全部") ? "" : s.gift_id,
+                type: (s.type == -1 || s.type == "全部") ? "" : s.type,
             }
 		},
         // 设置时间段
@@ -201,7 +203,7 @@ export default {
 		},
         // 获取礼物名称
         async getPoolNameSource() {
-            let res = await getGiftList();
+            let res = await getGiftV520();
             if(res.code == 2000){
                 this.giftNameList = res.data.list;
                 let all = {gift_id: 0, gift_name: "全部"}
@@ -213,7 +215,7 @@ export default {
             let res = await getRoundV520();
             if(res.code == 2000){
                 this.roundList = res.data.round;
-                let all = {round_number: 0, gift_name: "全部"}
+                let all = {round_number: 0, title: "全部"}
                 this.roundList.unshift(all)
             }
         },
@@ -221,8 +223,8 @@ export default {
         async getPoolSource() {
             let res = await getPoolNameV520();
             if(res.code == 2000){
-                this.poolList = res.data.list;
-                let all = {round_number: 0, gift_name: "全部"}
+                this.poolList = res.data.pool;
+                let all = {key: 0, value: "全部"}
                 this.poolList.unshift(all)
             }
         },

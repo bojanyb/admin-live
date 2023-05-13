@@ -38,42 +38,59 @@ export default {
                     name: 'user_number',
                     type: 'input',
                     value: '',
-                    label: '用户ID',
+                    label: '发起方ID',
                     isNum: true,
                     linkage: true,
-                    placeholder: '请输入用户ID'
+                    placeholder: '请输入发起方ID'
+                },
+				{
+                    name: 'to_user_number',
+                    type: 'input',
+                    value: '',
+                    label: '接收方ID',
+                    isNum: true,
+                    linkage: true,
+                    placeholder: '请输入接收方ID'
                 }
 			]
 		},
 		cfgs() {
 			return {
 				vm: this,
-				url: REQUEST.activity.giftLogList,
+				url: REQUEST.activity.getCpRankingV520,
 				columns: [
 					{
 						label: '排名',
 						width: '180px',
-                        prop: 'create_time'
+                        prop: 'ranking'
 					},
 					{
-                        label: '用户1ID',
-                        prop: 'user_number'
+                        label: '发起方ID',
+						render: (h, params) => {
+                            return h('span', params.row.user.user_number)
+                        }
                     },
                     {
-                        label: '用户1昵称',
-                        prop: 'nickname',
+                        label: '发起方昵称',
+						render: (h, params) => {
+                            return h('span', params.row.user.nickname)
+                        }
                     },
                     {
-                        label: '用户2ID',
-                        prop: 'live_user_number'
+                        label: '接收方ID',
+                        render: (h, params) => {
+                            return h('span', params.row.to_user.user_number)
+                        }
                     },
                     {
-                        label: '用户2昵称',
-                        prop: 'live_nickname',
+                        label: '接收方昵称',
+                        render: (h, params) => {
+                            return h('span', params.row.to_user.nickname)
+                        }
                     },
                     {
                         label: '甜蜜值',
-                        prop: 'gift_diamond',
+                        prop: 'value',
                     }
 				]
 			}
@@ -87,7 +104,8 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                user_number: s.user_number
+                user_number: s.user_number,
+				to_user_number: s.to_user_number
             }
 		},
 		// 刷新列表

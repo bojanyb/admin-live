@@ -17,7 +17,7 @@
 
 <script>
 // 引入api
-import { getGiftList } from '@/api/activity'
+import { getGiftV520 } from '@/api/activity'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -94,7 +94,7 @@ export default {
 		cfgs() {
 			return {
 				vm: this,
-				url: REQUEST.activity.giftLogList,
+				url: REQUEST.activity.giftLogV520,
 				columns: [
 					{
 						label: '时间',
@@ -187,7 +187,7 @@ export default {
 		},
         // 获取礼物名称
         async getPoolNameSource() {
-            let res = await getGiftList();
+            let res = await getGiftV520();
             if(res.code == 2000){
                 this.giftNameList = res.data.list;
                 let all = {gift_id: 0, gift_name: "全部"}

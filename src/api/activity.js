@@ -219,3 +219,30 @@ export function getRoundV520(data){
     data
   })
 }
+
+// 获取礼物
+export function getGiftV520(data) {
+  return request({
+    url: api.activity.getGiftV520,
+    method: 'post',
+    data
+  })
+}
+
+// 获取礼物数据
+export function giftLogV520(data) {
+  return request({
+    url: api.activity.giftLogV520,
+    method: 'post',
+    data
+  })
+}
+
+// 手动绑定CP
+export function getBindCpV520(data) {
+  return request({
+    url: api.activity.getBindCpV520,
+    method: 'post',
+    data
+  })
+}
