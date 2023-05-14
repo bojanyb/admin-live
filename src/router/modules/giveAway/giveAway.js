@@ -72,6 +72,24 @@ const giveAwayRouter = {
 				noCache: true,
 			},
 		},
+    {
+      path: 'withdrawal-channel',
+      component: () => import('@/views/voiceroom/finance/withdrawalChannel'),
+      name: 'withdrawal-channel',
+      meta: {
+        title: '提现通道管理',
+        noCache: true,
+      },
+    },
+    {
+      path: 'withdrawal-account',
+      component: () => import('@/views/voiceroom/finance/withdrawalAccount.vue'),
+      name: 'withdrawal-account',
+      meta: {
+        title: '提现账户管理',
+        noCache: true,
+      },
+    },
 		{
 			path: 'embodyHistory-list',
 			component: () => import('@/views/voiceroom/finance/embodyHistory'),

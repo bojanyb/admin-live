@@ -242,6 +242,28 @@ const STATUSLISTCOPY = [
   }
 ]
 
+/*
+* 提现渠道
+*/
+const CASHCHANNEL = [
+  {
+    value: 1,
+    name: '爱意银行卡'
+  },
+  {
+    value: 2,
+    name: '爱意支付宝'
+  },
+  {
+    value: 4,
+    name: '小猪银行卡'
+  },
+  {
+    value: 5,
+    name: '小猪支付宝'
+  }
+]
+
 // 充值记录排序
 const EMBODYSORT = [
   {
@@ -3023,6 +3045,7 @@ export default {
   JOINHOUSETYPELIST,
   ISFIRSTJOINHOUSELIST,
   STATUSLISTCOPY,
+  CASHCHANNEL,
   PAYMENTALLOCATIONMANAGEMENTLIST,
   PAYMENTALLOCATIONMANAGEMENTTYPELIST,
   DEALSOURCETYPELIST,

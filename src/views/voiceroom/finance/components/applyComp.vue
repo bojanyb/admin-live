@@ -52,16 +52,17 @@ export default {
                     isNum: true,
                     placeholder: '请输入用户ID'
                 },
-                // {
-                //     name: 'sort',
-                //     type: 'select',
-                //     value: '',
-                //     keyName: 'value',
-                //     optionLabel: 'name',
-                //     label: '排序',
-                //     placeholder: '请选择',
-                //     options: MAPDATA.EMBODYSORT
-                // },
+                {
+                    name: 'channel',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '提现通道',
+                    placeholder: '请选择',
+                    clearable: true,
+                    options: MAPDATA.CASHCHANNEL
+                },
                 {
                     name: 'dateTimeParams',
                     type: 'datePicker',
@@ -134,6 +135,17 @@ export default {
                     label: '提现账号',
                     width: '160px',
                     prop: 'card_id'
+                },
+                {
+                    label: '本次提现通道',
+                    width: '160px',
+                    prop: 'channel',
+                    render: (h, params) => {
+                      let data = MAPDATA.CASHCHANNEL.find((item) => {
+                        return item.value === params.row.channel;
+                      });
+                      return h("span", data ? data.name : "无");
+                    },
                 },
                 {
                     label: '提现状态',
@@ -339,7 +351,7 @@ export default {
             return {
                 page: params.page,
                 pagesize: params.size,
-                sort: s.sort,
+                channel: s.channel,
                 user_id: s.user_id,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : ''

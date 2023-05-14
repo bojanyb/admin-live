@@ -58,16 +58,17 @@ export default {
                     isNum: true,
                     placeholder: '请输入用户ID'
                 },
-                // {
-                //     name: 'sort',
-                //     type: 'select',
-                //     value: '',
-                //     keyName: 'value',
-                //     optionLabel: 'name',
-                //     label: '排序',
-                //     placeholder: '请选择',
-                //     options: MAPDATA.EMBODYSORT
-                // },
+                {
+                    name: 'channel',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '提现通道',
+                    placeholder: '请选择',
+                    clearable: true,
+                    options: MAPDATA.CASHCHANNEL
+                },
                 {
                     name: 'order_id',
                     type: 'input',
@@ -193,6 +194,22 @@ export default {
                         }
                     },
                     {
+                        label: '本次提现账号',
+                        prop: 'order_id',
+                        width: '200'
+                    },
+                    {
+                        label: '本次提现通道',
+                        prop: 'channel',
+                        width: '200',
+                        render: (h, params) => {
+                          let data = MAPDATA.CASHCHANNEL.find((item) => {
+                            return item.value === params.row.channel;
+                          });
+                          return h("span", data ? data.name : "无");
+                      },
+                    },
+                    {
                         label: '交易单号',
                         prop: 'order_id',
                         width: '200'
@@ -309,7 +326,7 @@ export default {
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
                 user_id: s.user_id,
                 order_id: s.order_id,
-                sort: s.sort
+                channel: s.channel
             }
         },
         // 设置时间段
