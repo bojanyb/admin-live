@@ -13,7 +13,7 @@
       ></SearchPanel>
     </div>
 
-    <tableList :isHidePage="true" :cfgs="cfgs" ref="tableList"></tableList>
+    <tableList :cfgs="cfgs" ref="tableList"></tableList>
 
     <!-- 新增组件 -->
     <cornerComp

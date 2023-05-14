@@ -252,10 +252,10 @@
 				this.searchParams.round = ""
 				let res = await getRoundV3({type:roundType});
 				if(res.code == 2000){
-          // 全部默认选择第一个
-          if(roundType == ""){
-            this.searchParams.round = res.data.round[0].round_number
-          }
+					// 全部默认选择第一个
+					if(roundType == ""){
+						this.searchParams.round = res.data.round[0].round_number
+					}
 					this.poolList = res.data.round
 				}
 			}

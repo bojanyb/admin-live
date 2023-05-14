@@ -56,7 +56,7 @@
 						label: '活动轮次',
 						placeholder: '请选择',
 						clearable: true,
-            linkage: true,
+            			linkage: true,
 						options: this.poolList
 					},
 				]

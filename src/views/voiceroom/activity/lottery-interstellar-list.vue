@@ -178,35 +178,70 @@ export default {
 					},
 					{
 						label: '用户ID',
-						prop: 'user_number'
+						isNum: true,
+            			linkage: true,
+						placeholder: '请输入用户ID'
 					},
 					{
-						label: '用户昵称',
-						prop: 'nickname',
+						name: 'remark',
+						type: 'input',
+						value: '',
+						label: '奖品名称',
+            			linkage: true,
+						placeholder: '请输入奖品名称'
 					},
 					{
 						label: '奖品类型',
-						render: (h, params) => {
-							return h('span', params.row.type_desc ? params.row.type_desc : '无')
+						placeholder: '请选择',
+						clearable: true,
+            			linkage: true,
+						options: this.giftTypeList
+					},
+					{
+						name: 'type',
+						type: 'select',
+						value: '',
+						keyName: 'key',
+						optionLabel: 'value',
+						label: '奖池类型',
+						placeholder: '请选择',
+						clearable: true,
+            			linkage: true,
+						options: this.lotteryList,
+						handler: {
+							change: v => {
+								this.getRoundSource(v)
+							},
 						}
 					},
 					{
-						label: '奖品ID',
-						prop: 'gift_id',
-						showOverFlow: true,
-						render: (h, params) => {
-							return h('span', params.row.gift_id > 0 ? params.row.gift_id : '--')
-						}
+						name: 'round',
+						type: 'select',
+						value: '',
+						keyName: 'round_number',
+						optionLabel: 'title',
+						label: '轮次',
+						placeholder: '请选择',
+						clearable: true,
+            			linkage: true,
+						options: this.poolList
 					},
 					{
-						label: '奖品名称',
-						prop: 'remark',
-						showOverFlow: true
-					},
-					{
-						label: '奖品价值',
-						render: (h, params) => {
-							return h('span', params.row.gift_diamond)
+						name: 'dateTimeParams',
+						type: 'datePicker',
+						dateType: 'datetimerange',
+						format: "yyyy-MM-dd HH:mm:ss",
+						label: '时间选择',
+						value: '',
+            			linkage: true,
+						handler: {
+							change: v => {
+								this.emptyDateTime()
+								this.setDateTime(v)
+							},
+							selectChange: (v, key) => {
+								this.emptyDateTime()
+							}
 						}
 					},
 					{
