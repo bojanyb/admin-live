@@ -248,7 +248,8 @@ const STATUSLISTCOPY = [
 const CASHCHANNEL = [
   {
     value: 1,
-    name: '爱意银行卡'
+    name: '爱意银行卡',
+    disabled: true
   },
   {
     value: 2,
@@ -260,7 +261,8 @@ const CASHCHANNEL = [
   },
   {
     value: 5,
-    name: '小猪支付宝'
+    name: '小猪支付宝',
+    disabled: true
   }
 ]
 

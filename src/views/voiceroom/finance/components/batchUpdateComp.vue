@@ -37,7 +37,7 @@
             <el-form-item label="修改提现通道" prop="channels" label-width="80">
               <el-select
                 v-model="ruleForm.cash_channel"
-                placeholder="请选择用户性别"
+                placeholder="请选择修改提现通道"
                 style="width: 80%"
               >
                 <el-option
@@ -45,6 +45,7 @@
                   :key="item.value"
                   :label="item.name"
                   :value="item.value"
+                  :disabled="item.disabled"
                 ></el-option>
               </el-select>
             </el-form-item>
