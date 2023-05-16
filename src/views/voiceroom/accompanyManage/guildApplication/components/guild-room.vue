@@ -76,17 +76,17 @@
 		computed: {
 			forms() {
 				return [
-          {
-            name: 'room_type',
-            type: 'select',
-            value: '',
-            keyName: 'value',
-            optionLabel: 'name',
-            label: '房间类型',
-            placeholder: '请选择',
-            clearable: true,
-            options: this.roomTypeList
-          },
+          // {
+          //   name: 'room_type',
+          //   type: 'select',
+          //   value: '',
+          //   keyName: 'value',
+          //   optionLabel: 'name',
+          //   label: '房间类型',
+          //   placeholder: '请选择',
+          //   clearable: true,
+          //   options: this.roomTypeList
+          // },
           {
               name: 'dateTimeParams',
               type: 'datePicker',

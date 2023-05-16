@@ -39,7 +39,7 @@
               :disabled="disabled"
             ></el-input>
           </el-form-item>
-          <el-form-item label="热门推荐" prop="admin_recommend_status">
+          <!-- <el-form-item label="热门推荐" prop="admin_recommend_status">
             <el-select v-model="ruleForm.admin_recommend_status">
               <el-option
                 v-for="item in recommendList"
@@ -48,7 +48,7 @@
                 :value="item.value"
               ></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </div>
         <el-form-item label="房间封面" prop="room_cover">
           <uploadImg

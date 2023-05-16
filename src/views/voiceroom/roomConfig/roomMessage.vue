@@ -130,22 +130,22 @@ export default {
                             ])
                         }
                     },
-                    {
-                        minWidth: '100px',
-                        label: '热门推荐',
-                        prop: 'admin_recommend_status',
-                        isSwitch: true,
-                        isTrueValue: 1,
-                        isFalseValue: 0,
-                        activeText: 'ON',
-                        inactiveText: 'OFF',
-                        change: (v, row) => {
-                            this.hotRecommend(row, v)
-                        },
-                        render: (h, params) => {
-                            return h('span', '')
-                        }
-                    },
+                    // {
+                    //     minWidth: '100px',
+                    //     label: '热门推荐',
+                    //     prop: 'admin_recommend_status',
+                    //     isSwitch: true,
+                    //     isTrueValue: 1,
+                    //     isFalseValue: 0,
+                    //     activeText: 'ON',
+                    //     inactiveText: 'OFF',
+                    //     change: (v, row) => {
+                    //         this.hotRecommend(row, v)
+                    //     },
+                    //     render: (h, params) => {
+                    //         return h('span', '')
+                    //     }
+                    // },
                     {
                         label: '操作',
                         minWidth: '180px',
