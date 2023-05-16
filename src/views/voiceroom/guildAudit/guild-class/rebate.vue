@@ -4,8 +4,6 @@
       <SearchPanel
         v-model="searchParams"
         :forms="forms"
-        :show-reset="true"
-        :show-search-btn="true"
         :show-add="true"
         @onReset="reset"
         @onSearch="onSearch"
@@ -55,44 +53,44 @@ export default {
   computed: {
     forms() {
       return [
-        {
-          name: "name",
-          type: "input",
-          value: null,
-          keyName: "value",
-          optionLabel: "name",
-          label: "公会等级",
-          placeholder: "公会等级",
-        },
-        {
-          name: "guild_type",
-          type: "select",
-          value: "",
-          keyName: "value",
-          optionLabel: "name",
-          label: "公会类型",
-          placeholder: "请选择",
-          clearable: true,
-          linkage: true,
-          options: this.guildTypeList,
-          handler: {
-            change: (val) => {
-              this.getGenreList({ belong: val });
-              this.searchParams.room_type = "";
-            },
-          },
-        },
-        {
-          name: "room_type",
-          type: "select",
-          value: "",
-          keyName: "value",
-          optionLabel: "name",
-          label: "房间类型",
-          placeholder: "请选择",
-          clearable: true,
-          options: this.roomTypeList,
-        },
+        // {
+        //   name: "name",
+        //   type: "input",
+        //   value: null,
+        //   keyName: "value",
+        //   optionLabel: "name",
+        //   label: "公会等级",
+        //   placeholder: "公会等级",
+        // },
+        // {
+        //   name: "guild_type",
+        //   type: "select",
+        //   value: "",
+        //   keyName: "value",
+        //   optionLabel: "name",
+        //   label: "公会类型",
+        //   placeholder: "请选择",
+        //   clearable: true,
+        //   linkage: true,
+        //   options: this.guildTypeList,
+        //   handler: {
+        //     change: (val) => {
+        //       this.getGenreList({ belong: val });
+        //       this.searchParams.room_type = "";
+        //     },
+        //   },
+        // },
+        // {
+        //   name: "room_type",
+        //   type: "select",
+        //   value: "",
+        //   keyName: "value",
+        //   optionLabel: "name",
+        //   label: "房间类型",
+        //   placeholder: "请选择",
+        //   clearable: true,
+        //   options: this.roomTypeList,
+        // },
       ];
     },
     cfgs() {

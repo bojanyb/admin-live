@@ -46,7 +46,7 @@ export default {
             classifyList: [],
             searchParams: {
                 party_status: 2,
-                admin_recommend_status: -1
+                // admin_recommend_status: -1
             }
         };
     },
@@ -79,16 +79,16 @@ export default {
                     placeholder: '请选择',
                     options: this.classifyList
                 },
-                {
-                    name: 'admin_recommend_status',
-                    type: 'select',
-                    value: -1,
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '热门推荐',
-                    placeholder: '请选择',
-                    options: MAPDATA.HOUSEMESSAGEHOTRECOMMENDLIST
-                }
+                // {
+                //     name: 'admin_recommend_status',
+                //     type: 'select',
+                //     value: -1,
+                //     keyName: 'value',
+                //     optionLabel: 'name',
+                //     label: '热门推荐',
+                //     placeholder: '请选择',
+                //     options: MAPDATA.HOUSEMESSAGEHOTRECOMMENDLIST
+                // }
             ]
         },
         cfgs() {
@@ -171,9 +171,9 @@ export default {
                 room_category_id: s.room_category_id,
                 guild_number: s.guild_number,
             }
-            if(s.admin_recommend_status > -1){
-                data.admin_recommend_status = s.admin_recommend_status
-            }
+            // if(s.admin_recommend_status > -1){
+            //     data.admin_recommend_status = s.admin_recommend_status
+            // }
             return {
                 page: params.page,
                 pagesize: params.size,
@@ -188,7 +188,7 @@ export default {
         reset() {
             this.searchParams = {
                 party_status: 2,
-                admin_recommend_status: -1
+                // admin_recommend_status: -1
             }
             this.getList()
         },
@@ -236,7 +236,7 @@ export default {
                 room_cover: row.room_cover,
                 room_category_id: row.room_category_id,
                 room_notice: row.room_notice,
-                admin_recommend_status: v
+                // admin_recommend_status: v
             }
             let res = await updateParty(params)
             if(res.code === 2000) {

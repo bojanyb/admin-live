@@ -79,16 +79,16 @@ export default {
                     placeholder: '请选择',
                     options: this.classifyList
                 },
-                {
-                    name: 'admin_recommend_status',
-                    type: 'select',
-                    value: -1,
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '热门推荐',
-                    placeholder: '请选择',
-                    options: MAPDATA.HOUSEMESSAGEHOTRECOMMENDLIST
-                }
+                // {
+                //     name: 'admin_recommend_status',
+                //     type: 'select',
+                //     value: -1,
+                //     keyName: 'value',
+                //     optionLabel: 'name',
+                //     label: '热门推荐',
+                //     placeholder: '请选择',
+                //     options: MAPDATA.HOUSEMESSAGEHOTRECOMMENDLIST
+                // }
             ]
         },
         cfgs() {
