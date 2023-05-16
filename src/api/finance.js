@@ -20,6 +20,15 @@ export function diamondRecharge(data) {
   })
 }
 
+// 提现导出excel
+export function exprotCash(data) {
+  return request({
+    url: REQUEST.CashHisity.apply,
+    method: 'post',
+    data
+  })
+}
+
 // 获取支付渠道
 export function payList(data) {
   return request({
