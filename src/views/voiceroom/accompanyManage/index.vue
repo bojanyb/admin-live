@@ -94,7 +94,7 @@ export default {
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.house.partyListV2,
+                url: REQUEST.accompany.roomShouList,
                 columns: [
                     {
                         label: '房间',
@@ -120,39 +120,39 @@ export default {
                             return h('span', params.row.room_category_name || '无')
                         }
                     },
-                    {
-                        label: '所属公会',
-                        minWidth: '100px',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('div', params.row.guild_name),
-                                h('div', params.row.guild_number || '无'),
-                            ])
-                        }
-                    },
-                    {
-                        minWidth: '100px',
-                        label: '热门推荐',
-                        prop: 'admin_recommend_status',
-                        isSwitch: true,
-                        isTrueValue: 1,
-                        isFalseValue: 0,
-                        activeText: 'ON',
-                        inactiveText: 'OFF',
-                        change: (v, row) => {
-                            this.hotRecommend(row, v)
-                        },
-                        render: (h, params) => {
-                            return h('span', '')
-                        }
-                    },
+                    // {
+                    //     label: '所属公会',
+                    //     minWidth: '100px',
+                    //     render: (h, params) => {
+                    //         return h('div', [
+                    //             h('div', params.row.guild_name),
+                    //             h('div', params.row.guild_number || '无'),
+                    //         ])
+                    //     }
+                    // },
+                    // {
+                    //     minWidth: '100px',
+                    //     label: '热门推荐',
+                    //     prop: 'admin_recommend_status',
+                    //     isSwitch: true,
+                    //     isTrueValue: 1,
+                    //     isFalseValue: 0,
+                    //     activeText: 'ON',
+                    //     inactiveText: 'OFF',
+                    //     change: (v, row) => {
+                    //         this.hotRecommend(row, v)
+                    //     },
+                    //     render: (h, params) => {
+                    //         return h('span', '')
+                    //     }
+                    // },
                     {
                         label: '操作',
                         minWidth: '180px',
                         fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary', disabled: !params.row.guild_number }, on: {click:()=>{this.setHouseClassify(params.row)}}}, '修改房间类型'),
+                                // h('el-button', { props: { type: 'primary', disabled: !params.row.guild_number }, on: {click:()=>{this.setHouseClassify(params.row)}}}, '修改房间类型'),
                                 h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改')
                             ])
                         }

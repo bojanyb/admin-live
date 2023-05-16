@@ -390,6 +390,12 @@ const request = {
       saveEff: `${HTTPHEADER}/RoomV2/saveEff`, // 有效直播时长 -- 保存
     },
 
+    // 相守管理
+    accompany: {
+      roomShouList: `${HTTPHEADER}/partyRoom/roomShouList`, // 房间列表
+      shouRooms: `${HTTPHEADER}/guild/shouRooms`, // 房间数据
+    },
+
     // 风控检测
     risk: {
         audioStreamDefyList: `${HTTPHEADER}/Room/audioStreamDefyList`, // 音频违规日志

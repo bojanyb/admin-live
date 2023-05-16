@@ -21,9 +21,9 @@ const accompanyManageRouter = {
 			}
     },
     {
-      path: 'streamer-data',
+      path: 'accompany-data',
       component: () => import('@/views/voiceroom/accompanyManage/guildApplication/index'),
-      name: 'streamer-data',
+      name: 'accompany-data',
       meta: {
         title: '房间数据',
         noCache: true
