@@ -248,12 +248,12 @@ const STATUSLISTCOPY = [
 const CASHCHANNEL = [
   {
     value: 1,
-    name: '爱意银行卡',
+    name: '公司银行卡',
     disabled: true
   },
   {
     value: 2,
-    name: '爱意支付宝'
+    name: '公司支付宝'
   },
   {
     value: 4,
