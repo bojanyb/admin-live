@@ -149,7 +149,7 @@ const actions = {
               }
               if(item.child && item.child.length > 0) {
                 sv(item.child);
-                if(item.params.name){
+                if(item.params && item.params.name){
                   newList.push(item)
                 }
               }

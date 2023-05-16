@@ -77,6 +77,11 @@ export default {
                     label: '奖池类型',
                     placeholder: '请选择',
                     options: this.poolList,
+                    handler: {
+						change: v => {
+							this.getRoundSource(v)
+						},
+					}
                 },
                 {
                     name: 'round',
@@ -211,8 +216,9 @@ export default {
             }
         },
         // 获取轮次
-        async getRoundSource() {
-            let res = await getRoundV520();
+        async getRoundSource(type) {
+            let roundType = type == -1 ? "" : type
+            let res = await getRoundV520({ type: roundType });
             if(res.code == 2000){
                 this.roundList = res.data.round;
                 let all = {round_number: 0, title: "全部"}
