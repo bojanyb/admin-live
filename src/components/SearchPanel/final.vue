@@ -111,6 +111,7 @@
             <el-button v-if="showReset" icon="el-icon-refresh" @click="reset">重置</el-button>
             <el-button v-if="showBatchPass" type="success" @click="batchPass">{{ batchFuncName || '批量通过' }}</el-button>
             <el-button v-if="showBatchRurn" type="danger" @click="BatchRurn">{{ batchRurnName || '批量拒绝' }}</el-button>
+            <el-button v-if="showExport" type="info" @click="handleExport">{{ exportName || 'Excel导出' }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -197,6 +198,11 @@ export default {
       type: Boolean,
       default: false
     },
+    // 是否显示导出按钮
+    showExport: {
+      type: Boolean,
+      default: false
+    },
     // 显示搜索按钮
     showSearchBtn: {
       type: Boolean,
@@ -219,6 +225,11 @@ export default {
     },
     // 批量操作 - 按钮名称
     batchRurnName: {
+      type: String,
+      default: ''
+    },
+    // 导出 - 按钮名称
+    exportName: {
       type: String,
       default: ''
     },
@@ -490,6 +501,10 @@ export default {
     // 批量拒绝
     BatchRurn() {
       this.$emit('BatchRurn')
+    },
+    // 导出
+    handleExport() {
+      this.$emit('export')
     },
     // 新增
     add() {

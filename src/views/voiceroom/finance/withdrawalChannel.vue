@@ -128,7 +128,7 @@ export default {
             },
           },
           {
-            label: "爱意-银行卡",
+            label: "公司-银行卡",
             prop: "aiyi_bank",
             render: (h, params) => {
               let data = MAPDATA.CASHCHANNEL.find((item) => {
@@ -138,7 +138,7 @@ export default {
             },
           },
           {
-            label: "爱意-支付宝",
+            label: "公司-支付宝",
             prop: "aiyi_alipay",
             render: (h, params) => {
               let data = MAPDATA.CASHCHANNEL.find((item) => {
