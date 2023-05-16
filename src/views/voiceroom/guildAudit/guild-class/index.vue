@@ -10,6 +10,7 @@
 import menuComp from '@/components/menuComp/index.vue'
 // 引入公会等级配置管理组件
 import gradeComp from './grade.vue'
+import rebateComp from './rebate.vue'
 import weekComp from './week.vue'
 import mouthComp from './mouth.vue'
 
@@ -27,6 +28,7 @@ import coupling from './coupling.vue'
 export default {
     components: {
         gradeComp,
+        rebateComp,
         weekComp,
         mouthComp,
         durationComp,
@@ -42,7 +44,7 @@ export default {
                     name: '公会等级配置'
                 },
                 {
-                    name: '公会周奖励配置'
+                    name: '实时返点配置'
                 },
                 {
                     name: '公会月奖励配置'
@@ -68,15 +70,18 @@ export default {
                     compText = "gradeComp"
                     break;
                 case '1':
-                    compText = "weekComp"
+                    compText = "rebateComp"
                     break;
                 case '2':
-                    compText = "mouthComp"
+                    compText = "weekComp"
                     break;
                 case '3':
-                    compText = "effective"
+                    compText = "mouthComp"
                     break;
                 case '4':
+                    compText = "effective"
+                    break;
+                case '5':
                     compText = "coupling"
                     break;
                 // case '3':

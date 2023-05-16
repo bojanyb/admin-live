@@ -1129,6 +1129,15 @@ export function delSettlementConfig(data) {
   })
 }
 
+// 修改实时返点配置
+export function updateGuildRebate(data) {
+  return request({
+    url: api.guild.updateGuildRebate,
+    method: 'post',
+    data
+  })
+}
+
 // 私聊权限
 export function changePrivateChat(data) {
   return request({
