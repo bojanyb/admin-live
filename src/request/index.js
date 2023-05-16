@@ -154,6 +154,9 @@ const request = {
         apply: `${HTTPHEADER}/cash/getCash`,
         doCash: `${HTTPHEADER}/cash/doCash2`,
         diamondRecharge: `${HTTPHEADER}/Recharge/diamondRecharge`,
+        cashChannel: `${HTTPHEADER}/cash/getCashChannel`, // 获取提现通道
+        cashAccount: `${HTTPHEADER}/cash/getCashAccount`,  // 获取提现账户
+        updateCashChannel: `${HTTPHEADER}/cash/updateCashChannel`,  // 更新提现账户
     },
 
     // 商城管理
