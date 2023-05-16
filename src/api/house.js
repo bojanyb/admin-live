@@ -91,6 +91,33 @@ export function delBind(data) {
     })
 }
 
+// 查看房间已经绑定的分类
+export function liveTypes(data) {
+  return request({
+      url: api.house.liveTypes,
+      method: 'post',
+      data
+  })
+}
+
+// 为房间绑定分类
+export function liveBindType(data) {
+  return request({
+      url: api.house.liveBindType,
+      method: 'post',
+      data
+  })
+}
+
+// 房间移除绑定分类
+export function delLiveBind(data) {
+  return request({
+      url: api.house.delLiveBind,
+      method: 'post',
+      data
+  })
+}
+
 // 关闭直播
 export function endLive(data) {
     return request({
