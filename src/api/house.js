@@ -37,6 +37,15 @@ export function genreList(data) {
     })
 }
 
+// 相守类型列表
+export function partyRoomTypes(data) {
+  return request({
+    url: api.house.partyRoomTypes,
+    method: 'post',
+    data
+  })
+}
+
 // 增加房间热度
 export function addRoomHot(data) {
     return request({

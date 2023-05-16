@@ -16,8 +16,7 @@
 
 <script>
 // 引入api
-import { genreList } from '@/api/house.js'
-import { updateParty } from '@/api/house.js'
+import { updateParty, partyRoomTypes } from '@/api/house.js'
 // 引入房间类型详情组件
 import typeComp from './components/typeNewComp.vue'
 // 引入新增 - 修改组件
@@ -212,7 +211,7 @@ export default {
         },
         // 获取房间分类
         async getHouse() {
-            let res = await genreList({ belong: 2 })
+            let res = await partyRoomTypes({ belong: 2 })
             if(res.data.list && res.data.list.length > 0) {
                 res.data.list.unshift({
                     name: '全部',
