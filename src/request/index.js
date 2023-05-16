@@ -274,6 +274,8 @@ const request = {
         settlementConfig: `${HTTPHEADER}/guild/settlementConfig`, // 获取周返点
         getGuildRebateList: `${HTTPHEADER}/guild/getGuildRebateList`, // 获取实时返点配置
         updateGuildRebate: `${HTTPHEADER}/guild/updateGuildRebate`, // 修改实时返点配置
+        addGuildRebate: `${HTTPHEADER}/guild/addGuildRebate`, // 新增实时返点配置
+        delGuildRebate: `${HTTPHEADER}/guild/delGuildRebate`, // 删除实时返点配置
         saveSettlementConfig: `${HTTPHEADER}/guild/saveSettlementConfig`, // 配置周返点
         delSettlementConfig: `${HTTPHEADER}/guild/delSettlementConfig`, // 删除周返点配置
         doSettlement: `${HTTPHEADER}/guild/doSettlement`, // 公会批量结算

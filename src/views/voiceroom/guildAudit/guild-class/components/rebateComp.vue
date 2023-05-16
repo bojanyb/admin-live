@@ -30,11 +30,11 @@
           </el-form-item>
         </div>
         <div class="formBox">
-          <el-form-item label="周返点比例" prop="rewards" :rules="rewardsRules">
+          <el-form-item label="实时返点比例" prop="rebate" :rules="rebateRules">
             <el-input
               onkeydown="this.value=this.value.replace(/[^0-9.]/g,'')"
               oninput="this.value=this.value.replace(/[^0-9.]/g,'')"
-              v-model="ruleForm.rewards"
+              v-model="ruleForm.rebate"
             ></el-input>
           </el-form-item>
         </div>
@@ -51,29 +51,25 @@
 
 <script>
 // 引入api
-import { updateGuildRebate, getGuildType } from "@/api/videoRoom.js";
+import { updateGuildRebate, addGuildRebate, getGuildType } from "@/api/videoRoom.js";
 // 引入公共map
 import MAPDATA from "@/utils/jsonMap.js";
 export default {
   computed: {
     title() {
       // 标题
-      return "修改实时返点配置";
+      return `${this.status === 'add' ? '新增' : '修改'}修改实时返点配置`;
     },
-    // 周返点限制
-    rewardsRules() {
+    // 实时返点限制
+    rebateRules() {
       let params = {};
       params = {
         required: true,
         validator: (rules, val, cb) => {
-          if (!this.ruleForm.rewards || this.ruleForm.rewards == 0) {
-            cb(new Error("请输入有效周返点比例"));
+          if (!this.ruleForm.rebate || this.ruleForm.rebate == 0) {
+            cb(new Error("请输入有效实时返点比例"));
           } else {
-            if (Number(this.ruleForm.rewards) > 15) {
-              cb(new Error("周返点比例最大为15"));
-            } else {
-              cb();
-            }
+            cb();
           }
         },
       };
@@ -86,21 +82,15 @@ export default {
       dialogVisible: false,
       codeList: MAPDATA.CLASSLIST, // 公会等级
       ruleForm: {
-        id: null,
-        name: null,
-        start: "",
-        end: "",
-        rewards: "",
-        type: 1,
-        rewards_type: 2,
+        guild_type: null,
+        rebate: null,
       },
       rules: {
-        rewards: [
-          { required: true, message: "请输入周返点比例", trigger: "blur" },
-          // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        ],
         guild_type: [
           { required: true, message: "请选择公会类型", trigger: "change" },
+        ],
+        rebate: [
+          { required: true, message: "请输入实时返点比例", trigger: "blur" },
         ],
       },
       guildTypeList: [],
@@ -128,14 +118,23 @@ export default {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           let params = {
-            id: this.ruleForm.guild_type,
-            rebate: this.ruleForm.rewards,
+            guild_type: this.ruleForm.guild_type,
+            rebate: this.ruleForm.rebate,
           };
-          let res = await updateGuildRebate(params);
+
+          let res;
+          if (this.status === "add") {
+            res = await addGuildRebate(params);
+          }
+          else if (this.status === "update") {
+            params.id = this.ruleForm.id;
+            res = await updateGuildRebate(params);
+          }
+
           if (res.code === 2000) {
             if (this.status === "add") {
               this.$success("新增成功");
-            } else {
+            } else if (this.status === "update") {
               this.$success("修改成功");
             }
             this.dialogVisible = false;

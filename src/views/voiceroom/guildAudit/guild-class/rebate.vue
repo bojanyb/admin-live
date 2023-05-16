@@ -29,7 +29,7 @@
 <script>
 // 引入api
 import {
-  delSettlementConfig,
+  delGuildRebate,
   getGuildType,
   guildRoomType,
 } from "@/api/videoRoom.js";
@@ -214,7 +214,7 @@ export default {
         type: "warning",
       })
         .then(async () => {
-          let res = await delSettlementConfig({ id: id });
+          let res = await delGuildRebate({ id: id });
           if (res.code === 2000) {
             this.$success("删除成功");
             this.getList();

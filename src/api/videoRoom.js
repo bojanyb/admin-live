@@ -1138,6 +1138,24 @@ export function updateGuildRebate(data) {
   })
 }
 
+// 新增实时返点配置
+export function addGuildRebate(data) {
+  return request({
+    url: api.guild.addGuildRebate,
+    method: 'post',
+    data
+  })
+}
+
+// 删除实时返点配置
+export function delGuildRebate(data) {
+  return request({
+    url: api.guild.delGuildRebate,
+    method: 'post',
+    data
+  })
+}
+
 // 私聊权限
 export function changePrivateChat(data) {
   return request({
