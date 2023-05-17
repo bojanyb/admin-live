@@ -131,7 +131,7 @@ export default {
                     },
                     {
                         label: '用户昵称',
-                        prop: 'user_number',
+                        prop: 'nickname',
                     },
                     {
                         label: '奖品ID',
