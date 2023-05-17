@@ -30,7 +30,7 @@
     ></editComp>
 
     <!-- 批量输入ID修改 -->
-    <el-dialog :visible.sync="inputIdUpdateVisible" width="30%" append-to-body @close="inputIdForm = {}">
+    <el-dialog :visible.sync="inputIdUpdateVisible" title="批量输入ID修改" width="30%" append-to-body @close="inputIdForm = {}">
       <el-form ref="inputIdForm" :model="inputIdForm" label-suffix=":" label-width="110px">
         <el-form-item label="用户ID">
           <el-input type="textarea" v-model="inputIdForm.user_number"></el-input>
