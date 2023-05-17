@@ -21,24 +21,24 @@ export default {
 		guildWeekWater,
 		guildMonthWater,
 		menuComp,
-    dynamic,
-    effectDynamic
+		dynamic,
+		effectDynamic
 	},
 	computed: {
 		comp() {
-			let compText= ""
+			let compText = ""
 			switch (this.tabIndex) {
 				case '0': // 周流水
-					compText= "guildWeekWater"
+					compText = "guildWeekWater"
 					break;
 				case '1': // 公会周奖励结算
-					compText= "dynamic"
+					compText = "dynamic"
 					break;
 				case '2': // 月奖励
-					compText= "guildMonthWater"
+					compText = "guildMonthWater"
 					break;
 				case '3': // 直播公会有效直播奖励
-					compText= "effectDynamic"
+					compText = "effectDynamic"
 					break;
 				default:
 					break;
@@ -57,7 +57,7 @@ export default {
 				},
 				{
 					name: '直播公会月奖励'
-        },
+				},
 				{
 					name: '直播公会有效直播奖励'
 				}
