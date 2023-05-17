@@ -30,7 +30,7 @@
     ></editComp>
 
     <!-- 批量输入ID修改 -->
-    <el-dialog :visible.sync="inputIdUpdateVisible" width="30%" append-to-body>
+    <el-dialog :visible.sync="inputIdUpdateVisible" width="30%" append-to-body @close="inputIdForm = {}">
       <el-form ref="inputIdForm" :model="inputIdForm" label-suffix=":" label-width="110px">
         <el-form-item label="用户ID">
           <el-input type="textarea" v-model="inputIdForm.user_number"></el-input>
@@ -58,13 +58,17 @@
     </el-dialog>
 
     <!-- 批量修改返回 -->
-     <el-dialog :visible.sync="respsoneDataVisible" title="批量修改执行结果" width="30%" append-to-body>
+     <el-dialog :visible.sync="respsoneDataVisible" title="批量修改执行结果" width="30%" append-to-body center>
       <div style="padding: 20px;">
           <div style="padding: 10px;">
-              <span style="color: #67C23A;">{{ respsoneData.success_num }}</span>条执行成功
-              <span style="color: #F56C6C;">{{ respsoneData.error_num }}</span>条执行失败
+              <span style="color: #F56C6C;">{{
+              (respsoneData.error_user && respsoneData.error_user.split(',').length) ? respsoneData.error_user.split(',').length : 0
+              }}</span>条执行失败
             </div>
           <div style="padding: 10px;">{{ `请排查：${respsoneData.error_user || '无'}` }}</div>
+      </div>
+      <div slot="footer">
+         <el-button type="primary" @click="handleCloseRespsone">确定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -106,7 +110,9 @@ export default {
       respsoneDataVisible: false,  // 批量输入ID返回弹框
       cashList: MAPDATA.CASHCHANNEL,
       inputIdForm: {}, // 批量输入ID表单
-      respsoneData: {} // 批量输入ID返回表单
+      respsoneData: {  // 批量输入ID返回表单
+        error_user: ""
+      }
     };
   },
   computed: {
@@ -302,18 +308,29 @@ export default {
       this.$refs.inputIdForm.validate(async (valid) => {
         if (valid) {
           let temp = {
-            id_card: this.inputIdForm.user_number,
+            user_number: this.inputIdForm.user_number,
             cash_channel: this.inputIdForm.cash_channel
           };
           const res = await updateCashChannel(temp);
           if (res.code + "" === "2000") {
             this.respsoneData = res.data;
-            this.respsoneDataVisible = true;          }
+            if (res.data && res.data.error_user) {
+              this.respsoneDataVisible = true;
+            } else {
+              this.inputIdUpdateVisible = false;
+              this.getList();
+            }
+          }
         } else {
           console.log("error submit!!");
           return false;
         }
       })
+    },
+    handleCloseRespsone() {
+      this.respsoneDataVisible = false;
+      this.inputIdUpdateVisible = false;
+      this.getList();
     }
   },
 };
