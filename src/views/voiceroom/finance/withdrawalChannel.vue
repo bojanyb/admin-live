@@ -31,14 +31,48 @@
 
     <!-- 批量输入ID修改 -->
     <el-dialog :visible.sync="inputIdUpdateVisible" width="30%" append-to-body>
-       批量
+      <el-form ref="inputIdForm" :model="inputIdForm" label-suffix=":" label-width="110px">
+        <el-form-item label="用户ID">
+          <el-input type="textarea" v-model="inputIdForm.user_number"></el-input>
+        </el-form-item>
+        <el-form-item label="修改提现通道">
+             <el-select
+                v-model="inputIdForm.cash_channel"
+                placeholder="请选择修改提现通道"
+                style="width: 80%"
+              >
+                <el-option
+                  v-for="item in cashList"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
+                  :disabled="item.disabled"
+                ></el-option>
+              </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm">提交</el-button>
+          <el-button  @click="inputIdForm = {}">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <!-- 批量修改返回 -->
+     <el-dialog :visible.sync="respsoneDataVisible" title="批量修改执行结果" width="30%" append-to-body>
+      <div style="padding: 20px;">
+          <div style="padding: 10px;">
+              <span style="color: #67C23A;">{{ respsoneData.success_num }}</span>条执行成功
+              <span style="color: #F56C6C;">{{ respsoneData.error_num }}</span>条执行失败
+            </div>
+          <div style="padding: 10px;">{{ `请排查：${respsoneData.error_user || '无'}` }}</div>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
 // 引入api
-import { delAutoJoinRule, delChannels } from "@/api/videoRoom";
+import { updateCashChannel } from "@/api/videoRoom";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
@@ -67,7 +101,12 @@ export default {
       isDestoryComp: false, // 是否销毁组件
       ruleForm: {},
       selectionList: [],
-      inputIdUpdateVisible: false,
+
+      inputIdUpdateVisible: false, // 批量输入ID弹框
+      respsoneDataVisible: false,  // 批量输入ID返回弹框
+      cashList: MAPDATA.CASHCHANNEL,
+      inputIdForm: {}, // 批量输入ID表单
+      respsoneData: {} // 批量输入ID返回表单
     };
   },
   computed: {
@@ -258,6 +297,24 @@ export default {
 
       this.selectionList = res;
     },
+    // 批量输入ID修改提交表单
+    submitForm() {
+      this.$refs.inputIdForm.validate(async (valid) => {
+        if (valid) {
+          let temp = {
+            id_card: this.inputIdForm.user_number,
+            cash_channel: this.inputIdForm.cash_channel
+          };
+          const res = await updateCashChannel(temp);
+          if (res.code + "" === "2000") {
+            this.respsoneData = res.data;
+            this.respsoneDataVisible = true;          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      })
+    }
   },
 };
 </script>
