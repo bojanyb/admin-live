@@ -47,7 +47,8 @@
 
 <script>
 // 引入api
-import { roomTypes, roomBindType, delBind } from "@/api/house.js";
+// import { roomTypes, roomBindType, delBind } from "@/api/house.js";
+import { liveTypes,liveBindType,delLiveBind } from "@/api/house.js";
 export default {
   data() {
     return {
@@ -81,13 +82,13 @@ export default {
     },
     // 获取分类
     async getTypes(room_number) {
-      let res = await roomTypes({ room_number });
+      let res = await liveTypes({ room_number });
       this.tagsData = res.data.list || [];
     },
     // 绑定分类
     async bindTypes() {
       let { room_number, type_id } = this.$data;
-      let res = await roomBindType({ room_number, type_id });
+      let res = await liveBindType({ room_number, type_id });
       if (res.code === 2000) {
         this.$success("添加成功");
         this.getTypes(this.room_number);
@@ -95,7 +96,7 @@ export default {
     },
     // 移除分类
     async deleteTypes(id) {
-      let res = await delBind({ id });
+      let res = await delLiveBind({ id });
       if (res.code === 2000) {
         this.$success("移除成功");
         this.getTypes(this.room_number);
