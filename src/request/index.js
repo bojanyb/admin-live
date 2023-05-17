@@ -154,6 +154,9 @@ const request = {
         apply: `${HTTPHEADER}/cash/getCash`,
         doCash: `${HTTPHEADER}/cash/doCash2`,
         diamondRecharge: `${HTTPHEADER}/Recharge/diamondRecharge`,
+        cashChannel: `${HTTPHEADER}/cash/getCashChannel`, // 获取提现通道
+        cashAccount: `${HTTPHEADER}/cash/getCashAccount`,  // 获取提现账户
+        updateCashChannel: `${HTTPHEADER}/cash/updateCashChannel`,  // 更新提现账户
     },
 
     // 商城管理
@@ -253,6 +256,7 @@ const request = {
         addStatisticsroom: `${HTTPHEADER}/guild/addStatisticsroom`, // 添加24小时房间统计集合
         statisticsroomS: `${HTTPHEADER}/guild/statisticsroomS`, // 统计24小时房间列表
         delStatisticsroom: `${HTTPHEADER}/guild/delStatisticsroom`, // 移除24小时房间统计
+        roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 移除24小时房间统计
 
 
         // v2
@@ -493,6 +497,13 @@ const request = {
         getLabourGiftList: `${HTTPHEADER}/hdMaydayLog/getGift`, // 五一劳模获取礼物
         getLabourGiftLog: `${HTTPHEADER}/hdMaydayLog/giftLog`, // 五一劳模榜单排名
         getLabourRankingList: `${HTTPHEADER}/hdMaydayLog/getRanking`, // 五一劳模榜单排名
+
+        // 奇妙跳跳屋
+        getPoolNameV5: `${HTTPHEADER}/hdWonderfulLog/getPoolName`, // 获取奖池列表
+        poolDetailV5: `${HTTPHEADER}/hdWonderfulLog/poolDetail`, // 获取抽奖数据
+        getRoundV5: `${HTTPHEADER}/hdWonderfulLog/getRound`, // 获取轮次
+        luckyListV5: `${HTTPHEADER}/hdWonderfulLog/luckyList`, // 榜单排名表
+        luckyConfigV5: `${HTTPHEADER}/hdWonderfulLog/luckyConfig`, // 榜单配置
 
     },
 

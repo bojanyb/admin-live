@@ -90,7 +90,7 @@
     </el-table>
     <div class="pagination" v-if="data.length != 0 && !isHidePage">
       <el-pagination background @size-change="handleSizeChange" @current-change="handlePageChange" :page-size="search.size"
-        :current-page="search.page" layout="total, prev, pager, next, jumper" :page-sizes="cfgs.search ? cfgs.search.sizes:search.sizes"
+        :current-page="search.page" :layout="layout" :page-sizes="cfgs.search ? cfgs.search.sizes:search.sizes"
         :total="search.total" class="fr" :small="isSmall">
       </el-pagination>
     </div>
@@ -139,6 +139,10 @@
         type: Boolean,
         default: false
       },
+      layout: {
+        type: String,
+        default: "total, prev, pager, next, jumper"
+      }
     },
     data() {
       return {

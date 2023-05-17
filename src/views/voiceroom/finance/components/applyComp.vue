@@ -9,10 +9,10 @@
         </div>
         <!-- <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp> -->
         <div class="searchParams" v-if="tabIndex === '0'">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" :show-batch-pass="true" @batchPass="batchPass" :show-batch-rurn="true" :showBeforeYesterday="true" @BatchRurn="BatchRurn" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @beforeYesterday="beforeYesterday"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :showExport="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" :show-batch-pass="true" @export="handleExcelExport" @batchPass="batchPass" :show-batch-rurn="true" :showBeforeYesterday="true" @BatchRurn="BatchRurn" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @beforeYesterday="beforeYesterday"></SearchPanel>
         </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt" layout="total, sizes, prev, pager, next, jumper"></tableList>
         </div>
     </div>
 </template>
@@ -20,7 +20,7 @@
 <script>
 // 引入tab菜单组件
 import menuComp from '@/components/menuComp/index.vue'
-import { doCash } from '@/api/finance'
+import { doCash, exprotCash } from '@/api/finance'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -30,7 +30,7 @@ import mixins from '@/utils/mixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
-import { timeFormat } from '@/utils/common.js'
+import { timeFormat, exportTableData } from '@/utils/common.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 
@@ -52,16 +52,17 @@ export default {
                     isNum: true,
                     placeholder: '请输入用户ID'
                 },
-                // {
-                //     name: 'sort',
-                //     type: 'select',
-                //     value: '',
-                //     keyName: 'value',
-                //     optionLabel: 'name',
-                //     label: '排序',
-                //     placeholder: '请选择',
-                //     options: MAPDATA.EMBODYSORT
-                // },
+                {
+                    name: 'channel',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '提现通道',
+                    placeholder: '请选择',
+                    clearable: true,
+                    options: MAPDATA.CASHCHANNEL
+                },
                 {
                     name: 'dateTimeParams',
                     type: 'datePicker',
@@ -136,6 +137,17 @@ export default {
                     prop: 'card_id'
                 },
                 {
+                    label: '本次提现通道',
+                    width: '160px',
+                    prop: 'channel',
+                    render: (h, params) => {
+                      let data = MAPDATA.CASHCHANNEL.find((item) => {
+                        return item.value === params.row.channel;
+                      });
+                      return h("span", data ? data.name : "无");
+                    },
+                },
+                {
                     label: '提现状态',
                     render: (h, params) => {
                         let paramsData = MAPDATA.STATUSLIST.find(item => { return item.value === params.row.status })
@@ -204,6 +216,9 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.CashHisity.apply,
+                search: {
+                  sizes: [10, 30, 50, 100]
+                },
                 keyId: 'id',
                 isShowCheckbox: this.tabIndex === '0' ? true : false,
                 columns: this.tabIndex === '0' ? [ ...arr ] : [ ...arr1 ]
@@ -337,9 +352,9 @@ export default {
         beforeSearch(params) {
             let s = {...this.searchParams, ...this.dateTimeParams}
             return {
-                page: params.page,
-                pagesize: params.size,
-                sort: s.sort,
+                page: params ? params.page : null,
+                pagesize: params ? params.size : null,
+                channel: s.channel,
                 user_id: s.user_id,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : ''
@@ -366,6 +381,67 @@ export default {
             } else {
                 this.$warning('请至少选择一条数据')
             }
+        },
+        // 导出
+      async  handleExcelExport() {
+          let s = this.beforeSearch();
+          console.log(s, 's');
+          delete s.page;
+          s.is_all = "1";
+          const loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
+          let res = await exprotCash(s);
+          try {
+            let arr = JSON.parse(JSON.stringify(res.data.list));
+              if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
+              arr = arr.map((item, index) => {
+              let data = MAPDATA.CASHCHANNEL.find((v) => {
+                return v.value === item.channel;
+              });
+              let data1 = MAPDATA.STATUSLIST.find((v) => {
+                return v.value === item.status;
+              });
+              let params = {
+                addtime: timeFormat(item.addtime, 'YYYY-MM-DD HH:mm:ss', true) || '--',
+                room_number: item.user_number || '--',
+                role: item.role || '--',
+                money: item.money || '--',
+                cash: item.money / 100 || '--',
+                cash_rate: Math.floor((item.money / 10000 * item.cash_rate).toFixed(5) * 100) / 100 || '--',
+                real_money: item.real_money / 100 || '--',
+                card_id: item.card_id || '--',
+                channel: data ? data.name : '--',
+                status: data1 ? data1.name : '--',
+                today_count: `第${item.today_count}次` || '--',
+                remark: item.remark || '无',
+              };
+              return params;
+            });
+            let nameList = [
+              "提现时间",
+              "用户ID",
+              "用户角色",
+              "喵粮",
+              "提现金额",
+              "手续费",
+              "到账金额",
+              "提现账号",
+              "本次提现通道",
+              "提现状态",
+
+              "今日次数",
+              "备注说明",
+            ];
+            exportTableData(arr, nameList, "公会房间列表");
+            loading.close();
+          } catch (error) {
+            console.log(error);
+            loading.close();
+          }
         },
         // 设置时间段
         setDateTime(arr) {

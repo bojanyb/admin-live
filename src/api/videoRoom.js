@@ -1184,6 +1184,15 @@ export function getGuildType(data) {
   })
 }
 
+// 房间流水明细
+export function roomFlow(data) {
+  return request({
+    url: api.guild.roomFlow,
+    method: 'post',
+    data
+  })
+}
+
 // 保存有效直播奖励
 export function effectSave(data) {
   return request({
@@ -1403,6 +1412,15 @@ export function updateChannels(data) {
 export function delChannels(data) {
   return request({
     url: api.room.delChannels,
+    method: 'post',
+    data
+  })
+}
+
+// 更新提现账户
+export function updateCashChannel(data) {
+  return request({
+    url: api.CashHisity.updateCashChannel,
     method: 'post',
     data
   })
