@@ -407,7 +407,7 @@ export default {
               });
               let params = {
                 addtime: timeFormat(item.addtime, 'YYYY-MM-DD HH:mm:ss', true) || '--',
-                room_number: `用户昵称：${item.nickname}; 用户ID：${item.user_number}` || '--',
+                room_number: item.user_number || '--',
                 role: item.role || '--',
                 money: item.money || '--',
                 cash: item.money / 100 || '--',
@@ -423,7 +423,7 @@ export default {
             });
             let nameList = [
               "提现时间",
-              "用户",
+              "用户ID",
               "用户角色",
               "喵粮",
               "提现金额",

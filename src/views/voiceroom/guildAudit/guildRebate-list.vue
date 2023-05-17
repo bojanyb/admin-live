@@ -27,30 +27,30 @@ export default {
 		award,
 		menuComp,
 		dynamic,
-    clapReward,
-    clapWeekReward
+		clapReward,
+		clapWeekReward
 	},
 	computed: {
 		comp() {
-			let compText= ""
+			let compText = ""
 			switch (this.tabIndex) {
 				case '0': // 周流水
-					compText= "guildWeekWater"
+					compText = "guildWeekWater"
 					break;
 				case '1': // 公会周奖励结算
-					compText= "dynamic"
+					compText = "dynamic"
 					break;
 				case '2': // 24小时房间奖励
-					compText= "award"
+					compText = "award"
 					break;
 				case '3': // 月奖励
-					compText= "guildMonthWater"
+					compText = "guildMonthWater"
 					break;
 				case '4': // 拍一拍房间次数结算
-					compText= "clapReward"
+					compText = "clapReward"
 					break;
 				case '5': // 拍一拍房间周奖励结算
-					compText= "clapWeekReward"
+					compText = "clapWeekReward"
 					break;
 				default:
 					break;
@@ -75,7 +75,7 @@ export default {
 				},
 				{
 					name: '拍一拍房间次数结算'
-        },
+				},
 				{
 					name: '拍一拍房间周奖励结算'
 				}
