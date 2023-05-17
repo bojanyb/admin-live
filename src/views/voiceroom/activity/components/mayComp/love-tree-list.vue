@@ -71,11 +71,13 @@ export default {
                 {
                     name: 'type',
                     type: 'select',
-                    value: "全部",
+                    value: "",
                     keyName: 'key',
                     optionLabel: 'value',
                     label: '奖池类型',
                     placeholder: '请选择',
+                    clearable: true,
+            		linkage: true,
                     options: this.poolList,
                     handler: {
 						change: v => {
@@ -218,11 +220,15 @@ export default {
         // 获取轮次
         async getRoundSource(type) {
             let roundType = type == -1 ? "" : type
+            // 初始化轮数
+			this.searchParams.round = ""
             let res = await getRoundV520({ type: roundType });
             if(res.code == 2000){
-                this.roundList = res.data.round;
-                let all = {round_number: 0, title: "全部"}
-                this.roundList.unshift(all)
+                // 全部默认选择第一个
+				if(roundType == ""){
+					this.searchParams.round = res.data.round[0].round_number
+				}
+				this.roundList = res.data.round
             }
         },
         // 奖池类型
