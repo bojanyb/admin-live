@@ -87,7 +87,7 @@
 						label: '奖池',
 						placeholder: '请选择',
 						clearable: true,
-            linkage: true,
+            			linkage: true,
 						options: this.lotteryList,
 						handler: {
 							change: v => {
@@ -104,7 +104,7 @@
 						label: '轮次',
 						placeholder: '请选择',
 						clearable: true,
-            linkage: true,
+            			linkage: true,
 						options: this.poolList
 					},
 					{
@@ -114,7 +114,7 @@
 						format: "yyyy-MM-dd HH:mm:ss",
 						label: '时间选择',
 						value: '',
-            linkage: true,
+            			linkage: true,
 						handler: {
 							change: v => {
 								this.emptyDateTime()
@@ -252,10 +252,10 @@
 				this.searchParams.round = ""
 				let res = await getRound({type:roundType});
 				if(res.code == 2000){
-          // 全部默认选择第一个
-          if(roundType == ""){
-            this.searchParams.round = res.data.round[0].round_number
-          }
+				// 全部默认选择第一个
+				if(roundType == ""){
+					this.searchParams.round = res.data.round[0].round_number
+				}
 					this.poolList = res.data.round
 				}
 			}
