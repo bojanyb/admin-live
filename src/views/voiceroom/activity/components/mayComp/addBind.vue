@@ -59,7 +59,6 @@ export default {
                 if (valid) {
                     let res = getBindCpV520(this.ruleForm);
                     if(res.code === 2000){
-                        console.log("绑定CP成功");
                         this.$success("绑定CP成功");
                     }
                     this.dialogVisible = false;

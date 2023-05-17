@@ -198,6 +198,7 @@ export default {
 		// 重置
 		reset() {
 			this.searchParams = {}
+            this.dateTimeParams = {}
 			this.getList()
 		},
 		// 查询
