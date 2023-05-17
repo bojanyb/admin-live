@@ -6,8 +6,11 @@
         :forms="forms"
         :show-add="true"
         :show-search-btn="true"
+        :show-export="true"
         add-name="批量修改当前通道"
+        export-name="批量输入ID修改"
         @add="batch"
+        @export="handleInputIdUpdate"
         @onSearch="onSearch"
       ></SearchPanel>
     </div>
@@ -25,6 +28,11 @@
       @destoryComp="destoryComp"
       @getList="getList"
     ></editComp>
+
+    <!-- 批量输入ID修改 -->
+    <el-dialog :visible.sync="inputIdUpdateVisible" width="30%" append-to-body>
+       批量
+    </el-dialog>
   </div>
 </template>
 
@@ -59,6 +67,7 @@ export default {
       isDestoryComp: false, // 是否销毁组件
       ruleForm: {},
       selectionList: [],
+      inputIdUpdateVisible: false,
     };
   },
   computed: {
@@ -217,6 +226,10 @@ export default {
       }
       const parma = this.selectionList || [];
       this.load("batch", parma);
+    },
+    // 批量输入ID修改
+    handleInputIdUpdate() {
+      this.inputIdUpdateVisible = true;
     },
     // 修改
     update(row) {
