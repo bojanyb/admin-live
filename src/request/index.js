@@ -363,6 +363,11 @@ const request = {
         roomTypes: `${HTTPHEADER}/party/roomTypes`, // 查看房间已经绑定的分类
         roomBindType: `${HTTPHEADER}/party/roomBindType`, // 为房间绑定分类
         delBind: `${HTTPHEADER}/party/delBind`, // 房间移除绑定分类
+        // 20230516 17:32 直播房间列表 接口名称变更 
+        liveTypes: `${HTTPHEADER}/party/liveTypes`, // 查看房间已经绑定的分类
+        liveBindType: `${HTTPHEADER}/party/liveBindType`, // 为房间绑定分类
+        delLiveBind: `${HTTPHEADER}/party/delLiveBind`, // 房间移除绑定分类
+
         endLive: `${HTTPHEADER}/party/endLive`, // 关闭直播
         joinRoomLog: `${HTTPHEADER}/Room/joinRoomLog`, // 进入房间记录
         statJoin: `${HTTPHEADER}/room/statJoin`, // 进房记录汇总
