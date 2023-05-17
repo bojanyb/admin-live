@@ -12,7 +12,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :showExport="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" :show-batch-pass="true" @export="handleExcelExport" @batchPass="batchPass" :show-batch-rurn="true" :showBeforeYesterday="true" @BatchRurn="BatchRurn" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @beforeYesterday="beforeYesterday"></SearchPanel>
         </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt" layout="total, sizes, prev, pager, next, jumper"></tableList>
         </div>
     </div>
 </template>
@@ -216,6 +216,9 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.CashHisity.apply,
+                search: {
+                  sizes: [10, 30, 50, 100]
+                },
                 keyId: 'id',
                 isShowCheckbox: this.tabIndex === '0' ? true : false,
                 columns: this.tabIndex === '0' ? [ ...arr ] : [ ...arr1 ]
