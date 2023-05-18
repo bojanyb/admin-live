@@ -189,3 +189,21 @@ export function deleteRoomPushFlow(data) {
     data
   })
 }
+
+// 全部房间-修改房间类别
+export function changePartyRoom(data) {
+  return request({
+    url: api.house.changePartyRoom,
+    method: 'post',
+    data
+  })
+}
+
+// 全部房间-获取房间类别
+export function canChangeType(data) {
+  return request({
+    url: api.house.canChangeType,
+    method: 'post',
+    data
+  })
+}

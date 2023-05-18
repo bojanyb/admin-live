@@ -381,6 +381,10 @@ const request = {
         createRoomPushFlow: `${HTTPHEADER}/RoomPushFlow/create`, // 首页房间推荐-新增
         updateRoomPushFlow: `${HTTPHEADER}/RoomPushFlow/update`, // 首页房间推荐-修改
         deleteRoomPushFlow: `${HTTPHEADER}/RoomPushFlow/delete`, // 首页房间推荐-删除
+
+        partyRoomList: `${HTTPHEADER}/PartyRoom/list`, // 全部房间-列表
+        changePartyRoom: `${HTTPHEADER}/PartyRoom/change`, // 全部房间-修改房间类别
+        canChangeType: `${HTTPHEADER}/PartyRoom/canChangeType`, // 全部房间-获取房间类别
     },
 
     // 直播管理
