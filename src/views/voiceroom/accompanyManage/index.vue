@@ -16,8 +16,7 @@
 
 <script>
 // 引入api
-import { genreList } from '@/api/house.js'
-import { updateParty } from '@/api/house.js'
+import { updateParty, partyRoomTypes } from '@/api/house.js'
 // 引入房间类型详情组件
 import typeComp from './components/typeNewComp.vue'
 // 引入新增 - 修改组件
@@ -46,7 +45,7 @@ export default {
             classifyList: [],
             searchParams: {
                 party_status: 2,
-                admin_recommend_status: -1
+                // admin_recommend_status: -1
             }
         };
     },
@@ -61,14 +60,14 @@ export default {
                     isNum: true,
                     placeholder: '请输入房间ID'
                 },
-                {
-                    name: 'guild_number',
-                    type: 'input',
-                    value: '',
-                    label: '公会ID',
-                    isNum: true,
-                    placeholder: '请输入公会ID'
-                },
+                // {
+                //     name: 'guild_number',
+                //     type: 'input',
+                //     value: '',
+                //     label: '公会ID',
+                //     isNum: true,
+                //     placeholder: '请输入公会ID'
+                // },
                 {
                     name: 'room_category_id',
                     type: 'select',
@@ -79,22 +78,22 @@ export default {
                     placeholder: '请选择',
                     options: this.classifyList
                 },
-                {
-                    name: 'admin_recommend_status',
-                    type: 'select',
-                    value: -1,
-                    keyName: 'value',
-                    optionLabel: 'name',
-                    label: '热门推荐',
-                    placeholder: '请选择',
-                    options: MAPDATA.HOUSEMESSAGEHOTRECOMMENDLIST
-                }
+                // {
+                //     name: 'admin_recommend_status',
+                //     type: 'select',
+                //     value: -1,
+                //     keyName: 'value',
+                //     optionLabel: 'name',
+                //     label: '热门推荐',
+                //     placeholder: '请选择',
+                //     options: MAPDATA.HOUSEMESSAGEHOTRECOMMENDLIST
+                // }
             ]
         },
         cfgs() {
             return {
                 vm: this,
-                url: REQUEST.house.partyListV2,
+                url: REQUEST.accompany.roomShouList,
                 columns: [
                     {
                         label: '房间',
@@ -120,39 +119,39 @@ export default {
                             return h('span', params.row.room_category_name || '无')
                         }
                     },
-                    {
-                        label: '所属公会',
-                        minWidth: '100px',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('div', params.row.guild_name),
-                                h('div', params.row.guild_number || '无'),
-                            ])
-                        }
-                    },
-                    {
-                        minWidth: '100px',
-                        label: '热门推荐',
-                        prop: 'admin_recommend_status',
-                        isSwitch: true,
-                        isTrueValue: 1,
-                        isFalseValue: 0,
-                        activeText: 'ON',
-                        inactiveText: 'OFF',
-                        change: (v, row) => {
-                            this.hotRecommend(row, v)
-                        },
-                        render: (h, params) => {
-                            return h('span', '')
-                        }
-                    },
+                    // {
+                    //     label: '所属公会',
+                    //     minWidth: '100px',
+                    //     render: (h, params) => {
+                    //         return h('div', [
+                    //             h('div', params.row.guild_name),
+                    //             h('div', params.row.guild_number || '无'),
+                    //         ])
+                    //     }
+                    // },
+                    // {
+                    //     minWidth: '100px',
+                    //     label: '热门推荐',
+                    //     prop: 'admin_recommend_status',
+                    //     isSwitch: true,
+                    //     isTrueValue: 1,
+                    //     isFalseValue: 0,
+                    //     activeText: 'ON',
+                    //     inactiveText: 'OFF',
+                    //     change: (v, row) => {
+                    //         this.hotRecommend(row, v)
+                    //     },
+                    //     render: (h, params) => {
+                    //         return h('span', '')
+                    //     }
+                    // },
                     {
                         label: '操作',
                         minWidth: '180px',
                         fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary', disabled: !params.row.guild_number }, on: {click:()=>{this.setHouseClassify(params.row)}}}, '修改房间类型'),
+                                // h('el-button', { props: { type: 'primary', disabled: !params.row.guild_number }, on: {click:()=>{this.setHouseClassify(params.row)}}}, '修改房间类型'),
                                 h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.update(params.row)}}}, '修改')
                             ])
                         }
@@ -171,9 +170,9 @@ export default {
                 room_category_id: s.room_category_id,
                 guild_number: s.guild_number,
             }
-            if(s.admin_recommend_status > -1){
-                data.admin_recommend_status = s.admin_recommend_status
-            }
+            // if(s.admin_recommend_status > -1){
+            //     data.admin_recommend_status = s.admin_recommend_status
+            // }
             return {
                 page: params.page,
                 pagesize: params.size,
@@ -188,7 +187,7 @@ export default {
         reset() {
             this.searchParams = {
                 party_status: 2,
-                admin_recommend_status: -1
+                // admin_recommend_status: -1
             }
             this.getList()
         },
@@ -212,7 +211,7 @@ export default {
         },
         // 获取房间分类
         async getHouse() {
-            let res = await genreList({ belong: 2 })
+            let res = await partyRoomTypes({ belong: 2 })
             if(res.data.list && res.data.list.length > 0) {
                 res.data.list.unshift({
                     name: '全部',
@@ -236,7 +235,7 @@ export default {
                 room_cover: row.room_cover,
                 room_category_id: row.room_category_id,
                 room_notice: row.room_notice,
-                admin_recommend_status: v
+                // admin_recommend_status: v
             }
             let res = await updateParty(params)
             if(res.code === 2000) {

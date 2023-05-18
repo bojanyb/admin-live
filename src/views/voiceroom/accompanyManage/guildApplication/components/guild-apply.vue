@@ -74,11 +74,11 @@
 						},
 						{
 							label: '现有类型',
-							prop: 'guild_nickname'
+							prop: 'old_genre_name'
 						},
 						{
 							label: '申请类型',
-							prop: 'guild_nickname'
+							prop: 'new_genre_name'
 						},
 						{
 							label: '所属公会昵称',

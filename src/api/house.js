@@ -37,6 +37,15 @@ export function genreList(data) {
     })
 }
 
+// 相守类型列表
+export function partyRoomTypes(data) {
+  return request({
+    url: api.house.partyRoomTypes,
+    method: 'post',
+    data
+  })
+}
+
 // 增加房间热度
 export function addRoomHot(data) {
     return request({
@@ -203,6 +212,24 @@ export function updateRoomPushFlow(data) {
 export function deleteRoomPushFlow(data) {
   return request({
     url: api.house.deleteRoomPushFlow,
+    method: 'post',
+    data
+  })
+}
+
+// 全部房间-修改房间类别
+export function changePartyRoom(data) {
+  return request({
+    url: api.house.changePartyRoom,
+    method: 'post',
+    data
+  })
+}
+
+// 全部房间-获取房间类别
+export function canChangeType(data) {
+  return request({
+    url: api.house.canChangeType,
     method: 'post',
     data
   })

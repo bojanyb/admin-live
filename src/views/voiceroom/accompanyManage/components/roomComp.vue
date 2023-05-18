@@ -39,7 +39,7 @@
               :disabled="disabled"
             ></el-input>
           </el-form-item>
-          <el-form-item label="热门推荐" prop="admin_recommend_status">
+          <!-- <el-form-item label="热门推荐" prop="admin_recommend_status">
             <el-select v-model="ruleForm.admin_recommend_status">
               <el-option
                 v-for="item in recommendList"
@@ -48,7 +48,7 @@
                 :value="item.value"
               ></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </div>
         <el-form-item label="房间封面" prop="room_cover">
           <uploadImg
@@ -107,7 +107,7 @@ export default {
         room_number: "",
         room_title: "",
         room_category_id: "",
-        admin_recommend_status: "",
+        // admin_recommend_status: "",
         room_cover: "",
         room_notice: "",
       },
@@ -116,9 +116,9 @@ export default {
         room_title: [
           { required: true, message: "请输入房间标题", trigger: "blur" },
         ],
-        admin_recommend_status: [
-          { required: true, message: "请输入热门推荐", trigger: "blur" },
-        ],
+        // admin_recommend_status: [
+        //   { required: true, message: "请输入热门推荐", trigger: "blur" },
+        // ],
         room_notice: [
           { required: false, message: "请输入房间公告", trigger: "blur" },
         ],
@@ -174,7 +174,7 @@ export default {
             id: s.id,
             room_title: s.room_title,
             room_category_id: s.room_category_id,
-            admin_recommend_status: s.admin_recommend_status,
+            // admin_recommend_status: s.admin_recommend_status,
             room_cover: s.room_cover,
             room_notice: s.room_notice,
           };

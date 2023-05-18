@@ -1,6 +1,6 @@
 <template>
 	<div class="guildAudit-guildRebate-list-box">
-		<menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
+		<!-- <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp> -->
 		<component :ref="comp" :is="comp"></component>
 	</div>
 </template>

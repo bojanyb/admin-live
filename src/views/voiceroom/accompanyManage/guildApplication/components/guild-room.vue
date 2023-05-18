@@ -76,17 +76,17 @@
 		computed: {
 			forms() {
 				return [
-          {
-            name: 'room_type',
-            type: 'select',
-            value: '',
-            keyName: 'value',
-            optionLabel: 'name',
-            label: '房间类型',
-            placeholder: '请选择',
-            clearable: true,
-            options: this.roomTypeList
-          },
+          // {
+          //   name: 'room_type',
+          //   type: 'select',
+          //   value: '',
+          //   keyName: 'value',
+          //   optionLabel: 'name',
+          //   label: '房间类型',
+          //   placeholder: '请选择',
+          //   clearable: true,
+          //   options: this.roomTypeList
+          // },
           {
               name: 'dateTimeParams',
               type: 'datePicker',
@@ -114,20 +114,20 @@
 						isNum: true,
 						placeholder: '请输入房间ID'
 					},
-					{
-						name: 'guild_number',
-						type: 'input',
-						value: '',
-						label: '公会ID',
-						isNum: true,
-						placeholder: '请输入公会ID'
-					},
+					// {
+					// 	name: 'guild_number',
+					// 	type: 'input',
+					// 	value: '',
+					// 	label: '公会ID',
+					// 	isNum: true,
+					// 	placeholder: '请输入公会ID'
+					// },
 				]
 			},
 			cfgs() {
 				return {
 					vm: this,
-					url: REQUEST.guild.guildRooms,
+					url: REQUEST.accompany.shouRooms,
 					columns: [
 						{
 							label: '创建时间',
@@ -158,16 +158,16 @@
 							label: '房间流水',
 							prop: 'flow'
 						},
-						{
-							label: '所属公会ID',
-              width: '100px',
-							prop: 'guild_number'
-						},
-						{
-							label: '所属公会名称',
-              minWidth: '120px',
-							prop: 'guild_nickname'
-						},
+						// {
+						// 	label: '所属公会ID',
+            //   width: '100px',
+						// 	prop: 'guild_number'
+						// },
+						// {
+						// 	label: '所属公会名称',
+            //   minWidth: '120px',
+						// 	prop: 'guild_nickname'
+						// },
 						{
 							label: '新用户进厅',
               minWidth: '100px',
@@ -219,14 +219,14 @@
               minWidth: '120px',
 							prop: 'times_chat'
 						},
-						{
-							label: '操作',
-							render: (h, params) => {
-								return h('div', [
-									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.del(params.row)}}},'移除')
-								])
-							}
-						}
+						// {
+						// 	label: '操作',
+						// 	render: (h, params) => {
+						// 		return h('div', [
+						// 			h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.del(params.row)}}},'移除')
+						// 		])
+						// 	}
+						// }
 					]
 				}
 			},
