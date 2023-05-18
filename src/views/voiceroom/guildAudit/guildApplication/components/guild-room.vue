@@ -3,7 +3,7 @@
 		<SearchPanel
       v-model="searchParams"
       :forms=" forms"
-      :showAdd="true"
+      :showAdd="false"
       :show-reset="true"
       :show-search-btn="true"
 
