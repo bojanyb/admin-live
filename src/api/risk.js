@@ -136,3 +136,12 @@ export function chatTalkList(data) {
     data
   })
 }
+
+// 导出音频列表
+export function exprotAudio(data) {
+  return request({
+    url: api.risk.audioStreamDefyList,
+    method: 'post',
+    data
+  })
+}

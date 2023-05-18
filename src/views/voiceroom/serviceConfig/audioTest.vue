@@ -2,10 +2,21 @@
     <div class="serviceConfig-audioTest-box">
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel
+              v-model="searchParams"
+              :forms="forms"
+              :show-reset="true"
+              :show-search-btn="true"
+              :show-export="true"
+              :show-batch-pass="true"
+              batch-func-name="批量待复审"
+              @onReset="reset"
+              @onSearch="onSearch"
+              @export="handleExport"
+              @batchPass="handleBatchPendingReview"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" layout="total, sizes, prev, pager, next, jumper"></tableList>
 
         <!-- 详情组件 -->
         <audioComp v-if="isDestoryComp" ref="audioComp" @destoryComp="destoryComp" :tabIndex="tabIndex"></audioComp>
@@ -22,8 +33,13 @@
 // 引入api
 import {
   guildRoomType,
-  getTencentLabel
+  getTencentLabel,
+  updateReview
 } from "@/api/videoRoom.js";
+// 引入api
+import {
+  exprotAudio
+} from "@/api/risk.js";
 // 引入详情组件
 import audioComp from './components/audioComp.vue'
 // 引入tab菜单组件
@@ -39,7 +55,7 @@ import warnComp from './components/warnComp.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
-import { timeFormat } from '@/utils/common.js'
+import { timeFormat, exportTableData } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 // 引入公共map
@@ -132,11 +148,46 @@ export default {
                 //     options: MAPDATA.RISKSYSTEMTYPELIST
                 // },
                 {
+                  name: 'room_category_id',
+                  type: 'select',
+                  value: '',
+                  keyName: 'value',
+                  optionLabel: 'name',
+                  label: '待复审',
+                  placeholder: '请选择',
+                  clearable: true,
+                  options: this.roomTypeList
+                },
+                {
+                    name: 'keywords',
+                    type: 'input',
+                    value: '',
+                    label: '复审操作审核人',
+                    placeholder: '请输入复审操作审核人'
+                },
+                {
                     name: 'dateTimeParams',
                     type: 'datePicker',
                     dateType: 'datetimerange',
                     format: "yyyy-MM-dd HH:mm:ss",
                     label: '时间选择',
+                    value: '',
+                    handler: {
+                        change: v => {
+                            this.emptyDateTime()
+                            this.setDateTime(v)
+                        },
+                        selectChange: (v, key) => {
+                            this.emptyDateTime()
+                        }
+                    }
+                },
+                {
+                    name: 'dateTimeParams',
+                    type: 'datePicker',
+                    dateType: 'datetimerange',
+                    format: "yyyy-MM-dd HH:mm:ss",
+                    label: '复审操作时间',
                     value: '',
                     handler: {
                         change: v => {
@@ -154,6 +205,9 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.risk.audioStreamDefyList,
+                search: {
+                  sizes: [10, 30, 50, 100]
+                },
                 columns: [
                     {
                         label: '时间',
@@ -235,17 +289,37 @@ export default {
                         }
                     },
                     {
+                        label: '腾讯审核结果',
+                        minWidth: '120px',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('div', `${params.row.label}/${params.row.sub_label}`),
+                            ])
+                        }
+                    },
+                    {
+                        label: '复审人',
+                        prop: 'room_number',
+                        minWidth: '80px',
+                    },
+                    {
+                        label: '操作时间',
+                        width: '160px',
+                        render: (h, params) => {
+                            return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                        }
+                    },
+                    {
                         label: '音频',
                         isimg: true,
                         prop: 'url',
                         imgWidth: '50px',
                         imgHeight: '50px',
-                        minWidth: '260px'
+                        minWidth: '300px'
                     },
                     {
                         label: '音转文',
                         prop: 'content',
-                        showOverFlow: true,
                         minWidth: '160px',
                         render: (h, params) => {
                           return (
@@ -260,12 +334,13 @@ export default {
                     },
                     {
                         label: '操作',
-                        width: '180px',
+                        width: '270px',
                         fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'warning'}, on: {click:()=>{this.handleOperation('warn', params.row)}}}, '警告'),
-                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.handleOperation('add', params.row)}}}, '封禁')
+                                h('el-button', { props: { type: 'danger' }, on: { click: () => { this.handleOperation('add', params.row) } } }, '封禁'),
+                                h('el-button', { props: { type: 'success'}, on: {click:()=>{this.handlePendingReview(params.row)}}}, '待复审')
                             ])
                         }
                     }
@@ -288,8 +363,8 @@ export default {
         beforeSearch(params) {
             let s = { ...this.searchParams, ...this.dateTimeParams }
             return {
-                page: params.page,
-                pagesize: params.size,
+                page: params ? params.page : null,
+                pagesize: params ? params.size : null,
                 type: this.tabIndex === '0' ? 2 : 1,
                 // risk_type: s.risk_type,
                 label: s.risk_type ? s.risk_type[0] : '',
@@ -396,6 +471,72 @@ export default {
         if (response.code + "" === "2000") {
           this.options = response.data;
         }
+      },
+      // 导出
+      async handleExport() {
+         let s = this.beforeSearch();
+          delete s.page;
+          s.is_all = "1";
+          const loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
+          let res = await exprotAudio(s);
+          try {
+            let arr = JSON.parse(JSON.stringify(res.data.list));
+              if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
+              arr = arr.map((item, index) => {
+
+              let room_category_id = this.roomTypeList.find((v) => {
+                return v.value === item.room_category_id;
+              });
+
+              let params = {
+                start_time: timeFormat(item.start_time, 'YYYY-MM-DD HH:mm:ss', true) || '--',
+                user_number: item.user_number || '--',
+                room_category_id: room_category_id.name || '--',
+                user_rank: `用户等级: ${item.user_rank}; 魅力等级: ${item.live_rank}`,
+                guild_name: item.guild_name || '--',
+                punish_status: item.punish_status,
+                sort_number: item.sort_number || '--',
+                room_number: item.room_number || '--',
+                label: `${item.label}/${item.sub_label}`,
+                label1: `${item.label}/${item.sub_label}`,
+                content: item.content || '--',
+                keywords: item.keywords || '--',
+              };
+              return params;
+            });
+            let nameList = [
+              "时间",
+              "用户ID",
+              "房间类型",
+              "用户等级",
+              "用户所属公会",
+              "用户当前状态",
+              "用户麦位",
+              "房间ID",
+              "风险类型",
+              "腾讯审核结果",
+              "音转文",
+              "音转文关键词",
+            ];
+            exportTableData(arr, nameList, "公会房间列表");
+            loading.close();
+          } catch (error) {
+            console.log(error);
+            loading.close();
+          }
+      },
+      // 待复审
+      async handlePendingReview() {
+       
+      },
+      // 批量待复审
+      handleBatchPendingReview() {
+
       }
   },
     created() {

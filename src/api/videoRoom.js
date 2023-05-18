@@ -620,6 +620,15 @@ export function getTencentLabel(data) {
   })
 }
 
+// 处罚举报 - 风险类型
+export function updateReview(data) {
+  return request({
+    url: api.risk.updateReview,
+    method: 'post',
+    data
+  })
+}
+
 // 处罚举报 - 处罚类型
 export function getPunishTypeList(data) {
   return request({
