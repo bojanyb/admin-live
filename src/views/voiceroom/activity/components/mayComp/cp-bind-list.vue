@@ -94,7 +94,7 @@ export default {
                     {
                         label: '类型',
                         render: (h, params) => {
-                            return h('span', params.row.type.nickn == 0 ? '邀请绑定' : '后台绑定')
+                            return h('span', params.row.type == 0 ? '邀请绑定' : '后台绑定')
                         }
                     }
 				]

@@ -54,12 +54,11 @@ export default {
             this.dialogVisible = true
         },
         // 提交
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+        async submitForm(formName) {
+            this.$refs[formName].validate(async (valid) => {
                 if (valid) {
-                    let res = getBindCpV520(this.ruleForm);
+                    let res = await getBindCpV520(this.ruleForm);
                     if(res.code === 2000){
-                        console.log("绑定CP成功");
                         this.$success("绑定CP成功");
                     }
                     this.dialogVisible = false;
