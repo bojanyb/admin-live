@@ -37,6 +37,8 @@
 			<!-- <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel> -->
 		</div>
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt" @handleSizeChange="handleSizeChange"></tableList>
+		<!-- 详情组件 -->
+		<lookComp ref="lookComp"></lookComp>
 	</div>
 </template>
 
@@ -57,6 +59,8 @@ import { timeFormat, exportTableData } from '@/utils/common.js'
 import mixins from '@/utils/mixins.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
+// 引入详情组件
+import lookComp from "./components/lookComp.vue";
 
 export default {
 	name: 'guildRebate-list',
@@ -64,6 +68,7 @@ export default {
 	components: {
 		SearchPanel,
 		tableList,
+    lookComp
 	},
 	computed: {
 		cfgs() {
@@ -157,7 +162,11 @@ export default {
 					render: (h, params) => {
 						return h('div', [
 							h('el-button', { props: { type: 'primary' }, on: { click: () => { this.rebateFunc(params.row.id, 1) } } }, '结算'),
-							h('el-button', { props: { type: 'danger' }, on: { click: () => { this.rebateFunc(params.row.id, 2) } } }, '忽略')
+							h('el-button', { props: { type: 'danger' }, on: { click: () => { this.rebateFunc(params.row.id, 2) } } }, '忽略'),
+              h('el-button', {
+								props: { type: 'info' },
+								on: { click: () => { this.handleLook(params.row) } }
+							}, '详情'),
 						])
 					}
 				}
@@ -297,6 +306,11 @@ export default {
 				}
 				this.getList()
 			}).catch(() => {});
+		},
+    handleLook(row) {
+			setTimeout(() => {
+				this.$refs.lookComp.load(row);
+			}, 100);
 		},
 		// 列表返回数据
 		saleAmunt(row) {
