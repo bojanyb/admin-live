@@ -9,7 +9,30 @@
         </div>
         <!-- <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp> -->
         <div class="searchParams" v-if="tabIndex === '0'">
-            <SearchPanel v-model="searchParams" :forms="forms" :showExport="true" :show-search-btn="true" :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" :show-batch-pass="true" @export="handleExcelExport" @batchPass="batchPass" :show-batch-rurn="true" :showBeforeYesterday="true" @BatchRurn="BatchRurn" @yesterday="yesterday" @recentSeven="recentSeven" @today="today" @beforeYesterday="beforeYesterday"></SearchPanel>
+            <SearchPanel
+              v-model="searchParams"
+              :forms="forms"
+              :showExport="true"
+              :show-search-btn="true"
+              :showYesterday="true"
+              :showRecentSeven="true"
+              :showToday="true"
+              @onSearch="onSearch"
+              :show-batch-pass="true"
+              @export="handleExcelExport"
+              @batchPass="batchPass"
+              :show-batch-rurn="true"
+              :showBeforeYesterday="true"
+              @BatchRurn="BatchRurn"
+              @yesterday="yesterday"
+              @recentSeven="recentSeven"
+              @today="today"
+              @beforeYesterday="beforeYesterday"
+
+              :show-custom="true"
+              custom-name="批量支付(小猪)"
+              @custom="handleBatchTopUp"
+              ></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt" layout="total, sizes, prev, pager, next, jumper"></tableList>
@@ -20,7 +43,8 @@
 <script>
 // 引入tab菜单组件
 import menuComp from '@/components/menuComp/index.vue'
-import { doCash, exprotCash } from '@/api/finance'
+// 引入api
+import { doCash, exprotCash, batchCash } from '@/api/finance'
 // 引入列表组件
 import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
@@ -442,6 +466,26 @@ export default {
             console.log(error);
             loading.close();
           }
+        },
+        // 批量支付
+      handleBatchTopUp() {
+
+        if (!(this.list && this.list.length)) {
+          this.$warning('请至少选择一条数据')
+          return
+        }
+
+        const result = this.list.reduce((prev, curr) => {
+          prev.push(curr.id)
+          return prev;
+        }, []).join(",");
+
+        batchCash({ id: result, channel: 4 }).then(response => {
+          if (response.code + "" === "2000") {
+            this.$success(response.msg || "操作成功")
+          }
+        })
+
         },
         // 设置时间段
         setDateTime(arr) {
