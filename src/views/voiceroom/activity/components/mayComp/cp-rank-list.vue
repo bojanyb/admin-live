@@ -38,19 +38,19 @@ export default {
                     name: 'user_number',
                     type: 'input',
                     value: '',
-                    label: '发起方ID',
+                    label: '收礼方ID',
                     isNum: true,
                     linkage: true,
-                    placeholder: '请输入发起方ID'
+                    placeholder: '请输入收礼方ID'
                 },
 				{
                     name: 'to_user_number',
                     type: 'input',
                     value: '',
-                    label: '接收方ID',
+                    label: '送礼方ID',
                     isNum: true,
                     linkage: true,
-                    placeholder: '请输入接收方ID'
+                    placeholder: '请输入送礼方ID'
                 }
 			]
 		},
@@ -65,25 +65,25 @@ export default {
                         prop: 'ranking'
 					},
 					{
-                        label: '发起方ID',
+                        label: '收礼方ID',
 						render: (h, params) => {
                             return h('span', params.row.user.user_number)
                         }
                     },
                     {
-                        label: '发起方昵称',
+                        label: '收礼方昵称',
 						render: (h, params) => {
                             return h('span', params.row.user.nickname)
                         }
                     },
                     {
-                        label: '接收方ID',
+                        label: '送礼方ID',
                         render: (h, params) => {
                             return h('span', params.row.to_user.user_number)
                         }
                     },
                     {
-                        label: '接收方昵称',
+                        label: '送礼方昵称',
                         render: (h, params) => {
                             return h('span', params.row.to_user.nickname)
                         }
