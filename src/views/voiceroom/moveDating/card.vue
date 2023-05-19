@@ -113,10 +113,18 @@ export default {
         // 配置参数
         beforeSearch(params) {
             let s = { ...this.searchParams }
+            let sound_tag = ""
+            if(s.sound_tag !== "" || s.sound_tag !== "全部"){
+                this.sound_tagList.forEach(res=>{
+                    if(res.id == s.sound_tag){
+                        sound_tag = res.sound_tag
+                    }
+                })
+            }else{sound_tag = "";}
             return {
                 page: params.page,
                 pagesize: params.size,
-                sound_tag: s.sound_tag == "全部" ? "" : s.sound_tag
+                sound_tag: sound_tag
             }
         },
         // 刷新列表
