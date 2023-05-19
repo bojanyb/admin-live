@@ -4,7 +4,7 @@
 		<giftListPage ref="giftListPage" v-if="tabIndex == '0'"/>
 		<cpRankPage ref="cpRankPage" v-if="tabIndex == '1'"/>
 		<loveTreePage ref="loveTreePage" v-if="tabIndex == '2'"/>
-		<cpBindPage ref="cpBindPage" v-if="tabIndex == '3'" />
+		<!-- <cpBindPage ref="cpBindPage" v-if="tabIndex == '3'" /> -->
 	</div>
 </template>
 
@@ -21,7 +21,7 @@ export default {
 		giftListPage: () => import("./components/mayComp/gift-list.vue"),
 		cpRankPage: () => import("./components/mayComp/cp-rank-list.vue"),
 		loveTreePage: () => import("./components/mayComp/love-tree-list.vue"),
-		cpBindPage: () => import("./components/mayComp/cp-bind-list.vue"),
+		// cpBindPage: () => import("./components/mayComp/cp-bind-list.vue"),
 	},
 	data() {
 		return {
@@ -38,10 +38,10 @@ export default {
 					id: 3,
 					name: '爱情树抽奖数据'
 				},
-				{
-					id: 4,
-					name: '绑定CP记录'
-				}
+				// {
+				// 	id: 4,
+				// 	name: '绑定CP记录'
+				// }
 			],
 			tabIndex: '0',
 		}
