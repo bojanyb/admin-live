@@ -157,6 +157,7 @@ const request = {
         cashChannel: `${HTTPHEADER}/cash/getCashChannel`, // 获取提现通道
         cashAccount: `${HTTPHEADER}/cash/getCashAccount`,  // 获取提现账户
         updateCashChannel: `${HTTPHEADER}/cash/updateCashChannel`,  // 更新提现账户
+        batchCash: `${HTTPHEADER}/cash/batchCash`,  // 批量提现
     },
 
     // 商城管理

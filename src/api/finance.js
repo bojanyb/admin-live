@@ -29,6 +29,15 @@ export function exprotCash(data) {
   })
 }
 
+// 批量支付
+export function batchCash(data) {
+  return request({
+    url: REQUEST.CashHisity.batchCash,
+    method: 'post',
+    data
+  })
+}
+
 // 获取支付渠道
 export function payList(data) {
   return request({
