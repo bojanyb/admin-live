@@ -168,57 +168,57 @@
             //   minWidth: '120px',
 						// 	prop: 'guild_nickname'
 						// },
-						{
-							label: '新用户进厅',
-              minWidth: '100px',
-							prop: 'first_join'
-						},
-						{
-							label: '进厅总人数',
-              minWidth: '100px',
-							prop: 'stat_join'
-						},
-						{
-							label: '进厅总人次',
-              minWidth: '100px',
-							prop: 'times_join'
-						},
-						{
-							label: '消费总人数',
-              minWidth: '100px',
-							prop: 'stat_consume'
-						},
-						{
-							label: '消费转化率',
-              minWidth: '100px',
-							prop: 'rate',
-              render: (h, params) => {
-                  return h('span', params.row.rate + '%')
-              }
-						},
-						{
-							label: '成员上麦总人数',
-              minWidth: '120px',
-							prop: 'anchor'
-						},
-						{
-							label: '成员上麦总时长',
-              minWidth: '120px',
-              prop: 'stat_anchor_time',
-              render: (h, params) => {
-                  return h('span', params.row.stat_anchor_time || '0')
-              }
-						},
-						{
-							label: '成员私聊用户人数',
-              minWidth: '120px',
-							prop: 'chat'
-						},
-						{
-							label: '成员私聊用户次数',
-              minWidth: '120px',
-							prop: 'times_chat'
-						},
+						// {
+						// 	label: '新用户进厅',
+            //   minWidth: '100px',
+						// 	prop: 'first_join'
+						// },
+						// {
+						// 	label: '进厅总人数',
+            //   minWidth: '100px',
+						// 	prop: 'stat_join'
+						// },
+						// {
+						// 	label: '进厅总人次',
+            //   minWidth: '100px',
+						// 	prop: 'times_join'
+						// },
+						// {
+						// 	label: '消费总人数',
+            //   minWidth: '100px',
+						// 	prop: 'stat_consume'
+						// },
+						// {
+						// 	label: '消费转化率',
+            //   minWidth: '100px',
+						// 	prop: 'rate',
+            //   render: (h, params) => {
+            //       return h('span', params.row.rate + '%')
+            //   }
+						// },
+						// {
+						// 	label: '成员上麦总人数',
+            //   minWidth: '120px',
+						// 	prop: 'anchor'
+						// },
+						// {
+						// 	label: '成员上麦总时长',
+            //   minWidth: '120px',
+            //   prop: 'stat_anchor_time',
+            //   render: (h, params) => {
+            //       return h('span', params.row.stat_anchor_time || '0')
+            //   }
+						// },
+						// {
+						// 	label: '成员私聊用户人数',
+            //   minWidth: '120px',
+						// 	prop: 'chat'
+						// },
+						// {
+						// 	label: '成员私聊用户次数',
+            //   minWidth: '120px',
+						// 	prop: 'times_chat'
+						// },
 						// {
 						// 	label: '操作',
 						// 	render: (h, params) => {
@@ -494,17 +494,17 @@
             room_type: item.room_type,
             room_title: item.room_title,
             flow: item.flow || "0",
-            guild_number: item.guild_number,
-            guild_nickname: item.guild_nickname,
-            first_join: item.first_join || "0",
-            stat_join: item.stat_join || "0",
-            times_join: item.times_join || "0",
-            stat_consume: item.stat_consume || "0",
-            rate: item.rate ? item.rate + "%" : "0%",
-            anchor: item.anchor || "0",
-            stat_anchor_time: item.stat_anchor_time || "0",
-            chat: item.chat || "0",
-            times_chat: item.times_chat || "0",
+            // guild_number: item.guild_number,
+            // guild_nickname: item.guild_nickname,
+            // first_join: item.first_join || "0",
+            // stat_join: item.stat_join || "0",
+            // times_join: item.times_join || "0",
+            // stat_consume: item.stat_consume || "0",
+            // rate: item.rate ? item.rate + "%" : "0%",
+            // anchor: item.anchor || "0",
+            // stat_anchor_time: item.stat_anchor_time || "0",
+            // chat: item.chat || "0",
+            // times_chat: item.times_chat || "0",
           };
           return params;
         });
@@ -515,19 +515,19 @@
           "房间类型",
           "房间标题",
           "房间流水",
-          "所属公会ID",
-          "所属公会名称",
-          "新用户进厅",
-          "进厅总人数",
+          // "所属公会ID",
+          // "所属公会名称",
+          // "新用户进厅",
+          // "进厅总人数",
 
-          "进厅总人次",
-          "消费总人数",
-          "消费转化率",
-          "成员上麦总人数",
+          // "进厅总人次",
+          // "消费总人数",
+          // "消费转化率",
+          // "成员上麦总人数",
 
-          "成员上麦总时长",
-          "成员私聊用户人数",
-          "成员私聊用户次数",
+          // "成员上麦总时长",
+          // "成员私聊用户人数",
+          // "成员私聊用户次数",
         ];
         exportTableData(arr, nameList, "公会房间列表");
         loading.close();
