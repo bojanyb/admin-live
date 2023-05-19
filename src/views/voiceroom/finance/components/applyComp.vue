@@ -6,6 +6,7 @@
             <span>提现金额：{{ ruleForm.totalMoney / 100 || 0 }}元</span>
             <span>手续费：{{ ruleForm.totalMoneyRate / 100 || 0 }}元</span>
             <span>到账金额：{{ Number(((ruleForm.totalMoney - ruleForm.totalMoneyRate) / 100).toFixed(2)) || 0 }}元</span>
+            <span>当前页到账金额：{{ Number(((ruleForm.realMoneyTotal) / 100).toFixed(2)) || 0 }}元</span>
         </div>
         <!-- <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp> -->
         <div class="searchParams" v-if="tabIndex === '0'">
@@ -505,7 +506,15 @@ export default {
         },
         // 列表返回数据
         saleAmunt(data) {
-            this.ruleForm = { ...data }
+            const result = data.list.reduce((prev, curr) => {
+              prev += curr.real_money ? +curr.real_money : 0
+              return prev;
+            }, 0)
+
+            this.ruleForm = {
+              ...data,
+              realMoneyTotal: result
+            }
         }
     },
     created() {
