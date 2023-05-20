@@ -462,6 +462,14 @@ const DURATIONCOPY = [
     name: '30天'
   },
   {
+    value: 7776000,
+    name: '90天'
+  },
+  {
+    value: 15552000,
+    name: '180天'
+  },
+  {
     value: -1,
     name: '永久'
   }
@@ -2281,7 +2289,7 @@ const USERPUNISHTYPELIST = [
     value: 2
   },
   {
-    name: '封IP',
+    name: '封WIFI',
     value: 3
   },
   {
@@ -2305,7 +2313,7 @@ const USERPUNISHTYPELISTCOPY = [
     value: 2
   },
   {
-    name: '封IP',
+    name: '封WIFI',
     value: 3
   },
   {
@@ -2337,7 +2345,7 @@ const USERPUNISHTYPELISTCOPYTWO = [
     disabled: false
   },
   {
-    name: '封IP',
+    name: '封WIFI',
     value: 3,
     disabled: false
   },
@@ -2410,7 +2418,7 @@ const TIMEPENALTYSTATUS = [
     value: 2
   },
   {
-    name: '封IP',
+    name: '封WIFI',
     value: 3
   },
   {
