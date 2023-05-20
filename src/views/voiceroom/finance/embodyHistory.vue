@@ -74,8 +74,14 @@ export default {
                     type: 'input',
                     value: '',
                     label: '交易单号',
-                    isNum: true,
                     placeholder: '请输入交易单号'
+                },
+                {
+                    name: 'outer_trade_no',
+                    type: 'input',
+                    value: '',
+                    label: '第三方交易单号',
+                    placeholder: '请输入第三方交易单号'
                 },
                 {
                     name: 'status',
@@ -215,6 +221,11 @@ export default {
                         width: '200'
                     },
                     {
+                        label: '第三方交易单号',
+                        prop: 'outer_trade_no',
+                        width: '200'
+                    },
+                    {
                         label: '操作人',
                         prop: 'admin_id'
                     }
@@ -326,6 +337,7 @@ export default {
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
                 user_id: s.user_id,
                 order_id: s.order_id,
+                outer_trade_no: s.outer_trade_no,
                 channel: s.channel
             }
         },
@@ -370,11 +382,12 @@ export default {
                     toMoney: item.status != 3 ? item.real_money / 100 : item.money / 100,
                     toTime: item.status != 3 ? item.pay_time ? timeFormat(item.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无' : item.remark,
                     order_id: item.order_id,
+                    outer_trade_no: item.outer_trade_no,
                     admin_id: item.admin_id
                 }
                 return params
             })
-            let nameList = [ '用户ID','申请时间', '扣除喵粮', '申请金额','手续费','处理时间','处理状态','到账金额/退回金额','到账时间/原因','交易单号','操作人' ]
+            let nameList = [ '用户ID','申请时间', '扣除喵粮', '申请金额','手续费','处理时间','处理状态','到账金额/退回金额','到账时间/原因','交易单号','第三方交易单号','操作人' ]
             exportTableData(arr, nameList, '提现记录')
         }
     },
