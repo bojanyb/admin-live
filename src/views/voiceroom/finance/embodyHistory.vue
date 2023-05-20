@@ -74,7 +74,6 @@ export default {
                     type: 'input',
                     value: '',
                     label: '交易单号',
-                    isNum: true,
                     placeholder: '请输入交易单号'
                 },
                 {
@@ -82,7 +81,6 @@ export default {
                     type: 'input',
                     value: '',
                     label: '第三方交易单号',
-                    isNum: true,
                     placeholder: '请输入第三方交易单号'
                 },
                 {
