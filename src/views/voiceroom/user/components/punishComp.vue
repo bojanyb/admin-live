@@ -8,7 +8,7 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="处罚类型" prop="type">
                     <el-select v-model="ruleForm.type" placeholder="请选择">
-                        <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value" :disabled="item.name == '封WIFI'"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="处罚时间" prop="ban_duration">

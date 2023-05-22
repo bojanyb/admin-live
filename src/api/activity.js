@@ -218,15 +218,6 @@ export function poolDetailV5(data) {
     data
   })
 }
-/*******520活动**********/
-// 奖池列表
-export function getPoolNameV520(data){
-  return request({
-    url: api.activity.getPoolNameV520,
-    method: 'post',
-    data
-  })
-}
 // 获取轮次
 export function getRoundV5(data) {
   return request({
@@ -243,19 +234,27 @@ export function luckyListV5(data) {
     data
   })
 }
-// 获取轮次
-export function getRoundV520(data){
-  return request({
-    url : api.activity.getRoundV520,
-    method: 'post',
-    data
-  })
-}
-
 // 榜单配置
 export function luckyConfigV5(data) {
   return request({
     url: api.activity.luckyConfigV5,
+    method: 'post',
+    data
+  })
+}
+/*******520活动**********/
+// 奖池列表
+export function getPoolNameV520(data){
+  return request({
+    url: api.activity.getPoolNameV520,
+    method: 'post',
+    data
+  })
+}
+// 获取轮次
+export function getRoundV520(data){
+  return request({
+    url : api.activity.getRoundV520,
     method: 'post',
     data
   })
@@ -268,7 +267,6 @@ export function getGiftV520(data) {
     data
   })
 }
-
 // 获取礼物数据
 export function giftLogV520(data) {
   return request({
@@ -277,7 +275,6 @@ export function giftLogV520(data) {
     data
   })
 }
-
 // 手动绑定CP
 export function getBindCpV520(data) {
   return request({
