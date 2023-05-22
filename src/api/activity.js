@@ -218,6 +218,14 @@ export function poolDetailV5(data) {
     data
   })
 }
+// 榜单配置
+export function luckyConfigV5(data) {
+  return request({
+    url: api.activity.luckyConfigV5,
+    method: 'post',
+    data
+  })
+}
 // 获取轮次
 export function getRoundV5(data) {
   return request({
@@ -230,14 +238,6 @@ export function getRoundV5(data) {
 export function luckyListV5(data) {
   return request({
     url: api.activity.luckyListV5,
-    method: 'post',
-    data
-  })
-}
-// 榜单配置
-export function luckyConfigV5(data) {
-  return request({
-    url: api.activity.luckyConfigV5,
     method: 'post',
     data
   })
