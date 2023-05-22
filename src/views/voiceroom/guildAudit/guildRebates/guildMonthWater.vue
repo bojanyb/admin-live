@@ -169,7 +169,7 @@ export default {
               h('el-button', { props: { type: 'danger' }, on: { click: () => { this.rebateFunc(params.row.id, 2) } } }, '忽略'),
               h('el-button', {
 								props: { type: 'info' },
-								on: { click: () => { this.handleLook(params.row) } }
+								on: { click: () => { this.handleLook(params.row, "guildMonthWater") } }
 							}, '详情'),
 						])
 					}
@@ -310,9 +310,9 @@ export default {
 				this.getList()
 			}).catch(() => {});
 		},
-    handleLook(row) {
+    handleLook(row, status) {
 			setTimeout(() => {
-				this.$refs.lookComp.load(row);
+				this.$refs.lookComp.load(row, status);
 			}, 100);
 		},
 		// 列表返回数据
