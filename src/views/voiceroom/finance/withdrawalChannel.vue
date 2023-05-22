@@ -222,6 +222,17 @@ export default {
             },
           },
           {
+            label: "小猪通道余额",
+            prop: "pig_quota",
+            minWidth: "120px",
+            render: (h, params) => {
+              const result = params.row.pig_quota.map(item => {
+                return h("div",  `${item.name}：${item.quota}`)
+              })
+              return h("div", result);
+            },
+          },
+          {
             label: "操作",
             minWidth: "120px",
             fixed: "right",
