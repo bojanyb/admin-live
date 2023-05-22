@@ -68,16 +68,16 @@ export default {
                 //     isNum: true,
                 //     placeholder: '请输入公会ID'
                 // },
-                {
-                    name: 'room_category_id',
-                    type: 'select',
-                    value: '',
-                    keyName: 'id',
-                    optionLabel: 'name',
-                    label: '房间类型',
-                    placeholder: '请选择',
-                    options: this.classifyList
-                },
+                // {
+                //     name: 'room_category_id',
+                //     type: 'select',
+                //     value: '',
+                //     keyName: 'id',
+                //     optionLabel: 'name',
+                //     label: '房间类型',
+                //     placeholder: '请选择',
+                //     options: this.classifyList
+                // },
                 // {
                 //     name: 'admin_recommend_status',
                 //     type: 'select',

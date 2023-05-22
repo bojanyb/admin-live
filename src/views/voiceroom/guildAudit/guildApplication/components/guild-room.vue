@@ -54,8 +54,10 @@
 </template>
 
 <script>
-	import {addGuildRoom, rmGuildRoom, guildRoomType} from '@/api/videoRoom.js'
-  	import {guildRooms} from '@/api/user.js'
+  // 引入api
+	import { addGuildRoom, rmGuildRoom } from '@/api/videoRoom.js'
+  import { guildRooms } from '@/api/user.js'
+  import { partyRoomTypes } from '@/api/house.js'
 	// 引入菜单组件
   import SearchPanel from "@/components/SearchPanel/final.vue";
 	// 引入列表组件
@@ -430,7 +432,7 @@
 			},
       // 获取房间类型
       async getGenreList(){
-        const response = await guildRoomType({ belong: 2 })
+        const response = await partyRoomTypes({ belong: 2 })
         if(response.code == 2000){
           const tempArr = Array.from(
             Array.isArray(response.data.list) ? response.data.list : []
@@ -442,6 +444,12 @@
             })
             return prev
           }, []) || []
+
+          this.roomTypeList.unshift({
+            name: '全部',
+            value: ''
+          })
+
         }
       },
       // 清空日期选择
