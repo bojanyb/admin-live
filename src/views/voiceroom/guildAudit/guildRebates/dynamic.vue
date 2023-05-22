@@ -169,7 +169,7 @@ export default {
 							}, '忽略'),
 							h('el-button', {
 								props: { type: 'info' },
-								on: { click: () => { this.handleLook(params.row) } }
+								on: { click: () => { this.handleLook(params.row, "dynamic") } }
 							}, '详情'),
 						])
 					}
@@ -312,9 +312,9 @@ export default {
 				this.getList()
 			}).catch(() => {});
 		},
-		handleLook(row) {
+		handleLook(row, status) {
 			setTimeout(() => {
-				this.$refs.lookComp.load(row);
+				this.$refs.lookComp.load(row, status);
 			}, 100);
 		},
 		// 列表返回数据
