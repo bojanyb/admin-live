@@ -243,6 +243,17 @@ export default {
             },
           },
           {
+            label: "工猫通道余额",
+            prop: "cat_quota",
+            minWidth: "120px",
+            render: (h, params) => {
+              const result = params.row.pig_quota.map(item => {
+                return h("div",  `${item.name}：${item.cat_quota}`)
+              })
+              return h("div", result);
+            },
+          },
+          {
             label: "操作",
             minWidth: "120px",
             fixed: "right",
