@@ -222,6 +222,16 @@ export default {
             },
           },
           {
+            label: "工猫通道-银行卡",
+            prop: "cat_bank",
+            render: (h, params) => {
+              let data = MAPDATA.CASHCHANNEL.find((item) => {
+                return item.value === params.row.cat_bank;
+              });
+              return h("span", data ? "已签署" : "未签署");
+            },
+          },
+          {
             label: "操作",
             minWidth: "120px",
             fixed: "right",
