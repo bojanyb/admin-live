@@ -373,6 +373,22 @@ export default {
           //         return h('span', params.row.out_trade_no || '无')
           //     }
           // }
+          {
+            label: "操作",
+            fixed: "right",
+            minWidth: "120px",
+            render: (h, params) => {
+                return h("div", [
+                  h("el-button", {
+                    props: { type: "primary" },
+                    style: {
+                        display: params.row.status === 3 ? 'unset' : 'none'
+                    },
+                    on: { click: () => { this.handleQueryOrder(params.row) } }
+                  }, "查单")
+                ])
+            }
+          }
         ],
       };
     },
@@ -640,6 +656,10 @@ export default {
           })
       }
     },
+    // 查单
+    handleQueryOrder(row) {
+      console.log(row, "row");
+    }
   },
   created() {
     let time = new Date();
