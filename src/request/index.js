@@ -327,6 +327,7 @@ const request = {
         changePayStatus: `${HTTPHEADER}/PayManage/changePayStatus`, // 修改支付使用状态
         getMerchantList: `${HTTPHEADER}/Recharge/getMerchantList`, // 获取appid
         getWXMerchantList: `${HTTPHEADER}/Recharge/getWXMerchantList`, // 获取商户号
+        queryPayStatus: `${HTTPHEADER}/Recharge/queryPayStatus`, // 查询充值订单支付状态
     },
 
     // 消息管理

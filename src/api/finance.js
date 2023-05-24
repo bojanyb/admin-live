@@ -136,3 +136,12 @@ export function wxMerchantList(data) {
     data
   })
 }
+
+// 查询充值订单支付状态
+export function queryPayStatus(data) {
+  return request({
+    url: REQUEST.finance.queryPayStatus,
+    method: 'post',
+    data
+  })
+}
