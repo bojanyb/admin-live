@@ -323,6 +323,7 @@ const request = {
         changePayStatus: `${HTTPHEADER}/PayManage/changePayStatus`, // 修改支付使用状态
         getMerchantList: `${HTTPHEADER}/Recharge/getMerchantList`, // 获取appid
         getWXMerchantList: `${HTTPHEADER}/Recharge/getWXMerchantList`, // 获取商户号
+        queryPayStatus: `${HTTPHEADER}/Recharge/queryPayStatus`, // 查询充值订单支付状态
     },
 
     // 消息管理
@@ -364,7 +365,7 @@ const request = {
         roomTypes: `${HTTPHEADER}/party/roomTypes`, // 查看房间已经绑定的分类
         roomBindType: `${HTTPHEADER}/party/roomBindType`, // 为房间绑定分类
         delBind: `${HTTPHEADER}/party/delBind`, // 房间移除绑定分类
-        // 20230516 17:32 直播房间列表 接口名称变更 
+        // 20230516 17:32 直播房间列表 接口名称变更
         liveTypes: `${HTTPHEADER}/party/liveTypes`, // 查看房间已经绑定的分类
         liveBindType: `${HTTPHEADER}/party/liveBindType`, // 为房间绑定分类
         delLiveBind: `${HTTPHEADER}/party/delLiveBind`, // 房间移除绑定分类

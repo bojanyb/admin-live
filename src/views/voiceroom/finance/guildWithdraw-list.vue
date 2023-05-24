@@ -44,7 +44,7 @@
 
 <script>
 // 引入api
-import { diamondRechargeAll, getMerchantList, wxMerchantList } from "@/api/finance.js";
+import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus } from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
@@ -373,6 +373,22 @@ export default {
           //         return h('span', params.row.out_trade_no || '无')
           //     }
           // }
+          {
+            label: "操作",
+            fixed: "right",
+            minWidth: "120px",
+            render: (h, params) => {
+                return h("div", [
+                  h("el-button", {
+                    props: { type: "primary" },
+                    style: {
+                        display: params.row.status === 3 ? 'unset' : 'none'
+                    },
+                    on: { click: () => { this.handleQueryOrder(params.row) } }
+                  }, "查单")
+                ])
+            }
+          }
         ],
       };
     },
@@ -640,6 +656,15 @@ export default {
           })
       }
     },
+    // 查询充值订单支付状态
+    async handleQueryOrder(row) {
+      const response = await queryPayStatus({ trade_no: row.trade_no })
+      this.$notify.warning({
+        title: '消息',
+        message: response.data && response.data.list[0].msg,
+      });
+      this.getList();
+    }
   },
   created() {
     let time = new Date();
