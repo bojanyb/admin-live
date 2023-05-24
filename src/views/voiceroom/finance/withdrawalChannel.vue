@@ -247,7 +247,7 @@ export default {
             prop: "cat_quota",
             minWidth: "120px",
             render: (h, params) => {
-              const result = params.row.pig_quota.map(item => {
+              const result = params.row.cat_quota.map(item => {
                 return h("div",  `${item.name}：${item.quota}`)
               })
               return h("div", result);
