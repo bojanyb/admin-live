@@ -185,19 +185,20 @@ export default {
                             } else if (+params.row.orderDetails.status === 4) {
                               return h('span', params.row.orderDetails.real_money / 100)
                             } else if (+params.row.orderDetails.status === 6) {
-                              return h('span', (+params.row.orderDetails.success_money) / (+params.row.orderDetails.fail_money))
+                              return h('span', `${(params.row.orderDetails.success_money)} / ${(params.row.orderDetails.fail_money)}`)
                             }
                         }
                     },
                     {
                         label: '到账时间/原因',
                         width: '160px',
-                        showOverFlow: true,
                         render: (h, params) => {
-                            if(params.row.orderDetails.status != 3) {
-                                return h('span', params.row.pay_time ? timeFormat(params.row.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
-                            } else {
-                                return h('span', params.row.orderDetails.remark || '无')
+                            if(+params.row.orderDetails.status === 3) {
+                               return h('span', params.row.orderDetails.remark || '无')
+                            } else if (+params.row.orderDetails.status === 4) {
+                              return h('span', params.row.pay_time ? timeFormat(params.row.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            } else if (+params.row.orderDetails.status === 6) {
+                              return h('span', `${params.row.orderDetails.remark || '无'}`)
                             }
                         }
                     },
