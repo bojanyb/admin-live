@@ -248,7 +248,7 @@ export default {
             minWidth: "120px",
             render: (h, params) => {
               const result = params.row.pig_quota.map(item => {
-                return h("div",  `${item.name}：${item.cat_quota}`)
+                return h("div",  `${item.name}：${item.quota}`)
               })
               return h("div", result);
             },
