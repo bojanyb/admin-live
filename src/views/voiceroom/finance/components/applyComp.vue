@@ -481,10 +481,22 @@ export default {
           return prev;
         }, []).join(",");
 
+       const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+
         batchCash({ id: result, channel: 4 }).then(response => {
           if (response.code + "" === "2000") {
-            this.$success(response.msg || "操作成功")
+            this.$success(response.msg || "操作成功");
+            this.getList();
+            loading.close();
           }
+        }).catch(error => {
+          console.log(error);
+          loading.close();
         })
 
         },
