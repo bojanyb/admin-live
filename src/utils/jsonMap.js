@@ -219,11 +219,15 @@ const STATUSLIST = [
   },
   {
     value: 4,
-    name: '提现完成'
+    name: '全部完成'
   },
   {
     value: 5,
-    name: '提现失败'
+    name: '全部退回'
+  },
+  {
+    value: 6,
+    name: '部分完成'
   }
 ]
 
