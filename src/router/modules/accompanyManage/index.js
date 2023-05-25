@@ -8,7 +8,7 @@ const accompanyManageRouter = {
   name: 'accompanyManage',
 	meta: {
 		title: '相守管理',
-		icon: 'el-icon-house'
+    icon: 'el-icon-chat-line-round'
 	},
 	children: [
 		{

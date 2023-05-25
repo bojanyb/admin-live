@@ -8,7 +8,7 @@ const moveDatingRouter = {
 	name: 'moveDating',
 	meta: {
 		title: '心动速配',
-		icon: 'el-icon-position'
+    icon: 'el-icon-magic-stick'
 	},
 	children: [
 		{
