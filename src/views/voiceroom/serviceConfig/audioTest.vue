@@ -16,7 +16,7 @@
               @batchPass="handleBatchPendingReview"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" layout="total, sizes, prev, pager, next, jumper"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" layout="total, sizes, prev, pager, next, jumper" @selectionChange="selectionChange"></tableList>
 
         <!-- 详情组件 -->
         <audioComp v-if="isDestoryComp" ref="audioComp" @destoryComp="destoryComp" :tabIndex="tabIndex"></audioComp>
@@ -26,6 +26,9 @@
 
         <!-- 警告组件 -->
         <warnComp v-if="isWarnDestoryComp" ref="warnComp" @destoryComp="destoryComp" @getList="getList"></warnComp>
+
+        <!-- 警告组件 -->
+        <reviewComp v-if="isReviewDestoryComp" ref="reviewComp" @destoryComp="destoryComp" @getList="getList"></reviewComp>
     </div>
 </template>
 
@@ -34,7 +37,6 @@
 import {
   guildRoomType,
   getTencentLabel,
-  updateReview
 } from "@/api/videoRoom.js";
 // 引入api
 import {
@@ -52,6 +54,8 @@ import tableList from '@/components/tableList/TableList.vue'
 import userComp from './components/userComp.vue'
 // 引入警告组件
 import warnComp from './components/warnComp.vue'
+// 引入警告组件
+import reviewComp from './components/reviewComp.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
@@ -68,7 +72,8 @@ export default {
         menuComp,
         audioComp,
         userComp,
-        warnComp
+        warnComp,
+        reviewComp
     },
     data() {
         return {
@@ -83,9 +88,11 @@ export default {
             isDestoryComp: false, // 是否销毁组件
             isUserDestoryComp: false,
             isWarnDestoryComp: false,
+            isReviewDestoryComp: false,
             tabIndex: '0',
             roomTypeList: [], // 房间类型
-            options: []
+            options: [],
+            selectionList: []
         };
     },
     computed: {
@@ -156,7 +163,7 @@ export default {
                   label: '待复审',
                   placeholder: '请选择',
                   clearable: true,
-                  options: this.roomTypeList
+                  options: MAPDATA.REVIEWSTATUSLIST
                 },
                 {
                     name: 'keywords',
@@ -164,23 +171,6 @@ export default {
                     value: '',
                     label: '复审操作审核人',
                     placeholder: '请输入复审操作审核人'
-                },
-                {
-                    name: 'dateTimeParams',
-                    type: 'datePicker',
-                    dateType: 'datetimerange',
-                    format: "yyyy-MM-dd HH:mm:ss",
-                    label: '时间选择',
-                    value: '',
-                    handler: {
-                        change: v => {
-                            this.emptyDateTime()
-                            this.setDateTime(v)
-                        },
-                        selectChange: (v, key) => {
-                            this.emptyDateTime()
-                        }
-                    }
                 },
                 {
                     name: 'dateTimeParams',
@@ -198,23 +188,53 @@ export default {
                             this.emptyDateTime()
                         }
                     }
-                }
+                },
+                {
+                    name: 'dateTimeParams',
+                    type: 'datePicker',
+                    dateType: 'datetimerange',
+                    format: "yyyy-MM-dd HH:mm:ss",
+                    label: '创建时间选择',
+                    value: '',
+                    handler: {
+                        change: v => {
+                            this.emptyDateTime()
+                            this.setDateTime(v)
+                        },
+                        selectChange: (v, key) => {
+                            this.emptyDateTime()
+                        }
+                    }
+                },
             ]
         },
         cfgs() {
             return {
                 vm: this,
                 url: REQUEST.risk.audioStreamDefyList,
+                isShowCheckbox: true,
                 search: {
                   sizes: [10, 30, 50, 100]
                 },
                 columns: [
                     {
-                        label: '时间',
+                        label: '创建时间',
                         width: '160px',
                         render: (h, params) => {
                             return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
+                    },
+                    {
+                        label: '复审操作时间',
+                        width: '160px',
+                        render: (h, params) => {
+                            return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                        }
+                    },
+                    {
+                        label: '复审人',
+                        prop: 'room_number',
+                        minWidth: '90px',
                     },
                     {
                         label: '用户',
@@ -233,13 +253,12 @@ export default {
                         let data = this.roomTypeList.find((item) => {
                           return item.value === params.row.room_category_id;
                         });
-                        return h("span", data ? data.name : "");
+                        return h("span", data ? data.name : "--");
                       },
                     },
                     {
                         label: '用户等级',
-                        width: '100px',
-                        showOverFlow: true,
+                        width: '110px',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', `用户等级: ${params.row.user_rank}`),
@@ -249,7 +268,7 @@ export default {
                     },
                     {
                         label: '用户所属公会',
-                        width: '100px',
+                        width: '110px',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.guild_name),
@@ -258,7 +277,7 @@ export default {
                     },
                     {
                         label: '用户当前状态',
-                        width: '100px',
+                        width: '110px',
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.punish_status),
@@ -277,36 +296,24 @@ export default {
                     {
                         label: '房间ID',
                         prop: 'room_number',
-                        minWidth: '80px',
+                        minWidth: '90px',
                     },
                     {
                         label: '风险类型',
-                        minWidth: '120px',
+                        minWidth: '130px',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', `${params.row.label}/${params.row.sub_label}`),
+                                h('div', `${params.row.label || '--'}/${params.row.sub_label || '--'}`),
                             ])
                         }
                     },
                     {
                         label: '腾讯审核结果',
-                        minWidth: '120px',
+                        minWidth: '130px',
                         render: (h, params) => {
                             return h('div', [
-                                h('div', `${params.row.label}/${params.row.sub_label}`),
+                                h('div', `${params.row.label || '--'}/${params.row.sub_label || '--'}`),
                             ])
-                        }
-                    },
-                    {
-                        label: '复审人',
-                        prop: 'room_number',
-                        minWidth: '80px',
-                    },
-                    {
-                        label: '操作时间',
-                        width: '160px',
-                        render: (h, params) => {
-                            return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
                     },
                     {
@@ -340,7 +347,7 @@ export default {
                             return h('div', [
                                 h('el-button', { props: { type: 'warning'}, on: {click:()=>{this.handleOperation('warn', params.row)}}}, '警告'),
                                 h('el-button', { props: { type: 'danger' }, on: { click: () => { this.handleOperation('add', params.row) } } }, '封禁'),
-                                h('el-button', { props: { type: 'success'}, on: {click:()=>{this.handlePendingReview(params.row)}}}, '待复审')
+                                h('el-button', { props: { type: 'success'}, on: {click:()=>{this.handleOperation('review', params.row)}}}, '待复审')
                             ])
                         }
                     }
@@ -388,6 +395,11 @@ export default {
               setTimeout(() => {
                 this.$refs.warnComp.loadParams(status, row)
             }, 50);
+            } else if (status === 'review') {
+              this.isReviewDestoryComp = true
+              setTimeout(() => {
+                this.$refs.reviewComp.loadParams(status, row)
+            }, 50);
             }
         },
         // 刷新列表
@@ -420,6 +432,7 @@ export default {
             this.isDestoryComp = false
             this.isUserDestoryComp = false
             this.isWarnDestoryComp = false
+            this.isReviewDestoryComp = false
         },
         handleOperation(status, user_number) {
           this.load(status, user_number);
@@ -530,13 +543,23 @@ export default {
             loading.close();
           }
       },
-      // 待复审
-      async handlePendingReview() {
-       
-      },
+
+    // 选择
+    selectionChange(callbackList) {
+      const res = callbackList.reduce((prev, curr) => {
+        prev.push(curr);
+        return prev;
+      }, []);
+
+      this.selectionList = res;
+    },
+
       // 批量待复审
       handleBatchPendingReview() {
-
+        this.isReviewDestoryComp = true
+        setTimeout(() => {
+          this.$refs.reviewComp.loadParams('batchReview', this.selectionList)
+        }, 50);
       }
   },
     created() {
