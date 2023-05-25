@@ -25,6 +25,7 @@ import REQUEST from '@/request/index.js'
 import mixins from '@/utils/mixins.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
+import { numChangeThousand } from '@/utils/common.js'
 export default {
   mixins: [mixins],
   components: {
@@ -99,7 +100,7 @@ export default {
           {
             label: '流水范围',
             render: (h, params) => {
-              return h('span', params.row.start + '~' + params.row.end)
+              return h('span', numChangeThousand(params.row.start) + '~' + numChangeThousand(params.row.end))
             }
           },
           {

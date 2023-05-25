@@ -130,7 +130,6 @@
 				})
 			},
 			handleChange(row) {
-				
 				let isReturn = false;
 				row.configSource.map(res=>{
 					// if(res.rebate > 100){
@@ -144,7 +143,6 @@
 						return
 					}
 				})
-				
 				if(isReturn == true){
 					return
 				}

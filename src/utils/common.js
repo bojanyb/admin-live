@@ -315,3 +315,9 @@ export function exportTableData(list, nameList, title) {
   link.download = timeFormat(new Date(), 'YYYY-MM-DD', false) + title + '.xls';
   link.click();
 }
+
+// 数值千分位转换
+export function numChangeThousand(num){
+  let reg = /\d{1,3}(?=(\d{3})+$)/g;
+  return String(num).replace(reg, '$&,');
+}
