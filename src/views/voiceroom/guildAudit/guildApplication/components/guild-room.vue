@@ -55,7 +55,7 @@
 
 <script>
   // 引入api
-	import { addGuildRoom, rmGuildRoom } from '@/api/videoRoom.js'
+	import { addGuildRoom, rmGuildRoom,adminUserList } from '@/api/videoRoom.js'
   import { guildRooms } from '@/api/user.js'
   import { partyRoomTypes } from '@/api/house.js'
 	// 引入菜单组件
@@ -89,6 +89,32 @@
             clearable: true,
             options: this.roomTypeList
           },
+					{
+						name: 'room_number',
+						type: 'input',
+						value: '',
+						label: '房间ID',
+						isNum: true,
+						placeholder: '请输入房间ID'
+					},
+					{
+						name: 'guild_number',
+						type: 'input',
+						value: '',
+						label: '公会ID',
+						isNum: true,
+						placeholder: '请输入公会ID'
+					},
+          {
+						name: 'operator',
+						type: 'select',
+						value: '',
+						keyName: 'id',
+						optionLabel: 'username',
+						label: '公会运营',
+						placeholder: '请选择',
+						options: this.operatorList
+					},
           {
               name: 'dateTimeParams',
               type: 'datePicker',
@@ -108,22 +134,6 @@
                   }
               }
           },
-					{
-						name: 'room_number',
-						type: 'input',
-						value: '',
-						label: '房间ID',
-						isNum: true,
-						placeholder: '请输入房间ID'
-					},
-					{
-						name: 'guild_number',
-						type: 'input',
-						value: '',
-						label: '公会ID',
-						isNum: true,
-						placeholder: '请输入公会ID'
-					},
 				]
 			},
 			cfgs() {
@@ -142,6 +152,13 @@
 							label: '查询时间',
               width: '200px',
               prop: 'date',
+						},
+            {
+							label: '公会运营',
+							render: (h, params) => {
+								let data = this.operatorList.find(item => { return item.id === params.row.operator })
+								return h('span', data ? data.username : '未知')
+							}
 						},
 						{
 							label: '房间ID',
@@ -238,7 +255,8 @@
 				isAdd :false,
 				ruleForm : {
 					guild_number : "",
-					user_number : ""
+					user_number : "",
+          operatorList: [],
 				},
 				rules: {
 					guild_number: [
@@ -281,7 +299,8 @@
           start_date: start,
           end_date: end,
         };
-        this.getGenreList()
+        this.getGenreList();
+        this.getAdminUserList();
     },
 		methods: {
       // 昨日
@@ -366,7 +385,7 @@
 					page: params ? params.page : null,
 					room_number: s.room_number,
 					guild_number: s.guild_number,
-
+          operator: s.operator,
           room_type: s.room_type,
           start_date: Math.floor(s.start_date / 1000),
           end_date: Math.floor(s.end_date / 1000),
@@ -468,82 +487,88 @@
           this.$set(this, 'dateTimeParams', date)
       },
 
-    // 导出excel
-    async BatchRurn() {
-      let s = this.beforeSearch();
-      console.log(s, 's');
-      delete s.page;
-      s.is_all = "1";
-      const loading = this.$loading({
-        lock: true,
-        text: 'Loading',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      })
-      let res = await guildRooms(s);
-      try {
-         let arr = JSON.parse(JSON.stringify(res.data.list));
-          if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
-          arr = arr.map((item, index) => {
-            // let name = MAPDATA.RECHARGEHISTORYTYPELIST.find((a) => {
-            //   return a.value === item.purpose;
-            // });
-            // let status = MAPDATA.ORDERSTATUS.find((a) => {
-            //   return a.value.indexOf(item.status) !== -1;
-            // });
-          let params = {
-            create_time: timeFormat(
-              item.create_time,
-              "YYYY-MM-DD HH:mm:ss",
-              true
-            ),
-            date: item.date,
-            room_number: item.room_number,
-            room_type: item.room_type,
-            room_title: item.room_title,
-            flow: item.flow || "0",
-            guild_number: item.guild_number,
-            guild_nickname: item.guild_nickname,
-            first_join: item.first_join || "0",
-            stat_join: item.stat_join || "0",
-            times_join: item.times_join || "0",
-            stat_consume: item.stat_consume || "0",
-            rate: item.rate ? item.rate + "%" : "0%",
-            anchor: item.anchor || "0",
-            stat_anchor_time: item.stat_anchor_time || "0",
-            chat: item.chat || "0",
-            times_chat: item.times_chat || "0",
-          };
-          return params;
-        });
-        let nameList = [
-          "添加时间",
-          "时间",
-          "房间ID",
-          "房间类型",
-          "房间标题",
-          "房间流水",
-          "所属公会ID",
-          "所属公会名称",
-          "新用户进厅",
-          "进厅总人数",
+      // 导出excel
+      async BatchRurn() {
+        let s = this.beforeSearch();
+        delete s.page;
+        s.is_all = "1";
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        let res = await guildRooms(s);
+        try {
+          let arr = JSON.parse(JSON.stringify(res.data.list));
+            if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
+            arr = arr.map((item, index) => {
+            let operator = this.operatorList.find(it => { return it.id === item.operator });
+            let params = {
+              create_time: timeFormat(
+                item.create_time,
+                "YYYY-MM-DD HH:mm:ss",
+                true
+              ),
+              date: item.date,
+              operator: operator ? operator.username : "未知",
+              room_number: item.room_number,
+              room_type: item.room_type,
+              room_title: item.room_title,
+              flow: item.flow || "0",
+              guild_number: item.guild_number,
+              guild_nickname: item.guild_nickname,
+              first_join: item.first_join || "0",
+              stat_join: item.stat_join || "0",
+              times_join: item.times_join || "0",
+              stat_consume: item.stat_consume || "0",
+              rate: item.rate ? item.rate + "%" : "0%",
+              anchor: item.anchor || "0",
+              stat_anchor_time: item.stat_anchor_time || "0",
+              chat: item.chat || "0",
+              times_chat: item.times_chat || "0",
+            };
+            return params;
+          });
+          let nameList = [
+            "添加时间",
+            "时间",
+            "公会运营",
+            "房间ID",
+            "房间类型",
+            "房间标题",
+            "房间流水",
+            "所属公会ID",
+            "所属公会名称",
+            "新用户进厅",
+            "进厅总人数",
 
-          "进厅总人次",
-          "消费总人数",
-          "消费转化率",
-          "成员上麦总人数",
+            "进厅总人次",
+            "消费总人数",
+            "消费转化率",
+            "成员上麦总人数",
 
-          "成员上麦总时长",
-          "成员私聊用户人数",
-          "成员私聊用户次数",
-        ];
-        exportTableData(arr, nameList, "公会房间列表");
-        loading.close();
-      } catch (error) {
-        console.log(error);
-        loading.close();
-      }
-    },
+            "成员上麦总时长",
+            "成员私聊用户人数",
+            "成员私聊用户次数",
+          ];
+          exportTableData(arr, nameList, "公会房间列表");
+          loading.close();
+        } catch (error) {
+          console.log(error);
+          loading.close();
+        }
+      },
+      // 公会运营
+      async getAdminUserList(){
+          let res = await adminUserList();
+          if(res.code === 2000){
+            this.operatorList = res.data.list;
+            this.isAuth = res.data.is_auth;
+            let all = { username: '全部',id: ''}
+            this.operatorList.unshift(all);
+          }
+        }
 		}
 	}
 </script>
