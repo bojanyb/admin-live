@@ -55,8 +55,8 @@
 
 <script>
   // 引入api
-	import { addGuildRoom, rmGuildRoom,adminUserList } from '@/api/videoRoom.js'
-  import { guildRooms } from '@/api/user.js'
+	import {addGuildRoom, rmGuildRoom, guildRoomType,adminUserList} from '@/api/videoRoom.js'
+  import {guildRooms} from '@/api/user.js'
   import { partyRoomTypes } from '@/api/house.js'
 	// 引入菜单组件
   import SearchPanel from "@/components/SearchPanel/final.vue";
@@ -287,7 +287,8 @@
         },
         searchParams: {
           dateTimeParams: ["", ""]
-        }
+        },
+        operatorList: [],
 			}
 		},
     created() {
@@ -486,7 +487,6 @@
           } : {}
           this.$set(this, 'dateTimeParams', date)
       },
-
       // 导出excel
       async BatchRurn() {
         let s = this.beforeSearch();
@@ -541,13 +541,10 @@
             "所属公会ID",
             "所属公会名称",
             "新用户进厅",
-            "进厅总人数",
-
             "进厅总人次",
             "消费总人数",
             "消费转化率",
             "成员上麦总人数",
-
             "成员上麦总时长",
             "成员私聊用户人数",
             "成员私聊用户次数",
