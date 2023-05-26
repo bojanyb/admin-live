@@ -271,6 +271,10 @@ const CASHCHANNEL = [
     value: 5,
     name: '小猪支付宝',
     disabled: true
+  },
+  {
+    value: 6,
+    name: '工猫银行卡',
   }
 ]
 
