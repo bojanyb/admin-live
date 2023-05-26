@@ -499,9 +499,9 @@
             let operator = this.operatorList.find(it => { return it.id === item.operator })
           let params = {
             create_time: timeFormat(
-              item.create_time,
-              "YYYY-MM-DD HH:mm:ss",
-              true
+                item.create_time,
+                "YYYY-MM-DD HH:mm:ss",
+                true
             ),
             date: item.date,
             operator: operator ? operator.username: "未知",
