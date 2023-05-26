@@ -91,21 +91,25 @@ export default {
 					}
 				}]
 			},
-			timer: null
+			timer: []
 		};
+	},
+	mounted(){
+		this.getCurretnDayTimer();
 	},
 	methods: {
 		// 切换
 		selectChange(index) {
 			this.selectIndex = index
 			let start_time,end_time;
-			this.timer = null
+			this.timer = []
 			if(index === 1) {
 				let date = timeFormat(new Date().getTime() - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
 				this.timer = new Date(date)
 				start_time = Math.floor(new Date(date + ' 00:00:00').getTime() / 1000)
 				this.overviewDayDataFunc(start_time)
 			} else {
+				this.getCurretnDayTimer();
 				this.getRoomWalletInfo(start_time,end_time)
 			}
 		},
@@ -131,6 +135,22 @@ export default {
 		// 日终数据
 		overviewDayDataFunc(start_time, end_time) {
 			this.$refs.item.overviewDayDataFunc(start_time, end_time)
+		},
+		// 当天时间
+		getCurretnDayTimer(){
+			let data = new Date()
+			let y = data.getFullYear()
+			let m = data.getMonth()
+			let day = data.getDate()
+			if(m + 1 <= 12) {
+				m = m + 1
+			} else {
+				m = 1
+			}
+			let start = new Date(y + '-' + m + '-' + day + ' 00:00:00')
+			let end = new Date(y + '-' + m + '-' + day + ' 23:59:59')
+			let timer = [start,end]
+			this.timer = timer;
 		}
 	}
 }
