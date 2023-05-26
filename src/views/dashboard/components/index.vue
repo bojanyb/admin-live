@@ -26,6 +26,7 @@
 import { overview, overviewDayData } from '@/api/videoRoom'
 // 引入数据
 import DATA from './index.js'
+import { timeFormat } from '@/utils/common'
 
 export default {
     data() {
@@ -36,6 +37,12 @@ export default {
     },
     methods: {
         async getRoomWalletInfo(start_time = '',end_time = '') {
+            if(start_time == '' && end_time ==''){
+                let date = new Date()
+                let currentDate = timeFormat(date, 'YYYY-MM-DD', false)
+                start_time = Date.parse(currentDate + ' 00:00:00') / 1000
+                end_time = Date.parse(currentDate + ' 23:59:59') / 1000
+            }
 			var params = {
 				start_time,
                 end_time
