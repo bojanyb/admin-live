@@ -49,7 +49,7 @@
     <!-- 批量查单 -->
     <el-dialog title="批量查询反馈" width="30%" :visible.sync="batchDialogVisible">
       <div style="padding: 10px;">
-        共{{ batchResultData && batchResultData.length }}条数据查询出已支付成功
+        查询出共{{ batchResultData && batchResultData.length }}条数据已支付成功
       </div>
       <div style="padding: 10px;" v-if="batchResultData && batchResultData.length">
       <div>详情：</div>
