@@ -37,6 +37,7 @@
 import {
   guildRoomType,
   getTencentLabel,
+  getCheckOperator
 } from "@/api/videoRoom.js";
 // 引入api
 import {
@@ -92,7 +93,9 @@ export default {
             tabIndex: '0',
             roomTypeList: [], // 房间类型
             options: [],
-            selectionList: []
+            selectionList: [],
+            checkOperatorList: [],
+            dateCheckTimeParams: {}
         };
     },
     computed: {
@@ -155,7 +158,7 @@ export default {
                 //     options: MAPDATA.RISKSYSTEMTYPELIST
                 // },
                 {
-                  name: 'room_category_id',
+                  name: 'status',
                   type: 'select',
                   value: '',
                   keyName: 'value',
@@ -166,14 +169,18 @@ export default {
                   options: MAPDATA.REVIEWSTATUSLIST
                 },
                 {
-                    name: 'keywords',
-                    type: 'input',
-                    value: '',
-                    label: '复审操作审核人',
-                    placeholder: '请输入复审操作审核人'
+                  name: 'operator_id',
+                  type: 'select',
+                  value: '',
+                  keyName: 'value',
+                  optionLabel: 'name',
+                  label: '复审操作审核人',
+                  placeholder: '请选择',
+                  clearable: true,
+                  options: this.checkOperatorList
                 },
                 {
-                    name: 'dateTimeParams',
+                    name: 'dateCheckTimeParams',
                     type: 'datePicker',
                     dateType: 'datetimerange',
                     format: "yyyy-MM-dd HH:mm:ss",
@@ -181,11 +188,11 @@ export default {
                     value: '',
                     handler: {
                         change: v => {
-                            this.emptyDateTime()
-                            this.setDateTime(v)
+                            this.emptyCheckDateTime()
+                            this.setCheckDateTime(v)
                         },
                         selectChange: (v, key) => {
-                            this.emptyDateTime()
+                            this.emptyCheckDateTime()
                         }
                     }
                 },
@@ -221,20 +228,23 @@ export default {
                         label: '创建时间',
                         width: '160px',
                         render: (h, params) => {
-                            return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                            return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
                         label: '复审操作时间',
                         width: '160px',
                         render: (h, params) => {
-                            return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                            return h('span', params.row.operate_start_time ? timeFormat(params.row.operate_start_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
                         label: '复审人',
-                        prop: 'room_number',
+                        prop: 'operator',
                         minWidth: '90px',
+                        render: (h, params) => {
+                            return h('span', params.row.operator ? params.row.operator : '--')
+                        }
                     },
                     {
                         label: '用户',
@@ -311,9 +321,8 @@ export default {
                         label: '腾讯审核结果',
                         minWidth: '130px',
                         render: (h, params) => {
-                            return h('div', [
-                                h('div', `${params.row.label || '--'}/${params.row.sub_label || '--'}`),
-                            ])
+                            let data = MAPDATA.REVIEWSTATUSLIST.find(item => { return item.value === params.row.status })
+                            return h('span', data ? data.name : '无')
                         }
                     },
                     {
@@ -347,7 +356,13 @@ export default {
                             return h('div', [
                                 h('el-button', { props: { type: 'warning'}, on: {click:()=>{this.handleOperation('warn', params.row)}}}, '警告'),
                                 h('el-button', { props: { type: 'danger' }, on: { click: () => { this.handleOperation('add', params.row) } } }, '封禁'),
-                                h('el-button', { props: { type: 'success'}, on: {click:()=>{this.handleOperation('review', params.row)}}}, '待复审')
+                              h('el-button', {
+                                props: { type: 'success' },
+                                style: {
+                                   display: params.row.status === 1 ? 'unset' : 'none'
+                                },
+                                on: { click: () => { this.handleOperation('review', params.row) } }
+                              }, '待复审')
                             ])
                         }
                     }
@@ -368,7 +383,7 @@ export default {
     methods: {
         // 配置参数
         beforeSearch(params) {
-            let s = { ...this.searchParams, ...this.dateTimeParams }
+            let s = { ...this.searchParams, ...this.dateTimeParams, ...this.dateCheckTimeParams }
             return {
                 page: params ? params.page : null,
                 pagesize: params ? params.size : null,
@@ -380,8 +395,11 @@ export default {
                 keywords: s.keywords,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
+                operate_start_time: s.operate_start_time ? Math.floor(s.operate_start_time / 1000) : '',
+                operate_end_time: s.operate_end_time ? Math.floor(s.operate_end_time / 1000) : '',
                 room_number: s.room_number,
-                user_number: s.user_number
+                user_number: s.user_number,
+                status: s.status
             }
         },
         load(status, row) {
@@ -418,10 +436,23 @@ export default {
         emptyDateTime() {
             this.dateTimeParams = {}
         },
+        // 清空日期选择
+        emptyCheckDateTime() {
+            this.dateCheckTimeParams = {}
+        },
+        // 设置时间段
+        setCheckDateTime(arr) {
+            const date = arr ? {
+                operate_start_time: arr[0],
+                operate_end_time: arr[1]
+            } : {}
+            this.$set(this, 'dateCheckTimeParams', date)
+        },
         // 重置
         reset() {
             this.searchParams = {}
             this.dateTimeParams = {}
+            this.dateCheckTimeParams = {}
             this.getList()
         },
         // 查询
@@ -449,6 +480,23 @@ export default {
               prev.push({
                 name: curr.name,
                 value: curr.id,
+              });
+              return prev;
+            }, []) || [];
+        }
+      },
+      // 获取复审操作人
+      async getCheckOperatorList() {
+        const response = await getCheckOperator();
+        if (response.code + "" === "2000") {
+          const tempArr = Array.from(
+            Array.isArray(response.data.list) ? response.data.list : []
+          );
+          this.checkOperatorList =
+            tempArr.reduce((prev, curr) => {
+              prev.push({
+                name: curr.operator,
+                value: curr.operator_id,
               });
               return prev;
             }, []) || [];

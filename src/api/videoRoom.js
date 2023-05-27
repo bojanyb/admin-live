@@ -620,10 +620,19 @@ export function getTencentLabel(data) {
   })
 }
 
-// 处罚举报 - 风险类型
-export function updateReview(data) {
+// 处罚举报 - 复审操作
+export function checkAudioStreamDefyList(data) {
   return request({
-    url: api.risk.updateReview,
+    url: api.risk.checkAudioStreamDefyList,
+    method: 'post',
+    data
+  })
+}
+
+// 处罚举报 - 审核人员
+export function getCheckOperator(data) {
+  return request({
+    url: api.risk.getCheckOperator,
     method: 'post',
     data
   })

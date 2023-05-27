@@ -8,7 +8,7 @@
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="修改审核状态">
-                <el-select v-model="ruleForm.status" placeholder="请选择审核状态">
+                <el-select v-model="ruleForm.type" placeholder="请选择审核状态">
                   <el-option label="待复审" :value="1"></el-option>
                   <el-option label="通过" :value="2"></el-option>
                   <el-option label="误杀" :value="3"></el-option>
@@ -25,17 +25,17 @@
 
 <script>
 // 引入api
-import { updateReview } from '@/api/videoRoom.js';
+import { checkAudioStreamDefyList } from '@/api/videoRoom.js';
 export default {
     data() {
         return {
             dialogVisible: false,
             ruleForm: {
-                status: '',
+                type: '',
             },
             rules: {
-                status: [
-                    { required: true, message: '请输入消息内容', trigger: 'change' },
+                type: [
+                    { required: true, message: '请选择审核状态', trigger: 'change' },
                 ]
             }
         };
@@ -67,7 +67,7 @@ export default {
             this.$refs[formName].validate(async (valid) => {
               if (valid) {
                   console.log(this.ruleForm);
-                    let res = await updateReview({ status: this.ruleForm.status, ids: this.ruleForm.ids })
+                    let res = await checkAudioStreamDefyList({ type: this.ruleForm.type, id: this.ruleForm.ids })
                     if(res.code === 2000) {
                         this.dialogVisible = false
                         this.$success('添加成功')
