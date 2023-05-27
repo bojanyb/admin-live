@@ -255,7 +255,8 @@
 				isAdd :false,
 				ruleForm : {
 					guild_number : "",
-					user_number : ""
+					user_number : "",
+          operatorList: [],
 				},
 				rules: {
 					guild_number: [
@@ -569,8 +570,8 @@
           let all = { username: '全部',id: ''}
           this.operatorList.unshift(all);
         }
-      }
 		}
+  }
 	}
 </script>
 <style lang="scss">
