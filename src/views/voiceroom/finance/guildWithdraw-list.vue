@@ -30,15 +30,32 @@
         @today="today"
         @BatchRurn="BatchRurn"
         @beforeYesterday="beforeYesterday"
+
+        :show-custom="true"
+        custom-name="批量查单"
+        @custom="handleBatchQurtyOrder"
       ></SearchPanel>
     </div>
     <div class="tableList">
       <tableList
         :cfgs="cfgs"
         ref="tableList"
+        @selectionChange="selectionChange"
         @saleAmunt="saleAmunt"
+        layout="total, sizes, prev, pager, next, jumper"
       ></tableList>
     </div>
+
+    <!-- 批量查单 -->
+    <el-dialog title="批量查询反馈" width="30%" :visible.sync="batchDialogVisible">
+      <div style="padding: 10px;">
+        共{{ batchResultData && batchResultData.length }}条数据查询出已支付成功
+      </div>
+      <div style="padding: 10px;" v-if="batchResultData && batchResultData.length">
+      <div>详情：</div>
+        <div v-for="(item, index) in batchResultData" :key="index"><span>{{ item.trade_no }}</span></div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -102,6 +119,11 @@ export default {
           label: "充值状态",
           placeholder: "请选择",
           options: MAPDATA.ORDERSTATUS,
+          handler: {
+            change: (val) => {
+              this.topupStatus = val;
+           }
+          }
         },
         {
           name: "purpose",
@@ -181,6 +203,10 @@ export default {
       return {
         vm: this,
         url: REQUEST.diamondRecharge.list,
+        search: {
+          sizes: [10, 30, 50, 100]
+        },
+        isShowCheckbox: true,
         columns: [
           {
             label: "订单时间",
@@ -408,6 +434,10 @@ export default {
       },
       guildTypeList: [],
       merchantIdList: [],
+      list: [],
+      topupStatus: null,
+      batchDialogVisible: false,
+      batchResultDataData: []
     };
   },
   methods: {
@@ -480,6 +510,7 @@ export default {
       let s = { ...this.searchParams, ...this.dateTimeParams };
       return {
         page: params ? params.page : null,
+        pagesize: params ? params.size : null,
         user_number: s.user_number,
         channel: s.channel,
         status: s.status,
@@ -664,7 +695,54 @@ export default {
         message: response.data && response.data.list[0].msg,
       });
       this.getList();
-    }
+    },
+    // 选中
+    selectionChange(val) {
+      this.list = val
+    },
+    // 批量查单
+    handleBatchQurtyOrder() {
+
+      if (this.topupStatus + '' !== '3') {
+        this.$warning('未支付状态才能批量查单')
+        return
+      }
+
+      if (!(this.list && this.list.length)) {
+        this.$warning('请至少选择一条数据')
+        return
+      }
+
+      const result = this.list.reduce((prev, curr) => {
+        prev.push(curr.trade_no)
+        return prev;
+      }, []).join(",");
+
+      const loading = this.$loading({
+         lock: true,
+         text: 'Loading',
+         spinner: 'el-icon-loading',
+         background: 'rgba(0, 0, 0, 0.7)'
+       })
+
+        queryPayStatus({ trade_no: result }).then(response => {
+          if (response.code + "" === "2000") {
+            this.batchDialogVisible = true;
+            this.batchResultData = response.data && response.data.list.reduce((prev, curr) => {
+              if (curr.status + "" === "1") {
+                prev.push(curr)
+              }
+              return prev;
+            }, [])
+            this.getList();
+            loading.close();
+          }
+        }).catch(error => {
+          console.log(error);
+          loading.close();
+        })
+
+    },
   },
   created() {
     let time = new Date();
