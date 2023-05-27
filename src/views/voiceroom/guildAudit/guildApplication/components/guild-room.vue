@@ -89,6 +89,32 @@
             clearable: true,
             options: this.roomTypeList
           },
+					{
+						name: 'room_number',
+						type: 'input',
+						value: '',
+						label: '房间ID',
+						isNum: true,
+						placeholder: '请输入房间ID'
+					},
+					{
+						name: 'guild_number',
+						type: 'input',
+						value: '',
+						label: '公会ID',
+						isNum: true,
+						placeholder: '请输入公会ID'
+					},
+          {
+						name: 'operator',
+						type: 'select',
+						value: '',
+						keyName: 'id',
+						optionLabel: 'username',
+						label: '公会运营',
+						placeholder: '请选择',
+						options: this.operatorList
+					},
           {
               name: 'dateTimeParams',
               type: 'datePicker',
@@ -108,22 +134,6 @@
                   }
               }
           },
-					{
-						name: 'room_number',
-						type: 'input',
-						value: '',
-						label: '房间ID',
-						isNum: true,
-						placeholder: '请输入房间ID'
-					},
-					{
-						name: 'guild_number',
-						type: 'input',
-						value: '',
-						label: '公会ID',
-						isNum: true,
-						placeholder: '请输入公会ID'
-					},
 				]
 			},
 			cfgs() {
@@ -142,6 +152,13 @@
 							label: '查询时间',
               width: '200px',
               prop: 'date',
+						},
+            {
+							label: '公会运营',
+							render: (h, params) => {
+								let data = this.operatorList.find(item => { return item.id === params.row.operator })
+								return h('span', data ? data.username : '未知')
+							}
 						},
 						{
 							label: '房间ID',
@@ -269,7 +286,8 @@
         },
         searchParams: {
           dateTimeParams: ["", ""]
-        }
+        },
+        operatorList: [],
 			}
 		},
     created() {
@@ -281,7 +299,8 @@
           start_date: start,
           end_date: end,
         };
-        this.getGenreList()
+        this.getGenreList();
+        this.getAdminUserList();
     },
 		methods: {
       // 昨日
@@ -366,7 +385,7 @@
 					page: params ? params.page : null,
 					room_number: s.room_number,
 					guild_number: s.guild_number,
-
+          operator: s.operator,
           room_type: s.room_type,
           start_date: Math.floor(s.start_date / 1000),
           end_date: Math.floor(s.end_date / 1000),
@@ -485,19 +504,15 @@
          let arr = JSON.parse(JSON.stringify(res.data.list));
           if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
           arr = arr.map((item, index) => {
-            // let name = MAPDATA.RECHARGEHISTORYTYPELIST.find((a) => {
-            //   return a.value === item.purpose;
-            // });
-            // let status = MAPDATA.ORDERSTATUS.find((a) => {
-            //   return a.value.indexOf(item.status) !== -1;
-            // });
+            let operator = this.operatorList.find(it => { return it.id === item.operator })
           let params = {
             create_time: timeFormat(
-              item.create_time,
-              "YYYY-MM-DD HH:mm:ss",
-              true
+                item.create_time,
+                "YYYY-MM-DD HH:mm:ss",
+                true
             ),
             date: item.date,
+            operator: operator ? operator.username: "未知",
             room_number: item.room_number,
             room_type: item.room_type,
             room_title: item.room_title,
@@ -519,6 +534,7 @@
         let nameList = [
           "添加时间",
           "时间",
+          "公会运营",
           "房间ID",
           "房间类型",
           "房间标题",
@@ -544,6 +560,16 @@
         loading.close();
       }
     },
+    // 公会运营
+    async getAdminUserList(){
+        let res = await adminUserList();
+        if(res.code === 2000){
+          this.operatorList = res.data.list;
+          this.isAuth = res.data.is_auth;
+          let all = { username: '全部',id: ''}
+          this.operatorList.unshift(all);
+        }
+      }
 		}
 	}
 </script>
