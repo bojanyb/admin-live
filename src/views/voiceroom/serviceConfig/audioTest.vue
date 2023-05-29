@@ -404,7 +404,8 @@ export default {
                 operate_end_time: s.operate_end_time ? Math.floor(s.operate_end_time / 1000) : '',
                 room_number: s.room_number,
                 user_number: s.user_number,
-                status: s.status
+                status: s.status,
+                operator_id: s.operator_id
             }
         },
         load(status, row) {
