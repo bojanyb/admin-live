@@ -125,6 +125,28 @@ export default {
                     placeholder: '请输入关键词'
                 },
                 {
+                  name: 'status',
+                  type: 'select',
+                  value: '',
+                  keyName: 'value',
+                  optionLabel: 'name',
+                  label: '待复审',
+                  placeholder: '请选择',
+                  clearable: true,
+                  options: MAPDATA.REVIEWSTATUSLIST
+                },
+                {
+                  name: 'operator_id',
+                  type: 'select',
+                  value: '',
+                  keyName: 'value',
+                  optionLabel: 'name',
+                  label: '复审操作审核人',
+                  placeholder: '请选择',
+                  clearable: true,
+                  options: this.checkOperatorList
+                },
+                {
                     name: 'risk_type',
                     type: 'cascader',
                     value: null,
@@ -157,28 +179,6 @@ export default {
                 //     placeholder: '请选择',
                 //     options: MAPDATA.RISKSYSTEMTYPELIST
                 // },
-                {
-                  name: 'status',
-                  type: 'select',
-                  value: '',
-                  keyName: 'value',
-                  optionLabel: 'name',
-                  label: '待复审',
-                  placeholder: '请选择',
-                  clearable: true,
-                  options: MAPDATA.REVIEWSTATUSLIST
-                },
-                {
-                  name: 'operator_id',
-                  type: 'select',
-                  value: '',
-                  keyName: 'value',
-                  optionLabel: 'name',
-                  label: '复审操作审核人',
-                  placeholder: '请选择',
-                  clearable: true,
-                  options: this.checkOperatorList
-                },
                 {
                     name: 'dateCheckTimeParams',
                     type: 'datePicker',
@@ -235,7 +235,7 @@ export default {
                         label: '复审操作时间',
                         width: '160px',
                         render: (h, params) => {
-                            return h('span', params.row.operate_start_time ? timeFormat(params.row.operate_start_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
+                            return h('span', params.row.operator_time ? timeFormat(params.row.operator_time, 'YYYY-MM-DD HH:mm:ss', true) : '--')
                         }
                     },
                     {
@@ -554,24 +554,33 @@ export default {
                 return v.value === item.room_category_id;
               });
 
+
+              let status = MAPDATA.REVIEWSTATUSLIST.find((v) => {
+                return v.value === item.status;
+              });
+
               let params = {
                 start_time: timeFormat(item.start_time, 'YYYY-MM-DD HH:mm:ss', true) || '--',
+                operator_time: timeFormat(item.operator_time, 'YYYY-MM-DD HH:mm:ss', true) || '--',
+                operator: item.operator || '--',
                 user_number: item.user_number || '--',
-                room_category_id: room_category_id.name || '--',
+                room_category_id: room_category_id ? room_category_id.name : '--',
                 user_rank: `用户等级: ${item.user_rank}; 魅力等级: ${item.live_rank}`,
                 guild_name: item.guild_name || '--',
                 punish_status: item.punish_status,
                 sort_number: item.sort_number || '--',
                 room_number: item.room_number || '--',
                 label: `${item.label}/${item.sub_label}`,
-                label1: `${item.label}/${item.sub_label}`,
+                label1: status ? status.name : '--',
                 content: item.content || '--',
                 keywords: item.keywords || '--',
               };
               return params;
             });
             let nameList = [
-              "时间",
+              "创建时间",
+              "复审操作时间",
+              "复审人",
               "用户ID",
               "房间类型",
               "用户等级",
