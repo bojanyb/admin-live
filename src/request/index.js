@@ -417,6 +417,8 @@ const request = {
     // 风控检测
     risk: {
         audioStreamDefyList: `${HTTPHEADER}/Room/audioStreamDefyList`, // 音频违规日志
+        checkAudioStreamDefyList: `${HTTPHEADER}/Room/checkAudioStreamDefyList`, // 复审操作
+        getCheckOperator: `${HTTPHEADER}/Room/getCheckOperator`, // 审核人员
         roomCoverCheckList: `${HTTPHEADER}/Room/roomCoverCheckList`, // 封面审核列表
         coverCheck: `${HTTPHEADER}/Room/coverCheck`, // 封面审核
         UserPunish: `${HTTPHEADER}/UserPunish`, // 用户处罚列表
