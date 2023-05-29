@@ -9,7 +9,6 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="修改审核状态">
                 <el-select v-model="ruleForm.type" placeholder="请选择审核状态">
-                  <el-option label="待复审" :value="1"></el-option>
                   <el-option label="通过" :value="2"></el-option>
                   <el-option label="误杀" :value="3"></el-option>
                 </el-select>

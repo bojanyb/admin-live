@@ -121,7 +121,7 @@ export default {
                     name: 'keywords',
                     type: 'input',
                     value: '',
-                    label: '音转文关键词',
+                    label: '关键词',
                     placeholder: '请输入关键词'
                 },
                 {
@@ -318,12 +318,17 @@ export default {
                         }
                     },
                     {
-                        label: '腾讯审核结果',
+                        label: '复审结果',
                         minWidth: '130px',
                         render: (h, params) => {
                             let data = MAPDATA.REVIEWSTATUSLIST.find(item => { return item.value === params.row.status })
                             return h('span', data ? data.name : '无')
                         }
+                    },
+                    {
+                        label: '腾讯审核结果',
+                        minWidth: '130px',
+                        prop: 'suggestion',
                     },
                     {
                         label: '音频',
@@ -490,7 +495,7 @@ export default {
         const response = await getCheckOperator();
         if (response.code + "" === "2000") {
           const tempArr = Array.from(
-            Array.isArray(response.data.list) ? response.data.list : []
+            Array.isArray(response.data) ? response.data : []
           );
           this.checkOperatorList =
             tempArr.reduce((prev, curr) => {
@@ -564,6 +569,7 @@ export default {
                 operator_time: timeFormat(item.operator_time, 'YYYY-MM-DD HH:mm:ss', true) || '--',
                 operator: item.operator || '--',
                 user_number: item.user_number || '--',
+                nickname: item.nickname || '--',
                 room_category_id: room_category_id ? room_category_id.name : '--',
                 user_rank: `用户等级: ${item.user_rank}; 魅力等级: ${item.live_rank}`,
                 guild_name: item.guild_name || '--',
@@ -572,6 +578,7 @@ export default {
                 room_number: item.room_number || '--',
                 label: `${item.label}/${item.sub_label}`,
                 label1: status ? status.name : '--',
+                suggestion: item.suggestion || '--',
                 content: item.content || '--',
                 keywords: item.keywords || '--',
               };
@@ -582,6 +589,7 @@ export default {
               "复审操作时间",
               "复审人",
               "用户ID",
+              "用户昵称",
               "房间类型",
               "用户等级",
               "用户所属公会",
@@ -589,6 +597,7 @@ export default {
               "用户麦位",
               "房间ID",
               "风险类型",
+              "复审结果",
               "腾讯审核结果",
               "音转文",
               "音转文关键词",
@@ -622,6 +631,7 @@ export default {
     created() {
       this.getRoomTypeList()
       this.getRiskLabel()
+      this.getCheckOperatorList()
     },
 }
 </script>
