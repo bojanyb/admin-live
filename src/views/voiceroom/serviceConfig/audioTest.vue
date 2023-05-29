@@ -540,9 +540,10 @@ export default {
       },
       // 导出
       async handleExport() {
-         let s = this.beforeSearch();
-          delete s.page;
-          s.is_all = "1";
+        let s = this.beforeSearch();
+        const search = this.$refs.tableList.search;
+        s.page = search ? search.page : null;
+        s.pagesize = search ? search.size : null;
           const loading = this.$loading({
             lock: true,
             text: 'Loading',
