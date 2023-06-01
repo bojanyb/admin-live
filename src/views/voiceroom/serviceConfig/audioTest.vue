@@ -591,7 +591,7 @@ export default {
                         user_rank: `用户等级: ${item.user_rank}; 魅力等级: ${item.live_rank}`,
                         guild_name: item.guild_name || '--',
                         punish_status: item.punish_status,
-                        sort_number: item.sort_number || '--',
+                        sort_number: item.sort_number || '0',
                         room_number: item.room_number || '--',
                         label: `${item.label}/${item.sub_label}`,
                         label1: status ? status.name : '--',
