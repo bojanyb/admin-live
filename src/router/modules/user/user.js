@@ -8,7 +8,7 @@ const userRouter = {
 	name: 'user',
 	meta: {
 		title: '用户管理',
-		icon: 'people'
+    icon: 'el-icon-user-solid'
 	},
 	children: [{
 			path: 'user-list',
