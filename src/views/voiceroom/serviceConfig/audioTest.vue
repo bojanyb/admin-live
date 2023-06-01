@@ -525,6 +525,9 @@ export default {
         },
         // 关键词高亮
         replaceReplyMethod(value, keywords) {
+            if(typeof(keywords) == "string"){
+                keywords = JSON.parse(keywords);
+            }
             if (keywords && keywords.length) {
                 let replyList = value.split("");
                 keywords.forEach(item => {
