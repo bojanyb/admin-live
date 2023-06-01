@@ -73,16 +73,16 @@
 							prop: 'guild_number'
 						},
 						{
-							label: '所属公会昵称',
-							prop: 'guild_nickname'
-						},
-						{
 							label: '现有类型',
 							prop: 'old_genre_name'
 						},
 						{
 							label: '申请类型',
 							prop: 'new_genre_name'
+						},
+						{
+							label: '所属公会昵称',
+							prop: 'guild_nickname'
 						},
 						{
 							label: '审核状态',

@@ -136,6 +136,13 @@
 								return h('span', data ? data.username : '未知')
 							}
 						},
+            {
+							label: '公司主体',
+              prop: 'company',
+							render: (h, params) => {
+								return h('span', params.row.company ? params.row.company : '--')
+							}
+						},
 						{
 							label: '主播人数',
               prop: 'user_count',

@@ -54,9 +54,8 @@
 </template>
 
 <script>
-	import {addGuildRoom, rmGuildRoom, guildRoomType,adminUserList} from '@/api/videoRoom.js'
-  import {guildRooms} from '@/api/user.js'
-  import { partyRoomTypes } from '@/api/house.js'
+	import {addGuildRoom, rmGuildRoom, guildRoomType} from '@/api/videoRoom.js'
+  	import {guildRooms} from '@/api/user.js'
 	// 引入菜单组件
   import SearchPanel from "@/components/SearchPanel/final.vue";
 	// 引入列表组件
@@ -77,43 +76,17 @@
 		computed: {
 			forms() {
 				return [
-          {
-            name: 'room_type',
-            type: 'select',
-            value: '',
-            keyName: 'value',
-            optionLabel: 'name',
-            label: '房间类型',
-            placeholder: '请选择',
-            clearable: true,
-            options: this.roomTypeList
-          },
-					{
-						name: 'room_number',
-						type: 'input',
-						value: '',
-						label: '房间ID',
-						isNum: true,
-						placeholder: '请输入房间ID'
-					},
-					{
-						name: 'guild_number',
-						type: 'input',
-						value: '',
-						label: '公会ID',
-						isNum: true,
-						placeholder: '请输入公会ID'
-					},
-          {
-						name: 'operator',
-						type: 'select',
-						value: '',
-						keyName: 'id',
-						optionLabel: 'username',
-						label: '公会运营',
-						placeholder: '请选择',
-						options: this.operatorList
-					},
+          // {
+          //   name: 'room_type',
+          //   type: 'select',
+          //   value: '',
+          //   keyName: 'value',
+          //   optionLabel: 'name',
+          //   label: '房间类型',
+          //   placeholder: '请选择',
+          //   clearable: true,
+          //   options: this.roomTypeList
+          // },
           {
               name: 'dateTimeParams',
               type: 'datePicker',
@@ -133,12 +106,28 @@
                   }
               }
           },
+					{
+						name: 'room_number',
+						type: 'input',
+						value: '',
+						label: '房间ID',
+						isNum: true,
+						placeholder: '请输入房间ID'
+					},
+					// {
+					// 	name: 'guild_number',
+					// 	type: 'input',
+					// 	value: '',
+					// 	label: '公会ID',
+					// 	isNum: true,
+					// 	placeholder: '请输入公会ID'
+					// },
 				]
 			},
 			cfgs() {
 				return {
 					vm: this,
-					url: REQUEST.guild.guildRooms,
+					url: REQUEST.accompany.shouRooms,
 					columns: [
 						{
 							label: '创建时间',
@@ -152,13 +141,6 @@
               width: '200px',
               prop: 'date',
 						},
-            {
-							label: '公会运营',
-							render: (h, params) => {
-								let data = this.operatorList.find(item => { return item.id === params.row.operator })
-								return h('span', data ? data.username : '未知')
-							}
-						},
 						{
 							label: '房间ID',
 							prop: 'room_number'
@@ -170,91 +152,81 @@
 						{
 							label: '房间标题',
               width: '120px',
-              showOverFlow: true,
 							prop: 'room_title'
 						},
 						{
 							label: '房间流水',
 							prop: 'flow'
 						},
-						{
-							label: '所属公会ID',
-              width: '100px',
-							prop: 'guild_number'
-						},
-						{
-							label: '所属公会名称',
-              minWidth: '120px',
-              showOverFlow: true,
-							prop: 'guild_nickname'
-						},
-						{
-							label: '新用户进厅',
-              minWidth: '100px',
-							prop: 'first_join'
-						},
-						{
-							label: '进厅总人数',
-              minWidth: '100px',
-							prop: 'stat_join'
-						},
-						{
-							label: '进厅总人次',
-              minWidth: '100px',
-							prop: 'times_join'
-						},
-						{
-							label: '消费总人数',
-              minWidth: '100px',
-							prop: 'stat_consume'
-						},
-						{
-							label: '消费转化率',
-              minWidth: '100px',
-							prop: 'rate',
-              render: (h, params) => {
-                  return h('span', params.row.rate + '%')
-              }
-						},
-						{
-							label: '成员上麦总人数',
-              minWidth: '120px',
-							prop: 'anchor'
-						},
-						{
-							label: '成员上麦总时长',
-              minWidth: '120px',
-              prop: 'stat_anchor_time',
-              render: (h, params) => {
-                  let allNum = 0;
-                  if(params.row.stat_anchor_time.indexOf("小时") > -1){
-                    let hourNum = params.row.stat_anchor_time.split("小时")[0] * 60;
-                    let minuteNum = params.row.stat_anchor_time.split("小时")[1] ? params.row.stat_anchor_time.split("小时")[1].split("分")[0] : 0;
-                    allNum = Number(hourNum) + Number(minuteNum);
-                  }else if(params.row.stat_anchor_time.indexOf("分") > -1){
-                    allNum = params.row.stat_anchor_time.split("分")[0]
-                  }
-                  return h('span',  allNum + '分钟')
-              }
-						},
-						{
-							label: '成员私聊用户人数',
-              minWidth: '120px',
-							prop: 'chat'
-						},
-						{
-							label: '成员私聊用户次数',
-              minWidth: '120px',
-							prop: 'times_chat'
-						},
-						{
-							label: '操作',
-							render: (h, params) => {
-								return h('div', [
-									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.del(params.row)}}},'移除')
-								])
-							}
-						}
+						// {
+						// 	label: '所属公会ID',
+            //   width: '100px',
+						// 	prop: 'guild_number'
+						// },
+						// {
+						// 	label: '所属公会名称',
+            //   minWidth: '120px',
+						// 	prop: 'guild_nickname'
+						// },
+						// {
+						// 	label: '新用户进厅',
+            //   minWidth: '100px',
+						// 	prop: 'first_join'
+						// },
+						// {
+						// 	label: '进厅总人数',
+            //   minWidth: '100px',
+						// 	prop: 'stat_join'
+						// },
+						// {
+						// 	label: '进厅总人次',
+            //   minWidth: '100px',
+						// 	prop: 'times_join'
+						// },
+						// {
+						// 	label: '消费总人数',
+            //   minWidth: '100px',
+						// 	prop: 'stat_consume'
+						// },
+						// {
+						// 	label: '消费转化率',
+            //   minWidth: '100px',
+						// 	prop: 'rate',
+            //   render: (h, params) => {
+            //       return h('span', params.row.rate + '%')
+            //   }
+						// },
+						// {
+						// 	label: '成员上麦总人数',
+            //   minWidth: '120px',
+						// 	prop: 'anchor'
+						// },
+						// {
+						// 	label: '成员上麦总时长',
+            //   minWidth: '120px',
+            //   prop: 'stat_anchor_time',
+            //   render: (h, params) => {
+            //       return h('span', params.row.stat_anchor_time || '0')
+            //   }
+						// },
+						// {
+						// 	label: '成员私聊用户人数',
+            //   minWidth: '120px',
+						// 	prop: 'chat'
+						// },
+						// {
+						// 	label: '成员私聊用户次数',
+            //   minWidth: '120px',
+						// 	prop: 'times_chat'
+						// },
+						// {
+						// 	label: '操作',
+						// 	render: (h, params) => {
+						// 		return h('div', [
+						// 			h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.del(params.row)}}},'移除')
+						// 		])
+						// 	}
+						// }
 					]
 				}
 			},
@@ -295,8 +267,7 @@
         },
         searchParams: {
           dateTimeParams: ["", ""]
-        },
-        operatorList: [],
+        }
 			}
 		},
     created() {
@@ -308,8 +279,7 @@
           start_date: start,
           end_date: end,
         };
-        this.getGenreList();
-        this.getAdminUserList();
+        this.getGenreList()
     },
 		methods: {
       // 昨日
@@ -394,7 +364,7 @@
 					page: params ? params.page : null,
 					room_number: s.room_number,
 					guild_number: s.guild_number,
-          operator: s.operator,
+
           room_type: s.room_type,
           start_date: Math.floor(s.start_date / 1000),
           end_date: Math.floor(s.end_date / 1000),
@@ -460,7 +430,7 @@
 			},
       // 获取房间类型
       async getGenreList(){
-        const response = await partyRoomTypes({ belong: 2 })
+        const response = await guildRoomType({ belong: 2 })
         if(response.code == 2000){
           const tempArr = Array.from(
             Array.isArray(response.data.list) ? response.data.list : []
@@ -472,12 +442,6 @@
             })
             return prev
           }, []) || []
-
-          this.roomTypeList.unshift({
-            name: '全部',
-            value: ''
-          })
-
         }
       },
       // 清空日期选择
@@ -513,54 +477,57 @@
          let arr = JSON.parse(JSON.stringify(res.data.list));
           if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
           arr = arr.map((item, index) => {
-            let operator = this.operatorList.find(it => { return it.id === item.operator })
+            // let name = MAPDATA.RECHARGEHISTORYTYPELIST.find((a) => {
+            //   return a.value === item.purpose;
+            // });
+            // let status = MAPDATA.ORDERSTATUS.find((a) => {
+            //   return a.value.indexOf(item.status) !== -1;
+            // });
           let params = {
             create_time: timeFormat(
-                item.create_time,
-                "YYYY-MM-DD HH:mm:ss",
-                true
+              item.create_time,
+              "YYYY-MM-DD HH:mm:ss",
+              true
             ),
             date: item.date,
-            operator: operator ? operator.username: "未知",
             room_number: item.room_number,
             room_type: item.room_type,
             room_title: item.room_title,
             flow: item.flow || "0",
-            guild_number: item.guild_number,
-            guild_nickname: item.guild_nickname,
-            first_join: item.first_join || "0",
-            stat_join: item.stat_join || "0",
-            times_join: item.times_join || "0",
-            stat_consume: item.stat_consume || "0",
-            rate: item.rate ? item.rate + "%" : "0%",
-            anchor: item.anchor || "0",
-            stat_anchor_time: item.stat_anchor_time || "0",
-            chat: item.chat || "0",
-            times_chat: item.times_chat || "0",
+            // guild_number: item.guild_number,
+            // guild_nickname: item.guild_nickname,
+            // first_join: item.first_join || "0",
+            // stat_join: item.stat_join || "0",
+            // times_join: item.times_join || "0",
+            // stat_consume: item.stat_consume || "0",
+            // rate: item.rate ? item.rate + "%" : "0%",
+            // anchor: item.anchor || "0",
+            // stat_anchor_time: item.stat_anchor_time || "0",
+            // chat: item.chat || "0",
+            // times_chat: item.times_chat || "0",
           };
           return params;
         });
         let nameList = [
           "添加时间",
           "时间",
-          "公会运营",
           "房间ID",
           "房间类型",
           "房间标题",
           "房间流水",
-          "所属公会ID",
-          "所属公会名称",
-          "新用户进厅",
-          "进厅总人数",
+          // "所属公会ID",
+          // "所属公会名称",
+          // "新用户进厅",
+          // "进厅总人数",
 
-          "进厅总人次",
-          "消费总人数",
-          "消费转化率",
-          "成员上麦总人数",
+          // "进厅总人次",
+          // "消费总人数",
+          // "消费转化率",
+          // "成员上麦总人数",
 
-          "成员上麦总时长",
-          "成员私聊用户人数",
-          "成员私聊用户次数",
+          // "成员上麦总时长",
+          // "成员私聊用户人数",
+          // "成员私聊用户次数",
         ];
         exportTableData(arr, nameList, "公会房间列表");
         loading.close();
@@ -569,16 +536,6 @@
         loading.close();
       }
     },
-    // 公会运营
-    async getAdminUserList(){
-        let res = await adminUserList();
-        if(res.code === 2000){
-          this.operatorList = res.data.list;
-          this.isAuth = res.data.is_auth;
-          let all = { username: '全部',id: ''}
-          this.operatorList.unshift(all);
-        }
-      }
 		}
 	}
 </script>

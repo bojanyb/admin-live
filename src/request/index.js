@@ -268,15 +268,19 @@ const request = {
         guildUserApply: `${HTTPHEADER}/guild/guildUserApply`, // 主播申请列表
         guildUserApplyCheck: `${HTTPHEADER}/guild/guildUserApplyCheck`, // 主播申请审核
         guildRooms: `${HTTPHEADER}/guild/guildRooms`, // 公会房间列表
-        guildRoomApply: `${HTTPHEADER}/guild/guildRoomApply`, // 公会房间申请列表
+        guildRoomApply: `${HTTPHEADER}/guild/guildRoomUpdateApply`, // 公会房间申请列表
         addGuildRoom: `${HTTPHEADER}/guild/addGuildRoom`, // 添加公会房间
         rmGuildRoom: `${HTTPHEADER}/guild/rmGuildRoom`, // 移除公会房间
-        guildRoomApplyCheck: `${HTTPHEADER}/guild/guildRoomApplyCheck`, // 审核公会申请
+        guildRoomApplyCheck: `${HTTPHEADER}/guild/guildRoomTypeUpdateCheck`, // 审核公会申请
         rebateConfig: `${HTTPHEADER}/guild/rebateConfig`, // 获取周返点
         delConfigRebate: `${HTTPHEADER}/guild/delConfigRebate`, // 获取周返点
         configRebate: `${HTTPHEADER}/guild/configRebate`, // 获取周返点
         guildWeekList: `${HTTPHEADER}/guild/guildWeekList`, // 公会结算 公会评级（周）（月）未结算
         settlementConfig: `${HTTPHEADER}/guild/settlementConfig`, // 获取周返点
+        getGuildRebateList: `${HTTPHEADER}/guild/getGuildRebateList`, // 获取实时返点配置
+        updateGuildRebate: `${HTTPHEADER}/guild/updateGuildRebate`, // 修改实时返点配置
+        addGuildRebate: `${HTTPHEADER}/guild/addGuildRebate`, // 新增实时返点配置
+        delGuildRebate: `${HTTPHEADER}/guild/delGuildRebate`, // 删除实时返点配置
         saveSettlementConfig: `${HTTPHEADER}/guild/saveSettlementConfig`, // 配置周返点
         delSettlementConfig: `${HTTPHEADER}/guild/delSettlementConfig`, // 删除周返点配置
         doSettlement: `${HTTPHEADER}/guild/doSettlement`, // 公会批量结算
@@ -358,6 +362,7 @@ const request = {
         delGenre: `${HTTPHEADER}/party/delGenre`, // 删除类别
         saveGenre: `${HTTPHEADER}/party/saveGenre`, // 添加类别
         genreList: `${HTTPHEADER}/Party/genreList`, // 类型列表
+        partyRoomTypes: `${HTTPHEADER}/PartyRoom/roomTypes`, // 相守类型列表
         roomHotSetting: `${HTTPHEADER}/Room/roomHotSetting`, // 房间热度设置
         addRoomHot: `${HTTPHEADER}/Room/addRoomHot`, // 增加房间热度
         roomHotList: `${HTTPHEADER}/Room/roomHotList`, // 增加房间热度列表
@@ -387,6 +392,10 @@ const request = {
         createRoomPushFlow: `${HTTPHEADER}/RoomPushFlow/create`, // 首页房间推荐-新增
         updateRoomPushFlow: `${HTTPHEADER}/RoomPushFlow/update`, // 首页房间推荐-修改
         deleteRoomPushFlow: `${HTTPHEADER}/RoomPushFlow/delete`, // 首页房间推荐-删除
+
+        partyRoomList: `${HTTPHEADER}/PartyRoom/list`, // 全部房间-列表
+        changePartyRoom: `${HTTPHEADER}/PartyRoom/change`, // 全部房间-修改房间类别
+        canChangeType: `${HTTPHEADER}/PartyRoom/canChangeType`, // 全部房间-获取房间类别
     },
 
     // 直播管理
@@ -397,6 +406,12 @@ const request = {
       anchorData: `${HTTPHEADER}/roomV2/anchorData`, // 直播数据
       effective: `${HTTPHEADER}/RoomV2/effective`, // 有效直播时长
       saveEff: `${HTTPHEADER}/RoomV2/saveEff`, // 有效直播时长 -- 保存
+    },
+
+    // 相守管理
+    accompany: {
+      roomShouList: `${HTTPHEADER}/partyRoom/roomShouList`, // 房间列表
+      shouRooms: `${HTTPHEADER}/guild/shouRooms`, // 房间数据
     },
 
     // 风控检测

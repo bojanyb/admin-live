@@ -8,7 +8,7 @@ const serviceConfigRouter = {
 	name: 'serviceConfig',
 	meta: {
 		title: '风控管理',
-		icon: 'el-icon-office-building'
+    icon: 'el-icon-s-custom'
 	},
 	children: [
 		{
