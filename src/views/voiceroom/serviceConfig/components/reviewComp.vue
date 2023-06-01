@@ -46,6 +46,7 @@ export default {
         },
         // 打开弹窗
         loadParams(status, row) {
+            console.log("---49----",status, row);
             this.dialogVisible = true
           if (status === 'review') {
             let params = JSON.parse(JSON.stringify(row))

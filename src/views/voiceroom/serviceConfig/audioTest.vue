@@ -2,27 +2,21 @@
     <div class="serviceConfig-audioTest-box">
         <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
         <div class="searchParams">
-            <SearchPanel
-              v-model="searchParams"
-              :forms="forms"
-              :show-reset="true"
-              :show-search-btn="true"
-              :show-export="true"
-              :show-batch-pass="true"
-              batch-func-name="批量待复审"
-              @onReset="reset"
-              @onSearch="onSearch"
-              @export="handleExport"
-              @batchPass="handleBatchPendingReview"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true"
+                :show-export="true" :show-batch-pass="true" :show-batch-rurn="true" batch-func-name="批量审核通过"
+                batchRurnName="批量审核误杀" @onReset="reset" @onSearch="onSearch" @export="handleExport"
+                @batchPass="handleBatchPendingReview(2)" @BatchRurn="handleBatchPendingReview(3)"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList" layout="total, sizes, prev, pager, next, jumper" @selectionChange="selectionChange"></tableList>
+        <tableList :cfgs="cfgs" ref="tableList" layout="total, sizes, prev, pager, next, jumper"
+            @selectionChange="selectionChange"></tableList>
 
         <!-- 详情组件 -->
         <audioComp v-if="isDestoryComp" ref="audioComp" @destoryComp="destoryComp" :tabIndex="tabIndex"></audioComp>
 
         <!-- 处罚组件 -->
-        <userComp v-if="isUserDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList" isDetection ></userComp>
+        <userComp v-if="isUserDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList" isDetection>
+        </userComp>
 
         <!-- 警告组件 -->
         <warnComp v-if="isWarnDestoryComp" ref="warnComp" @destoryComp="destoryComp" @getList="getList"></warnComp>
@@ -35,13 +29,14 @@
 <script>
 // 引入api
 import {
-  guildRoomType,
-  getTencentLabel,
-  getCheckOperator
+    guildRoomType,
+    getTencentLabel,
+    getCheckOperator,
+    checkAudioStreamDefyList
 } from "@/api/videoRoom.js";
 // 引入api
 import {
-  exprotAudio
+    exprotAudio
 } from "@/api/risk.js";
 // 引入详情组件
 import audioComp from './components/audioComp.vue'
@@ -125,26 +120,26 @@ export default {
                     placeholder: '请输入关键词'
                 },
                 {
-                  name: 'status',
-                  type: 'select',
-                  value: '',
-                  keyName: 'value',
-                  optionLabel: 'name',
-                  label: '待复审',
-                  placeholder: '请选择',
-                  clearable: true,
-                  options: MAPDATA.REVIEWSTATUSLIST
+                    name: 'status',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '待复审',
+                    placeholder: '请选择',
+                    clearable: true,
+                    options: MAPDATA.REVIEWSTATUSLIST
                 },
                 {
-                  name: 'operator_id',
-                  type: 'select',
-                  value: '',
-                  keyName: 'value',
-                  optionLabel: 'name',
-                  label: '复审操作审核人',
-                  placeholder: '请选择',
-                  clearable: true,
-                  options: this.checkOperatorList
+                    name: 'operator_id',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '复审操作审核人',
+                    placeholder: '请选择',
+                    clearable: true,
+                    options: this.checkOperatorList
                 },
                 {
                     name: 'risk_type',
@@ -159,15 +154,15 @@ export default {
                     options: this.options,
                 },
                 {
-                  name: 'room_category_id',
-                  type: 'select',
-                  value: '',
-                  keyName: 'value',
-                  optionLabel: 'name',
-                  label: '房间类型',
-                  placeholder: '请选择',
-                  clearable: true,
-                  options: this.roomTypeList
+                    name: 'room_category_id',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '房间类型',
+                    placeholder: '请选择',
+                    clearable: true,
+                    options: this.roomTypeList
                 },
                 // {
                 //     name: 'risk_type',
@@ -221,7 +216,7 @@ export default {
                 url: REQUEST.risk.audioStreamDefyList,
                 isShowCheckbox: true,
                 search: {
-                  sizes: [10, 30, 50, 100]
+                    sizes: [10, 30, 50, 100]
                 },
                 columns: [
                     {
@@ -257,14 +252,14 @@ export default {
                         }
                     },
                     {
-                      label: "房间类型",
-                      width: '80px',
-                      render: (h, params) => {
-                        let data = this.roomTypeList.find((item) => {
-                          return item.value === params.row.room_category_id;
-                        });
-                        return h("span", data ? data.name : "--");
-                      },
+                        label: "房间类型",
+                        width: '80px',
+                        render: (h, params) => {
+                            let data = this.roomTypeList.find((item) => {
+                                return item.value === params.row.room_category_id;
+                            });
+                            return h("span", data ? data.name : "--");
+                        },
                     },
                     {
                         label: '用户等级',
@@ -343,31 +338,33 @@ export default {
                         prop: 'content',
                         minWidth: '160px',
                         render: (h, params) => {
-                          return (
-                            <span
-                              domPropsInnerHTML={this.replaceReplyMethod(
-                                params.row.content,
-                                params.row.keywords ? params.row.keywords : ''
-                              )}
-                            />
-                          );
+                            return (
+                                <span
+                                    domPropsInnerHTML={this.replaceReplyMethod(
+                                        params.row.content,
+                                        params.row.keywords ? params.row.keywords : ''
+                                    )}
+                                />
+                            );
                         },
                     },
                     {
                         label: '操作',
-                        width: '270px',
+                        width: '340px',
                         fixed: 'right',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'warning'}, on: {click:()=>{this.handleOperation('warn', params.row)}}}, '警告'),
+                                h('el-button', { props: { type: 'warning' }, on: { click: () => { this.handleOperation('warn', params.row) } } }, '警告'),
                                 h('el-button', { props: { type: 'danger' }, on: { click: () => { this.handleOperation('add', params.row) } } }, '封禁'),
-                              h('el-button', {
-                                props: { type: 'success' },
-                                style: {
-                                   display: params.row.status === 1 ? 'unset' : 'none'
-                                },
-                                on: { click: () => { this.handleOperation('review', params.row) } }
-                              }, '待复审')
+                                h('el-button', { props: { type: 'success' }, style: { display: params.row.status === 1 ? 'unset' : 'none' }, on: { click: () => { this.handleOperation2(2, params.row.id) } } }, '通过'),
+                                h('el-button', { props: { type: 'danger' }, style: { display: params.row.status === 1 ? 'unset' : 'none' }, on: { click: () => { this.handleOperation2(3, params.row.id) } } }, '误杀'),
+                                // h('el-button', {
+                                //     props: { type: 'success' },
+                                //     style: {
+                                //     display: params.row.status === 1 ? 'unset' : 'none'
+                                //     },
+                                //     on: { click: () => { this.handleOperation('review', params.row) } }
+                                // }, '待复审')
                             ])
                         }
                     }
@@ -378,7 +375,7 @@ export default {
     watch: {
         tabIndex: {
             handler(n) {
-                if(n) {
+                if (n) {
                     this.getList()
                 }
             },
@@ -410,20 +407,20 @@ export default {
         },
         load(status, row) {
             if (status === 'add') {
-              this.isUserDestoryComp = true
-              setTimeout(() => {
-                this.$refs.userComp.loadParams(status, row)
-            }, 50);
+                this.isUserDestoryComp = true
+                setTimeout(() => {
+                    this.$refs.userComp.loadParams(status, row)
+                }, 50);
             } else if (status === 'warn') {
-              this.isWarnDestoryComp = true
-              setTimeout(() => {
-                this.$refs.warnComp.loadParams(status, row)
-            }, 50);
+                this.isWarnDestoryComp = true
+                setTimeout(() => {
+                    this.$refs.warnComp.loadParams(status, row)
+                }, 50);
             } else if (status === 'review') {
-              this.isReviewDestoryComp = true
-              setTimeout(() => {
-                this.$refs.reviewComp.loadParams(status, row)
-            }, 50);
+                this.isReviewDestoryComp = true
+                setTimeout(() => {
+                    this.$refs.reviewComp.loadParams(status, row)
+                }, 50);
             }
         },
         // 刷新列表
@@ -472,168 +469,210 @@ export default {
             this.isReviewDestoryComp = false
         },
         handleOperation(status, user_number) {
-          this.load(status, user_number);
-      },
-      // 获取房间类型
-      async getRoomTypeList() {
-        const response = await guildRoomType();
-        if (response.code + "" === "2000") {
-          const tempArr = Array.from(
-            Array.isArray(response.data.list) ? response.data.list : []
-          );
-          this.roomTypeList =
-            tempArr.reduce((prev, curr) => {
-              prev.push({
-                name: curr.name,
-                value: curr.id,
-              });
-              return prev;
-            }, []) || [];
-        }
-      },
-      // 获取复审操作人
-      async getCheckOperatorList() {
-        const response = await getCheckOperator();
-        if (response.code + "" === "2000") {
-          const tempArr = Array.from(
-            Array.isArray(response.data) ? response.data : []
-          );
-          this.checkOperatorList =
-            tempArr.reduce((prev, curr) => {
-              prev.push({
-                name: curr.operator,
-                value: curr.operator_id,
-              });
-              return prev;
-            }, []) || [];
-        }
-      },
-      // 关键词高亮
-      replaceReplyMethod(value, keywords) {
-        if (keywords && keywords.length) {
-          let replyList = value.split("");
-          keywords.forEach(item => {
-            let quickWord = item.split("");
-            for (let index = 0; index < replyList.length; index++) {
-              quickWord.forEach((subItem) => {
-                let replaceString = "" + `(${subItem})`;
-                let replaceReg = new RegExp(replaceString, "gi");
-                if (replyList[index].indexOf("span") === -1) {
-                  replyList[index] = replyList[index].replace(
-                    replaceReg,
-                    "<span style='color: red;'>$1</span>"
-                  );
+            this.load(status, user_number);
+        },
+        //   通过 误杀
+        async handleOperation2(type, user_number) {
+            this.$confirm('是否确认操作' + (type == 2 ? '通过' : '误杀') + '?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                let params = {
+                    type: type,
+                    id: [user_number]
                 }
-              });
+                let res = await checkAudioStreamDefyList(params);
+                if (res.code === 2000) {
+                    this.$success('操作成功');
+                    this.getList();
+                }
+            }).catch(res => { })
+        },
+        // 获取房间类型
+        async getRoomTypeList() {
+            const response = await guildRoomType();
+            if (response.code + "" === "2000") {
+                const tempArr = Array.from(
+                    Array.isArray(response.data.list) ? response.data.list : []
+                );
+                this.roomTypeList =
+                    tempArr.reduce((prev, curr) => {
+                        prev.push({
+                            name: curr.name,
+                            value: curr.id,
+                        });
+                        return prev;
+                    }, []) || [];
             }
-          })
-          return replyList.join("");
-        } else {
-          return value
-        }
-      },
-      // 获取风险类型
-      async getRiskLabel() {
-        const response = await getTencentLabel();
-        if (response.code + "" === "2000") {
-          this.options = response.data;
-        }
-      },
-      // 导出
-      async handleExport() {
-        let s = this.beforeSearch();
-        const search = this.$refs.tableList.search;
-        s.page = search ? search.page : null;
-        s.pagesize = search ? search.size : null;
-          const loading = this.$loading({
-            lock: true,
-            text: 'Loading',
-            spinner: 'el-icon-loading',
-            background: 'rgba(0, 0, 0, 0.7)'
-          })
-          let res = await exprotAudio(s);
-          try {
-            let arr = JSON.parse(JSON.stringify(res.data.list));
-              if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
-              arr = arr.map((item, index) => {
+        },
+        // 获取复审操作人
+        async getCheckOperatorList() {
+            const response = await getCheckOperator();
+            if (response.code + "" === "2000") {
+                const tempArr = Array.from(
+                    Array.isArray(response.data) ? response.data : []
+                );
+                this.checkOperatorList =
+                    tempArr.reduce((prev, curr) => {
+                        prev.push({
+                            name: curr.operator,
+                            value: curr.operator_id,
+                        });
+                        return prev;
+                    }, []) || [];
+            }
+        },
+        // 关键词高亮
+        replaceReplyMethod(value, keywords) {
+            if (keywords && keywords.length) {
+                let replyList = value.split("");
+                keywords.forEach(item => {
+                    let quickWord = item.split("");
+                    for (let index = 0; index < replyList.length; index++) {
+                        quickWord.forEach((subItem) => {
+                            let replaceString = "" + `(${subItem})`;
+                            let replaceReg = new RegExp(replaceString, "gi");
+                            if (replyList[index].indexOf("span") === -1) {
+                                replyList[index] = replyList[index].replace(
+                                    replaceReg,
+                                    "<span style='color: red;'>$1</span>"
+                                );
+                            }
+                        });
+                    }
+                })
+                return replyList.join("");
+            } else {
+                return value
+            }
+        },
+        // 获取风险类型
+        async getRiskLabel() {
+            const response = await getTencentLabel();
+            if (response.code + "" === "2000") {
+                this.options = response.data;
+            }
+        },
+        // 导出
+        async handleExport() {
+            let s = this.beforeSearch();
+            const search = this.$refs.tableList.search;
+            s.page = search ? search.page : null;
+            s.pagesize = search ? search.size : null;
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            })
+            let res = await exprotAudio(s);
+            try {
+                let arr = JSON.parse(JSON.stringify(res.data.list));
+                if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
+                arr = arr.map((item, index) => {
 
-              let room_category_id = this.roomTypeList.find((v) => {
-                return v.value === item.room_category_id;
-              });
+                    let room_category_id = this.roomTypeList.find((v) => {
+                        return v.value === item.room_category_id;
+                    });
 
 
-              let status = MAPDATA.REVIEWSTATUSLIST.find((v) => {
-                return v.value === item.status;
-              });
+                    let status = MAPDATA.REVIEWSTATUSLIST.find((v) => {
+                        return v.value === item.status;
+                    });
 
-              let params = {
-                start_time: timeFormat(item.start_time, 'YYYY-MM-DD HH:mm:ss', true) || '--',
-                operator_time: timeFormat(item.operator_time, 'YYYY-MM-DD HH:mm:ss', true) || '--',
-                operator: item.operator || '--',
-                user_number: item.user_number || '--',
-                nickname: item.nickname || '--',
-                room_category_id: room_category_id ? room_category_id.name : '--',
-                user_rank: `用户等级: ${item.user_rank}; 魅力等级: ${item.live_rank}`,
-                guild_name: item.guild_name || '--',
-                punish_status: item.punish_status,
-                sort_number: item.sort_number || '--',
-                room_number: item.room_number || '--',
-                label: `${item.label}/${item.sub_label}`,
-                label1: status ? status.name : '--',
-                suggestion: item.suggestion || '--',
-                content: item.content || '--',
-                keywords: item.keywords || '--',
-              };
-              return params;
-            });
-            let nameList = [
-              "创建时间",
-              "复审操作时间",
-              "复审人",
-              "用户ID",
-              "用户昵称",
-              "房间类型",
-              "用户等级",
-              "用户所属公会",
-              "用户当前状态",
-              "用户麦位",
-              "房间ID",
-              "风险类型",
-              "复审结果",
-              "腾讯审核结果",
-              "音转文",
-              "音转文关键词",
-            ];
-            exportTableData(arr, nameList, "公会房间列表");
-            loading.close();
-          } catch (error) {
-            console.log(error);
-            loading.close();
-          }
-      },
+                    let params = {
+                        start_time: timeFormat(item.start_time, 'YYYY-MM-DD HH:mm:ss', true) || '--',
+                        operator_time: timeFormat(item.operator_time, 'YYYY-MM-DD HH:mm:ss', true) || '--',
+                        operator: item.operator || '--',
+                        user_number: item.user_number || '--',
+                        nickname: item.nickname || '--',
+                        room_category_id: room_category_id ? room_category_id.name : '--',
+                        user_rank: `用户等级: ${item.user_rank}; 魅力等级: ${item.live_rank}`,
+                        guild_name: item.guild_name || '--',
+                        punish_status: item.punish_status,
+                        sort_number: item.sort_number || '--',
+                        room_number: item.room_number || '--',
+                        label: `${item.label}/${item.sub_label}`,
+                        label1: status ? status.name : '--',
+                        suggestion: item.suggestion || '--',
+                        content: item.content || '--',
+                        keywords: item.keywords || '--',
+                    };
+                    return params;
+                });
+                let nameList = [
+                    "创建时间",
+                    "复审操作时间",
+                    "复审人",
+                    "用户ID",
+                    "用户昵称",
+                    "房间类型",
+                    "用户等级",
+                    "用户所属公会",
+                    "用户当前状态",
+                    "用户麦位",
+                    "房间ID",
+                    "风险类型",
+                    "复审结果",
+                    "腾讯审核结果",
+                    "音转文",
+                    "音转文关键词",
+                ];
+                exportTableData(arr, nameList, "公会房间列表");
+                loading.close();
+            } catch (error) {
+                console.log(error);
+                loading.close();
+            }
+        },
 
-    // 选择
-    selectionChange(callbackList) {
-      const res = callbackList.reduce((prev, curr) => {
-        prev.push(curr);
-        return prev;
-      }, []);
+        // 选择
+        selectionChange(callbackList) {
+            const res = callbackList.reduce((prev, curr) => {
+                prev.push(curr);
+                return prev;
+            }, []);
+            this.selectionList = res;
+        },
 
-      this.selectionList = res;
+        // 批量待复审
+        async handleBatchPendingReview(type) {
+            // 获取参数
+            let list = JSON.parse(JSON.stringify(this.selectionList))
+            const ids = list.reduce((prev, curr) => {
+                prev.push(curr.id)
+                return prev;
+            }, [])
+
+            // 操作数据是否为空
+            if (ids.length == 0) {
+                this.$warning("请先选择需要操作的数据");
+                return
+            }
+
+            this.$confirm('是否确认' + (type == 2 ? '批量审核通过' : '批量审核误杀') + '?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(async () => {
+                let params = {
+                    type: type,
+                    id: ids
+                }
+                console.log("params:", params);
+                let res = await checkAudioStreamDefyList(params);
+                if (res.code === 2000) {
+                    this.$success('操作成功');
+                    this.getList();
+                }
+            }).catch(res => { })
+        },
     },
-
-      // 批量待复审
-      handleBatchPendingReview() {
-        this.isReviewDestoryComp = true
-        setTimeout(() => {
-          this.$refs.reviewComp.loadParams('batchReview', this.selectionList)
-        }, 50);
-      }
-  },
     created() {
-      this.getRoomTypeList()
-      this.getRiskLabel()
-      this.getCheckOperatorList()
+        this.getRoomTypeList()
+        this.getRiskLabel()
+        this.getCheckOperatorList()
     },
 }
 </script>
@@ -642,8 +681,9 @@ export default {
 .serviceConfig-audioTest-box {
     padding: 10px 20px 20px 20px;
     box-sizing: border-box;
+
     .share-table-list-box .el-table__body-wrapper {
-      max-height: none  !important;
+        max-height: none !important;
     }
 }
 </style>
