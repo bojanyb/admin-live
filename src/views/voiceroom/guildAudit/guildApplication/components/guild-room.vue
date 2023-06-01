@@ -54,9 +54,8 @@
 </template>
 
 <script>
-  // 引入api
-	import { addGuildRoom, rmGuildRoom } from '@/api/videoRoom.js'
-  import { guildRooms } from '@/api/user.js'
+	import {addGuildRoom, rmGuildRoom, guildRoomType,adminUserList} from '@/api/videoRoom.js'
+  import {guildRooms} from '@/api/user.js'
   import { partyRoomTypes } from '@/api/house.js'
 	// 引入菜单组件
   import SearchPanel from "@/components/SearchPanel/final.vue";
