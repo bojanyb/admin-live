@@ -8,7 +8,7 @@
                 </div>
             </el-image> -->
             <el-image v-for="(item,index) in srcList" :key="index" :src="item || item"
-            :preview-src-list="srcList">
+            :preview-src-list="srcList" @click.stop="handleClickStop">
                 <div slot="error" class="image-slot">
                     <img :src="imgUrl" />
                 </div>
@@ -88,6 +88,19 @@ export default {
         // 关闭特效弹窗
         destoryComp() {
             this.isDestoryComp = false
+        },
+        // 点击遮罩层关闭
+        handleClickStop() {
+          this.$nextTick(() => {
+            let domImageView = document.querySelector(".el-image-viewer__mask");
+            if (!domImageView) {
+              return
+            }
+            domImageView.addEventListener("click", () => {
+              // 点击遮罩层时调用关闭按钮
+              document.querySelector(".el-image-viewer__close").click();
+            })
+          })
         }
     }
 }
