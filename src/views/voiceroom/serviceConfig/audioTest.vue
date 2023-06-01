@@ -585,8 +585,8 @@ export default {
                     });
 
                     let params = {
-                        start_time: timeFormat(item.start_time, 'YYYY-MM-DD HH:mm:ss', true) || '--',
-                        operator_time: timeFormat(item.operator_time, 'YYYY-MM-DD HH:mm:ss', true) || '--',
+                        start_time: item.start_time > 0 ? timeFormat(item.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '--',
+                        operator_time: item.operator_time > 0 ? timeFormat(item.operator_time, 'YYYY-MM-DD HH:mm:ss', true) : '--',
                         operator: item.operator || '--',
                         user_number: item.user_number || '--',
                         nickname: item.nickname || '--',
@@ -622,7 +622,7 @@ export default {
                     "音转文",
                     "音转文关键词",
                 ];
-                exportTableData(arr, nameList, "公会房间列表");
+                exportTableData(arr, nameList, "音频检测派对房间列表");
                 loading.close();
             } catch (error) {
                 console.log(error);
