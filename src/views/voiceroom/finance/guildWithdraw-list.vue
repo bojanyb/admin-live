@@ -587,8 +587,8 @@ export default {
               item.create_time,
               "YYYY-MM-DD HH:mm:ss",
               true
-            ),
-            pay_time: timeFormat(item.pay_time, "YYYY-MM-DD HH:mm:ss", true),
+            )+';',
+            pay_time: timeFormat(item.pay_time, "YYYY-MM-DD HH:mm:ss", true)+';',
             user_number: item.user_number,
             nickname: item.nickname,
             amount: item.amount / 100,
