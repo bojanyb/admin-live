@@ -417,6 +417,9 @@ const request = {
     // 风控检测
     risk: {
         audioStreamDefyList: `${HTTPHEADER}/Room/audioStreamDefyList`, // 音频违规日志
+        audioStreamDefyListExport: `${HTTPHEADER}/Room/audioStreamDefyListExport`, // 音频违规日志导出
+        checkAudioStreamDefyList: `${HTTPHEADER}/Room/checkAudioStreamDefyList`, // 复审操作
+        getCheckOperator: `${HTTPHEADER}/Room/getCheckOperator`, // 审核人员
         roomCoverCheckList: `${HTTPHEADER}/Room/roomCoverCheckList`, // 封面审核列表
         coverCheck: `${HTTPHEADER}/Room/coverCheck`, // 封面审核
         UserPunish: `${HTTPHEADER}/UserPunish`, // 用户处罚列表
@@ -432,6 +435,7 @@ const request = {
         screenImgLog: `${HTTPHEADER}/ScreenImgLog/index`, // 图片审核-列表
         review: `${HTTPHEADER}/ScreenImgLog/review`, // 图片审核-操作
         getPunishTypeList: `${HTTPHEADER}/UserPunishLog/getPunishTypeList`, // 处罚举报-处罚类型
+        getTencentLabel: `${HTTPHEADER}/Room/tencent_label`, // 处罚举报-风险类型
 
         // 用户处罚 - 用户举报二合一
         UserPunishLog: `${HTTPHEADER}/UserPunishLog`, // 处罚-列表

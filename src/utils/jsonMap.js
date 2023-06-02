@@ -2991,6 +2991,21 @@ const DEBRISS = [
   },
 ]
 
+const REVIEWSTATUSLIST = [
+  {
+    name: '待复审',
+    value: 1
+  },
+  {
+    name: '通过',
+    value: 2
+  },
+  {
+    name: '误杀',
+    value: 3
+  },
+]
+
 export default {
   USERINVITE,
   DOWNLOADSOURCE,
@@ -3131,5 +3146,6 @@ export default {
   PRAYCARDS,
   DEBRISS,
   GIFTACTIVETYLIST,
-  ISACTIVETYLIST
+  ISACTIVETYLIST,
+  REVIEWSTATUSLIST
 }
