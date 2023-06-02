@@ -30,7 +30,7 @@
 			forms() {
 				return [
 					{
-						name: 'guild_number',
+						name: 'room_number',
 						type: 'input',
 						value: '',
 						label: '房间ID',
@@ -156,7 +156,7 @@
 				return {
 					page: params.page,
 					pagesize: params.size,
-					guild_number: s.guild_number,
+					room_number: s.room_number,
 					status: s.status ? s.status : 0,
 					type: s.type
 				}
