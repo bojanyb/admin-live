@@ -54,9 +54,8 @@
 </template>
 
 <script>
-  // 引入api
-	import { addGuildRoom, rmGuildRoom } from '@/api/videoRoom.js'
-  import { guildRooms } from '@/api/user.js'
+	import {addGuildRoom, rmGuildRoom, guildRoomType,adminUserList} from '@/api/videoRoom.js'
+  import {guildRooms} from '@/api/user.js'
   import { partyRoomTypes } from '@/api/house.js'
 	// 引入菜单组件
   import SearchPanel from "@/components/SearchPanel/final.vue";
@@ -171,6 +170,7 @@
 						{
 							label: '房间标题',
               width: '120px',
+              showOverFlow: true,
 							prop: 'room_title'
 						},
 						{
@@ -185,6 +185,7 @@
 						{
 							label: '所属公会名称',
               minWidth: '120px',
+              showOverFlow: true,
 							prop: 'guild_nickname'
 						},
 						{
@@ -225,7 +226,15 @@
               minWidth: '120px',
               prop: 'stat_anchor_time',
               render: (h, params) => {
-                  return h('span', params.row.stat_anchor_time || '0')
+                  let allNum = 0;
+                  if(params.row.stat_anchor_time.indexOf("小时") > -1){
+                    let hourNum = params.row.stat_anchor_time.split("小时")[0] * 60;
+                    let minuteNum = params.row.stat_anchor_time.split("小时")[1] ? params.row.stat_anchor_time.split("小时")[1].split("分")[0] : 0;
+                    allNum = Number(hourNum) + Number(minuteNum);
+                  }else if(params.row.stat_anchor_time.indexOf("分") > -1){
+                    allNum = params.row.stat_anchor_time.split("分")[0]
+                  }
+                  return h('span',  allNum + '分钟')
               }
 						},
 						{
