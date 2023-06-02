@@ -696,7 +696,7 @@ export default {
       });
       let res = await exprotAudio(s);
       try {
-        if (+res.data.count <= 200) {
+        if (res.data.type + "" === "excel") {
           let arr = JSON.parse(JSON.stringify(res.data.list));
           if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
           arr = arr.map((item, index) => {
@@ -753,7 +753,7 @@ export default {
             "音转文关键词",
           ];
           exportTableData(arr, nameList, "音频检测派对房间列表");
-        } else {
+        } else if (res.data.type + "" === "csv") {
           let URL = ENV_DOMAINHTTPS + res.data.url;
           let link = document.createElement("a");
           link.href = URL;
