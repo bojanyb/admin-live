@@ -204,7 +204,7 @@ export default {
         vm: this,
         url: REQUEST.diamondRecharge.list,
         search: {
-          sizes: [10, 30, 50, 100]
+          sizes: [10, 30, 50, 100,999,9999]
         },
         isShowCheckbox: true,
         columns: [
@@ -437,7 +437,7 @@ export default {
       list: [],
       topupStatus: null,
       batchDialogVisible: false,
-      batchResultDataData: []
+      batchResultData: []
     };
   },
   methods: {
@@ -791,5 +791,8 @@ export default {
     background: #c7c7c7;
     border-radius: 5px;
   }
+}
+.el-table__fixed-body-wrapper{
+  bottom: 0;
 }
 </style>
