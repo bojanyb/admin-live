@@ -204,7 +204,7 @@ export default {
         vm: this,
         url: REQUEST.diamondRecharge.list,
         search: {
-          sizes: [10, 30, 50, 100]
+          sizes: [10, 30, 50, 100,999,9999]
         },
         isShowCheckbox: true,
         columns: [
