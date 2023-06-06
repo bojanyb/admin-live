@@ -252,7 +252,18 @@
         }
         // 表单顺序、倒序排序
         if(this.search.sort && this.search.sort !== "") {
-          params.sort_field = this.search.sort.split(",")[0]
+          let sort_field = this.search.sort.split(",")[0];
+          // 财务管理 提现通道
+          switch(sort_field){
+            case "pig_quota":
+              sort_field = "pig_amount_total"
+            break;
+            case "cat_quota":
+              sort_field = "cat_amount_total"
+            break;
+          }
+          params.sort_field = sort_field
+
           params.sort = this.search.sort.split(",")[1] === 'asc' ? 'asc' : 'desc'
         }
         // 用来比对分页 - 重置分页
