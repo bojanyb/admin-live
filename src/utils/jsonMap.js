@@ -1844,7 +1844,7 @@ const RECHARGEHISTORYTYPELIST = [
 /*
 *交易管理
 */
-// 流水记录 - 来源
+// 房间来源 - 来源
 const DEALSOURCELIST = [
   {
     id: 0,
