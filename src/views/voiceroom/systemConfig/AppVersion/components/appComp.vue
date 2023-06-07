@@ -20,7 +20,7 @@
           <el-form-item label="版本号" prop="version">
             <el-input v-model="ruleForm.version" style="width:305px;" placeholder="如: 1.0.1"></el-input>
           </el-form-item>
-          <el-form-item label="安卓Code" prop="version_code" v-if="ruleForm.platform !== 1">
+          <el-form-item :label=" ruleForm.platform == '4' ? 'PC Code' : '安卓Code' " prop="version_code" v-if="ruleForm.platform !== 1">
             <el-input v-model="ruleForm.version_code"></el-input>
           </el-form-item>
           <el-form-item label="开关状态" prop="value">
