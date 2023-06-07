@@ -53,27 +53,27 @@ service.interceptors.response.use(
 				// to re-login
 				MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again',
 					'Confirm logout', {
-						confirmButtonText: 'Re-Login',
-						cancelButtonText: 'Cancel',
-						type: 'warning'
-					}).then(() => {
+					confirmButtonText: 'Re-Login',
+					cancelButtonText: 'Cancel',
+					type: 'warning'
+				}).then(() => {
 					store.dispatch('user/resetToken').then(() => {
 						location.reload()
 					})
 				})
-			}else if(res.code == 3000 && res.msg == "请重新登录"){
-        if (isRefreshFail) {
-          error(res.msg || '登录过期，请重新登录')
-          isRefreshFail = false
-          setTimeout(() => {
-            isRefreshFail = true;
-          }, 2000);
-        }
-        setTimeout(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
-        }, 2000);
+			} else if (res.code == 3000 && res.msg == "请重新登录") {
+				if (isRefreshFail) {
+					error(res.msg || '登录过期，请重新登录')
+					isRefreshFail = false
+					setTimeout(() => {
+						isRefreshFail = true;
+					}, 2000);
+				}
+				setTimeout(() => {
+					store.dispatch('user/resetToken').then(() => {
+						location.reload()
+					})
+				}, 2000);
 				return
 			}
 			error(res.msg)

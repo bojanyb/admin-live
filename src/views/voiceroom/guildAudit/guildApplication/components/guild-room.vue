@@ -247,14 +247,14 @@
               minWidth: '120px',
 							prop: 'times_chat'
 						},
-						{
-							label: '操作',
-							render: (h, params) => {
-								return h('div', [
-									h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.del(params.row)}}},'移除')
-								])
-							}
-						}
+						// {
+						// 	label: '操作',
+						// 	render: (h, params) => {
+						// 		return h('div', [
+						// 			h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.del(params.row)}}},'移除')
+						// 		])
+						// 	}
+						// }
 					]
 				}
 			},

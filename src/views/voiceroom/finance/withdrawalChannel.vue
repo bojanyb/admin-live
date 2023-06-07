@@ -401,4 +401,7 @@ export default {
     }
   }
 }
+.el-table__fixed-body-wrapper{
+  bottom: 0;
+}
 </style>

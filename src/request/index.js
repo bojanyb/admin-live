@@ -146,6 +146,7 @@ const request = {
     // 充值记录
     diamondRecharge: {
         list: `${HTTPHEADER}/Recharge/diamondRecharge`, // 充值记录
+        exportTask: `${HTTPHEADER}/Recharge/getExportTask`, // 文件查询
     },
 
     // 体现记录
@@ -231,6 +232,7 @@ const request = {
         userFlow2: `${HTTPHEADER}/Statistical/userFlow2`, // 用户流水记录2
         userFlow1: `${HTTPHEADER}/Statistical/userFlow1`, // 用户流水记录1
         diamondLog: `${HTTPHEADER}/Statistical/diamondLog`, // 余额明细
+        userFlowAll: `${HTTPHEADER}/Statistical/userFlowAll`, // 导出
     },
 
     // 公会管理

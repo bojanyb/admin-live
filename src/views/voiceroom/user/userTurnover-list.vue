@@ -7,14 +7,48 @@
         <span>选择时间内总金额：{{ ruleForm.total_amount || 0 }}喵粮</span>
     </div>
 		<div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"
+			:show-batch-rurn="true"
+			batchRurnName="导出EXCEL"
+			@BatchRurn="batchRurnFileName"
+			:show-batch-pass="true"
+			batchFuncName="文件查询"
+			@batchPass="batchFileSearch"
+			></SearchPanel>
         </div>
 
         <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
+
+		<!-- 导出文件名称 -->
+		<el-dialog class="downFilePop" title="导出文件名称" width="50%" :visible.sync="batchFileNameVisible">
+		<div>
+			由于导出数据量较大，现采取异步导出的方案进行，导出文件需要一段时间进行，请稍后自行点击 "文件查询" 下载。
+		</div>
+		<el-form>
+			<div class="inputBox">
+				<el-form-item label="请输入本次文件名称：" prop="file_name" class="numberBox">
+					<el-input v-model="file_name" placeholder="请输入本次文件名称" @input="fileNameInput" onkeyup="this.value=this.value.replace(/\s+/g,'')"></el-input>
+				</el-form-item>
+			</div>
+		</el-form>
+		<span slot="footer" class="dialog-footer">
+			<el-button type="primary" @click="BatchRurn">确 定</el-button>
+		</span>
+		</el-dialog>
+
+		<!-- 文件查询 -->
+		<el-dialog class="downFileSearchPop" title="文件查询" width="50%" :visible.sync="batchFileVisible">
+		<tableList
+			:cfgs="cfgs1"
+			ref="tableList2"
+		></tableList>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
+	// 引入api
+	import { getUserFlowAll } from "@/api/videoRoom.js";
 	// 引入列表组件
 	import tableList from '@/components/tableList/TableList.vue'
 	// 引入菜单组件
@@ -24,7 +58,7 @@
 	// 引入api
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
-	import { timeFormat } from '@/utils/common.js'
+	import { timeFormat, exportTableData } from "@/utils/common.js";
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
@@ -114,6 +148,9 @@
 				return {
 					vm: this,
 					url: REQUEST.deal.userFlow1,
+					search: {
+						sizes: [10, 30, 50, 100,300,500]
+					},
 					columns: [
 						{
 							label: '时间',
@@ -184,7 +221,37 @@
 						},
 					]
 				}
-			}
+			},
+			cfgs1() {
+				return {
+					vm: this,
+					url: REQUEST.diamondRecharge.exportTask,
+					columns: [
+					{
+						label: "文件名称",
+						render: (h, params) => {
+						return h("span", params.row.file_name || "无");
+						},
+					},
+					{
+						label: "状态",
+						render: (h, params) => {
+						let stateName = this.fileStateList.find((item) => { return item.state == params.row.export_status} )
+						return h("span", stateName.name || "无");
+						},
+					},
+					{
+						label: "下载",
+						fixed: "right",
+						render: (h, params) => {
+						return h("div", [
+							h("el-button",{props: { type: "primary" },style: { display: params.row.export_url !== '' ? 'unset' : 'none'}, on: {click: () => { this.downFile(params.row);}}},"下载"),
+						]);
+						},
+					},
+					],
+				};
+			},
 		},
 		data() {
 			return {
@@ -197,20 +264,45 @@
 					start_time: null,
 					end_time: null
 				},
-        roomTypeList : [
-          {
-            id : 0,
-            name : "全部"
-          },
-          {
-            id : 1,
-            name : "直播房间"
-          },
-          {
-            id : 2,
-            name : "派对房间"
-          }
-        ]
+				roomTypeList : [
+				{
+					id : 0,
+					name : "全部"
+				},
+				{
+					id : 1,
+					name : "直播房间"
+				},
+				{
+					id : 2,
+					name : "派对房间"
+				}
+				],
+				batchFileNameVisible: false,
+				file_name: "",
+				batchFileVisible: false,
+				fileStateList: [
+					{
+					id: 1,
+					state : 0,
+					name : "待导出"
+					},
+					{
+					id: 2,
+					state : 1,
+					name : "导出中"
+					},
+					{
+					id: 3,
+					state : 2,
+					name : "导出成功"
+					},
+					{
+					id: 4,
+					state : 3,
+					name : "导出失败"
+					}
+				]
 			}
 		},
 		methods: {
@@ -220,18 +312,28 @@
 			},
 			// 配置参数
 			beforeSearch(params) {
-				let s = { ...this.searchParams, ...this.dateTimeParams }
-				return {
-					page: params.page,
-					pagesize: params.size,
-					guild_number: s.guild_number,
-					room_number: s.room_number,
-					user_number: s.user_number,
-					start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
-					end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
-					flow_type: s.flow_type,
-          			guild_type: s.guild_type,
-					source: s.source
+				// 文件查询
+				if(this.batchFileVisible == true){
+					let s = {
+						page: params ? params.page : 1,
+						pagesize: params ? params.size : 10,
+						export_type : 2 // 1、财务管理-充值记录导出  2、交易管理-流水记录
+					}
+					return s
+				}else{
+					let s = { ...this.searchParams, ...this.dateTimeParams }
+					return {
+						page: params ? params.page : 1,
+          				pagesize: params ? params.size : 10,
+						guild_number: s.guild_number,
+						room_number: s.room_number,
+						user_number: s.user_number,
+						start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
+						end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
+						flow_type: s.flow_type,
+						guild_type: s.guild_type,
+						source: s.source
+					}
 				}
 			},
 			// 重置
@@ -292,7 +394,80 @@
 				this.searchParams.dateTimeParams = time
 				this.dateTimeParams.start_time = time[0]
 				this.dateTimeParams.end_time = time[1]
-			}
+			},
+			// 导出文件名称弹框
+			batchRurnFileName(){
+				this.batchFileNameVisible = true;
+			},
+			// 限制id输入
+			fileNameInput() {
+				this.file_name = this.file_name.replace(/[/\\]*/g, '')
+			},
+			// 文件查询
+			batchFileSearch(){
+				this.batchFileVisible = true;
+			},
+			// 下载文件
+			downFile(row){
+				window.location.href = row.export_url;
+			},
+			// 导出excel
+			BatchRurn() {
+				let s = this.beforeSearch();
+				delete s.page;
+				s.file_name = this.file_name;
+				const loading = this.$loading({
+					lock: true,
+					text: 'Loading',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				})
+				getUserFlowAll(s).then(res=>{
+					let arr = JSON.parse(JSON.stringify(res.data.list));
+					if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
+					arr = arr.map((item) => {
+						let source = MAPDATA.DEALSOURCETYPELIST.find(it => { return it.value === item.source })
+						let flow_type = MAPDATA.DEALSOURCELIST.find(it => { return it.id === item.flow_type })
+						let guild_type = this.roomTypeList.find(it => { return it.id === item.guild_type });
+						let params = {
+							create_time: timeFormat(
+							item.create_time,
+							"YYYY-MM-DD HH:mm:ss",
+							true
+							)+';',
+							relation_trade_no: JSON.stringify(item.relation_trade_no),
+							live_user_number: item.live_user_number,
+							room_number: item.room_number,
+							guild_number: item.guild_number,
+							source: source.name? source.name: "无",
+							flow_type: flow_type.name? flow_type.name: "无",
+							guild_type: guild_type.name? guild_type.name: "无",
+							amount: item.amount,
+							receive_ip: item.receive_ip,
+						};
+						return params;
+					});
+					let nameList = [
+					"时间",
+					"交易流水号",
+					"收礼ID",
+					"房间ID",
+					"公会ID",
+					"流水类型",
+					"房间来源",
+					"房间类型",
+					"金额",
+					"收礼人IP"
+					];
+					exportTableData(arr, nameList, this.file_name);
+					loading.close();
+					this.file_name = "";
+			}).catch(err=>{
+				loading.close();
+				this.file_name = "";
+			});
+			this.batchFileNameVisible = false;
+    },
 		},
 		created() {
 			this.changeIndex(0)

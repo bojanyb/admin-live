@@ -884,6 +884,15 @@ export function getUserDiamondLog(data) {
   })
 }
 
+// 导出
+export function getUserFlowAll(data) {
+  return request({
+    url: '/Statistical/userFlowAll',
+    method: 'post',
+    data
+  })
+}
+
 // 抽奖明细
 export function getUserDrawLog(data) {
   return request({
