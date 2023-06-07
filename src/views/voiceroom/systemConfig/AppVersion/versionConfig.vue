@@ -306,6 +306,9 @@ export default {
                 case 3:
                   platformName = "模拟器";
                   break;
+                case 4:
+                  platformName = "PC";
+                  break;
                 default:
                   platformName = "其他";
                   break;
