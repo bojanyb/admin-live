@@ -180,7 +180,25 @@ export default {
             label: '操作平台',
             prop: 'version',
             render: (h, params) => {
-              return h('span', params.row.platform == "2" ? "安卓" : (params.row.platform == "1" ? "IOS" : "模拟器"))
+              let platformName = ""
+              switch (params.row.platform) {
+                case 1:
+                  platformName = "iOS";
+                  break;
+                case 2:
+                  platformName = "安卓";
+                  break;
+                case 3:
+                  platformName = "模拟器";
+                  break;
+                case 4:
+                  platformName = "PC";
+                  break;
+                default:
+                  platformName = "其他";
+                  break;
+              }
+              return h('span', platformName)
             }
           },
           {

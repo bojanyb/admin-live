@@ -20,6 +20,7 @@
             <el-radio-button label="2">Android</el-radio-button>
             <el-radio-button label="1">iOS</el-radio-button>
             <el-radio-button label="3">模拟器</el-radio-button>
+            <el-radio-button label="4">PC</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="任务名" prop="title">
@@ -38,7 +39,7 @@
         <el-form-item label="版本号" prop="version">
           <el-input v-model="Form.version" placeholder="如: 1.0.1"></el-input>
         </el-form-item>
-        <el-form-item label="安卓Code" prop="version_code" v-if="platform !== '1'">
+        <el-form-item :label="platform == '4' ? 'PC Code' : '安卓Code' " prop="version_code" v-if="platform !== '1'">
           <el-input v-model="Form.version_code"></el-input>
         </el-form-item>
         <el-form-item label="热更新code" prop="hotfix" v-if="is_mandatory === 30 && platform !== '1'"
@@ -106,7 +107,7 @@ export default {
         }],
         version_code: [{
           required: (this.platform !== 1 ? true : false),
-          message: '请输入安卓Code',
+          message: '请输入Code',
           trigger: 'blur'
         }],
         hotfix:[{
@@ -304,6 +305,9 @@ export default {
                   break;
                 case 3:
                   platformName = "模拟器";
+                  break;
+                case 4:
+                  platformName = "PC";
                   break;
                 default:
                   platformName = "其他";

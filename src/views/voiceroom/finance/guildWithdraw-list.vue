@@ -28,12 +28,14 @@
         @bigBeforeYesterday="bigBeforeYesterday"
         @currentWeek="currentWeek"
         @today="today"
-        @BatchRurn="BatchRurn"
+        @BatchRurn="batchRurnFileName"
         @beforeYesterday="beforeYesterday"
-
         :show-custom="true"
         custom-name="批量查单"
         @custom="handleBatchQurtyOrder"
+        :show-batch-pass="true"
+        batchFuncName="文件查询"
+        @batchPass="batchFileSearch"
       ></SearchPanel>
     </div>
     <div class="tableList">
@@ -55,6 +57,31 @@
       <div>详情：</div>
         <div v-for="(item, index) in batchResultData" :key="index"><span>{{ item.trade_no }}</span></div>
       </div>
+    </el-dialog>
+
+    <!-- 导出文件名称 -->
+    <el-dialog class="downFilePop" title="导出文件名称" width="50%" :visible.sync="batchFileNameVisible">
+      <div>
+        由于导出数据量较大，现采取异步导出的方案进行，导出文件需要一段时间进行，请稍后自行点击 "文件查询" 下载。
+      </div>
+      <el-form>
+        <div class="inputBox">
+            <el-form-item label="请输入本次文件名称：" prop="file_name" class="numberBox">
+                <el-input v-model="file_name" placeholder="请输入本次文件名称" @input="fileNameInput" onkeyup="this.value=this.value.replace(/\s+/g,'')"></el-input>
+            </el-form-item>
+        </div>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="BatchRurn">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 文件查询 -->
+    <el-dialog class="downFileSearchPop" title="文件查询" width="50%" :visible.sync="batchFileVisible">
+      <tableList
+        :cfgs="cfgs1"
+        ref="tableList2"
+      ></tableList>
     </el-dialog>
   </div>
 </template>
@@ -418,6 +445,36 @@ export default {
         ],
       };
     },
+    cfgs1() {
+      return {
+        vm: this,
+        url: REQUEST.diamondRecharge.exportTask,
+        columns: [
+          {
+            label: "文件名称",
+            render: (h, params) => {
+              return h("span", params.row.file_name || "无");
+            },
+          },
+          {
+            label: "状态",
+            render: (h, params) => {
+              let stateName = this.fileStateList.find((item) => { return item.state == params.row.export_status} )
+              return h("span", stateName.name || "无");
+            },
+          },
+          {
+            label: "下载",
+            fixed: "right",
+            render: (h, params) => {
+              return h("div", [
+                h("el-button",{props: { type: "primary" },style: { display: params.row.export_url !== '' ? 'unset' : 'none'}, on: {click: () => { this.downFile(params.row);}}},"下载"),
+              ]);
+            },
+          },
+        ],
+      };
+    },
   },
   data() {
     return {
@@ -437,7 +494,32 @@ export default {
       list: [],
       topupStatus: null,
       batchDialogVisible: false,
-      batchResultData: []
+      batchResultData: [],
+      batchFileNameVisible: false,
+      file_name: "",
+      batchFileVisible: false,
+      fileStateList: [
+        {
+          id: 1,
+          state : 0,
+          name : "待导出"
+        },
+        {
+          id: 2,
+          state : 1,
+          name : "导出中"
+        },
+        {
+          id: 3,
+          state : 2,
+          name : "导出成功"
+        },
+        {
+          id: 4,
+          state : 3,
+          name : "导出失败"
+        }
+      ]
     };
   },
   methods: {
@@ -507,21 +589,31 @@ export default {
     },
     // 配置参数
     beforeSearch(params) {
-      let s = { ...this.searchParams, ...this.dateTimeParams };
-      return {
-        page: params ? params.page : null,
-        pagesize: params ? params.size : null,
-        user_number: s.user_number,
-        channel: s.channel,
-        status: s.status,
-        amount: s.amount ? Number(s.amount) * 100 : s.amount,
-        start_time: Math.floor(s.start_time / 1000),
-        end_time: Math.floor(s.end_time / 1000),
-        trade_no: s.trade_no,
-        purpose: s.purpose,
-        risk_status: s.risk_status,
-        wx_merchant_id: s.wx_merchant_id,
-      };
+      // 文件查询
+      if(this.batchFileVisible == true){
+        let s = {
+          page: params ? params.page : null,
+          pagesize: params ? params.size : null,
+          export_type : 1 // 1、财务管理-充值记录导出  2、交易管理-流水记录
+        }
+        return s
+      }else{
+        let s = { ...this.searchParams, ...this.dateTimeParams };
+        return {
+          page: params ? params.page : null,
+          pagesize: params ? params.size : null,
+          user_number: s.user_number,
+          channel: s.channel,
+          status: s.status,
+          amount: s.amount ? Number(s.amount) * 100 : s.amount,
+          start_time: Math.floor(s.start_time / 1000),
+          end_time: Math.floor(s.end_time / 1000),
+          trade_no: s.trade_no,
+          purpose: s.purpose,
+          risk_status: s.risk_status,
+          wx_merchant_id: s.wx_merchant_id,
+        };
+      }
     },
     // 设置时间段
     setDateTime(arr) {
@@ -559,20 +651,17 @@ export default {
       this.$set(this.searchParams, "dateTimeParams", [start_time,end_time]);
     },
     // 导出excel
-    async BatchRurn() {
+    BatchRurn() {
       let s = this.beforeSearch();
-
       delete s.page;
-
+      s.file_name = this.file_name;
       const loading = this.$loading({
         lock: true,
         text: 'Loading',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })
-
-      let res = await diamondRechargeAll(s);
-      try {
+      diamondRechargeAll(s).then(res=>{
         let arr = JSON.parse(JSON.stringify(res.data.list));
         if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
         arr = arr.map((item, index) => {
@@ -618,12 +707,14 @@ export default {
           "充值人IP",
           "地区"
         ];
-        exportTableData(arr, nameList, "充值记录");
+        exportTableData(arr, nameList, this.file_name);
         loading.close();
-      } catch (error) {
-         console.log(error);
+        this.file_name = "";
+      }).catch(err=>{
          loading.close();
-      }
+         this.file_name = "";
+      });
+      this.batchFileNameVisible = false;
     },
     // 获取当前周的开始结束时间
     getCurrWeekDays() {
@@ -743,6 +834,22 @@ export default {
         })
 
     },
+    // 限制id输入
+    fileNameInput() {
+      this.file_name = this.file_name.replace(/[/\\]*/g, '')
+    },
+    // 导出文件名称弹框
+    batchRurnFileName(){
+      this.batchFileNameVisible = true;
+    },
+    // 文件查询
+    batchFileSearch(){
+      this.batchFileVisible = true;
+    },
+    // 下载文件
+    downFile(row){
+      window.location.href = row.export_url;
+    }
   },
   created() {
     let time = new Date();
@@ -794,5 +901,10 @@ export default {
 }
 .el-table__fixed-body-wrapper{
   bottom: 0;
+}
+.downFileSearchPop{
+  .el-dialog{
+    margin-top: 5vh !important;
+  }
 }
 </style>
