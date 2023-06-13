@@ -119,6 +119,15 @@ const activityRouter = {
 				noCache: true
 			},
 			name: 'may-list'
+		},
+		{
+			path: 'pizza-list',
+			component: () => import('@/views/voiceroom/activity/pizza-list.vue'),
+			meta: {
+				title: '披萨活动数据',
+				noCache: true
+			},
+			name: 'pizza-list'
 		}
         // {
 		// 	path: 'first-charge',

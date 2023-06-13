@@ -541,6 +541,12 @@ const request = {
         getCpRankingV520: `${HTTPHEADER}/hdRomanticLog/cpRanking`, // cp榜排名
         getCpLogV520: `${HTTPHEADER}/hdRomanticLog/cpLog`, // 绑定cp记录
         getBindCpV520: `${HTTPHEADER}/hdRomanticLog/bindCp`, // 手动绑定cp
+
+        // 披萨
+        getPizzaGift: `${HTTPHEADER}/hdPizzaLog/getGift`, // 获取礼物
+        getPizzaGiftLog: `${HTTPHEADER}/hdPizzaLog/giftLog`, // 礼物数据
+        getPizzaGiftProduceLog: `${HTTPHEADER}/hdPizzaLog/getProduceLog`, // 制作披萨数据
+        getPizzaExchangeLog: `${HTTPHEADER}/hdPizzaLog/exchangeLog`, // 获取兑换数据
     },
 
     // 靓号管理

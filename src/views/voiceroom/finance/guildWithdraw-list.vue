@@ -649,7 +649,7 @@ export default {
       this.ruleForm = { ...data };
       let timer = JSON.parse(JSON.stringify(this.dateTimeParams));
       let start_time = timer.start_time;
-      let end_time = new Date(timer.end_time).getTime();
+      let end_time = timer.end_time;
       this.$set(this.searchParams, "dateTimeParams", [start_time,end_time]);
     },
     // 导出excel
@@ -857,7 +857,7 @@ export default {
     let time = new Date();
     let date = timeFormat(time, "YYYY-MM-DD", false);
     let start = new Date(date + " 00:00:00").getTime();
-    let end = new Date(timeFormat(time, "YYYY-MM-DD HH:mm:ss", false));
+    let end = new Date(timeFormat(time, "YYYY-MM-DD HH:mm:ss", false)).getTime();
     this.searchParams.dateTimeParams = [start, end];
     this.dateTimeParams = {
       start_time: start,
