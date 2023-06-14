@@ -36,6 +36,9 @@
         :show-batch-pass="true"
         batchFuncName="文件查询"
         @batchPass="batchFileSearch"
+        :showQuery="true"
+        queryName="批量查单结果"
+        @query="handleBatchQurtyResult"
       ></SearchPanel>
     </div>
     <div class="tableList">
@@ -80,6 +83,22 @@
     <el-dialog class="downFileSearchPop" title="文件查询" width="50%" :visible.sync="batchFileVisible">
       <tableList
         :cfgs="cfgs1"
+        ref="tableList2"
+      ></tableList>
+    </el-dialog>
+
+    <!-- 批量查单结果 -->
+    <el-dialog class="queryOrderResult" title="批量查单结果" width="50%" :visible.sync="queryOrderVisible">
+      <tableList
+        :cfgs="cfgs2"
+        ref="tableList2"
+      ></tableList>
+    </el-dialog>
+
+    <!-- 查单明细 -->
+    <el-dialog class="queryOrderResult" title="批量查单明细" width="50%" :visible.sync="queryOrderDetailVisible">
+      <tableList
+        :cfgs="cfgs3"
         ref="tableList2"
       ></tableList>
     </el-dialog>
@@ -475,6 +494,57 @@ export default {
         ],
       };
     },
+      cfgs2() {
+      return {
+        vm: this,
+        url: REQUEST.diamondRecharge.exportTask,
+        columns: [
+          {
+            label: "批量查单时间",
+            render: (h, params) => {
+              return h("span", params.row.file_name || "无");
+            },
+          },
+          {
+            label: "结果",
+            render: (h, params) => {
+              let stateName = this.fileStateList.find((item) => { return item.state == params.row.export_status} )
+              return h("span", stateName.name || "无");
+            },
+          },
+          {
+            label: "成功查单明细",
+            fixed: "right",
+            render: (h, params) => {
+              return h("div", [
+                h("el-button",{props: { type: "primary" },style: { display: params.row.export_url !== '' ? 'unset' : 'none'}, on: {click: () => { this.hanldeQueryDetail(params.row);}}},"查看明细"),
+              ]);
+            },
+          },
+        ],
+      };
+    },
+      cfgs3() {
+      return {
+        vm: this,
+        url: REQUEST.diamondRecharge.exportTask,
+        columns: [
+          {
+            label: "序号",
+            render: (h, params) => {
+              return h("span", params.row.file_name || "无");
+            },
+          },
+          {
+            label: "成功商户单号",
+            render: (h, params) => {
+              let stateName = this.fileStateList.find((item) => { return item.state == params.row.export_status} )
+              return h("span", stateName.name || "无");
+            },
+          },
+        ],
+      };
+    },
   },
   data() {
     return {
@@ -498,6 +568,8 @@ export default {
       batchFileNameVisible: false,
       file_name: "",
       batchFileVisible: false,
+      queryOrderVisible: false,
+      queryOrderDetailVisible: false,
       fileStateList: [
         {
           id: 1,
@@ -849,7 +921,15 @@ export default {
     // 下载文件
     downFile(row){
       window.location.href = row.export_url;
-    }
+    },
+    // 批量查单结果
+    handleBatchQurtyResult() {
+      this.queryOrderVisible = true;
+    },
+    // 查单明细
+    hanldeQueryDetail() {
+      this.queryOrderDetailVisible = true;
+    },
   },
   created() {
     let time = new Date();
@@ -903,6 +983,12 @@ export default {
   bottom: 0;
 }
 .downFileSearchPop{
+  .el-dialog{
+    margin-top: 5vh !important;
+  }
+}
+
+.queryOrderResult {
   .el-dialog{
     margin-top: 5vh !important;
   }

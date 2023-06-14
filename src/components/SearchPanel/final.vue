@@ -193,6 +193,7 @@
             <el-button v-if="showBatchRurn" type="danger" @click="BatchRurn">{{ batchRurnName || '批量拒绝' }}</el-button>
             <el-button v-if="showExport" type="info" @click="handleExport">{{ exportName || 'Excel导出' }}</el-button>
             <el-button v-if="showCustom" type="warning" @click="handleCustom">{{ customName || '自定义' }}</el-button>
+            <el-button v-if="showQuery" type="primary" @click="handleQuery">{{ queryName || '查询' }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -288,6 +289,11 @@ export default {
       type: Boolean,
       default: false
     },
+    // 是否显示查询按钮
+    showQuery: {
+      type: Boolean,
+      default: false
+    },
     // 显示搜索按钮
     showSearchBtn: {
       type: Boolean,
@@ -320,6 +326,11 @@ export default {
     },
     // 自定义 - 按钮名称
     customName: {
+      type: String,
+      default: ''
+    },
+    // 查询 - 按钮名称
+    queryName: {
       type: String,
       default: ''
     },
@@ -579,6 +590,10 @@ export default {
     // 自定义
     handleCustom() {
       this.$emit('custom')
+    },
+    // 查询
+    handleQuery() {
+      this.$emit('query')
     },
     // 新增
     add() {
