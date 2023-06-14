@@ -152,7 +152,20 @@ export default {
 						}
 						return h('span', name)
 					}
-				}
+        },
+				{
+					label: '操作时间',
+					width: '180px',
+					render: (h, params) => {
+						return h('span', params.row.op_time ? timeFormat(params.row.op_time, 'YYYY-MM-DD HH:mm:ss', true) : '-')
+					}
+				},
+				{
+					label: '操作人',
+					render: (h, params) => {
+						return h('span', params.row.op_user ? timeFormat(params.row.op_user, 'YYYY-MM-DD HH:mm:ss', true) : '-')
+					}
+				},
 			]
 			let arr1 = [
 				{
