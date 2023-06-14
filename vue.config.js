@@ -60,6 +60,16 @@ const option = {
 	  domainHttp: '//m.huidapay.net', // app端接口
 	  httpHeader: '', // 后台本地携带
 	},
+  // 灰度环境
+  '--grey': {
+    publicPath: '/',
+    outputDir: 'dist',
+    assetsDir: 'static',
+    mode: 'grey',
+    domainHttps: '//api.grey.aiyi.live', // https环境地址
+    domainHttp: '//m.grey.aiyi.live', // app端接口
+    httpHeader: '', // 后台本地携带
+  },
 	// 生产环境
 	'--prod': {
 	  publicPath: '/',
