@@ -233,10 +233,30 @@ export default {
           },
           {
             label: "工猫通道-支付宝",
-            prop: "cat_bank",
+            prop: "cat_alipay",
             render: (h, params) => {
               let data = MAPDATA.CASHCHANNEL.find((item) => {
                 return item.value === params.row.cat_alipay;
+              });
+              return h("span", data ? "已签署" : "未签署");
+            },
+          },
+          {
+            label: "美事通-银行卡",
+            prop: "mst_bank",
+            render: (h, params) => {
+              let data = MAPDATA.CASHCHANNEL.find((item) => {
+                return item.value === params.row.mst_bank;
+              });
+              return h("span", data ? "已签署" : "未签署");
+            },
+          },
+          {
+            label: "美事通-支付宝",
+            prop: "mst_alipay",
+            render: (h, params) => {
+              let data = MAPDATA.CASHCHANNEL.find((item) => {
+                return item.value === params.row.mst_alipay;
               });
               return h("span", data ? "已签署" : "未签署");
             },
@@ -260,6 +280,18 @@ export default {
             sortable: "custom",
             render: (h, params) => {
               const result = params.row.cat_quota.map(item => {
+                return h("div",  `${item.name}：${item.quota}`)
+              })
+              return h("div", result);
+            },
+          },
+          {
+            label: "美事通通道余额",
+            prop: "mst_quota",
+            minWidth: "120px",
+            sortable: "custom",
+            render: (h, params) => {
+              const result = params.row.mst_quota.map(item => {
                 return h("div",  `${item.name}：${item.quota}`)
               })
               return h("div", result);

@@ -351,6 +351,7 @@ const request = {
         list: `${HTTPHEADER}/Cancellation/index`, // 注销列表
         listV2: `${HTTPHEADER}/Cancellation/indexV2`, // 注销列表V2
         hasDeal: `${HTTPHEADER}/Cancellation/hasDeal`, // 已处理列表
+        indexV2Export: `${HTTPHEADER}/Cancellation/indexV2Export`, // 注销列表V2
     },
 
     // 房间列表

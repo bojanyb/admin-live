@@ -656,6 +656,15 @@ export function getUserCancellationHasDeal(data) {
   })
 }
 
+// 注销管理 导出
+export function indexV2Export(data) {
+  return request({
+    url: '/Cancellation/indexV2Export',
+    method: 'post',
+    data
+  })
+}
+
 // 注销管理 处理 操作
 export function getUserCancellationDeal(data) {
   return request({

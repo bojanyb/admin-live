@@ -6,8 +6,10 @@
         :forms="forms"
         :show-reset="true"
         :show-search-btn="true"
+        :show-export="true"
         @onReset="reset"
         @onSearch="onSearch"
+        @export="handleExport"
       ></SearchPanel>
     </div>
     <tableList :cfgs="cfgs" ref="tableList"></tableList>
@@ -15,7 +17,7 @@
 </template>
 
 <script>
-import { getUserCancellationDeal } from "@/api/videoRoom";
+import { getUserCancellationDeal, indexV2Export } from "@/api/videoRoom";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
@@ -108,6 +110,16 @@ export default {
             prop: "role_name",
           },
           {
+              label: '所属公会',
+              minWidth: '100px',
+              render: (h, params) => {
+                  return h('div', [
+                      h('div', params.row.guild_name),
+                      h('div', params.row.guild_number || '-'),
+                  ])
+              }
+          },
+          {
             label: "等级",
             render: (h, params) => {
               return h("div", [
@@ -187,8 +199,8 @@ export default {
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams };
       return {
-        page: params.page,
-        pagesize: params.size,
+        page: params ? params.page : null,
+        pagesize: params ? params.size : null,
         status: s.status,
         user_number: s.user_number,
         start_time: s.start_time
@@ -274,6 +286,34 @@ export default {
     // 清空日期选择
     emptyDateTime() {
       this.dateTimeParams = {};
+    },
+    async handleExport() {
+      let s = this.beforeSearch();
+      const search = this.$refs.tableList.search;
+      s.page = search ? search.page : null;
+      s.pagesize = search ? search.size : null;
+      const loading = this.$loading({
+        lock: true,
+        text: "Loading",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      let res = await indexV2Export(s);
+      try {
+        let URL = res.data.url;
+        let link = document.createElement("a");
+        link.href = URL;
+        link.download = "用户注销"; //加上下载的文件名
+        if (URL.indexOf("?") === -1) {
+          URL += "?download";
+        }
+        link.click();
+        link.remove();
+        loading.close();
+      } catch (error) {
+        console.log(error);
+        loading.close();
+      }
     },
   },
 };
