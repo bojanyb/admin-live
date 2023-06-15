@@ -6,8 +6,10 @@
         :forms="forms"
         :show-reset="true"
         :show-search-btn="true"
+        :show-export="true"
         @onReset="reset"
         @onSearch="onSearch"
+        @export="onExport"
       ></SearchPanel>
     </div>
     <tableList :cfgs="cfgs" ref="tableList"></tableList>
@@ -106,6 +108,16 @@ export default {
           {
             label: "用户角色",
             prop: "role_name",
+          },
+          {
+              label: '所属公会',
+              minWidth: '100px',
+              render: (h, params) => {
+                  return h('div', [
+                      h('div', params.row.guild_name),
+                      h('div', params.row.guild_number || '-'),
+                  ])
+              }
           },
           {
             label: "等级",
@@ -274,6 +286,9 @@ export default {
     // 清空日期选择
     emptyDateTime() {
       this.dateTimeParams = {};
+    },
+    onExport() {
+      console.log("导出");
     },
   },
 };
