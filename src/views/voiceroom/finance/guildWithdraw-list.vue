@@ -97,10 +97,7 @@
 
     <!-- 查单明细 -->
     <el-dialog class="queryOrderResult" title="成功查单明细" width="50%" :visible.sync="queryOrderDetailVisible">
-      <tableList
-        :cfgs="cfgs3"
-        ref="tableList2"
-      ></tableList>
+      123
     </el-dialog>
   </div>
 </template>
@@ -502,14 +499,13 @@ export default {
           {
             label: "批量查单时间",
             render: (h, params) => {
-              return h("span", params.row.add_time || "无");
+              return h("span",  timeFormat(params.row.add_time, "YYYY-MM-DD HH:mm:ss", true) || "无");
             },
           },
           {
             label: "结果",
             render: (h, params) => {
-              let stateName = this.fileStateList.find((item) => { return item.state == params.row.export_status} )
-              return h("span", stateName.success_number ? `${stateName.success_number}条成功 / 共查单${stateName.total_number}条记录` || "无");
+              return h("span", `${params.success_number || 0}条成功 / 共查单${params.total_number || 0}条记录` || "无");
             },
           },
           {
@@ -519,27 +515,6 @@ export default {
               return h("div", [
                 h("el-button",{props: { type: "primary" },style: { display: params.row.export_url !== '' ? 'unset' : 'none'}, on: {click: () => { this.hanldeQueryDetail(params.row);}}},"查看明细"),
               ]);
-            },
-          },
-        ],
-      };
-    },
-      cfgs3() {
-      return {
-        vm: this,
-        url: REQUEST.diamondRecharge.getQueryPayDetails,
-        columns: [
-          {
-            label: "序号",
-            render: (h, params) => {
-              return h("span", params.row.file_name || "无");
-            },
-          },
-          {
-            label: "成功商户单号",
-            render: (h, params) => {
-              let stateName = this.fileStateList.find((item) => { return item.state == params.row.export_status} )
-              return h("span", stateName.name || "无");
             },
           },
         ],
