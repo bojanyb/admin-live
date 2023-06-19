@@ -109,6 +109,7 @@ const activityRouter = {
 				title: '奇妙跳跳屋榜单排名表',
 				noCache: true
 			},
+			name: 'jump-rank-list'
 		},
 		{
 			path: 'may-list',
@@ -118,6 +119,15 @@ const activityRouter = {
 				noCache: true
 			},
 			name: 'may-list'
+		},
+		{
+			path: 'pizza-list',
+			component: () => import('@/views/voiceroom/activity/pizza-list.vue'),
+			meta: {
+				title: '披萨活动数据',
+				noCache: true
+			},
+			name: 'pizza-list'
 		}
         // {
 		// 	path: 'first-charge',
