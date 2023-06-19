@@ -283,3 +283,39 @@ export function getBindCpV520(data) {
     data
   })
 }
+
+// 获取礼物
+export function getDragonBoatGift(data) {
+  return request({
+    url: api.dragonBoat.getGift,
+    method: 'post',
+    data
+  })
+}
+
+// 礼物数据
+export function getDragonBoatGiftLog(data) {
+  return request({
+    url: api.dragonBoat.giftLog,
+    method: 'post',
+    data
+  })
+}
+
+// 获取兑换数据
+export function getDragonBoatExchangeLog(data) {
+  return request({
+    url: api.dragonBoat.exchangeLog,
+    method: 'post',
+    data
+  })
+}
+
+// 榜单排名
+export function getDragonBoatRanking(data) {
+  return request({
+    url: api.dragonBoat.getRanking,
+    method: 'post',
+    data
+  })
+}

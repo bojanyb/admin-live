@@ -118,6 +118,15 @@ const activityRouter = {
 				noCache: true
 			},
 			name: 'may-list'
+		},
+		{
+			path: 'dragonBoat-list',
+			component: () => import('@/views/voiceroom/activity/dragonBoat-list.vue'),
+			meta: {
+				title: '端午活动数据',
+				noCache: true
+			},
+			name: 'dragonBoat-list'
 		}
         // {
 		// 	path: 'first-charge',
