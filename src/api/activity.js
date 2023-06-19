@@ -283,7 +283,6 @@ export function getBindCpV520(data) {
     data
   })
 }
-
 /*******披萨屋**********/
 // 获取礼物
 export function getPizzaGift(data) {
@@ -309,4 +308,3 @@ export function getPizzaExchangeLog(data) {
     data
   })
 }
-

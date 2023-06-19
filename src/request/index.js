@@ -571,6 +571,31 @@ const request = {
         recycle: `${HTTPHEADER}/PrettyNumber/recycle`, // 靓号回收
         recycleLog: `${HTTPHEADER}/PrettyNumber/recycleLog`, // 回收记录
         refund: `${HTTPHEADER}/PrettyNumber/refund`, // 退款
+    },
+
+    // 快乐披萨屋
+    pizza:{
+        myMaterialsInfo :  `${HTTPHEADER}/hdPizza/myInfo`, // 获取用户信息
+        getRanking :  `${HTTPHEADER}/hdPizza/getRanking`, // 获取排行榜列表
+        exchangeList :  `${HTTPHEADER}/hdPizza/exchangeList`, // 获取兑换列表
+        exchange :  `${HTTPHEADER}/hdPizza/exchange`, // 兑换商品
+        getProduceMaterial :  `${HTTPHEADER}/hdPizza/getProduceMaterial`, // 获取制作披萨材料列表
+        markProduce :  `${HTTPHEADER}/hdPizza/produce`, // 制作披萨
+        getUserProduceLog :  `${HTTPHEADER}/hdPizza/getUserProduceLog`, // 获取用户披萨制作日志
+        getUserSpeedUpLog :  `${HTTPHEADER}/hdPizza/getUserSpeedUpLog`, // 获取用户的加速披萨日志
+        myExchangeLog :  `${HTTPHEADER}/hdPizza/myExchangeLog`, // 我的兑换记录
+        getPizzaProduceRanking :  `${HTTPHEADER}/hdPizza/getPizzaProduceRanking`, // 获取制作披萨排行榜
+        getGetRanking :  `${HTTPHEADER}/hdPizza/getRanking`, // 我的兑换记录
+        signInGetPizza :  `${HTTPHEADER}/hdPizza/signInGetPizza`, // 签到领披萨
+        getSpeedUp :  `${HTTPHEADER}/hdPizza/speedUp`, // 加速披萨制作
+    },
+
+    //  浓情端午
+    dragonBoat: {
+        getGift: `${HTTPHEADER}/hdDuanwuLog/getGift`, // 获取礼物
+        giftLog: `${HTTPHEADER}/hdDuanwuLog/giftLog`, // 礼物数据
+        exchangeLog: `${HTTPHEADER}/hdDuanwuLog/exchangeLog`, // 获取兑换数据
+        getRanking: `${HTTPHEADER}/hdDuanwuLog/getRanking`, // 榜单排名
     }
 }
 
