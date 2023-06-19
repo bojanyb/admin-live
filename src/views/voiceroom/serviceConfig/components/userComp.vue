@@ -60,6 +60,7 @@
                         <div class="rightBox">
                             <div class="name">{{ item.nickname }}</div>
                             <div class="id">ID：{{ item.user_number }}</div>
+                            <div class="id">userId：{{ item.id }}</div>
                         </div>
                     </div>
                     <div class="downBox">
