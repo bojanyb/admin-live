@@ -96,7 +96,7 @@
     </el-dialog>
 
     <!-- 查单明细 -->
-    <el-dialog class="queryOrderResult" title="批量查单明细" width="50%" :visible.sync="queryOrderDetailVisible">
+    <el-dialog class="queryOrderResult" title="成功查单明细" width="50%" :visible.sync="queryOrderDetailVisible">
       <tableList
         :cfgs="cfgs3"
         ref="tableList2"
@@ -497,19 +497,19 @@ export default {
       cfgs2() {
       return {
         vm: this,
-        url: REQUEST.diamondRecharge.exportTask,
+        url: REQUEST.diamondRecharge.getQueryPayTask,
         columns: [
           {
             label: "批量查单时间",
             render: (h, params) => {
-              return h("span", params.row.file_name || "无");
+              return h("span", params.row.add_time || "无");
             },
           },
           {
             label: "结果",
             render: (h, params) => {
               let stateName = this.fileStateList.find((item) => { return item.state == params.row.export_status} )
-              return h("span", stateName.name || "无");
+              return h("span", stateName.success_number ? `${stateName.success_number}条成功 / 共查单${stateName.total_number}条记录` || "无");
             },
           },
           {
@@ -527,7 +527,7 @@ export default {
       cfgs3() {
       return {
         vm: this,
-        url: REQUEST.diamondRecharge.exportTask,
+        url: REQUEST.diamondRecharge.getQueryPayDetails,
         columns: [
           {
             label: "序号",
