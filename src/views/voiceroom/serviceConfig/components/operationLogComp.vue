@@ -74,7 +74,7 @@ export default {
       this.dialogVisible = true;
       let res = await punishOperateLog({
         ...this.lookPage,
-        event_id: row.report_event_id || "",
+        id: row.id || "",
       });
       this.tableData = res.data || [];
     },
