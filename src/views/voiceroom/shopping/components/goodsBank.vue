@@ -143,7 +143,6 @@ export default {
                 page: this.giftPage.page,
                 ...this.formData
             }
-            console.log(params, 'params');
             this.giftListArr = [];
             goodsList(params).then(res => {
                 this.giftTotal = res.data.count;
