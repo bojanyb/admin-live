@@ -162,7 +162,7 @@ export default {
 				{
 					label: '操作人',
 					render: (h, params) => {
-						return h('span', params.row.op_user ? timeFormat(params.row.op_user, 'YYYY-MM-DD HH:mm:ss', true) : '-')
+						return h('span', params.row.op_user ? params.row.op_user : '-')
 					}
 				},
 			]
@@ -318,7 +318,7 @@ export default {
 		// 列表返回数据
 		saleAmunt(row) {
       this.ruleForm = { ...row };
-      this.page = ruleForm.page;
+      this.page = this.ruleForm.page;
 		},
 		// 分页切换 当前页码
 		handleSizeChange(val) {

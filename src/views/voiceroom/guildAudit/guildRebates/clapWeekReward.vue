@@ -153,7 +153,7 @@ export default {
 				{
 					label: '操作人',
 					render: (h, params) => {
-						return h('span', params.row.op_user ? timeFormat(params.row.op_user, 'YYYY-MM-DD HH:mm:ss', true) : '-')
+						return h('span', params.row.op_user ? params.row.op_user : '-')
 					}
 				},
 			]
