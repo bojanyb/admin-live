@@ -88,27 +88,73 @@
     </el-dialog>
 
     <!-- 批量查单结果 -->
-    <el-dialog class="queryOrderResult" title="批量查单结果" width="50%" :visible.sync="queryOrderVisible">
-      <tableList
-        :cfgs="cfgs2"
-        ref="tableList2"
-      ></tableList>
+    <el-dialog class="queryPayResult" title="批量查单结果" width="50%" :visible.sync="queryOrderResultVisible">
+      <el-table
+        :data="orderPayData"
+        style="width: 100%">
+        <el-table-column
+          prop="add_time"
+          label="批量查单时间"
+          show-overflow-tooltip
+          >
+          <template slot-scope="scope">
+              {{ scope.row.add_time | filtersTime }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="success_number"
+          label="结果"
+          show-overflow-tooltip
+          >
+        <template slot-scope="scope">
+          {{ `${scope.row.success_number || 0}条成功 / 共查单${scope.row.total_number || 0}条记录` }}
+        </template>
+        </el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button type="primary" @click="hanldeQueryDetail(scope.row)">查看明细</el-button>
+                </template>
+            </el-table-column>
+      </el-table>
+				<!--工具条-->
+				<pagination v-show="orderPayTotal>0" :total="orderPayTotal" :page.sync="payResulPage.page"
+					:limit.sync="payResulPage.limit" @pagination="getPayResult" />
     </el-dialog>
 
     <!-- 查单明细 -->
     <el-dialog class="queryOrderResult" title="成功查单明细" width="50%" :visible.sync="queryOrderDetailVisible">
-      123
+      <el-table
+        :data="orderDetailData"
+        style="width: 100%">
+        <el-table-column
+          prop="trade_no"
+          label="序号"
+          show-overflow-tooltip
+          >
+        </el-table-column>
+        <el-table-column
+          prop="remark"
+          label="成功商户单号"
+          show-overflow-tooltip
+          >
+        </el-table-column>
+      </el-table>
+				<!--工具条-->
+				<pagination v-show="orderDetailTotal>0" :total="orderDetailTotal" :page.sync="orderDetailPage.page"
+					:limit.sync="orderDetailPage.limit" @pagination="getDetails" />
     </el-dialog>
   </div>
 </template>
 
 <script>
 // 引入api
-import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus } from "@/api/finance.js";
+import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails } from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
+// 分页
+import Pagination from '@/components/Pagination'
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
 // 引入api
@@ -123,6 +169,7 @@ export default {
   components: {
     tableList,
     SearchPanel,
+    Pagination
   },
   mixins: [mixins],
   computed: {
@@ -491,35 +538,11 @@ export default {
         ],
       };
     },
-      cfgs2() {
-      return {
-        vm: this,
-        url: REQUEST.diamondRecharge.getQueryPayTask,
-        columns: [
-          {
-            label: "批量查单时间",
-            render: (h, params) => {
-              return h("span",  timeFormat(params.row.add_time, "YYYY-MM-DD HH:mm:ss", true) || "无");
-            },
-          },
-          {
-            label: "结果",
-            render: (h, params) => {
-              return h("span", `${params.success_number || 0}条成功 / 共查单${params.total_number || 0}条记录` || "无");
-            },
-          },
-          {
-            label: "成功查单明细",
-            fixed: "right",
-            render: (h, params) => {
-              return h("div", [
-                h("el-button",{props: { type: "primary" },style: { display: params.row.export_url !== '' ? 'unset' : 'none'}, on: {click: () => { this.hanldeQueryDetail(params.row);}}},"查看明细"),
-              ]);
-            },
-          },
-        ],
-      };
-    },
+  },
+  filters: {
+    filtersTime(str) {
+      return timeFormat(str, "YYYY-MM-DD HH:mm:ss", true) || "无"
+    }
   },
   data() {
     return {
@@ -543,7 +566,15 @@ export default {
       batchFileNameVisible: false,
       file_name: "",
       batchFileVisible: false,
-      queryOrderVisible: false,
+
+      queryOrderResultVisible: false,
+      orderPayData: [],
+      orderPayTotal: 0,
+      payResulPage: {
+          page: 1,
+          limit: 10,
+      },
+
       queryOrderDetailVisible: false,
       fileStateList: [
         {
@@ -566,7 +597,14 @@ export default {
           state : 3,
           name : "导出失败"
         }
-      ]
+      ],
+      orderDetailData: [],
+      orderDetailTotal: 0,
+      orderDetailPage: {
+          page: 1,
+          limit: 10,
+      },
+      queryOrderData: {}
     };
   },
   methods: {
@@ -899,12 +937,36 @@ export default {
     },
     // 批量查单结果
     handleBatchQurtyResult() {
-      this.queryOrderVisible = true;
+      this.queryOrderResultVisible = true;
+      this.getPayResult()
+    },
+    async getPayResult() {
+      const response = await getQueryPayTask({
+        page: this.payResulPage.page,
+        pagesize: this.payResulPage.limit
+      })
+      if (response.code === 2000) {
+        this.orderPayData = response.data.list;
+        this.orderPayTotal = response.data.count;
+      }
     },
     // 查单明细
-    hanldeQueryDetail() {
+    hanldeQueryDetail(row) {
+      this.queryOrderData = row;
       this.queryOrderDetailVisible = true;
+      this.getDetails()
     },
+    async getDetails() {
+      const response = await getQueryPayDetails({
+        task_id: this.queryOrderData.task_id,
+        page: this.orderDetailPage.page,
+        pagesize: this.orderDetailPage.limit
+      })
+      if (response.code === 2000) {
+        this.orderDetailData = response.data.list;
+        this.orderDetailTotal = response.data.count;
+      }
+    }
   },
   created() {
     let time = new Date();

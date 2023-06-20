@@ -145,3 +145,22 @@ export function queryPayStatus(data) {
     data
   })
 }
+
+
+// 文件查询
+export function getQueryPayTask(data) {
+  return request({
+    url: REQUEST.diamondRecharge.getQueryPayTask,
+    method: 'post',
+    data
+  })
+}
+
+// 文件查询
+export function getQueryPayDetails(data) {
+  return request({
+    url: REQUEST.diamondRecharge.getQueryPayDetails,
+    method: 'post',
+    data
+  })
+}
