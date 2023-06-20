@@ -60,14 +60,16 @@ export default {
           options: MAPDATA.USERBALANCETYPE
         },
         {
-          name: 'relation_type',
-          type: 'select',
-          value: '',
-          keyName: 'code',
-          optionLabel: 'name',
-          label: '交易渠道',
-          placeholder: '请选择交易渠道',
-          options: this.jsonMapList
+          name: "relation_type",
+          type: "cascader",
+          value: null,
+          keyName: "value",
+          optionLabel: "label",
+          label: "交易渠道",
+          placeholder: "请选择",
+          filterable: true,
+          clearable: true,
+          options: this.jsonMapList,
         },
         {
           name: 'dateTimeParams',
@@ -124,8 +126,12 @@ export default {
             }
           },
           {
-            label: '渠道',
+            label: '一级渠道',
             prop: 'relation_type_name'
+          },
+          {
+            label: '二级渠道',
+            prop: 'relation_sub_type_name'
           },
           {
             label: '交易流水号',
@@ -169,7 +175,7 @@ export default {
         user_number: s.user_number,
         trade_no: s.trade_no,
         genre: s.genre,
-        relation_type: s.relation_type,
+        relation_type: s.relation_type ? s.relation_type[1] : "",
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0
       }
@@ -204,13 +210,23 @@ export default {
     },
     async getRelationTypeFunc() {
       let res = await getAdminRelationType()
-      if(res.data.list && res.data.list.length > 0) {
-        res.data.list.unshift({
-          code: '',
-          name: '全部'
-        })
-      }
-      this.jsonMapList = res.data.list
+
+      const result = res.data.list.reduce((prev, curr) => {
+        const temp = {
+          value: curr.code + '',
+          label: curr.name,
+          children: curr.child.map(item => {
+            return {
+              value: item.code + '',
+              label: item.name,
+            }
+          })
+        }
+        prev.push(temp)
+        return prev;
+      }, [])
+
+      this.jsonMapList = result
     },
     saleAmunt(row) {
       this.ruleForm = { ...row.total_sum }
