@@ -69,7 +69,9 @@ export default {
           placeholder: "请选择",
           filterable: true,
           clearable: true,
+          collapse: true,
           options: this.jsonMapList,
+          props: { multiple: true }
         },
         {
           name: 'dateTimeParams',
@@ -169,13 +171,22 @@ export default {
     // 配置参数
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams }
+      let data = s.relation_type ? JSON.parse(JSON.stringify(s.relation_type)) : []
+      const result = data.reduce((prev, curr) => {
+        curr.map((item, index) => {
+          if (index !== 0) {
+            prev.push(item)
+          }
+        })
+        return prev
+      }, []).join(',')
       return {
         page: params.page,
         pagesize: params.size,
         user_number: s.user_number,
         trade_no: s.trade_no,
         genre: s.genre,
-        relation_type: s.relation_type ? s.relation_type[1] : "",
+        relation_type: (result && result.length) ? result : "",
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0
       }
