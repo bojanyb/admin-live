@@ -126,11 +126,11 @@ export default {
             }
           },
           {
-            label: '一级渠道',
+            label: '主渠道',
             prop: 'relation_type_name'
           },
           {
-            label: '二级渠道',
+            label: '子渠道',
             prop: 'relation_sub_type_name'
           },
           {
