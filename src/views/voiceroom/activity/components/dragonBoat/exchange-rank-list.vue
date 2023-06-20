@@ -7,7 +7,7 @@
         <el-card class="box-card" shadow="always" v-if="tabIndex === '0'">
 			<div class="box-card-inner">
 				<div>兑换人数：{{sumSource.user_count || 0}}人</div>
-				<div>消耗兑换浓情值：{{sumSource.debris_number || 0}}人</div>
+				<div>消耗兑换浓情值：{{sumSource.debris_number || 0}}</div>
 			</div>
 		</el-card>
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -46,7 +46,6 @@ export default {
                     value: '',
                     label: '用户ID',
                     isNum: true,
-                    linkage: true,
                     placeholder: '请输入用户ID'
                 },
                 {
@@ -54,7 +53,6 @@ export default {
                     type: 'input',
                     value: '',
                     label: '奖品名称',
-                    linkage: true,
                     placeholder: '请输入奖品名称'
                 },
                 {
