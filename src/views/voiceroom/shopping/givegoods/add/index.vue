@@ -3,7 +3,7 @@
         <el-dialog
             :title="title"
             :visible.sync="dialogVisible"
-            width="590px"
+            width="620px"
             :before-close="handleClose"
             :close-on-click-modal="false"
             @closed="closed">
@@ -13,7 +13,7 @@
                         <el-input v-model="ruleForm.user_number" placeholder="被赠送用户ID"></el-input>
                     </el-form-item>
                     <el-form-item label="赠送商品" prop="goods_id" :rules="goodsComputed">
-                        <el-button type="primary" @click="selectClick">选择商品</el-button>
+                        <el-button v-for="item in goodsOptions" :key="item.value" type="primary" size="mini" @click="selectClick(item.value)">{{ item.name }}</el-button>
                     </el-form-item>
                     <el-form-item label="" v-if="list.length > 0">
                         <div class="goods_List">
@@ -39,19 +39,22 @@
             </div>
         </el-dialog>
 
-        <goodsBank ref="goodsBank" :list="list" :isLimit="10" @validateField="validateField"></goodsBank>
+        <goodsBank v-if="goodsBankVisible" ref="goodsBank" :list="list" :goodsType="goodsType" :isLimit="10" @validateField="validateField" @distoryComp="distoryComp"></goodsBank>
     </div>
 </template>
 
 <script>
 // 引入商品库组件
-import goodsBank from '@/components/goodsBank/index.vue'
+import goodsBank from '../../components/goodsBank.vue'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 // 引入api
 import { goodsSend } from '@/api/shopping'
+// 引入公共参数
+import mixins from "@/utils/mixins.js";
 
 export default {
+    mixins: [mixins],
     components: {
         goodsBank
     },
@@ -79,7 +82,10 @@ export default {
                 goods_id: [
                     { required: true, message: '请选择赠送商品', trigger: 'change' }
                 ]
-            }
+            },
+            goodsOptions: MAPDATA.SHOPPING,
+            goodsType: null,
+            goodsBankVisible: false,
         };
     },
     computed: {
@@ -114,9 +120,13 @@ export default {
             this.dialogVisible = true
         },
         // 选择商品
-        selectClick() {
-            this.$refs.goodsBank.drawer = true
-            this.$refs.goodsBank.giftList()
+      selectClick(goodsType) {
+           this.goodsType = goodsType;
+           this.goodsBankVisible = true;
+            setTimeout(() => {
+                this.$refs.goodsBank.drawer = true
+                this.$refs.goodsBank.giftList()
+            }, 30);
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
@@ -152,7 +162,11 @@ export default {
         // 销毁弹窗
         closed() {
             this.$emit('destoryComp')
-        }
+      },
+      // 销毁组件
+      distoryComp() {
+        this.goodsBankVisible = false;
+      },
     }
 }
 </script>
