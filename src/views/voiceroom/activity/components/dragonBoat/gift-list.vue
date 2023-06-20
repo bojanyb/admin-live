@@ -50,7 +50,6 @@ export default {
                     value: '',
                     label: '送礼人ID',
                     isNum: true,
-                    linkage: true,
                     placeholder: '请输入送礼人ID'
                 },
                 {
@@ -58,7 +57,7 @@ export default {
                     type: 'input',
                     value: '',
                     label: '收礼人ID',
-                    linkage: true,
+                    isNum: true,
                     placeholder: '请输入收礼人ID'
                 },
                 {
@@ -174,7 +173,10 @@ export default {
 		},
 		// 重置
 		reset() {
-			this.searchParams = {}
+            for(let i in this.searchParams){
+                this.searchParams[i] = "";
+            }
+			// this.searchParams = {}
             this.dateTimeParams = {}
 			this.getList()
 		},
