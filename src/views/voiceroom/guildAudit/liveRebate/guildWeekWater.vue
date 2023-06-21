@@ -331,7 +331,7 @@ export default {
 				this.guildList = res.data.list || []
 			}
     },
-		// 导出excel
+		// 导出excel.
 		async BatchRurn() {
 			if (this.ruleForm.list.length == 0) {
 				this.$warning("当前没有数据可以导出");
