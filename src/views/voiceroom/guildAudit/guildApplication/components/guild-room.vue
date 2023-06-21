@@ -615,11 +615,7 @@
                 allNum = item.stat_anchor_time.split("分")[0]
               }
             let params = {
-              create_time: timeFormat(
-                  item.create_time,
-                  "YYYY-MM-DD HH:mm:ss",
-                  true
-              ),
+              create_time: JSON.stringify(timeFormat(item.create_time,"YYYY-MM-DD HH:mm:ss",true)),
               date: item.date,
               operator: operator ? operator.username: "未知",
               room_number: item.room_number,
