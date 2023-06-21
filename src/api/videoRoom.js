@@ -1534,4 +1534,11 @@ export function adminUserList(data) {
   })
 }
 
-
+// 获取交易管理 -- 流水记录
+export function userFlow1Count(data) {
+  return request({
+    url: api.deal.userFlow1Count,
+    method: 'post',
+    data
+  })
+}
