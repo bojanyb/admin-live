@@ -29,7 +29,7 @@ import tableList from '@/components/tableList/TableList.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共参数
-import mixins from '@/utils/mixins.js'
+import authMixins from '@/utils/authMixins.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 // 引入公共方法
@@ -38,8 +38,7 @@ import { mapState } from 'vuex'
 // 引入操作日志组件
 import operationLogComp from "./components/operationLogComp.vue";
 export default {
-    name: 'userPunish',
-    mixins: [mixins],
+    mixins: [authMixins],
     components: {
         SearchPanel,
         tableList,

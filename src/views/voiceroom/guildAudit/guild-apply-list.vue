@@ -17,7 +17,6 @@ import anchorApplyComp from './components/anchorApplyComp.vue'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 export default {
-  name: 'guild-apply-list',
   data() {
     return {
       isAdd: false,

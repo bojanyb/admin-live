@@ -40,13 +40,13 @@
 	// 引入公共方法
 	import { timeFormat } from '@/utils/common.js'
 	// 引入公共参数
-	import mixins from '@/utils/mixins.js'
+	import authMixins from '@/utils/authMixins.js'
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
 
 	export default {
 		name: 'user-list',
-		mixins: [mixins],
+		mixins: [authMixins],
 		components: {
 			bindStuck,
 			tableList,
