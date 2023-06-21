@@ -49,245 +49,39 @@
 </template>
 
 <script>
-	import {addGuildRoom, rmGuildRoom, guildRoomType,adminUserList} from '@/api/videoRoom.js'
-  import {guildRooms} from '@/api/user.js'
-  import { partyRoomTypes } from '@/api/house.js'
-	// 引入菜单组件
-  import SearchPanel from "@/components/SearchPanel/final.vue";
-	// 引入列表组件
-	import tableList from '@/components/tableList/TableList.vue'
-	// 引入api
-	import REQUEST from '@/request/index.js'
-	// 引入公共方法
-	import { timeFormat, exportTableData } from '@/utils/common.js'
-	// 引入公共参数
-	import mixins from '@/utils/mixins.js'
-  import moment from "moment";
-	export default {
-		mixins: [mixins],
-		components: {
-			SearchPanel,
-			tableList
-		},
-		computed: {
-			forms() {
-				return [
-          {
-            name: 'room_type',
-            type: 'select',
-            value: '',
-            keyName: 'value',
-            optionLabel: 'name',
-            label: '房间类型',
-            placeholder: '请选择',
-            clearable: true,
-            options: this.roomTypeList
-          },
-					{
-						name: 'room_number',
-						type: 'input',
-						value: '',
-						label: '房间ID',
-						isNum: true,
-						placeholder: '请输入房间ID'
-					},
-					{
-						name: 'guild_number',
-						type: 'input',
-						value: '',
-						label: '公会ID',
-						isNum: true,
-						placeholder: '请输入公会ID'
-					},
-          {
-						name: 'operator',
-						type: 'select',
-						value: '',
-						keyName: 'id',
-						optionLabel: 'username',
-						label: '公会运营',
-						placeholder: '请选择',
-						options: this.operatorList
-					},
-          {
-              name: 'dateTimeParams',
-              type: 'datePicker',
-              dateType: 'datetimerange',
-              format: "yyyy-MM-dd HH:mm:ss",
-              label: '时间选择',
-              value: '',
-              handler: {
-                  change: v => {
-                      this.emptyDateTime()
-                      this.setDateTime(v)
-                      this.getList();
-                  },
-                  selectChange: (v, key) => {
-                      this.emptyDateTime()
-                      this.getList();
-                  }
-              }
-          },
-				]
-			},
-			cfgs() {
-				return {
-					vm: this,
-					url: REQUEST.guild.guildRooms,
-					columns: [
-						{
-							label: '创建时间',
-              width: '160px',
-							render: (h, params) => {
-								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-							}
-						},
-						{
-							label: '查询时间',
-              width: '200px',
-              prop: 'date',
-						},
-            {
-							label: '公会运营',
-							render: (h, params) => {
-								let data = this.operatorList.find(item => { return item.id === params.row.operator })
-								return h('span', data ? data.username : '未知')
-							}
-						},
-						{
-							label: '房间ID',
-							prop: 'room_number'
-						},
-						{
-							label: '房间类型',
-							prop: 'room_type'
-						},
-						{
-							label: '房间标题',
-              width: '120px',
-              showOverFlow: true,
-							prop: 'room_title'
-						},
-						{
-							label: '房间流水',
-							prop: 'flow'
-						},
-						{
-							label: '所属公会ID',
-              width: '100px',
-							prop: 'guild_number'
-						},
-						{
-							label: '所属公会名称',
-              minWidth: '120px',
-              showOverFlow: true,
-							prop: 'guild_nickname'
-						},
-						{
-							label: '新用户进厅',
-              minWidth: '100px',
-							prop: 'first_join'
-						},
-						{
-							label: '进厅总人数',
-              minWidth: '100px',
-							prop: 'stat_join'
-						},
-						{
-							label: '进厅总人次',
-              minWidth: '100px',
-							prop: 'times_join'
-						},
-						{
-							label: '消费总人数',
-              minWidth: '100px',
-							prop: 'stat_consume'
-						},
-						{
-							label: '消费转化率',
-              minWidth: '100px',
-							prop: 'rate',
-              render: (h, params) => {
-                  return h('span', params.row.rate + '%')
-              }
-						},
-						{
-							label: '成员上麦总人数',
-              minWidth: '120px',
-							prop: 'anchor'
-						},
-						{
-							label: '成员上麦总时长',
-              minWidth: '120px',
-              prop: 'stat_anchor_time',
-              render: (h, params) => {
-                  let allNum = 0;
-                  if(params.row.stat_anchor_time.indexOf("小时") > -1){
-                    let hourNum = params.row.stat_anchor_time.split("小时")[0] * 60;
-                    let minuteNum = params.row.stat_anchor_time.split("小时")[1] ? params.row.stat_anchor_time.split("小时")[1].split("分")[0] : 0;
-                    allNum = Number(hourNum) + Number(minuteNum);
-                  }else if(params.row.stat_anchor_time.indexOf("分") > -1){
-                    allNum = params.row.stat_anchor_time.split("分")[0]
-                  }
-                  return h('span',  allNum + '分钟')
-              }
-						},
-						{
-							label: '成员私聊用户人数',
-              minWidth: '120px',
-							prop: 'chat'
-						},
-						{
-							label: '成员私聊用户次数',
-              minWidth: '120px',
-							prop: 'times_chat'
-						},
-						// {
-						// 	label: '操作',
-						// 	render: (h, params) => {
-						// 		return h('div', [
-						// 			h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.del(params.row)}}},'移除')
-						// 		])
-						// 	}
-						// }
-					]
-				}
-			},
-		},
-		data() {
-			return {
-				isAdd :false,
-				ruleForm : {
-					guild_number : "",
-					user_number : "",
-          operatorList: [],
-				},
-				rules: {
-					guild_number: [
-						{ required: true, message: '请输入公会ID', trigger: 'blur' ,
-						validator: (rules, value, cb) => {
-							if (!value) {
-								return cb(new Error('公会ID不能为空!'))
-							}
-							return cb()
-						}
-					}
-					],
-					user_number: [
-						{ required: true, message: '请输入房主ID', trigger: 'blur',
-						validator: (rules, value, cb) => {
-							if (!value) {
-								return cb(new Error('房主ID不能为空!'))
-							}
-							return cb()
-						}
-					 }
-					],
-				},
-        roomTypeList: [], // 房间类型
-        dateTimeParams: {
-          start_date: null,
-          end_date: null,
+import { addGuildRoom, rmGuildRoom, guildRoomType, adminUserList } from '@/api/videoRoom.js'
+import { guildRooms } from '@/api/user.js'
+import { partyRoomTypes } from '@/api/house.js'
+// 引入菜单组件
+import SearchPanel from "@/components/SearchPanel/final.vue";
+// 引入列表组件
+import tableList from '@/components/tableList/TableList.vue'
+// 引入api
+import REQUEST from '@/request/index.js'
+// 引入公共方法
+import { timeFormat, exportTableData } from '@/utils/common.js'
+// 引入公共参数
+import mixins from '@/utils/mixins.js'
+import moment from "moment";
+export default {
+  mixins: [mixins],
+  components: {
+    SearchPanel,
+    tableList
+  },
+  computed: {
+    forms() {
+      return [
+        {
+          name: 'room_type',
+          type: 'select',
+          value: '',
+          keyName: 'value',
+          optionLabel: 'name',
+          label: '房间类型',
+          placeholder: '请选择',
+          clearable: true,
+          options: this.roomTypeList
         },
         {
           name: 'room_number',
@@ -867,13 +661,30 @@
     },
   }
 }
-=======
-    async getAdminUserList(){
-        let res = await adminUserList();
-        if(res.code === 2000){
-          this.operatorList = res.data.list;
-          this.isAuth = res.data.is_auth;
-          let all = { username: '全部',id: ''}
+</script>
+<style lang="scss">
+.guildApplication-list-box {
+  padding: 20px;
+  box-sizing: border-box;
+
+  .headerBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 30px;
+
+    .select {
+      display: flex;
+      align-items: center;
+
+      >span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+        height: 50px;
+        margin-left: 20px;
         cursor: pointer;
         border-bottom: 2px solid rgba(0, 0, 0, 0);
         transform: translateY(1px);
@@ -885,3 +696,4 @@
     }
   }
 }
+</style>
