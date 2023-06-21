@@ -8,12 +8,14 @@
         <userComp v-if="isDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList"></userComp>
         <!-- 修改证据弹窗 -->
         <uploadImg v-if="isDestoryComp" ref="uploadImg" @destoryComp="destoryComp" @getList="getList"></uploadImg>
+        <!-- 操作日志 -->
+	    	<operationLogComp ref="operationLogComp"></operationLogComp>
     </div>
 </template>
 
 <script>
 // 引入api
-import { removeUser, removeUserPunish, passUserPunish,UserPunishLog } from '@/api/risk'
+import { removeUser, removeUserPunish, passUserPunish, UserPunishLog, acceptPunish } from '@/api/risk'
 // 引入api
 import { getPunishTypeList } from '@/api/videoRoom'
 // 引入新增组件
@@ -33,13 +35,16 @@ import MAPDATA from '@/utils/jsonMap.js'
 // 引入公共方法
 import { exportTableData } from "@/utils/common.js";
 import { mapState } from 'vuex'
+// 引入操作日志组件
+import operationLogComp from "./components/operationLogComp.vue";
 export default {
     mixins: [mixins],
     components: {
         SearchPanel,
         tableList,
         userComp,
-        uploadImg
+        uploadImg,
+        operationLogComp
     },
     data() {
         return {
@@ -302,10 +307,31 @@ export default {
                       }
                     },
                     {
-                      label: '操作人',
+                      label: '处罚操作人',
                       minWidth: '120px',
                       render: (h, params) => {
-                          return h('span', params.row.operator || '- -')
+                          return h('span', params.row.penalty_admin || '- -')
+                      }
+                    },
+                    {
+                      label: '解除操作人',
+                      minWidth: '120px',
+                      render: (h, params) => {
+                          return h('span', params.row.undo_admin || '- -')
+                      }
+                    },
+                    {
+                      label: '忽略操作人',
+                      minWidth: '120px',
+                      render: (h, params) => {
+                          return h('span', params.row.ignore_admin || '- -')
+                      }
+                    },
+                    {
+                      label: '受理操作人',
+                      minWidth: '120px',
+                      render: (h, params) => {
+                          return h('span', params.row.accept_admin || '- -')
                       }
                     },
                     {
@@ -318,10 +344,13 @@ export default {
                     },
                     {
                       label: '操作',
-                      minWidth: '200px',
+                      minWidth: '430px',
                       fixed: 'right',
                       render: (h, params) => {
                           return h('div', [
+                              h('el-button', { props: { type: 'info'}, style: {
+                                  display: (params.row.status || params.row.status === 0) ? 'unset' : 'none'
+                              }, on: {click:()=>{this.handleControl(params.row)}}}, `${(params.row.accept_type === 0) ? '未受理' : '已受理'}`),
                               h('el-button', { props: { type: 'success'}, style: {
                                   display: (params.row.status === 1 && this.curBtnArr.includes('UserPunishLog@remove')) ? 'unset' : 'none'
                               }, on: {click:()=>{this.relieve(params.row)}}}, '解除'),
@@ -333,7 +362,10 @@ export default {
                               }, on: {click:()=>{this.neglect(params.row.id)}}}, '忽略'),
                               h('el-button', { props: { type: 'primary'}, style: {
                                   display: (params.row.from === '后台处罚' && params.row.status === 1 && this.curBtnArr.includes('UserPunishLog@updateSource')) ? 'unset' : 'none'
-                              }, on: {click:()=>{this.update(params.row)}}}, '修改证据')
+                              }, on: {click:()=>{this.update(params.row)}}}, '修改证据'),
+                              h('el-button', { props: { type: 'primary'}, style: {
+                                  display: (params.row.status || params.row.status === 0) ? 'unset' : 'none'
+                              }, on: {click:()=>{this.handleOperationLog(params.row)}}}, '操作日志'),
                           ])
                       }
                     }
@@ -525,6 +557,20 @@ export default {
                 return prev;
               }, []) || [];
             this.punishTypeList.unshift({ name: "全部", value: '' })
+          }
+        },
+        // 操作日志
+        handleOperationLog(row) {
+          setTimeout(() => {
+            this.$refs.operationLogComp.load(row);
+          }, 100);
+        },
+        // 受理
+      async handleControl(row) {
+          const response = await acceptPunish({ id: row.id });
+          if (response.code == 2000) {
+            this.$success('受理成功');
+            this.getList();
           }
         },
     },

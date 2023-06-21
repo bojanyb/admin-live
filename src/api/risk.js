@@ -118,6 +118,24 @@ export function updateSource(data) {
     })
 }
 
+// 处罚-操作日志
+export function punishOperateLog(data) {
+  return request({
+    url: api.risk.punishOperateLog,
+    method: 'post',
+    data
+  })
+}
+
+// 处罚-审核实例
+export function acceptPunish(data) {
+  return request({
+    url: api.risk.acceptPunish,
+    method: 'post',
+    data
+  })
+}
+
 
 // 会话消息-房间会话记录
 export function roomTalkList(data) {
