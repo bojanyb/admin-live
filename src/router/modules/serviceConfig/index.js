@@ -26,7 +26,7 @@ const serviceConfigRouter = {
 			name: 'userPunish',
 			meta: {
 				title: '用户处罚',
-				noCache: false
+				noCache: true
 			}
 		},
         {

@@ -27,15 +27,14 @@ import tableList from '@/components/tableList/TableList.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共参数
-import mixins from '@/utils/mixins.js'
+import authMixins from '@/utils/authMixins.js'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 // 引入公共方法
 import { exportTableData } from "@/utils/common.js";
 import { mapState } from 'vuex'
 export default {
-    name: 'userPunish',
-    mixins: [mixins],
+    mixins: [authMixins],
     components: {
         SearchPanel,
         tableList,

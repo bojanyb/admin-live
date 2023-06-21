@@ -15,7 +15,7 @@ import tableList from '@/components/tableList/TableList.vue'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入公共参数
-import mixins from '@/utils/mixins.js'
+import authMixins from '@/utils/authMixins.js'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
@@ -31,7 +31,7 @@ export default {
         tableList,
         SearchPanel
     },
-    mixins: [mixins],
+    mixins: [authMixins],
     computed: {
         forms() {
             return [

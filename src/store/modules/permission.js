@@ -54,14 +54,18 @@ const mutations = {
     state.btnArr = btnArr
   },
   SET_CUR_BTN: (state, fullPath) => {
-    state.curBtnArr = state.btnArr.reduce((pev, cur) => {
+   state.btnArr.reduce((pev, cur) => {
       if ((fullPath === cur.h5_path)) {
         if (state.userPids.indexOf(cur.id) !== -1) {
           pev.push(cur.api_controller);
         }
       }
       return pev;
-    }, [])
+    }, []).forEach(item => {
+      state.curBtnArr.push(item)
+    })
+
+    state.curBtnArr = Array.from(new Set(state.curBtnArr))
   },
   SET_USER_PIDS: (state, userPids) => {
     state.userPids = userPids
