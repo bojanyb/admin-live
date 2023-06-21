@@ -235,6 +235,7 @@ const request = {
         userFlow1: `${HTTPHEADER}/Statistical/userFlow1`, // 用户流水记录1
         diamondLog: `${HTTPHEADER}/Statistical/diamondLog`, // 余额明细
         userFlowAll: `${HTTPHEADER}/Statistical/userFlowAll`, // 导出
+        userFlow1Count: `${HTTPHEADER}/Statistical/userCount`, // 流水记录 汇总
     },
 
     // 公会管理

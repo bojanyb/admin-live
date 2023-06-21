@@ -48,7 +48,7 @@
 
 <script>
 	// 引入api
-	import { getUserFlowAll } from "@/api/videoRoom.js";
+	import { getUserFlowAll,userFlow1Count } from "@/api/videoRoom.js";
 	// 引入列表组件
 	import tableList from '@/components/tableList/TableList.vue'
 	// 引入菜单组件
@@ -363,7 +363,8 @@
 			},
 			// 列表返回数据
 			saleAmunt(row) {
-				this.ruleForm = { ...row }
+				// this.ruleForm = { ...row }
+				this.getUserFlow1Count();
 			},
 			// 更改日期
 			changeIndex(index) {
@@ -462,12 +463,21 @@
 					exportTableData(arr, nameList, this.file_name);
 					loading.close();
 					this.file_name = "";
-				}).catch(err=>{
-					loading.close();
-					this.file_name = "";
-				});
-				this.batchFileNameVisible = false;
+			}).catch(err=>{
+				loading.close();
+				this.file_name = "";
+			});
+			this.batchFileNameVisible = false;
     		},
+			// 获取汇总数据
+			async getUserFlow1Count(){
+
+				let s = this.beforeSearch();
+				let res = await userFlow1Count(s);
+				if(res.code == 2000){
+					this.ruleForm = res.data;
+				}
+			},
 		},
 		created() {
 			this.changeIndex(0)
