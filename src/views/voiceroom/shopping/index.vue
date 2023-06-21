@@ -33,6 +33,7 @@ import MAPDATA from '@/utils/jsonMap.js'
 import addCom from './add/index.vue'
 
 export default {
+    name: 'shopping-list',
     components: {
         tableList,
         SearchPanel,

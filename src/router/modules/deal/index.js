@@ -26,7 +26,7 @@ const userRouter = {
 			name: 'userTurnover-list',
 			meta: {
 				title: '流水记录',
-				noCache: true
+				noCache: false
 			}
 		},
         {
@@ -38,7 +38,7 @@ const userRouter = {
 				noCache: true
 			}
 		},
-		
+
 	]
 }
 

@@ -17,7 +17,7 @@ const goodNumRouter = {
 			name: 'repot-list',
 			meta: {
 				title: '靓号仓库',
-				noCache: true
+				noCache: false
 			}
 		},
 		{

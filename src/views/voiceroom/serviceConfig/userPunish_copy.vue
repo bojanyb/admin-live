@@ -38,6 +38,7 @@ import { mapState } from 'vuex'
 // 引入操作日志组件
 import operationLogComp from "./components/operationLogComp.vue";
 export default {
+    name: 'userPunish',
     mixins: [mixins],
     components: {
         SearchPanel,

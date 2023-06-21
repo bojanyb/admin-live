@@ -82,7 +82,7 @@ const systemConfigRouter = {
 			name: 'gift-list',
 			meta: {
 				title: '礼物列表',
-				noCache: true
+				noCache: false
 			}
 		},
 		{

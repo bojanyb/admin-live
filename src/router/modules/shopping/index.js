@@ -17,7 +17,7 @@ const userRouter = {
 			name: 'shopping-list',
 			meta: {
 				title: '商品列表',
-				noCache: true
+				noCache: false
 			}
 		},
 		{
@@ -29,7 +29,7 @@ const userRouter = {
 				noCache: true
 			}
 		}
-		
+
 	]
 }
 
