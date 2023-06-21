@@ -561,6 +561,14 @@ const request = {
         recycle: `${HTTPHEADER}/PrettyNumber/recycle`, // 靓号回收
         recycleLog: `${HTTPHEADER}/PrettyNumber/recycleLog`, // 回收记录
         refund: `${HTTPHEADER}/PrettyNumber/refund`, // 退款
+    },
+
+    //  浓情端午
+    dragonBoat: {
+        getGift: `${HTTPHEADER}/hdDuanwuLog/getGift`, // 获取礼物
+        giftLog: `${HTTPHEADER}/hdDuanwuLog/giftLog`, // 礼物数据
+        exchangeLog: `${HTTPHEADER}/hdDuanwuLog/exchangeLog`, // 获取兑换数据
+        getRanking: `${HTTPHEADER}/hdDuanwuLog/getRanking`, // 榜单排名
     }
 }
 
