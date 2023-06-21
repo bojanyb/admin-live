@@ -25,7 +25,7 @@ const guildAuditRouter = {
 			name: 'guild-apply-list',
 			meta: {
 				title: '公会申请列表',
-				noCache: true
+				noCache: false
 			}
 		},
 		{

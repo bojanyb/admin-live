@@ -27,6 +27,7 @@
 	// 引入公共map
 	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
+    name: 'gift-list',
 		mixins: [mixins],
 		components: {
 			SearchPanel,

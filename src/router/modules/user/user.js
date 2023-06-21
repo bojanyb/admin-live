@@ -16,7 +16,7 @@ const userRouter = {
 			name: 'user-list',
 			meta: {
 				title: '用户列表',
-				noCache: true
+				noCache: false
 			}
 		},
 		{

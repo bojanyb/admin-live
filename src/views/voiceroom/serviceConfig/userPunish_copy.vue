@@ -34,6 +34,7 @@ import MAPDATA from '@/utils/jsonMap.js'
 import { exportTableData } from "@/utils/common.js";
 import { mapState } from 'vuex'
 export default {
+    name: 'userPunish',
     mixins: [mixins],
     components: {
         SearchPanel,

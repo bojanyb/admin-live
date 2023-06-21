@@ -13,12 +13,17 @@ const mixins = {
   computed: {
     ...mapState({
       curBtnArr: state => state.permission.curBtnArr,
+      cachedViews: state => state.tagsView.cachedViews
     }),
   },
   mounted() {
-    const { fullPath } = this.$route;
-    this.$store.commit('permission/SET_CUR_BTN', fullPath)
-    console.log(this.curBtnArr, 'curBtnArr');
+    const { fullPath, name } = this.$route;
+    if (this.cachedViews.includes(name)) {
+      this.$store.commit('permission/SET_CUR_BTN', fullPath)
+      console.log(this.curBtnArr, 'curBtnArr');
+    }
+
+    console.log(fullPath, this.cachedViews, 'fullPath');
   },
 }
 

@@ -45,7 +45,7 @@
 	import MAPDATA from '@/utils/jsonMap.js'
 
 	export default {
-		name: 'UserList',
+		name: 'user-list',
 		mixins: [mixins],
 		components: {
 			bindStuck,

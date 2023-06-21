@@ -30,6 +30,7 @@ import addNumComp from './components/addNumComp.vue'
 import { timeFormat } from '@/utils/common.js'
 
 export default {
+    name: 'repot-list',
     components: {
         tableList,
         SearchPanel,
