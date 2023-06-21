@@ -462,12 +462,12 @@
 					exportTableData(arr, nameList, this.file_name);
 					loading.close();
 					this.file_name = "";
-			}).catch(err=>{
-				loading.close();
-				this.file_name = "";
-			});
-			this.batchFileNameVisible = false;
-    },
+				}).catch(err=>{
+					loading.close();
+					this.file_name = "";
+				});
+				this.batchFileNameVisible = false;
+    		},
 		},
 		created() {
 			this.changeIndex(0)
