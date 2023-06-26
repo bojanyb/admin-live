@@ -90,6 +90,7 @@
           <el-upload
           ref="upload"
           action=""
+          :show-file-list="status !== 'add' ? false : true"
           :file-list="fileList"
           :limit="limit"
           :class="{hide:hideUpload}"
@@ -97,14 +98,15 @@
           :on-exceed="masterFileMax"
           :before-remove="beforeRemove"
           :on-remove="handleRemove"
-            list-type="picture-card"
-            :accept="accept"
-            :http-request="upLoadFile"
-            multiple
+          list-type="picture-card"
+          :accept="accept"
+          :http-request="upLoadFile"
+          multiple
           >
-            <i class="el-icon-plus"></i>
+          <img v-if="status !== 'add' && url !== ''" :src="url" class="avatar" />
+          <i v-if="status == 'add' && (!url || url == '')" class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="form-tips" style="margin-top: 10px" >
-              <el-tag  type="warning">最多上传5张，最大上传大小2MB</el-tag>
+              <el-tag  type="warning">最多上传{{limit}}张，最大上传大小2MB</el-tag>
             </div>
           </el-upload>
 
@@ -209,6 +211,8 @@ export default {
       },
       accept: ".png,.jpg,.jpeg",
       imgList: [],
+      url: "",
+      showList: [],
     };
   },
   computed: {
@@ -249,8 +253,9 @@ export default {
         let params = JSON.parse(JSON.stringify(row));
         params.room_business_type = +params.room_business_type
         this.$set(this.$data, "ruleForm", params);
+        this.limit = 1;
       }
-
+      this.url = this.ruleForm.url;
       this.oldParams = JSON.parse(JSON.stringify(this.ruleForm));
     },
     // 提交
@@ -375,6 +380,11 @@ export default {
       this.$store.commit("app/SET_LOADING", true);
       uploadOSS(file.file)
         .then((res) => {
+          if(this.status !== 'add'){
+            this.url = res.url;
+          }else{
+            this.url = '';
+          }
           if (res.url) {
             this.$emit("input", res.url);
             this.$emit("getFile", file);
@@ -397,6 +407,12 @@ export default {
 .roomBgEdit-box {
   .el-input {
     width: 310px;
+  }
+}
+.el-upload--picture-card{
+  .avatar{
+    width: 148px;
+    height: 148px;
   }
 }
 </style>
