@@ -364,7 +364,7 @@
 			},
 			// 列表返回数据
 			saleAmunt(row) {
-				this.ruleForm = { ...row }
+				// this.ruleForm = { ...row }
 			},
 			// 更改日期
 			changeIndex(index) {
