@@ -308,7 +308,8 @@
 		methods: {
 			// 刷新列表
 			getList() {
-				this.$refs.tableList.getData()
+				this.getUserFlow1Count();
+				this.$refs.tableList.getData();
 			},
 			// 配置参数
 			beforeSearch(params) {
@@ -363,8 +364,7 @@
 			},
 			// 列表返回数据
 			saleAmunt(row) {
-				// this.ruleForm = { ...row }
-				this.getUserFlow1Count();
+				this.ruleForm = { ...row }
 			},
 			// 更改日期
 			changeIndex(index) {
