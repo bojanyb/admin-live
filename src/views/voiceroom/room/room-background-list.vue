@@ -59,7 +59,7 @@ export default {
     return {
       isDestoryComp: false,
       searchParams: {
-        assign_status: 2,
+        assign_status: 0,
       },
       roomTypeList: [
         {
@@ -212,7 +212,7 @@ export default {
         page: params.page,
         pagesize: params.size,
         name: s.name,
-        assign_status: s.assign_status,
+        assign_status: s.assign_status == -1 ? '' : s.assign_status,
         room_business_type: s.room_business_type,
       };
     },

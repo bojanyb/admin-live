@@ -1,7 +1,7 @@
 <template>
   <div class="roomBgEdit-box">
     <drawer
-      size="470px"
+      size="500px"
       :title="title"
       ref="drawer"
       :isShowUpdate="true"
@@ -48,7 +48,7 @@
         <el-form-item label="图片类型" prop="assign_status">
           <!-- 2022/12/14 18:35 产品确认打开修改状态下禁止操作 -->
           <!-- <el-select v-model="ruleForm.assign_status" :disabled="status === 'update'" placeholder="请选择"> -->
-          <el-select v-model="ruleForm.assign_status" placeholder="请选择" @change="handleChangeType">
+          <el-select v-model="ruleForm.assign_status" placeholder="请选择">
             <el-option
               v-for="item in assignList"
               :key="item.value"
@@ -87,40 +87,27 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="图片" prop="url">
-          <uploadImg
-            action="#"
-            v-model="ruleForm.url"
-            accept=".png,.jpg,.jpeg,.svga"
-            :imgUrl="ruleForm.url"
-            name="url"
-            ref="url"
-            @validateField="validateField"
+          <el-upload
+          ref="upload"
+          action=""
+          :file-list="fileList"
+          :limit="limit"
+          :class="{hide:hideUpload}"
+          :on-change="beforeAvatarUpload"
+          :on-exceed="masterFileMax"
+          :before-remove="beforeRemove"
+          :on-remove="handleRemove"
             list-type="picture-card"
-            :auto-upload="false"
+            :accept="accept"
+            :http-request="upLoadFile"
+            multiple
           >
-          <!-- <i slot="default" class="el-icon-plus"></i> -->
-          <div slot="file" slot-scope="{file}">
-            <img
-              class="el-upload-list__item-thumbnail"
-              :src="file.url" alt=""
-            >
-            <span class="el-upload-list__item-actions">
-              <span
-                class="el-upload-list__item-preview"
-                @click="handlePictureCardPreview(file)"
-              >
-                <i class="el-icon-zoom-in"></i>
-              </span>
-              <span
-                v-if="!disabled"
-                class="el-upload-list__item-delete"
-                @click="handleRemove(file)"
-              >
-                <i class="el-icon-delete"></i>
-              </span>
-            </span>
-          </div>
-        </uploadImg>
+            <i class="el-icon-plus"></i>
+            <div slot="tip" class="form-tips" style="margin-top: 10px" >
+              <el-tag  type="warning">最多上传5张，最大上传大小2MB</el-tag>
+            </div>
+          </el-upload>
+
         </el-form-item>
         <!-- <el-form-item label="是否默认" prop="is_default">
                     <el-select v-model="ruleForm.is_default">
@@ -146,6 +133,8 @@ import uploadImg from "@/components/uploadImg/index.vue";
 import MAPDATA from "@/utils/jsonMap.js";
 // 引入api
 import { getRoomBgAdd } from "@/api/videoRoom";
+// 引入oss
+import { uploadOSS } from "@/utils/oss.js";
 export default {
   components: {
     uploadImg,
@@ -184,7 +173,14 @@ export default {
         assign_status: [
           { required: true, message: "请选择背景类型", trigger: "change" },
         ],
-        url: [{ required: true, message: "请上传图片", trigger: "change" }],
+        url: [{ required: true, message: "请上传图片", trigger: "change",
+          validator: (rules, value, cb) => {
+                if (this.imgList.length === 0) {
+                  return cb(new Error('请上传图片!'))
+                }
+                return cb()
+              }
+        }],
         // room_genre: [
         //     { required: true, message: '请选择房间类型', trigger: 'change' }
         // ],
@@ -202,6 +198,17 @@ export default {
           value: 1,
         },
       ],
+      fileList: [],    //图片列表
+      imgs: [],
+      limit: 5,  //上传图片的数量
+      hideUpload: false,   // 判断是否隐藏上传按钮
+      isAdd: true,   //判断对应的操作
+      construction: {
+        images: "",
+        addImages: ""
+      },
+      accept: ".png,.jpg,.jpeg",
+      imgList: [],
     };
   },
   computed: {
@@ -255,19 +262,18 @@ export default {
             id: s.id || null,
             // room_genre: s.room_genre,
             sort: s.sort,
-            url: s.url,
+            url: this.imgList.join(),
             name: s.name,
             // is_default: s.is_default,
             assign_status: s.assign_status,
-            room_business_type: s.room_business_type
+            room_business_type: s.room_business_type,
+            assign_room: s.assign_room ? s.assign_room : "",
+            assign_guild: s.assign_guild ? s.assign_guild: ""
           };
           if (s.assign_status === 1) {
             params.assign_room = s.assign_room;
-          }else if (s.assign_status === 2) {
-            params.assign_guild = s.assign_guild;
           }
           console.log("params:",params);
-          return
           let res = await getRoomBgAdd(params);
           if (res.code === 2000) {
             this.$success("操作成功");
@@ -315,12 +321,73 @@ export default {
     validateField(name) {
       this.$refs.ruleForm.validateField([name]);
     },
-    // 切换图片类型
-    handleChangeType(){
-      console.log("---290---");
+    //上传图片，添加到图片列表
+    beforeAvatarUpload(file, fileList) {
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+        return
+      }
+      //图片转为base64位
+      let _this = this
+      const reader = new FileReader()
+      reader.readAsDataURL(file.raw)
+      reader.onload = function(e) {
+        undefined
+        _this.imgs.push(this.result)
+      }
+      //达到限制上传图片，隐藏上传按钮
+      this.hideUpload = fileList.length >= this.limit;
     },
-    handleRemove(file) {
-      console.log(file);
+    // 移除文件之前
+    beforeRemove(file) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+    },
+    //删除图片，更新图片列表
+    handleRemove(file, fileList) {
+      //达到限制上传图片，隐藏上传按钮
+      this.hideUpload = fileList.length >= this.limit;
+      this.imgList = [];
+      fileList.map(res=>{
+        console.log("res:",res);
+        res.file = res.raw;
+        this.upLoadFile(res);
+      })
+    },
+    //限制多少张图片
+    masterFileMax(files, fileList) {
+      this.$message.warning(`请最多上传 ${this.limit} 个文件。`)
+    },
+    // 上传
+    upLoadFile(file) {
+      const isLtXM = file.file.size / 1024 / 1024 < 5;
+      let fileType = file.file.type;
+      let accept = JSON.parse(JSON.stringify(this.accept));
+      accept = accept.replace(".", "");
+      if (fileType.indexOf(accept) == -1 && this.isFileType == true) {
+        this.$message.error("上传图片只能是" + accept + "格式!");
+        return false;
+      }
+      this.uploadImg(file);
+    },
+    uploadImg(file) {
+      this.isShowSvg = false;
+      this.$store.commit("app/SET_LOADING", true);
+      uploadOSS(file.file)
+        .then((res) => {
+          if (res.url) {
+            this.$emit("input", res.url);
+            this.$emit("getFile", file);
+            this.$store.commit("app/SET_LOADING", false);
+            this.isShowSvg = true;
+            this.$emit("validateField", this.name);
+            this.imageUrl = res.url;
+            this.imgList.push(res.url);
+          }
+        })
+        .catch((err) => {
+          this.$message.error(err);
+        });
     },
   },
 };
