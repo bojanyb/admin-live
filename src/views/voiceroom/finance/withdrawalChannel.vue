@@ -19,6 +19,7 @@
       :cfgs="cfgs"
       ref="tableList"
       @selectionChange="selectionChange"
+      layout="total, sizes, prev, pager, next, jumper"
     ></tableList>
 
     <!-- 修改组件 -->
@@ -158,6 +159,9 @@ export default {
         vm: this,
         isShowCheckbox: true,
         url: REQUEST.CashHisity.cashChannel,
+        search: {
+          sizes: [10, 30, 50, 100,300,500]
+        },
         columns: [
           {
             label: "身份证",
