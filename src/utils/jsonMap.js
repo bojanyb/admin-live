@@ -2368,11 +2368,11 @@ const USERPUNISHTYPELISTCOPYTWO = [
     value: 2,
     disabled: false
   },
-  {
-    name: '封WIFI',
-    value: 3,
-    disabled: false
-  },
+  // {
+  //   name: '封WIFI',
+  //   value: 3,
+  //   disabled: false
+  // },
   {
     name: '封实名',
     value: 4,
