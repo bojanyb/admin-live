@@ -37,7 +37,7 @@
 		data() {
 			return {
 				searchParams: { // 搜索参数
-					sort: 0
+					sort: ''
 				},
 				isDestoryComp: false // 是否销毁组件
 			}
@@ -48,7 +48,7 @@
 					{
 						name: 'sort',
 						type: 'select',
-						value: 0,
+						value: '',
 						keyName: 'value',
 						optionLabel: 'name',
 						label: '排序查看',
@@ -72,6 +72,13 @@
 						label: '用户ID',
 						isNum: true,
 						placeholder: '请输入用户ID'
+					},
+					{
+						name: 'keywords',
+						type: 'input',
+						value: '',
+						label: '歌手/歌曲',
+						placeholder: '请输入歌手/歌曲'
 					},
 				]
 			},
@@ -146,6 +153,7 @@
 					page: params.page,
 					pagesize: params.size,
 					user_number: s.user_number,
+          keywords: s.keywords,
 					status: s.status,
 					sort: s.sort
 				}
