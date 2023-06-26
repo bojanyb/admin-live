@@ -240,7 +240,7 @@
 							label: '是否为公会长',
 							width: '110px',
 							render: (h, params) => {
-								return h('span', params.row.is_guild_room === 0 ? '否' : '是')
+								return h('span', params.row.is_admin || '否')
 							}
 						},
 						{
