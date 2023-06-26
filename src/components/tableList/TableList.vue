@@ -29,6 +29,7 @@
           v-if="item.isimg"
           :src="scope.row[item.prop] || scope.row[item.propCopy]"
           :name="item.nameProp ? scope.row[item.nameProp] : ''"
+          :subName="item.subNameProp ? scope.row[item.subNameProp] : ''"
           :tagList="item.tagProp ? scope.row[item.tagProp] : []"
           :width="item.imgWidth"
           :height="item.imgHeight"
