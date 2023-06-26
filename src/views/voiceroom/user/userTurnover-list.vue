@@ -481,6 +481,7 @@
 		},
 		created() {
 			this.changeIndex(0)
+			this.getUserFlow1Count();
 		}
 	}
 </script>
