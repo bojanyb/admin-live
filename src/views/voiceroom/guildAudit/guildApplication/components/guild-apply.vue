@@ -56,6 +56,7 @@
 					columns: [
 						{
 							label: '申请时间',
+							width: "160px",
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
@@ -66,6 +67,7 @@
 						},
 						{
 							label: '房间标题',
+							width: "180px",
 							prop: 'room_title'
 						},
 						{
@@ -75,6 +77,10 @@
 						{
 							label: '所属公会昵称',
 							prop: 'guild_nickname'
+						},
+						{
+							label: '公会运营',
+							prop: 'operator_name'
 						},
 						{
 							label: '现有类型',
@@ -92,7 +98,22 @@
 							}
 						},
 						{
+							label: '审核时间',
+							width: "180px",
+							render: (h, params) => {
+								return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '-')
+							}
+						},
+						{
+							label: '操作人',
+							prop: 'admin',
+							render: (h, params) => {
+								return h('span', params.row.admin ? params.row.admin : '-')
+							}
+						},
+						{
 							label: '操作',
+							width: "180px",
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props: { type: 'primary'}, style: {
