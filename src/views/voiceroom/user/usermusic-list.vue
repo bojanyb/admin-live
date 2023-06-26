@@ -109,6 +109,7 @@
 							isimg: true,
 							prop: 'url',
 							nameProp: 'name',
+              subNameProp: 'singer',
 							tagProp: 'tags',
 							width: '300px'
 						},
