@@ -238,7 +238,7 @@ export default {
         totalName() {
             if(!this.searchParams.status) {
                 return '总金额'
-            } else if(this.searchParams.status === 4) {
+            } else if(this.searchParams.status === 4 || this.searchParams.status === 6) {
                 return '到账金额'
             } else if(this.searchParams.status === 3) {
                 return '退回金额'
@@ -247,7 +247,7 @@ export default {
         rateName() {
             if(!this.searchParams.status) {
                 return '手续费'
-            } else if(this.searchParams.status === 4) {
+            } else if(this.searchParams.status === 4 || this.searchParams.status === 6) {
                 return '手续费'
             } else if(this.searchParams.status === 3) {
                 return '退回手续费'
