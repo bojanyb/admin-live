@@ -23,10 +23,10 @@ const userRouter = {
 		{
 			path: 'userTurnover-list',
 			component: () => import('@/views/voiceroom/user/userTurnover-list'),
-			name: 'userTurnover-list',
+      name: 'userTurnover-list',
 			meta: {
 				title: '流水记录',
-				noCache: true
+				noCache: false
 			}
 		},
         {
@@ -38,7 +38,7 @@ const userRouter = {
 				noCache: true
 			}
 		},
-		
+
 	]
 }
 

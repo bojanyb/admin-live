@@ -1,7 +1,7 @@
 <template>
 	<div class="gift-list-box">
 		<div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="this.curBtnArr.includes('Gift@addGift')" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="this.permissionArr.includes('Gift@addGift')" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
 
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
@@ -212,7 +212,7 @@
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props: { type: 'primary'}, style: {
-										display: (params.row.status === 1 && this.curBtnArr.includes('Gift@saveGift')) ? 'unset' : 'none'
+										display: (params.row.status === 1 && this.permissionArr.includes('Gift@saveGift')) ? 'unset' : 'none'
 									}, on: {click:()=>{this.update(params.row)}}}, '修改')
 									// h('el-button', { props: { type: 'danger'}, style: {
 									// 	display: params.row.status === 2 ? 'unset' : 'none'
@@ -224,7 +224,7 @@
 				return {
 					vm: this,
 					url: REQUEST.system.gift.giftList,
-					columns: this.curBtnArr.includes('Gift@index') ? arr : []
+					columns: this.permissionArr.includes('Gift@index') ? arr : []
 				}
 			}
 		},

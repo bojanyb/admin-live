@@ -135,10 +135,10 @@ export default {
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'primary'}, style: {
-                                    display: (params.row.status === 0 && this.curBtnArr.includes('Guild@guildUserApplyCheck')) ? 'unset' : 'none'
+                                    display: (params.row.status === 0 && this.permissionArr.includes('Guild@guildUserApplyCheck')) ? 'unset' : 'none'
                                 }, on: {click:()=>{this.clickFunc(params.row, 1)}}}, '通过'),
                                 h('el-button', { props: { type: 'danger'}, style: {
-                                    display: (params.row.status === 0 && this.curBtnArr.includes('Guild@guildUserApplyCheck')) ? 'unset' : 'none'
+                                    display: (params.row.status === 0 && this.permissionArr.includes('Guild@guildUserApplyCheck')) ? 'unset' : 'none'
                                 }, on: {click:()=>{this.clickFunc(params.row, 2)}}}, '拒绝'),
                                 h('el-button', { props: { type: 'primary'},style: {
                                     display: params.row.status === 1 ? 'unset' : 'none',
@@ -153,7 +153,7 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.guild.guildUserApply,
-                columns: this.curBtnArr.includes('Guild@guildUsers') ? arr : []
+                columns: this.permissionArr.includes('Guild@guildUsers') ? arr : []
             }
         },
     },
