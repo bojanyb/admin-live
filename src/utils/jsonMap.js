@@ -2191,7 +2191,7 @@ const ISFIRSTJOINHOUSELIST = [
 const ROOMBACKGROUNDSELECTLIST = [
   {
     name: '全部',
-    value: 2
+    value: -1
   },
   {
     name: '通用背景',
@@ -2200,6 +2200,10 @@ const ROOMBACKGROUNDSELECTLIST = [
   {
     name: '指定背景',
     value: 1
+  },
+  {
+    name: '公会背景',
+    value: 2
   }
 ]
 

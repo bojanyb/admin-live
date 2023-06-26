@@ -2,7 +2,7 @@
   <div class="roomBgEdit-box">
     <drawer
       size="470px"
-      title="修改房间背景图信息"
+      :title="title"
       ref="drawer"
       :isShowUpdate="true"
       @cancel="cancel"
@@ -48,7 +48,7 @@
         <el-form-item label="图片类型" prop="assign_status">
           <!-- 2022/12/14 18:35 产品确认打开修改状态下禁止操作 -->
           <!-- <el-select v-model="ruleForm.assign_status" :disabled="status === 'update'" placeholder="请选择"> -->
-          <el-select v-model="ruleForm.assign_status" placeholder="请选择">
+          <el-select v-model="ruleForm.assign_status" placeholder="请选择" @change="handleChangeType">
             <el-option
               v-for="item in assignList"
               :key="item.value"
@@ -70,18 +70,57 @@
             :rows="4"
             v-model="ruleForm.assign_room"
             placeholder="请输入房间ID，输入多个房间ID请用逗号隔开"
-            @input="roomInput"
+            @input="roomInput(1)"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="公会ID"
+          prop="assign_guild"
+          v-if="ruleForm.assign_status === 2"
+        >
+          <el-input
+            type="textarea"
+            :rows="4"
+            v-model="ruleForm.assign_guild"
+            placeholder="请输入公会ID，输入多个公会ID请用逗号隔开"
+            @input="roomInput(2)"
           ></el-input>
         </el-form-item>
         <el-form-item label="图片" prop="url">
           <uploadImg
+            action="#"
             v-model="ruleForm.url"
             accept=".png,.jpg,.jpeg,.svga"
             :imgUrl="ruleForm.url"
             name="url"
             ref="url"
             @validateField="validateField"
-          ></uploadImg>
+            list-type="picture-card"
+            :auto-upload="false"
+          >
+          <!-- <i slot="default" class="el-icon-plus"></i> -->
+          <div slot="file" slot-scope="{file}">
+            <img
+              class="el-upload-list__item-thumbnail"
+              :src="file.url" alt=""
+            >
+            <span class="el-upload-list__item-actions">
+              <span
+                class="el-upload-list__item-preview"
+                @click="handlePictureCardPreview(file)"
+              >
+                <i class="el-icon-zoom-in"></i>
+              </span>
+              <span
+                v-if="!disabled"
+                class="el-upload-list__item-delete"
+                @click="handleRemove(file)"
+              >
+                <i class="el-icon-delete"></i>
+              </span>
+            </span>
+          </div>
+        </uploadImg>
         </el-form-item>
         <!-- <el-form-item label="是否默认" prop="is_default">
                     <el-select v-model="ruleForm.is_default">
@@ -139,6 +178,9 @@ export default {
         assign_room: [
           { required: true, message: "请输入房间ID", trigger: "blur" },
         ],
+        assign_guild: [
+          { required: true, message: "请输入公会ID", trigger: "blur" },
+        ],
         assign_status: [
           { required: true, message: "请选择背景类型", trigger: "change" },
         ],
@@ -183,11 +225,13 @@ export default {
   },
   methods: {
     // 限制房间id输入
-    roomInput() {
-      this.ruleForm.assign_room = this.ruleForm.assign_room.replace(
+    roomInput(type) {
+      let changeNum = type == 1 ? this.ruleForm.assign_room : this.ruleForm.assign_guild;
+      changeNum = changeNum.replace(
         /[\u4E00-\u9FA5A-Za-z_^%&'\-\*\ /;.，。、‘；、】【=?$\[\]!@#()\\~]/g,
         ""
       );
+      this.ruleForm[(type == 1 ? "assign_room" : "assign_guild")] = changeNum;
     },
     // 获取数据
     loadParams(status, row) {
@@ -219,7 +263,11 @@ export default {
           };
           if (s.assign_status === 1) {
             params.assign_room = s.assign_room;
+          }else if (s.assign_status === 2) {
+            params.assign_guild = s.assign_guild;
           }
+          console.log("params:",params);
+          return
           let res = await getRoomBgAdd(params);
           if (res.code === 2000) {
             this.$success("操作成功");
@@ -266,6 +314,13 @@ export default {
     // 重置字段验证
     validateField(name) {
       this.$refs.ruleForm.validateField([name]);
+    },
+    // 切换图片类型
+    handleChangeType(){
+      console.log("---290---");
+    },
+    handleRemove(file) {
+      console.log(file);
     },
   },
 };
