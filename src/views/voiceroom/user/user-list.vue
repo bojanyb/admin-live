@@ -45,7 +45,7 @@
 	import MAPDATA from '@/utils/jsonMap.js'
 
 	export default {
-		name: 'UserList',
+		name: 'user-list',
 		mixins: [mixins],
 		components: {
 			bindStuck,
@@ -321,12 +321,12 @@
 								return h('div', [
                   h('el-button', {
                     props: { type: 'primary' },
-                    style: { display: (this.curBtnArr.includes('User@userEdit')) ? 'unset' : 'none' },
+                    style: { display: (this.permissionArr.includes('User@userEdit')) ? 'unset' : 'none' },
                     on: { click: () => { this.editFunc(params.row) } }
                   }, '修改'),
                   h('el-button', {
                     props: { type: '' },
-                    style: { display: (this.curBtnArr.includes('User@updateLoginPwd')) ? 'unset' : 'none' },
+                    style: { display: (this.permissionArr.includes('User@updateLoginPwd')) ? 'unset' : 'none' },
                     on: { click: () => { this.updatePass(params.row) } }
                   }, '更改密码')
 								])
@@ -336,7 +336,7 @@
 				return {
 					vm: this,
 					url: REQUEST.user.list,
-					columns: this.curBtnArr.includes('User@index') ? arr : []
+					columns: this.permissionArr.includes('User@index') ? arr : []
 				}
 			}
 		},

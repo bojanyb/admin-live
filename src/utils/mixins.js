@@ -12,13 +12,14 @@ const mixins = {
     },
   computed: {
     ...mapState({
-      curBtnArr: state => state.permission.curBtnArr,
+      permissionArr: state => state.permission.permissionArr,
     }),
   },
   mounted() {
-    const { fullPath } = this.$route;
-    this.$store.commit('permission/SET_CUR_BTN', fullPath)
-    console.log(this.curBtnArr, 'curBtnArr');
+    console.log(this.permissionArr, "permissionArr");
+    // const { fullPath } = this.$route;
+    // this.$store.commit('permission/SET_CUR_BTN', fullPath)
+    // console.log(this.permissionArr, 'permissionArr');
   },
 }
 
