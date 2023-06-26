@@ -75,6 +75,9 @@ service.interceptors.response.use(
 					})
 				}, 2000);
 				return
+			} else if(res.code == 3991){
+				Message.warning(res.msg);
+				return
 			}
 			error(res.msg)
 			return Promise.reject(res.msg || new Error('Error'))

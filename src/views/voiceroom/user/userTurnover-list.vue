@@ -407,6 +407,9 @@
 			// 文件查询
 			batchFileSearch(){
 				this.batchFileVisible = true;
+				if(this.$refs.tableList2){
+					this.$refs.tableList2.getData();
+				}
 			},
 			// 下载文件
 			downFile(row){
