@@ -186,7 +186,7 @@ export default {
             } else {
                 this.$message.error('最多只能赠送一个商品')
 
-                this.drawer = false
+                // this.drawer = false
                 this.$emit('validateField')
             }
             // this.$set(row, 'type', 1)

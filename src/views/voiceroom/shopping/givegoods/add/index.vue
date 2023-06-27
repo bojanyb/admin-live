@@ -39,7 +39,7 @@
             </div>
         </el-dialog>
 
-        <goodsBank v-if="goodsBankVisible" ref="goodsBank" :list="list" :goodsType="goodsType" :isLimit="10" @validateField="validateField" @distoryComp="distoryComp"></goodsBank>
+        <goodsBank v-if="goodsBankVisible" ref="goodsBank" :list="list" :goodsType="goodsType" :isLimit="1" @validateField="validateField" @distoryComp="distoryComp"></goodsBank>
     </div>
 </template>
 
