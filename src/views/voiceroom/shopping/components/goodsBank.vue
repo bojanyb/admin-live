@@ -28,7 +28,7 @@
              </el-row>
           </el-form>
 			<div class="giftListBox">
-				<el-table ref="giftTable" v-loading="giftLoading" :data="giftListArr" element-loading-text="拼命加载中"
+				<el-table ref="giftTable" v-loading="giftLoading" :data="giftListArr" element-loading-text="拼命加载中" max-height="740px"
 					border fit highlight-current-row>
           <el-table-column label="商品ID" prop="id" align="center" width="100px" show-overflow-tooltip />
 					<el-table-column label="商品名称" prop="goods_name" align="center" show-overflow-tooltip />
