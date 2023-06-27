@@ -160,7 +160,7 @@ export default {
         isShowCheckbox: true,
         url: REQUEST.CashHisity.cashChannel,
         search: {
-          sizes: [10, 30, 50, 100,300,500]
+          sizes: [10, 30, 50, 100,300,500,1000]
         },
         columns: [
           {
