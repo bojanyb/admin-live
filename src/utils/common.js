@@ -312,7 +312,7 @@ export function exportTableData(list, nameList, title) {
   // window.location.href = uri + this.base64(template);
   const link = document.createElement("a");
   link.href = uri + base64(template);
-  link.download = timeFormat(new Date(), 'YYYY-MM-DD', false) + title + '.xls';
+  link.download = title + '.xls';
   link.click();
 }
 
