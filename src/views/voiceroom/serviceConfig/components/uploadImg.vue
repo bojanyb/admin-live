@@ -97,6 +97,7 @@ export default {
             } else if(row.img_path) {
                 let name = row.img_path.split('.live/')[1]
                 this.fileList = [ { name: name, url: row.img_path } ]
+                this.ruleForm.img = row.img_path
             }
         },
         // 提交
