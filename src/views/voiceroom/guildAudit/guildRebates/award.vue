@@ -397,8 +397,8 @@ export default {
 					t_flow: this.form.status === 2 ? item.flow + '钻石' : item.t_flow + '钻石',
 					settlement: this.form.status === 2 ? '无' : (item.settlement || 0) + '喵粮',
 					status: status_name,
-          op_time: item.op_time ? timeFormat(item.op_time, 'YYYY-MM-DD HH:mm:ss', true) : '-',
-          op_user: item.op_user ? item.op_user : '-'
+					op_time: item.op_time ? JSON.stringify(timeFormat(item.op_time, 'YYYY-MM-DD HH:mm:ss', true)) : '-',
+					op_user: item.op_user ? item.op_user : '-'
 				};
 				return params;
 			});
@@ -414,8 +414,8 @@ export default {
 				"总流水（含冻结）",
 				"时长奖励",
 				"结算状态",
-        "操作时间",
-        "操作人",
+				"操作时间",
+				"操作人",
 			];
 			exportTableData(arr, nameList, " 24小时房间奖励结算");
 		},
