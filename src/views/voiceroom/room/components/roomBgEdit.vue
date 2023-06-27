@@ -202,7 +202,7 @@ export default {
       ],
       fileList: [],    //图片列表
       imgs: [],
-      limit: 5,  //上传图片的数量
+      limit: 1,  //上传图片的数量
       hideUpload: false,   // 判断是否隐藏上传按钮
       isAdd: true,   //判断对应的操作
       construction: {
@@ -234,6 +234,18 @@ export default {
       });
     },
   },
+  watch:{
+    "ruleForm.assign_status": {
+      handler(newVal){
+        if(newVal == 2){
+          this.limit = 5;
+        }else{
+          this.limit = 1;
+        }
+        this.fileList = [];
+      }
+    }
+  },
   methods: {
     // 限制房间id输入
     roomInput(type) {
@@ -256,6 +268,7 @@ export default {
         this.limit = 1;
       }
       this.url = this.ruleForm.url;
+      this.imgList.push(this.ruleForm.url);
       this.oldParams = JSON.parse(JSON.stringify(this.ruleForm));
     },
     // 提交
