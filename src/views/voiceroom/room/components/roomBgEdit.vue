@@ -243,6 +243,7 @@ export default {
           this.limit = 1;
         }
         this.fileList = [];
+        this.imgList = [];
       }
     }
   },
@@ -369,7 +370,6 @@ export default {
       this.hideUpload = fileList.length >= this.limit;
       this.imgList = [];
       fileList.map(res=>{
-        console.log("res:",res);
         res.file = res.raw;
         this.upLoadFile(res);
       })
