@@ -345,7 +345,7 @@ export default {
       if (!isLt2M) {
         fileList = fileList.filter(item => item !== file);
         this.fileList = fileList;
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+        this.$message.warning('上传头像图片大小不能超过 2MB!')
         return
       }
       //图片转为base64位
@@ -383,14 +383,14 @@ export default {
       let isLt2M = file.file.size / 1024 / 1024 < 2;
       if (!isLt2M) {
         this.fileList = this.fileList.filter(item => item !== file);
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+        this.$message.warning('上传头像图片大小不能超过 2MB!')
         return
       }
       let fileType = file.file.type;
       let accept = JSON.parse(JSON.stringify(this.accept));
       accept = accept.replace(".", "");
       if (fileType.indexOf(accept) == -1 && this.isFileType == true) {
-        this.$message.error("上传图片只能是" + accept + "格式!");
+        this.$message.warning("上传图片只能是" + accept + "格式!");
         return false;
       }
       this.uploadImg(file);
