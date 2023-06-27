@@ -1,6 +1,6 @@
 import defaultSettings from '@/settings'
 
-const title = defaultSettings.title || '喵喵星球管理平台'
+const title = defaultSettings.title || process.env.ENV_TITLE
 
 export default function getPageTitle(pageTitle) {
   if (pageTitle) {
