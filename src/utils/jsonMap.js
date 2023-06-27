@@ -250,6 +250,25 @@ const STATUSLISTCOPY = [
   }
 ]
 
+const HISTORYSTATUSLISTCOPY = [
+  {
+      value: '',
+      name: '全部'
+  },
+  {
+    value: 4,
+    name: '全部完成'
+  },
+  {
+    value: 3,
+    name: '全部失败'
+  },
+  {
+    value: 6,
+    name: '部分完成'
+  }
+]
+
 /*
 * 提现渠道
 */
@@ -3130,6 +3149,7 @@ export default {
   GIFTSHOWTYPELIST,
   JOINHOUSETYPELIST,
   ISFIRSTJOINHOUSELIST,
+  HISTORYSTATUSLISTCOPY,
   STATUSLISTCOPY,
   CASHCHANNEL,
   PAYMENTALLOCATIONMANAGEMENTLIST,
