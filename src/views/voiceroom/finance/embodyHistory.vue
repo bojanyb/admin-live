@@ -45,7 +45,7 @@ export default {
     mixins: [mixins],
     computed: {
         statusComputed() {
-            let array = MAPDATA.STATUSLISTCOPY
+            let array = MAPDATA.HISTORYSTATUSLISTCOPY
             return array
         },
         forms() {
