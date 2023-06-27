@@ -18,13 +18,28 @@
 				this.$store.commit('user/SET_PERMISSION', permissionList)
 
 				localStorage.removeItem("permissionList");
-				
+
 				window.addEventListener("beforeunload",() => {
 					let permissionList = that.$store.state.user.permissionList
 					localStorage.setItem("permissionList", JSON.stringify(permissionList));
 				})
-			}
-		}
+      },
+    changeFavicon () {
+      let favicon = document.querySelector('link[rel="icon"]')
+      if (favicon !== null) {
+        favicon.href = process.env.ENV_FAVICON
+      } else {
+        favicon = document.createElement('link')
+        favicon.rel = 'icon'
+        favicon.href = process.env.ENV_FAVICON
+        document.head.appendChild(favicon)
+      }
+    },
+
+  },
+    mounted() {
+      this.changeFavicon()
+    },
 	}
 </script>
 <style>

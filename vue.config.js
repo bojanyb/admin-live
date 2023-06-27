@@ -7,7 +7,7 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || '喵喵星球管理平台' // page title
+const name = defaultSettings.title || '' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -29,7 +29,9 @@ const option = {
 	    domainHttp: 'http://m.huixin.info', // app端接口
 	  //   domainHttps: 'http://api.huida.vip', // https环境地址
     // domainHttps: 'http://192.168.0.114', // https环境地址
-    httpHeader: '' // 后台本地携带
+    httpHeader: '', // 后台本地携带
+    favicon: 'favicon.ico',
+    title: '喵喵星球管理平台'
   },
   '--dev': {
 	  // apiBaseUrl: ''
@@ -39,7 +41,9 @@ const option = {
 	  mode: 'info',
 	  domainHttps: 'http://api.huixin.info', // https环境地址
 	  domainHttp: 'http://m.huixin.info', // app端接口
-	  httpHeader: '' // 后台本地携带
+	  httpHeader: '', // 后台本地携带
+    favicon: 'favicon.ico',
+    title: '喵喵星球管理平台'
   },
   // 测试环境
   '--test': {
@@ -49,7 +53,9 @@ const option = {
 	  mode: 'test',
 	  domainHttps: 'http://api.huida.vip', // https环境地址
 	  domainHttp: 'http://m.huida.vip', // app端接口
-	  httpHeader: '' // 后台本地携带
+	  httpHeader: '', // 后台本地携带
+    favicon: 'favicon.ico',
+    title: '喵喵星球管理平台'
   },
   // 预生产环境
   '--pre': {
@@ -59,7 +65,9 @@ const option = {
 	  mode: 'pre',
 	  domainHttps: '//api.huidapay.net', // https环境地址
 	  domainHttp: '//m.huidapay.net', // app端接口
-	  httpHeader: '' // 后台本地携带
+	  httpHeader: '', // 后台本地携带
+    favicon: 'favicon.ico',
+    title: '喵喵星球管理平台'
   },
   // 灰度环境
   '--grey': {
@@ -69,7 +77,9 @@ const option = {
     mode: 'grey',
     domainHttps: '//api.grey.aiyi.live', // https环境地址
     domainHttp: '//m.grey.aiyi.live', // app端接口
-    httpHeader: '' // 后台本地携带
+    httpHeader: '', // 后台本地携带
+    favicon: 'favicon.ico',
+    title: '喵喵星球管理平台'
   },
   // 生产环境
   '--prod': {
@@ -79,7 +89,33 @@ const option = {
 	  mode: 'prod',
 	  domainHttps: '//api.aiyi.live', // https环境地址
 	  domainHttp: '//m.aiyi.live', // app端接口
-	  httpHeader: '' // 后台本地携带
+	  httpHeader: '', // 后台本地携带
+    favicon: 'favicon.ico',
+    title: '喵喵星球管理平台'
+  },
+  // 预生产环境
+  '--aidoo.pre': {
+    publicPath: '/',
+    outputDir: 'dist',
+    assetsDir: 'static',
+    mode: 'aidoo.pre',
+    domainHttps: '//pre_api.aidoo.live', // https环境地址
+    domainHttp: '//pre_m.aidoo.live', // app端接口
+    httpHeader: '', // 后台本地携带
+    favicon: 'faviconkb.ico', // 图标
+    title: 'aidoo管理平台'
+  },
+  // 生产环境
+  '--aidoo.prod': {
+    publicPath: '/',
+    outputDir: 'dist',
+    assetsDir: 'static',
+    mode: 'aidoo.prod',
+    domainHttps: '//api.aidoo.live', // https环境地址
+    domainHttp: '//m.aidoo.live', // app端接口
+    httpHeader: '', // 后台本地携带
+    favicon: 'faviconkb.ico', // 图标
+    title: 'aidoo管理平台'
   }
 }
 
@@ -209,7 +245,9 @@ module.exports = {
           'ENV_DOMAINHTTP': JSON.stringify(configObj.domainHttp),
           'process.env': {
             NODE_ENV: JSON.stringify(configObj.mode),
-            BASE_URL: JSON.stringify(configObj.publicPath)
+            BASE_URL: JSON.stringify(configObj.publicPath),
+            ENV_TITLE: JSON.stringify(configObj.title),
+            ENV_FAVICON: JSON.stringify(configObj.favicon)
           }
         }
       ])
