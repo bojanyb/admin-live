@@ -567,7 +567,7 @@ export default {
         },
         // 受理
       async handleControl(row) {
-          const response = await acceptPunish({ id: row.id });
+          const response = await acceptPunish({ id: row.report_event_id });
           if (response.code == 2000) {
             this.$success('受理成功');
             this.getList();
