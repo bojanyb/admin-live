@@ -113,7 +113,7 @@
             <el-button v-if="showReset" icon="el-icon-refresh" @click="reset">重置</el-button>
             <el-button v-if="showBatchPass" type="success" @click="batchPass">{{ batchFuncName || '批量通过' }}</el-button>
             <el-button v-if="showBatchRurn" type="danger" @click="BatchRurn">{{ batchRurnName || '批量拒绝' }}</el-button>
-            <el-button v-if="showExport" type="info" @click="handleExport">{{ exportName || '导出Excel' }}</el-button>
+            <el-button v-if="showExport" :type="customType ||'info'" @click="handleExport">{{ exportName || '导出Excel' }}</el-button>
             <el-button v-if="showCustom" type="warning" @click="handleCustom">{{ customName || '自定义' }}</el-button>
             <el-button v-if="showQuery" type="primary" @click="handleQuery">{{ queryName || '查询' }}</el-button>
           </el-form-item>
@@ -306,6 +306,11 @@ export default {
     preMonth:{
       type: Number,
       default: 0
+    },
+    // 自定义按钮颜色
+    customType: {
+      type: String,
+      default: ''
     }
   },
   data() {
