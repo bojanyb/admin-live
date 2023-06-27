@@ -380,12 +380,6 @@ export default {
     },
     // 上传
     upLoadFile(file) {
-      let isLt2M = file.file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        this.fileList = this.fileList.filter(item => item !== file);
-        this.$message.warning('上传头像图片大小不能超过 2MB!')
-        return
-      }
       let fileType = file.file.type;
       let accept = JSON.parse(JSON.stringify(this.accept));
       accept = accept.replace(".", "");
