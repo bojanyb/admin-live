@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: '喵喵星球管理平台',
+      title: process.env.ENV_TITLE,
       logo: '../../../../public/images/logo.png'
     }
   }

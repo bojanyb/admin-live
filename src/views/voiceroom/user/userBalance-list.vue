@@ -60,14 +60,18 @@ export default {
           options: MAPDATA.USERBALANCETYPE
         },
         {
-          name: 'relation_type',
-          type: 'select',
-          value: '',
-          keyName: 'code',
-          optionLabel: 'name',
-          label: '交易渠道',
-          placeholder: '请选择交易渠道',
-          options: this.jsonMapList
+          name: "relation_type",
+          type: "cascader",
+          value: null,
+          keyName: "value",
+          optionLabel: "label",
+          label: "交易渠道",
+          placeholder: "请选择",
+          filterable: true,
+          clearable: true,
+          collapse: true,
+          options: this.jsonMapList,
+          props: { multiple: true }
         },
         {
           name: 'dateTimeParams',
@@ -124,8 +128,12 @@ export default {
             }
           },
           {
-            label: '渠道',
+            label: '主渠道',
             prop: 'relation_type_name'
+          },
+          {
+            label: '子渠道',
+            prop: 'relation_sub_type_name'
           },
           {
             label: '交易流水号',
@@ -163,13 +171,22 @@ export default {
     // 配置参数
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams }
+      let data = s.relation_type ? JSON.parse(JSON.stringify(s.relation_type)) : []
+      const result = data.reduce((prev, curr) => {
+        curr.map((item, index) => {
+          if (index !== 0) {
+            prev.push(item)
+          }
+        })
+        return prev
+      }, []).join(',')
       return {
         page: params.page,
         pagesize: params.size,
         user_number: s.user_number,
         trade_no: s.trade_no,
         genre: s.genre,
-        relation_type: s.relation_type,
+        relation_type: (result && result.length) ? result : "",
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0
       }
@@ -204,13 +221,23 @@ export default {
     },
     async getRelationTypeFunc() {
       let res = await getAdminRelationType()
-      if(res.data.list && res.data.list.length > 0) {
-        res.data.list.unshift({
-          code: '',
-          name: '全部'
-        })
-      }
-      this.jsonMapList = res.data.list
+
+      const result = res.data.list.reduce((prev, curr) => {
+        const temp = {
+          value: curr.code + '',
+          label: curr.name,
+          children: curr.child.map(item => {
+            return {
+              value: item.code + '',
+              label: item.name,
+            }
+          })
+        }
+        prev.push(temp)
+        return prev;
+      }, [])
+
+      this.jsonMapList = result
     },
     saleAmunt(row) {
       this.ruleForm = { ...row.total_sum }

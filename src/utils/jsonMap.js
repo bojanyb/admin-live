@@ -279,6 +279,14 @@ const CASHCHANNEL = [
   {
     value: 7,
     name: '工猫支付宝',
+  },
+  {
+    value: 8,
+    name: '美事通银行卡',
+  },
+  {
+    value: 9,
+    name: '美事通支付宝',
   }
 ]
 
@@ -2360,11 +2368,11 @@ const USERPUNISHTYPELISTCOPYTWO = [
     value: 2,
     disabled: false
   },
-  {
-    name: '封WIFI',
-    value: 3,
-    disabled: false
-  },
+  // {
+  //   name: '封WIFI',
+  //   value: 3,
+  //   disabled: false
+  // },
   {
     name: '封实名',
     value: 4,

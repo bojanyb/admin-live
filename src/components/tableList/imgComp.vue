@@ -11,7 +11,7 @@
             <svgComp ref="svgComp" :src="src" :styleObj="{ width: width, height: height }" ></svgComp>
         </div>
         <div class="audioBox" v-else-if="isSpecial === 'mp3'">
-            <div class="audio-name" v-if="name" :title="name">{{ name }}</div>
+            <div class="audio-name" v-if="name" :title="name">{{ name }}<span v-if="subName"> - {{ subName }}</span></div>
             <audio ref="audio" :src="src" controls="controls"></audio>
             <div v-if="tagList.length > 0">
                 <span v-for="(item,index) in tagList" :key="index">{{ item }}</span>
@@ -60,6 +60,10 @@ export default {
             default: ''
         },
         name: { // 音乐名称 - 音乐专用
+            type: String,
+            default: ''
+        },
+        subName: { // 音乐名称 - 音乐专用
             type: String,
             default: ''
         },

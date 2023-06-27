@@ -139,6 +139,7 @@
             />
             <!--级联选择器-->
             <el-cascader
+              class="v-cascader"
               v-else-if="item.type === 'cascader'"
               v-model="form[item.name]"
               :options="item.options"
@@ -147,6 +148,7 @@
               :placeholder="item.placeholder"
               :clearable="item.clearable || false"
               :filterable="item.filterable || false"
+              :collapse-tags="item.collapse || false"
               @change="mergeEvent(arguments, item)"
             />
             <!--日期控件-->
@@ -754,6 +756,20 @@ export default {
       }
       .el-input__icon {
         line-height: 32px;
+      }
+    }
+    .v-cascader {
+       margin-right: 30px;
+      .el-cascader__search-input {
+        background: #F5F7FA;
+        border: none;
+        border-radius: 0;
+      }
+      .el-input {
+        width: 350px;
+      }
+      .el-cascader__tags {
+        width: 350px;
       }
     }
 	}
