@@ -10,6 +10,7 @@
         @onReset="reset"
         @onSearch="onSearch"
         @export="handleExport"
+        customType="danger"
       ></SearchPanel>
     </div>
     <tableList :cfgs="cfgs" ref="tableList"></tableList>
