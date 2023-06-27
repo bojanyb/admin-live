@@ -1,5 +1,6 @@
+console.log(process.env);
 module.exports = {
-  title: '喵喵星球管理平台',
+  title: process.env.ENV_TITLE,
 
   /**
 	 * @type {boolean} true | false
