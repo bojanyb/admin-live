@@ -61,7 +61,7 @@ export default {
   },
     filters: {
         typeFilter(val) {
-            let params = MAPDATA.USERPUNISHSTATUSLISTCOPY.find(item => { return item.value === val })
+            let params = MAPDATA.OPERATIONTYPE.find(item => { return item.value === val })
             return params ? params.name : '无'
         }
     },

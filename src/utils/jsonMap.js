@@ -2443,6 +2443,30 @@ const USERPUNISHSTATUSLISTCOPY = [
   }
 ]
 
+// 用户处罚 - 操作类型
+const OPERATIONTYPE = [
+  {
+    name: '处罚',
+    value: 1
+  },
+  {
+    name: '解除',
+    value: 2
+  },
+  {
+    name: '忽略',
+    value: 3
+  },
+  {
+    name: '受理',
+    value: 4
+  },
+  {
+    name: '修改证据',
+    value: 5
+  },
+]
+
 // 用户处罚 - 处罚时间
 const TIMEPENALTYSTATUS = [
   {
@@ -3102,6 +3126,7 @@ export default {
   USERPUNISHTYPELISTCOPYTWO,
   USERPUNISHSTATUSLIST,
   USERPUNISHSTATUSLISTCOPY,
+  OPERATIONTYPE,
   GIFTSHOWTYPELIST,
   JOINHOUSETYPELIST,
   ISFIRSTJOINHOUSELIST,
