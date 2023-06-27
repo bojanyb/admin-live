@@ -348,7 +348,7 @@ export default {
                       fixed: 'right',
                       render: (h, params) => {
                           return h('div', [
-                              h('el-button', { props: { type: 'info'}, style: {
+                              h('el-button', { props: { type: (params.row.accept_type === 0) ? 'danger' : 'info'}, style: {
                                   display: (params.row.status || params.row.status === 0) ? 'unset' : 'none'
                               }, on: {click:()=>{this.handleControl(params.row)}}}, `${(params.row.accept_type === 0) ? '未受理' : '已受理'}`),
                               h('el-button', { props: { type: 'success'}, style: {
