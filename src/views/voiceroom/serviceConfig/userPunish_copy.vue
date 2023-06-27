@@ -348,7 +348,7 @@ export default {
                       fixed: 'right',
                       render: (h, params) => {
                           return h('div', [
-                              h('el-button', { props: { type: 'info'}, style: {
+                              h('el-button', { props: { type: (params.row.accept_type === 0) ? 'danger' : 'info'}, style: {
                                   display: (params.row.status || params.row.status === 0) ? 'unset' : 'none'
                               }, on: {click:()=>{this.handleControl(params.row)}}}, `${(params.row.accept_type === 0) ? '未受理' : '已受理'}`),
                               h('el-button', { props: { type: 'success'}, style: {
@@ -567,7 +567,7 @@ export default {
         },
         // 受理
       async handleControl(row) {
-          const response = await acceptPunish({ id: row.id });
+          const response = await acceptPunish({ id: row.report_event_id });
           if (response.code == 2000) {
             this.$success('受理成功');
             this.getList();
