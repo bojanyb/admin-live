@@ -341,9 +341,11 @@ export default {
     },
     //上传图片，添加到图片列表
     beforeAvatarUpload(file, fileList) {
-      const isLt2M = file.size / 1024 / 1024 < 2
+      let isLt2M = file.size / 1024 / 1024 < 2;
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+        fileList = fileList.filter(item => item !== file);
+        this.fileList = fileList;
+        this.$message.warning('上传头像图片大小不能超过 2MB!')
         return
       }
       //图片转为base64位
@@ -378,12 +380,17 @@ export default {
     },
     // 上传
     upLoadFile(file) {
-      const isLtXM = file.file.size / 1024 / 1024 < 5;
+      let isLt2M = file.file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        this.fileList = this.fileList.filter(item => item !== file);
+        this.$message.warning('上传头像图片大小不能超过 2MB!')
+        return
+      }
       let fileType = file.file.type;
       let accept = JSON.parse(JSON.stringify(this.accept));
       accept = accept.replace(".", "");
       if (fileType.indexOf(accept) == -1 && this.isFileType == true) {
-        this.$message.error("上传图片只能是" + accept + "格式!");
+        this.$message.warning("上传图片只能是" + accept + "格式!");
         return false;
       }
       this.uploadImg(file);
