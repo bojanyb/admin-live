@@ -323,7 +323,7 @@ export default {
 				this.getList()
 			}).catch(() => {});
 		},
-    handleLook(row, status) {
+    	handleLook(row, status) {
 			setTimeout(() => {
 				this.$refs.lookComp.load(row, status);
 			}, 100);
@@ -395,8 +395,8 @@ export default {
 					t_flow: item.t_flow + "钻石",
 					settlement: this.form.status === 2 ? '无' : item.settlement + '喵粮',
 					status: status_name,
-          op_time: item.op_time ? timeFormat(item.op_time, 'YYYY-MM-DD HH:mm:ss', true) : '-',
-          op_user: item.op_user ? item.op_user : '-'
+					op_time: item.op_time ? JSON.stringify(timeFormat(item.op_time, 'YYYY-MM-DD HH:mm:ss', true)) : '-',
+					op_user: item.op_user ? item.op_user : '-'
 				};
 				return params;
 			});
@@ -411,8 +411,8 @@ export default {
 				"总流水（含冻结）",
 				"月奖励金额",
 				"结算状态",
-        "操作时间",
-        "操作人",
+				"操作时间",
+				"操作人",
 			];
 			exportTableData(arr, nameList, "公会月奖励结算");
 		},
