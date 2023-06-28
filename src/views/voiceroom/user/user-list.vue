@@ -237,10 +237,17 @@
 							}
 						},
 						{
-							label: '是否为公会长',
-							width: '110px',
+							label: '是否为派对公会长',
+							width: '135px',
 							render: (h, params) => {
-								return h('span', params.row.is_admin || '否')
+								return h('span', params.row.is_party_admin)
+							}
+						},
+						{
+							label: '是否为直播公会长',
+							width: '135px',
+							render: (h, params) => {
+								return h('span', params.row.is_live_admin)
 							}
 						},
 						{
