@@ -64,6 +64,14 @@ export default {
           value: "com.aiyi.lemon",
         },
       ],
+      navList_aidoo:[
+        {
+          key: "com.party.aidoo",
+          isActive: true,
+          label: "Aidoo",
+          value: "com.party.aidoo",
+        },
+      ],
       packageName: [
         {
           key: "",
@@ -96,6 +104,15 @@ export default {
           value: "com.aiyi.lemon",
         }
       ],
+      packageName_aidoo: [
+        {
+          key: "com.party.aidoo",
+          label: "Aidoo",
+          value: "com.party.aidoo",
+        }
+      ],
+      navSourceList:[],
+      packageSourceList: []
     }
   },
   components: {
@@ -109,7 +126,7 @@ export default {
         {
           name: 'package_name',
           type: 'select',
-          options: this.packageName,
+          options: this.packageSourceList,
           label: '应用类型',
           placeholder: '',
           handler: {
@@ -151,7 +168,7 @@ export default {
           {
             label: '应用类型',
             render: (h, params) => {
-              let package_name = this.navList.find(item => { return item.value === params.row.package_name })
+              let package_name = this.packageSourceList.find(item => { return item.value === params.row.package_name })
 							return h('span', package_name ? package_name.label : '无')
             }
           },
@@ -212,6 +229,16 @@ export default {
           },
         ]
       }
+    }
+  },
+  mounted(){
+    let node_env = process.env.NODE_ENV;
+    if(node_env.indexOf("aidoo") > -1){
+      this.navSourceList = this.navList_aidoo;
+      this.packageSourceList = this.packageName_aidoo;
+    }else{
+      this.navSourceList = this.navList;
+      this.packageSourceList = this.packageName;
     }
   },
   methods:{

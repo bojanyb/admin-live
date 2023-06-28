@@ -7,7 +7,7 @@
         <div class="inputBox">
           <el-form-item label="应用类型" prop="package_name">
             <el-select v-model="ruleForm.package_name" placeholder="请选择" :disabled="status === 'add' ? false : true ">
-              <el-option v-for="item in packageName" :key="item.value" :label="item.name"
+              <el-option v-for="item in packageSourceList" :key="item.value" :label="item.name"
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
@@ -159,13 +159,29 @@ export default {
           message: '请输入安卓Code',
           trigger: 'blur'
         }],
-      }
+      },
+      packageName_aidoo: [
+        {
+          key: "com.party.aidoo",
+          name: "Aidoo",
+          value: "com.party.aidoo",
+        }
+      ],
+      packageSourceList: []
     };
   },
   computed: {
     title() { // 标题
       return this.status === 'add' ? "新增" : "编辑"
     },
+  },
+  mounted(){
+    let node_env = process.env.NODE_ENV;
+    if(node_env.indexOf("aidoo") > -1){
+      this.packageSourceList = this.packageName_aidoo;
+    }else{
+      this.packageSourceList = this.packageName;
+    }
   },
   methods: {
     // 获取数据
