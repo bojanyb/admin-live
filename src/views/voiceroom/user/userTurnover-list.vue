@@ -416,6 +416,10 @@
 			},
 			// 导出excel
 			BatchRurn() {
+				if(this.file_name == ""){
+					this.$message.warning("请先输入有效的文件名");
+					return
+				}
 				let s = this.beforeSearch();
 				delete s.page;
 				s.file_name = this.file_name;
