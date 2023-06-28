@@ -335,6 +335,13 @@ export default {
                       }
                     },
                     {
+                      label: '修改证据人',
+                      minWidth: '120px',
+                      render: (h, params) => {
+                          return h('span', params.row.admin || '- -')
+                      }
+                    },
+                    {
                       label: '备注说明',
                       minWidth: '180px',
                       render: (h, params) => {
@@ -510,6 +517,7 @@ export default {
               undo_admin : item.undo_admin || '--',
               ignore_admin : item.ignore_admin || '--',
               accept_admin : item.accept_admin || '--',
+              admin : item.admin || '--',
               remark : item.remark
             };
             return params;
@@ -539,6 +547,7 @@ export default {
             "解除操作人",
             "忽略操作人",
             "受理操作人",
+            "修改证据人",
             "备注说明"
           ];
           exportTableData(arr, nameList, "处罚举报记录");
