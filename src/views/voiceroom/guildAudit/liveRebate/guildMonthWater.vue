@@ -394,7 +394,7 @@ export default {
 				"公会类型",
 				"流水",
 				"总流水（含冻结）",
-				"月返点金额",
+				"月奖励金额",
 				"结算状态",
 			];
 			exportTableData(arr, nameList, "直播公会月奖励");
