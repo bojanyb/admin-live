@@ -159,7 +159,7 @@ export default {
                         label: '来源',
                         minWidth: '100px',
                         render: (h, params) => {
-                            return h('span', params.row.from || '- -')
+                            return h('span', params.row.from || '无')
                         }
                     },
                     {
@@ -168,7 +168,7 @@ export default {
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.punished_user_nickname),
-                                h('div', params.row.punished_user_number || '- -')
+                                h('div', params.row.punished_user_number || '无')
                             ])
                         }
                     },
@@ -213,7 +213,7 @@ export default {
                       label: '举报类型',
                       minWidth: '130px',
                       render: (h, params) => {
-                          return h('span', params.row.genre || '- -')
+                          return h('span', params.row.genre || '无')
                       },
                       showOverFlow: true
                     },
@@ -221,7 +221,7 @@ export default {
                       label: '举报说明',
                       minWidth: '100px',
                       render: (h, params) => {
-                          return h('span', params.row.content || '- -')
+                          return h('span', params.row.content || '无')
                       },
                       showOverFlow: true
                     },
@@ -239,7 +239,7 @@ export default {
                       minWidth: '160px',
                       render: (h, params) => {
                           return h('div', [
-                              h('div', params.row.report_user_nickname)
+                              h('div', params.row.report_user_nickname || '无')
                           ])
                       }
                     },
@@ -293,9 +293,9 @@ export default {
                       minWidth: '520px',
                       render: (h, params) => {
                         const vnode = params.row.res && params.row.res.length && params.row.res.map(item => {
-                          return h('span', `${item};` || '--')
+                          return h('span', `${item};` || '无')
                         })
-                        return h('div', vnode || '--')
+                        return h('div', vnode || '无')
                       },
                       showOverFlow: true
                     },
@@ -303,49 +303,49 @@ export default {
                       label: '解除时间',
                       minWidth: '170px',
                       render: (h, params) => {
-                          return h('span', params.row.remove_time || '- -')
+                          return h('span', params.row.remove_time || '无')
                       }
                     },
                     {
                       label: '处罚操作人',
                       minWidth: '120px',
                       render: (h, params) => {
-                          return h('span', params.row.penalty_admin || '- -')
+                          return h('span', params.row.penalty_admin || '无')
                       }
                     },
                     {
                       label: '解除操作人',
                       minWidth: '120px',
                       render: (h, params) => {
-                          return h('span', params.row.undo_admin || '- -')
+                          return h('span', params.row.undo_admin || '无')
                       }
                     },
                     {
                       label: '忽略操作人',
                       minWidth: '120px',
                       render: (h, params) => {
-                          return h('span', params.row.ignore_admin || '- -')
+                          return h('span', params.row.ignore_admin || '无')
                       }
                     },
                     {
                       label: '受理操作人',
                       minWidth: '120px',
                       render: (h, params) => {
-                          return h('span', params.row.accept_admin || '- -')
+                          return h('span', params.row.accept_admin || '无')
                       }
                     },
                     {
                       label: '修改证据人',
                       minWidth: '120px',
                       render: (h, params) => {
-                          return h('span', params.row.admin || '- -')
+                          return h('span', params.row.admin || '无')
                       }
                     },
                     {
                       label: '备注说明',
                       minWidth: '180px',
                       render: (h, params) => {
-                          return h('span', params.row.remark || '- -')
+                          return h('span', params.row.remark || '无')
                       },
                       showOverFlow: true
                     },
@@ -492,6 +492,9 @@ export default {
           let arr = JSON.parse(JSON.stringify(res.data.list));
           if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
           arr = arr.map((item, index) => {
+            let data = MAPDATA.USERPUNISHSTATUSLISTCOPY.find((v) => {
+                return v.value === item.status;
+            });
             let params = {
               create_time: item.create_time,
               from: item.from,
@@ -510,14 +513,15 @@ export default {
               report_user_guild_name : item.report_user_guild_name,
               report_user_guild_status: item.report_user_guild_status,
               report_user_guild_operator_user_name : item.report_user_guild_operator_user_name,
-              status : item.status,
+              status : data ? data.name : '无',
+              punish_type_str: item.punish_type_str,
               res : item.res,
               remove_time: item.remove_time,
-              penalty_admin : item.penalty_admin || '--',
-              undo_admin : item.undo_admin || '--',
-              ignore_admin : item.ignore_admin || '--',
-              accept_admin : item.accept_admin || '--',
-              admin : item.admin || '--',
+              penalty_admin : item.penalty_admin || '无',
+              undo_admin : item.undo_admin || '无',
+              ignore_admin : item.ignore_admin || '无',
+              accept_admin : item.accept_admin || '无',
+              admin : item.admin || '无',
               remark : item.remark
             };
             return params;
@@ -541,6 +545,7 @@ export default {
             "举报用户所属公会状态",
             "举报用户所属运营",
             "处理状态",
+            "处罚类别",
             "处罚结果",
             "解除时间",
             "处罚操作人",
