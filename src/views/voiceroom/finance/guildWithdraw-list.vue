@@ -739,6 +739,10 @@ export default {
     },
     // 导出excel
     BatchRurn() {
+      if(this.file_name == ""){
+        this.$message.warning("请先输入有效的文件名");
+        return
+      }
       let s = this.beforeSearch();
       delete s.page;
       s.file_name = this.file_name;
@@ -774,6 +778,7 @@ export default {
             identity: `${item.buyer_id ? item.buyer_id : "-"}(${item.wx_merchant ? item.wx_merchant : (item.ali_merchant ? item.ali_merchant : "-")})`,
             status: status.name,
             trade_no: item.trade_no,
+            out_trade_no: JSON.stringify(item.out_trade_no),
             ip: item.ip,
             addr: item.addr,
           };
@@ -790,7 +795,8 @@ export default {
           "充值平台",
           "微信/支付宝支付标识",
           "充值状态",
-          "交易单号",
+          "商户单号",
+          "支付单号",
           "充值人IP",
           "地区"
         ];

@@ -93,6 +93,18 @@ const option = {
     favicon: 'favicon.ico',
     title: '喵喵星球管理平台'
   },
+  // 测试环境
+  '--aidoo.test': {
+    publicPath: '/',
+    outputDir: 'dist',
+    assetsDir: 'static',
+    mode: 'aidoo.test',
+    domainHttps: 'http://api.huida.vip', // https环境地址
+	  domainHttp: 'http://m.huida.vip', // app端接口
+    httpHeader: '', // 后台本地携带
+    favicon: 'faviconkb.ico', // 图标
+    title: 'aidoo管理平台'
+  },
   // 预生产环境
   '--aidoo.pre': {
     publicPath: '/',
