@@ -318,7 +318,7 @@ export default {
 		// 列表返回数据
 		saleAmunt(row) {
       this.ruleForm = { ...row };
-      this.page = ruleForm.page;
+      this.page = this.ruleForm.page;
 		},
 		// 分页切换 当前页码
 		handleSizeChange(val) {
@@ -394,7 +394,7 @@ export default {
 				"公会类型",
 				"流水",
 				"总流水（含冻结）",
-				"周返点金额",
+				"月返点金额",
 				"结算状态",
 			];
 			exportTableData(arr, nameList, "直播公会月奖励");
