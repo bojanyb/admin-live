@@ -11,7 +11,7 @@
     <!--弹窗界面-->
     <el-dialog :title="title" :visible.sync="FormVisible" :close-on-click-modal="false">
       <div class="navBox">
-        <div class="navItem" v-for="item in navList" :key="item.key" :class="item.isActive == true ? 'active' : ''"
+        <div class="navItem" v-for="item in navSourceList" :key="item.key" :class="item.isActive == true ? 'active' : ''"
           @click="handlerNav(item)">{{ item.label }}</div>
       </div>
       <el-form :model="Form" label-width="120px" :rules="FormRules" ref="Form">
@@ -19,7 +19,7 @@
           <el-radio-group class="platformType" v-model="platform" :disabled="isAdd == false">
             <el-radio-button label="2">Android</el-radio-button>
             <el-radio-button label="1">iOS</el-radio-button>
-            <el-radio-button label="3">模拟器</el-radio-button>
+            <el-radio-button label="3" v-if="node_env.indexOf('aidoo') == -1">模拟器</el-radio-button>
             <el-radio-button label="4">PC</el-radio-button>
           </el-radio-group>
         </el-form-item>
@@ -212,6 +212,24 @@ export default {
         start_time: null,
         end_time: null
       },
+      packageName_aidoo: [
+        {
+          key: "com.party.aidoo",
+          label: "Aidoo",
+          value: "com.party.aidoo",
+        }
+      ],
+      navList_aidoo:[
+        {
+          key: "com.party.aidoo",
+          isActive: true,
+          label: "Aidoo",
+          value: "com.party.aidoo",
+        },
+      ],
+      navSourceList:[],
+      packageSourceList: [],
+      node_env: ""
     }
   },
   components: {
@@ -224,7 +242,7 @@ export default {
         {
           name: 'package_name',
           type: 'select',
-          options: this.packageName,
+          options: this.packageSourceList,
           label: '应用类型',
           placeholder: '',
           handler: {
@@ -404,6 +422,16 @@ export default {
       deep: true
     }
   },
+  mounted(){
+    this.node_env = process.env.NODE_ENV;
+    if(this.node_env.indexOf("aidoo") > -1){
+      this.navSourceList = this.navList_aidoo;
+      this.packageSourceList = this.packageName_aidoo;
+    }else{
+      this.navSourceList = this.navList;
+      this.packageSourceList = this.packageName;
+    }
+  },
   methods: {
     // 新增 应用类型切换
     handlerNav(row) {
@@ -411,7 +439,7 @@ export default {
       if (this.isAdd == false) {
         return
       }
-      this.navList.map(res => {
+      this.navSourceList.map(res => {
         res.isActive = false
         if (res.key == row.key) {
           res.isActive = true
@@ -466,7 +494,7 @@ export default {
       this.progress = 100;
       this.platform = JSON.stringify(item.platform);
       this.addLoading = false;
-      this.navList.map(res=>{
+      this.navSourceList.map(res=>{
         res.isActive = false
         if(res.key == item.package_name){
           res.isActive = true
@@ -496,7 +524,8 @@ export default {
         // version_code: ''
       };
       this.platform = "2";
-      this.navList.map((res,i)=>{
+      console.log("---518----",this.navSourceList);
+      this.navSourceList.map((res,i)=>{
         res.isActive = false
         if(i == 0){
           res.isActive = true
@@ -514,7 +543,7 @@ export default {
             this.Form.platform = this.platform;
             this.Form.is_mandatory = this.is_mandatory;
             this.Form.download_url = this.Form.download_url.trim()
-            this.navList.map(res => {
+            this.navSourceList.map(res => {
               if (res.isActive == true) {
                 this.Form.package_name = res.value
               }
@@ -573,7 +602,7 @@ export default {
     },
     // 获取包名
     getPackageName(id) {
-      this.navList.map(res => {
+      this.navSourceList.map(res => {
         if (id == res.id) {
           return res.value
         }

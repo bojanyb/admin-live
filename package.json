@@ -10,6 +10,7 @@
     "dev.pre": "vue-cli-service serve --pre",
     "dev.grey": "vue-cli-service serve --grey",
     "dev.prod": "vue-cli-service serve --prod",
+    "dev.aidoo.test": "vue-cli-service serve --aidoo.test",
     "dev.aidoo.pre": "vue-cli-service serve --aidoo.pre",
     "dev.aidoo.prod": "vue-cli-service serve --aidoo.prod",
     "lint": "eslint --ext .js,.vue src",
