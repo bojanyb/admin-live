@@ -506,7 +506,10 @@ export default {
               status : item.status,
               res : item.res,
               remove_time: item.remove_time,
-              operator : item.operator,
+              penalty_admin : item.penalty_admin || '--',
+              undo_admin : item.undo_admin || '--',
+              ignore_admin : item.ignore_admin || '--',
+              accept_admin : item.accept_admin || '--',
               remark : item.remark
             };
             return params;
@@ -532,7 +535,10 @@ export default {
             "处理状态",
             "处罚结果",
             "解除时间",
-            "操作人",
+            "处罚操作人",
+            "解除操作人",
+            "忽略操作人",
+            "受理操作人",
             "备注说明"
           ];
           exportTableData(arr, nameList, "处罚举报记录");
