@@ -2,7 +2,7 @@
 <template>
     <div class="depot-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="curBtnArr.includes('PrettyNumber@add')" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="permissionArr.includes('PrettyNumber@add')" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -138,25 +138,25 @@ export default {
                             return h('div', [
                               h('el-button', {
                                 props: { type: 'primary', size: 'mini' },
-                                style: { display: (params.row.show_status === 1 && this.curBtnArr.includes('PrettyNumber@update')) ? 'unset' : 'none' },
+                                style: { display: (params.row.show_status === 1 && this.permissionArr.includes('PrettyNumber@update')) ? 'unset' : 'none' },
                                 on: { click: () => { this.update(params.row) } }
                               }, '修改'),
                               h('el-button', {
                                 props: { type: 'danger', size: 'mini' },
-                                style: { display: (params.row.show_status === 1 && this.curBtnArr.includes('PrettyNumber@del') ) ? 'unset' : 'none' },
+                                style: { display: (params.row.show_status === 1 && this.permissionArr.includes('PrettyNumber@del') ) ? 'unset' : 'none' },
                                 on: { click: () => { this.deleteParams(params.row.id) } }
                               }, '删除'),
                               h('el-button', {
                                 props: { type: 'success', size: 'mini' },
                                 style: {
-                                    display: (params.row.show_status === 1 && this.curBtnArr.includes('PrettyNumber@update')) ? 'unset' : 'none'
+                                    display: (params.row.show_status === 1 && this.permissionArr.includes('PrettyNumber@update')) ? 'unset' : 'none'
                                 },
                                 on: { click: () => { this.down(params.row, 0) } }
                               }, '上架'),
                               h('el-button', {
                                 props: { type: 'info', size: 'mini' },
                                 style: {
-                                    display: (params.row.show_status === 2 && this.curBtnArr.includes('PrettyNumber@update')) ? 'unset' : 'none'
+                                    display: (params.row.show_status === 2 && this.permissionArr.includes('PrettyNumber@update')) ? 'unset' : 'none'
                                 },
                                 on: { click: () => { this.down(params.row, 1) } }
                               }, '下架')
@@ -171,7 +171,7 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.prettyNumber.prettyNumber,
-                columns: this.curBtnArr.includes('PrettyNumber@index') ? arr : []
+                columns: this.permissionArr.includes('PrettyNumber@index') ? arr : []
             }
         },
     },

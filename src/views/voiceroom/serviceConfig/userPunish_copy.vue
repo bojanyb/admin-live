@@ -1,7 +1,7 @@
 <template>
     <div class="app-container serviceConfig-userPunish-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="curBtnArr.includes('UserPunishLog@add')" :show-batch-rurn="true" @onReset="reset" @onSearch="onSearch" @add="add" batchRurnName="导出EXCEL" @BatchRurn="BatchRurn"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="permissionArr.includes('UserPunishLog@add')" :show-batch-rurn="true" @onReset="reset" @onSearch="onSearch" @add="add" batchRurnName="导出EXCEL" @BatchRurn="BatchRurn"></SearchPanel>
         </div>
 		    <tableList :cfgs="cfgs" ref="tableList"></tableList>
         <!-- 新增组件 -->
@@ -56,9 +56,9 @@ export default {
         };
     },
     computed: {
-        ...mapState({
-          curBtnArr: state => state.permission.curBtnArr,
-        }),
+        // ...mapState({
+        //   permissionArr: state => state.permission.permissionArr,
+        // }),
         forms() {
             return [
                 {
@@ -359,16 +359,16 @@ export default {
                                   display: (params.row.status || params.row.status === 0) ? 'unset' : 'none'
                               }, on: {click:()=>{this.handleControl(params.row)}}}, `${(params.row.accept_type === 0) ? '未受理' : '已受理'}`),
                               h('el-button', { props: { type: 'success'}, style: {
-                                  display: (params.row.status === 1 && this.curBtnArr.includes('UserPunishLog@remove')) ? 'unset' : 'none'
+                                  display: (params.row.status === 1 && this.permissionArr.includes('UserPunishLog@remove')) ? 'unset' : 'none'
                               }, on: {click:()=>{this.relieve(params.row)}}}, '解除'),
                               h('el-button', { props: { type: 'danger'}, style: {
-                                  display: (params.row.status === 0 && this.curBtnArr.includes('UserPunishLog@save')) ? 'unset' : 'none'
+                                  display: (params.row.status === 0 && this.permissionArr.includes('UserPunishLog@save')) ? 'unset' : 'none'
                               }, on: {click:()=>{this.blocked(params.row)}}}, '封禁'),
                               h('el-button', { props: { type: 'primary'}, style: {
-                                  display: (params.row.status === 0 && this.curBtnArr.includes('UserPunishLog@pass')) ? 'unset' : 'none'
+                                  display: (params.row.status === 0 && this.permissionArr.includes('UserPunishLog@pass')) ? 'unset' : 'none'
                               }, on: {click:()=>{this.neglect(params.row.id)}}}, '忽略'),
                               h('el-button', { props: { type: 'primary'}, style: {
-                                  display: (params.row.from === '后台处罚' && params.row.status === 1 && this.curBtnArr.includes('UserPunishLog@updateSource')) ? 'unset' : 'none'
+                                  display: (params.row.from === '后台处罚' && params.row.status === 1 && this.permissionArr.includes('UserPunishLog@updateSource')) ? 'unset' : 'none'
                               }, on: {click:()=>{this.update(params.row)}}}, '修改证据'),
                               h('el-button', { props: { type: 'primary'}, style: {
                                   display: (params.row.status || params.row.status === 0) ? 'unset' : 'none'
@@ -380,15 +380,15 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.risk.UserPunishLog,
-                columns: this.curBtnArr.includes('UserPunishLog@index') ? arr : []
+                columns: this.permissionArr.includes('UserPunishLog@index') ? arr : []
             }
         }
     },
-    mounted() {
-      const { fullPath } = this.$route;
-      this.$store.commit('permission/SET_CUR_BTN', fullPath)
-      console.log(this.curBtnArr, 'curBtnArr');
-    },
+    // mounted() {
+    //   const { fullPath } = this.$route;
+    //   this.$store.commit('permission/SET_CUR_BTN', fullPath)
+    //   console.log(this.permissionArr, 'permissionArr');
+    // },
     methods: {
         // 配置参数
         beforeSearch(params) {

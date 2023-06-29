@@ -40,8 +40,8 @@ export function filterAsyncRoutes(routes, roles) {
 const state = {
   routes: [],
   addRoutes: [],
-  btnArr: [],
-  curBtnArr: [],
+  permissionArr: JSON.parse(localStorage.getItem('permissionArr')) || [],
+  // curBtnArr: [],
   userPids: []
 }
 
@@ -50,19 +50,23 @@ const mutations = {
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)
   },
-  SET_BTN: (state, btnArr) => {
-    state.btnArr = btnArr
+  SET_PER_BTN: (state, permissionArr) => {
+    const arr = permissionArr.map(item => {
+      return item.api_controller
+    })
+    localStorage.setItem('permissionArr', JSON.stringify(arr))
+    state.permissionArr = arr
   },
-  SET_CUR_BTN: (state, fullPath) => {
-    state.curBtnArr = state.btnArr.reduce((pev, cur) => {
-      if ((fullPath === cur.h5_path)) {
-        if (state.userPids.indexOf(cur.id) !== -1) {
-          pev.push(cur.api_controller);
-        }
-      }
-      return pev;
-    }, [])
-  },
+  // SET_CUR_BTN: (state, fullPath) => {
+  //   state.curBtnArr = state.permissionArr.reduce((pev, cur) => {
+  //     if ((fullPath === cur.h5_path)) {
+  //       if (state.userPids.indexOf(cur.id) !== -1) {
+  //         pev.push(cur.api_controller);
+  //       }
+  //     }
+  //     return pev;
+  //   }, [])
+  // },
   SET_USER_PIDS: (state, userPids) => {
     state.userPids = userPids
   },
@@ -77,7 +81,7 @@ const actions = {
         let arr = JSON.parse(JSON.stringify(res.data.list))
         let user_pids = res.data.user_pids
         commit('SET_USER_PIDS', user_pids)
-        let btnArr = []
+        let permissionArr = []
         if(arr && arr.length > 0) { // 递归删除所有不需要展示的菜单
           let prv = (list, params) => {
             list.forEach((item,index) => {
@@ -98,8 +102,8 @@ const actions = {
               }
 
               if (item.is_menu === 0) {
-                btnArr.push(item)
-                commit('SET_BTN', btnArr)
+                permissionArr.push(item)
+                commit('SET_PER_BTN', permissionArr)
                }
               if(item.child && item.child.length > 0) {
                 prv(item.child, item)

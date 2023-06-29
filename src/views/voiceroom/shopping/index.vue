@@ -2,7 +2,7 @@
 <template>
     <div class="shopping-box">
         <div class="searchParams">
-            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="curBtnArr.includes('Goods@save')" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="permissionArr.includes('Goods@save')" @onReset="reset" @onSearch="onSearch" @add="add"></SearchPanel>
         </div>
         <div class="tableList">
             <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -117,21 +117,21 @@ export default {
                               h('el-button', {
                                 props: { type: 'primary' },
                                 style: {
-                                    display: !this.curBtnArr.includes('Goods@save') ? 'none' : 'unset'
+                                    display: !this.permissionArr.includes('Goods@save') ? 'none' : 'unset'
                                 },
                                 on: { click: () => { this.update(params.row) } }
                               }, '修改'),
                               h('el-button', {
                                 props: { type: 'danger' },
                                 style: {
-                                    display: (params.row.status === 1 && !this.curBtnArr.includes('Goods@down') ) ? 'none' : 'unset'
+                                    display: (params.row.status === 1 && !this.permissionArr.includes('Goods@down') ) ? 'none' : 'unset'
                                 },
                                 on: { click: () => { this.down(params.row, 1) } }
                               }, '上架'),
                               h('el-button', {
                                 props: { type: 'danger' },
                                 style: {
-                                    display: (params.row.status === 2 && !this.curBtnArr.includes('Goods@down')) ? 'none' : 'unset'
+                                    display: (params.row.status === 2 && !this.permissionArr.includes('Goods@down')) ? 'none' : 'unset'
                                 },
                                 on: { click: () => { this.down(params.row, 2) } }
                               }, '下架')
@@ -142,7 +142,7 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.shopping.list,
-                columns: this.curBtnArr.includes('Goods@index') ? arr : []
+                columns: this.permissionArr.includes('Goods@index') ? arr : []
             }
         },
         forms() {
