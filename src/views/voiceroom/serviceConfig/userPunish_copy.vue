@@ -8,12 +8,14 @@
         <userComp v-if="isDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList"></userComp>
         <!-- 修改证据弹窗 -->
         <uploadImg v-if="isDestoryComp" ref="uploadImg" @destoryComp="destoryComp" @getList="getList"></uploadImg>
+        <!-- 操作日志 -->
+	    	<operationLogComp ref="operationLogComp"></operationLogComp>
     </div>
 </template>
 
 <script>
 // 引入api
-import { removeUser, removeUserPunish, passUserPunish,UserPunishLog } from '@/api/risk'
+import { removeUser, removeUserPunish, passUserPunish, UserPunishLog, acceptPunish } from '@/api/risk'
 // 引入api
 import { getPunishTypeList } from '@/api/videoRoom'
 // 引入新增组件
@@ -33,13 +35,16 @@ import MAPDATA from '@/utils/jsonMap.js'
 // 引入公共方法
 import { exportTableData } from "@/utils/common.js";
 import { mapState } from 'vuex'
+// 引入操作日志组件
+import operationLogComp from "./components/operationLogComp.vue";
 export default {
     mixins: [mixins],
     components: {
         SearchPanel,
         tableList,
         userComp,
-        uploadImg
+        uploadImg,
+        operationLogComp
     },
     data() {
         return {
@@ -154,7 +159,7 @@ export default {
                         label: '来源',
                         minWidth: '100px',
                         render: (h, params) => {
-                            return h('span', params.row.from || '- -')
+                            return h('span', params.row.from || '无')
                         }
                     },
                     {
@@ -163,7 +168,7 @@ export default {
                         render: (h, params) => {
                             return h('div', [
                                 h('div', params.row.punished_user_nickname),
-                                h('div', params.row.punished_user_number || '- -')
+                                h('div', params.row.punished_user_number || '无')
                             ])
                         }
                     },
@@ -208,7 +213,7 @@ export default {
                       label: '举报类型',
                       minWidth: '130px',
                       render: (h, params) => {
-                          return h('span', params.row.genre || '- -')
+                          return h('span', params.row.genre || '无')
                       },
                       showOverFlow: true
                     },
@@ -216,7 +221,7 @@ export default {
                       label: '举报说明',
                       minWidth: '100px',
                       render: (h, params) => {
-                          return h('span', params.row.content || '- -')
+                          return h('span', params.row.content || '无')
                       },
                       showOverFlow: true
                     },
@@ -234,7 +239,7 @@ export default {
                       minWidth: '160px',
                       render: (h, params) => {
                           return h('div', [
-                              h('div', params.row.report_user_nickname)
+                              h('div', params.row.report_user_nickname || '无')
                           ])
                       }
                     },
@@ -288,9 +293,9 @@ export default {
                       minWidth: '520px',
                       render: (h, params) => {
                         const vnode = params.row.res && params.row.res.length && params.row.res.map(item => {
-                          return h('span', `${item};` || '--')
+                          return h('span', `${item};` || '无')
                         })
-                        return h('div', vnode || '--')
+                        return h('div', vnode || '无')
                       },
                       showOverFlow: true
                     },
@@ -298,30 +303,61 @@ export default {
                       label: '解除时间',
                       minWidth: '170px',
                       render: (h, params) => {
-                          return h('span', params.row.remove_time || '- -')
+                          return h('span', params.row.remove_time || '无')
                       }
                     },
                     {
-                      label: '操作人',
+                      label: '处罚操作人',
                       minWidth: '120px',
                       render: (h, params) => {
-                          return h('span', params.row.operator || '- -')
+                          return h('span', params.row.penalty_admin || '无')
+                      }
+                    },
+                    {
+                      label: '解除操作人',
+                      minWidth: '120px',
+                      render: (h, params) => {
+                          return h('span', params.row.undo_admin || '无')
+                      }
+                    },
+                    {
+                      label: '忽略操作人',
+                      minWidth: '120px',
+                      render: (h, params) => {
+                          return h('span', params.row.ignore_admin || '无')
+                      }
+                    },
+                    {
+                      label: '受理操作人',
+                      minWidth: '120px',
+                      render: (h, params) => {
+                          return h('span', params.row.accept_admin || '无')
+                      }
+                    },
+                    {
+                      label: '修改证据人',
+                      minWidth: '120px',
+                      render: (h, params) => {
+                          return h('span', params.row.admin || '无')
                       }
                     },
                     {
                       label: '备注说明',
                       minWidth: '180px',
                       render: (h, params) => {
-                          return h('span', params.row.remark || '- -')
+                          return h('span', params.row.remark || '无')
                       },
                       showOverFlow: true
                     },
                     {
                       label: '操作',
-                      minWidth: '200px',
+                      minWidth: '430px',
                       fixed: 'right',
                       render: (h, params) => {
                           return h('div', [
+                              h('el-button', { props: { type: (params.row.accept_type === 0) ? 'danger' : 'info'}, style: {
+                                  display: (params.row.status || params.row.status === 0) ? 'unset' : 'none'
+                              }, on: {click:()=>{this.handleControl(params.row)}}}, `${(params.row.accept_type === 0) ? '未受理' : '已受理'}`),
                               h('el-button', { props: { type: 'success'}, style: {
                                   display: (params.row.status === 1 && this.curBtnArr.includes('UserPunishLog@remove')) ? 'unset' : 'none'
                               }, on: {click:()=>{this.relieve(params.row)}}}, '解除'),
@@ -333,7 +369,10 @@ export default {
                               }, on: {click:()=>{this.neglect(params.row.id)}}}, '忽略'),
                               h('el-button', { props: { type: 'primary'}, style: {
                                   display: (params.row.from === '后台处罚' && params.row.status === 1 && this.curBtnArr.includes('UserPunishLog@updateSource')) ? 'unset' : 'none'
-                              }, on: {click:()=>{this.update(params.row)}}}, '修改证据')
+                              }, on: {click:()=>{this.update(params.row)}}}, '修改证据'),
+                              h('el-button', { props: { type: 'primary'}, style: {
+                                  display: (params.row.status || params.row.status === 0) ? 'unset' : 'none'
+                              }, on: {click:()=>{this.handleOperationLog(params.row)}}}, '操作日志'),
                           ])
                       }
                     }
@@ -453,6 +492,9 @@ export default {
           let arr = JSON.parse(JSON.stringify(res.data.list));
           if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
           arr = arr.map((item, index) => {
+            let data = MAPDATA.USERPUNISHSTATUSLISTCOPY.find((v) => {
+                return v.value === item.status;
+            });
             let params = {
               create_time: item.create_time,
               from: item.from,
@@ -471,10 +513,15 @@ export default {
               report_user_guild_name : item.report_user_guild_name,
               report_user_guild_status: item.report_user_guild_status,
               report_user_guild_operator_user_name : item.report_user_guild_operator_user_name,
-              status : item.status,
+              status : data ? data.name : '无',
+              punish_type_str: item.punish_type_str,
               res : item.res,
               remove_time: item.remove_time,
-              operator : item.operator,
+              penalty_admin : item.penalty_admin || '无',
+              undo_admin : item.undo_admin || '无',
+              ignore_admin : item.ignore_admin || '无',
+              accept_admin : item.accept_admin || '无',
+              admin : item.admin || '无',
               remark : item.remark
             };
             return params;
@@ -498,9 +545,14 @@ export default {
             "举报用户所属公会状态",
             "举报用户所属运营",
             "处理状态",
+            "处罚类别",
             "处罚结果",
             "解除时间",
-            "操作人",
+            "处罚操作人",
+            "解除操作人",
+            "忽略操作人",
+            "受理操作人",
+            "修改证据人",
             "备注说明"
           ];
           exportTableData(arr, nameList, "处罚举报记录");
@@ -525,6 +577,20 @@ export default {
                 return prev;
               }, []) || [];
             this.punishTypeList.unshift({ name: "全部", value: '' })
+          }
+        },
+        // 操作日志
+        handleOperationLog(row) {
+          setTimeout(() => {
+            this.$refs.operationLogComp.load(row);
+          }, 100);
+        },
+        // 受理
+      async handleControl(row) {
+          const response = await acceptPunish({ id: row.report_event_id });
+          if (response.code == 2000) {
+            this.$success('受理成功');
+            this.getList();
           }
         },
     },

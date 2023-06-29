@@ -38,6 +38,7 @@
 import { updateSource } from '@/api/risk.js'
 // 引入oss
 import { uploadOSS } from '@/utils/oss.js'
+import { debounce } from "lodash";
 export default {
     data() {
         return {
@@ -97,12 +98,19 @@ export default {
             } else if(row.img_path) {
                 let name = row.img_path.split('.live/')[1]
                 this.fileList = [ { name: name, url: row.img_path } ]
+                this.ruleForm.img = row.img_path
             }
         },
         // 提交
-        async submitForm(formName) {
+        submitForm: debounce(async function (formName) {
             this.$refs[formName].validate(async (valid) => {
               if (valid) {
+
+                if (!this.ruleForm.img) {
+                  this.$warning('违规证据不能为空！');
+                  return
+                }
+
                   let params = {}
                   if (this.form.id_array.length > 1) {
                     params.ids = this.form.id_array;
@@ -127,7 +135,7 @@ export default {
                     return false;
                 }
             });
-        },
+        }, 300),
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },

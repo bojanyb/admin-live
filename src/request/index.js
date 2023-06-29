@@ -448,6 +448,9 @@ const request = {
         passUserPunish: `${HTTPHEADER}/UserPunishLog/pass`, // 处罚-忽略
         punishStatus: `${HTTPHEADER}/UserPunishLog/punishStatus`, // 用户状态
         updateSource: `${HTTPHEADER}/UserPunishLog/updateSource`, // 处罚-修改证据
+
+        punishOperateLog: `${HTTPHEADER}/UserPunishLog/punishOperateLog`, // 处罚举报-操作日志
+        acceptPunish: `${HTTPHEADER}/UserPunishLog/acceptPunish`, // 处罚举报-审核受理
     },
 
     // 心动速配
