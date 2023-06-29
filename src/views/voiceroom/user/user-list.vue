@@ -251,6 +251,13 @@
 							}
 						},
 						{
+							label: '是否为房主',
+							width: '110px',
+							render: (h, params) => {
+								return h('span', params.row.is_guild_room === 0 ? '否' : '是')
+							}
+						},
+						{
 							label: '注册渠道',
 							width: '110px',
 							render: (h, params) => {
