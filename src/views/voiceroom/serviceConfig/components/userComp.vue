@@ -69,7 +69,8 @@
                         <p>用户状态：<span>{{ item.statusText ? item.statusText : "无" }}</span></p>
                         <p>违规信息：<span>{{ item.lineText ? item.lineText : "无" }}</span></p>
                         <p>实名信息：<span>{{ item.real_name ? item.real_name : '无' }}</span></p>
-                        <p>所属公会：<span>{{ item.guild_name ? item.guild_name : '无' }}</span></p>
+                        <p>所属派对公会：<span>{{ item.party_name ? item.party_name : '无' }}</span></p>
+                        <p>所属直播公会：<span>{{ item.live_name ? item.live_name : '无' }}</span></p>
                         <p>注册时间：<span>{{ item.create_time }}</span></p>
                     </div>
                 </div>

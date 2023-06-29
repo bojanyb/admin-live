@@ -26,6 +26,12 @@
         <el-form-item label="任务名" prop="title">
           <el-input v-model="Form.title" placeholder="输入任务名"></el-input>
         </el-form-item>
+        <el-form-item label="渠道" v-if="node_env.indexOf('aidoo') > -1">
+          <el-radio-group v-model="packet_type">
+            <el-radio :label="1">主包</el-radio>
+            <el-radio :label="2">谷歌</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="升级类型">
           <el-radio-group v-model="is_mandatory">
             <el-radio :label="10">建议升级</el-radio>
@@ -89,6 +95,7 @@ export default {
       //界面数据
       platform: '2', //平台 IOS/ANDROID
       is_mandatory: 10, //是否强制更新(0否 1是)
+      packet_type: 1, // aidoo 渠道
       Form: {
         id: '', // 版本id
         title: '', // 任务名
@@ -97,7 +104,7 @@ export default {
         download_url: '', //文件下载链接
         package_name: '', // 包名 喵喵星球、声撩语音
         version_code: '', // 安卓code
-        hotfix: "" // 热更新code
+        hotfix: "", // 热更新code
       },
       FormRules: {
         version: [{
@@ -287,11 +294,8 @@ export default {
       ]
     },
     cfgs() {
-      return {
-        vm: this,
-        url: REQUEST.system.Appversion,
-        method: "post",
-        columns: [
+      let columnsList = [];
+      let arr1 = [
           {
             label: '创建时间',
             prop: 'start_time',
@@ -307,7 +311,27 @@ export default {
             render: (h, params) => {
               return h('span', params.row.title || '无')
             }
+      }];
+      let arr2 = [
+          {
+            label: '渠道',
+            prop: 'packet_type',
+            width: '180px',
+            render: (h, params) => {
+              let name = "";
+              switch (params.row.packet_type) {
+                case 1:
+                name = "主包";
+                  break;
+                case 2:
+                name = "谷歌";
+                  break;
+              }
+              return h('span',name)
+            }
           },
+      ];
+      let arr3 = [
           {
             label: '设备类型',
             prop: 'platform',
@@ -404,7 +428,17 @@ export default {
               ])
             }
           },
-        ]
+      ];
+      if(this.node_env.indexOf("aidoo") > -1){
+        columnsList = arr1.concat(arr2).concat(arr3);
+      }else{
+        columnsList = arr1.concat(arr3);
+      }
+      return {
+        vm: this,
+        url: REQUEST.system.Appversion,
+        method: "post",
+        columns: columnsList
       }
     }
   },
@@ -490,6 +524,7 @@ export default {
       this.btnTip = '修改';
       this.Form.id = item.id;
       this.is_mandatory = item.is_mandatory;
+      this.packet_type = item.packet_type;
       this.fileUrl = item.download_url;
       this.progress = 100;
       this.platform = JSON.stringify(item.platform);
@@ -524,7 +559,6 @@ export default {
         // version_code: ''
       };
       this.platform = "2";
-      console.log("---518----",this.navSourceList);
       this.navSourceList.map((res,i)=>{
         res.isActive = false
         if(i == 0){
@@ -548,6 +582,10 @@ export default {
                 this.Form.package_name = res.value
               }
             })
+            // aidoo 增加 渠道字段
+            if(this.node_env.indexOf("aidoo") > -1){
+              this.Form.packet_type = this.packet_type
+            }
             request({
               url: REQUEST.system.AppversionAChange,
               method: "post",
