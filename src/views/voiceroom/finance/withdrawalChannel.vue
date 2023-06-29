@@ -32,18 +32,20 @@
 
     <!-- 批量输入ID修改 -->
     <el-dialog :visible.sync="inputIdUpdateVisible" title="批量输入ID修改" width="30%" append-to-body @close="inputIdForm = {}">
-      <el-form ref="inputIdForm" :model="inputIdForm" label-suffix=":" label-width="110px">
+      <el-form ref="inputIdForm" :model="inputIdForm" label-suffix=":" label-width="90px">
         <el-form-item label="用户ID">
           <el-input type="textarea" v-model="inputIdForm.user_number"></el-input>
         </el-form-item>
-        <el-form-item label="修改提现通道">
+        <el-row style="padding: 20px">
+          <el-col :span="12">
+            <el-form-item label="支付宝提现通道" label-width="80">
              <el-select
-                v-model="inputIdForm.cash_channel"
+                v-model="inputIdForm.alipay_cash_channel"
                 placeholder="请选择修改提现通道"
                 style="width: 80%"
               >
                 <el-option
-                  v-for="item in cashList"
+                  v-for="item in alipayCashList"
                   :key="item.value"
                   :label="item.name"
                   :value="item.value"
@@ -51,6 +53,26 @@
                 ></el-option>
               </el-select>
         </el-form-item>
+          </el-col>
+
+      <el-col :span="12">
+        <el-form-item label="银行卡提现通道" label-width="80">
+             <el-select
+                v-model="inputIdForm.cash_channel"
+                placeholder="请选择修改提现通道"
+                style="width: 80%"
+              >
+                <el-option
+                  v-for="item in bankCashList"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
+                  :disabled="item.disabled"
+                ></el-option>
+              </el-select>
+        </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item>
           <el-button type="primary" @click="submitForm">提交</el-button>
           <el-button  @click="inputIdForm = {}">重置</el-button>
@@ -110,6 +132,8 @@ export default {
       inputIdUpdateVisible: false, // 批量输入ID弹框
       respsoneDataVisible: false,  // 批量输入ID返回弹框
       cashList: MAPDATA.CASHCHANNEL,
+      alipayCashList: MAPDATA.ALIPAYCASHCHANNEL,
+      bankCashList: MAPDATA.BANKCASHCHANNEL,
       inputIdForm: {}, // 批量输入ID表单
       respsoneData: {  // 批量输入ID返回表单
         error_user: ""
@@ -179,9 +203,20 @@ export default {
             width: "100px"
           },
           {
-            label: "当前提现通道",
+            label: "支付宝提现通道",
+            prop: "alipay_cash_channel",
+            width: "120px",
+            render: (h, params) => {
+              let data = MAPDATA.CASHCHANNEL.find((item) => {
+                return item.value === params.row.alipay_cash_channel;
+              });
+              return h("span", data ? data.name : "无");
+            },
+          },
+          {
+            label: "银行卡提现通道",
             prop: "cash_channel",
-            width: "110px",
+            width: "120px",
             render: (h, params) => {
               let data = MAPDATA.CASHCHANNEL.find((item) => {
                 return item.value === params.row.cash_channel;
@@ -405,7 +440,8 @@ export default {
         if (valid) {
           let temp = {
             user_number: this.inputIdForm.user_number,
-            cash_channel: this.inputIdForm.cash_channel
+            cash_channel: this.inputIdForm.cash_channel,
+            alipay_cash_channel: this.inputIdForm.alipay_cash_channel
           };
           const res = await updateCashChannel(temp);
           if (res.code + "" === "2000") {

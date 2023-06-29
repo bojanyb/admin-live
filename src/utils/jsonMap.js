@@ -270,7 +270,7 @@ const HISTORYSTATUSLISTCOPY = [
 ]
 
 /*
-* 提现渠道
+* 全部提现渠道
 */
 const CASHCHANNEL = [
   {
@@ -310,6 +310,60 @@ const CASHCHANNEL = [
   {
     value: 10,
     name: '福穗银行卡',
+  },
+  {
+    value: 11,
+    name: '福穗支付宝',
+  }
+]
+
+/*
+* 银行卡提现渠道
+*/
+const BANKCASHCHANNEL = [
+  {
+    value: 1,
+    name: '公司银行卡',
+    disabled: true
+  },
+  {
+    value: 4,
+    name: '小猪银行卡'
+  },
+  {
+    value: 6,
+    name: '工猫银行卡',
+  },
+  {
+    value: 8,
+    name: '美事通银行卡',
+  },
+  {
+    value: 10,
+    name: '福穗银行卡',
+  },
+]
+
+/*
+* 支付宝提现渠道
+*/
+const ALIPAYCASHCHANNEL = [
+  {
+    value: 2,
+    name: '公司支付宝'
+  },
+  {
+    value: 5,
+    name: '小猪支付宝',
+    disabled: true
+  },
+  {
+    value: 7,
+    name: '工猫支付宝',
+  },
+  {
+    value: 9,
+    name: '美事通支付宝',
   },
   {
     value: 11,
@@ -3123,6 +3177,8 @@ export default {
   HISTORYSTATUSLISTCOPY,
   STATUSLISTCOPY,
   CASHCHANNEL,
+  BANKCASHCHANNEL,
+  ALIPAYCASHCHANNEL,
   PAYMENTALLOCATIONMANAGEMENTLIST,
   PAYMENTALLOCATIONMANAGEMENTTYPELIST,
   DEALSOURCETYPELIST,
