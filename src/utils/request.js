@@ -71,18 +71,21 @@ service.interceptors.response.use(
 			}
 
 			if(res.code == 3000 && res.msg == "请重新登录"){
-        if (isRefreshFail) {
-          error(res.msg || '登录过期，请重新登录')
-          isRefreshFail = false
-          setTimeout(() => {
-            isRefreshFail = true;
-          }, 2000);
-        }
-        setTimeout(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
-        }, 2000);
+				if (isRefreshFail) {
+				error(res.msg || '登录过期，请重新登录')
+				isRefreshFail = false
+				setTimeout(() => {
+					isRefreshFail = true;
+				}, 2000);
+				}
+				setTimeout(() => {
+				store.dispatch('user/resetToken').then(() => {
+					location.reload()
+				})
+				}, 2000);
+				return
+			}else if(res.code == 3991){
+				Message.warning(res.msg);
 				return
 			}
 

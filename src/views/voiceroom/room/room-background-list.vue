@@ -59,7 +59,7 @@ export default {
     return {
       isDestoryComp: false,
       searchParams: {
-        assign_status: 2,
+        assign_status: -1,
       },
       roomTypeList: [
         {
@@ -89,7 +89,7 @@ export default {
         {
           name: "assign_status",
           type: "select",
-          value: 2,
+          value: -1,
           keyName: "value",
           optionLabel: "name",
           label: "图片类型",
@@ -223,7 +223,7 @@ export default {
     // 重置
     reset() {
       this.searchParams = {
-        assign_status: 2,
+        assign_status: -1,
       };
       this.getList();
     },

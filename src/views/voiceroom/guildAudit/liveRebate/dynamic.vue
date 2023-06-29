@@ -311,7 +311,7 @@ export default {
 		// 列表返回数据
 		saleAmunt(row) {
       this.ruleForm = { ...row };
-      this.page = ruleForm.page;
+      this.page = this.ruleForm.page;
 		},
 		// 分页切换 当前页码
 		handleSizeChange(val) {
