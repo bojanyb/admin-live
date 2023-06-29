@@ -147,6 +147,8 @@ const request = {
     diamondRecharge: {
         list: `${HTTPHEADER}/Recharge/diamondRecharge`, // 充值记录
         exportTask: `${HTTPHEADER}/Recharge/getExportTask`, // 文件查询
+        getQueryPayTask: `${HTTPHEADER}/Recharge/getQueryPayTask`, // 文件查询
+        getQueryPayDetails: `${HTTPHEADER}/Recharge/getQueryPayDetails`, // 文件查询
     },
 
     // 体现记录
