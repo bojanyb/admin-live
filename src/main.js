@@ -46,6 +46,9 @@ Vue.use(format)
 // 	mockXHR()
 // }
 import { success, error, warning } from '@/utils/common'
+import {
+  reMessage
+} from '@/utils/resetMessage';
 // 成功
 Vue.prototype.$success = success
 
@@ -54,6 +57,9 @@ Vue.prototype.$error = error
 
 // 警告
 Vue.prototype.$warning = warning
+
+// 防重复弹出message
+Vue.prototype.$reMessage = reMessage
 
 
 Vue.use(Element, {
