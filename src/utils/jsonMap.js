@@ -2210,7 +2210,7 @@ const ISFIRSTJOINHOUSELIST = [
 const ROOMBACKGROUNDSELECTLIST = [
   {
     name: '全部',
-    value: 2
+    value: -1
   },
   {
     name: '通用背景',
@@ -2219,6 +2219,10 @@ const ROOMBACKGROUNDSELECTLIST = [
   {
     name: '指定背景',
     value: 1
+  },
+  {
+    name: '公会背景',
+    value: 2
   }
 ]
 
@@ -2430,7 +2434,7 @@ const USERPUNISHSTATUSLIST = [
 const USERPUNISHSTATUSLISTCOPY = [
   {
     name: '全部',
-    value: 4
+    value: -1
   },
   {
     name: '待处理',
@@ -2447,6 +2451,14 @@ const USERPUNISHSTATUSLISTCOPY = [
   {
     name: '已解除',
     value: 3
+  },
+  {
+    name: '受理',
+    value: 4
+  },
+  {
+    name: '修改证据',
+    value: 5
   }
 ]
 

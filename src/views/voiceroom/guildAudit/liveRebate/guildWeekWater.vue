@@ -314,7 +314,7 @@ export default {
 		// 列表返回数据
 		saleAmunt(row) {
       this.ruleForm = { ...row };
-      this.page = ruleForm.page;
+      this.page = this.ruleForm.page;
 		},
 		// 分页切换 当前页码
 		handleSizeChange(val) {
@@ -375,6 +375,7 @@ export default {
 					guild_type: guild_type.name,
 					flow: item.flow + "钻石",
 					t_flow: item.t_flow + "钻石",
+					rebate: item.rebate + "%",
 					settlement: item.settlement + "喵粮",
 					status: status_name,
           op_time: item.op_time ? timeFormat(item.op_time, 'YYYY-MM-DD HH:mm:ss', true) : '-',
@@ -391,6 +392,7 @@ export default {
 				"公会类型",
 				"流水",
 				"总流水（含冻结）",
+				"周返点比例",
 				"周返点金额",
 				"结算状态",
         "操作时间",

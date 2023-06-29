@@ -217,16 +217,41 @@
 							}
 						},
 						{
-							label: '所属公会',
+							label: '所属派对公会',
+							width: "160px",
 							render: (h, params) => {
 								return h('div', [
-									h('div', params.row.guild_name || '无'),
-									h('div', params.row.guild_number)
+									h('div', params.row.party_name || '无'),
+									h('div', params.row.party_number)
 								])
 							}
 						},
 						{
-							label: '是否为厅主',
+							label: '所属直播公会',
+							width: "160px",
+							render: (h, params) => {
+								return h('div', [
+									h('div', params.row.live_name || '无'),
+									h('div', params.row.live_number)
+								])
+							}
+						},
+						{
+							label: '是否为派对公会长',
+							width: '135px',
+							render: (h, params) => {
+								return h('span', params.row.is_party_admin)
+							}
+						},
+						{
+							label: '是否为直播公会长',
+							width: '135px',
+							render: (h, params) => {
+								return h('span', params.row.is_live_admin)
+							}
+						},
+						{
+							label: '是否为房主',
 							width: '110px',
 							render: (h, params) => {
 								return h('span', params.row.is_guild_room === 0 ? '否' : '是')
