@@ -306,6 +306,14 @@ const CASHCHANNEL = [
   {
     value: 9,
     name: '美事通支付宝',
+  },
+  {
+    value: 10,
+    name: '福穗银行卡',
+  },
+  {
+    value: 11,
+    name: '福穗支付宝',
   }
 ]
 

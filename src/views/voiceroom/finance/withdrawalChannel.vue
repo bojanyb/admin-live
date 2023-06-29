@@ -166,18 +166,22 @@ export default {
           {
             label: "身份证",
             prop: "id_card",
+            width: "170px"
           },
           {
             label: "姓名",
             prop: "name",
+            width: "100px"
           },
           {
             label: "用户ID",
             prop: "user_number",
+            width: "100px"
           },
           {
             label: "当前提现通道",
             prop: "cash_channel",
+            width: "110px",
             render: (h, params) => {
               let data = MAPDATA.CASHCHANNEL.find((item) => {
                 return item.value === params.row.cash_channel;
@@ -188,87 +192,87 @@ export default {
           {
             label: "公司-银行卡",
             prop: "aiyi_bank",
+            width: "100px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.aiyi_bank;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.aiyi_bank ? "已签署" : "未签署");
+            }
           },
           {
             label: "公司-支付宝",
             prop: "aiyi_alipay",
+            width: "100px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.aiyi_alipay;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.aiyi_alipay ? "已签署" : "未签署");
+            }
           },
           {
             label: "小猪-支付宝",
             prop: "pig_alipay",
+            width: "100px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.pig_alipay;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.pig_alipay ? "已签署" : "未签署");
+            }
           },
           {
-            label: "小猪通道-银行卡",
+            label: "小猪-银行卡",
             prop: "pig_bank",
+            width: "100px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.pig_bank;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.pig_bank ? "已签署" : "未签署");
+            }
           },
           {
-            label: "工猫通道-银行卡",
+            label: "工猫-银行卡",
+            width: "100px",
             prop: "cat_bank",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.cat_bank;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.cat_bank ? "已签署" : "未签署");
+            }
           },
           {
-            label: "工猫通道-支付宝",
+            label: "工猫-支付宝",
             prop: "cat_alipay",
+            width: "100px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.cat_alipay;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.cat_alipay ? "已签署" : "未签署");
+            }
           },
           {
             label: "美事通-银行卡",
             prop: "mst_bank",
+            width: "110px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.mst_bank;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.mst_bank ? "已签署" : "未签署");
+            }
           },
           {
             label: "美事通-支付宝",
             prop: "mst_alipay",
+            width: "110px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.mst_alipay;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.mst_alipay ? "已签署" : "未签署");
+            }
+          },
+          {
+            label: "福穗-银行卡",
+            prop: "fusui_bank",
+            width: "100px",
+            render: (h, params) => {
+              return h("span", params.row.fusui_bank ? "已签署" : "未签署");
+            }
+          },
+          {
+            label: "福穗-支付宝",
+            prop: "fusui_alipay",
+            width: "100px",
+            render: (h, params) => {
+              return h("span", params.row.fusui_alipay ? "已签署" : "未签署");
+            }
           },
           {
             label: "小猪通道余额",
             prop: "pig_quota",
-            minWidth: "120px",
+            minWidth: "130px",
             sortable: "custom",
             render: (h, params) => {
               const result = params.row.pig_quota.map(item => {
@@ -280,7 +284,7 @@ export default {
           {
             label: "工猫通道余额",
             prop: "cat_quota",
-            minWidth: "120px",
+            minWidth: "130px",
             sortable: "custom",
             render: (h, params) => {
               const result = params.row.cat_quota.map(item => {
@@ -292,10 +296,22 @@ export default {
           {
             label: "美事通通道余额",
             prop: "mst_quota",
-            minWidth: "120px",
+            minWidth: "150px",
             sortable: "custom",
             render: (h, params) => {
               const result = params.row.mst_quota.map(item => {
+                return h("div",  `${item.name}：${item.quota}`)
+              })
+              return h("div", result);
+            },
+          },
+          {
+            label: "福穗通道余额",
+            prop: "fusui_quota",
+            minWidth: "130px",
+            sortable: "custom",
+            render: (h, params) => {
+              const result = params.row.fusui_quota.map(item => {
                 return h("div",  `${item.name}：${item.quota}`)
               })
               return h("div", result);
