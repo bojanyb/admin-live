@@ -32,18 +32,20 @@
 
     <!-- 批量输入ID修改 -->
     <el-dialog :visible.sync="inputIdUpdateVisible" title="批量输入ID修改" width="30%" append-to-body @close="inputIdForm = {}">
-      <el-form ref="inputIdForm" :model="inputIdForm" label-suffix=":" label-width="110px">
+      <el-form ref="inputIdForm" :model="inputIdForm" label-suffix=":" label-width="90px">
         <el-form-item label="用户ID">
           <el-input type="textarea" v-model="inputIdForm.user_number"></el-input>
         </el-form-item>
-        <el-form-item label="修改提现通道">
+        <el-row style="padding: 20px">
+          <el-col :span="12">
+            <el-form-item label="支付宝提现通道" label-width="80">
              <el-select
-                v-model="inputIdForm.cash_channel"
+                v-model="inputIdForm.alipay_cash_channel"
                 placeholder="请选择修改提现通道"
                 style="width: 80%"
               >
                 <el-option
-                  v-for="item in cashList"
+                  v-for="item in alipayCashList"
                   :key="item.value"
                   :label="item.name"
                   :value="item.value"
@@ -51,6 +53,26 @@
                 ></el-option>
               </el-select>
         </el-form-item>
+          </el-col>
+
+      <el-col :span="12">
+        <el-form-item label="银行卡提现通道" label-width="80">
+             <el-select
+                v-model="inputIdForm.cash_channel"
+                placeholder="请选择修改提现通道"
+                style="width: 80%"
+              >
+                <el-option
+                  v-for="item in bankCashList"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
+                  :disabled="item.disabled"
+                ></el-option>
+              </el-select>
+        </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item>
           <el-button type="primary" @click="submitForm">提交</el-button>
           <el-button  @click="inputIdForm = {}">重置</el-button>
@@ -110,6 +132,8 @@ export default {
       inputIdUpdateVisible: false, // 批量输入ID弹框
       respsoneDataVisible: false,  // 批量输入ID返回弹框
       cashList: MAPDATA.CASHCHANNEL,
+      alipayCashList: MAPDATA.ALIPAYCASHCHANNEL,
+      bankCashList: MAPDATA.BANKCASHCHANNEL,
       inputIdForm: {}, // 批量输入ID表单
       respsoneData: {  // 批量输入ID返回表单
         error_user: ""
@@ -166,18 +190,33 @@ export default {
           {
             label: "身份证",
             prop: "id_card",
+            width: "170px"
           },
           {
             label: "姓名",
             prop: "name",
+            width: "100px"
           },
           {
             label: "用户ID",
             prop: "user_number",
+            width: "100px"
           },
           {
-            label: "当前提现通道",
+            label: "支付宝提现通道",
+            prop: "alipay_cash_channel",
+            width: "120px",
+            render: (h, params) => {
+              let data = MAPDATA.CASHCHANNEL.find((item) => {
+                return item.value === params.row.alipay_cash_channel;
+              });
+              return h("span", data ? data.name : "无");
+            },
+          },
+          {
+            label: "银行卡提现通道",
             prop: "cash_channel",
+            width: "120px",
             render: (h, params) => {
               let data = MAPDATA.CASHCHANNEL.find((item) => {
                 return item.value === params.row.cash_channel;
@@ -188,87 +227,87 @@ export default {
           {
             label: "公司-银行卡",
             prop: "aiyi_bank",
+            width: "100px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.aiyi_bank;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.aiyi_bank ? "已签署" : "未签署");
+            }
           },
           {
             label: "公司-支付宝",
             prop: "aiyi_alipay",
+            width: "100px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.aiyi_alipay;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.aiyi_alipay ? "已签署" : "未签署");
+            }
           },
           {
             label: "小猪-支付宝",
             prop: "pig_alipay",
+            width: "100px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.pig_alipay;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.pig_alipay ? "已签署" : "未签署");
+            }
           },
           {
-            label: "小猪通道-银行卡",
+            label: "小猪-银行卡",
             prop: "pig_bank",
+            width: "100px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.pig_bank;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.pig_bank ? "已签署" : "未签署");
+            }
           },
           {
-            label: "工猫通道-银行卡",
+            label: "工猫-银行卡",
+            width: "100px",
             prop: "cat_bank",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.cat_bank;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.cat_bank ? "已签署" : "未签署");
+            }
           },
           {
-            label: "工猫通道-支付宝",
+            label: "工猫-支付宝",
             prop: "cat_alipay",
+            width: "100px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.cat_alipay;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.cat_alipay ? "已签署" : "未签署");
+            }
           },
           {
             label: "美事通-银行卡",
             prop: "mst_bank",
+            width: "110px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.mst_bank;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.mst_bank ? "已签署" : "未签署");
+            }
           },
           {
             label: "美事通-支付宝",
             prop: "mst_alipay",
+            width: "110px",
             render: (h, params) => {
-              let data = MAPDATA.CASHCHANNEL.find((item) => {
-                return item.value === params.row.mst_alipay;
-              });
-              return h("span", data ? "已签署" : "未签署");
-            },
+              return h("span", params.row.mst_alipay ? "已签署" : "未签署");
+            }
+          },
+          {
+            label: "福穗-银行卡",
+            prop: "fusui_bank",
+            width: "100px",
+            render: (h, params) => {
+              return h("span", params.row.fusui_bank ? "已签署" : "未签署");
+            }
+          },
+          {
+            label: "福穗-支付宝",
+            prop: "fusui_alipay",
+            width: "100px",
+            render: (h, params) => {
+              return h("span", params.row.fusui_alipay ? "已签署" : "未签署");
+            }
           },
           {
             label: "小猪通道余额",
             prop: "pig_quota",
-            minWidth: "120px",
+            minWidth: "130px",
             sortable: "custom",
             render: (h, params) => {
               const result = params.row.pig_quota.map(item => {
@@ -280,7 +319,7 @@ export default {
           {
             label: "工猫通道余额",
             prop: "cat_quota",
-            minWidth: "120px",
+            minWidth: "130px",
             sortable: "custom",
             render: (h, params) => {
               const result = params.row.cat_quota.map(item => {
@@ -292,10 +331,22 @@ export default {
           {
             label: "美事通通道余额",
             prop: "mst_quota",
-            minWidth: "120px",
+            minWidth: "150px",
             sortable: "custom",
             render: (h, params) => {
               const result = params.row.mst_quota.map(item => {
+                return h("div",  `${item.name}：${item.quota}`)
+              })
+              return h("div", result);
+            },
+          },
+          {
+            label: "福穗通道余额",
+            prop: "fusui_quota",
+            minWidth: "130px",
+            sortable: "custom",
+            render: (h, params) => {
+              const result = params.row.fusui_quota.map(item => {
                 return h("div",  `${item.name}：${item.quota}`)
               })
               return h("div", result);
@@ -389,7 +440,8 @@ export default {
         if (valid) {
           let temp = {
             user_number: this.inputIdForm.user_number,
-            cash_channel: this.inputIdForm.cash_channel
+            cash_channel: this.inputIdForm.cash_channel,
+            alipay_cash_channel: this.inputIdForm.alipay_cash_channel
           };
           const res = await updateCashChannel(temp);
           if (res.code + "" === "2000") {

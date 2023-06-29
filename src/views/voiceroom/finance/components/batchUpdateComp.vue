@@ -2,7 +2,7 @@
   <div class="dialog_body_box">
     <el-dialog
       :title="title"
-      :width="'600px'"
+      :width="'800px'"
       @closed="closed"
       :visible.sync="isEditComp"
     >
@@ -20,11 +20,16 @@
             style="width: 100%"
             max-height="250"
           >
-            <el-table-column fixed prop="id_card" label="身份证" width="200">
+            <el-table-column fixed prop="id_card" label="身份证">
             </el-table-column>
-            <el-table-column prop="name" label="姓名" width="200">
+            <el-table-column prop="name" label="姓名" width="100">
             </el-table-column>
-            <el-table-column prop="cash_channel" label="当前提现通道">
+            <el-table-column prop="alipay_cash_channel" label="当前支付宝提现通道">
+              <template slot-scope="scope">
+                {{ scope.row.alipay_cash_channel | filterChannel }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="cash_channel" label="当前银行卡提现通道">
               <template slot-scope="scope">
                 {{ scope.row.cash_channel | filterChannel }}
               </template>
@@ -33,15 +38,32 @@
         </div>
 
         <el-row style="padding: 20px">
-          <el-col>
-            <el-form-item label="修改提现通道" prop="channels" label-width="80">
+          <el-col :span="12">
+            <el-form-item label="支付宝提现通道" prop="channels" label-width="80">
+              <el-select
+                v-model="ruleForm.alipay_cash_channel"
+                placeholder="请选择修改提现通道"
+                style="width: 80%"
+              >
+                <el-option
+                  v-for="item in alipayCashList"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
+                  :disabled="item.disabled"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col  :span="12">
+            <el-form-item label="银行卡提现通道" prop="channels" label-width="80">
               <el-select
                 v-model="ruleForm.cash_channel"
                 placeholder="请选择修改提现通道"
                 style="width: 80%"
               >
                 <el-option
-                  v-for="item in cashList"
+                  v-for="item in bankCashList"
                   :key="item.value"
                   :label="item.name"
                   :value="item.value"
@@ -65,14 +87,20 @@
 import { updateCashChannel } from "@/api/videoRoom";
 // 引入公共map
 import MAPDATA from "@/utils/jsonMap.js";
+import { cloneDeep } from "lodash";
 export default {
   components: {},
   data() {
     return {
       isEditComp: false,
-      ruleForm: {},
+      ruleForm: {
+        alipay_cash_channel: null,
+        cash_channel: null
+      },
       tableData: [],
       cashList: MAPDATA.CASHCHANNEL,
+      alipayCashList: MAPDATA.ALIPAYCASHCHANNEL,
+      bankCashList: MAPDATA.BANKCASHCHANNEL,
       status: "",
     };
   },
@@ -100,6 +128,9 @@ export default {
       this.status = status;
       if (status === "single") {
         this.tableData = [row];
+        let rowData = cloneDeep(row);
+        this.ruleForm.alipay_cash_channel = rowData.alipay_cash_channel;
+        this.ruleForm.cash_channel = rowData.cash_channel;
       } else if (status === "batch") {
         this.tableData = row;
       }
@@ -137,6 +168,7 @@ export default {
           let temp = {
             id_card: ids,
             cash_channel: this.ruleForm.cash_channel,
+            alipay_cash_channel: this.ruleForm.alipay_cash_channel,
           };
 
           const res = await updateCashChannel(temp);
