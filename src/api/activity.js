@@ -293,10 +293,28 @@ export function getDragonBoatGift(data) {
   })
 }
 
+/*******披萨屋**********/
+// 获取礼物
+export function getPizzaGift(data) {
+  return request({
+    url: api.activity.getPizzaGift,
+    method: 'post',
+    data
+  })
+}
+
 // 礼物数据
 export function getDragonBoatGiftLog(data) {
   return request({
     url: api.dragonBoat.giftLog,
+    method: 'post',
+    data
+  })
+}
+// 礼物数据
+export function getPizzaGiftLog(data) {
+  return request({
+    url: api.activity.getPizzaGiftLog,
     method: 'post',
     data
   })
@@ -310,7 +328,14 @@ export function getDragonBoatExchangeLog(data) {
     data
   })
 }
-
+// 获取兑换数据
+export function getPizzaExchangeLog(data) {
+  return request({
+    url: api.activity.getPizzaExchangeLog,
+    method: 'post',
+    data
+  })
+}
 // 榜单排名
 export function getDragonBoatRanking(data) {
   return request({
