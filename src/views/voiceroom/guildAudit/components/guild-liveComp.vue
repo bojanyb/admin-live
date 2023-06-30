@@ -13,7 +13,7 @@
 
 <script>
 	// 引入api
-	import { getGuildUpdateV2, getGuildType,adminUserList } from '@/api/videoRoom'
+	import { updateLiveFreeze, updateLiveReplace, updateLiveDisband, getGuildType,adminUserList } from '@/api/videoRoom'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -103,10 +103,8 @@
         return this.isAuth ? arr : arr1;
 			},
 			cfgs() {
-				return {
-					vm: this,
-					url: REQUEST.guild.list,
-					columns: [
+        //  存在公司主体
+        const isMainArr = [
 						{
 							label: '创建时间',
 							render: (h, params) => {
@@ -132,6 +130,13 @@
 								return h('span', data ? data.username : '未知')
 							}
 						},
+            {
+							label: '公司主体',
+              prop: 'company',
+							render: (h, params) => {
+								return h('span', params.row.company ? params.row.company : '--')
+							}
+						},
 						{
 							label: '主播人数',
               prop: 'user_count',
@@ -142,7 +147,7 @@
 								])
 							}
 						},
-           	{
+						{
 							label: '今日流水',
               prop: 'today_flow',
               sortable: "custom",
@@ -212,6 +217,118 @@
 							}
 						}
 					]
+
+
+        const arr = [
+						{
+							label: '创建时间',
+							render: (h, params) => {
+								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							}
+						},
+            {
+							label: '公会ID',
+							prop: 'guild_number'
+						},
+            {
+							label: '公会名称',
+							prop: 'name'
+						},
+            {
+							label: '公会长',
+							prop: 'guild_user_nickname'
+						},
+						{
+							label: '公会运营',
+							render: (h, params) => {
+								let data = this.operatorList.find(item => { return item.id === params.row.operator })
+								return h('span', data ? data.username : '未知')
+							}
+						},
+						{
+							label: '主播人数',
+              prop: 'user_count',
+              sortable: "custom",
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.user_count + '人'),
+								])
+							}
+						},
+						{
+							label: '今日流水',
+              prop: 'today_flow',
+              sortable: "custom",
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.today_flow + '钻石'),
+								])
+							}
+						},
+						{
+							label: '昨日流水',
+              prop: 'yestoday_flow',
+              sortable: "custom",
+							render: (h, params) => {
+								return h('div', [
+									h('span', (params.row.yestoday_flow  ? params.row.yestoday_flow : 0) + '钻石'),
+								])
+							}
+						},
+						{
+							label: '本周流水',
+              prop: 'week_flow',
+              sortable: "custom",
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.week_flow + '钻石'),
+								])
+							}
+						},
+						{
+							label: '本月流水',
+              prop: 'month_flow',
+              sortable: "custom",
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.month_flow + '钻石'),
+								])
+							}
+						},
+						{
+							label: '公会状态',
+							render: (h, params) => {
+								return h('div', [
+									h('span',{style: {display :  params.row.status == 1 ? 'unset' : 'none',color: params.row.status == 1 ? '#67C23A' : ''}}, params.row.status == 1 ? '正常' : ''),
+									h('span',{style: {display :  params.row.status == 2 ? 'unset' : 'none',color: params.row.status == 2 ?  '#E6A23C' : ''}}, params.row.status == 1 ? '' : '已冻结'),
+									h('span',{style: {display :  params.row.status == 3 ? 'unset' : 'none',color: params.row.status == 3 ?  '#F56C6C' : ''}}, params.row.status == 1 ? '' : '已解散'),
+								])
+							}
+						},
+						{
+							label: '操作',
+							minWidth: '320px',
+							fixed: 'right',
+							render: (h, params) => {
+								return h('div', [
+									h('el-button', { props: { type: 'primary'},style:{display: params.row.status !== 3 ? 'unset' : 'none'}, on: {click:()=>{this.change(params.row)}}}, '更换会长'),
+									h('el-button', { props: { type: 'primary'},style:{display: params.row.status !== 3 ? 'unset' : 'none'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
+									h('el-button', { props: { type: 'danger'}, style: {
+										display: (params.row.status === 1 && params.row.status !== 3)  ? 'unset' : 'none'
+									}, on: {click:()=>{this.freezeFunc(2, params.row)}}}, '冻结'),
+									h('el-button', { props: { type: 'success'}, style: {
+										display: (params.row.status === 2 && params.row.status !== 3) ? 'unset' : 'none'
+									}, on: {click:()=>{this.freezeFunc(1, params.row)}}}, '解冻'),
+									h('el-button', { props: { type: 'danger'},style:{display: params.row.status !== 3 ? 'unset' : 'none'}, on: {click:()=>{this.deleteParams(params.row)}}}, '解散'),
+									h('el-button', { props: { type: 'danger'},style:{display: params.row.status == 3 ? 'unset' : 'none'}}, '已解散'),
+								])
+							}
+						}
+          ]
+				return {
+					vm: this,
+					url: REQUEST.guild.list,
+					columns: this.permissionArr.includes('Guild@updateLiveReplace') ? isMainArr : arr
 				}
 			}
 		},
@@ -277,7 +394,7 @@
 						status: row.status,
 						rebate: row.rebate,
 					}
-					this.getGuildUpdateSource(params,"更换会长")
+					this.methodUpdateLiveReplace(params,"更换会长")
 				}).catch(() => {});
 			},
 			// 解散公会
@@ -296,7 +413,7 @@
 						status: 3,
 						rebate: row.rebate,
 					}
-					this.getGuildUpdateSource(params,"解散公会")
+					this.methodUpdateLiveDisband(params,"解散公会")
 
 				}).catch(() => {
 					this.$message({
@@ -328,7 +445,7 @@
 							status: status,
 							rebate: row.rebate,
 						}
-						this.getGuildUpdateSource(params,"冻结公会")
+						this.methodUpdateLiveFreeze(params,"冻结公会")
 					}).catch(() => {});
 				} else { // 解冻
 					let params = {
@@ -339,17 +456,36 @@
 						status: status,
 						rebate: row.rebate,
 					}
-					this.getGuildUpdateSource(params,"解冻公会")
+					this.methodUpdateLiveFreeze(params,"解冻公会")
 				}
 			},
-			// 更换公会长 冻结 解冻 解散公会
-			async getGuildUpdateSource(params,text){
-				let res = await getGuildUpdateV2(params)
+			// 冻结/解冻
+			async methodUpdateLiveFreeze(params,text){
+				let res = await updateLiveFreeze(params)
 				if(res.code === 2000) {
 					this.$success( text + '成功')
 					this.getList()
 				}
 			},
+
+      // 更换公会长
+			async methodUpdateLiveReplace(params,text){
+				let res = await updateLiveReplace(params)
+				if(res.code === 2000) {
+					this.$success( text + '成功')
+					this.getList()
+				}
+			},
+
+      // 解散
+			async methodUpdateLiveDisband(params,text){
+				let res = await updateLiveDisband(params)
+				if(res.code === 2000) {
+					this.$success( text + '成功')
+					this.getList()
+				}
+      },
+
       // 获取公会类型
       async getTypeList() {
         const response = await getGuildType()
