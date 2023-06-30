@@ -235,6 +235,13 @@ export default {
           placeholder: "请输入商户/支付单号",
         },
         {
+          name: "buyer_id",
+          type: "input",
+          value: "",
+          label: "微信/支付宝标识",
+          placeholder: "请输入支付标识",
+        },
+        {
           name: "wx_merchant_id",
           type: "select",
           value: "",
@@ -696,6 +703,7 @@ export default {
           start_time: Math.floor(s.start_time / 1000),
           end_time: Math.floor(s.end_time / 1000),
           trade_no: s.trade_no,
+          buyer_id: s.buyer_id,
           purpose: s.purpose,
           risk_status: s.risk_status,
           wx_merchant_id: s.wx_merchant_id,

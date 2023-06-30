@@ -31,6 +31,7 @@ const option = {
     // domainHttps: 'http://192.168.0.114', // https环境地址
     httpHeader: '', // 后台本地携带
     favicon: 'favicon.ico',
+    logo: 'images/logo.png',
     title: '喵喵星球管理平台'
   },
   '--dev': {
@@ -43,6 +44,7 @@ const option = {
 	  domainHttp: 'http://m.huixin.info', // app端接口
 	  httpHeader: '', // 后台本地携带
     favicon: 'favicon.ico',
+    logo: 'images/logo.png',
     title: '喵喵星球管理平台'
   },
   // 测试环境
@@ -55,6 +57,7 @@ const option = {
 	  domainHttp: 'http://m.huida.vip', // app端接口
 	  httpHeader: '', // 后台本地携带
     favicon: 'favicon.ico',
+    logo: 'images/logo.png',
     title: '喵喵星球管理平台'
   },
   // 预生产环境
@@ -67,6 +70,7 @@ const option = {
 	  domainHttp: '//m.huidapay.net', // app端接口
 	  httpHeader: '', // 后台本地携带
     favicon: 'favicon.ico',
+    logo: 'images/logo.png',
     title: '喵喵星球管理平台'
   },
   // 灰度环境
@@ -79,6 +83,7 @@ const option = {
     domainHttp: '//m.grey.aiyi.live', // app端接口
     httpHeader: '', // 后台本地携带
     favicon: 'favicon.ico',
+    logo: 'images/logo.png',
     title: '喵喵星球管理平台'
   },
   // 生产环境
@@ -91,6 +96,7 @@ const option = {
 	  domainHttp: '//m.aiyi.live', // app端接口
 	  httpHeader: '', // 后台本地携带
     favicon: 'favicon.ico',
+    logo: 'images/logo.png',
     title: '喵喵星球管理平台'
   },
   // 测试环境
@@ -103,6 +109,7 @@ const option = {
 	  domainHttp: 'http://m.huida.vip', // app端接口
     httpHeader: '', // 后台本地携带
     favicon: 'faviconkb.ico', // 图标
+    logo: 'images/logokb.png',
     title: 'aidoo管理平台'
   },
   // 预生产环境
@@ -115,6 +122,7 @@ const option = {
     domainHttp: '//pre_m.aidoo.live', // app端接口
     httpHeader: '', // 后台本地携带
     favicon: 'faviconkb.ico', // 图标
+    logo: 'images/logokb.png',
     title: 'aidoo管理平台'
   },
   // 生产环境
@@ -127,6 +135,7 @@ const option = {
     domainHttp: '//m.aidoo.live', // app端接口
     httpHeader: '', // 后台本地携带
     favicon: 'faviconkb.ico', // 图标
+    logo: 'images/logokb.png',
     title: 'aidoo管理平台'
   }
 }
@@ -259,7 +268,8 @@ module.exports = {
             NODE_ENV: JSON.stringify(configObj.mode),
             BASE_URL: JSON.stringify(configObj.publicPath),
             ENV_TITLE: JSON.stringify(configObj.title),
-            ENV_FAVICON: JSON.stringify(configObj.favicon)
+            ENV_FAVICON: JSON.stringify(configObj.favicon),
+            ENV_LOGO: JSON.stringify(configObj.logo)
           }
         }
       ])
