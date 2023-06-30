@@ -14,7 +14,7 @@
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
-		  <img src="../../../public/images/logo.png" class="user-avatar">
+		  <img :src="logo" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -36,6 +36,11 @@ import Screenfull from '@/components/Screenfull'
 import Search from '@/components/HeaderSearch'
 
 export default {
+  data() {
+    return {
+      logo: process.env.ENV_LOGO
+    }
+  },
   components: {
     Breadcrumb,
     Hamburger,
