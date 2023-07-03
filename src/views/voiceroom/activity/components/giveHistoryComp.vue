@@ -15,7 +15,6 @@
                     </el-form-item>
                     <el-form-item label="用户ID" prop="user_number" class="numberBox">
                         <el-input v-model="ruleForm.user_number" @blur="seeUser"></el-input>
-
                         <el-button type="success" @click="seeUser">查询</el-button>
                     </el-form-item>
                     <el-form-item label="增发数额" prop="amount" :rules="verifyAmount">
@@ -166,16 +165,17 @@ export default {
           }
           this.$refs[formName].validate(async (valid) => {
               if (valid) {
-                  let res = await getUserAddMoney(this.ruleForm)
-                  if(res.code === 2000) {
-                      if(this.ruleForm.amount.indexOf('-') !== -1) {
-                          this.$success('扣除成功')
-                      } else {
-                          this.$success('增发成功')
-                      }
-                      this.dialogVisible = false
-                      this.$emit('getList')
-                  }
+                await getUserAddMoney(this.ruleForm).then(res=>{
+                    if(this.ruleForm.amount.indexOf('-') !== -1) {
+                        this.$success('扣除成功')
+                    } else {
+                        this.$success('增发成功')
+                    }
+                    this.dialogVisible = false
+                    this.$emit('getList')
+                }).catch(err=>{
+                this.isSubmit = false;
+                })
               } else {
                   this.isSubmit = false;
                   return false;
