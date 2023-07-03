@@ -69,7 +69,8 @@ export default {
         name: "",
         remark: ""
       },
-      node_env : process.env.NODE_ENV
+      node_env : process.env.NODE_ENV,
+      statusList : []
     }
   },
   computed: {
@@ -91,7 +92,7 @@ export default {
           optionLabel: 'name',
           label: '状态',
           placeholder: '请选择',
-          options: MAPDATA.USERMANAGEMENTAUTONYMSTATUSLIST
+          options: this.statusList
         },
         // {
         //   name: 'user_phone',
@@ -179,7 +180,7 @@ export default {
           {
             label: '状态',
             render: (h, params) => {
-              let data = MAPDATA.USERMANAGEMENTAUTONYMSTATUSLIST.find(item => { return item.value === params.row.status })
+              let data = this.statusList.find(item => { return item.value == params.row.status })
               return h('span', data ? data.name : '无')
             }
           },
@@ -189,16 +190,16 @@ export default {
             render: (h, params) => {
               return h('div', [
                 h('el-button', { props: { type: 'success'}, style: {
-                  display: params.row.status === 'C' ? 'unset' : 'none'
-                }, on: {click:()=>{this.funcClick(params.row.uid)}}}, '审核通过'),
+                  display: (params.row.status === 'C' || params.row.status === 2) ? 'unset' : 'none'
+                }, on: {click:()=>{this.funcClick(params.row)}}}, '审核通过'),
                 h('el-button', { props: { type: 'danger'}, style: {
-                  display: params.row.status === 'C' ? 'unset' : 'none'
+                  display: (params.row.status === 'C' || params.row.status === 2) ? 'unset' : 'none'
                 }, on: {click:()=>{this.manageClick(params.row)}}}, '驳回'),
                 h('span', { style: {
-                  display: params.row.status === 'Y' ? 'unset' : 'none'
+                  display: (params.row.status === 'Y' ||  params.row.status === 1) ? 'unset' : 'none'
                 }, on: {click:()=>{}}}, '- -'),
                 h('span', { style: {
-                  display: params.row.status === 'R' ? 'unset' : 'none'
+                  display: (params.row.status === 'R' ||  params.row.status === 3) ? 'unset' : 'none'
                 }, on: {click:()=>{}}}, '- -'),
               ])
             }
@@ -206,6 +207,15 @@ export default {
         ]
       }
     }
+  },
+  mounted(){
+    let statusList = [];
+    if(this.node_env.indexOf("aidoo") > -1){
+      statusList = MAPDATA.USERMANAGEMENTAUTONYMSTATUSLIST2;
+    }else{
+      statusList = MAPDATA.USERMANAGEMENTAUTONYMSTATUSLIST;
+    }
+    this.$set(this,"statusList",statusList);
   },
   methods: {
     // 名称脱敏
@@ -266,7 +276,11 @@ export default {
     },
     // 审核通过
     funcClick(id) {
-      this.func('Y', id)
+      if(this.node_env.indexOf("aidoo") > -1){
+        this.func('1', id)
+      }else{
+        this.func('Y', id)
+      }
     },
     // 驳回
     manageClick(row) {
@@ -286,8 +300,10 @@ export default {
       if(this.node_env.indexOf("aidoo") > -1){
         params = {
           uid : row.uid,
-          status: status,
-          remark: row.remark
+          status: status
+        }
+        if(row.remark){
+          params.remark = row.remark
         }
       }else{
         params = {
@@ -308,7 +324,7 @@ export default {
     },
     // 提交
     submitForm() {
-      this.func('R', this.ruleForm)
+      this.func('3', this.ruleForm)
     },
     // 关闭
     closed(){
