@@ -23,9 +23,18 @@
                     </el-input>
                 </el-form-item> -->
                 <!-- this.permissionArr.includes('PrettyNumber@update') -->
-                <el-form-item label="公司主体" prop="company" v-if="status === 'add' || permissionArr.includes('Guild@updateReplace')">
-                    <el-input v-model="ruleForm.company" placeholder="请输入公司主体"></el-input>
-                </el-form-item>
+                <!-- 派对公会 -->
+                <template v-if="type + '' === '2'">
+                  <el-form-item label="公司主体" prop="company" v-if="status === 'add' || permissionArr.includes('Guild@updatePartyReplace')">
+                      <el-input v-model="ruleForm.company" placeholder="请输入公司主体"></el-input>
+                  </el-form-item>
+                </template>
+                <!-- 直播公会 -->
+                <template v-if="type + '' === '1'">
+                  <el-form-item label="公司主体" prop="company" v-if="status === 'add' || permissionArr.includes('Guild@updateLiveReplace')">
+                      <el-input v-model="ruleForm.company" placeholder="请输入公司主体"></el-input>
+                  </el-form-item>
+                </template>
                 <el-form-item label="公会运营" prop="operator" v-if="isAuth && status === 'update'">
                     <el-select v-model="ruleForm.operator" placeholder="请选择公会运营">
                         <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
