@@ -51,9 +51,12 @@ const mutations = {
     state.routes = constantRoutes.concat(routes)
   },
   SET_PER_BTN: (state, permissionArr) => {
-    const arr = permissionArr.map(item => {
-      return item.api_controller
-    })
+    const arr = permissionArr.reduce((pev, cur) => {
+        if (state.userPids.indexOf(cur.id) !== -1) {
+          pev.push(cur.api_controller);
+        }
+      return pev
+     }, [])
     localStorage.setItem('permissionArr', JSON.stringify(arr))
     state.permissionArr = arr
   },
