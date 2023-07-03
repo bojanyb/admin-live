@@ -203,15 +203,31 @@
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props: { type: 'primary'},style:{display: params.row.status !== 3 ? 'unset' : 'none'}, on: {click:()=>{this.change(params.row)}}}, '更换会长'),
-									h('el-button', { props: { type: 'primary'},style:{display: params.row.status !== 3 ? 'unset' : 'none'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
-									h('el-button', { props: { type: 'danger'}, style: {
-										display: (params.row.status === 1 && params.row.status !== 3)  ? 'unset' : 'none'
-									}, on: {click:()=>{this.freezeFunc(2, params.row)}}}, '冻结'),
-									h('el-button', { props: { type: 'success'}, style: {
-										display: (params.row.status === 2 && params.row.status !== 3) ? 'unset' : 'none'
-									}, on: {click:()=>{this.freezeFunc(1, params.row)}}}, '解冻'),
-									h('el-button', { props: { type: 'danger'},style:{display: params.row.status !== 3 ? 'unset' : 'none'}, on: {click:()=>{this.deleteParams(params.row)}}}, '解散'),
+                  h('el-button', {
+                    props: { type: 'primary' },
+                    style: { display: (params.row.status && this.permissionArr.includes('Guild@updateLiveReplace')) !== 3 ? 'unset' : 'none' },
+                    on: { click: () => { this.change(params.row) } }
+                  }, '更换会长'),
+                  h('el-button', {
+                    props: { type: 'primary' },
+                    style: { display: (params.row.status !== 3 && this.permissionArr.includes('Guild@updateLiveInfo')) ? 'unset' : 'none' },
+                    on: { click: () => { this.update(params.row) } }
+                  }, '修改'),
+                  h('el-button', {
+                    props: { type: 'danger' },
+                    style: { display: ((params.row.status === 1 && params.row.status !== 3) && this.permissionArr.includes('Guild@updateLiveFreeze')) ? 'unset' : 'none' },
+                    on: { click: () => { this.freezeFunc(2, params.row) } }
+                  }, '冻结'),
+                  h('el-button', {
+                    props: { type: 'success' },
+                    style: { display: ((params.row.status === 2 && params.row.status !== 3) &&  this.permissionArr.includes('Guild@updateLiveFreeze')) ? 'unset' : 'none' },
+                    on: { click: () => { this.freezeFunc(1, params.row) } }
+                  }, '解冻'),
+                  h('el-button', {
+                    props: { type: 'danger' },
+                    style: { display: (params.row.status !== 3 && this.permissionArr.includes('Guild@updateLiveDisband')) ? 'unset' : 'none' },
+                    on: { click: () => { this.deleteParams(params.row) } }
+                  }, '解散'),
 									h('el-button', { props: { type: 'danger'},style:{display: params.row.status == 3 ? 'unset' : 'none'}}, '已解散'),
 								])
 							}
@@ -311,15 +327,31 @@
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
-									h('el-button', { props: { type: 'primary'},style:{display: params.row.status !== 3 ? 'unset' : 'none'}, on: {click:()=>{this.change(params.row)}}}, '更换会长'),
-									h('el-button', { props: { type: 'primary'},style:{display: params.row.status !== 3 ? 'unset' : 'none'}, on: {click:()=>{this.update(params.row)}}}, '修改'),
-									h('el-button', { props: { type: 'danger'}, style: {
-										display: (params.row.status === 1 && params.row.status !== 3)  ? 'unset' : 'none'
-									}, on: {click:()=>{this.freezeFunc(2, params.row)}}}, '冻结'),
-									h('el-button', { props: { type: 'success'}, style: {
-										display: (params.row.status === 2 && params.row.status !== 3) ? 'unset' : 'none'
-									}, on: {click:()=>{this.freezeFunc(1, params.row)}}}, '解冻'),
-									h('el-button', { props: { type: 'danger'},style:{display: params.row.status !== 3 ? 'unset' : 'none'}, on: {click:()=>{this.deleteParams(params.row)}}}, '解散'),
+                  h('el-button', {
+                    props: { type: 'primary' },
+                    style: { display: (params.row.status && this.permissionArr.includes('Guild@updateLiveReplace')) !== 3 ? 'unset' : 'none' },
+                    on: { click: () => { this.change(params.row) } }
+                  }, '更换会长'),
+                  h('el-button', {
+                    props: { type: 'primary' },
+                    style: { display: (params.row.status !== 3 && this.permissionArr.includes('Guild@updateLiveInfo')) ? 'unset' : 'none' },
+                    on: { click: () => { this.update(params.row) } }
+                  }, '修改'),
+                  h('el-button', {
+                    props: { type: 'danger' },
+                    style: { display: ((params.row.status === 1 && params.row.status !== 3) && this.permissionArr.includes('Guild@updateLiveFreeze')) ? 'unset' : 'none' },
+                    on: { click: () => { this.freezeFunc(2, params.row) } }
+                  }, '冻结'),
+                  h('el-button', {
+                    props: { type: 'success' },
+                    style: { display: ((params.row.status === 2 && params.row.status !== 3) &&  this.permissionArr.includes('Guild@updateLiveFreeze')) ? 'unset' : 'none' },
+                    on: { click: () => { this.freezeFunc(1, params.row) } }
+                  }, '解冻'),
+                  h('el-button', {
+                    props: { type: 'danger' },
+                    style: { display: (params.row.status !== 3 && this.permissionArr.includes('Guild@updateLiveDisband')) ? 'unset' : 'none' },
+                    on: { click: () => { this.deleteParams(params.row) } }
+                  }, '解散'),
 									h('el-button', { props: { type: 'danger'},style:{display: params.row.status == 3 ? 'unset' : 'none'}}, '已解散'),
 								])
 							}
