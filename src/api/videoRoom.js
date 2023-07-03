@@ -1138,10 +1138,73 @@ export function getGuildCreateV2(data) {
   })
 }
 
-// 修改公会
-export function getGuildUpdateV2(data) {
+// 派对修改公会
+export function updatePartyInfo(data) {
   return request({
-    url: '/guild/updateV2',
+    url: '/guild/updatePartyInfo',
+    method: 'post',
+    data
+  })
+}
+// 直播修改公会
+export function updateLiveInfo(data) {
+  return request({
+    url: '/guild/updateLiveInfo',
+    method: 'post',
+    data
+  })
+}
+
+// 派对更换会长
+export function updatePartyReplace(data) {
+  return request({
+    url: '/guild/updatePartyReplace',
+    method: 'post',
+    data
+  })
+}
+
+// 派对冻结
+export function updatePartyFreeze(data) {
+  return request({
+    url: '/guild/updatePartyFreeze',
+    method: 'post',
+    data
+  })
+}
+
+// 派对解散
+export function updatePartyDisband(data) {
+  return request({
+    url: '/guild/updatePartyDisband',
+    method: 'post',
+    data
+  })
+}
+
+
+// 直播更换会长
+export function updateLiveReplace(data) {
+  return request({
+    url: '/guild/updateLiveReplace',
+    method: 'post',
+    data
+  })
+}
+
+// 直播冻结
+export function updateLiveFreeze(data) {
+  return request({
+    url: '/guild/updateLiveFreeze',
+    method: 'post',
+    data
+  })
+}
+
+// 直播解散
+export function updateLiveDisband(data) {
+  return request({
+    url: '/guild/updateLiveDisband',
     method: 'post',
     data
   })

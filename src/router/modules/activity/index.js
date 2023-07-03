@@ -121,15 +121,6 @@ const activityRouter = {
 			name: 'may-list'
 		},
 		{
-			path: 'pizza-list',
-			component: () => import('@/views/voiceroom/activity/pizza-list.vue'),
-			meta: {
-				title: '披萨活动数据',
-				noCache: true
-			},
-			name: 'pizza-list'
-		},
-		{
 			path: 'dragonBoat-list',
 			component: () => import('@/views/voiceroom/activity/dragonBoat-list.vue'),
 			meta: {
@@ -137,6 +128,15 @@ const activityRouter = {
 				noCache: true
 			},
 			name: 'dragonBoat-list'
+		},
+		{
+			path: 'pizza-list',
+			component: () => import('@/views/voiceroom/activity/pizza-list.vue'),
+			meta: {
+				title: '披萨活动数据',
+				noCache: true
+			},
+			name: 'pizza-list'
 		}
         // {
 		// 	path: 'first-charge',

@@ -2515,7 +2515,7 @@ const USERPUNISHSTATUSLISTCOPY = [
     value: 3
   },
   {
-    name: '受理',
+    name: '已受理',
     value: 4
   },
   {
@@ -2539,7 +2539,7 @@ const OPERATIONTYPE = [
     value: 3
   },
   {
-    name: '受理',
+    name: '已受理',
     value: 4
   },
   {
