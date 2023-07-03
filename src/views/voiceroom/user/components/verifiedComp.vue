@@ -1,6 +1,6 @@
 <template>
     <div class="user-verifiedComp-box">
-        <drawer 
+        <drawer
         size="470px"
         title="查看实名详情"
         ref="drawer"
