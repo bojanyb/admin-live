@@ -1379,6 +1379,25 @@ const USERMANAGEMENTAUTONYMSTATUSLIST = [
   // }
 ]
 
+// 实名列表 - 状态 -- Aidoo
+const USERMANAGEMENTAUTONYMSTATUSLIST2 = [
+  {
+    name: '全部',
+    value: ''
+  },
+  {
+    name: '待审核',
+    value: '2'
+  },
+  {
+    name: '已通过',
+    value: '1'
+  },
+  // {
+  //     name: '已拒绝',
+  //     value: '3'
+  // }
+]
 /*
 *审核管理 - 用户图片资料审核列表
 */
@@ -3234,6 +3253,7 @@ export default {
   ROOMBACKGROUNDSELECTLIST,
   RECHARGEHISTORYTYPELIST,
   USERMANAGEMENTAUTONYMSTATUSLIST,
+  USERMANAGEMENTAUTONYMSTATUSLIST2,
   GUILDSTATUS,
   GUILDAPPLYTYPE,
   SETTLEMENTSTATUS,
