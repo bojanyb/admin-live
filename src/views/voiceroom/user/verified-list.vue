@@ -1,4 +1,4 @@
-// 实名列表
+<!-- 实名列表 -->
 <template>
   <div class="app-container">
     <div class="searchParams">
@@ -9,6 +9,25 @@
 
     <!-- 实名详情组件 -->
     <verifiedComp ref="verifiedComp"></verifiedComp>
+
+    <!-- aidoo 驳回说明 -->
+    <el-dialog class="rejectPop"
+        :visible.sync="dialogVisible"
+        width="600px"
+        @closed="closed"
+        :before-close="handleClose"
+        :show-close="false">
+            <el-form :model="ruleForm" ref="ruleForm" label-width="95px" class="demo-ruleForm">
+                <el-form-item label="用户信息:">{{ruleForm.name}} （ ID: {{ruleForm.user_id}}）</el-form-item>
+                <el-form-item label="驳回说明:" prop="remark">
+                    <el-input type="textarea" maxlength="15" v-model="ruleForm.remark" placeholder="请输入驳回理由"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="submitForm">确 定</el-button>
+            </span>
+        </el-dialog>
   </div>
 </template>
 
@@ -42,7 +61,15 @@ export default {
     return {
       searchParams: {
         status: ''
-      }
+      },
+      dialogVisible: false,
+      ruleForm: {
+        id: "",
+        user_id: "",
+        name: "",
+        remark: ""
+      },
+      node_env : process.env.NODE_ENV
     }
   },
   computed: {
@@ -166,7 +193,7 @@ export default {
                 }, on: {click:()=>{this.funcClick(params.row.uid)}}}, '审核通过'),
                 h('el-button', { props: { type: 'danger'}, style: {
                   display: params.row.status === 'C' ? 'unset' : 'none'
-                }, on: {click:()=>{this.manageClick(params.row.uid)}}}, '驳回'),
+                }, on: {click:()=>{this.manageClick(params.row)}}}, '驳回'),
                 h('span', { style: {
                   display: params.row.status === 'Y' ? 'unset' : 'none'
                 }, on: {click:()=>{}}}, '- -'),
@@ -242,21 +269,56 @@ export default {
       this.func('Y', id)
     },
     // 驳回
-    manageClick(id) {
-      this.func('R', id)
+    manageClick(row) {
+      if(this.node_env.indexOf("aidoo") > -1){
+        this.ruleForm.uid = row.uid;
+        this.ruleForm.user_id = row.user_id;
+        this.ruleForm.name = row.name;
+        this.ruleForm.remark = "";
+        this.dialogVisible = true;
+      }else{
+        this.func('R', row)
+      }
     },
     // 操作
-    async func(status, uid) {
-      let params = {
-        uid,
-        status
+    async func(status, row) {
+      let params = {}
+      if(this.node_env.indexOf("aidoo") > -1){
+        params = {
+          uid : row.uid,
+          status: status,
+          remark: row.remark
+        }
+      }else{
+        params = {
+          uid : row.uid,
+          status: status,
+        }
       }
       let res = await check(params)
       if(res.code === 2000) {
-        this.$success('操作成功')
-        this.getList()
+        this.$success('操作成功');
+        this.getList();
+        this.dialogVisible = false;
       }
-    }
+    },
+    // 关闭弹窗
+    handleClose() {
+        this.dialogVisible = false
+    },
+    // 提交
+    submitForm() {
+      this.func('R', this.ruleForm)
+    },
+    // 关闭
+    closed(){
+      this.ruleForm = {
+        id: "",
+        user_id: "",
+        name: "",
+        remark: ""
+      }
+    },
   }
 }
 </script>
