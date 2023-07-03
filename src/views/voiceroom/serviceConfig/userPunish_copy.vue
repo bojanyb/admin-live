@@ -50,7 +50,7 @@ export default {
         return {
             isDestoryComp: false, // 是否销毁组件
             searchParams: {
-              status: 4
+              status: -1
             },
             punishTypeList: []
         };
@@ -122,7 +122,7 @@ export default {
                 {
                     name: 'status',
                     type: 'select',
-                    value: 4,
+                    value: -1,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '处罚状态',
@@ -426,7 +426,7 @@ export default {
         // 重置
         reset() {
             this.searchParams = {
-                status: 4
+                status: -1
             }
             this.dateTimeParams = {}
             this.getList()
