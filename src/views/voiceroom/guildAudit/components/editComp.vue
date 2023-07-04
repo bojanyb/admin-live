@@ -15,16 +15,26 @@
                     </el-select>
                 </el-form-item> -->
                 <el-form-item label="公会长ID" prop="guild_number">
-                    <el-input v-model="ruleForm.guild_number" placeholder="请输入公会长ID"></el-input>
+                    <el-input v-model="ruleForm.guild_number" placeholder="请输入公会长ID" :disabled="status === 'update'"></el-input>
                 </el-form-item>
                 <!-- <el-form-item label="实时返点" prop="rebate">
                     <el-input v-model="ruleForm.rebate" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d]/g,'');" @input="rebateInput" placeholder="请输入实时返点">
                         <template slot="append">%</template>
                     </el-input>
                 </el-form-item> -->
-                <el-form-item label="公司主体" prop="company">
-                    <el-input v-model="ruleForm.company" placeholder="请输入公司主体"></el-input>
-                </el-form-item>
+                <!-- this.permissionArr.includes('PrettyNumber@update') -->
+                <!-- 派对公会 -->
+                <template v-if="type + '' === '2'">
+                  <el-form-item label="公司主体" prop="company" v-if="status === 'add' || permissionArr.includes('Guild@updatePartyReplace')">
+                      <el-input v-model="ruleForm.company" placeholder="请输入公司主体"></el-input>
+                  </el-form-item>
+                </template>
+                <!-- 直播公会 -->
+                <template v-if="type + '' === '1'">
+                  <el-form-item label="公司主体" prop="company" v-if="status === 'add' || permissionArr.includes('Guild@updateLiveReplace')">
+                      <el-input v-model="ruleForm.company" placeholder="请输入公司主体"></el-input>
+                  </el-form-item>
+                </template>
                 <el-form-item label="公会运营" prop="operator" v-if="isAuth && status === 'update'">
                     <el-select v-model="ruleForm.operator" placeholder="请选择公会运营">
                         <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
@@ -41,10 +51,13 @@
 
 <script>
 // 引入api
-import { getGuildCreateV2, getGuildUpdateV2, getGuildType, adminUserList } from '@/api/videoRoom'
+import { getGuildCreateV2, updatePartyInfo, updateLiveInfo, getGuildType, adminUserList } from '@/api/videoRoom'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
+// 引入公共参数
+import mixins from '@/utils/mixins.js'
 export default {
+  	mixins: [mixins],
     data() {
         return {
             status: 'add',
@@ -175,7 +188,13 @@ export default {
                             this.$success('新增成功')
                         }
                     } else {
-                        let res = await getGuildUpdateV2(params)
+                        let res
+                        if (params.guild_type === 1) { // 直播
+                          res = await updateLiveInfo(params)
+                        }
+                        else if (params.guild_type === 2) { // 派对
+                          res = await updatePartyInfo(params)
+                        }
                         if(res.code === 2000) {
                             this.$success('修改成功')
                         }
