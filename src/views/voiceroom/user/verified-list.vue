@@ -129,11 +129,9 @@ export default {
       ]
     },
     cfgs() {
-      return {
-        vm: this,
-        url: REQUEST.user.autonymlist,
-        columns: [
-          {
+      let columnsList= [];
+      let arr1 = [
+        {
             label: '时间',
             render: (h, params) => {
               return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
@@ -165,6 +163,38 @@ export default {
               return h('span', data || '无')
             }
           },
+      ]
+      let arr2 = [
+        {
+          label: '证件照正面',
+          isimg: true,
+          prop: 'id_card_front',
+          imgWidth: '50px',
+          imgHeight: '50px'
+        },
+        {
+          label: '证件照反面',
+          isimg: true,
+          prop: 'id_card_back',
+          imgWidth: '50px',
+          imgHeight: '50px'
+        },
+        {
+          label: '自拍照',
+          isimg: true,
+          prop: 'user_photo',
+          imgWidth: '50px',
+          imgHeight: '50px'
+        },
+        {
+          label: '地区',
+          prop: 'area',
+          render: (h, params) => {
+              return h('span', params.row.area || '--')
+          }
+        },
+      ];
+      let arr3 = [
           {
             label: '实名次数',
             render: (h, params) => {
@@ -204,7 +234,16 @@ export default {
               ])
             }
           }
-        ]
+      ];
+      if(this.node_env.indexOf("aidoo") > -1){
+        columnsList = arr1.concat(arr2).concat(arr3);
+      }else{
+        columnsList = arr1.concat(arr3);
+      }
+      return {
+        vm: this,
+        url: REQUEST.user.autonymlist,
+        columns: columnsList
       }
     }
   },
