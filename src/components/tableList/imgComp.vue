@@ -78,9 +78,6 @@ export default {
         isSpecial() { // 判断是图片还是svga
             if(this.src) {
                 if(this.src.indexOf('png') !== -1 || this.src.indexOf('jpg') !== -1 || this.src.indexOf('jpeg') !== -1) {
-                    if(this.src.indexOf("https://music.aiyi.love/") > -1){
-                        this.src = 'http://music-aiyi.oss-cn-shenzhen.aliyuncs.com' + this.src.split('https://music.aiyi.love')[1];
-                    }
                     return 'png'
                 } else if(this.src.indexOf('svga') !== -1) {
                     return 'svga'
