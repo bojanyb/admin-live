@@ -2,7 +2,16 @@
 	<div class="guildRebate-dynamic-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ ruleForm.total_flow || 0 }}</span>
+			<span>流水总计：{{ ruleForm.total_flow || 0 }}
+        <el-popover
+          placement="bottom"
+          width="400"
+          trigger="hover"
+          >
+          根据每周完成拍成的次数档位，发放房间（只是该拍拍房的）对应的流水返点奖励。
+          <i class="icon-hover el-icon-question" slot="reference"></i>
+        </el-popover>
+      </span>
 			<span>结算总计：{{ ruleForm.total_settlement || 0 }}</span>
 			<span>拍成次数：{{ ruleForm.total_cp || 0 }}</span>
 		</div>
@@ -124,10 +133,10 @@ export default {
 					}
 				},
 				{
-					label: '奖励名称',
+					label: '档位及返点比例',
 					minWidth: '120px',
 					render: (h, params) => {
-						return h('span', params.row.reward_name)
+						return h('span', params.row.reward_name ? params.row.reward_name : '-')
 					}
 				},
 				{
@@ -177,6 +186,13 @@ export default {
 						return h('div', [
 							h('el-button', { props: { type: 'primary' }, on: { click: () => { this.rebateFunc(params.row.id, 1) } } }, '结算'),
 							h('el-button', { props: { type: 'danger' }, on: { click: () => { this.rebateFunc(params.row.id, 2) } } }, '忽略'),
+              h('el-button', {
+                props: { type: 'primary' },
+                style: {
+                  display :  +params.row.resettle === 1 ? 'unset' : 'none',
+                },
+                on: { click: () => { this.rebateFunc(params.row.id, 1) } }
+              }, '再次结算'),
 						])
 					}
 				}
