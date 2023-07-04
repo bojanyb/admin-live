@@ -209,7 +209,7 @@
 								return h('div', [
                   h('el-button', {
                     props: { type: 'primary' },
-                    style: { display: (params.row.status && this.permissionArr.includes('Guild@updatePartyReplace')) !== 3 ? 'unset' : 'none' },
+                    style: { display: (params.row.status !== 3 && this.permissionArr.includes('Guild@updatePartyReplace'))  ? 'unset' : 'none' },
                     on: { click: () => { this.change(params.row) } }
                   }, '更换会长'),
                   h('el-button', {
