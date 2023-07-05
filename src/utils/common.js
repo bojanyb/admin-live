@@ -25,7 +25,7 @@ export function formatTime(time, format) {
 
 // 格式化时间 - 二次
 export function formatTimeTwo(time, format) {
-    let data = null
+  let data = null
     if(time > 60) {
         if(time > 3600) {
             let hours = Math.floor(time / 3600)
@@ -38,6 +38,16 @@ export function formatTimeTwo(time, format) {
         data = time + '秒钟'
     }
     return data
+}
+
+export function formatTimeMinutes(time, format) {
+  let data = null
+  if (time > 60) {
+    data = parseInt(time / 60) + '分钟 ' + (time % 60) + '秒钟'
+  } else {
+    data = time + '秒钟'
+  }
+  return data
 }
 
 // 礼物 - 错误提示

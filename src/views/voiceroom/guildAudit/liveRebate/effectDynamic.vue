@@ -123,16 +123,17 @@ export default {
 				},
 				{
 					label: '总流水（含冻结）',
-					minWidth: '130px',
+					minWidth: '150px',
 					render: (h, params) => {
 						return h('span', params.row.t_flow + '钻石')
 					}
 				},
 				{
 					label: '有效主播数',
-					minWidth: '120px',
+          minWidth: '120px',
+          headIcon: true,
 					render: (h, params) => {
-						return h('span', this.form.status === 2 ? '无' : params.row.settlement + '喵粮')
+						return h('span', params.row.effective_anchor ? params.row.effective_anchor : '无')
 					}
 				},
 				{
@@ -176,7 +177,7 @@ export default {
 			let arr1 = [
 				{
 					label: '操作',
-					minWidth: '150px',
+					minWidth: '200px',
 					fixed: 'right',
 					render: (h, params) => {
 						return h('div', [

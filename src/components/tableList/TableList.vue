@@ -17,6 +17,24 @@
       <el-table-column v-for="item in cfgs.columns" :prop="item.prop" :sortable="item.sortable ? item.sortable : false"
         :align="item.align || 'center'" :header-align="item.headerAlign" :label="item.label" :fixed="item.fixed" :width="item.width"
         :min-width="item.minWidth" :key="item.label" :show-overflow-tooltip="item.showOverFlow" v-if="heckoutGoodsField(item.label)">
+
+        <template slot="header" slot-scope="scope">
+          <div class="" v-if="item.headIcon && item.label == '有效主播数' ">
+            <span>{{item.label}}</span>
+            <el-popover
+              placement="top"
+              width="400"
+              trigger="hover">
+              <slot>
+                <div>有效主播：一个自然周内，必须直播4天及以上，并且每天必须满2个小时及以上。</div>
+              </slot>
+            <i class="el-icon-question" slot="reference"></i>
+          </el-popover>
+          </div>
+
+          <span v-else>{{item.label}}</span>
+        </template>
+
         <template slot-scope="scope">
           <WeTableCustomColumn :renderContent="item.render" v-if="!item.isimg && !item.isSwitch && !item.isimgList" :scope="scope" :prop="item.prop"></WeTableCustomColumn>
           <!-- <el-image v-if="item.isimg" :src="scope.row[item.prop] || $store.state.defaultImg" :style="{width:item.imgWidth,height:item.imgHeight}"

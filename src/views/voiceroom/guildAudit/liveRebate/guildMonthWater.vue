@@ -181,7 +181,7 @@ export default {
 			let arr1 = [
 				{
 					label: '操作',
-					minWidth: '150px',
+					minWidth: '200px',
 					fixed: 'right',
 					render: (h, params) => {
 						return h('div', [
@@ -236,8 +236,8 @@ export default {
 			},
       page: 1,
       gridData: [{
-          date: '女神、男神、游戏、点唱、交友、拍拍、相亲',
-          name: '相守、个播'
+          date: '个播',
+          name: '相守、女神、男神、游戏、点唱、交友、拍拍、相亲'
         }]
 		}
 	},

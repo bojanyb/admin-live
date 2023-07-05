@@ -67,7 +67,7 @@ import tableList from '@/components/tableList/TableList.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
-import { formatTimeTwo, timeFormat, exportTableData } from '@/utils/common.js'
+import { formatTimeMinutes, timeFormat, exportTableData } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 // 引入公共map
@@ -127,9 +127,14 @@ export default {
 					label: '本周营业时长',
 					minWidth: '140px',
 					prop: 'online',
-					render: (h, params) => {
-						let status = params.row.online ? formatTimeTwo(params.row.online) : '--'
-						return h('span', status)
+          render: (h, params) => {
+            console.log(params.row.is_red, 'row');
+						let status = params.row.online ? formatTimeMinutes(params.row.online) : '--'
+            return h('span', {
+			   			style: {
+			   				color: params.row.online ? '#ff4949' : ''
+			   			},
+            }, status)
 					}
 				},
 				{
@@ -423,7 +428,7 @@ export default {
 					guild_number: item.guild_number,
           room_number: item.room_number,
 					guild_nickname: this.form.status === 2 ? item.guild_nickname : item.guild_name,
-					online: item.online ? formatTimeTwo(item.online) : '--',
+					online: item.online ? formatTimeMinutes(item.online) : '--',
 					flow: item.flow + "钻石",
 					t_flow: this.form.status === 2 ? item.flow + '钻石' : item.t_flow + '钻石',
 					settlement: this.form.status === 2 ? '无' : (item.settlement || 0) + '喵粮',
