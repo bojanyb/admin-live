@@ -58,7 +58,10 @@
 						id: 2,
 						name: "派对"
 					}
-				]
+				],
+				searchParams: {
+					round: 1
+				}
 			}
 		},
 		computed: {
@@ -229,7 +232,7 @@
 					pagesize: params.size,
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
           			end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
-					round: (s.round == -1 || s.round == "全部") ? "" : s.round,
+					round: s.round ? s.round : 1,
 					user_number: s.user_number,
           			live_user_number: s.live_user_number,
 					room_number: s.room_number,
@@ -283,8 +286,6 @@
 					// 全部默认选择第一个
 					this.searchParams.round = res.data.round[0].round_number;
 					this.poolList = res.data.round;
-          			let all = {round_number: 0, title: "全部"}
-					this.poolList.unshift(all)
 				}
 			}
 		}
