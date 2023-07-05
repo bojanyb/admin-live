@@ -7,9 +7,9 @@
 			<div class="box-card-inner">
 				<div>送礼人数：{{sumSource.user_count || 0}}人</div>
 				<div>收礼人数：{{sumSource.live_user_count || 0}}人</div>
-				<div>派对房间收礼金额：{{sumSource.live_user_count || 0}}钻石</div>
-				<div>直播房间收礼金额：{{sumSource.live_user_count || 0}}钻石</div>
-				<div>礼物总金额：{{sumSource.gift_diamond_total || 0}}钻石</div>
+				<div>派对房间收礼金额：{{sumSource.party_gift_diamond_total || 0}}钻石</div>
+				<div>直播房间收礼金额：{{sumSource.live_gift_diamond_total || 0}}钻石</div>
+				<div>礼物总金额：{{sumSource.all_gift_diamond_total || 0}}钻石</div>
 			</div>
 		</el-card>
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
@@ -18,15 +18,13 @@
 
 <script>
 	// 引入api
-	import { getGiftList,getRoundList } from '@/api/activity'
+	import { getMonthStarGift,getMonthStarRound } from '@/api/activity'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
 	import tableList from '@/components/tableList/TableList.vue'
 	// 引入api
 	import REQUEST from '@/request/index.js'
-	// 引入公共方法
-	import { timeFormat } from '@/utils/common.js'
 	// 引入公共参数
 	import mixins from '@/utils/mixins.js'
 
@@ -40,15 +38,25 @@
 			return {
 				giftNameList: [], // 礼物名称
 				poolList: [], // 轮次
-				sumSource: {},
+				sumSource: {
+					user_count : 0,
+					live_user_count : 0,
+					party_gift_diamond_total : 0,
+					live_gift_diamond_total : 0,
+					all_gift_diamond_total : 0
+				},
 				roomTypeList: [
 					{
+						id: 0,
+						name: "全部"
+					},
+					{
 						id: 1,
-						name: "派对"
+						name: "直播"
 					},
 					{
 						id: 2,
-						name: "直播"
+						name: "派对"
 					}
 				]
 			}
@@ -82,14 +90,6 @@
 						placeholder: '请输入房间ID'
 					},
 					{
-						name: 'guild_number',
-						type: 'input',
-						value: '',
-						label: '公会ID',
-            			linkage: true,
-						placeholder: '请输入公会ID'
-					},
-					{
 						name: 'gift_id',
 						type: 'select',
 						value: "全部",
@@ -100,7 +100,7 @@
 						options: this.giftNameList,
 					},
 					{
-						name: 'room_type',
+						name: 'room_category',
 						type: 'select',
 						value: "全部",
 						keyName: 'id',
@@ -144,7 +144,7 @@
 			cfgs() {
 				return {
 					vm: this,
-					url: REQUEST.activity.giftLogList,
+					url: REQUEST.monthStar.giftLog,
 					columns: [
 						{
 							label: '时间',
@@ -153,15 +153,23 @@
 						},
 						{
 							label: '房间类型',
-							prop: 'type'
+							prop: 'room_category',
+							render: (h, params) => {
+								let roomName =  "";
+								switch (params.row.room_category) {
+									case 1:
+									roomName =  "直播";
+										break;
+									case 2:
+									roomName =  "派对";
+										break;
+								}
+								return h('span', roomName || '--')
+							}
 						},
 						{
 							label: '房间ID',
 							prop: 'room_number'
-						},
-						{
-							label: '公会ID',
-							prop: 'guild_number'
 						},
             			{
 							label: '活动轮次',
@@ -210,7 +218,7 @@
 		},
 		mounted(){
 			this.getPoolNameSource();
-      this.getRoundSource();
+      		this.getRoundSource();
 		},
 		methods: {
 			// 配置参数
@@ -224,6 +232,8 @@
 					round: (s.round == -1 || s.round == "全部") ? "" : s.round,
 					user_number: s.user_number,
           			live_user_number: s.live_user_number,
+					room_number: s.room_number,
+					room_category: (s.room_category == -1 || s.room_category == "全部") ? "" : s.room_category,
 					gift_id: (s.gift_id == -1 || s.gift_id == "全部") ? "" : s.gift_id,
 				}
 			},
@@ -259,7 +269,7 @@
 			},
 			// 获取礼物名称
 			async getPoolNameSource() {
-				let res = await getGiftList();
+				let res = await getMonthStarGift();
 				if(res.code == 2000){
 					this.giftNameList = res.data.list;
           			let all = {gift_id: 0, gift_name: "全部"}
@@ -268,12 +278,12 @@
 			},
 			// 获取轮数
 			async getRoundSource() {
-				let res = await getRoundList();
+				let res = await getMonthStarRound();
 				if(res.code == 2000){
-          // 全部默认选择第一个
-          this.searchParams.round = res.data.round[0].round_number;
+					// 全部默认选择第一个
+					this.searchParams.round = res.data.round[0].round_number;
 					this.poolList = res.data.round;
-          let all = {round_number: 0, title: "全部"}
+          			let all = {round_number: 0, title: "全部"}
 					this.poolList.unshift(all)
 				}
 			}

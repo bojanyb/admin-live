@@ -9,8 +9,11 @@
 </template>
 
 <script>
+
+
+
 	// 引入api
-	import { getRoundList } from '@/api/activity'
+	import { getMonthStarRound } from '@/api/activity'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -45,6 +48,9 @@
 				tabIndex: '0',
 				giftNameList: [], // 礼物名称
 				poolList: [], // 轮次
+				searchParams: {
+					round : 1,
+				}
 			}
 		},
 		computed: {
@@ -53,7 +59,7 @@
 					{
 						name: 'round',
 						type: 'select',
-						value: '全部',
+						value: '第1轮',
 						keyName: 'round_number',
 						optionLabel: 'title',
 						label: '活动轮次',
@@ -69,7 +75,7 @@
 				let arr1 = [
 						{
 							label: '时间',
-							width: '180px',
+							width: '310px',
 							render: (h, params) => {
 								return h('span', params.row.start_time + " 至 " + params.row.end_time)
 							}
@@ -99,19 +105,14 @@
 				]
 				let arr3 = [
 						{
-							label: '公会ID',
-							prop: 'guild_number'
-						},
-						{
 							label: '房间ID',
 							prop: 'room_number'
 						},
 						{
 							label: '房间昵称',
-							prop: 'nickname',
+							prop: 'room_title',
 						}
 				]
-
 				let arr4 = [
 						{
 							label: '礼物总价值',
@@ -120,14 +121,17 @@
 							}
 						}
 				]
+				let portName = "";
 				if(Number(this.tabIndex) < 2){
 					columnsList = arr1.concat(arr3).concat(arr4);
+					portName = "getRoomRanking";
 				}else{
 					columnsList = arr1.concat(arr2).concat(arr4);
+					portName = "getUserRanking";
 				}
 				return {
 					vm: this,
-					url: REQUEST.activity.getRankingList,
+					url: REQUEST.monthStar[portName],
 					columns: columnsList
 				}
 			}
@@ -139,12 +143,16 @@
 			// 配置参数
 			beforeSearch(params) {
 				let s = { ...this.searchParams }
-				return {
+				let params_new = {
 					page: params.page,
 					pagesize: params.size,
           			type: (Number(this.tabIndex) + 1),
-					round: (s.round == -1 || s.round == "全部") ? "" : s.round
+					round: s.round ? s.round : 1
 				}
+				if(this.tabIndex < 2){
+					params_new.room_category = this.tabIndex == 0 ? 2 :1;
+				}
+				return params_new
 			},
 			// 刷新列表
 			getList() {
@@ -165,20 +173,21 @@
 			},
 			// 获取轮数
 			async getRoundSource() {
-				let res = await getRoundList();
+				let res = await getMonthStarRound();
 				if(res.code == 2000){
 					// 全部默认选择第一个
 					this.searchParams.round = res.data.round[0].round_number;
 					this.poolList = res.data.round;
-          			let all = {round_number: 0, title: "全部"}
-					this.poolList.unshift(all)
 				}
 			},
 			// 菜单切换
 			tabChange() {
-				if(this.$refs.tableList) {
-					this.$refs.tableList.getData()
-				}
+				this.$nextTick(res=>{
+					this.searchParams.round = 1;
+					if(this.$refs.tableList && this.tabIndex < 2) {
+						this.$refs.tableList.getData()
+					}
+				})
       		},
 		}
 	}
