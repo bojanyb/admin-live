@@ -180,7 +180,7 @@ export default {
           imgHeight: '50px'
         },
         {
-          label: '自拍照',
+          label: '手持身份证照',
           isimg: true,
           prop: 'user_photo',
           imgWidth: '50px',
