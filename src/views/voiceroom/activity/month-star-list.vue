@@ -9,7 +9,7 @@
 				<div>收礼人数：{{sumSource.live_user_count || 0}}人</div>
 				<div>派对房间收礼金额：{{sumSource.party_gift_diamond_total || 0}}钻石</div>
 				<div>直播房间收礼金额：{{sumSource.live_gift_diamond_total || 0}}钻石</div>
-				<div>礼物总金额：{{sumSource.all_gift_diamond_total || 0}}钻石</div>
+				<div>送礼总金额：{{sumSource.all_gift_diamond_total || 0}}钻石</div>
 			</div>
 		</el-card>
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
