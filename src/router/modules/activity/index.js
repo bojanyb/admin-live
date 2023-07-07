@@ -76,6 +76,24 @@ const activityRouter = {
 			name: 'week-rank-list'
 		},
 		{
+			path: 'month-star-list',
+			component: () => import('@/views/voiceroom/activity/month-star-list.vue'),
+			meta: {
+				title: '月星活动数据',
+				noCache: true
+			},
+			name: 'month-star-list'
+		},
+    	{
+			path: 'month-rank-list',
+			component: () => import('@/views/voiceroom/activity/month-rank-list.vue'),
+			meta: {
+				title: '月星榜单排名数据',
+				noCache: true
+			},
+			name: 'month-rank-list'
+		},
+		{
 			path: 'labour-star-list',
 			component: () => import('@/views/voiceroom/activity/labour-star-list.vue'),
 			meta: {

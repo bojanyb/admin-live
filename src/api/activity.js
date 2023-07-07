@@ -344,3 +344,45 @@ export function getDragonBoatRanking(data) {
     data
   })
 }
+
+/*******月星榜**********/
+// 后台-获取轮次
+export function getMonthStarRound(data) {
+  return request({
+    url: api.monthStar.getRound,
+    method: 'post',
+    data
+  })
+}
+// 后台-获取礼物
+export function getMonthStarGift(data) {
+  return request({
+    url: api.monthStar.getGift,
+    method: 'post',
+    data
+  })
+}
+// 后台-月度之星活动数据
+export function giftMonthStarLog(data) {
+  return request({
+    url: api.monthStar.giftLog,
+    method: 'post',
+    data
+  })
+}
+// 后台-房间榜单排名
+export function getMonthStarRoomRanking(data) {
+  return request({
+    url: api.monthStar.getRoomRanking,
+    method: 'post',
+    data
+  })
+}
+ // 后台-用户榜单排名
+export function getMonthStarUserRanking(data) {
+  return request({
+    url: api.monthStar.getUserRanking,
+    method: 'post',
+    data
+  })
+}
