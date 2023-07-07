@@ -263,6 +263,9 @@ const request = {
         statisticsroomS: `${HTTPHEADER}/guild/statisticsroomS`, // 统计24小时房间列表
         delStatisticsroom: `${HTTPHEADER}/guild/delStatisticsroom`, // 移除24小时房间统计
         roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 移除24小时房间统计
+        guildOperateList: `${HTTPHEADER}/GuildOperate/list`, // 公会运营二维码列表
+        saveWechatCode: `${HTTPHEADER}/GuildOperate/saveWechatCode`, // 修改二维码
+
 
 
         // v2
