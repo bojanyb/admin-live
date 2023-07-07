@@ -3,7 +3,8 @@
 		<tableList :cfgs="cfgs" ref="tableList"></tableList>
 
 		<!-- 新增 - 编辑组件 -->
-		<editQrCodeComp ref="editQrCodeComp" v-if="isDestoryComp" @destoryComp="destoryComp" :type="1" @getList="getList"></editQrCodeComp>
+		<editQrCodeComp ref="editQrCodeComp" v-if="isDestoryComp" @destoryComp="destoryComp" :type="1" @getList="getList">
+		</editQrCodeComp>
 	</div>
 </template>
 
@@ -35,43 +36,51 @@ export default {
 	},
 	computed: {
 		cfgs() {
+			let columnsList = [];
+			let arr1 = [
+				{
+					label: '序号',
+					prop: 'id',
+				},
+				{
+					label: '公会运营',
+					prop: 'username'
+				},
+				{
+					label: '公会二维码',
+					isimg: true,
+					prop: 'wechat_code',
+					imgWidth: '50px',
+					imgHeight: '50px'
+				},
+			]
+			let arr2 = [
+				{
+					label: '操作',
+					fixed: 'right',
+					render: (h, params) => {
+						return h('div', [
+							h('el-button', {
+								props: { type: 'primary' },
+								on: { click: () => { this.update(params.row) } }
+							}, '编辑'),
+						])
+					}
+				}
+			]
+			if (this.permissionArr.includes('GuildOperate@saveWechatCode')) {
+				columnsList = arr1.concat(arr2);
+			} else {
+				columnsList = arr1;
+			}
 			return {
 				vm: this,
 				url: REQUEST.guild.guildOperateList,
-				columns: [
-					{
-						label: '序号',
-						prop: 'id',
-					},
-					{
-						label: '公会运营',
-						prop: 'username'
-					},
-					{
-                        label: '公会二维码',
-                        isimg: true,
-                        prop: 'wechat_code',
-                        imgWidth: '50px',
-                        imgHeight: '50px'
-                    },
-					{
-						label: '操作',
-						fixed: 'right',
-						render: (h, params) => {
-							return h('div', [
-								h('el-button', {
-									props: { type: 'primary' },
-									style: { display: (params.row.status !== 3 && this.permissionArr.includes('Guild@updateLiveInfo')) ? 'unset' : 'none' },
-									on: { click: () => { this.update(params.row) } }
-								}, '编辑'),
-							])
-						}
-					}
-				]
+				columns: columnsList
 			}
 		}
 	},
-	created() {},
+	created() { },
 	methods: {
 		// 刷新列表
 		getList() {
