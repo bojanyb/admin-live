@@ -27,7 +27,8 @@
 		<el-form>
 			<div class="inputBox">
 				<el-form-item label="请输入本次文件名称：" prop="file_name" class="numberBox">
-					<el-input v-model="file_name" placeholder="请输入本次文件名称" @input="fileNameInput" onkeyup="this.value=this.value.replace(/\s+/g,'')"></el-input>
+					<!-- <el-input v-model="file_name" placeholder="请输入本次文件名称" @input="fileNameInput" onkeyup="this.value=this.value.replace(/\s+/g,'')"></el-input> -->
+					<el-input v-model="file_name" placeholder="请输入本次文件名称" ></el-input>
 				</el-form-item>
 			</div>
 		</el-form>
