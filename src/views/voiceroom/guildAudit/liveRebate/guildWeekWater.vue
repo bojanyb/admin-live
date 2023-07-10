@@ -9,8 +9,8 @@
           trigger="hover"
           >
           <el-table :data="gridData">
-            <el-table-column property="date" label="参数统计的房间类型"></el-table-column>
-            <el-table-column property="name" label="不参数统计的房间类型"></el-table-column>
+            <el-table-column property="date" label="参与统计的房间类型"></el-table-column>
+            <el-table-column property="name" label="不参与统计的房间类型"></el-table-column>
           </el-table>
           <i class="icon-hover el-icon-question" slot="reference"></i>
         </el-popover>
