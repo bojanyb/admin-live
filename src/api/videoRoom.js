@@ -1552,6 +1552,15 @@ export function updateCashChannel(data) {
   })
 }
 
+// 提现账户列表
+export function cashChannel(data) {
+  return request({
+    url: api.CashHisity.cashChannel,
+    method: 'post',
+    data
+  })
+}
+
 // 房间类型列表
 export function guildRoomType(data) {
   return request({
