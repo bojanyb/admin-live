@@ -293,6 +293,9 @@ export default {
                 "el-button",
                 {
                   props: { type: "info" },
+                  style: {
+                    display: +params.row.resettle !== 1 ? "unset" : "none",
+                  },
                   on: {
                     click: () => {
                       this.handleLook(params.row, "dynamic");
@@ -311,7 +314,7 @@ export default {
         isShowCheckbox: this.form.status === 1,
         isShowIndex: true,
         columns:
-          this.form.status === 1 || this.form.status === 3
+          (this.form.status === 1 || this.form.status === 3 || this.form.status === 4)
             ? [...arr, ...arr1]
             : arr,
       };
