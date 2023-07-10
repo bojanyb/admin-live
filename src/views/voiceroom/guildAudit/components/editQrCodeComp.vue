@@ -110,6 +110,7 @@
           this.limit = 1;
         }
         this.url = this.ruleForm.wechat_code;
+        this.imgList = [];
         if(this.ruleForm.wechat_code && this.ruleForm.wechat_code !== ""){
             this.imgList.push(this.ruleForm.wechat_code);
         }
@@ -120,7 +121,6 @@
         this.$refs[formName].validate(async (valid) => {
           if (valid) {
             let s = this.ruleForm;
-            console.log(this.imgList);
             let params = {
               id: s.id || null,
               wechat_code: this.imgList.join(),
@@ -233,6 +233,7 @@
             if (res.url) {
               this.isShowSvg = true;
               this.imageUrl = res.url;
+              this.imgList= [];
               this.imgList.push(res.url);
             }
           })
