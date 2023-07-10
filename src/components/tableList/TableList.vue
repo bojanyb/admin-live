@@ -19,14 +19,14 @@
         :min-width="item.minWidth" :key="item.label" :show-overflow-tooltip="item.showOverFlow" v-if="heckoutGoodsField(item.label)">
 
         <template slot="header" slot-scope="scope">
-          <div class="" v-if="item.headIcon && item.label == '有效主播数' ">
+          <div class="" v-if="item.headIcon && item.headConent">
             <span>{{item.label}}</span>
             <el-popover
               placement="top"
               width="400"
               trigger="hover">
               <slot>
-                <div>有效主播：一个自然周内，必须直播4天及以上，并且每天必须满2个小时及以上。</div>
+                <div>{{ item.headConent  }}</div>
               </slot>
             <i class="el-icon-question" slot="reference"></i>
           </el-popover>
