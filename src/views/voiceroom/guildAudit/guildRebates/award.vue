@@ -216,7 +216,7 @@ export default {
               "span",
               {
                 style: {
-                  color: params.row.online ? "#ff4949" : "",
+                  color: params.row.is_red ? "#ff4949" : "",
                 },
               },
               status
