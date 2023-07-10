@@ -203,6 +203,54 @@ export default {
             width: "100px"
           },
           {
+            label: "小猪通道余额",
+            prop: "pig_quota",
+            minWidth: "130px",
+            sortable: "custom",
+            render: (h, params) => {
+              const result = params.row.pig_quota.map(item => {
+                return h("div",  `${item.name}：${item.quota}`)
+              })
+              return h("div", result);
+            },
+          },
+          {
+            label: "工猫通道余额",
+            prop: "cat_quota",
+            minWidth: "130px",
+            sortable: "custom",
+            render: (h, params) => {
+              const result = params.row.cat_quota.map(item => {
+                return h("div",  `${item.name}：${item.quota}`)
+              })
+              return h("div", result);
+            },
+          },
+          {
+            label: "美事通通道余额",
+            prop: "mst_quota",
+            minWidth: "150px",
+            sortable: "custom",
+            render: (h, params) => {
+              const result = params.row.mst_quota.map(item => {
+                return h("div",  `${item.name}：${item.quota}`)
+              })
+              return h("div", result);
+            },
+          },
+          {
+            label: "福穗通道余额",
+            prop: "fusui_quota",
+            minWidth: "130px",
+            sortable: "custom",
+            render: (h, params) => {
+              const result = params.row.fusui_quota.map(item => {
+                return h("div",  `${item.name}：${item.quota}`)
+              })
+              return h("div", result);
+            },
+          },
+          {
             label: "支付宝提现通道",
             prop: "alipay_cash_channel",
             width: "120px",
@@ -303,54 +351,6 @@ export default {
             render: (h, params) => {
               return h("span", params.row.fusui_alipay ? "已签署" : "未签署");
             }
-          },
-          {
-            label: "小猪通道余额",
-            prop: "pig_quota",
-            minWidth: "130px",
-            sortable: "custom",
-            render: (h, params) => {
-              const result = params.row.pig_quota.map(item => {
-                return h("div",  `${item.name}：${item.quota}`)
-              })
-              return h("div", result);
-            },
-          },
-          {
-            label: "工猫通道余额",
-            prop: "cat_quota",
-            minWidth: "130px",
-            sortable: "custom",
-            render: (h, params) => {
-              const result = params.row.cat_quota.map(item => {
-                return h("div",  `${item.name}：${item.quota}`)
-              })
-              return h("div", result);
-            },
-          },
-          {
-            label: "美事通通道余额",
-            prop: "mst_quota",
-            minWidth: "150px",
-            sortable: "custom",
-            render: (h, params) => {
-              const result = params.row.mst_quota.map(item => {
-                return h("div",  `${item.name}：${item.quota}`)
-              })
-              return h("div", result);
-            },
-          },
-          {
-            label: "福穗通道余额",
-            prop: "fusui_quota",
-            minWidth: "130px",
-            sortable: "custom",
-            render: (h, params) => {
-              const result = params.row.fusui_quota.map(item => {
-                return h("div",  `${item.name}：${item.quota}`)
-              })
-              return h("div", result);
-            },
           },
           {
             label: "操作",

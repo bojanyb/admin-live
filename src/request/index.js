@@ -263,6 +263,9 @@ const request = {
         statisticsroomS: `${HTTPHEADER}/guild/statisticsroomS`, // 统计24小时房间列表
         delStatisticsroom: `${HTTPHEADER}/guild/delStatisticsroom`, // 移除24小时房间统计
         roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 移除24小时房间统计
+        guildOperateList: `${HTTPHEADER}/GuildOperate/list`, // 公会运营二维码列表
+        saveWechatCode: `${HTTPHEADER}/GuildOperate/saveWechatCode`, // 修改二维码
+
 
 
         // v2
@@ -599,7 +602,16 @@ const request = {
         giftLog: `${HTTPHEADER}/hdDuanwuLog/giftLog`, // 礼物数据
         exchangeLog: `${HTTPHEADER}/hdDuanwuLog/exchangeLog`, // 获取兑换数据
         getRanking: `${HTTPHEADER}/hdDuanwuLog/getRanking`, // 榜单排名
-    }
+    },
+
+    // 月星榜
+    monthStar: {
+        getRound: `${HTTPHEADER}/hdMonthstarLog/getRound`, // 后台-获取轮次
+        getGift: `${HTTPHEADER}/hdMonthstarLog/getGift`, // 后台-获取礼物
+        giftLog: `${HTTPHEADER}/hdMonthstarLog/giftLog`, // 后台-月度之星活动数据
+        getRoomRanking: `${HTTPHEADER}/hdMonthstarLog/getRoomRanking`, // 后台-房间榜单排名
+        getUserRanking: `${HTTPHEADER}/hdMonthstarLog/getUserRanking`, // 后台-用户榜单排名
+    },
 }
 
 export default request
