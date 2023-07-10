@@ -248,6 +248,9 @@ export default {
                 "el-button",
                 {
                   props: { type: "primary" },
+                  style: {
+                    display: +params.row.resettle !== 1 ? "unset" : "none",
+                  },
                   on: {
                     click: () => {
                       this.rebateFunc(params.row.id, 1);
@@ -260,6 +263,9 @@ export default {
                 "el-button",
                 {
                   props: { type: "danger" },
+                  style: {
+                    display: +params.row.resettle !== 1 ? "unset" : "none",
+                  },
                   on: {
                     click: () => {
                       this.rebateFunc(params.row.id, 2);
@@ -287,6 +293,9 @@ export default {
                 "el-button",
                 {
                   props: { type: "info" },
+                  style: {
+                    display: +params.row.resettle !== 1 ? "unset" : "none",
+                  },
                   on: {
                     click: () => {
                       this.handleLook(params.row, "guildWeekWater");
@@ -304,7 +313,7 @@ export default {
         url: REQUEST.guild[name],
         isShowCheckbox: this.form.status === 1,
         isShowIndex: true,
-        columns: this.form.status === 1 ? [...arr, ...arr1] : [...arr],
+        columns: (this.form.status === 1 || this.form.status === 4) ? [...arr, ...arr1] : [...arr]
       };
     },
   },

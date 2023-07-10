@@ -181,8 +181,20 @@ export default {
 					fixed: 'right',
 					render: (h, params) => {
 						return h('div', [
-							h('el-button', { props: { type: 'primary' }, on: { click: () => { this.rebateFunc(params.row.id, 1) } } }, '结算'),
-							h('el-button', { props: { type: 'danger' }, on: { click: () => { this.rebateFunc(params.row.id, 2) } } }, '忽略'),
+              h('el-button', {
+                props: { type: 'primary' },
+                style: {
+                  display :  +params.row.resettle !== 1 ? 'unset' : 'none',
+                },
+                on: { click: () => { this.rebateFunc(params.row.id, 1) } }
+              }, '结算'),
+              h('el-button', {
+                props: { type: 'danger' },
+                style: {
+                  display :  +params.row.resettle !== 1 ? 'unset' : 'none',
+                },
+                on: { click: () => { this.rebateFunc(params.row.id, 2) } }
+              }, '忽略'),
               h('el-button', {
                 props: { type: 'primary' },
                 style: {
@@ -199,7 +211,7 @@ export default {
 				url: REQUEST.guild[name],
 				isShowCheckbox: this.form.status === 1,
 				isShowIndex: true,
-				columns: this.form.status === 1 ? [...arr, ...arr1] : [...arr]
+				columns: (this.form.status === 1 || this.form.status === 4) ? [...arr, ...arr1] : [...arr]
 			}
 		}
 	},
