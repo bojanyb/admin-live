@@ -132,6 +132,7 @@ export default {
 					label: '有效主播数',
           minWidth: '120px',
           headIcon: true,
+          headConent: '有效主播：一个自然周内，必须直播4天及以上，并且每天必须满2个小时及以上。',
 					render: (h, params) => {
 						return h('span', params.row.effective_anchor ? params.row.effective_anchor : '无')
 					}

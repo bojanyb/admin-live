@@ -134,7 +134,9 @@ export default {
 				},
 				{
 					label: '档位及返点比例',
-					minWidth: '120px',
+					minWidth: '150px',
+          headIcon: true,
+          headConent: '档位及返点比例：这里取的是最新政策数据',
 					render: (h, params) => {
 						return h('span', `${params.row.reward_name ? params.row.reward_name : '--'}: ${params.row.reward_val ? params.row.reward_val : '--'}%` )
 					}
@@ -142,6 +144,8 @@ export default {
 				{
 					label: '周奖励金额',
 					minWidth: '120px',
+          headIcon: true,
+          headConent: '周奖励金额：这里的数据是结算时的金额',
 					render: (h, params) => {
 						return h('span', params.row.settlement ? params.row.settlement + '喵粮' : '无')
 					}
