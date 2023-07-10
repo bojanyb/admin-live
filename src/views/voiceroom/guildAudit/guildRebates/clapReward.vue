@@ -136,7 +136,7 @@ export default {
 					label: '档位及返点比例',
 					minWidth: '120px',
 					render: (h, params) => {
-						return h('span', `${params.row.reward_name}: ${params.row.reward_val}%` )
+						return h('span', `${params.row.reward_name ? params.row.reward_name : '--'}: ${params.row.reward_val ? params.row.reward_val : '--'}%` )
 					}
 				},
 				{
