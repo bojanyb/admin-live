@@ -2,7 +2,19 @@
 	<div class="guildAudit-award-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ ruleForm.all_flow || ruleForm.total_flow || 0 }}</span>
+			<span>流水总计：{{ ruleForm.all_flow || ruleForm.total_flow || 0 }}
+        <el-popover
+          placement="bottom"
+          width="400"
+          trigger="hover"
+          >
+          <el-table :data="gridData">
+            <el-table-column property="date" label="参数统计的房间类型"></el-table-column>
+            <el-table-column property="name" label="不参数统计的房间类型"></el-table-column>
+          </el-table>
+          <i class="icon-hover el-icon-question" slot="reference"></i>
+        </el-popover>
+      </span>
 			<span>结算总计：{{ ruleForm.all_settlement || ruleForm.total_settlement || 0 }}</span>
 		</div>
 		<div class="searchParams">
@@ -10,6 +22,10 @@
 				<div class="sunBox">
 					<span>公会</span>
 					<el-input v-model="form.guild_number" placeholder="请输入公会ID"></el-input>
+				</div>
+				<div class="sunBox">
+					<span>房间ID</span>
+          <el-input v-model="form.room_number" oninput="this.value=this.value.replace(/[^\d]/g,'');" placeholder="请输入房间ID" clearable></el-input>
 				</div>
 				<div class="sunBox">
 					<span>结算状态</span>
@@ -51,7 +67,7 @@ import tableList from '@/components/tableList/TableList.vue'
 // 引入api
 import REQUEST from '@/request/index.js'
 // 引入公共方法
-import { formatTimeTwo, timeFormat, exportTableData } from '@/utils/common.js'
+import { formatTimeMinutes, timeFormat, exportTableData } from '@/utils/common.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 // 引入公共map
@@ -111,9 +127,14 @@ export default {
 					label: '本周营业时长',
 					minWidth: '140px',
 					prop: 'online',
-					render: (h, params) => {
-						let status = params.row.online ? formatTimeTwo(params.row.online) : '--'
-						return h('span', status)
+          render: (h, params) => {
+            console.log(params.row.is_red, 'row');
+						let status = params.row.online ? formatTimeMinutes(params.row.online) : '--'
+            return h('span', {
+			   			style: {
+			   				color: params.row.online ? '#ff4949' : ''
+			   			},
+            }, status)
 					}
 				},
 				{
@@ -125,7 +146,7 @@ export default {
 				},
 				{
 					label: '总流水（含冻结）',
-					minWidth: '130px',
+					minWidth: '140px',
 					render: (h, params) => {
 						return h('span', this.form.status === 2 ? params.row.flow + "钻石" : params.row.t_flow + '钻石')
 					}
@@ -156,7 +177,7 @@ export default {
 					}
         },
 				{
-					label: '操作时间',
+					label: '结算操作时间',
 					width: '180px',
 					render: (h, params) => {
 						return h('span', params.row.op_time ? timeFormat(params.row.op_time, 'YYYY-MM-DD HH:mm:ss', true) : '-')
@@ -177,7 +198,14 @@ export default {
 					render: (h, params) => {
 						return h('div', [
 							h('el-button', { props: { type: 'primary' }, on: { click: () => { this.rebateFunc(params.row.id, 1) } } }, '结算'),
-							h('el-button', { props: { type: 'danger' }, on: { click: () => { this.rebateFunc(params.row.id, 2) } } }, '忽略')
+              h('el-button', { props: { type: 'danger' }, on: { click: () => { this.rebateFunc(params.row.id, 2) } } }, '忽略'),
+              h('el-button', {
+                props: { type: 'primary' },
+                style: {
+                  display :  +params.row.resettle === 1 ? 'unset' : 'none',
+                },
+                on: { click: () => { this.rebateFunc(params.row.id, 1) } }
+              }, '再次结算'),
 						])
 					}
 				}
@@ -196,7 +224,8 @@ export default {
 		return {
 			closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLISTCOPY, // 结算状态
 			form: { // 表单数据
-				guild_number: '',
+        guild_number: '',
+        room_number: '',
 				status: 1,
 				time: [],
 				start_time: null,
@@ -210,6 +239,10 @@ export default {
 			},
 			isDestoryComp: false, // 是否销毁组件
 			page: 1,
+      gridData: [{
+          date: '女神、男神、游戏、点唱、交友',
+          name: '相守、拍拍、个播、相亲'
+        }]
 		}
 	},
 	watch: {
@@ -232,6 +265,7 @@ export default {
 				page: params ? params.page : 1,
 				pagesize: params ? params.size : 10,
 				guild_number: s.guild_number ? s.guild_number : "",
+        room_number: s.room_number ? s.room_number : "",
 				type: 4,
 				status: s.status,
 				start_time: s.time && s.time.length > 0 ? Math.floor(s.time[0] / 1000) : 0,
@@ -260,6 +294,7 @@ export default {
 		reset() {
 			this.form = {
 				guild_number: '',
+        room_number: '',
 				status: 1,
 				time: [],
 				start_time: null,
@@ -391,8 +426,9 @@ export default {
 					room_number: item.room_number,
 					title: this.form.status === 2 ? item.title : item.room_title,
 					guild_number: item.guild_number,
+          room_number: item.room_number,
 					guild_nickname: this.form.status === 2 ? item.guild_nickname : item.guild_name,
-					online: item.online ? formatTimeTwo(item.online) : '--',
+					online: item.online ? formatTimeMinutes(item.online) : '--',
 					flow: item.flow + "钻石",
 					t_flow: this.form.status === 2 ? item.flow + '钻石' : item.t_flow + '钻石',
 					settlement: this.form.status === 2 ? '无' : (item.settlement || 0) + '喵粮',
