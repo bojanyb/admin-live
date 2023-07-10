@@ -7,11 +7,14 @@
         :show-add="true"
         :show-search-btn="true"
         :show-export="true"
+        :show-batch-rurn="true"
         add-name="批量修改当前通道"
         export-name="批量输入ID修改"
+        batch-rurn-name="导出Excel"
         @add="batch"
         @export="handleInputIdUpdate"
         @onSearch="onSearch"
+        @BatchRurn="BatchRurn"
       ></SearchPanel>
     </div>
 
@@ -99,7 +102,7 @@
 
 <script>
 // 引入api
-import { updateCashChannel } from "@/api/videoRoom";
+import { updateCashChannel, cashChannel } from "@/api/videoRoom";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
@@ -109,7 +112,7 @@ import editComp from "./components/batchUpdateComp.vue";
 // 引入api
 import REQUEST from "@/request/index.js";
 // 引入公共方法
-import { timeFormat } from "@/utils/common.js";
+import { timeFormat, exportTableData } from "@/utils/common.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
 // 引入公共map
@@ -382,8 +385,8 @@ export default {
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams };
       return {
-        page: params.page,
-        pagesize: params.size,
+        page: params ? params.page : null,
+        pagesize: params ? params.size : null,
         user_number: s.user_number,
         id_card: s.id_card,
         name: s.name,
@@ -458,6 +461,58 @@ export default {
           return false;
         }
       })
+    },
+    async BatchRurn() {
+      let s = this.beforeSearch();
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      let res = await cashChannel(s);
+      try {
+        let arr = JSON.parse(JSON.stringify(res.data.list));
+        if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
+        arr = arr.map((item, index) => {
+          const pigResult = item.pig_quota.map(cur => {
+            return `${cur.name}：${cur.quota}`
+          })
+          const catResult = item.cat_quota.map(cur => {
+            return `${cur.name}：${cur.quota}`
+          })
+          const mstResult = item.mst_quota.map(cur => {
+            return `${cur.name}：${cur.quota}`
+          })
+          const fusuiResult = item.fusui_quota.map(cur => {
+            return `${cur.name}：${cur.quota}`
+          })
+          let params = {
+            id_card: item.id_card,
+            name: item.name,
+            user_number: item.user_number,
+            pig_quota: pigResult,
+            cat_quota: catResult,
+            mst_quota: mstResult,
+            fusui_quota: fusuiResult,
+          };
+          return params;
+        });
+        let nameList = [
+          "身份证",
+          "姓名",
+          "用户ID",
+          "小猪通道余额",
+          "工猫通道余额",
+          "美事通通道余额",
+          "福穗通道余额",
+        ];
+        exportTableData(arr, nameList, "公会房间列表");
+        loading.close();
+      } catch (error) {
+        console.log(error);
+        loading.close();
+      }
     },
     handleCloseRespsone() {
       this.respsoneDataVisible = false;
