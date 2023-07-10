@@ -83,7 +83,7 @@ export default {
         },
         // 查询24小时房间
         async searchStatisticsroomFunc() {
-           let res = await statisticsroomS({ room_number: this.room_number, page: 1, pagesize: 10, })
+           let res = await statisticsroomS({ room_number: this.room_number, type: 1, page: 1, pagesize: 10, })
             if(res.code === 2000) {
               this.tableData = res.data.list;
             }
