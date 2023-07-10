@@ -126,7 +126,7 @@ export default {
 				},
 				{
 					label: '总流水（含冻结）',
-					minWidth: '130px',
+					minWidth: '140px',
 					render: (h, params) => {
 						return h('span', params.row.t_flow + '钻石')
 					}
@@ -156,7 +156,7 @@ export default {
 					}
         },
 				{
-					label: '操作时间',
+					label: '结算操作时间',
 					width: '180px',
 					render: (h, params) => {
 						return h('span', params.row.op_time ? timeFormat(params.row.op_time, 'YYYY-MM-DD HH:mm:ss', true) : '-')

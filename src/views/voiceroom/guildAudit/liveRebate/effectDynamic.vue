@@ -161,7 +161,7 @@ export default {
 					}
         },
 				{
-					label: '操作时间',
+					label: '结算操作时间',
 					width: '180px',
 					render: (h, params) => {
 						return h('span', params.row.op_time ? timeFormat(params.row.op_time, 'YYYY-MM-DD HH:mm:ss', true) : '-')

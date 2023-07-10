@@ -37,7 +37,7 @@ import REQUEST from '@/request/index.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
 // 引入公共方法
-import { timeFormat } from '@/utils/common.js'
+import { timeFormat, formatTimeTwo } from '@/utils/common.js'
 export default {
     mixins: [mixins],
     components: {
@@ -72,6 +72,21 @@ export default {
                     {
                         label: '房间ID',
                         prop: 'room_number'
+                    },
+                    {
+                        label: '上周（自然周）开播时长(小时)',
+                        prop: 'online',
+                        render: (h, params) => {
+                          let data = formatTimeTwo(params.row.online)
+                          return h('span', data ? data : '无')
+                        }
+                    },
+                    {
+                        label: '上周（自然周）开播流水（喵粮）',
+                        prop: 'flow',
+                        render: (h, params) => {
+                          return h('span', params.row.flow + '钻石')
+                        }
                     },
                     {
                         label: '操作',
