@@ -120,7 +120,7 @@ import tableList from "@/components/tableList/TableList.vue";
 import REQUEST from "@/request/index.js";
 // 引入公共方法
 import {
-  formatTimeMinutes,
+  formatTimeTwo,
   timeFormat,
   exportTableData,
 } from "@/utils/common.js";
@@ -210,7 +210,7 @@ export default {
           render: (h, params) => {
             console.log(params.row.is_red, "row");
             let status = params.row.online
-              ? formatTimeMinutes(params.row.online)
+              ? formatTimeTwo(params.row.online)
               : "--";
             return h(
               "span",
@@ -592,7 +592,7 @@ export default {
           room_number: item.room_number,
           guild_nickname:
             this.form.status === 2 ? item.guild_nickname : item.guild_name,
-          online: item.online ? formatTimeMinutes(item.online) : "--",
+          online: item.online ? formatTimeTwo(item.online) : "--",
           flow: item.flow + "钻石",
           t_flow:
             this.form.status === 2 ? item.flow + "钻石" : item.t_flow + "钻石",
