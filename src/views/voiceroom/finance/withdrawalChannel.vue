@@ -464,6 +464,9 @@ export default {
     },
     async BatchRurn() {
       let s = this.beforeSearch();
+      const search = this.$refs.tableList.search;
+      s.page = search ? search.page : null;
+      s.pagesize = search ? search.size : null;
       const loading = this.$loading({
         lock: true,
         text: 'Loading',
