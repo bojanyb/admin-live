@@ -2,7 +2,19 @@
 	<div class="guildRebate-list-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
+			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}
+        <el-popover
+          placement="bottom"
+          width="400"
+          trigger="hover"
+          >
+          <el-table :data="gridData">
+            <el-table-column property="date" label="参与统计的房间类型"></el-table-column>
+            <el-table-column property="name" label="不参与统计的房间类型"></el-table-column>
+          </el-table>
+          <i class="icon-hover el-icon-question" slot="reference"></i>
+        </el-popover>
+      </span>
 			<span>结算总计：{{ (this.form.status !== 2 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
 		</div>
 
@@ -105,14 +117,14 @@ export default {
 				},
 				{
 					label: '流水',
-					minWidth: '120px',
+					minWidth: '130px',
 					render: (h, params) => {
 						return h('span', params.row.flow + '钻石')
 					}
 				},
 				{
 					label: '总流水（含冻结）',
-					minWidth: '130px',
+					minWidth: '140px',
 					render: (h, params) => {
 						return h('span', params.row.t_flow + '钻石')
 					}
@@ -149,7 +161,7 @@ export default {
 					}
         },
 				{
-					label: '操作时间',
+					label: '结算操作时间',
 					width: '180px',
 					render: (h, params) => {
 						return h('span', params.row.op_time ? timeFormat(params.row.op_time, 'YYYY-MM-DD HH:mm:ss', true) : '-')
@@ -169,8 +181,27 @@ export default {
 					fixed: 'right',
 					render: (h, params) => {
 						return h('div', [
-							h('el-button', { props: { type: 'primary' }, on: { click: () => { this.rebateFunc(params.row.id, 1) } } }, '结算'),
-							h('el-button', { props: { type: 'danger' }, on: { click: () => { this.rebateFunc(params.row.id, 2) } } }, '忽略')
+              h('el-button', {
+                props: { type: 'primary' },
+                style: {
+                  display :  +params.row.resettle !== 1 ? 'unset' : 'none',
+                },
+                on: { click: () => { this.rebateFunc(params.row.id, 1) } }
+              }, '结算'),
+              h('el-button', {
+                props: { type: 'danger' },
+                style: {
+                  display :  +params.row.resettle !== 1 ? 'unset' : 'none',
+                },
+                on: { click: () => { this.rebateFunc(params.row.id, 2) } }
+              }, '忽略'),
+              h('el-button', {
+                props: { type: 'primary' },
+                style: {
+                  display :  +params.row.resettle === 1 ? 'unset' : 'none',
+                },
+                on: { click: () => { this.rebateFunc(params.row.id, 1) } }
+              }, '再次结算'),
 						])
 					}
 				}
@@ -180,7 +211,7 @@ export default {
 				url: REQUEST.guild[name],
 				isShowCheckbox: this.form.status === 1,
 				isShowIndex: true,
-				columns: this.form.status === 1 ? [...arr, ...arr1] : [...arr]
+				columns: (this.form.status === 1 || this.form.status === 4) ? [...arr, ...arr1] : [...arr]
 			}
 		}
 	},
@@ -212,6 +243,10 @@ export default {
 				end_time: null
       },
       page: 1,
+      gridData: [{
+          date: '个播',
+          name: '相守、相亲、女神、男神、游戏、点唱、交友、拍拍'
+        }]
 		}
 	},
 	methods: {

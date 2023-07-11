@@ -2,7 +2,16 @@
 	<div class="guildRebate-dynamic-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
-			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
+			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}
+        <el-popover
+          placement="bottom"
+          width="400"
+          trigger="hover"
+          >
+           周有效主播返点：公会本周有效主播人数对应的返点奖励，流水是整个公会直播房间流水的总和。
+          <i class="icon-hover el-icon-question" slot="reference"></i>
+        </el-popover>
+      </span>
 			<span>结算总计：{{ (this.form.status !== 2 ? ruleForm.all_settlement : ruleForm.total_settlement) || 0 }}</span>
 		</div>
 		<div class="searchParams">
@@ -114,9 +123,18 @@ export default {
 				},
 				{
 					label: '总流水（含冻结）',
-					minWidth: '130px',
+					minWidth: '150px',
 					render: (h, params) => {
 						return h('span', params.row.t_flow + '钻石')
+					}
+				},
+				{
+					label: '有效主播数',
+          minWidth: '120px',
+          headIcon: true,
+          headConent: '有效主播：一个自然周内，必须直播4天及以上，并且每天必须满2个小时及以上。',
+					render: (h, params) => {
+						return h('span', params.row.effective_anchor ? params.row.effective_anchor : '无')
 					}
 				},
 				{
@@ -144,7 +162,7 @@ export default {
 					}
         },
 				{
-					label: '操作时间',
+					label: '结算操作时间',
 					width: '180px',
 					render: (h, params) => {
 						return h('span', params.row.op_time ? timeFormat(params.row.op_time, 'YYYY-MM-DD HH:mm:ss', true) : '-')
@@ -160,12 +178,31 @@ export default {
 			let arr1 = [
 				{
 					label: '操作',
-					minWidth: '150px',
+					minWidth: '200px',
 					fixed: 'right',
 					render: (h, params) => {
 						return h('div', [
-							h('el-button', { props: { type: 'primary' }, on: { click: () => { this.rebateFunc(params.row.id, 1) } } }, '结算'),
-							h('el-button', { props: { type: 'danger' }, on: { click: () => { this.rebateFunc(params.row.id, 2) } } }, '忽略'),
+              h('el-button', {
+                props: { type: 'primary' },
+                style: {
+                  display :  +params.row.resettle !== 1 ? 'unset' : 'none',
+                },
+                on: { click: () => { this.rebateFunc(params.row.id, 1) } }
+              }, '结算'),
+              h('el-button', {
+                props: { type: 'danger' },
+                style: {
+                  display :  +params.row.resettle !== 1 ? 'unset' : 'none',
+                },
+                on: { click: () => { this.rebateFunc(params.row.id, 2) } }
+              }, '忽略'),
+              h('el-button', {
+                props: { type: 'primary' },
+                style: {
+                  display :  +params.row.resettle === 1 ? 'unset' : 'none',
+                },
+                on: { click: () => { this.rebateFunc(params.row.id, 1) } }
+              }, '再次结算'),
 						])
 					}
 				}
@@ -175,7 +212,7 @@ export default {
 				url: REQUEST.guild[name],
 				isShowCheckbox: this.form.status === 1,
 				isShowIndex: true,
-				columns: this.form.status === 1 ? [...arr, ...arr1] : [...arr]
+				columns: (this.form.status === 1 || this.form.status === 4) ? [...arr, ...arr1] : [...arr]
 			}
 		}
 	},

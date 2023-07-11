@@ -145,6 +145,15 @@ export function addStatisticsroom(data) {
   })
 }
 
+// 查询24小时房间
+export function roomS(data) {
+  return request({
+    url: api.guild.roomS,
+    method: 'post',
+    data
+  })
+}
+
 // 移除24小时房间统计
 export function delStatisticsroom(data) {
   return request({
