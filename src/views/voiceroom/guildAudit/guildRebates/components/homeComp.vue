@@ -3,7 +3,7 @@
         <el-dialog
         title="24小时房间列表"
         :visible.sync="dialogVisible"
-        width="700px"
+        width="900px"
         :before-close="handleClose"
         @closed="closed">
             <div class="mainBox">
@@ -65,6 +65,7 @@ export default {
                 columns: [
                     {
                         label: '添加时间',
+                        minWidth: '150px',
                         render: (h, params) => {
                             return h('span', params.row.add_duration_statistics_time ? timeFormat(params.row.add_duration_statistics_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
                         }
@@ -74,8 +75,9 @@ export default {
                         prop: 'room_number'
                     },
                     {
-                        label: '上周（自然周）开播时长(小时)',
+                        label: '上周（自然周）开播时长',
                         prop: 'online',
+                        minWidth: '180px',
                         render: (h, params) => {
                           let data = formatTimeTwo(params.row.online)
                           return h('span', data ? data : '无')
@@ -84,6 +86,7 @@ export default {
                     {
                         label: '上周（自然周）开播流水（喵粮）',
                         prop: 'flow',
+                        minWidth: '190px',
                         render: (h, params) => {
                           return h('span', params.row.flow + '钻石')
                         }
