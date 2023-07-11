@@ -21,7 +21,7 @@
                 style="width: 100%">
                 <el-table-column
                   prop="online"
-                  label="上周（自然周）开播时长(小时)"
+                  label="上周（自然周）开播时长"
                   >
                   <template slot-scope="{row}">
                     {{ row.online | filtersFormatTimeTwo }}
