@@ -261,6 +261,7 @@ const request = {
         lockGuild: `${HTTPHEADER}/Guild/lockGuild`, // 封禁（解封）公会,
         addStatisticsroom: `${HTTPHEADER}/guild/addStatisticsroom`, // 添加24小时房间统计集合
         statisticsroomS: `${HTTPHEADER}/guild/statisticsroomS`, // 统计24小时房间列表
+        roomS: `${HTTPHEADER}/guild/roomS`, // 查询房间流水列表
         delStatisticsroom: `${HTTPHEADER}/guild/delStatisticsroom`, // 移除24小时房间统计
         roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 移除24小时房间统计
         guildOperateList: `${HTTPHEADER}/GuildOperate/list`, // 公会运营二维码列表
