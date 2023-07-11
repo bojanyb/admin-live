@@ -146,9 +146,9 @@ export function addStatisticsroom(data) {
 }
 
 // 查询24小时房间
-export function statisticsroomS(data) {
+export function roomS(data) {
   return request({
-    url: api.guild.statisticsroomS,
+    url: api.guild.roomS,
     method: 'post',
     data
   })

@@ -12,7 +12,7 @@
                     <el-input v-model="room_number" placeholder="请先输入房间ID"></el-input>
                 </div>
                 <el-button :disabled="!room_number" type="success" @click="addStatisticsroomFunc">添加</el-button>
-                <el-button :disabled="!room_number" @click="searchStatisticsroomFunc">查询</el-button>
+                <el-button :disabled="!room_number" type="primary" @click="searchStatisticsroomFunc">查询</el-button>
             </div>
             <!-- 表格 -->
             <div class="table" v-if="tableData && tableData.length">
@@ -46,7 +46,7 @@
 
 <script>
 // 引入api
-import { addStatisticsroom, statisticsroomS } from '@/api/user.js'
+import { addStatisticsroom, roomS } from '@/api/user.js'
 // 引入公共方法
 import { formatTimeTwo } from '@/utils/common.js'
 export default {
@@ -83,7 +83,7 @@ export default {
         },
         // 查询24小时房间
         async searchStatisticsroomFunc() {
-           let res = await statisticsroomS({ room_number: this.room_number, type: 1, page: 1, pagesize: 10, })
+           let res = await roomS({ room_number: this.room_number, page: 1, pagesize: 10, })
             if(res.code === 2000) {
               this.tableData = res.data.list;
             }
