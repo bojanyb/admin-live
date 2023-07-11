@@ -41,7 +41,7 @@ export default {
         return {
             menuList: [
                 {
-                    name: '公会等级配置'
+                    name: '公会周流水奖励配置'
                 },
                 {
                     name: '实时返点配置'

@@ -50,16 +50,16 @@ export default {
 		return {
 			menuList: [
 				{
-					name: '直播公会周流水结算'
+					name: '直播公会周流水奖励结算'
 				},
 				{
-					name: '直播公会周奖励'
+					name: '直播公会周奖励结算'
 				},
 				{
-					name: '直播公会月奖励'
+					name: '直播公会月奖励结算'
 				},
 				{
-					name: '直播公会有效直播奖励'
+					name: '直播公会有效直播奖励结算'
 				}
 			],
 			tabIndex: '0',

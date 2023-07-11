@@ -139,7 +139,7 @@
 						}
 					},
 					{
-						label: '所属公会',
+						label: '所属直播公会',
 						minWidth: '100px',
 						render: (h, params) => {
 							return h('div', [
