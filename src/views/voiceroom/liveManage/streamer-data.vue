@@ -104,7 +104,7 @@ export default {
             },
           },
           {
-            label: "所属公会",
+            label: "所属直播公会",
             render: (h, params) => {
               return h("div", [
                 h("div", `${params.row.guild_name || "--"}`),
