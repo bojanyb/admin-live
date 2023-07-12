@@ -124,7 +124,11 @@
 						{
 							label: '礼物来源',
 							render: (h, params) => {
-								return h('span', params.row.room_number ? '派对' : '私聊')
+                return h('span',
+                  +params.row.room_category === 0 ? '私聊' :
+                  +params.row.room_category === 1 ? '直播房间' :
+                  +params.row.room_category === 2 ? '派对房间' : '无'
+                )
 							}
 						},
 						{
@@ -169,12 +173,16 @@
 					},
 					{
 						id: 1,
-						name: '派对'
+						name: '派对房间'
+					},
+					{
+						id: 3,
+						name: '直播房间'
 					},
 					{
 						id: 2,
 						name: '私聊'
-					}
+          }
 				],
 				id: null,
 				searchParams: {
