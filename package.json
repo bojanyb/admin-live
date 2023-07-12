@@ -21,6 +21,7 @@
     "build.prod": "vue-cli-service build --prod",
     "build.aidoo.pre": "vue-cli-service build --aidoo.pre",
     "build.aidoo.prod": "vue-cli-service build --aidoo.prod",
+    "build.aidoo.test": "vue-cli-service build --aidoo.test",
     "build:stage": "vue-cli-service build --mode staging",
     "beta": "vue-cli-service build --mode beta",
     "preview": "node build/index.js --preview",
