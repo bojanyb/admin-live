@@ -331,6 +331,7 @@
       		},
 			// 添加初选用户
 			addUser(){
+				this.ruleForm.user_number = "";
 				this.dialogVisible = true;
 			},
 			// 限制用户id输入
