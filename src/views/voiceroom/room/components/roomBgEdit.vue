@@ -274,6 +274,9 @@ export default {
     },
     // 提交
     async submitForm(formName) {
+      if(this.fileList.length == 0){
+        this.imgList.push(this.ruleForm.url);
+      }
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           let s = this.ruleForm;
@@ -292,7 +295,6 @@ export default {
           if (s.assign_status === 1) {
             params.assign_room = s.assign_room;
           }
-          console.log("params:",params);
           let res = await getRoomBgAdd(params);
           if (res.code === 2000) {
             this.$success("操作成功");
