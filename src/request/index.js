@@ -593,6 +593,11 @@ const request = {
         getRoomRanking: `${HTTPHEADER}/hdMonthstarLog/getRoomRanking`, // 后台-房间榜单排名
         getUserRanking: `${HTTPHEADER}/hdMonthstarLog/getUserRanking`, // 后台-用户榜单排名
     },
+    // 夏日音乐节
+    summerSign: {
+        getSummerUserList: `${HTTPHEADER}/hdMusicfestLog/userList`, // 后台-初选用户列表
+        getSummerAddUser: `${HTTPHEADER}/hdMusicfestLog/addUser`, // 后台-添加初选用户
+    }
 }
 
 export default request

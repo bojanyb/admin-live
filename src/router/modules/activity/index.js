@@ -154,7 +154,16 @@ const activityRouter = {
 				noCache: true
 			},
 			name: 'pizza-list'
-		}
+		},
+		{
+			path: 'summer-audit-list',
+			component: () => import('@/views/voiceroom/activity/summer-audit-list.vue'),
+			meta: {
+				title: '夏日音乐节活动',
+				noCache: true
+			},
+			name: 'summer-audit-list'
+		},
         // {
 		// 	path: 'first-charge',
 		// 	component: () => import('@/views/voiceroom/platformActivity/first-charge/index.vue'),

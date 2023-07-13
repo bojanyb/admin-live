@@ -386,3 +386,21 @@ export function getMonthStarUserRanking(data) {
     data
   })
 }
+
+/*******夏日音乐节**********/
+// 初选用户列表
+export function getSummerUserList(data) {
+  return request({
+    url: api.summerSign.summerUserList,
+    method: 'post',
+    data
+  })
+}
+// 添加初选用户
+export function getSummerAddUser(data) {
+  return request({
+    url: api.summerSign.getSummerAddUser,
+    method: 'post',
+    data
+  })
+}
