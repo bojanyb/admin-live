@@ -171,7 +171,7 @@ export default {
         if (valid) {
           let s = this.ruleForm;
           let params = {
-            id: s.id,
+            id: s.room_id,
             room_title: s.room_title,
             room_category_id: s.room_category_id,
             // admin_recommend_status: s.admin_recommend_status,
