@@ -40,6 +40,21 @@
                         <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="对公转账" prop="aaa">
+                    <el-select v-model="ruleForm.aaa" placeholder="请选择对公转账">
+                        <el-option label="否" :value="0"></el-option>
+                        <el-option label="是" :value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="发票税率" prop="bbb" v-if="ruleForm.aaa === 1">
+                    <el-select v-model="ruleForm.bbb" placeholder="请选择发票税率">
+                        <el-option label="3%" :value="1"></el-option>
+                        <el-option label="6%" :value="0"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="手续费率" v-if="ruleForm.aaa === 1">
+                   <span>{{ ruleForm.bbb === 1 ? '3.2%' : '0%'  }}</span>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">取 消</el-button>
@@ -72,6 +87,8 @@ export default {
                 // rebate: 0,
                 guild_type: this.type,
                 operator: null,
+                aaa: 0,
+                bbb: 0
             },
             oldParams: {}, // 老数据
             rules: {
@@ -96,6 +113,12 @@ export default {
                 // ],
                 remark: [
                     { required: false, message: '请输入公会简介', trigger: 'blur' }
+                ],
+                aaa: [
+                    { required: true, message: '请选择对公转账', trigger: 'change' }
+                ],
+                bbb: [
+                    { required: true, message: '请选择发票税率', trigger: 'change' }
                 ]
             },
             operatorList: [],

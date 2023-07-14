@@ -202,6 +202,24 @@
 							}
 						},
 						{
+							label: '对公转账',
+              prop: 'aaa',
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.aaa || '--'),
+								])
+							}
+						},
+						{
+							label: '手续费率',
+              prop: 'bbb',
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.bbb || '--'),
+								])
+							}
+						},
+						{
 							label: '操作',
 							minWidth: '320px',
 							fixed: 'right',
