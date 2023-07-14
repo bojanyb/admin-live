@@ -404,3 +404,27 @@ export function getSummerAddUser(data) {
     data
   })
 }
+// 添加初选用户
+export function getAuditList(data) {
+  return request({
+    url: api.summerSign.getAuditList,
+    method: 'post',
+    data
+  })
+}
+// 歌曲审核通过
+export function getAuditPass(data) {
+  return request({
+    url: api.summerSign.getAuditPass,
+    method: 'post',
+    data
+  })
+}
+// 歌曲审核不通过
+export function getAuditNoPass(data) {
+  return request({
+    url: api.summerSign.getAuditNoPass,
+    method: 'post',
+    data
+  })
+}
