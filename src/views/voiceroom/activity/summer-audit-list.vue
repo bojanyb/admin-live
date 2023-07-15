@@ -159,9 +159,9 @@
 						name: 'user_number',
 						type: 'input',
 						value: '',
-						label: '房间ID',
+						label: '用户ID',
 						isNum: true,
-						placeholder: '请输入房间ID'
+						placeholder: '请输入用户ID'
 					},
 					{
 						name: 'status',
