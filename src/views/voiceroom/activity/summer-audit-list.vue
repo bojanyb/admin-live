@@ -281,6 +281,11 @@
 						}
 					},
 					{
+						label: '备注',
+						minWidth: '120px',
+						prop: 'remark'
+					},
+					{
 						label: '操作',
 						minWidth: '200px',
 						fixed: 'right',
