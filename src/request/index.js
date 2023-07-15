@@ -617,6 +617,9 @@ const request = {
     summerSign: {
         getSummerUserList: `${HTTPHEADER}/hdMusicfestLog/userList`, // 后台-初选用户列表
         getSummerAddUser: `${HTTPHEADER}/hdMusicfestLog/addUser`, // 后台-添加初选用户
+        getAuditList: `${HTTPHEADER}/hdMusicfestLog/auditList`, // 后台-添加初选用户
+        getAuditPass: `${HTTPHEADER}/hdMusicfestLog/auditPass`, // 后台-歌曲审核通过
+        getAuditNoPass: `${HTTPHEADER}/hdMusicfestLog/auditNoPass`, // 后台-歌曲审核不通过
     }
 }
 

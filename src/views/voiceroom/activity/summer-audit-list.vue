@@ -23,12 +23,41 @@
                 <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
             </span>
         </el-dialog>
+
+		<!-- 审核拒绝 -->
+		<el-dialog
+        title="拒绝"
+        :visible.sync="isEditRuleForm"
+        width="600px"
+        :before-close="handleClose"
+        :close-on-click-modal="false">
+            <el-form :model="editRuleForm" label-suffix=":" ref="editRuleForm" label-width="110px" class="demo-ruleForm">
+                <el-form-item label="拒绝说明" prop="remark">
+                    <el-input
+                    type="textarea"
+                    :autosize="{ minRows: 2, maxRows: 4}"
+                    placeholder="请输入拒绝说明"
+                    maxlength="300"
+                    v-model="editRuleForm.remark">
+                    </el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="submitEditCancel('editRuleForm')">取 消</el-button>
+                <el-button type="primary" @click="submitEditForm('editRuleForm')">确 定</el-button>
+            </span>
+        </el-dialog>
 	</div>
 </template>
 
 <script>
 	// 引入api
-	import { getSummerAddUser } from '@/api/activity'
+	import {
+		getSummerAddUser,
+		getAuditList,
+		getAuditPass,
+		getAuditNoPass
+	} from '@/api/activity'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
 	// 引入列表组件
@@ -54,9 +83,9 @@
 					{
 						name: '初选名单添加'
 					},
-					// {
-					// 	name: '初选赛歌曲审核'
-					// },
+					{
+						name: '初选赛歌曲审核'
+					},
 					// {
 					// 	name: '晋级赛歌曲审核'
 					// },
@@ -68,28 +97,30 @@
 				searchParams: {
 					status : 0,
 				},
-				auditStatuslList: [
+				auditStatuslList: [ // 0=审核中,1=通过,2=未通过
 					{
 						id: 0,
-						title: "全部"
+						title: "审核中"
 					},
 					{
 						id: 1,
-						title: "未审核"
+						title: "通过"
 					},
 					{
 						id: 2,
-						title: "审核通过"
-					},
-					{
-						id: 3,
-						title: "不通过"
+						title: "未通过"
 					},
 				],
 				dialogVisible: false,
 				ruleForm: {
 					user_number: ""
-				}
+				},
+				searchParams1: {},
+				editRuleForm: {
+					id : "",
+					remark: ""
+				},
+				isEditRuleForm: false,
 			}
 		},
 		computed: {
@@ -128,14 +159,14 @@
 						name: 'user_number',
 						type: 'input',
 						value: '',
-						label: '房间ID',
+						label: '用户ID',
 						isNum: true,
-						placeholder: '请输入房间ID'
+						placeholder: '请输入用户ID'
 					},
 					{
 						name: 'status',
 						type: 'select',
-						value: '',
+						value: 0,
 						keyName: 'id',
 						optionLabel: 'title',
 						label: '审核结果',
@@ -209,7 +240,7 @@
 						label: '上传时间',
 						minWidth: '180px',
 						render: (h, params) => {
-							return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							return h('span', params.row.create_time || '无')
 						}
 					},
 					{
@@ -225,12 +256,18 @@
 					{
 						label: '审核结果',
 						minWidth: '120px',
-						prop: 'user_number'
+						prop: 'status',
+						render: (h, params) => {
+							let statusName =  this.auditStatuslList.find(a => { return a.id === params.row.status })
+							if(statusName){
+								return h('span', statusName.title)
+							}
+						}
 					},
 					{
 						label: '音乐',
 						isimg: true,
-						prop: 'url',
+						prop: 'song_url',
 						nameProp: 'name',
 						subNameProp: 'singer',
 						tagProp: 'tags',
@@ -240,8 +277,13 @@
 						label: '审核时间',
 						minWidth: '180px',
 						render: (h, params) => {
-							return h('span', params.row.update_time ? timeFormat(params.row.update_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+							return h('span', params.row.audit_time || '无')
 						}
+					},
+					{
+						label: '备注',
+						minWidth: '120px',
+						prop: 'remark'
 					},
 					{
 						label: '操作',
@@ -250,11 +292,11 @@
 						render: (h, params) => {
 							return h('div', [
 								h('el-button', { style: {
-									display: params.row.status === 1 ? 'none' : 'unset'
-								}, on: {click:()=>{this.up(params.row)}}}, '通过'),
+									display: params.row.status !== 0 ? 'none' : 'unset'
+								}, on: {click:()=>{this.pass(params.row)}}}, '通过'),
 								h('el-button', { props: { type: 'danger'}, style: {
-									display: params.row.status === 2 ? 'none' : 'unset'
-								}, on: {click:()=>{this.down(params.row)}}}, '拒绝')
+									display: params.row.status !== 0 ? 'none' : 'unset'
+								}, on: {click:()=>{this.noass(params.row)}}}, '拒绝')
 							])
 						}
 				}
@@ -262,7 +304,7 @@
 				let portName = "";
 				if(Number(this.tabIndex) !== 0){
 					columnsList = arr2;
-					portName = "getRoomRanking";
+					portName = "getAuditList";
 				}else{
 					columnsList = arr1;
 					portName = "getSummerUserList";
@@ -285,10 +327,17 @@
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
 					end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
 					user_number: s.user_number,
+					status: s.status ? s.status: 0
 				}
-				if(this.tabIndex < 2){
-					params_new.room_category = this.tabIndex == 0 ? 2 :1;
+				// if(this.tabIndex < 2){
+				// 	params_new.room_category = this.tabIndex == 0 ? 2 :1;
+				// }
+				if(this.tabIndex > 1){
+					params_new.config_id = Number(this.tabIndex) + 1;
+				}else{
+					params_new.config_id = 2;
 				}
+				this.searchParams1 = params_new;
 				return params_new
 			},
 			// 刷新列表
@@ -360,6 +409,46 @@
 						return false;
 					}
 				});
+			},
+			// 审核通过
+			async pass(row){
+				this.$confirm('确认通过吗?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(async () => {
+					let params = {
+						id : row.id
+					}
+					let res = await getAuditPass(params);
+					if(res.code === 2000){
+						this.$success('操作成功')
+						this.$refs.tableList.getData()
+					}
+				}).catch(() => {});
+			},
+			// 审核拒绝
+			async noass(row){
+				this.editRuleForm.id = row.id;
+				this.isEditRuleForm = true;
+			},
+			// 拒绝弹框关闭
+			submitEditCancel(){
+				this.isEditRuleForm = false;
+			},
+			// 审核拒绝请求
+			async submitEditForm(){
+				let params = {
+					id : this.editRuleForm.id,
+					remark: this.editRuleForm.remark
+				}
+				let res = await getAuditNoPass(params);
+				if(res.code === 2000){
+					this.$success('操作成功')
+					this.$refs.tableList.getData();
+					this.editRuleForm.remark = "";
+					this.isEditRuleForm = false;
+				}
 			},
 		}
 	}
