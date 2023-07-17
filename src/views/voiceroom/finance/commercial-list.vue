@@ -84,7 +84,7 @@ export default {
                     {
                         label: '支付类型',
                         render: (h, params) => {
-                            let data = MAPDATA.PAYCONFIGLIST.find(a => { return params.row.channel_way === a.value })
+                            let data = MAPDATA.PAYCONFIGURATIONPLATFORMTYPELIST.find(a => { return params.row.channel_way === a.value })
                             return h('span', data ? data.name : '无')
                         }
                     },
