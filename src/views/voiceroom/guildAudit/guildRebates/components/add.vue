@@ -58,7 +58,7 @@ export default {
         };
     },
   filters: {
-    filtersFormatTimeTwo(status) {
+    filtersFormatTimeTwo(status) { 
       const res = formatTimeTwo(status)
       return res
     }

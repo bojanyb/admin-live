@@ -26,43 +26,43 @@
         <el-table-column prop="Mon" label="周一" align="left" width="110px">
           <template slot-scope="scope">
             <div>时间： {{ scope.row.Mon.time || '--' }}</div>
-            <div>时长： {{ scope.row.Mon.long || '--' }}</div>
+            <div>时长： {{ scope.row.Mon.long | filtersFormatTimeTwo }}</div>
           </template>
         </el-table-column>
         <el-table-column prop="Tue" label="周二" align="left" width="110px">
           <template slot-scope="scope">
             <div>时间： {{ scope.row.Tue.time || '--' }}</div>
-            <div>时长： {{ scope.row.Tue.long || '--' }}</div>
+            <div>时长： {{ scope.row.Tue.long | filtersFormatTimeTwo }}</div>
           </template>
         </el-table-column>
         <el-table-column prop="Wed" label="周三" align="left" width="110px">
           <template slot-scope="scope">
             <div>时间： {{ scope.row.Wed.time || '--' }}</div>
-            <div>时长： {{ scope.row.Wed.long || '--' }}</div>
+            <div>时长： {{ scope.row.Wed.long | filtersFormatTimeTwo }}</div>
           </template>
         </el-table-column>
         <el-table-column prop="Thu" label="周四" align="left" width="110px">
           <template slot-scope="scope">
             <div>时间： {{ scope.row.Thu.time || '--' }}</div>
-            <div>时长： {{ scope.row.Thu.long || '--' }}</div>
+            <div>时长： {{ scope.row.Thu.long | filtersFormatTimeTwo }}</div>
           </template>
         </el-table-column>
         <el-table-column prop="Fri" label="周五" align="left" width="110px">
           <template slot-scope="scope">
             <div>时间： {{ scope.row.Fri.time || '--' }}</div>
-            <div>时长： {{ scope.row.Fri.long || '--' }}</div>
+            <div>时长： {{ scope.row.Fri.long | filtersFormatTimeTwo }}</div>
           </template>
         </el-table-column>
         <el-table-column prop="Sat" label="周六" align="left" width="110px">
           <template slot-scope="scope">
             <div>时间： {{ scope.row.Sat.time || '--' }}</div>
-            <div>时长： {{ scope.row.Sat.long || '--' }}</div>
+            <div>时长： {{ scope.row.Sat.long | filtersFormatTimeTwo }}</div>
           </template>
         </el-table-column>
         <el-table-column prop="Sun" label="周日" align="left" width="110px">
           <template slot-scope="scope">
             <div>时间： {{ scope.row.Sun.time || '--' }}</div>
-            <div>时长： {{ scope.row.Sun.long || '--' }}</div>
+            <div>时长： {{ scope.row.Sun.long | filtersFormatTimeTwo }}</div>
           </template>
         </el-table-column>
       </el-table>
@@ -106,6 +106,8 @@
 import { roomFlow } from "@/api/videoRoom";
 // 分页
 import Pagination from "@/components/Pagination";
+// 引入公共方法
+import { formatTimeTwo } from '@/utils/common.js'
 export default {
   components: {
     Pagination,
@@ -126,6 +128,10 @@ export default {
       }
       return msg;
     },
+    filtersFormatTimeTwo(status) {
+      const res = formatTimeTwo(status)
+      return res
+    }
   },
   data() {
     return {
