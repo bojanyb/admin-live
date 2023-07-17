@@ -409,10 +409,6 @@ const INSTITUTION = [
   //     value: 4,
   //     name: '银联'
   // },
-  {
-    value: 5,
-    name: '易生支付'
-  },
 ]
 
 
@@ -1914,37 +1910,9 @@ const PAYCONFIGURATIONPLATFORMTYPELIST = [
   {
     name: '小程序',
     value: 5
-  }
-]
-
-// 支付配置管理 - 支付方式
-const PAYCONFIGLIST = [
-  {
-    name: '全部',
-    value: 0
   },
   {
-    name: 'app支付',
-    value: 1
-  },
-  {
-    name: 'PC',
-    value: 2
-  },
-  {
-    name: 'h5支付',
-    value: 3
-  },
-  {
-    name: '公众号',
-    value: 4
-  },
-  {
-    name: '小程序',
-    value: 5
-  },
-  {
-    name: '小程序',
+    name: '易生小程序',
     value: 8
   }
 ]
@@ -3284,7 +3252,6 @@ export default {
   RENDERGUILDCONFIG,
   PAYCONFIGURATIONPLATFORMLIST,
   PAYCONFIGURATIONPLATFORMTYPELIST,
-  PAYCONFIGLIST,
   COMMERCIALMANAGEMENTPAYTYPELIST,
   REPORTUSERPUNISHSTATUSLIST,
   NOBILITYUSERSORTLIST,
