@@ -60,6 +60,12 @@
           >
           </el-date-picker>
         </div>
+        <div class="sunBox">
+          <span>公会运营</span>
+          <el-select v-model="form.operator" placeholder="请选择公会运营">
+              <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+          </el-select>
+        </div>
         <div class="btnBox">
           <el-button class="seeBox" type="primary" @click="getList"
             >查询</el-button
@@ -97,7 +103,7 @@
 // 引入公会列表接口
 import { guildList } from "@/api/user";
 // 引入api
-import { doSettlement, settlementLog, guildWeekListV2 } from "@/api/videoRoom";
+import { doSettlement, settlementLog, guildWeekListV2, adminUserList } from "@/api/videoRoom";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
@@ -339,6 +345,7 @@ export default {
       form: {
         // 表单数据
         guild_number: "",
+        operator: "",
         status: 1,
         time: [],
         start_time: null,
@@ -357,7 +364,11 @@ export default {
           name: "相守、个播",
         },
       ],
+      operatorList: []
     };
+  },
+  created() {
+    this.getAdminUserList();
   },
   methods: {
     // 配置参数
@@ -367,6 +378,7 @@ export default {
         page: params ? params.page : 1,
         pagesize: params ? params.size : 10,
         guild_number: s.guild_number ? s.guild_number : "",
+        operator: s.operator ? s.operator : "",
         type: 1,
         status: s.status ? s.status : 1,
         start_time:
@@ -396,6 +408,7 @@ export default {
     reset() {
       this.form = {
         guild_number: "",
+        operator: "",
         status: 1,
         time: [],
         start_time: null,
@@ -581,6 +594,23 @@ export default {
       ];
       exportTableData(arr, nameList, "公会周流水结算");
     },
+     // 获取公会运营
+     async getAdminUserList() {
+       const response = await adminUserList()
+       if(response.code === 2000) {
+         const tempArr =  Array.from(
+           Array.isArray(response.data.list) ? response.data.list : []
+       )
+       this.operatorList = tempArr.reduce((prev, curr) => {
+         prev.push({
+             name: curr.username,
+             value: curr.id
+         })
+         return prev
+       }, []) || []
+       this.isAuth = response.data.is_auth;
+       }
+     },
   },
 };
 </script>
