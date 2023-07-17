@@ -409,6 +409,11 @@ const INSTITUTION = [
   //     value: 4,
   //     name: '银联'
   // },
+  {
+    value: 5,
+    name: '易生支付'
+  },
+
 ]
 
 
