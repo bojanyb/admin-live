@@ -62,7 +62,7 @@
         </div>
         <div class="sunBox">
           <span>公会运营</span>
-          <el-select v-model="form.operator" placeholder="请选择公会运营">
+          <el-select v-model="form.operator" placeholder="请选择公会运营"  @change="change">
               <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
           </el-select>
         </div>
