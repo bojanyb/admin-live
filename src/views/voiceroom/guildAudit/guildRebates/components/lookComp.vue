@@ -3,7 +3,7 @@
     <el-dialog
       :title="editTitle"
       :visible.sync="dialogVisible"
-      width="800px"
+      width="1100px"
       :close-on-click-modal="false"
       :before-close="handleClose"
       @closed="closed"
@@ -15,13 +15,55 @@
           <span>详情</span>
         </div>
       <el-table :data="tableData.list" style="width: 100%">
-        <el-table-column prop="room_title" label="房间名" align="center">
+        <el-table-column prop="room_title" label="房间名" align="center" width="120px">
         </el-table-column>
         <el-table-column prop="room_type_name" label="房间类型" align="center">
         </el-table-column>
         <el-table-column prop="flow" label="流水" align="center">
         </el-table-column>
-        <el-table-column prop="t_flow" label="流水(含冻结）" align="center">
+        <el-table-column prop="t_flow" label="流水(含冻结）" align="center" width="120px">
+        </el-table-column>
+        <el-table-column prop="Mon" label="周一" align="left" width="110px">
+          <template slot-scope="scope">
+            <div>时间： {{ scope.row.Mon.time || '--' }}</div>
+            <div>时长： {{ scope.row.Mon.long || '--' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="Tue" label="周二" align="left" width="110px">
+          <template slot-scope="scope">
+            <div>时间： {{ scope.row.Tue.time || '--' }}</div>
+            <div>时长： {{ scope.row.Tue.long || '--' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="Wed" label="周三" align="left" width="110px">
+          <template slot-scope="scope">
+            <div>时间： {{ scope.row.Wed.time || '--' }}</div>
+            <div>时长： {{ scope.row.Wed.long || '--' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="Thu" label="周四" align="left" width="110px">
+          <template slot-scope="scope">
+            <div>时间： {{ scope.row.Thu.time || '--' }}</div>
+            <div>时长： {{ scope.row.Thu.long || '--' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="Fri" label="周五" align="left" width="110px">
+          <template slot-scope="scope">
+            <div>时间： {{ scope.row.Fri.time || '--' }}</div>
+            <div>时长： {{ scope.row.Fri.long || '--' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="Sat" label="周六" align="left" width="110px">
+          <template slot-scope="scope">
+            <div>时间： {{ scope.row.Sat.time || '--' }}</div>
+            <div>时长： {{ scope.row.Sat.long || '--' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="Sun" label="周日" align="left" width="110px">
+          <template slot-scope="scope">
+            <div>时间： {{ scope.row.Sun.time || '--' }}</div>
+            <div>时长： {{ scope.row.Sun.long || '--' }}</div>
+          </template>
         </el-table-column>
       </el-table>
       <!--工具条-->

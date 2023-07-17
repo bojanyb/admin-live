@@ -159,6 +159,11 @@ export default {
           minWidth: "100px",
           prop: "guild_name",
         },
+				{
+					label: '公会运营',
+					minWidth: '100px',
+					prop: 'operator_name'
+				},
         {
           label: "公会长昵称",
           minWidth: "120px",
@@ -551,6 +556,7 @@ export default {
           timer: timer,
           guild_number: item.guild_number,
           guild_name: item.guild_name,
+          operator_name: item.operator_name,
           guild_owner_nickname: item.guild_owner_nickname,
           guild_type: guild_type.name,
           flow: item.flow + "钻石",
@@ -569,6 +575,7 @@ export default {
         "时间",
         "公会ID",
         "公会名称",
+        "公会运营",
         "公会长昵称",
         "公会类型",
         "流水",
