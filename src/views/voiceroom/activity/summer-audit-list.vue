@@ -373,7 +373,7 @@
 			tabChange() {
 				this.$nextTick(res=>{
 					this.searchParams.round = 1;
-					if(this.$refs.tableList && this.tabIndex < 2) {
+					if(this.$refs.tableList) {
 						this.$refs.tableList.getData()
 					}
 				})
