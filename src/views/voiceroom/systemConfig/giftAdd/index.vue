@@ -38,10 +38,15 @@
                   </el-radio-group>
               </el-form-item>
               <el-form-item label="礼物角标" prop="gift_icon">
-                <uploadImg ref="uploadImg" v-model="ruleForm.gift_icon" :imgUrl="ruleForm.gift_icon" name="gift_icon" @validateField="validateField" accept=".png"></uploadImg>
+                <div style="display: flex;align-items: center;">
+                    <ImageUpload ref="uploadGiftIcon" v-model="ruleForm.gift_icon" :imgUrl="ruleForm.gift_icon" name="gift_icon" @validateField="validateField" accept=".png"></ImageUpload>
+                    <div v-if="ruleForm.gift_icon" style="flex: 1;margin-left: 10px;">
+                        <el-button type="primary" round size="small" @click="reUpload('uploadGiftIcon')">更改</el-button>
+                    </div>
+                </div>
               </el-form-item>
               <el-form-item label="礼物banner" prop="gift_banner">
-                <uploadImg ref="uploadImg" v-model="ruleForm.gift_banner" :imgUrl="ruleForm.gift_banner" name="gift_banner" @validateField="validateField" accept=".jpg,.jpeg"></uploadImg>
+                <uploadGift ref="uploadGift" v-model="ruleForm.gift_banner" name="gift_banner"></uploadGift>
               </el-form-item>
               <el-form-item label="礼物播放类型" prop="play_type">
                   <el-radio-group v-model="ruleForm.play_type" @input="handleChangePlayType">
@@ -124,11 +129,15 @@ import { getGiftAdd, getGiftEdit } from '@/api/videoRoom'
 import { nobilitylist } from '@/api/nobility'
 // 引入图片上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
+import ImageUpload from './components/ImageUpload.vue'
+import UploadGift from './components/UploadGift.vue'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
-        uploadImg
+        uploadImg,
+        ImageUpload,
+        UploadGift
     },
     data() {
         return {
@@ -325,6 +334,10 @@ export default {
       this.componentKey += 1
       this.ruleForm.gift_gif = ''
       },
+      // 重新上传图片
+      reUpload(name) {
+        this.$refs[name].reUpload()
+      }
     },
     mounted() {
         this.getNobility()
