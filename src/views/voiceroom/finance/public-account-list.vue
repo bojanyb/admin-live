@@ -4,9 +4,8 @@
     <el-card class="section-select" shadow="never">
       <el-form>
         <el-form-item label="结算状态：">
-          <el-select v-model="sectionForm.sectionStatus">
-            <el-option label="进程中" :value="0"></el-option>
-            <el-option label="已完成" :value="1"></el-option>
+          <el-select v-model="sectionForm.status" @change="handleAccountChange">
+            <el-option v-for="item in accountMapOptions" :key="item.value" :label="item.name" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -14,7 +13,24 @@
 
     <el-card class="section-select" shadow="never">
       <div class="section-title">
-        {{ sectionForm.sectionStatus ? "已完成结算单" : "进程中结算单" }}
+        {{ sectionForm.status | filterCheckAudit }}
+      </div>
+      <div class="model" v-if="sectionForm.status !== 3">
+        <span>总计喵粮：{{ ruleForm.gain_total || 0 }}条</span>
+        <span>总计提现金额：{{ ruleForm.apply_amount_total || 0 }}元</span>
+        <span>总计实际金额：{{ ruleForm.cash_money_total || 0 }}元</span>
+        <span>总计手续费：{{ ruleForm.cash_fee_total }}元</span>
+        <span>总计实际收入：{{ ruleForm.real_money_total }}元</span>
+      </div>
+      <div class="model settled" v-if="sectionForm.status === 3">
+        <span>总计喵粮：{{ ruleForm.gain_total || 0 }}条</span>
+        <span>总计提现金额：{{ ruleForm.apply_amount_total || 0 }}元</span>
+        <span>总计异常扣除：{{ ruleForm.abnormal_money_total || 0 }}元</span>
+        <span>总计其它扣除：{{ ruleForm.other_money_total || 0 }}元</span>
+        <span>总计实际金额：{{ ruleForm.cash_money_total || 0 }}元</span>
+        <span>总计实际收入：{{ ruleForm.real_money_total }}元</span>
+        <span>总计实际开票金额：{{ ruleForm.real_invoice_money_total }}元</span>
+        <span>总计发票超额：{{ ruleForm.real_invoice_excess_total }}元</span>
       </div>
       <div class="searchParams">
         <SearchPanel
@@ -22,10 +38,8 @@
           :forms="forms"
           :show-reset="true"
           :show-search-btn="true"
-          :show-add="true"
           @onReset="reset"
           @onSearch="onSearch"
-          @add="add"
         ></SearchPanel>
       </div>
       <div class="tableList">
@@ -119,26 +133,36 @@ export default {
     cfgs() {
       return {
         vm: this,
-        url: REQUEST.CashHisity.apply,
+        url: REQUEST.finance.getCashList,
         columns: [
           {
             label: "申请时间",
+            minWidth: "120px",
             render: (h, params) => {
               return h(
                 "span",
-                params.row.addtime
-                  ? timeFormat(params.row.addtime, "YYYY-MM-DD HH:mm:ss", true)
+                params.row.start_time
+                  ? timeFormat(
+                      params.row.start_time,
+                      "YYYY-MM-DD HH:mm:ss",
+                      true
+                    )
                   : "--"
               );
             },
           },
           {
             label: "统计时间",
+            minWidth: "120px",
             render: (h, params) => {
               return h(
                 "span",
-                params.row.addtime
-                  ? timeFormat(params.row.addtime, "YYYY-MM-DD HH:mm:ss", true)
+                params.row.start_time
+                  ? timeFormat(
+                      params.row.start_time,
+                      "YYYY-MM-DD HH:mm:ss",
+                      true
+                    )
                   : "--"
               );
             },
@@ -146,57 +170,47 @@ export default {
           {
             label: "公会",
             minWidth: "100px",
-            prop: "guild_number",
+            prop: "guild_name",
           },
           {
             label: "喵粮",
             minWidth: "100px",
-            prop: "money",
+            prop: "gain",
           },
           {
             label: "提现金额",
-            render: (h, params) => {
-              return h("span", params.row.money / 100);
-            },
+            prop: "apply_amount",
           },
           {
             label: "异常扣除",
-            render: (h, params) => {
-              return h("span", params.row.money / 100);
-            },
+            prop: "abnormal_money",
           },
           {
             label: "其他扣除",
             minWidth: "100px",
-            prop: "guild_number",
+            prop: "other_money",
           },
           {
             label: "实际金额",
             minWidth: "100px",
-            prop: "guild_number",
+            prop: "cash_money",
           },
           {
             label: "手续费",
-            prop: "cash_rate",
-            render: (h, params) => {
-              let money =
-                Math.floor(
-                  ((params.row.money / 10000) * params.row.cash_rate).toFixed(
-                    5
-                  ) * 100
-                ) / 100;
-              return h("span", money);
-            },
+            prop: "cash_fee",
           },
           {
             label: "实际收入",
             minWidth: "100px",
-            prop: "guild_number",
+            prop: "real_money",
           },
           {
             label: "状态",
             minWidth: "100px",
-            prop: "guild_number",
+						render: (h, params) => {
+							let data = MAPDATA.CASHAUDITLIST.find(item => { return item.value === params.row.status })
+							return h('span', data ? data.name : '无')
+						}
           },
           {
             label: "操作",
@@ -206,14 +220,26 @@ export default {
                 h(
                   "el-button",
                   {
-                    props: { type: "primary" },
+                    props: { type: "info" },
                     on: {
                       click: () => {
-                        this.showEditor(params.row);
+                        this.handleLookDetail(params.row);
                       },
                     },
                   },
-                  "编辑"
+                  "账单明细"
+                ),
+                h(
+                  "el-button",
+                  {
+                    props: { type: "primary" },
+                    on: {
+                      click: () => {
+                        this.showEditor(params.row.status === 1 ? "editor" : "look", params.row);
+                      },
+                    },
+                  },
+                  params.row.status === 1 ? "编辑" : "查看"
                 )
               ]);
             },
@@ -222,16 +248,22 @@ export default {
       };
     },
   },
+  filters: {
+    filterCheckAudit(status) {
+      let data = MAPDATA.CASHAUDITLIST.find((item) => {
+        return item.value === status;
+      });
+      return data.name + '结算单';
+    },
+  },
   data() {
     return {
-      ruleForm: {
-        alreadyMoney: null,
-        deductMoney: null,
-      },
+      ruleForm: {},
       isDestoryComp: false, // 销毁组件
       sectionForm: {
-        sectionStatus: 0,
+        status: 0,
       },
+      accountMapOptions: MAPDATA.CASHAUDITLIST
     };
   },
   methods: {
@@ -241,17 +273,14 @@ export default {
     },
     // 配置参数
     beforeSearch(params) {
-      let s = { ...this.searchParams, ...this.dateTimeParams };
+      let s = { ...this.searchParams, ...this.dateTimeParams, ...this.sectionForm };
       return {
-        page: params.page,
-        status: s.status,
-        user_number: s.user_number,
-        start_time: Math.floor(s.start_time / 1000),
-        end_time: Math.floor(s.end_time / 1000),
-        user_id: s.user_id,
-        order_id: s.order_id,
-        sort: s.sort,
-        goods_type: s.goods_type,
+        page: params ? params.page : null,
+        pagesize: params ? params.pagesize : null,
+        guild_id: s.guild_id || '',
+        status: s.status || '',
+        start_time: Math.floor(s.start_time / 1000) || '',
+        end_time: Math.floor(s.end_time / 1000) || ''
       };
     },
     // 设置时间段
@@ -282,14 +311,12 @@ export default {
     },
     // 列表返回数据
     saleAmunt(data) {
-      // this.ruleForm.allMoney = data.total_money ? data.total_money / 100 : 0
+      this.ruleForm = {
+        ...data.data,
+      };
     },
-    // 新增
-    add() {
-      this.load("add");
-    },
-    showEditor(row) {
-      this.load("editor", row);
+    showEditor(status, row) {
+      this.load(status, row);
     },
     down(row, status) {
       let params = {
@@ -313,6 +340,19 @@ export default {
     destoryComp() {
       this.isDestoryComp = false;
     },
+    // 查看账单明细
+    handleLookDetail(row) {
+      this.$router.push({
+        path: "/giveAway/public-transfer",
+        query: {
+          id: row.id,
+        },
+      });
+    },
+    // 切换结算状态
+    handleAccountChange() {
+      this.getList();
+    }
   },
 };
 </script>
@@ -328,7 +368,24 @@ export default {
     }
   }
   .model {
+    width: 100%;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    padding: 0px 30px;
+    box-sizing: border-box;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
     margin-bottom: 20px;
+    > span {
+      font-size: 15px;
+      color: #fff;
+      margin-right: 100px;
+    }
+  }
+  .settled {
+    height: 80px;
+    flex-wrap: wrap;
   }
   .bounce_fa {
     position: relative;

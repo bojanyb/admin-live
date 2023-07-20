@@ -8,126 +8,176 @@
       :close-on-click-modal="false"
       @closed="destoryComp"
     >
-      <el-form
-        :model="ruleForm"
-        :rules="rules"
-        label-suffix=":"
-        ref="ruleForm"
-        label-width="110px"
-        class="demo-ruleForm"
-      >
-        <div class="editor-body-text">
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="收款账户" class="body-box-item">
-                {{ "622************7671" }}
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="开户银行" class="body-box-item">
-                {{ "中国工商银行齐齐哈尔市分行核算中心" }}
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="开户名称" class="body-box-item">
-                {{ "北京微世界科技有限公司" }}
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="提现金额" class="body-box-item">
-                {{ "50000" }}
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="异常扣除" class="body-box-item">
-                {{ "0" }}
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="其它扣除" class="body-box-item">
-                {{ "0" }}
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="实际金额" class="body-box-item">
-                {{ "50000" }}
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="发票税率" class="body-box-item">
-                {{ "3%" }}
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="手续费率" class="body-box-item">
-                {{ "3.2%" }}
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="手续费" class="body-box-item">
-                {{ "-1600" }}
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="实际收入" class="body-box-item">
-                {{ "48400" }}
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </div>
+      <div class="editor-body-main">
+        <el-form
+          :model="ruleForm"
+          :rules="rules"
+          label-suffix=":"
+          ref="ruleForm"
+          label-width="110px"
+          class="demo-ruleForm"
+        >
+          <!-- 结算信息详情 -->
+          <el-card class="editor-body-text" shadow="never">
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="收款账户" class="body-box-item">
+                  {{ ruleForm.bank_card }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="开户银行" class="body-box-item">
+                  {{ ruleForm.bank_name }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="开户名称" class="body-box-item">
+                  {{ ruleForm.owner_name }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="提现金额" class="body-box-item">
+                  {{ ruleForm.apply_amount }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="异常扣除" class="body-box-item">
+                  {{ ruleForm.abnormal_money }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="其它扣除" class="body-box-item">
+                  {{ ruleForm.other_money }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="实际金额" class="body-box-item">
+                  {{ ruleForm.cash_money }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="发票税率" class="body-box-item">
+                  {{ ruleForm.cash_invoice_rate }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="手续费率" class="body-box-item">
+                  {{ ruleForm.cash_fee_rate }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="手续费" class="body-box-item">
+                  {{ ruleForm.cash_fee }}
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="实际收入" class="body-box-item">
+                  {{ ruleForm.real_money }}
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-form>
 
-        <div class="editor-body-form">
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="账单状态" class="body-box-item">
-                {{ "结算审核中" }}
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="审核结果">
-                <el-radio-group v-model="ruleForm.resource">
-                  <el-radio label="aaa">审核退回</el-radio>
-                  <el-radio label="bbb">确认结算</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="活动形式">
-                <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </div>
+        <!-- 账单状态 -->
+        <el-form
+          :model="checkForm"
+          :rules="rules"
+          label-suffix=":"
+          ref="ruleForm"
+          label-width="110px"
+          class="demo-ruleForm"
+        >
+          <el-card class="editor-body-form" shadow="never">
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="账单状态" class="body-box-item">
+                  {{ ruleForm.status | filterCheckAudit }}
+                </el-form-item>
+              </el-col>
+              <template v-if="ruleForm.status === 1">
+                <el-col :span="24">
+                  <el-form-item label="审核结果" prop="audit_status">
+                    <el-radio-group v-model="checkForm.audit_status">
+                      <el-radio :label="0">审核退回</el-radio>
+                      <el-radio :label="1">确认结算</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                </el-col>
 
-        <div class="editor-body-audit">
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="发起申请">
-                <el-upload
-                  class="upload-demo"
-                  action="#"
-                  :on-preview="handlePreview"
-                  :on-remove="handleRemove"
-                  :before-remove="beforeRemove"
-                  :limit="1"
-                  accept=".rar,.zip"
-                  :on-exceed="handleExceed"
-                  :file-list="fileList"
-                  :http-request="upLoad"
-                >
-                  <el-button size="small" type="primary">点击上传</el-button>
-                  <div slot="tip" class="el-upload__tip">
-                    只能上传rar/zip文件
-                  </div>
-                </el-upload>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="审核退回"> </el-form-item>
-            </el-col>
-          </el-row>
-        </div>
-      </el-form>
+                <template v-if="checkForm.audit_status === 0">
+                  <el-col :span="24">
+                    <el-form-item label="失败原因" prop="fail_reason">
+                      <el-input
+                        type="textarea"
+                        v-model="checkForm.fail_reason"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </template>
+
+                <template v-if="checkForm.audit_status === 1">
+                  <el-col :span="24">
+                    <el-form-item
+                      label="实际开票金额"
+                      prop="real_invoice_money"
+                    >
+                      <el-input
+                        v-model="checkForm.real_invoice_money"
+                        type="number"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="24">
+                    <el-form-item label="发票超额">
+                      {{
+                        !isNaN(checkForm.real_invoice_money)
+                          ? +checkForm.real_invoice_money - +ruleForm.real_money
+                          : "--"
+                      }}
+                    </el-form-item>
+                  </el-col>
+                </template>
+              </template>
+            </el-row>
+          </el-card>
+        </el-form>
+
+        <!-- 审批记录 -->
+        <el-card class="editor-body-audit" shadow="never">
+          <div class="audit-title">审批记录</div>
+          <template v-for="item in ruleForm.audit_log">
+            <el-row class="audit-row">
+              <el-col :span="12" class="audit-col">
+                {{ item.type | filterTypeAudit }}
+              </el-col>
+              <el-col :span="12" class="audit-col">
+                {{ item.create_time | filterTime }}
+              </el-col>
+              <el-col
+                :span="24"
+                v-for="subItem in item.audit_data"
+                class="audit-col"
+              >
+                <div v-if="item.type !== 1">
+                  <span>{{ subItem.title }}</span
+                  >:
+                  <span>{{ subItem.value }}</span>
+                </div>
+                <div v-else>
+                  <a
+                    href="javascript:void(0);"
+                    v-downLoad="subItem.value"
+                    rel="noopener"
+                  >
+                    {{ subItem.title }}
+                  </a>
+                </div>
+              </el-col>
+            </el-row>
+          </template>
+        </el-card>
+      </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
         <el-button type="primary" @click="submitForm('ruleForm')"
@@ -140,11 +190,7 @@
 
 <script>
 // 引入api
-import {
-  addPrettyNumber,
-  updatePrettyNumber,
-  getTypeOption,
-} from "@/api/videoRoom.js";
+import { getCashDetail, refuseCash, completeCash } from "@/api/finance.js";
 // 引入公共map
 import MAPDATA from "@/utils/jsonMap.js";
 // 引入图片上传组件
@@ -152,6 +198,8 @@ import uploadImg from "@/components/uploadImg/index.vue";
 import { debounce } from "@/utils";
 // 引入oss
 import { uploadOSS } from "@/utils/oss.js";
+// 引入公共方法
+import { timeFormat } from "@/utils/common.js";
 export default {
   components: {
     uploadImg,
@@ -159,142 +207,56 @@ export default {
   computed: {
     title() {
       // 标题
-      if (this.status === "add") {
-        return "新增商品";
-      } else if (this.status === "update") {
-        return "修改商品";
+      if (this.status === "look") {
+        return "查看";
+      } else if (this.status === "editor") {
+        return "编辑";
       } else {
-        return "查看商品";
+        return "--";
       }
     },
-    StartPicker() {
-      // 开始时间配置
-      return {
-        disabledDate: (time) => {
-          return time.getTime() < new Date().getTime() - 24 * 60 * 60 * 1000;
-        },
-      };
-    },
-    EndPicker() {
-      // 结束时间配置
-      return {
-        disabledDate: (time) => {
-          return time.getTime() < new Date().getTime() - 24 * 60 * 60 * 1000;
-        },
-      };
-    },
-    // StartRules() { // 开始时间限制
-    //     let params = {}
-    //     let start = this.ruleForm.start_time
-    //     params = {
-    //         required: true,
-    //         validator: (rules, val, cb) => {
-    //             if(!start) {
-    //                 cb(new Error('请选择开始时间'))
-    //             } else {
-    //                 cb()
-    //             }
-    //         }
-    //     }
-    //     return params
-    // },
-    // EndRules() { // 结束时间限制
-    //     let params = {}
-    //     let start = this.ruleForm.start_time
-    //     let end = this.ruleForm.end_time
-    //     params = {
-    //         required: true,
-    //         validator: (rules, val, cb) => {
-    //             if(end < new Date().getTime()) {
-    //                 cb(new Error('结束时间不能小于当前时间!'))
-    //             } if(start && end <= start) {
-    //                 cb(new Error('结束时间不能小于开始时间!'))
-    //             } else {
-    //                 cb()
-    //             }
-    //         }
-    //     }
-    //     return params
-    // },
-    limitRules() {
-      // 商品出售期限 - 必填
-      let array = this.ruleForm.price;
-      let isStatus = false;
-      array.forEach((item, index) => {
-        if (!item.day || !item.money) {
-          isStatus = true;
-        }
+  },
+  filters: {
+    filterCheckAudit(status) {
+      let data = MAPDATA.CASHAUDITLIST.find((item) => {
+        return item.value === status;
       });
-      let params = {};
-      params = {
-        required: true,
-        validator: (rules, val, cb) => {
-          if (isStatus) {
-            cb(new Error(`请填写所有数据`));
-          } else {
-            cb();
-          }
-        },
-      };
-      return params;
+      return data ? data.name : "--";
+    },
+    filterTypeAudit(status) {
+      let data = MAPDATA.TYPEAUDITLIST.find((item) => {
+        return item.value === status;
+      });
+      return data ? data.name : "--";
+    },
+    filterTime(time) {
+      return timeFormat(time, "YYYY-MM-DD HH:mm:ss", true);
     },
   },
   data() {
-    const validateNumber = (rule, value, callback) => {
-      let reg = /^\d*[13579]$/;
-      if (!value) {
-        callback(new Error("密码不能为空"));
-      } else if (value.length + "" === "1") {
-        callback(new Error("长度不能为一位数"));
-      } else {
-        callback();
-      }
-    };
-    const validateNumber1 = (rule, value, callback) => {
-      let reg = /^\d*[2468]$/;
-      if (!value) {
-        callback(new Error("密码不能为空"));
-      } else {
-        callback();
-      }
-    };
     return {
       dialogVisible: false,
-      goodsNumTypeList: MAPDATA.GOODNUMTYPE,
-      goodsNumClassList: [],
-      shopList: [],
-      status: "add",
-      oldParams: {},
-      ruleForm: {
-        category: "",
-        type_id: "",
-        number: "",
-        buy: "0",
-        price: [
-          {
-            day: undefined,
-            price: undefined,
-          },
-        ],
-        start_time: null,
-        end_time: null,
+      status: "look",
+      ruleForm: {},
+      checkForm: {
+        audit_status: 0,
       },
       rules: {
-        category: [
-          { required: true, message: "请选择商品类别", trigger: "change" },
+        audit_status: [
+          { required: true, message: "请选择审核结果", trigger: "change" },
         ],
-        type_id: [
-          { required: true, message: "请选择商品分类", trigger: "change" },
+        real_invoice_money: [
+          { required: true, message: "请输入实际开票金额", trigger: "change" },
+          {
+            message: "请输入正数，保留2位小数",
+            trigger: "blur",
+            pattern: /^(([0-9]+)|([0-9]+\.[0-9]{0,2}))$/,
+          },
         ],
-        number: [
-          { required: true, message: "请输入商品名称", trigger: "blur" },
-        ],
-        buy: [
-          { required: true, message: "请选择是否可购买", trigger: "change" },
+        fail_reason: [
+          { required: true, message: "请输入失败原因", trigger: "blur" },
         ],
       },
-      validateNumber: validateNumber,
-      validateNumber1: validateNumber1,
       fileList: [],
     };
   },
@@ -333,76 +295,19 @@ export default {
     },
     load(status, row) {
       this.status = status;
-      if (status !== "add") {
-        this.oldParams = row;
-        let params = JSON.parse(JSON.stringify(row));
-        params.buy = params.buy + "";
-        params.start_time = params.start_time * 1000;
-        params.end_time = params.end_time * 1000;
-        this.$set(this.$data, "ruleForm", params);
-        this.getPrettyNumTypeList(row.category);
-      }
+      this.getCashDetailList(row.id);
     },
     // 提交
     submitForm: debounce(async function () {
-      const isEmpty = this.ruleForm.price.some((item) => {
-        return (
-          item.day === "" ||
-          item.day == null ||
-          item.price === "" ||
-          item.price == null
-        );
-      });
-      const isNum = this.ruleForm.price.every((item) => {
-        return item.price > 0;
-      });
-
-      // 商品类型
-      const number = this.ruleForm.number.toString();
-      if (this.ruleForm.category == 0) {
-        // 用户靓号
-        if (number.length !== 5 && number.length !== 7 && number.length !== 9) {
-          this.$message.error("用户靓号只支持5位、7位、9位");
-          return;
-        }
-      } else if (this.ruleForm.category == 1) {
-        // 房间靓号
-        if (number.length !== 4 && number.length !== 6 && number.length !== 8) {
-          this.$message.error("房间靓号只支持4位、6位、8位");
-          return;
-        }
-      }
-      if (isEmpty && this.ruleForm.buy === "0") {
-        this.$message.error("请确保商品出售期限没有空值！");
-        return false;
-      }
-
-      if (!isNum && this.ruleForm.buy === "0") {
-        this.$message.error("请确保商品价格在0以上！");
-        return false;
-      }
-      // 不可购买时 初始化 price 字段数据，后台接口不兼容空数据
-      if (this.ruleForm.buy === "1") {
-        this.ruleForm.price = [];
-      }
-
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
-          let params = { ...this.ruleForm };
-          params.start_time = Math.floor(params.start_time / 1000);
-          params.end_time = Math.floor(params.end_time / 1000);
-          const tempData = {
-            ...params,
-            price: params.price,
-            type_id: params.type_id + "",
-            category: params.category + "",
-            buy: params.buy + "",
-            number: params.number + "",
-            start_time: params.start_time + "",
-            end_time: params.end_time + "",
-          };
-          if (this.status === "add") {
-            addPrettyNumber(tempData)
+          let params = { ...this.ruleForm, ...this.checkForm };
+          if (this.checkForm.audit_status === 0) {
+            const refuseTemp = {
+              id: params.id,
+              fail_reason: params.fail_reason,
+            };
+            refuseCash(refuseTemp)
               .then((res) => {
                 if (res.code === 2000) {
                   this.dialogVisible = false;
@@ -412,9 +317,12 @@ export default {
               .catch((err) => {
                 this.$message.error(err);
               });
-          } else if (this.status === "update") {
-            tempData.id = params.id + "";
-            updatePrettyNumber(tempData)
+          } else if (this.checkForm.audit_status === 1) {
+            const completeTemp = {
+              id: params.id,
+              real_invoice_money: params.real_invoice_money,
+            };
+            completeCash(completeTemp)
               .then((res) => {
                 if (res.code === 2000) {
                   this.dialogVisible = false;
@@ -431,37 +339,27 @@ export default {
         }
       });
     }, 500),
-    // 新增商品出售期限
-    handleAdd() {
-      let s = this.ruleForm;
-      if (s.price.length < 3) {
-        s.price.push({
-          day: undefined,
-          price: undefined,
-        });
-      }
-    },
-    // 删除商品出售期限
-    handleDel(index) {
-      let s = this.ruleForm;
-      s.price.splice(index, 1);
-    },
     // 重置
     resetForm() {
       this.close();
     },
     // 关闭弹窗
     close() {
-      this.$confirm("关闭后数据不会保存，确定关闭吗？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          this.dialogVisible = false;
-          this.$emit("onSearch");
+      if (this.status === "editor") {
+        this.$confirm("关闭后数据不会保存，确定关闭吗？", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
         })
-        .catch(() => {});
+          .then(() => {
+            this.dialogVisible = false;
+            this.$emit("onSearch");
+          })
+          .catch(() => {});
+      } else {
+        this.dialogVisible = false;
+        this.$emit("onSearch");
+      }
     },
     // 销毁组件
     destoryComp() {
@@ -471,44 +369,15 @@ export default {
     validateField(name) {
       this.$refs.ruleForm.validateField([name]);
     },
-    timeChange(row) {
-      console.log("生效时间:", row);
-    },
-    timeChange2(row) {
-      console.log("失效时间:", row);
-    },
-    handleChange(category) {
-      this.getPrettyNumTypeList(category);
-    },
-    // 获取靓号类型
-    async getPrettyNumTypeList(category) {
-      const response = await getTypeOption({ category });
-      if (response.code === 2000) {
-        const tempArr = Array.from(
-          Array.isArray(response.data) ? response.data : []
-        );
-        this.goodsNumClassList =
-          tempArr.reduce((prev, curr) => {
-            prev.push({
-              name: curr.name,
-              value: curr.type_id,
-            });
-            return prev;
-          }, []) || [];
-      }
-    },
-    handleBuyChange(buyStatus) {
-      if (buyStatus === "1") {
-        this.$set(this.ruleForm, "price", [
-          { day: undefined, price: undefined },
-        ]);
-      } else if (
-        buyStatus === "0" &&
-        JSON.stringify(this.ruleForm.price) === "[]"
-      ) {
-        this.$set(this.ruleForm, "price", [
-          { day: undefined, price: undefined },
-        ]);
+    // 获取对公转账详情
+    async getCashDetailList(id) {
+      const response = await getCashDetail({ id });
+      if (+response.code === 2000) {
+        this.ruleForm = {
+          ...response.data,
+        };
+        this.ruleForm.status = 2;
+        console.log(this.ruleForm, "this.ruleForm");
       }
     },
   },
@@ -518,12 +387,38 @@ export default {
 
 <style lang="scss">
 .editor-body-box {
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+    background: #e8e8e8;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #c7c7c7;
+    border-radius: 5px;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield; /* 此处写不写都可以 */
+  }
+  .editor-body-main {
+    height: 600px;
+    overflow-y: auto;
+  }
   .el-dialog {
     margin-top: 5vh !important;
   }
   .el-form {
     .el-form-item__label::before {
       margin-right: 0px !important;
+    }
+    .el-form-item {
+      margin-bottom: 2px !important;
     }
     .el-input {
       width: 300px;
@@ -557,7 +452,41 @@ export default {
   }
 
   .editor-body-text {
-    height: 300px;
+    height: 280px;
+    margin-bottom: 10px;
+  }
+
+  .editor-body-form {
+    margin-bottom: 10px;
+    max-height: 240px;
+  }
+
+  .editor-body-audit {
+    .audit-title {
+      font-size: 14px;
+      font-weight: 700;
+      padding: 0px 32px;
+    }
+    ::-webkit-scrollbar {
+      height: 10px;
+      width: 10px;
+      background: #e8e8e8;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #c7c7c7;
+      border-radius: 5px;
+    }
+
+    .audit-row {
+      padding: 10px;
+      .audit-col {
+        padding: 10px;
+        span {
+          color: #909399;
+        }
+      }
+    }
   }
 }
 </style>
