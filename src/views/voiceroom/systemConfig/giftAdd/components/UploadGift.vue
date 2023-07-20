@@ -1,14 +1,14 @@
 <template>
   <div class="uploadImg-wrap">
     <ul v-if="fileList.length" class="el-upload-list el-upload-list--picture">
-      <li v-for="(item, index) in fileList" :key="item.url" class="el-upload-list__item is-success" style="display: flex;height: auto;">
+      <li v-for="(item, index) in fileList" :key="item.src" class="el-upload-list__item is-success" style="display: flex;height: auto;">
         <img
           :src="item.src"
           class="el-upload-list__item-thumbnail"
           style="width: 120px;height: 120px;margin-right: 10px;"
         />
         <div style="flex: 1;">
-          <div style="">
+          <div class="button-box">
             <el-button type="primary" round size="small" @click="reUpload(index)"
               >更改</el-button
             >
@@ -123,8 +123,8 @@ export default {
       this.imgUrl = "";
       this.$refs.uploadImg.clear();
       if (this.curIndex > -1 && this.fileList.length) {
-        const item = Object.assign({}, this.fileList[this.curIndex], {url});
-        this.fileList.splice(this.curIndex, 1, item)
+        const item = Object.assign({}, this.fileList[this.curIndex], {'src': url});
+        this.fileList.splice(this.curIndex, 1, item);
         this.curIndex = -1;
       } else {
         this.fileList.push({
@@ -132,7 +132,6 @@ export default {
         });
       }
     }
-
   },
 };
 </script>
