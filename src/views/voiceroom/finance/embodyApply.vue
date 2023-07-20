@@ -15,6 +15,7 @@ import publicAccountList from './public-account-list.vue'
 // 引入tab菜单组件
 import menuComp from '@/components/menuComp/index.vue'
 export default {
+    name: 'embodyApply-list',
     components: {
         applyComp,
         depositList,

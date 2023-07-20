@@ -8,6 +8,9 @@
         :show-search-btn="true"
         @onReset="reset"
         @onSearch="onSearch"
+        :show-batch-rurn="true"
+        batchRurnName="导出EXCEL"
+        @BatchRurn="BatchRurn"
       ></SearchPanel>
     </div>
     <tableList :cfgs="cfgs" ref="tableList"></tableList>
@@ -16,7 +19,7 @@
 
 <script>
 // 引入api
-import { refuseApply } from "@/api/finance.js";
+import { refuseApply, getBillDetail } from "@/api/finance.js";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
@@ -26,7 +29,7 @@ import blocked from "@/views/voiceroom/user/components/blocked.vue";
 // 引入api
 import REQUEST from "@/request/index.js";
 // 引入公共方法
-import { timeFormat } from "@/utils/common.js";
+import { timeFormat, exportTableData  } from "@/utils/common.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
 // 引入公共map
@@ -67,12 +70,12 @@ export default {
           },
         },
         {
-          name: "room_number",
+          name: "user_number",
           type: "input",
           value: "",
-          label: "房间ID",
+          label: "用户ID",
           isNum: true,
-          placeholder: "请输入房间ID",
+          placeholder: "请输入用户ID",
         },
       ];
     },
@@ -166,20 +169,7 @@ export default {
                   },
                   data ? data.name : "无"
                 ),
-                h(
-                  "span",
-                  {
-                    style: {
-                      display: params.row.status !== 1 ? "unset" : "none",
-                    },
-                    on: {
-                      click: () => {
-                        this.handleAuditReturn(params.row);
-                      },
-                    },
-                  },
-                  data ? data.name : "无"
-                ),
+                h("span", "--"),
               ]);
             },
           },
@@ -201,12 +191,12 @@ export default {
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams };
       return {
-        page: params.page,
-        pagesize: params.pagesize,
+        page: params ? params.page : null,
+        pagesize: params ? params.pagesize : null,
         room_number: s.room_number,
         id: this.$route.query.id || "",
-        start_time: Math.floor(s.start_time / 1000) || '',
-        end_time: Math.floor(s.end_time / 1000) || ''
+        start_time: Math.floor(s.start_time / 1000) || "",
+        end_time: Math.floor(s.end_time / 1000) || "",
       };
     },
     // 刷新列表
@@ -217,8 +207,8 @@ export default {
     async handleAuditReturn(row) {
       const params = {
         id: row.id,
-        apply_id: row.apply_id
-      }
+        apply_id: this.$route.query.id || "",
+      };
       let res = await refuseApply(params);
       if (res.code === 2000) {
         this.$message.success("操作成功");
@@ -238,6 +228,59 @@ export default {
     // 清空日期选择
     emptyDateTime() {
       this.dateTimeParams = {};
+    },
+    // 导出excel
+    async BatchRurn() {
+      let s = this.beforeSearch();
+      s.is_all = "1";
+      const loading = this.$loading({
+        lock: true,
+        text: "Loading",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      let res = await getBillDetail(s);
+      try {
+        let arr = JSON.parse(JSON.stringify(res.data.list));
+        if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
+        arr = arr.map((item, index) => {
+          let data = MAPDATA.STATUSLIST.find((a) => {
+            return a.value === item.status;
+          });
+          let params = {
+            addtime: item.addtime,
+            nickname: item.nickname,
+            user_number: item.user_number,
+            is_guild_account:
+              item.is_guild_account === 1
+                ? "公会长"
+                : item.is_guild_account === 0
+                ? "公会成员"
+                : "无",
+            gain: item.gain,
+            money: item.money,
+            status: data.name,
+            remark: item.remark,
+          };
+          return params;
+        });
+        let nameList = [
+          "申请时间",
+          "用户",
+          "用户ID",
+          "用户角色",
+          "喵粮",
+          "提现金额",
+
+          "状态",
+          "备注",
+        ];
+        exportTableData(arr, nameList, "对公转账明细列表");
+        loading.close();
+      } catch (error) {
+        console.log(error);
+        loading.close();
+      }
     },
   },
 };
