@@ -181,6 +181,7 @@ export default {
     // 重置
     reset() {
       this.searchParams = {};
+      this.dateTimeParams = {};
       this.getList();
     },
     // 查询
@@ -193,7 +194,7 @@ export default {
       return {
         page: params ? params.page : null,
         pagesize: params ? params.pagesize : null,
-        room_number: s.room_number,
+        user_number: s.user_number,
         id: this.$route.query.id || "",
         start_time: Math.floor(s.start_time / 1000) || "",
         end_time: Math.floor(s.end_time / 1000) || "",

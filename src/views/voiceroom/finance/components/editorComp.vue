@@ -132,7 +132,7 @@
                     <el-form-item label="发票超额">
                       {{
                         !isNaN(checkForm.real_invoice_money)
-                          ? +checkForm.real_invoice_money - +ruleForm.real_money
+                          ? (+checkForm.real_invoice_money - +ruleForm.real_money).toFixed(2)
                           : "--"
                       }}
                     </el-form-item>
@@ -144,7 +144,7 @@
         </el-form>
 
         <!-- 审批记录 -->
-        <el-card class="editor-body-audit" shadow="never">
+        <el-card class="editor-body-audit" shadow="never" v-if="ruleForm.audit_log && ruleForm.audit_log.length">
           <div class="audit-title">审批记录</div>
           <template v-for="item in ruleForm.audit_log">
             <el-row class="audit-row">
@@ -170,7 +170,7 @@
                     v-downLoad="subItem.value"
                     rel="noopener"
                   >
-                    {{ subItem.title }}
+                    <span style="color: #1890ff;">{{ subItem.title }}</span>
                   </a>
                 </div>
               </el-col>
@@ -463,9 +463,8 @@ export default {
 
   .editor-body-audit {
     .audit-title {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
-      padding: 0px 32px;
     }
     ::-webkit-scrollbar {
       height: 10px;

@@ -171,6 +171,11 @@ export default {
             prop: "guild_name",
           },
           {
+            label: "公会ID",
+            minWidth: "100px",
+            prop: "guild_id",
+          },
+          {
             label: "喵粮",
             minWidth: "100px",
             prop: "gain",
