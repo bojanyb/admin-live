@@ -69,7 +69,7 @@ const giveAwayRouter = {
 			name: 'embodyApply-list',
 			meta: {
 				title: '提现申请',
-				noCache: true,
+				noCache: false,
 			},
 		},
     {
