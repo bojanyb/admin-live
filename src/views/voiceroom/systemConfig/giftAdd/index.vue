@@ -37,6 +37,12 @@
                       <el-radio v-for="item in activityList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
                   </el-radio-group>
               </el-form-item>
+              <el-form-item label="礼物角标" prop="gift_icon">
+                <uploadImg ref="uploadImg" v-model="ruleForm.gift_icon" :imgUrl="ruleForm.gift_icon" name="gift_icon" @validateField="validateField" accept=".png"></uploadImg>
+              </el-form-item>
+              <el-form-item label="礼物banner" prop="gift_banner">
+                <uploadImg ref="uploadImg" v-model="ruleForm.gift_banner" :imgUrl="ruleForm.gift_banner" name="gift_banner" @validateField="validateField" accept=".jpg,.jpeg"></uploadImg>
+              </el-form-item>
               <el-form-item label="礼物播放类型" prop="play_type">
                   <el-radio-group v-model="ruleForm.play_type" @input="handleChangePlayType">
                       <el-radio v-for="item in playTypeList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
@@ -138,6 +144,8 @@ export default {
                 gift_genre: 4,
                 play_type: 1,
                 is_activity: 1, // 是否是活动类型
+                gift_icon: '',
+                gift_banner: [],
                 gift_photo: '',
                 gift_gif: '',
                 gift_version: '',
