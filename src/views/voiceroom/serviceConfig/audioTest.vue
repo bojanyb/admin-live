@@ -126,6 +126,10 @@ export default {
       selectionList: [],
       checkOperatorList: [],
       dateCheckTimeParams: {},
+      dateTimeParams: {
+          start_time: null,
+          end_time: null,
+      }
     };
   },
   computed: {
@@ -233,6 +237,7 @@ export default {
           format: "yyyy-MM-dd HH:mm:ss",
           label: "创建时间选择",
           value: "",
+          linkage: true,
           handler: {
             change: (v) => {
               this.emptyDateTime();
@@ -819,11 +824,23 @@ export default {
         })
         .catch((res) => {});
     },
+    // 初始化时间
+    handleInitTime() {
+        let date = timeFormat(new Date(), "YYYY-MM-DD", false);
+        let start = new Date(date + " 00:00:00").getTime();
+        let end = new Date(date + " 23:59:59").getTime();
+        this.searchParams.dateTimeParams = [start, end];
+        this.dateTimeParams = {
+          start_time: start,
+          end_time: end,
+        };
+    }
   },
   created() {
     this.getRoomTypeList();
     this.getRiskLabel();
     this.getCheckOperatorList();
+    this.handleInitTime();
   },
 };
 </script>

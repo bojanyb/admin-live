@@ -40,6 +40,21 @@
                         <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="对公转账" prop="cash_type">
+                    <el-select v-model="ruleForm.cash_type" placeholder="请选择对公转账">
+                        <el-option label="默认" :value="0"></el-option>
+                        <el-option label="对公转账" :value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="发票税率" prop="cash_invoice_rate" v-if="ruleForm.cash_type === 1">
+                    <el-select v-model="ruleForm.cash_invoice_rate" placeholder="请选择发票税率">
+                        <el-option label="3%" :value="3"></el-option>
+                        <el-option label="6%" :value="6"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="手续费率" v-if="ruleForm.cash_type === 1">
+                   <span>{{ ruleForm.cash_invoice_rate === 3 ? '3.2%' : '0%'  }}</span>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">取 消</el-button>
@@ -72,6 +87,8 @@ export default {
                 // rebate: 0,
                 guild_type: this.type,
                 operator: null,
+                cash_type: 0,
+                cash_invoice_rate: 3
             },
             oldParams: {}, // 老数据
             rules: {
@@ -96,6 +113,12 @@ export default {
                 // ],
                 remark: [
                     { required: false, message: '请输入公会简介', trigger: 'blur' }
+                ],
+                cash_type: [
+                    { required: true, message: '请选择对公转账', trigger: 'change' }
+                ],
+                cash_invoice_rate: [
+                    { required: true, message: '请选择发票税率', trigger: 'change' }
                 ]
             },
             operatorList: [],
@@ -150,6 +173,11 @@ export default {
                 para.guild_number = params.guild_number ? params.guild_number : "";
                 para.company = params.company ? params.company : "";
                 para.status = params.status;
+                para.cash_type = params.cash_type;
+                if (para.cash_type === 1) {
+                  para.cash_invoice_rate = params.cash_invoice_rate === "3.00" ? 3 : 6;
+                  para.cash_fee_rate = params.cash_fee_rate;
+                }
                 // para.rebate = params.rebate;
                 this.$set(this.$data, 'ruleForm', para)
             }
@@ -181,7 +209,10 @@ export default {
         async submitForm() {
             this.$refs.ruleForm.validate(async (valid) => {
                 if (valid) {
-                    let params = { ...this.ruleForm }
+                  let params = { ...this.ruleForm }
+                    if (+params.cash_type === 1) {
+                      params.cash_fee_rate = params.cash_invoice_rate === 3 ? '3.2%' : '0%'
+                    }
                     if(this.status === 'add') {
                         let res = await getGuildCreateV2(params)
                         if(res.code === 2000) {

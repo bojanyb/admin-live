@@ -337,6 +337,13 @@ const request = {
         getMerchantList: `${HTTPHEADER}/Recharge/getMerchantList`, // 获取appid
         getWXMerchantList: `${HTTPHEADER}/Recharge/getWXMerchantList`, // 获取商户号
         queryPayStatus: `${HTTPHEADER}/Recharge/queryPayStatus`, // 查询充值订单支付状态
+
+        getCashList: `${HTTPHEADER}/GuildCash/getCashList`, // 对公转账列表
+        getCashDetail: `${HTTPHEADER}/GuildCash/getCashDetail`, // 对公转账详情
+        refuseCash: `${HTTPHEADER}/GuildCash/refuseCash`, // 审核退回
+        completeCash: `${HTTPHEADER}/GuildCash/completeCash`, // 确定结算
+        getBillDetail: `${HTTPHEADER}/GuildCash/getBillDetail`, // 账单明细列表
+        refuseApply: `${HTTPHEADER}/GuildCash/refuseApply`, // 确定结算
     },
 
     // 消息管理

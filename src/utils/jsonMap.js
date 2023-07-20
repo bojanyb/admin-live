@@ -3163,6 +3163,40 @@ const REVIEWSTATUSLIST = [
   },
 ]
 
+const CASHAUDITLIST = [
+  {
+    name: '待提交审核',
+    value: 0
+  },
+  {
+    name: '结算审核中',
+    value: 1
+  },
+  {
+    name: '结算审核退回',
+    value: 2
+  },
+  {
+    name: '已结算',
+    value: 3
+  },
+]
+
+const TYPEAUDITLIST = [
+  {
+    name: '发起申请',
+    value: 1
+  },
+  {
+    name: '审核退回',
+    value: 2
+  },
+  {
+    name: '确认结算',
+    value: 3
+  },
+]
+
 export default {
   USERINVITE,
   DOWNLOADSOURCE,
@@ -3309,5 +3343,7 @@ export default {
   DEBRISS,
   GIFTACTIVETYLIST,
   ISACTIVETYLIST,
-  REVIEWSTATUSLIST
+  REVIEWSTATUSLIST,
+  CASHAUDITLIST,
+  TYPEAUDITLIST
 }

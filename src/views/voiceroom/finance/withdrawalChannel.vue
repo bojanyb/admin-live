@@ -284,6 +284,14 @@ export default {
             }
           },
           {
+            label: "对公转账",
+            prop: "aaa",
+            width: "100px",
+            render: (h, params) => {
+              return h("span", params.row.aaa ? "是" : "否");
+            }
+          },
+          {
             label: "公司-支付宝",
             prop: "aiyi_alipay",
             width: "100px",

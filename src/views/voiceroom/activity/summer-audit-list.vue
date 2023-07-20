@@ -89,9 +89,9 @@
 					{
 						name: '晋级赛歌曲审核'
 					},
-					// {
-					// 	name: '半决赛歌曲审核'
-					// }
+					{
+						name: '半决赛歌曲审核'
+					}
 				],
 				tabIndex: '0',
 				searchParams: {
