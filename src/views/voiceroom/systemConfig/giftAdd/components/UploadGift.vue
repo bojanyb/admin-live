@@ -1,13 +1,9 @@
 <template>
-  <div class="uploadImg-wrap">
+  <div class="upload-img-wrap">
     <ul v-if="fileList.length" class="el-upload-list el-upload-list--picture">
-      <li v-for="(item, index) in fileList" :key="item.src" class="el-upload-list__item is-success" style="display: flex;height: auto;">
-        <img
-          :src="item.src"
-          class="el-upload-list__item-thumbnail"
-          style="width: 120px;height: 120px;margin-right: 10px;"
-        />
-        <div style="flex: 1;">
+      <li v-for="(item, index) in fileList" :key="item.src" class="el-upload-list__item">
+        <img class="el-upload-list__item-thumbnail" :src="item.src" alt=""/>
+        <div class="el-upload-list__item-info">
           <div class="button-box">
             <el-button type="primary" round size="small" @click="reUpload(index)"
               >更改</el-button
@@ -16,16 +12,15 @@
               >删除</el-button
             >
           </div>
-          <div class="input-box" style="width: 100%;margin-top: 10px;">
+          <div class="input-box">
             <el-input
               placeholder="请输入内容"
               v-model="item.val"
               class="input-with-select"
               size="small"
-              style="width: 100%;"
               :disabled="item.type == 4"
             >
-              <el-select v-model="item.type" slot="prepend" placeholder="请选择" style="width: 90px;">
+              <el-select class="type-select" v-model="item.type" slot="prepend" placeholder="请选择">
                 <el-option label="半屏H5" value="5"></el-option>
                 <el-option label="全屏H5" value="1"></el-option>
                 <el-option label="房间ID" value="2"></el-option>
@@ -33,7 +28,7 @@
                 <el-option label="无跳转" value="4"></el-option>
               </el-select>
             </el-input>
-            <el-input v-show="item.type == 5" placeholder="请输入屏幕高度" v-model="item.high" style="width: 100%;margin-top: 10px;">
+            <el-input class="height-input" v-show="item.type == 5" placeholder="请输入屏幕高度" v-model="item.high">
               <template slot="append">dp</template>
             </el-input>
           </div>
@@ -136,4 +131,33 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.upload-img-wrap {
+  .el-upload-list__item {
+    display: flex;
+    height: auto;
+  }
+  .el-upload-list__item-thumbnail {
+    width: 120px;
+    height: 120px;
+    margin-right: 10px;
+  }
+  .el-upload-list__item-info {
+    flex: 1;
+  }
+  .input-box {
+    width: 100%;
+    margin-top: 10px;
+  }
+  .input-with-select {
+    width: 100%;
+  }
+  .type-select {
+    width: 90px !important;
+  }
+  .height-input {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+</style>
