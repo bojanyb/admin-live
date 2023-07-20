@@ -202,6 +202,24 @@
 							}
 						},
 						{
+							label: '对公转账',
+              prop: 'cash_type',
+							render: (h, params) => {
+								return h('div', [
+									h('span', +params.row.cash_type === 1 ? "对公转账" : "默认"),
+								])
+							}
+						},
+						{
+							label: '手续费率',
+              prop: 'bbb',
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.cash_invoice_rate || '--'),
+								])
+							}
+						},
+						{
 							label: '操作',
 							minWidth: '320px',
 							fixed: 'right',

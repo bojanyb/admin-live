@@ -90,6 +90,15 @@ const giveAwayRouter = {
         noCache: true,
       },
     },
+    {
+      path: 'public-transfer',
+      component: () => import('@/views/voiceroom/finance/public-transfer.vue'),
+      name: 'public-transfer',
+      meta: {
+        title: '对公转账申请',
+        noCache: true,
+      },
+    },
 		{
 			path: 'embodyHistory-list',
 			component: () => import('@/views/voiceroom/finance/embodyHistory'),
