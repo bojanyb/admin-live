@@ -86,9 +86,9 @@
 					{
 						name: '初选赛歌曲审核'
 					},
-					// {
-					// 	name: '晋级赛歌曲审核'
-					// },
+					{
+						name: '晋级赛歌曲审核'
+					},
 					// {
 					// 	name: '半决赛歌曲审核'
 					// }
@@ -373,7 +373,7 @@
 			tabChange() {
 				this.$nextTick(res=>{
 					this.searchParams.round = 1;
-					if(this.$refs.tableList && this.tabIndex < 2) {
+					if(this.$refs.tableList) {
 						this.$refs.tableList.getData()
 					}
 				})

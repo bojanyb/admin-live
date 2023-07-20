@@ -68,6 +68,7 @@
                     <el-radio-group v-model="ruleForm.play_type">
                         <el-radio :label="1">Lottie</el-radio>
                         <el-radio :label="2">SVGA</el-radio>
+                        <el-radio :label="3">MP4</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="商品列表图片" prop="goods_bg_small">
@@ -216,6 +217,8 @@ export default {
                 return '.zip'
             } else if(this.ruleForm.play_type === 2) {
                 return '.svg,.svga'
+            } else if(this.ruleForm.play_type === 3) {
+                return '.mp4,.mov,.m4v,m4a'
             }
         }
     },

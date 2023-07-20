@@ -565,6 +565,13 @@ const request = {
         getPizzaGiftLog: `${HTTPHEADER}/hdPizzaLog/giftLog`, // 礼物数据
         getPizzaGiftProduceLog: `${HTTPHEADER}/hdPizzaLog/getProduceLog`, // 制作披萨数据
         getPizzaExchangeLog: `${HTTPHEADER}/hdPizzaLog/exchangeLog`, // 获取兑换数据
+
+        // 欢乐钓鱼季
+        getPoolNameV6: `${HTTPHEADER}/hdAnglerLog/getPoolName`, // 获取奖池列表
+        poolDetailV6: `${HTTPHEADER}/hdAnglerLog/poolDetail`, // 获取抽奖数据
+        getRoundV6: `${HTTPHEADER}/hdAnglerLog/getRound`, // 获取轮次
+        luckyListV6: `${HTTPHEADER}/hdAnglerLog/luckyList`, // 榜单排名表
+        luckyConfigV6: `${HTTPHEADER}/hdAnglerLog/luckyConfig`, // 榜单配置
     },
 
     // 靓号管理
