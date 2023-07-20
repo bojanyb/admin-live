@@ -276,7 +276,7 @@ export default {
         page: params ? params.page : null,
         pagesize: params ? params.pagesize : null,
         guild_number: s.guild_number || '',
-        status: s.status || '',
+        status: s.status,
         start_time: Math.floor(s.start_time / 1000) || '',
         end_time: Math.floor(s.end_time / 1000) || ''
       };
