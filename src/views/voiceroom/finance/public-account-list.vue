@@ -118,24 +118,13 @@ export default {
           options: MAPDATA.CASHAUDITLIST,
         },
         {
-          name: "guild_id",
+          name: "guild_number",
           type: "input",
           value: "",
           label: "公会ID",
           isNum: true,
           linkage: true,
           placeholder: "请输入公会ID",
-        },
-        {
-          name: "guild_id",
-          type: "select",
-          value: null,
-          keyName: "value",
-          optionLabel: "name",
-          label: "公会",
-          placeholder: "请选择",
-          clearable: true,
-          options: MAPDATA.GOODNUMTYPE,
         },
       ];
     },
@@ -286,7 +275,7 @@ export default {
       return {
         page: params ? params.page : null,
         pagesize: params ? params.pagesize : null,
-        guild_id: s.guild_id || '',
+        guild_number: s.guild_number || '',
         status: s.status || '',
         start_time: Math.floor(s.start_time / 1000) || '',
         end_time: Math.floor(s.end_time / 1000) || ''
