@@ -201,3 +201,11 @@ export function refuseApply(data) {
   })
 }
 
+// 账单明细
+export function getBillDetail(data) {
+  return request({
+    url: REQUEST.finance.getBillDetail,
+    method: 'post',
+    data
+  })
+}
