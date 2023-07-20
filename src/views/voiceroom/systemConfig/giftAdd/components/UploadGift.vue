@@ -1,7 +1,7 @@
 <template>
   <div class="uploadImg-wrap">
     <ul v-if="fileList.length" class="el-upload-list el-upload-list--picture">
-      <li v-for="(item, index) in fileList" :key="index" :tabindex="index" class="el-upload-list__item is-success" style="display: flex;height: auto;">
+      <li v-for="(item, index) in fileList" :key="item.url" class="el-upload-list__item is-success" style="display: flex;height: auto;">
         <img
           :src="item.src"
           class="el-upload-list__item-thumbnail"
@@ -23,7 +23,7 @@
               class="input-with-select"
               size="small"
               style="width: 100%;"
-              :disabled="item.type == 3"
+              :disabled="item.type == 4"
             >
               <el-select v-model="item.type" slot="prepend" placeholder="请选择" style="width: 90px;">
                 <el-option label="半屏H5" value="5"></el-option>
@@ -40,7 +40,7 @@
         </div>
       </li>
     </ul>
-    <div :style="uploadStyle">
+    <div v-show="this.fileList.length < 5" :style="uploadStyle">
       <ImageUpload
         ref="uploadImg"
         v-model="imgUrl"
@@ -122,10 +122,9 @@ export default {
     uploadSuccess(url) {
       this.imgUrl = "";
       this.$refs.uploadImg.clear();
-      if (this.curIndex > 0 && this.fileList.length) {
-        const item = this.fileList[this.curIndex];
-        item.url = url;
-        this.fileList.splice(this.curIndex, 1, item);
+      if (this.curIndex > -1 && this.fileList.length) {
+        const item = Object.assign({}, this.fileList[this.curIndex], {url});
+        this.fileList.splice(this.curIndex, 1, item)
         this.curIndex = -1;
       } else {
         this.fileList.push({
