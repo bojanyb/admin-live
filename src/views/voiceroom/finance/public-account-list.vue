@@ -135,44 +135,24 @@ export default {
         columns: [
           {
             label: "申请时间",
-            minWidth: "120px",
-            render: (h, params) => {
-              return h(
-                "span",
-                params.row.start_time
-                  ? timeFormat(
-                      params.row.start_time,
-                      "YYYY-MM-DD HH:mm:ss",
-                      true
-                    )
-                  : "--"
-              );
-            },
+            minWidth: "140px",
+            prop: "create_time"
           },
           {
             label: "统计时间",
-            minWidth: "120px",
+            minWidth: "150px",
             render: (h, params) => {
-              return h(
-                "span",
-                params.row.start_time
-                  ? timeFormat(
-                      params.row.start_time,
-                      "YYYY-MM-DD HH:mm:ss",
-                      true
-                    )
-                  : "--"
-              );
+              return h("span", `${params.row.start_time}-${params.row.end_time}`);
             },
           },
           {
             label: "公会",
-            minWidth: "100px",
+            minWidth: "150px",
             prop: "guild_name",
           },
           {
             label: "公会ID",
-            minWidth: "100px",
+            minWidth: "90px",
             prop: "guild_id",
           },
           {
@@ -182,6 +162,7 @@ export default {
           },
           {
             label: "提现金额",
+            minWidth: "120px",
             prop: "apply_amount",
           },
           {
@@ -204,7 +185,6 @@ export default {
           },
           {
             label: "实际收入",
-            minWidth: "100px",
             prop: "real_money",
           },
           {
