@@ -428,3 +428,44 @@ export function getAuditNoPass(data) {
     data
   })
 }
+/*******欢乐钓鱼季**********/
+// 获取奖池列表
+export function getPoolNameV6(data) {
+  return request({
+    url: api.activity.getPoolNameV6,
+    method: 'post',
+    data
+  })
+}
+// 获取抽奖数据
+export function poolDetailV6(data) {
+  return request({
+    url: api.activity.poolDetailV6,
+    method: 'post',
+    data
+  })
+}
+// 获取轮次
+export function getRoundV6(data) {
+  return request({
+    url: api.activity.getRoundV6,
+    method: 'post',
+    data
+  })
+}
+// 榜单排名表
+export function luckyListV6(data) {
+  return request({
+    url: api.activity.luckyListV6,
+    method: 'post',
+    data
+  })
+}
+// 榜单配置
+export function luckyConfigV6(data) {
+  return request({
+    url: api.activity.luckyConfigV6,
+    method: 'post',
+    data
+  })
+}
