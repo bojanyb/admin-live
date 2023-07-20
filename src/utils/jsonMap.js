@@ -314,6 +314,10 @@ const CASHCHANNEL = [
   {
     value: 11,
     name: '福穗支付宝',
+  },
+  {
+    value: 12,
+    name: '对公转账',
   }
 ]
 

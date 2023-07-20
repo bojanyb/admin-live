@@ -376,7 +376,7 @@ export default {
         this.ruleForm = {
           ...response.data,
         };
-        this.ruleForm.status = 2;
+        // this.ruleForm.status = 2;
         console.log(this.ruleForm, "this.ruleForm");
       }
     },

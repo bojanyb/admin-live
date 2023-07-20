@@ -208,8 +208,14 @@ export default {
                     width: '200px',
                     render: (h, params) => {
                         return h('div', [
-                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.doCashFunc(params.row, 'success')}}}, '通过'),
-                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.doCashFunc(params.row, 'reject')}}}, '退回')
+                          h('el-button', {
+                            props: { type: 'primary' },
+                            style: {
+                              display: params.row.channel !== 12 ? "unset" : "none",
+                            },
+                            on: { click: () => { this.doCashFunc(params.row, 'success') } }
+                          }, '通过'),
+                           h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.doCashFunc(params.row, 'reject')}}}, '退回')
                         ])
                     }
                 }
