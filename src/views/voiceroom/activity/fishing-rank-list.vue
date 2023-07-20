@@ -72,7 +72,7 @@ export default {
         }];
       return {
         vm: this,
-        url: REQUEST.activity.luckyListV5,
+        url: REQUEST.activity.luckyListV6,
         columns: columnsList,
       };
     },
