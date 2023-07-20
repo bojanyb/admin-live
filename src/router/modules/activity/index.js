@@ -164,6 +164,24 @@ const activityRouter = {
 			},
 			name: 'summer-audit-list'
 		},
+		{
+			path: 'fishing-star-list',
+			component: () => import('@/views/voiceroom/activity/fishing-star-list.vue'),
+			meta: {
+				title: '欢乐钓鱼季抽奖数据',
+				noCache: true
+			},
+			name: 'fishing-star-list'
+		},
+    	{
+			path: 'fishing-rank-list',
+			component: () => import('@/views/voiceroom/activity/fishing-rank-list.vue'),
+			meta: {
+				title: '欢乐钓鱼季榜单排名表',
+				noCache: true
+			},
+			name: 'fishing-rank-list'
+		},
         // {
 		// 	path: 'first-charge',
 		// 	component: () => import('@/views/voiceroom/platformActivity/first-charge/index.vue'),
