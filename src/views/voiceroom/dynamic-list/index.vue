@@ -26,6 +26,8 @@ import REQUEST from '@/request/index.js'
 import mixins from '@/utils/mixins.js'
 // 引入公共方法
 import { timeFormat } from '@/utils/common.js'
+// 引入公共map
+import MAPDATA from '@/utils/jsonMap.js'
 export default {
     mixins: [mixins],
     components: {
@@ -58,6 +60,16 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
+                    name: 'status',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '审核状态',
+                    placeholder: '请选择',
+                    options: MAPDATA.RISKMANAGEMENTIMGSTATUSLIST
+                },
+                {
                     name: 'dateTimeParams',
                     type: 'datePicker',
                     dateType: 'datetimerange',
@@ -83,6 +95,11 @@ export default {
                 columns: [
                     {
                         label: '发送时间',
+                        prop: 'create_time',
+                        minWidth: '100px'
+                    },
+                    {
+                        label: '审核时间',
                         prop: 'create_time',
                         minWidth: '100px'
                     },
@@ -113,6 +130,10 @@ export default {
                     },
                     {
                         label: '评论数量',
+                        prop: 'msg_number'
+                    },
+                    {
+                        label: '审核状态',
                         prop: 'msg_number'
                     },
                     {
