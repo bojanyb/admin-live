@@ -111,6 +111,8 @@
                       <el-input
                         type="textarea"
                         v-model="checkForm.fail_reason"
+                        maxlength="50"
+                        show-word-limit
                       ></el-input>
                     </el-form-item>
                   </el-col>
