@@ -89,8 +89,11 @@
 					{
 						name: '晋级赛歌曲审核'
 					},
+					{
+						name: '半决赛歌曲审核'
+					},
 					// {
-					// 	name: '半决赛歌曲审核'
+					// 	name: '总决赛实力榜打分'
 					// }
 				],
 				tabIndex: '0',
@@ -195,7 +198,17 @@
 						}
 					}
 				]
-				return (this.tabIndex == '0' ? arr1 : arr2)
+				let arr3 = [
+					{
+						name: 'user_number',
+						type: 'input',
+						value: '',
+						label: '用户ID',
+						isNum: true,
+						placeholder: '请输入用户ID'
+					}
+				]
+				return (this.tabIndex == '0' ? arr1 : (this.tabIndex == '4' ? arr3 : arr2 ))
 			},
 			cfgs() {
 				let columnsList = [];
@@ -299,15 +312,69 @@
 								}, on: {click:()=>{this.noass(params.row)}}}, '拒绝')
 							])
 						}
-				}
+					}
+				]
+				let arr3 = [
+					{
+						label: '排名',
+						prop: 'ranking'
+					},
+					{
+						label: '用户昵称',
+						prop: 'nickname'
+					},
+					{
+						label: '用户ID',
+						prop: 'user_number'
+					},
+					{
+						label: '评委1',
+						prop: 'judge1'
+					},
+					{
+						label: '评委2',
+						prop: 'judge2'
+					},
+					{
+						label: '评委3',
+						prop: 'judge3'
+					},
+					{
+						label: '评委4',
+						prop: 'judge4'
+					},
+					{
+						label: '得分',
+						prop: 'score'
+					},
+					{
+						label: '操作',
+						fixed: 'right',
+						render: (h, params) => {
+							return h('div', [
+								h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.finalEdit(params.row)}}}, '修改'),
+							])
+						}
+					}
 				]
 				let portName = "";
-				if(Number(this.tabIndex) !== 0){
-					columnsList = arr2;
-					portName = "getAuditList";
-				}else{
-					columnsList = arr1;
-					portName = "getSummerUserList";
+				switch (Number(this.tabIndex)) {
+					case 0:
+						columnsList = arr1;
+						portName = "getSummerUserList";
+						break;
+					case 1:
+					case 2:
+					case 3:
+						columnsList = arr2;
+						portName = "getAuditList";
+						break;
+					case 4:
+						columnsList = arr3;
+						portName = "getSummerUserList";
+						break;
+					default:
+						break;
 				}
 				return {
 					vm: this,
@@ -450,6 +517,10 @@
 					this.isEditRuleForm = false;
 				}
 			},
+			// 总决赛实力榜打分修改
+			finalEdit(){
+				console.log("总决赛实力榜打分修改---");
+			}
 		}
 	}
 </script>

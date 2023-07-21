@@ -607,6 +607,7 @@ const request = {
         getAuditList: `${HTTPHEADER}/hdMusicfestLog/auditList`, // 后台-添加初选用户
         getAuditPass: `${HTTPHEADER}/hdMusicfestLog/auditPass`, // 后台-歌曲审核通过
         getAuditNoPass: `${HTTPHEADER}/hdMusicfestLog/auditNoPass`, // 后台-歌曲审核不通过
+        likeLog: `${HTTPHEADER}/hdMusicfestLog/likeLog`, // 后台-点赞数据列表
     }
 }
 
