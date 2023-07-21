@@ -1,7 +1,7 @@
 <!-- // 对公转账列表 -->
 <template>
   <div class="public-account-container">
-    <el-card class="section-select" shadow="never">
+    <!-- <el-card class="section-select" shadow="never">
       <el-form>
         <el-form-item label="结算状态：">
           <el-select v-model="sectionForm.status" @change="handleAccountChange">
@@ -9,12 +9,12 @@
           </el-select>
         </el-form-item>
       </el-form>
-    </el-card>
+    </el-card> -->
 
     <el-card class="section-select" shadow="never">
-      <div class="section-title">
+      <!-- <div class="section-title">
         {{ sectionForm.status | filterCheckAudit }}
-      </div>
+      </div> -->
       <div class="model" v-if="sectionForm.status !== 3">
         <span>总计喵粮：{{ ruleForm.gain_total || 0 }}条</span>
         <span>总计提现金额：{{ ruleForm.apply_amount_total || 0 }}元</span>
@@ -116,6 +116,11 @@ export default {
           placeholder: "请选择",
           clearable: true,
           options: MAPDATA.CASHAUDITLIST,
+          handler: {
+            change: (status) => {
+             this.sectionForm.status = status
+            }
+          },
         },
         {
           name: "guild_number",
@@ -231,20 +236,20 @@ export default {
       };
     },
   },
-  filters: {
-    filterCheckAudit(status) {
-      let data = MAPDATA.CASHAUDITLIST.find((item) => {
-        return item.value === status;
-      });
-      return data.name + '结算单';
-    },
-  },
+  // filters: {
+  //   filterCheckAudit(status) {
+  //     let data = MAPDATA.CASHAUDITLIST.find((item) => {
+  //       return item.value === status;
+  //     });
+  //     return data.name + '结算单';
+  //   },
+  // },
   data() {
     return {
       ruleForm: {},
       isDestoryComp: false, // 销毁组件
       sectionForm: {
-        status: 0,
+        status: null,
       },
       accountMapOptions: MAPDATA.CASHAUDITLIST
     };

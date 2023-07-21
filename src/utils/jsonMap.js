@@ -3156,10 +3156,6 @@ const REVIEWSTATUSLIST = [
 
 const CASHAUDITLIST = [
   {
-    name: '待提交审核',
-    value: 0
-  },
-  {
     name: '结算审核中',
     value: 1
   },
