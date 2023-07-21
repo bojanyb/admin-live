@@ -22,7 +22,7 @@
             >
             </SearchPanel>
         </div>
-		<tableList :cfgs="cfgs" ref="tableList"  @selectionChange="selectionChange"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList"  @selectionChange="selectionChange" layout="total, sizes, prev, pager, next, jumper"></tableList>
     </div>
 </template>
 
@@ -141,6 +141,9 @@ export default {
                 vm: this,
                 isShowCheckbox: true,
                 url: REQUEST.risk.screenImgLog,
+                search: {
+                  sizes: [10, 30, 50, 100]
+                },
                 columns: [
                     {
                         label: '时间',
