@@ -207,7 +207,8 @@ const request = {
     user: {
         list: `${HTTPHEADER}/User/getUserInfo`,
         defaultFace: `${HTTPHEADER}/user/defaultFace`,
-        autonymlist: `${HTTPHEADER}/Verify`,
+        autonymlist: `${HTTPHEADER}/Verify/list`,
+        getVerifyOptions: `${HTTPHEADER}/Verify/options`, // 获取实名列表筛选项
         edit: `${HTTPHEADER}/User/userEdit`, // 编辑用户
         userSave: `${HTTPHEADER}/User/userSave`, // 用户封禁/启用
         musicList: `${HTTPHEADER}/music/index`, // 音乐列表
