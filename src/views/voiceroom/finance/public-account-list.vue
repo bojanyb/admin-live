@@ -109,12 +109,11 @@ export default {
         {
           name: "status",
           type: "select",
-          value: null,
+          value: 1,
           keyName: "value",
           optionLabel: "name",
           label: "状态",
           placeholder: "请选择",
-          clearable: true,
           options: MAPDATA.CASHAUDITLIST,
           handler: {
             change: (status) => {
@@ -134,25 +133,22 @@ export default {
       ];
     },
     cfgs() {
-      return {
-        vm: this,
-        url: REQUEST.finance.getCashList,
-        columns: [
+        let arr =[
           {
             label: "申请时间",
-            minWidth: "140px",
+            minWidth: "160px",
             prop: "create_time"
           },
           {
             label: "统计时间",
-            minWidth: "150px",
+            minWidth: "160px",
             render: (h, params) => {
               return h("span", `${params.row.start_time}-${params.row.end_time}`);
             },
           },
           {
             label: "公会",
-            minWidth: "150px",
+            minWidth: "120px",
             prop: "guild_name",
           },
           {
@@ -172,6 +168,7 @@ export default {
           },
           {
             label: "异常扣除",
+            minWidth: "100px",
             prop: "abnormal_money",
           },
           {
@@ -186,10 +183,12 @@ export default {
           },
           {
             label: "手续费",
+            minWidth: "100px",
             prop: "cash_fee",
           },
           {
             label: "实际收入",
+            minWidth: "100px",
             prop: "real_money",
           },
           {
@@ -203,6 +202,7 @@ export default {
           {
             label: "操作",
             width: "260px",
+            fixed: "right",
             render: (h, params) => {
               return h("div", [
                 h(
@@ -232,7 +232,122 @@ export default {
               ]);
             },
           },
-        ],
+        ]
+
+        let arr1 =[
+          {
+            label: "申请时间",
+            minWidth: "160px",
+            prop: "create_time"
+          },
+          {
+            label: "统计时间",
+            minWidth: "160px",
+            render: (h, params) => {
+              return h("span", `${params.row.start_time}-${params.row.end_time}`);
+            },
+          },
+          {
+            label: "公会",
+            minWidth: "120px",
+            prop: "guild_name",
+          },
+          {
+            label: "公会ID",
+            minWidth: "90px",
+            prop: "guild_id",
+          },
+          {
+            label: "喵粮",
+            minWidth: "100px",
+            prop: "gain",
+          },
+          {
+            label: "提现金额",
+            minWidth: "120px",
+            prop: "apply_amount",
+          },
+          {
+            label: "异常扣除",
+            minWidth: "100px",
+            prop: "abnormal_money",
+          },
+          {
+            label: "其他扣除",
+            minWidth: "100px",
+            prop: "other_money",
+          },
+          {
+            label: "实际金额",
+            minWidth: "100px",
+            prop: "cash_money",
+          },
+          {
+            label: "实际开票金额",
+            minWidth: "150px",
+            prop: "real_invoice_money_total",
+          },
+          {
+            label: "发票超额",
+            minWidth: "150px",
+            prop: "real_invoice_excess_total",
+          },
+          {
+            label: "手续费",
+            minWidth: "100px",
+            prop: "cash_fee",
+          },
+          {
+            label: "实际收入",
+            minWidth: "100px",
+            prop: "real_money",
+          },
+          {
+            label: "状态",
+            minWidth: "100px",
+						render: (h, params) => {
+							let data = MAPDATA.CASHAUDITLIST.find(item => { return item.value === params.row.status })
+							return h('span', data ? data.name : '无')
+						}
+          },
+          {
+            label: "操作",
+            width: "260px",
+            fixed: "right",
+            render: (h, params) => {
+              return h("div", [
+                h(
+                  "el-button",
+                  {
+                    props: { type: "info" },
+                    on: {
+                      click: () => {
+                        this.handleLookDetail(params.row);
+                      },
+                    },
+                  },
+                  "账单明细"
+                ),
+                h(
+                  "el-button",
+                  {
+                    props: { type: "primary" },
+                    on: {
+                      click: () => {
+                        this.showEditor(params.row.status === 1 ? "editor" : "look", params.row);
+                      },
+                    },
+                  },
+                  params.row.status === 1 ? "编辑" : "查看"
+                )
+              ]);
+            },
+          },
+        ]
+      return {
+        vm: this,
+        url: REQUEST.finance.getCashList,
+        columns: this.sectionForm.status === 3 ? arr1 : arr
       };
     },
   },
@@ -249,7 +364,7 @@ export default {
       ruleForm: {},
       isDestoryComp: false, // 销毁组件
       sectionForm: {
-        status: null,
+        status: 1,
       },
       accountMapOptions: MAPDATA.CASHAUDITLIST
     };
