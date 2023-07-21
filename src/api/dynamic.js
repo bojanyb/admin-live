@@ -29,3 +29,12 @@ export function multiDeleteMsg(data) {
       data
   })
 }
+
+// 动态审核操作
+export function check(data) {
+  return request({
+      url: api.dynamic.check,
+      method: 'post',
+      data
+  })
+}
