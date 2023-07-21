@@ -26,8 +26,6 @@ import REQUEST from '@/request/index.js'
 import mixins from '@/utils/mixins.js'
 // 引入公共方法
 import { timeFormat } from '@/utils/common.js'
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
 export default {
     mixins: [mixins],
     components: {
@@ -40,12 +38,35 @@ export default {
             msg_id: null,
             isDestoryComp: false, // 是否销毁组件
             searchParams: {
-                dateTimeParams: []
+                dateTimeParams: [],
+                check_status: '',
+                user_number: ''
             },
             dateTimeParams: {
                 start_time: null,
                 end_time: null
-            }
+            },
+            checkStatusList: [
+            {
+                name: '全部',
+                value: ''
+            },
+            {
+                name: '未审核',
+                value: '0'
+            },
+            {
+                name: '拒绝',
+                value: '1'
+            },
+            {
+                name: '忽略',
+                value: '2'
+            },
+            {
+                name: '通过',
+                value: '3'
+            }],
         };
     },
     computed: {
@@ -60,14 +81,14 @@ export default {
                     placeholder: '请输入用户ID'
                 },
                 {
-                    name: 'status',
+                    name: 'check_status',
                     type: 'select',
                     value: '',
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '审核状态',
                     placeholder: '请选择',
-                    options: MAPDATA.RISKMANAGEMENTIMGSTATUSLIST
+                    options: this.checkStatusList
                 },
                 {
                     name: 'dateTimeParams',
@@ -100,8 +121,11 @@ export default {
                     },
                     {
                         label: '审核时间',
-                        prop: 'create_time',
-                        minWidth: '100px'
+                        prop: 'check_time',
+                        minWidth: '100px',
+                        render: (h, params) => {
+                            return h('span', params.row.check_time ? timeFormat(params.row.check_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                        }
                     },
                     {
                         label: '用户ID',
@@ -134,15 +158,19 @@ export default {
                     },
                     {
                         label: '审核状态',
-                        prop: 'msg_number'
+                        prop: 'check_status',
+                        render: (h, params) => {
+                            const item = this.checkStatusList.find(item => item.value == params.row.check_status)
+                            return h('span', item ? item.name : '无')
+                        }
                     },
                     {
                         label: '操作',
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.seeDetails(params.row.id)}}}, '评论详情'),
-                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
+                                h('el-button', { props: { type: 'primary', size: 'mini'}, on: {click:()=>{this.seeDetails(params.row.id)}}}, '评论详情'),
+                                h('el-button', { props: { type: 'danger', size: 'mini'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
                             ])
                         }
                     }
@@ -200,7 +228,8 @@ export default {
                 pagesize: params.size,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
-                user_number: s.user_number
+                user_number: s.user_number,
+                check_status: s.check_status,
             }
         },
         // 刷新列表
