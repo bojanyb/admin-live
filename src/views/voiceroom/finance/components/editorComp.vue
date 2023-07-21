@@ -391,6 +391,7 @@ export default {
       } else {
         this.checkForm.real_invoice_money = undefined;
       }
+      this.$forceUpdate();
     }
   },
   mounted() {},
