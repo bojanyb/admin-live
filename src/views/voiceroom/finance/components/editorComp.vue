@@ -98,7 +98,7 @@
               <template v-if="ruleForm.status === 1">
                 <el-col :span="24">
                   <el-form-item label="审核结果" prop="audit_status">
-                    <el-radio-group v-model="checkForm.audit_status">
+                    <el-radio-group v-model="checkForm.audit_status" @input="handleAuditInput">
                       <el-radio :label="0">审核退回</el-radio>
                       <el-radio :label="1">确认结算</el-radio>
                     </el-radio-group>
@@ -111,6 +111,8 @@
                       <el-input
                         type="textarea"
                         v-model="checkForm.fail_reason"
+                        maxlength="50"
+                        show-word-limit
                       ></el-input>
                     </el-form-item>
                   </el-col>
@@ -380,6 +382,17 @@ export default {
         console.log(this.ruleForm, "this.ruleForm");
       }
     },
+    // 修改审核状态
+    handleAuditInput(status) {
+      // 确认结算
+      if (status) {
+        this.checkForm.fail_reason = "";
+      // 审核退回
+      } else {
+        this.checkForm.real_invoice_money = undefined;
+      }
+      this.$forceUpdate();
+    }
   },
   mounted() {},
 };

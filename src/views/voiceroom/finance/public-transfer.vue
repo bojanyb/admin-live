@@ -150,16 +150,13 @@ export default {
             width: "200px",
             fixed: "right",
             render: (h, params) => {
-              let data = MAPDATA.STATUSLIST.find((item) => {
-                return item.value === params.row.status;
-              });
               return h("div", [
                 h(
                   "el-button",
                   {
                     props: { type: "primary" },
                     style: {
-                      display: params.row.status === 1 ? "unset" : "none",
+                      display: params.row.status === 2 ? "unset" : "none",
                     },
                     on: {
                       click: () => {
@@ -167,9 +164,15 @@ export default {
                       },
                     },
                   },
-                  data ? data.name : "无"
+                  "审核退回"
                 ),
-                h("span", "--"),
+                h("span",
+                  {
+                    style: {
+                      display: params.row.status !== 2 ? "unset" : "none",
+                    }
+                  },
+                  "--"),
               ]);
             },
           },
