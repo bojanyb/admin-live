@@ -78,15 +78,15 @@ export default {
       rbiStatusList: [
       {
         name: '含有举报信息',
-        value: '1'
+        value: 1
       },
       {
         name: '含有处罚信息',
-        value: '2'
+        value: 2
       },
       {
         name: '无任何风险信息',
-        value: '0'
+        value: 0
       }],
       // 举报类型筛选项
       reportTypeList: [],
@@ -463,13 +463,21 @@ export default {
 				cancelButtonText: "取消",
 			})
 			.then(async () => {
-				let ids = []
+				let uids = []
 				this.selectList.forEach(item => {
-					ids.push(item.id)
+					uids.push(item.uid)
 				})
-        const params = {
-          ids,
-          status: status == 1 ? 'Y':'R',
+        let params = {}
+        if(this.node_env.indexOf("aidoo") > -1){
+          params = {
+            uids,
+            status: status == 1 ? '1' : '3'
+          }
+        }else{
+          params = {
+            uids,
+            status: status == 1 ? 'Y':'R',
+          }
         }
 				let res = await check(params)
 				if (res.code === 2000) {
