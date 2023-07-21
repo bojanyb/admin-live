@@ -123,6 +123,7 @@ export default {
                     format: "yyyy-MM-dd HH:mm:ss",
                     label: '时间选择',
                     value: '',
+                    linkage: true,
                     handler: {
                         change: v => {
                             this.emptyDateTime()
@@ -189,7 +190,15 @@ export default {
                         }
                     },
                     {
+                        label: '审核人',
+                        prop: 'username',
+                        render: (h, params) => {
+                            return h('div', params.row.username || '无')
+                        }
+                    },
+                    {
                         label: '操作',
+                        minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'primary'}, style: {
