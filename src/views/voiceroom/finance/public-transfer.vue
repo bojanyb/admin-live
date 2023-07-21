@@ -209,14 +209,25 @@ export default {
     },
     // 审核退回
     async handleAuditReturn(row) {
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       const params = {
-        id: row.id,
-        apply_id: this.$route.query.id || "",
+        id: this.$route.query.id || "",
+        apply_id: row.id
       };
       let res = await refuseApply(params);
-      if (res.code === 2000) {
-        this.$message.success("操作成功");
-        this.getList();
+      try {
+        if (res.code === 2000) {
+          this.$message.success("操作成功");
+          this.getList();
+           loading.close();
+        }
+      } catch (error) {
+        loading.close();
       }
     },
     // 设置时间段
