@@ -106,7 +106,7 @@ export default {
                     options: MAPDATA.RISKMANAGEMENTIMGSTATUSLIST
                 },
                 {
-                    name: 'operator_id',
+                    name: 'admin_id',
                     type: 'select',
                     value: '',
                     keyName: 'value',
@@ -144,6 +144,8 @@ export default {
                 columns: [
                     {
                         label: '时间',
+                        prop: "create_time",
+                        sortable: "custom",
                         render: (h, params) => {
                             return h('span', params.row.create_time || '无')
                         }
@@ -271,7 +273,8 @@ export default {
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
                 status: s.status,
-                rel_type: s.rel_type
+                rel_type: s.rel_type,
+                admin_id: s.admin_id
             }
             if(s.iSelect === 'user_id') {
                 data.user_number = s.inputSelect
