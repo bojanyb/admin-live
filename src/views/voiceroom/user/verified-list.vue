@@ -77,6 +77,10 @@ export default {
       // 风险信息筛选项
       rbiStatusList: [
       {
+        name: '全部',
+        value: ''
+      },
+      {
         name: '含有举报信息',
         value: 1
       },
@@ -186,6 +190,7 @@ export default {
       let arr1 = [
         {
             label: '时间',
+            width: 160,
             render: (h, params) => {
               return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
             }
@@ -269,6 +274,7 @@ export default {
           },
           {
             label: '举报类型',
+            showOverFlow: true,
             render: (h, params) => {
               let data = params.row.report_type
               return h('span', data || '无')
@@ -283,6 +289,7 @@ export default {
           },
           {
             label: '处罚类型',
+            showOverFlow: true,
             render: (h, params) => {
               let data = params.row.punish_type
               return h('span', data || '无')
@@ -300,10 +307,10 @@ export default {
             minWidth: '120px',
             render: (h, params) => {
               return h('div', [
-                h('el-button', { props: { type: 'success'}, style: {
+                h('el-button', { props: { type: 'success', size: 'mini'}, style: {
                   display: (params.row.status === 'C' || params.row.status === 2) ? 'unset' : 'none'
                 }, on: {click:()=>{this.funcClick(params.row)}}}, '审核通过'),
-                h('el-button', { props: { type: 'danger'}, style: {
+                h('el-button', { props: { type: 'danger', size: 'mini'}, style: {
                   display: (params.row.status === 'C' || params.row.status === 2) ? 'unset' : 'none'
                 }, on: {click:()=>{this.manageClick(params.row)}}}, '驳回'),
                 h('span', { style: {
@@ -339,8 +346,9 @@ export default {
     this.$set(this,"statusList",statusList);
     getVerifyOptions().then(res => {
       const data = res.data;
-      this.reportTypeList = data.report_list || []
-      this.punishTypeList = data.punish_list || []
+      const arr = [{id: 0, name: '全部'}]
+      this.reportTypeList = arr.concat(data.report_list)
+      this.punishTypeList = arr.concat(data.punish_list)
     })
   },
   methods: {
@@ -431,7 +439,7 @@ export default {
       let params = {}
       if(this.node_env.indexOf("aidoo") > -1){
         params = {
-          uid : row.uid,
+          uids: [row.uid],
           status: status
         }
         if(row.remark){
@@ -439,7 +447,7 @@ export default {
         }
       }else{
         params = {
-          uid : row.uid,
+          uids: [row.uid],
           status: status,
         }
       }
