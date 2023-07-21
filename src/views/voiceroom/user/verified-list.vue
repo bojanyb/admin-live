@@ -2,10 +2,10 @@
 <template>
   <div class="app-container">
     <div class="searchParams">
-      <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
+      <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-batch-pass="true" :show-batch-rurn="true" @onReset="reset" @onSearch="onSearch" @batchPass="handleBatchPass" @BatchRurn="handleBatchRurn"></SearchPanel>
     </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange"></tableList>
 
     <!-- 实名详情组件 -->
     <verifiedComp ref="verifiedComp"></verifiedComp>
@@ -33,7 +33,7 @@
 
 <script>
 // 引入api
-import { check } from '@/api/user.js'
+import { getVerifyOptions, check } from '@/api/user.js'
 // 引入实名详情组件
 import verifiedComp from './components/verifiedComp.vue'
 // 引入菜单组件
@@ -60,7 +60,10 @@ export default {
   data() {
     return {
       searchParams: {
-        status: ''
+        status: '',
+        rbiStatus: '',
+        reportType: '',
+        punishType: ''
       },
       dialogVisible: false,
       ruleForm: {
@@ -70,7 +73,27 @@ export default {
         remark: ""
       },
       node_env : process.env.NODE_ENV,
-      statusList : []
+      statusList : [],
+      // 风险信息筛选项
+      rbiStatusList: [
+      {
+        name: '含有举报信息',
+        value: 1
+      },
+      {
+        name: '含有处罚信息',
+        value: 2
+      },
+      {
+        name: '无任何风险信息',
+        value: 0
+      }],
+      // 举报类型筛选项
+      reportTypeList: [],
+      // 处罚类型筛选项
+      reportTypeList: [],
+      // 选择的列表
+      selectList: [],
     }
   },
   computed: {
@@ -125,6 +148,36 @@ export default {
               this.emptyDateTime()
             }
           }
+        },
+        {
+          name: 'rbiStatus',
+          type: 'select',
+          value: '',
+          keyName: 'value',
+          optionLabel: 'name',
+          label: '风险信息',
+          placeholder: '请选择',
+          options: this.rbiStatusList
+        },
+        {
+          name: 'reportType',
+          type: 'select',
+          value: '',
+          keyName: 'id',
+          optionLabel: 'name',
+          label: '举报类型',
+          placeholder: '请选择',
+          options: this.reportTypeList
+        },
+        {
+          name: 'punishType',
+          type: 'select',
+          value: '',
+          keyName: 'id',
+          optionLabel: 'name',
+          label: '处罚类型',
+          placeholder: '请选择',
+          options: this.punishTypeList
         }
       ]
     },
@@ -208,6 +261,34 @@ export default {
             }
           },
           {
+            label: '举报风险',
+            render: (h, params) => {
+              let data = params.row.rbi_report
+              return h('span', data || '无')
+            }
+          },
+          {
+            label: '举报类型',
+            render: (h, params) => {
+              let data = params.row.report_type
+              return h('span', data || '无')
+            }
+          },
+          {
+            label: '处罚风险',
+            render: (h, params) => {
+              let data = params.row.rbi_punish
+              return h('span', data || '无')
+            }
+          },
+          {
+            label: '处罚类型',
+            render: (h, params) => {
+              let data = params.row.punish_type
+              return h('span', data || '无')
+            }
+          },
+          {
             label: '状态',
             render: (h, params) => {
               let data = this.statusList.find(item => { return item.value == params.row.status })
@@ -243,6 +324,7 @@ export default {
       return {
         vm: this,
         url: REQUEST.user.autonymlist,
+        isShowCheckbox: true,
         columns: columnsList
       }
     }
@@ -255,6 +337,11 @@ export default {
       statusList = MAPDATA.USERMANAGEMENTAUTONYMSTATUSLIST;
     }
     this.$set(this,"statusList",statusList);
+    getVerifyOptions().then(res => {
+      const data = res.data;
+      this.reportTypeList = data.report_list || []
+      this.punishTypeList = data.punish_list || []
+    })
   },
   methods: {
     // 名称脱敏
@@ -282,7 +369,10 @@ export default {
         // name: s.name
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
-        status: s.status
+        status: s.status,
+        rbiStatus: s.rbiStatus,
+        reportType: s.reportType,
+        punishType: s.punishType
       }
     },
     // 刷新列表
@@ -304,7 +394,10 @@ export default {
     // 重置
     reset() {
       this.searchParams = {
-        status: ''
+        status: '',
+        rbiStatus: '',
+        reportType: '',
+        punishType: ''
       }
       this.dateTimeParams = {}
       this.getList()
@@ -357,6 +450,42 @@ export default {
         this.dialogVisible = false;
       }
     },
+    // 批量操作
+		async batchFunc(status) {
+			if (this.selectList.length <= 0) {
+				this.$warning('请至少选择一条数据')
+				return false
+			}
+			let text = status == 1 ?  "通过" : "拒绝";
+			this.$confirm("你确定要批量"+text+"此次数据吗？", "操作提醒", {
+				type: "warning",
+				confirmButtonText: "确定",
+				cancelButtonText: "取消",
+			})
+			.then(async () => {
+				let uids = []
+				this.selectList.forEach(item => {
+					uids.push(item.uid)
+				})
+        let params = {}
+        if(this.node_env.indexOf("aidoo") > -1){
+          params = {
+            uids,
+            status: status == 1 ? '1' : '3'
+          }
+        }else{
+          params = {
+            uids,
+            status: status == 1 ? 'Y':'R',
+          }
+        }
+				let res = await check(params)
+				if (res.code === 2000) {
+					this.$success("批量操作成功");
+				}
+				this.getList()
+			}).catch(() => {});
+		},
     // 关闭弹窗
     handleClose() {
         this.dialogVisible = false
@@ -374,6 +503,18 @@ export default {
         remark: ""
       }
     },
+    // 选中
+    selectionChange(val) {
+      this.selectList = val
+    },
+    // 批量通过
+    handleBatchPass() {
+      this.batchFunc(1)
+    },
+    // 批量拒绝
+    handleBatchRurn() {
+      this.batchFunc(2)
+    }
   }
 }
 </script>
