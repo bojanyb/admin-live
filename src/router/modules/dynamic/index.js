@@ -19,7 +19,16 @@ const dynamicRouter = {
 				title: '动态列表',
 				noCache: true
 			}
-		}
+		},
+		{
+			path: 'dynamic-audit',
+			component: () => import('@/views/voiceroom/serviceConfig/dynamic-audit'),
+			name: 'dynamic-audit',
+			meta: {
+				title: '动态审核',
+				noCache: true
+			}
+		},
 	]
 }
 
