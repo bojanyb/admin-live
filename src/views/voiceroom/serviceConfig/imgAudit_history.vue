@@ -28,7 +28,7 @@
 
 <script>
 // 引入api
-import { review } from '@/api/risk.js'
+import { review, customerServiceList } from '@/api/risk.js'
 // 引入菜单组件
 import SearchPanel from '@/components/SearchPanel/final.vue'
 // 引入列表组件
@@ -52,14 +52,15 @@ export default {
             searchParams: {
                 dateTimeParams: [],
                 rel_type: 4,
-                status: 2
+                status: 0
             },
             dateTimeParams: {
                 start_time: null,
                 end_time: null
             },
             selectList : [],
-            ids: []
+            ids: [],
+            serviceList: []
         };
     },
     computed: {
@@ -96,12 +97,24 @@ export default {
                 {
                     name: 'status',
                     type: 'select',
-                    value: 2,
+                    value: 0,
                     keyName: 'value',
                     optionLabel: 'name',
                     label: '审核状态',
                     placeholder: '请选择',
+                    clearable: true,
                     options: MAPDATA.RISKMANAGEMENTIMGSTATUSLIST
+                },
+                {
+                    name: 'admin_id',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '审核人',
+                    placeholder: '请选择',
+                    clearable: true,
+                    options: this.serviceList
                 },
                 {
                     name: 'dateTimeParams',
@@ -110,6 +123,7 @@ export default {
                     format: "yyyy-MM-dd HH:mm:ss",
                     label: '时间选择',
                     value: '',
+                    linkage: true,
                     handler: {
                         change: v => {
                             this.emptyDateTime()
@@ -130,6 +144,8 @@ export default {
                 columns: [
                     {
                         label: '时间',
+                        prop: "create_time",
+                        sortable: "custom",
                         render: (h, params) => {
                             return h('span', params.row.create_time || '无')
                         }
@@ -176,7 +192,15 @@ export default {
                         }
                     },
                     {
+                        label: '审核人',
+                        prop: 'username',
+                        render: (h, params) => {
+                            return h('div', params.row.username || '无')
+                        }
+                    },
+                    {
                         label: '操作',
+                        minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
                                 h('el-button', { props: { type: 'primary'}, style: {
@@ -249,7 +273,8 @@ export default {
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
                 status: s.status,
-                rel_type: s.rel_type
+                rel_type: s.rel_type,
+                admin_id: s.admin_id
             }
             if(s.iSelect === 'user_id') {
                 data.user_number = s.inputSelect
@@ -280,7 +305,7 @@ export default {
         reset() {
             this.searchParams = {
                 rel_type: 4,
-                status: 2
+                status: 0
             }
             this.dateTimeParams = {}
             this.changeIndex(0)
@@ -335,9 +360,26 @@ export default {
           }
           this.func(this.ids,-1,"一键拒绝",2)
         },
+        // 获取房间类型
+        async getCustomerServiceList(params){
+          const response = await customerServiceList(params)
+          if(response.code == 2000){
+            const tempArr = Array.from(
+              Array.isArray(response.data.list) ? response.data.list : []
+            )
+            this.serviceList = tempArr.reduce((prev, curr) => {
+              prev.push({
+                name: curr.username,
+                value: curr.id
+              })
+              return prev
+            }, []) || []
+          }
+        }
     },
     created() {
         this.changeIndex(0)
+        this.getCustomerServiceList()
     }
 }
 </script>
