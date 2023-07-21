@@ -41,9 +41,9 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="对公转账" prop="cash_type">
-                    <el-select v-model="ruleForm.cash_type" placeholder="请选择对公转账">
-                        <el-option label="默认" :value="0"></el-option>
-                        <el-option label="对公转账" :value="1"></el-option>
+                    <el-select v-model="ruleForm.cash_type" placeholder="请选择对公转账" :disabled="isFormDisabled">
+                        <el-option label="否" :value="0"></el-option>
+                        <el-option label="是" :value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="发票税率" prop="cash_invoice_rate" v-if="ruleForm.cash_type === 1">
@@ -122,7 +122,8 @@ export default {
                 ]
             },
             operatorList: [],
-            isAuth: 0
+            isAuth: 0,
+            isFormDisabled: false,
         };
     },
     props: {
@@ -163,23 +164,26 @@ export default {
         loadParams(status, row) {
             this.openComp()
             this.status = status
-            if(status !== 'add') {
-                let params = JSON.parse(JSON.stringify(row))
-                let para = {}
-                para.guild_type = params.guild_type ? params.guild_type : ''
-                para.operator = params.operator ? params.operator : ''
-                para.id = params.id ? params.id : "";
-                para.name = params.name ? params.name : "";
-                para.guild_number = params.guild_number ? params.guild_number : "";
-                para.company = params.company ? params.company : "";
-                para.status = params.status;
-                para.cash_type = params.cash_type;
-                if (para.cash_type === 1) {
-                  para.cash_invoice_rate = params.cash_invoice_rate === "3.00" ? 3 : 6;
-                  para.cash_fee_rate = params.cash_fee_rate;
-                }
-                // para.rebate = params.rebate;
-                this.$set(this.$data, 'ruleForm', para)
+            if (status !== 'add') {
+              let params = JSON.parse(JSON.stringify(row))
+              let para = {}
+              para.guild_type = params.guild_type ? params.guild_type : ''
+              para.operator = params.operator ? params.operator : ''
+              para.id = params.id ? params.id : "";
+              para.name = params.name ? params.name : "";
+              para.guild_number = params.guild_number ? params.guild_number : "";
+              para.company = params.company ? params.company : "";
+              para.status = params.status;
+              para.cash_type = params.cash_type;
+              if (para.cash_type === 1) {
+                para.cash_invoice_rate = params.cash_invoice_rate === "3.00" ? 3 : 6;
+                para.cash_fee_rate = params.cash_fee_rate;
+                this.isFormDisabled = true;
+              }
+              // para.rebate = params.rebate;
+              this.$set(this.$data, 'ruleForm', para)
+            } else {
+              this.isFormDisabled = false;
             }
 
             this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
