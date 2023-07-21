@@ -333,8 +333,8 @@ export default {
                             punish_type_id: data.punish_type_id,
                         }
                         let arr = JSON.parse(JSON.stringify(data.type))
-                        s.reset = arr.filter(item => { return item > 10 })
-                        s.type = arr.filter(item => { return item < 10 })
+                        s.reset = arr.filter(item => { return item > 10 && item !== 15 })
+                        s.type = arr.filter(item => { return item < 10 || item === 15 })
                         if(s.type.length <= 0 && s.reset.length > 0) {
                             s.ban_duration = 900
                         }
@@ -361,8 +361,8 @@ export default {
                             delete params.img
                         }
                         let arr = JSON.parse(JSON.stringify(params.type))
-                        params.reset = arr.filter(item => { return item > 10 })
-                        params.type = arr.filter(item => { return item < 10 })
+                        params.reset = arr.filter(item => { return item > 10 && item !== 15 })
+                        params.type = arr.filter(item => { return item < 10 || item === 15  })
                         if(params.type.length <= 0 && params.reset.length > 0) {
                             params.ban_duration = 900
                         }
