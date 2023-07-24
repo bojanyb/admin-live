@@ -1,5 +1,8 @@
 <template>
   <div class="app-container">
+    <div style="display: flex; margin-bottom: 20px;">
+      <el-button @click="handleBack">返回</el-button>
+    </div>
     <div class="searchParams">
       <SearchPanel
         v-model="searchParams"
@@ -297,6 +300,9 @@ export default {
         loading.close();
       }
     },
+    handleBack() {
+      this.$router.go(-1)
+    }
   },
 };
 </script>

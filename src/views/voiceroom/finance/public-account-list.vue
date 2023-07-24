@@ -193,7 +193,7 @@ export default {
           },
           {
             label: "状态",
-            minWidth: "100px",
+            minWidth: "110px",
 						render: (h, params) => {
 							let data = MAPDATA.CASHAUDITLIST.find(item => { return item.value === params.row.status })
 							return h('span', data ? data.name : '无')
@@ -201,7 +201,7 @@ export default {
           },
           {
             label: "操作",
-            width: "260px",
+            width: "290px",
             fixed: "right",
             render: (h, params) => {
               return h("div", [
