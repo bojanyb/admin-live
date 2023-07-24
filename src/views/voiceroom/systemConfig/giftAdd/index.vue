@@ -37,6 +37,17 @@
                       <el-radio v-for="item in activityList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
                   </el-radio-group>
               </el-form-item>
+              <el-form-item label="礼物角标" prop="gift_icon">
+                <div style="display: flex;align-items: center;">
+                    <ImageUpload ref="uploadGiftIcon" v-model="ruleForm.gift_icon" :imgUrl="ruleForm.gift_icon" name="gift_icon" @validateField="validateField" accept=".png"></ImageUpload>
+                    <div v-if="ruleForm.gift_icon" style="flex: 1;margin-left: 10px;">
+                        <el-button type="primary" round size="small" @click="reUpload('uploadGiftIcon')">更改</el-button>
+                    </div>
+                </div>
+              </el-form-item>
+              <el-form-item label="礼物banner" prop="gift_banner">
+                <uploadGift ref="uploadGift" v-model="ruleForm.gift_banner" name="gift_banner"></uploadGift>
+              </el-form-item>
               <el-form-item label="礼物播放类型" prop="play_type">
                   <el-radio-group v-model="ruleForm.play_type" @input="handleChangePlayType">
                       <el-radio v-for="item in playTypeList" :key="item.value" :label="item.value">{{ item.name }}</el-radio>
@@ -118,11 +129,15 @@ import { getGiftAdd, getGiftEdit } from '@/api/videoRoom'
 import { nobilitylist } from '@/api/nobility'
 // 引入图片上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
+import ImageUpload from './components/ImageUpload.vue'
+import UploadGift from './components/UploadGift.vue'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 export default {
     components: {
-        uploadImg
+        uploadImg,
+        ImageUpload,
+        UploadGift
     },
     data() {
         return {
@@ -138,6 +153,8 @@ export default {
                 gift_genre: 4,
                 play_type: 1,
                 is_activity: 1, // 是否是活动类型
+                gift_icon: '',
+                gift_banner: [],
                 gift_photo: '',
                 gift_gif: '',
                 gift_version: '',
@@ -317,6 +334,10 @@ export default {
       this.componentKey += 1
       this.ruleForm.gift_gif = ''
       },
+      // 重新上传图片
+      reUpload(name) {
+        this.$refs[name].reUpload()
+      }
     },
     mounted() {
         this.getNobility()
