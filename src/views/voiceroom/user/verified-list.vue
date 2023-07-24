@@ -315,7 +315,10 @@ export default {
         {
           label: "举报风险",
           render: (h, params) => {
-            let data = params.row.rbi_report;
+            let data = ''
+            if(params.row.rbi_report) {
+              data = params.row.rbi_report.split(',').join('\n')
+            }
             return h("span", {
               class: 'el-link el-link--primary',
               on: {
@@ -333,7 +336,10 @@ export default {
           label: "举报类型",
           showOverFlow: true,
           render: (h, params) => {
-            let data = params.row.report_type;
+            let data = ''
+            if(params.row.report_type) {
+              data = params.row.report_type.split(',').join(' / ')
+            }
             return h("span", {
               class: 'el-link el-link--primary',
               on: {
@@ -350,7 +356,10 @@ export default {
         {
           label: "处罚风险",
           render: (h, params) => {
-            let data = params.row.rbi_punish;
+            let data = ''
+            if(params.row.rbi_punish) {
+              data = params.row.rbi_punish.split(',').join('\n')
+            }
             return h("span", {
               class: 'el-link el-link--primary',
               on: {
@@ -368,7 +377,10 @@ export default {
           label: "处罚类型",
           showOverFlow: true,
           render: (h, params) => {
-            let data = params.row.punish_type;
+            let data = ''
+            if(params.row.punish_type) {
+              data = params.row.punish_type.split(',').join(' / ')
+            }
             return h("span", {
               class: 'el-link el-link--primary',
               on: {
