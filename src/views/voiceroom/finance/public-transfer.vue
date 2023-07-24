@@ -159,7 +159,7 @@ export default {
                   {
                     props: { type: "primary" },
                     style: {
-                      display: params.row.status === 2 ? "unset" : "none",
+                      display: params.row.status === 1 ? "unset" : "none",
                     },
                     on: {
                       click: () => {
@@ -172,7 +172,7 @@ export default {
                 h("span",
                   {
                     style: {
-                      display: params.row.status !== 2 ? "unset" : "none",
+                      display: params.row.status !== 1 ? "unset" : "none",
                     }
                   },
                   "--"),
