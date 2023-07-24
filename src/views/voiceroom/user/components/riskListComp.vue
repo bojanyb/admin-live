@@ -7,17 +7,16 @@
       :close-on-click-modal="false"
       :before-close="handleClose"
     >
-
-    <div class="searchParams">
-      <SearchPanel
-        v-model="searchParams"
-        :forms="forms"
-        :show-reset="true"
-        :show-search-btn="true"
-        @onReset="reset"
-        @onSearch="onSearch"
-      ></SearchPanel>
-    </div>
+      <div class="searchParams">
+        <SearchPanel
+          v-model="searchParams"
+          :forms="forms"
+          :show-reset="true"
+          :show-search-btn="true"
+          @onReset="reset"
+          @onSearch="onSearch"
+        ></SearchPanel>
+      </div>
 
       <tableList :cfgs="cfgs" ref="riskTableList"></tableList>
 
@@ -50,7 +49,12 @@ export default {
     return {
       dialogVisible: false,
       searchParams: {
-        id: ''
+        id: "",
+        dateTimeParams: [],
+      },
+      dateTimeParams: {
+        start_time: null,
+        end_time: null,
       },
       list: [],
     };
@@ -79,7 +83,7 @@ export default {
     },
     cfgs() {
       const columnsList = [
-      {
+        {
           label: "时间",
           width: 160,
           render: (h, params) => {
@@ -111,7 +115,7 @@ export default {
           label: "处罚结果",
           prop: "res",
           render: (h, params) => {
-            return h("span", params.row.res.join(',') || "无");
+            return h("span", params.row.res.join(",") || "无");
           },
         },
         {
@@ -128,14 +132,10 @@ export default {
   },
   methods: {
     show(row) {
-        console.log(row);
-        this.searchParams.id = row.id;
-        this.emptyDateTime();
-        const end = new Date();
-        const start = new Date();
-        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-        this.setDateTime([start, end]);
-        this.dialogVisible = true;
+      console.log(row);
+      this.searchParams.id = row.id;
+      this.setSevenDay();
+      this.dialogVisible = true;
     },
     // 设置时间段
     setDateTime(arr) {
@@ -153,8 +153,9 @@ export default {
     },
     // 重置
     reset() {
-    //   this.searchParams = {};
-      this.dateTimeParams = {};
+      //   this.searchParams = {};
+      //   this.dateTimeParams = {};
+      this.setSevenDay();
       this.getList();
     },
     // 查询
@@ -177,7 +178,25 @@ export default {
     },
     // 获取数据
     getList() {
-        this.$refs.riskTableList.getData();
+      this.$refs.riskTableList.getData();
+    },
+    setSevenDay() {
+      // 近7天日期
+      const date = new Date();
+      const now1 = timeFormat(date, "YYYY-MM-DD", false);
+      const now = timeFormat(date - 3600 * 1000 * 24 * 6, "YYYY-MM-DD", false);
+      const start = new Date(now + " 00:00:00");
+      const end = new Date(now1 + " 23:59:59");
+      const time = [start.getTime(), end.getTime()];
+
+      this.searchParams.dateTimeParams = time;
+      this.dateTimeParams.start_time = time[0];
+      this.dateTimeParams.end_time = time[1];
+    },
+    // 最近七日
+    recentSeven() {
+      this.setSevenDay();
+      this.getList();
     },
   },
 };
