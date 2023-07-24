@@ -19,6 +19,7 @@
     <tableList
       :cfgs="cfgs"
       ref="tableList"
+      layout="sizes, total, prev, pager, next, jumper"
       @selectionChange="selectionChange"
     ></tableList>
 
@@ -316,6 +317,7 @@ export default {
           render: (h, params) => {
             let data = params.row.rbi_report;
             return h("span", {
+              class: 'el-link el-link--primary',
               on: {
                 click: () => {
                   this.showRiskDialog(params.row);
@@ -333,6 +335,7 @@ export default {
           render: (h, params) => {
             let data = params.row.report_type;
             return h("span", {
+              class: 'el-link el-link--primary',
               on: {
                 click: () => {
                   this.showRiskDialog(params.row);
@@ -349,6 +352,7 @@ export default {
           render: (h, params) => {
             let data = params.row.rbi_punish;
             return h("span", {
+              class: 'el-link el-link--primary',
               on: {
                 click: () => {
                   this.showRiskDialog(params.row);
@@ -366,6 +370,7 @@ export default {
           render: (h, params) => {
             let data = params.row.punish_type;
             return h("span", {
+              class: 'el-link el-link--primary',
               on: {
                 click: () => {
                   this.showRiskDialog(params.row);
@@ -467,6 +472,7 @@ export default {
         url: REQUEST.user.autonymlist,
         isShowCheckbox: true,
         columns: columnsList,
+        search: {sizes: [10, 30, 50, 100]}
       };
     },
   },
