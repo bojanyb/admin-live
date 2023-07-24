@@ -87,7 +87,7 @@
 					vm: this,
 					url: REQUEST.user.musicList,
           search: {
-            sizes: [10, 30, 50, 100]
+            sizes: [10, 20, 30]
           },
 					columns: [
 						{
@@ -132,7 +132,6 @@
 						{
 							label: '操作',
 							minWidth: '200px',
-							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
 									h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editFunc(params.row)}}}, '修改'),
