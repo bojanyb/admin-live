@@ -108,7 +108,7 @@
         <SearchPanel v-model="searchParams" :forms="forms" :show-search-btn="true" :show-reset="true" :show-recent-seven="true" :showYesterday="tabIndex !== '2'" :showBeforeYesterday="tabIndex !== '2'" :showToday="tabIndex !== '2'" :show-add="tabIndex === '2'" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday" @beforeYesterday="beforeYesterday" @today="today" @recentSeven="recentSeven" @add="add"></SearchPanel>
     </div> -->
     <!-- Table 组件 -->
-    <tableList v-if="tabIndex !== '3'" :cfgs="cfgs" ref="tableList" @handlePageChange="handlePageChange" @saleAmunt="saleAmunt"></tableList>
+    <tableList v-if="tabIndex !== '3'" :cfgs="cfgs" ref="tableList" @handlePageChange="handlePageChange" @saleAmunt="saleAmunt" layout="total, sizes, prev, pager, next, jumper"></tableList>
     <!-- 详情组件 -->
     <historyComp v-if="isDestoryComp" ref="historyComp" @destoryComp="destoryComp" @getList="getList"></historyComp>
     <!-- 会话记录 -->
@@ -428,6 +428,9 @@ export default {
           return {
             vm: this,
             url: REQUEST.risk[name],
+            search: {
+              sizes: [10, 30, 50, 100]
+            },
             columns: arr5
           }
       }

@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" layout="total, sizes, prev, pager, next, jumper"></tableList>
 
 		<upMusic v-if="isDestoryComp" @destoryComp="destoryComp" @getList="getList" ref="upMusic"></upMusic>
 	</div>
@@ -86,6 +86,9 @@
 				return {
 					vm: this,
 					url: REQUEST.user.musicList,
+          search: {
+            sizes: [10, 30, 50, 100]
+          },
 					columns: [
 						{
 							label: '上传用户昵称',
