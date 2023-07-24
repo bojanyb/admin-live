@@ -104,7 +104,7 @@ export default {
           label: "来源",
           prop: "from",
           render: (h, params) => {
-            return h("span", params.row.punish_type_str || "未知");
+            return h("span", params.row.from || "无");
           },
         },
         {
