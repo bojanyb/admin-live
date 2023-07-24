@@ -16,26 +16,27 @@
           ref="ruleForm"
           label-width="110px"
           class="demo-ruleForm"
+          label-position="right"
         >
           <!-- 结算信息详情 -->
           <el-card class="editor-body-text" shadow="never">
             <el-row>
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-form-item label="收款账户" class="body-box-item">
                   {{ ruleForm.bank_card }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-form-item label="开户银行" class="body-box-item">
                   {{ ruleForm.bank_name }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-form-item label="开户名称" class="body-box-item">
                   {{ ruleForm.owner_name }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-form-item label="提现金额" class="body-box-item">
                   {{ ruleForm.apply_amount }}
                 </el-form-item>
@@ -50,22 +51,22 @@
                   {{ ruleForm.other_money }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-form-item label="实际金额" class="body-box-item">
                   {{ ruleForm.cash_money }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-form-item label="发票税率" class="body-box-item">
                   {{ ruleForm.cash_invoice_rate }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-form-item label="手续费率" class="body-box-item">
                   {{ ruleForm.cash_fee_rate }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-form-item label="手续费" class="body-box-item">
                   {{ ruleForm.cash_fee }}
                 </el-form-item>
@@ -465,7 +466,7 @@ export default {
   }
 
   .editor-body-text {
-    height: 280px;
+    height: 420px;
     margin-bottom: 10px;
   }
 
