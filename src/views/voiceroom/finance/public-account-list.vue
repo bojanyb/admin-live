@@ -285,12 +285,12 @@ export default {
           {
             label: "实际开票金额",
             minWidth: "150px",
-            prop: "real_invoice_money_total",
+            prop: "real_invoice_money",
           },
           {
             label: "发票超额",
             minWidth: "150px",
-            prop: "real_invoice_excess_total",
+            prop: "real_invoice_excess",
           },
           {
             label: "手续费",
