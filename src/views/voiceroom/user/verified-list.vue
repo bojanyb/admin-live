@@ -26,7 +26,7 @@
     <verifiedComp ref="verifiedComp"></verifiedComp>
 
     <!-- 风险列表组件 -->
-    <riskListComp ref="riskListComp"></riskListComp>
+    <riskListComp v-if="isDestoryComp" ref="riskListComp" @destoryComp="destoryComp"></riskListComp>
 
     <!-- aidoo 驳回说明 -->
     <el-dialog
@@ -134,6 +134,7 @@ export default {
       reportTypeList: [],
       // 选择的列表
       selectList: [],
+      isDestoryComp: false // 是否销毁组件
     };
   },
   computed: {
@@ -660,7 +661,14 @@ export default {
       this.batchFunc(2);
     },
     showRiskDialog(row) {
-      this.$refs.riskListComp.show(row);
+      this.isDestoryComp = true
+      setTimeout(() => {
+        this.$refs.riskListComp.show(row);
+      }, 50);
+    },
+    // 销毁组件
+    destoryComp() {
+      this.isDestoryComp = false
     },
   },
 };

@@ -6,6 +6,7 @@
       width="800px"
       :close-on-click-modal="false"
       :before-close="handleClose"
+      @closed="closed"
     >
       <div class="searchParams">
         <SearchPanel
@@ -102,6 +103,9 @@ export default {
         {
           label: "来源",
           prop: "from",
+          render: (h, params) => {
+            return h("span", params.row.punish_type_str || "未知");
+          },
         },
         {
           label: "用户",
@@ -110,6 +114,9 @@ export default {
         {
           label: "处罚类别",
           prop: "punish_type_str",
+          render: (h, params) => {
+            return h("span", params.row.punish_type_str || "无");
+          },
         },
         {
           label: "处罚结果",
@@ -121,6 +128,9 @@ export default {
         {
           label: "备注",
           prop: "remark",
+          render: (h, params) => {
+            return h("span", params.row.remark || "无");
+          },
         },
       ];
       return {
@@ -198,6 +208,10 @@ export default {
       this.setSevenDay();
       this.getList();
     },
+    // 销毁组件
+    closed() {
+      this.$emit('destoryComp')
+    }
   },
 };
 </script>
