@@ -252,8 +252,8 @@ const STATUSLISTCOPY = [
 
 const HISTORYSTATUSLISTCOPY = [
   {
-      value: '',
-      name: '全部'
+    value: '',
+    name: '全部'
   },
   {
     value: 4,
@@ -1052,8 +1052,8 @@ const DISSOLUTIONTYPELISTCOPY = [
     name: '后台关播'
   }
 ]
-  // 游戏配置 - 游戏列表
-  const PARTYGAMELIST = [
+// 游戏配置 - 游戏列表
+const PARTYGAMELIST = [
   // {
   //   index: 1,
   //   nickname: 'billiards',
@@ -3160,7 +3160,7 @@ const CASHAUDITLIST = [
     value: 1
   },
   {
-    name: '结算审核退回',
+    name: '结算',
     value: 2
   },
   {
