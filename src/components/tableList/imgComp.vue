@@ -12,7 +12,7 @@
         </div>
         <div class="audioBox" v-else-if="isSpecial === 'mp3'">
             <div class="audio-name" v-if="name" :title="name">{{ name }}<span v-if="subName"> - {{ subName }}</span></div>
-            <audio ref="audio" :src="src" controls="controls"></audio>
+            <audio ref="audio" :src="src" controls="controls" @play="playAudio"></audio>
             <div v-if="tagList.length > 0">
                 <span v-for="(item,index) in tagList" :key="index">{{ item }}</span>
             </div>
@@ -105,6 +105,17 @@ export default {
         // 关闭特效弹窗
         closeZoom() {
             this.isShowZoom = false
+        },
+        playAudio(e) {
+            this.pauseAll(e.target);
+        },
+        // 暂停音频播放
+        pauseAll(target) {
+            const audioList = document.getElementsByTagName("audio");
+            [].forEach.call(audioList, (item) => {
+                // 将audioList中其他的audio全部暂停
+                item.src !== target.src && item.pause();
+            })
         }
     }
 }
