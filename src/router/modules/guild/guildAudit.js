@@ -109,6 +109,15 @@ const guildAuditRouter = {
 				noCache: true
 			}
 		},
+		{
+			path: 'guildComplain-list',
+			component: () => import('@/views/voiceroom/guildAudit/guildComplain-list'),
+			name: 'guildComplain-list',
+			meta: {
+				title: '公会投诉',
+				noCache: true
+			}
+		},
 	]
 }
 
