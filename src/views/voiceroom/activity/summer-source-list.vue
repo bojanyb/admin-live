@@ -4,6 +4,13 @@
 		<div class="searchParams">
 			<SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
 		</div>
+		<el-card class="box-card" shadow="always" v-if="tabIndex === '2'">
+			<div class="box-card-inner">
+				<div>送礼人数：{{sumSource.user_count || 0}}人</div>
+				<div>收礼人数：{{sumSource.live_user_count || 0}}人</div>
+				<div>礼物总金额：{{sumSource.gift_diamond_total || 0}}钻石</div>
+			</div>
+		</el-card>
 		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
 	</div>
 </template>
@@ -11,10 +18,9 @@
 <script>
 	// 引入api
 	import {
-		getSummerAddUser,
-		getAuditList,
 		getAuditPass,
-		getAuditNoPass
+		getGiftVsummer,
+		giftLogVsummer
 	} from '@/api/activity'
 	// 引入菜单组件
 	import SearchPanel from '@/components/SearchPanel/final.vue'
@@ -50,7 +56,9 @@
 				],
 				tabIndex: '0',
 				searchParams: {
-					config_id: 2
+					config_id: 2,
+					type: this.tabIndex == '0' ? '' : 1,
+					gift_id : '0'
 				},
 				upvoteMatchList : [
 					{
@@ -68,56 +76,43 @@
 				],
 				rankMatchList : [
 					{
-						id: 2,
+						id: 1,
 						title: "初选赛点赞排名"
 					},
 					{
-						id: 3,
+						id: 2,
 						title: "晋级赛点赞排名"
 					},
 					{
-						id: 4,
+						id: 3,
 						title: "半决赛点赞排名"
 					},
 					{
-						id: 5,
+						id: 4,
 						title: "半决赛魅力排名"
 					},
 					{
-						id: 6,
+						id: 5,
 						title: "总决赛魅力排名"
 					},
 					{
-						id: 7,
+						id: 6,
 						title: "总决赛壕气排名"
 					},
 				],
-				giftList: [
-					{
-						id: 0,
-						title: "全部"
-					},
-					{
-						id: 1,
-						title: "审核中"
-					},
-					{
-						id: 2,
-						title: "通过"
-					},
-					{
-						id: 3,
-						title: "未通过"
-					},
-				],
+				giftList: [],
 				ruleForm: {
 					user_number: ""
 				},
-				searchParams1: {},
 				editRuleForm: {
 					id : "",
 					remark: ""
 				},
+				sumSource: {
+					user_count: 0,
+					live_user_count: 0,
+					gift_diamond_total: 0,
+				}
 			}
 		},
 		computed: {
@@ -154,9 +149,9 @@
 						placeholder: '请输入用户ID'
 					},
 					{
-						name: 'config_id',
+						name: 'type',
 						type: 'select',
-						value: 2,
+						value: 1,
 						keyName: 'id',
 						optionLabel: 'title',
 						label: '赛事',
@@ -176,7 +171,7 @@
 						placeholder: '请输入送礼人ID'
 					},
 					{
-						name: 'user_number',
+						name: 'live_user_number',
 						type: 'input',
 						value: '',
 						label: '收礼人ID',
@@ -184,11 +179,11 @@
 						placeholder: '请输入收礼人ID'
 					},
 					{
-						name: 'status',
+						name: 'gift_id',
 						type: 'select',
-						value: 0,
-						keyName: 'id',
-						optionLabel: 'title',
+						value: "0",
+						keyName: 'gift_id',
+						optionLabel: 'gift_name',
 						label: '礼物名称',
 						placeholder: '请选择',
 						clearable: true,
@@ -215,7 +210,19 @@
 						}
 					}
 				]
-				return (this.tabIndex == '0' ? arr1 : (this.tabIndex == '2' ? arr3 : arr2 ))
+				let arr = []
+				switch (this.tabIndex) {
+					case "0":
+						arr = arr1
+						break;
+					case "1":
+						arr = arr2
+						break;
+					case "2":
+						arr = arr3
+						break;
+				}
+				return arr
 			},
 			cfgs() {
 				let columnsList = [];
@@ -275,31 +282,34 @@
 					},
 					{
 						label: '送礼人昵称',
-						prop: 'judge1'
+						prop: 'nickname'
 					},
 					{
 						label: '收礼人ID',
-						prop: 'judge2'
+						prop: 'live_user_number'
 					},
 					{
 						label: '收礼人昵称',
-						prop: 'judge3'
+						prop: 'live_nickname'
 					},
 					{
 						label: '礼物名称',
-						prop: 'judge4'
+						prop: 'gift_name'
 					},
 					{
 						label: '数量',
-						prop: 'score'
+						prop: 'gift_num'
 					},
 					{
 						label: '单价',
-						prop: 'score'
+						prop: 'gift_diamond'
 					},
 					{
 						label: '礼物总价值',
-						prop: 'score'
+						prop: 'score',
+						render: (h, params) => {
+							return h('span', params.row.gift_num * params.row.gift_diamond)
+						}
 					},
 				]
 				let portName = "";
@@ -310,11 +320,11 @@
 						break;
 					case 1:
 						columnsList = arr2;
-						portName = "getAuditList";
+						portName = "getRanking";
 						break;
 					case 2:
 						columnsList = arr3;
-						portName = "getSummerUserList";
+						portName = "giftLog";
 						break;
 					default:
 						break;
@@ -326,19 +336,31 @@
 				}
 			}
 		},
-		mounted(){},
+		mounted(){
+			this.getGiftVsummerFun();
+		},
 		methods: {
 			// 配置参数
 			beforeSearch(params) {
 				let s = { ...this.searchParams, ...this.dateTimeParams }
-				console.log(s,"s---");
 				let params_new = {
-					page: params.page,
-					pagesize: params.size,
-					start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
-					end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
+					page: params ? params.page : 1,
+					pagesize: params ? params.size : 10,
 					user_number: s.user_number ? s.user_number : "",
-					config_id: s.config_id ? s.config_id: 2
+				}
+				switch (this.tabIndex) {
+					case "0":
+						params_new.config_id = s.config_id ? s.config_id: 2
+						break;
+					case "1":
+						params_new.type = s.type ? s.type: 1
+						break;
+					case "2":
+						params_new.gift_id = s.gift_id ? s.gift_id: "0";
+						params_new.live_user_number = s.live_user_number ? s.live_user_number : "";
+						params_new.start_time = s.start_time ? Math.floor(s.start_time / 1000) : s.start_time;
+						params_new.end_time = s.end_time ? Math.floor(s.end_time / 1000) : s.end_time;
+						break;
 				}
 				return params_new
 			},
@@ -369,16 +391,18 @@
 			},
 			// table 返回数据
 			saleAmunt(row){
-				// this.sumSource = row.data
+				if(row.data){
+					this.sumSource = row.data
+				}
 			},
 			// 菜单切换
 			tabChange() {
-				this.$nextTick(res=>{
-					this.searchParams.round = 1;
-					if(this.$refs.tableList) {
-						this.$refs.tableList.getData()
-					}
-				})
+				// this.$nextTick(res=>{
+				// 	this.searchParams.round = 1;
+				// 	if(this.$refs.tableList) {
+				// 		this.$refs.tableList.getData()
+				// 	}
+				// })
       		},
 			// 限制用户id输入
 			roomInput(type) {
@@ -409,15 +433,23 @@
 			// 总决赛实力榜打分修改
 			finalEdit(){
 				console.log("总决赛实力榜打分修改---");
+			},
+			async getGiftVsummerFun(){
+				let res = await getGiftVsummer();
+				if(res.code == 2000){
+					let giftList = res.data.list;
+					giftList.unshift({"gift_id": "0","gift_name": "全部"});
+					this.$set(this,"giftList",giftList)
+				}
 			}
 		}
 	}
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 	.el-icon-circle-close {
 		color: #FFFFFF;
 	}
-	.box-card {
+	::v-deep .box-card {
 		width: 100%;
 		height: 40px;
 		background: rgba(0, 0, 0, 0.7);
@@ -427,8 +459,8 @@
 		box-sizing: border-box;
 		margin-bottom: 20px;
 		.el-card__body{
-			width: 100%;
 			padding: 0;
+			width: 100% !important;
 			.box-card-inner {
 				display: flex;
 				justify-content: space-around;
@@ -438,6 +470,17 @@
 				}
 			}
 		}
+	}
+	::v-deep .share-table-list-box .el-table__body-wrapper {
+		height: 33rem !important;
+	}
+	::v-deep .share-table-list-box .el-table__body-wrapper::-webkit-scrollbar {
+		width: 5px;
+		background-color: #F5F5F5;
+	}
+	::v-deep .share-table-list-box .el-table__body-wrapper::-webkit-scrollbar-thumb {
+		border-radius:5px;
+		background:rgba(0,0,0,0.1);
 	}
 </style>
 
