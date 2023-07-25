@@ -428,6 +428,30 @@ export function getAuditNoPass(data) {
     data
   })
 }
+// 总决赛实力榜修改
+export function editPowerRanking(data) {
+  return request({
+    url: api.summerSign.editPowerRanking,
+    method: 'post',
+    data
+  })
+}
+// 礼物列表
+export function getGiftVsummer(data) {
+  return request({
+    url: api.summerSign.getGift,
+    method: 'post',
+    data
+  })
+}
+// 总决赛实力榜修改
+export function giftLogVsummer(data) {
+  return request({
+    url: api.summerSign.giftLog,
+    method: 'post',
+    data
+  })
+}
 /*******欢乐钓鱼季**********/
 // 获取奖池列表
 export function getPoolNameV6(data) {
