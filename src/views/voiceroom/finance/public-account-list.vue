@@ -402,7 +402,10 @@ export default {
     },
     // 查询
     reset() {
-      this.searchParams = {};
+      this.searchParams = {
+        status: 1
+      };
+      this.sectionForm.status = 1
       this.dateTimeParams = {
         activity_type_id: 1,
       };
