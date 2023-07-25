@@ -127,6 +127,9 @@ export default {
             label: "提现金额",
             prop: "money",
             minWidth: "100px",
+            render: (h, params) => {
+                return h('span', params.row.money / 100)
+            }
           },
           {
             label: "状态",
@@ -276,7 +279,7 @@ export default {
                 ? "公会成员"
                 : "无",
             gain: item.gain,
-            money: item.money,
+            money: item.money / 100 || '--',
             status: data.name,
             remark: item.remark,
           };

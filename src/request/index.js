@@ -642,6 +642,11 @@ const request = {
         getAuditPass: `${HTTPHEADER}/hdMusicfestLog/auditPass`, // 后台-歌曲审核通过
         getAuditNoPass: `${HTTPHEADER}/hdMusicfestLog/auditNoPass`, // 后台-歌曲审核不通过
         likeLog: `${HTTPHEADER}/hdMusicfestLog/likeLog`, // 后台-点赞数据列表
+        getPowerRanking: `${HTTPHEADER}/hdMusicfestLog/getPowerRanking`, // 后台-总决赛实力榜列表
+        editPowerRanking: `${HTTPHEADER}/hdMusicfestLog/editPowerRanking`, // 后台-总决赛实力榜修改
+        getRanking: `${HTTPHEADER}/hdMusicfestLog/getRanking`, // 后台-排名数据
+        getGift: `${HTTPHEADER}/hdMusicfestLog/getGift`, // 后台-礼物列表
+        giftLog: `${HTTPHEADER}/hdMusicfestLog/giftLog`, // 后台-收送礼数据
     }
 }
 

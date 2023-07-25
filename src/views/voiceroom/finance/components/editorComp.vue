@@ -114,6 +114,7 @@
                         v-model="checkForm.fail_reason"
                         maxlength="50"
                         show-word-limit
+                        @input="change"
                       ></el-input>
                     </el-form-item>
                   </el-col>
@@ -128,6 +129,7 @@
                       <el-input
                         v-model="checkForm.real_invoice_money"
                         type="number"
+                        @input="change"
                       ></el-input>
                     </el-form-item>
                   </el-col>
@@ -242,7 +244,7 @@ export default {
       status: "look",
       ruleForm: {},
       checkForm: {
-        audit_status: 0,
+        audit_status: null,
       },
       rules: {
         audit_status: [
@@ -358,7 +360,7 @@ export default {
             this.dialogVisible = false;
             this.$emit("onSearch");
           })
-          .catch(() => {});
+          .catch(() => { });
       } else {
         this.dialogVisible = false;
         this.$emit("onSearch");
@@ -388,10 +390,13 @@ export default {
       // 确认结算
       if (status) {
         this.checkForm.fail_reason = "";
-      // 审核退回
+        // 审核退回
       } else {
         this.checkForm.real_invoice_money = undefined;
       }
+      this.$refs["ruleForm"].clearValidate();
+    },
+    change() {
       this.$forceUpdate();
     }
   },

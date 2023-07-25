@@ -183,15 +183,15 @@ const activityRouter = {
 			},
 			name: 'fishing-rank-list'
 		},
-		// {
-		// 	path: 'summer-source-list',
-		// 	component: () => import('@/views/voiceroom/activity/summer-source-list.vue'),
-		// 	meta: {
-		// 		title: '夏日音乐节活动数据',
-		// 		noCache: true
-		// 	},
-		// 	name: 'summer-source-list'
-		// },
+		{
+			path: 'summer-source-list',
+			component: () => import('@/views/voiceroom/activity/summer-source-list.vue'),
+			meta: {
+				title: '夏日音乐节活动数据',
+				noCache: true
+			},
+			name: 'summer-source-list'
+		},
         // {
 		// 	path: 'first-charge',
 		// 	component: () => import('@/views/voiceroom/platformActivity/first-charge/index.vue'),
