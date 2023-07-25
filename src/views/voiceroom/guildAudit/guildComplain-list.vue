@@ -17,14 +17,13 @@
     <guildComplainComp
       v-if="isDestoryComp"
       ref="guildComplainComp"
+      @onSearch="onSearch"
       @destoryComp="destoryComp"
     ></guildComplainComp>
   </div>
 </template>
 
 <script>
-// 引入api
-import { getGuildDealReport } from "@/api/videoRoom";
 // 引入详情组件
 import guildComplainComp from "./components/guildComplainComp.vue";
 // 引入菜单组件
@@ -33,12 +32,10 @@ import SearchPanel from "@/components/SearchPanel/final.vue";
 import tableList from "@/components/tableList/TableList.vue";
 // 引入api
 import REQUEST from "@/request/index.js";
-// 引入公共方法
-import { timeFormat } from "@/utils/common.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
-// 引入公共map
-import MAPDATA from "@/utils/jsonMap.js";
+// 引入api
+import { getUserComplainOptions } from "@/api/videoRoom";
 export default {
   name: "guildComplain-list",
   mixins: [mixins],
@@ -46,6 +43,27 @@ export default {
     SearchPanel,
     tableList,
     guildComplainComp,
+  },
+  data() {
+    return {
+      isDestoryComp: false, // 是否销毁组件
+      dateTimeParams: {},
+      statusOptions: [
+        {
+          value: '',
+          name: '全部'
+        },
+        {
+          value: '1',
+          name: '已受理'
+        },
+        {
+          value: '0',
+          name: '未受理'
+        }
+      ],
+      typeOption:{}
+    };
   },
   computed: {
     forms() {
@@ -68,7 +86,7 @@ export default {
           },
         },
         {
-          name: "guild_number",
+          name: "user_id",
           type: "input",
           value: "",
           label: "投诉用户ID",
@@ -76,7 +94,7 @@ export default {
           placeholder: "请输入投诉用户ID",
         },
         {
-          name: "guild_number",
+          name: "guild_user_id",
           type: "input",
           value: "",
           label: "公会长ID",
@@ -91,7 +109,7 @@ export default {
           optionLabel: "name",
           label: "状态",
           placeholder: "请选择",
-          options: MAPDATA.GUILDREPORTSTATUS,
+          options: this.statusOptions,
         },
       ];
     },
@@ -103,122 +121,107 @@ export default {
           {
             label: "投诉时间",
             minWidth: 160,
-			prop: "create_time"
+            prop: "create_time",
           },
           {
             label: "投诉用户",
-            prop: "user_name"
+            prop: "user_name",
           },
           {
             label: "投诉用户ID",
-            prop: "user_id"
+            prop: "user_id",
           },
           {
             label: "被投诉公会",
-            prop: "guild_name"
+            prop: "guild_name",
           },
           {
             label: "被投诉公会所属公会长",
-            prop: "guild_user_name"
+            prop: "guild_user_name",
           },
           {
             label: "公会长ID",
-            prop: "guild_user_id"
+            prop: "guild_user_id",
           },
           {
             label: "公会所属运营",
-            render: (h, params) => {
-              let data = MAPDATA.GUILDREPORTSTATUS.find((item) => {
-                return item.value === params.row.status;
-              });
-              return h("span", data ? data.name : "无");
-            },
+            prop: "operator",
           },
           {
             label: "投诉类型",
-            minWidth: "180px",
             render: (h, params) => {
-              return h(
-                "span",
-                params.row.create_time
-                  ? timeFormat(
-                      params.row.create_time,
-                      "YYYY-MM-DD HH:mm:ss",
-                      true
-                    )
-                  : "无"
-              );
+              const arr = params.row.complaint_ids;
+              let data = []
+              arr.forEach(item => {
+                data.push(this.typeOption[item]);
+              })
+              return h("span", data.join(','));
             },
           },
           {
             label: "投诉原因",
-            prop: "deal_user",
+            prop: "content",
           },
           {
             label: "投诉证据",
-            minWidth: "180px",
-            render: (h, params) => {
-              return h(
-                "span",
-                params.row.create_time
-                  ? timeFormat(
-                      params.row.create_time,
-                      "YYYY-MM-DD HH:mm:ss",
-                      true
-                    )
-                  : "无"
-              );
-            },
+            isimgList: true,
+            prop: "pics",
+            imgWidth: '70px',
+            imgHeight: '70px',
+            width: '200px'
           },
           {
             label: "受理操作人",
-            prop: "deal_user",
+            render: (h, params) => {
+              return h("span", params.row.admin || "无");
+            },
           },
           {
             label: "受理时间",
-            prop: "deal_user",
+            render: (h, params) => {
+              return h("span", params.row.update_time || "无");
+            },
           },
           {
             label: "备注",
-            prop: "deal_user",
+            render: (h, params) => {
+              return h("span", params.row.remark || "无");
+            },
           },
           {
             label: "操作",
-            minWidth: "230px",
+            width: 100,
+            fixed: 'right',
             render: (h, params) => {
-              return h("div", [
-                h(
-                  "el-button",
-                  {
-                    props: {
-                      type: params.row.accept_type === 0 ? "danger" : "info",
-                    },
-                    style: {
-                      display:
-                        params.row.status || params.row.status === 0
-                          ? "unset"
-                          : "none",
-                    },
-                    on: {
-                      click: () => {
-                        this.func(params.row);
-                      },
+              return h(
+                "el-button",
+                {
+                  props: {
+                    type: params.row.status === 0 ? "danger" : "info",
+                    size: 'mini'
+                  },
+                  style: {
+                    display:
+                      params.row.status || params.row.status === 0
+                        ? "unset"
+                        : "none",
+                  },
+                  on: {
+                    click: () => {
+                      this.func(params.row);
                     },
                   },
-                  `${params.row.accept_type === 0 ? "未受理" : "已受理"}`
-                ),
-              ]);
+                },
+                `${params.row.status === 0 ? "未受理" : "已受理"}`
+              );
             },
           },
         ],
       };
     },
   },
-  data() {
-    return {
-      isDestoryComp: false, // 是否销毁组件
-      dateTimeParams: {},
-    };
+  created() {
+    this.getOptions();
   },
   methods: {
     // 配置参数
@@ -231,9 +234,19 @@ export default {
           ? Math.floor(s.start_time / 1000)
           : s.start_time,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
-        guild_number: s.guild_number,
-        status: s.status ? s.status : 1,
+        user_id: s.user_id,
+        guild_user_id: s.guild_user_id,
+        status: s.status ? s.status : '',
       };
+    },
+    getOptions() {
+      getUserComplainOptions().then((res) => {
+        if (res.code === 2000) {
+          const data = res.data;
+          console.log(data);
+          this.typeOption = data.complaint_type
+        }
+      })
     },
     // 刷新列表
     getList() {
@@ -265,24 +278,20 @@ export default {
     },
     // 操作
     func(row) {
-      this.showDialog(row)
+      if(row.status === 1) return;
+      this.showDialog(row);
     },
     // 销毁组件
     destoryComp() {
       this.isDestoryComp = false;
     },
     showDialog(row) {
-		// let params = {
-        //   user_id: row.reported_user.user_number,
-        //   guild_id: row.guild_number,
-        // };
-        this.isDestoryComp = true;
-        setTimeout(() => {
-          this.$refs.guildComplainComp.load(row);
-        }, 50);
+      this.isDestoryComp = true;
+      setTimeout(() => {
+        this.$refs.guildComplainComp.load(row);
+      }, 50);
     },
   },
 };
 </script>
-<style lang="scss">
-</style>
+<style lang="scss"></style>

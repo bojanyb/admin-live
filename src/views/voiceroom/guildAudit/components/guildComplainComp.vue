@@ -1,6 +1,7 @@
 <template>
   <div class="guildComplainComp-box">
     <el-dialog
+      title="受理"
       :visible.sync="dialogVisible"
       width="400px"
       :close-on-click-modal="false"
@@ -12,38 +13,26 @@
         :rules="rules"
         label-suffix=":"
         ref="ruleForm"
-        label-width="110px"
       >
-        <el-form-item label="靓号类型" prop="type">
-          <el-select v-model="ruleForm.type" placeholder="请选择靓号类型">
-            <el-option
-              v-for="item in goodsNumTypeList"
-              :label="item.name"
-              :key="item.value"
-              :value="item.value"
-            ></el-option>
-          </el-select>
+        <el-form-item label="被投诉工会">
+          <div>{{ ruleForm.guild_name }}</div>
         </el-form-item>
-        <el-form-item label="靓号ID" prop="goods_number">
-          <el-input
-            v-model="ruleForm.goods_number"
-            placeholder="请输入靓号ID"
-            clearable
-          />
+        <el-form-item label="公会所属运营">
+          <div>{{ ruleForm.operator }}</div>
         </el-form-item>
-        <el-form-item label="备注说明" prop="goods_describe">
+        <el-form-item label="备注说明" prop="remark">
           <el-input
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4 }"
             placeholder="请输入备注说明，内容将发给对应用户"
             maxlength="300"
-            v-model="ruleForm.goods_describe"
+            v-model="ruleForm.remark"
           >
           </el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+        <el-button @click="destoryComp">取 消</el-button>
         <el-button type="primary" @click="submitForm('ruleForm')"
           >确 定</el-button
         >
@@ -54,21 +43,25 @@
 
 <script>
 // 引入api
-import { getNotGuildFree } from "@/api/videoRoom";
+import { handleUserComplain } from "@/api/videoRoom";
 export default {
   data() {
     return {
       dialogVisible: false,
       ruleForm: {
-        goods_describe: "",
+        id: '',
+        user_number: '',
+        guild_name: '',
+        operator: '',
+        remark: '',
       },
       rules: {
-        goods_describe: [
+        remark: [
           { required: true, message: "请输入备注说明", trigger: "blur" },
           {
             min: 1,
-            max: 300,
-            message: "长度在 1 到 300 个字符",
+            max: 20,
+            message: "长度在 1 到 20 个字符",
             trigger: "blur",
           },
         ],
@@ -79,14 +72,21 @@ export default {
     handleClose() {
       this.close();
     },
-    load(params) {
+    load(row) {
+      const params = JSON.parse(JSON.stringify(row))
+      this.$set(this.$data, 'ruleForm', params)
       this.dialogVisible = true;
     },
     // 提交
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          add(this.ruleForm)
+          const params = {
+            id: this.ruleForm.id,
+            user_number: this.ruleForm.guild_user_id,
+            remark: this.ruleForm.remark,
+          }
+          handleUserComplain(params)
             .then((res) => {
               if (res.code === 2000) {
                 this.dialogVisible = false;
@@ -102,8 +102,6 @@ export default {
         }
       });
     },
-    // 重置
-    resetForm(formName) {},
     // 销毁组件
     destoryComp() {
       this.$emit("destoryComp");
@@ -112,4 +110,10 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.guildComplainComp-box {
+  .el-form-item {
+    margin-bottom: 0;
+  }
+}
+</style>
