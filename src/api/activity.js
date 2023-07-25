@@ -428,7 +428,7 @@ export function getAuditNoPass(data) {
     data
   })
 }
-// 总决赛实力榜修改
+// 总决赛实力榜修改 
 export function editPowerRanking(data) {
   return request({
     url: api.summerSign.editPowerRanking,
