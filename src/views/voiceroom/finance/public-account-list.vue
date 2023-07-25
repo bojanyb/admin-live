@@ -255,7 +255,7 @@ export default {
           {
             label: "公会ID",
             minWidth: "90px",
-            prop: "guild_id",
+            prop: "guild_number",
           },
           {
             label: "喵粮",
