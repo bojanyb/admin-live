@@ -244,7 +244,7 @@ export default {
       status: "look",
       ruleForm: {},
       checkForm: {
-        audit_status: 0,
+        audit_status: null,
       },
       rules: {
         audit_status: [
@@ -394,6 +394,7 @@ export default {
       } else {
         this.checkForm.real_invoice_money = undefined;
       }
+      this.$refs["ruleForm"].clearValidate();
     },
     change() {
       this.$forceUpdate();
