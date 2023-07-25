@@ -436,7 +436,7 @@ export function editPowerRanking(data) {
     data
   })
 }
-// 总决赛实力榜修改
+// 礼物列表
 export function getGiftVsummer(data) {
   return request({
     url: api.summerSign.getGift,
