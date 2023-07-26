@@ -215,7 +215,7 @@
               prop: 'bbb',
 							render: (h, params) => {
 								return h('div', [
-									h('span', params.row.cash_invoice_rate || '--'),
+									h('span', params.row.cash_fee_rate || '--'),
 								])
 							}
 						},
