@@ -176,7 +176,7 @@ export default {
               para.status = params.status;
               para.cash_type = params.cash_type;
               if (para.cash_type === 1) {
-                para.cash_invoice_rate = params.cash_invoice_rate === "3.00" ? 3 : 6;
+                para.cash_invoice_rate = params.cash_invoice_rate === "3%" ? 3 : 6;
                 para.cash_fee_rate = params.cash_fee_rate;
                 this.isFormDisabled = true;
               }
