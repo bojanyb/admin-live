@@ -54,11 +54,11 @@ export default {
           name: '全部'
         },
         {
-          value: '1',
+          value: 1,
           name: '已受理'
         },
         {
-          value: '0',
+          value: 0,
           name: '未受理'
         }
       ],
@@ -104,7 +104,7 @@ export default {
         {
           name: "status",
           type: "select",
-          value: "未处理",
+          value: "",
           keyName: "value",
           optionLabel: "name",
           label: "状态",
@@ -236,7 +236,7 @@ export default {
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
         user_id: s.user_id,
         guild_user_id: s.guild_user_id,
-        status: s.status ? s.status : '',
+        status: s.status,
       };
     },
     getOptions() {
