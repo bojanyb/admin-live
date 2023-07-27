@@ -53,8 +53,8 @@ const option = {
 	  outputDir: 'dist',
 	  assetsDir: 'static',
 	  mode: 'test',
-	  domainHttps: 'http://api.huida.vip', // https环境地址
-	  domainHttp: 'http://m.huida.vip', // app端接口
+    domainHttps: 'http://api.test.aiyi.live ', // https环境地址
+    domainHttp: 'http://m.test.aiyi.live', // app端接口
 	  httpHeader: '', // 后台本地携带
     favicon: 'favicon.ico',
     logo: 'images/logo.png',
