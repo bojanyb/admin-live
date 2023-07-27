@@ -120,7 +120,7 @@ export default {
         columns: [
           {
             label: "投诉时间",
-            minWidth: 160,
+            minWidth: 120,
             prop: "create_time",
           },
           {
@@ -149,6 +149,7 @@ export default {
           },
           {
             label: "投诉类型",
+            showOverFlow: true,
             render: (h, params) => {
               const arr = params.row.complaint_ids;
               let data = []
@@ -160,7 +161,10 @@ export default {
           },
           {
             label: "投诉原因",
-            prop: "content",
+            showOverFlow: true,
+            render: (h, params) => {
+              return h("span", params.row.content || "无");
+            },
           },
           {
             label: "投诉证据",
@@ -178,6 +182,7 @@ export default {
           },
           {
             label: "受理时间",
+            minWidth: 120,
             render: (h, params) => {
               return h("span", params.row.update_time || "无");
             },
