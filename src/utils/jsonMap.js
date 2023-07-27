@@ -913,10 +913,6 @@ const GUILDCLOSEANACCOUNTSTATUSLIST = [
   {
     name: '已忽略',
     value: 4
-  },
-  {
-    name: '未达标',
-    value: 5
   }
 ]
 

@@ -187,7 +187,7 @@ export default {
           },
         },
         {
-          label: "流水",
+          label: (this.form.status === 5 || this.form.status === 6)?'未达标':''+"流水",
           minWidth: "120px",
           render: (h, params) => {
             return h(
@@ -199,7 +199,7 @@ export default {
           },
         },
         {
-          label: "总流水（含冻结）",
+          label: (this.form.status === 5 || this.form.status === 6)?'未达标':''+"总流水（含冻结）",
           minWidth: "140px",
           render: (h, params) => {
             return h("span", params.row.t_flow + "钻石");
@@ -226,8 +226,12 @@ export default {
               name = "未结算";
             } else if (this.form.status === 3) {
               name = "已结算";
-            } else {
+            } else if (this.form.status === 4){
               name = "已忽略";
+            } else if (this.form.status === 5){
+              name = "未达标";
+            } else if (this.form.status === 6){
+              name = "未达标结算";
             }
             return h("span", name);
           },
@@ -276,7 +280,7 @@ export default {
                 "el-button",
                 {
                   props: { type: "danger" },
-                  style: { display: this.form.status === 1 ? "unset" : "none" },
+                  style: { display: (+params.row.resettle !== 1||params.row.is_standard === '否') ? "unset" : "none" },
                   on: {
                     click: () => {
                       this.rebateFunc(params.row.id, 2);
@@ -334,7 +338,19 @@ export default {
   data() {
     return {
       guildList: [], // 公会列表
-      closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLISTCOPY, // 结算状态
+      closeStatusList: [
+        ...MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST,
+        ...[
+          {
+            name: "未达标",
+            value: 5,
+          },
+          {
+            name: "未达标结算",
+            value: 6,
+          },
+        ],
+      ], // 结算状态
       form: {
         // 表单数据
         guild_number: "",
@@ -397,10 +413,19 @@ export default {
       };
       if (this.form.status === 1) {
         data.status = 0;
+        data.is_standard = 1;
       } else if (this.form.status === 3) {
         data.status = 1;
+        data.is_standard = 1;
       } else if (this.form.status === 4) {
         data.status = 2;
+        data.is_standard = 1;
+      } else if (this.form.status === 5) { // 未达标
+        data.status = 0
+        data.is_standard = 0;
+      } else if(this.form.status === 6) { // 未达标结算
+        data.status = 1
+        data.is_standard = 0;
       }
       if (s.status === 2) {
         delete data.status;
