@@ -398,6 +398,10 @@ export default {
         delete data.status;
         delete data.start_time, delete data.end_time;
       }
+      if(s.status === 5) {
+        delete data.status;
+        data.is_standard = 0;
+      }
       return data;
     },
     // 刷新列表
