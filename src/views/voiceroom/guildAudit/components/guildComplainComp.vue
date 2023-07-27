@@ -14,7 +14,7 @@
         label-suffix=":"
         ref="ruleForm"
       >
-        <el-form-item label="被投诉工会">
+        <el-form-item label="被投诉公会">
           <div>{{ ruleForm.guild_name }}</div>
         </el-form-item>
         <el-form-item label="公会所属运营">
@@ -22,11 +22,12 @@
         </el-form-item>
         <el-form-item label="备注说明" prop="remark">
           <el-input
+            v-model="ruleForm.remark"
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4 }"
             placeholder="请输入备注说明，内容将发给对应用户"
-            maxlength="300"
-            v-model="ruleForm.remark"
+            maxlength="20"
+            show-word-limit
           >
           </el-input>
         </el-form-item>
@@ -70,7 +71,7 @@ export default {
   },
   methods: {
     handleClose() {
-      this.close();
+      this.destoryComp();
     },
     load(row) {
       const params = JSON.parse(JSON.stringify(row))
