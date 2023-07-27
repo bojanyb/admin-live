@@ -148,8 +148,17 @@ export default {
           },
           {
             label: "公会",
-            minWidth: "120px",
+            minWidth: "140px",
             prop: "guild_name",
+            render: (h, params) => {
+              let data = MAPDATA.GUILDSTATUS.find((item) => {
+                return item.value === params.row.guild_status;
+              });
+              return h("div", [
+                h('div', params.row.guild_name || '无'),
+                h("div", `(${data ? data.name : "--"})`)
+              ]);
+            },
           },
           {
             label: "公会ID",
@@ -249,8 +258,17 @@ export default {
           },
           {
             label: "公会",
-            minWidth: "120px",
+            minWidth: "140px",
             prop: "guild_name",
+            render: (h, params) => {
+              let data = MAPDATA.GUILDSTATUS.find((item) => {
+                return item.value === params.row.guild_status;
+              });
+              return h("div", [
+                h('div', params.row.guild_name || '无'),
+                h("div", `(${data ? data.name : "--"})`)
+              ]);
+            },
           },
           {
             label: "公会ID",
