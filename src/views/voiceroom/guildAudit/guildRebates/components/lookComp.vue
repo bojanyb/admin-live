@@ -23,6 +23,8 @@
         </el-table-column>
         <el-table-column prop="t_flow" label="流水(含冻结）" align="center" width="120px">
         </el-table-column>
+        <el-table-column v-if="status === 'guildWeekWater'||status==='dynamic'" prop="t_flow" label="是否达标" align="center">
+        </el-table-column>
         <template v-if="status === 'guildWeekWater' || status === 'dynamic'">
         <el-table-column prop="Mon" label="周一" align="left" width="210px">
           <template slot-scope="scope">
@@ -86,6 +88,16 @@
         </el-table-column>
         <el-table-column prop="flow" label="总流水" align="center">
         </el-table-column>
+        <template v-if="status === 'guildWeekWater'||status==='dynamic'">
+          <el-table-column  prop="flow" label="达标流水" align="center">
+          </el-table-column>
+          <el-table-column  prop="flow" label="达标流水周结算" align="center">
+          </el-table-column>
+          <el-table-column  prop="flow" label="未达标流水" align="center">
+          </el-table-column>
+          <el-table-column  prop="flow" label="未达标流水周结算" align="center">
+          </el-table-column>
+        </template>
         <el-table-column prop="point" :label="status | statusFilters" align="center">
         </el-table-column>
       </el-table>
