@@ -1183,8 +1183,8 @@ const USERRANKLIST = [
     value: ''
   },
   {
-    name: '10-29',
-    value: '10~29'
+    name: '15-29',
+    value: '15~29'
   },
   {
     name: '30以上',

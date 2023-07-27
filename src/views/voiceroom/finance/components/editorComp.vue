@@ -390,6 +390,7 @@ export default {
       // 确认结算
       if (status) {
         this.checkForm.fail_reason = "";
+        this.checkForm.real_invoice_money = this.ruleForm.real_money;
         // 审核退回
       } else {
         this.checkForm.real_invoice_money = undefined;
