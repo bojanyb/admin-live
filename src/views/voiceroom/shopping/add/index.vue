@@ -62,9 +62,9 @@
                         </div>
                     </div>
                     <el-button v-if="ruleForm.time_limit.length < 3" @click="addData">添加</el-button>
-                    
+
                 </el-form-item>
-                <el-form-item label="商品播放类型" prop="play_type">
+                <el-form-item label="商品播放类型" prop="play_type" @input="handleChangePlayType">
                     <el-radio-group v-model="ruleForm.play_type">
                         <el-radio :label="1">Lottie</el-radio>
                         <el-radio :label="2">SVGA</el-radio>
@@ -86,6 +86,9 @@
                 </el-form-item>
                 <el-form-item label="商品特效" prop="goods_animation_path" v-if="goodsType === 1">
                     <upload v-model="ruleForm.goods_animation_path" :imgUrl="ruleForm.goods_animation_path" name="goods_animation_path" ref="goods_animation_path"  :accept="limitUploadType" @validateField="validateField"></upload>
+                </el-form-item>
+                <el-form-item label="商品特效文件" prop="mp4_conf_url" v-if="ruleForm.play_type == 3">
+                  <upload v-model="ruleForm.mp4_conf_url" :imgUrl="ruleForm.mp4_conf_url" name="mp4_conf_url" @validateField="validateField" accept=".json"></upload>
                 </el-form-item>
                 <el-form-item label="商品静态图" prop="goods_image" v-if="goodsType === 2">
                     <upload v-model="ruleForm.goods_image" :imgUrl="ruleForm.goods_image" accept=".png,.jpg,.jpeg" name="goods_image" ref="goods_image" @validateField="validateField"></upload>
@@ -218,7 +221,7 @@ export default {
             } else if(this.ruleForm.play_type === 2) {
                 return '.svg,.svga'
             } else if(this.ruleForm.play_type === 3) {
-                return '.mp4,.mov,.m4v,m4a'
+                return '.mp4'
             }
         }
     },
@@ -249,6 +252,7 @@ export default {
                 ],
                 play_type: null,
                 goods_animation_path: '',
+                mp4_conf_url: '',
                 goods_image: '',
                 start_time: '',
                 end_time: '',
@@ -294,6 +298,9 @@ export default {
                 ],
                 goods_animation_path: [
                     { required: true, message: '请上传商品特效', trigger: 'change' }
+                ],
+                mp4_conf_url: [
+                    { required: true, message: '请上传商品特效文件', trigger: 'change' }
                 ],
                 goods_image: [
                     { required: true, message: '请上传商品静态图', trigger: 'change' }
@@ -433,6 +440,14 @@ export default {
         async getNobility() {
             let res = await nobilitylist()
             this.nobilityList = res.data.list || []
+        },
+        handleChangePlayType() {
+            this.ruleForm.mp4_conf_url = ''
+            if(this.ruleForm.play_type === 3) {
+                this.rule.mp4_conf_url = false
+            } else {
+                this.rule.mp4_conf_url = false
+            }
         }
     },
     mounted() {
@@ -478,7 +493,7 @@ export default {
                 color: #ff4949;
             }
         }
-        
+
     }
 }
 </style>
