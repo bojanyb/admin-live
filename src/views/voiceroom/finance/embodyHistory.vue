@@ -204,7 +204,7 @@ export default {
                     },
                     {
                         label: '本次提现账号',
-                        prop: 'order_id',
+                        prop: 'card_id',
                         width: '200'
                     },
                     {

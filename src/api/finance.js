@@ -164,3 +164,48 @@ export function getQueryPayDetails(data) {
     data
   })
 }
+
+// 对公转账详情
+export function getCashDetail(data) {
+  return request({
+    url: REQUEST.finance.getCashDetail,
+    method: 'post',
+    data
+  })
+}
+
+// 审核退回
+export function refuseCash(data) {
+  return request({
+    url: REQUEST.finance.refuseCash,
+    method: 'post',
+    data
+  })
+}
+
+// 确定结算
+export function completeCash(data) {
+  return request({
+    url: REQUEST.finance.completeCash,
+    method: 'post',
+    data
+  })
+}
+
+// 审核退回
+export function refuseApply(data) {
+  return request({
+    url: REQUEST.finance.refuseApply,
+    method: 'post',
+    data
+  })
+}
+
+// 账单明细
+export function getBillDetail(data) {
+  return request({
+    url: REQUEST.finance.getBillDetail,
+    method: 'post',
+    data
+  })
+}
