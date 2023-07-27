@@ -169,8 +169,8 @@ export default {
           {
             label: "投诉证据",
             isimgList: true,
-            prop: "pics",
-            // propCopy: 'video_path',
+            prop: "img_path",
+            propCopy: 'video_path',
             imgWidth: '70px',
             imgHeight: '70px',
             width: '200px'
