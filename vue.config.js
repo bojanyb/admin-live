@@ -53,7 +53,7 @@ const option = {
 	  outputDir: 'dist',
 	  assetsDir: 'static',
 	  mode: 'test',
-    domainHttps: 'http://api.test.aiyi.live ', // https环境地址
+    domainHttps: 'http://api.test.aiyi.live', // https环境地址
     domainHttp: 'http://m.test.aiyi.live', // app端接口
 	  httpHeader: '', // 后台本地携带
     favicon: 'favicon.ico',
