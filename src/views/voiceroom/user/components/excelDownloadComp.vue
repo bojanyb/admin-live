@@ -1,8 +1,9 @@
 <template>
   <div class="user-excelDownloadComp-box">
     <el-dialog
+      title="导出文件名称"
       :visible.sync="dialogVisible"
-      width="500px"
+      width="50%"
       :before-close="handleClose"
       @closed="closed"
     >
@@ -15,9 +16,9 @@
         ref="ruleForm"
         class="demo-ruleForm"
       >
-        <el-form-item label="请输入本次文件名称" prop="name">
+        <el-form-item label="请输入本次文件名称" prop="file_name">
           <el-input
-            v-model="ruleForm.name"
+            v-model="ruleForm.file_name"
             placeholder="请输入本次文件名称"
           ></el-input>
         </el-form-item>
@@ -34,17 +35,17 @@
 
 <script>
 // 引入api
-import { updateLoginPwd } from "@/api/user.js";
+import { userExport } from "@/api/user.js";
 export default {
   data() {
     return {
       dialogVisible: false,
       form: {},
       ruleForm: {
-        name: "",
+        file_name: "",
       },
       rules: {
-        name: [
+        file_name: [
           { required: true, message: "请输入本次文件名称", trigger: "blur" },
         ],
       },
@@ -56,23 +57,24 @@ export default {
       this.dialogVisible = false;
     },
     // 获取数据
-    loadParams() {
+    loadParams(row) {
       this.dialogVisible = true;
-    //   this.form = row;
+      let params = JSON.parse(JSON.stringify(row))
+      this.$set(this.$data, 'form', params)
     },
     // 提交
     async submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          let res = await updateLoginPwd({
-            user_id: this.form.id,
-            password: this.ruleForm.password,
-          });
-          if (res.code === 2000) {
-            this.$success("修改成功");
-            this.dialogVisible = false;
-            this.$emit("getList");
+          const params = {
+            ...this.form,
+            ...this.ruleForm
           }
+          let res = await userExport(params);
+          if (res && res.code === 2000) {
+            this.$success("文件导出任务已开始！");
+          }
+          this.dialogVisible = false;
         } else {
           console.log("error submit!!");
           return false;

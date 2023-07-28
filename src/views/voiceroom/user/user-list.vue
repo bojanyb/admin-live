@@ -6,14 +6,14 @@
         :forms="forms"
         :show-reset="true"
         :show-search-btn="true"
-		:show-export="true"
-		:show-query="true"
+        :show-export="true"
+        :show-query="true"
         customType="danger"
-		queryName="文件查询"
+        queryName="文件查询"
         @onReset="reset"
         @onSearch="onSearch"
-		@export="handleExport"
-		@query="handleQuery"
+        @export="handleExport"
+        @query="handleQuery"
       ></SearchPanel>
     </div>
 
@@ -45,14 +45,14 @@
       @getList="getList"
     ></upatePassComp>
 
-	<!-- Excel文件下载弹窗组件 -->
+    <!-- Excel文件下载弹窗组件 -->
     <excelDownloadComp
       v-if="isDestoryComp"
       ref="excelDownloadComp"
       @destoryComp="destoryComp"
     ></excelDownloadComp>
 
-	<!-- Excel文件查询弹窗组件 -->
+    <!-- Excel文件查询弹窗组件 -->
     <excelQueryComp
       v-if="isDestoryComp"
       ref="excelQueryComp"
@@ -100,12 +100,16 @@ export default {
     userEdit,
     punishComp,
     upatePassComp,
-	excelDownloadComp,
-	excelQueryComp,
+    excelDownloadComp,
+    excelQueryComp,
   },
   data() {
     return {
       isDestoryComp: false, // 是否销毁组件
+      dateTimeParams: {
+        start_time: null,
+        end_time: null,
+      },
     };
   },
   computed: {
@@ -486,8 +490,8 @@ export default {
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams };
       return {
-        page: params.page,
-        pagesize: params.size,
+        page: params ? params.page : null,
+        pagesize: params ? params.size : null,
         user_number: s.user_number,
         nickname: s.nickname,
         real_name: s.real_name,
@@ -595,42 +599,24 @@ export default {
         this.$refs.bindStuck.getList(row.id);
       }
     },
-	// 导出Excel
-	async handleExport() {
-      let s = this.beforeSearch();
-      const search = this.$refs.tableList.search;
-      s.page = search ? search.page : null;
-      s.pagesize = search ? search.size : null;
-      const loading = this.$loading({
-        lock: true,
-        text: "Loading",
-        spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)",
-      });
-      let res = await indexV2Export(s);
-      try {
-        let URL = res.data.url;
-        let link = document.createElement("a");
-        link.href = URL;
-        link.download = "用户注销"; //加上下载的文件名
-        if (URL.indexOf("?") === -1) {
-          URL += "?download";
-        }
-        link.click();
-        link.remove();
-        loading.close();
-      } catch (error) {
-        console.log(error);
-        loading.close();
-      }
+    // 导出Excel
+    handleExport() {
+      this.isDestoryComp = true;
+      setTimeout(() => {
+        let params = this.beforeSearch();
+        const search = this.$refs.tableList.search;
+        params.page = search ? search.page : null;
+        params.pagesize = search ? search.size : null;
+        this.$refs.excelDownloadComp.loadParams(params);
+      }, 50);
     },
-	// 文件查询
-	handleQuery() {
-		this.isDestoryComp = true;
+    // 文件查询
+    handleQuery() {
+      this.isDestoryComp = true;
       setTimeout(() => {
         this.$refs.excelQueryComp.loadParams();
       }, 50);
-	}
+    },
   },
 };
 </script>
