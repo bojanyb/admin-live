@@ -187,7 +187,7 @@ export default {
           },
         },
         {
-          label: (this.form.status === 5 || this.form.status === 6)?'未达标':''+"流水",
+          label: (this.form.status === 5 || this.form.status === 6)?'未达标流水':'流水',
           minWidth: "120px",
           render: (h, params) => {
             return h(
@@ -199,7 +199,7 @@ export default {
           },
         },
         {
-          label: (this.form.status === 5 || this.form.status === 6)?'未达标':''+"总流水（含冻结）",
+          label: (this.form.status === 5 || this.form.status === 6)?'未达标总流水（含冻结）':'总流水（含冻结）',
           minWidth: "140px",
           render: (h, params) => {
             return h("span", params.row.t_flow + "钻石");
@@ -280,7 +280,7 @@ export default {
                 "el-button",
                 {
                   props: { type: "danger" },
-                  style: { display: (+params.row.resettle !== 1||params.row.is_standard === '否') ? "unset" : "none" },
+                  style: { display: +params.row.resettle !== 1 ? "unset" : "none" },
                   on: {
                     click: () => {
                       this.rebateFunc(params.row.id, 2);
@@ -309,7 +309,7 @@ export default {
                 {
                   props: { type: "info" },
                   style: {
-                    // display: +params.row.resettle !== 1 ? "unset" : "none",
+                    display: +params.row.resettle !== 1 ? "unset" : "none",
                   },
                   on: {
                     click: () => {
@@ -323,15 +323,64 @@ export default {
           },
         },
       ];
+
+      let arr2 = [
+        {
+          label: "操作",
+          minWidth: "280px",
+          fixed: "right",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "el-button",
+                {
+                  props: { type: "primary" },
+                  style: {
+                    display: (+params.row.resettle !== 1 && this.form.status === 5) ? "unset" : "none",
+                  },
+                  on: {
+                    click: () => {
+                      this.rebateFunc(params.row.id, 1);
+                    },
+                  },
+                },
+                "结算"
+              ),
+              h(
+                "el-button",
+                {
+                  props: { type: "info" },
+                  style: {
+                    display: +params.row.resettle !== 1 ? "unset" : "none",
+                  },
+                  on: {
+                    click: () => {
+                      this.handleLook(params.row, "guildWeekWater");
+                    },
+                  },
+                },
+                "详情"
+              ),
+            ]);
+          },
+        },
+      ];
+
+      let columns = [];
+      if (this.form.status === 1 || this.form.status === 3 || this.form.status === 4) {
+        columns = [...arr, ...arr1];
+      } else if (this.form.status === 5 || this.form.status === 6) {
+        columns = [...arr, ...arr2];
+      } else {
+        columns = [...arr];
+      }
+
       return {
         vm: this,
         url: REQUEST.guild[name],
         isShowCheckbox: this.form.status === 1,
         isShowIndex: true,
-        columns:
-          (this.form.status === 1 || this.form.status === 3 || this.form.status === 4)
-            ? [...arr, ...arr1]
-            : arr,
+        columns,
       };
     },
   },
@@ -586,8 +635,12 @@ export default {
           status_name = "未结算";
         } else if (this.form.status === 3) {
           status_name = "已结算";
-        } else {
+        } else if (this.form.status === 4){
           status_name = "已忽略";
+        } else if (this.form.status === 5){
+          status_name = "未达标";
+        } else if (this.form.status === 6){
+          status_name = "未达标结算";
         }
         let params = {
           num: index + 1,
