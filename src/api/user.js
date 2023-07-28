@@ -199,7 +199,14 @@ export function supperUList(data) {
   })
 }
 
-
+// 获取实名列表筛选项
+export function getVerifyOptions(data) {
+  return request({
+    url: api.user.getVerifyOptions,
+    method: 'post',
+    data
+  })
+}
 
 /***********公会v2******************/
 
