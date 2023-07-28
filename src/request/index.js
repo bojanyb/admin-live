@@ -482,6 +482,8 @@ const request = {
         deleteMsg: `${HTTPHEADER}/moments/deleteMsg`, // 删除评论
         msgListAll: `${HTTPHEADER}/moments/msgListAll`, // 评论列表
         multiDeleteMsg: `${HTTPHEADER}/moments/multiDeleteMsg`, // 批量删评论文案
+        checkList: `${HTTPHEADER}/moments/checkMomentIndex`, // 获取动态审核列表
+        check: `${HTTPHEADER}/moments/checkMomentUpdate`, // 动态审核操作
     },
 
     // 活动管理
