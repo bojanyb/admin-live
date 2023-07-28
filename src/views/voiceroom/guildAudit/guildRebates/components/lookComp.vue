@@ -23,8 +23,6 @@
         </el-table-column>
         <el-table-column prop="t_flow" label="流水(含冻结）" align="center" width="120px">
         </el-table-column>
-        <el-table-column v-if="status === 'guildWeekWater'||status==='dynamic'" prop="is_standard" label="是否达标" align="center">
-        </el-table-column>
         <template v-if="status === 'guildWeekWater' || status === 'dynamic'">
         <el-table-column prop="Mon" label="周一" align="left" width="210px">
           <template slot-scope="scope">
@@ -112,6 +110,7 @@ import { roomFlow } from "@/api/videoRoom";
 import Pagination from "@/components/Pagination";
 // 引入公共方法
 import { formatTimeTwo } from '@/utils/common.js'
+let that;
 export default {
   components: {
     Pagination,
@@ -121,7 +120,7 @@ export default {
       let msg = "";
       switch (val) {
         case "guildWeekWater":
-          if(this.is_standard === '否') {
+          if(that.is_standard === '否') {
             msg = "未达标周结算"
           } else {
             msg = "达标周结算"
@@ -155,12 +154,16 @@ export default {
       is_standard: ""
     };
   },
+  beforeCreate: function () {
+    that = this;
+  },
   methods: {
     handleClose() {
       this.dialogVisible = false;
     },
     async load(row, status) {
       this.status = status;
+      console.log('row',row);
       this.is_standard = row.is_standard || '';
       console.log(this.status, 'this.status');
       this.dialogVisible = true;
