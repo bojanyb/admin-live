@@ -63,18 +63,34 @@ export default {
       this.$set(this.$data, 'form', params)
     },
     // 提交
-    async submitForm(formName) {
-      this.$refs[formName].validate(async (valid) => {
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           const params = {
             ...this.form,
             ...this.ruleForm
           }
-          let res = await userExport(params);
-          if (res && res.code === 2000) {
-            this.$success("文件导出任务已开始！");
-          }
-          this.dialogVisible = false;
+          const loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
+          userExport(params).then(res => {
+            if (res.code === 2000 && res.data.url) {
+              window.location.href = res.data.url;
+              // this.$success("数据正在下载中");
+            } else {
+              this.$warning("当前没有数据可以导出");
+            }
+            loading.close();
+            this.resetForm('ruleForm');
+            this.dialogVisible = false;
+          }).catch(err => {
+            loading.close();
+            this.resetForm('ruleForm');
+            this.dialogVisible = false;
+          });
         } else {
           console.log("error submit!!");
           return false;
