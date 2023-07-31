@@ -428,14 +428,9 @@ export default {
   watch: {
     "form.status": {
       handler(n, o) {
-        if (
-          (o === 1 || o === 3 || o === 4) &&
-          (n === 1 || n === 3 || n === 4)
-        ) {
-          setTimeout(() => {
-            this.getList();
-          }, 50);
-        }
+        setTimeout(() => {
+          this.getList();
+        }, 50);
       },
       deep: true,
     },
