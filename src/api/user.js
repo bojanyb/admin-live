@@ -207,11 +207,10 @@ export function getVerifyOptions(data) {
     data
   })
 }
-
-// 用户导出
-export function userExport(data) {
+// 新进用户导出
+export function registerUserExport(data) {
   return request({
-    url: api.user.userExport,
+    url: api.user.registerUserExport,
     method: 'post',
     data
   })

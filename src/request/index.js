@@ -221,7 +221,8 @@ const request = {
         userGiftBag: `${HTTPHEADER}/user/userGiftBag`, // 用户礼物
         userGoods: `${HTTPHEADER}/user/userGoods`, // 用户特效
         loginLog: `${HTTPHEADER}/user/loginLog`, // 用户登录日志
-        userExport: `${HTTPHEADER}/User/userInfoExport`, // 用户导出
+        newList: `${HTTPHEADER}/user/registerUser`, // 新进用户数据
+        registerUserExport: `${HTTPHEADER}/user/registerUserExport`, // 用户导出
         getExportTask: `${HTTPHEADER}/Recharge/getExportTask`, // 用户导出列表
     },
 

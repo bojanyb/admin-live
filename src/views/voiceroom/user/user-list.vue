@@ -6,14 +6,8 @@
         :forms="forms"
         :show-reset="true"
         :show-search-btn="true"
-        :show-export="true"
-        :show-query="true"
-        customType="danger"
-        queryName="文件查询"
         @onReset="reset"
         @onSearch="onSearch"
-        @export="handleExport"
-        @query="handleQuery"
       ></SearchPanel>
     </div>
 
@@ -45,24 +39,11 @@
       @getList="getList"
     ></upatePassComp>
 
-    <!-- Excel文件下载弹窗组件 -->
-    <excelDownloadComp
-      v-if="isDestoryComp"
-      ref="excelDownloadComp"
-      @destoryComp="destoryComp"
-    ></excelDownloadComp>
-
-    <!-- Excel文件查询弹窗组件 -->
-    <excelQueryComp
-      v-if="isDestoryComp"
-      ref="excelQueryComp"
-      @destoryComp="destoryComp"
-    ></excelQueryComp>
   </div>
 </template>
 
 <script>
-import { getUserStatisticalShow, indexV2Export } from "@/api/videoRoom";
+import { getUserStatisticalShow } from "@/api/videoRoom";
 // 引入api
 import { addRichUser } from "@/api/user.js";
 // 卡列表组件
@@ -77,10 +58,6 @@ import SearchPanel from "@/components/SearchPanel/final.vue";
 import tableList from "@/components/tableList/TableList.vue";
 // 引入编辑组件
 import userEdit from "./components/userEdit.vue";
-// 引入文件下载组件
-import excelDownloadComp from "./components/excelDownloadComp.vue";
-// 引入文件查询组件
-import excelQueryComp from "./components/excelQueryComp.vue";
 // 引入api
 import REQUEST from "@/request/index.js";
 // 引入公共方法
@@ -100,8 +77,6 @@ export default {
     userEdit,
     punishComp,
     upatePassComp,
-    excelDownloadComp,
-    excelQueryComp,
   },
   data() {
     return {
@@ -598,24 +573,6 @@ export default {
         this.$refs.bindStuck.dialogVisible = true;
         this.$refs.bindStuck.getList(row.id);
       }
-    },
-    // 导出Excel
-    handleExport() {
-      this.isDestoryComp = true;
-      setTimeout(() => {
-        let params = this.beforeSearch();
-        const search = this.$refs.tableList.search;
-        params.page = search ? search.page : null;
-        params.pagesize = search ? search.size : null;
-        this.$refs.excelDownloadComp.loadParams(params);
-      }, 50);
-    },
-    // 文件查询
-    handleQuery() {
-      this.isDestoryComp = true;
-      setTimeout(() => {
-        this.$refs.excelQueryComp.loadParams();
-      }, 50);
     },
   },
 };
