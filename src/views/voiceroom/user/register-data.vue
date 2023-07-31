@@ -118,9 +118,8 @@ export default {
         },
         {
           label: "渠道ID",
-          width: "110px",
           render: (h, params) => {
-            return h("span", params.row.register_type || "无");
+            return h("span", params.row.channel || "无");
           },
         },
         {
@@ -136,28 +135,28 @@ export default {
         },
         {
           label: "充值金额",
-          prop: "user_number",
+          prop: "recharge",
         },
         {
           label: "消费金额",
-          prop: "user_number",
+          prop: "consumption",
         },
         {
           label: "进房次数",
-          prop: "user_number",
+          prop: "intoRoom",
         },
         {
           label: "收到私聊",
-          prop: "user_number",
+          prop: "userGetChat",
         },
         {
           label: "发送私聊",
-          prop: "user_number",
+          prop: "userChat",
         },
       ];
       return {
         vm: this,
-        url: REQUEST.user.list,
+        url: REQUEST.user.newList,
         columns: this.permissionArr.includes("User@index") ? arr : [],
       };
     },

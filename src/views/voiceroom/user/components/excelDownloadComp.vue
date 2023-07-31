@@ -35,7 +35,7 @@
 
 <script>
 // 引入api
-import { userExport } from "@/api/user.js";
+import { registerUserExport } from "@/api/user.js";
 export default {
   data() {
     return {
@@ -76,7 +76,7 @@ export default {
             spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)'
           })
-          userExport(params).then(res => {
+          registerUserExport(params).then(res => {
             if (res.code === 2000 && res.data.url) {
               window.location.href = res.data.url;
               // this.$success("数据正在下载中");
