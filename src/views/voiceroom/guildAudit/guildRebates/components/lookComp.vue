@@ -164,7 +164,7 @@ export default {
     async load(row, status) {
       this.status = status;
       console.log('row',row);
-      this.is_standard = row.is_standard || 1;
+      this.is_standard = row.is_standard;
       console.log(this.status, 'this.status');
       this.dialogVisible = true;
       this.editTitle = `${row.guild_name}公会流水详情`
