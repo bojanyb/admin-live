@@ -77,11 +77,8 @@ export default {
             background: 'rgba(0, 0, 0, 0.7)'
           })
           registerUserExport(params).then(res => {
-            if (res.code === 2000 && res.data.url) {
-              window.location.href = res.data.url;
-              // this.$success("数据正在下载中");
-            } else {
-              this.$warning("当前没有数据可以导出");
+            if (res.code === 2000) {
+              this.$success("任务创建成功，请稍后自行点击“文件查询”下载！");
             }
             loading.close();
             this.resetForm('ruleForm');
