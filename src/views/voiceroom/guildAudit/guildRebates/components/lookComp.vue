@@ -84,7 +84,7 @@
       <el-table :data="tableData.reward_list" style="width: 100%">
         <el-table-column prop="type_name" label="房间类型" align="center">
         </el-table-column>
-        <el-table-column prop="flow" :label="is_standard === '否'?'未达标流水':'达标流水'" align="center">
+        <el-table-column prop="flow" :label="is_standard === 0?'未达标流水':'达标流水'" align="center">
         </el-table-column>
         <el-table-column prop="point" :label="status | statusFilters" align="center">
         </el-table-column>
@@ -120,7 +120,7 @@ export default {
       let msg = "";
       switch (val) {
         case "guildWeekWater":
-          if(that.is_standard === '否') {
+          if(that.is_standard === 0) {
             msg = "未达标周结算"
           } else {
             msg = "达标周结算"
@@ -151,7 +151,7 @@ export default {
       },
       editTitle: "",
       status: "",
-      is_standard: ""
+      is_standard: 1
     };
   },
   beforeCreate: function () {
@@ -164,7 +164,7 @@ export default {
     async load(row, status) {
       this.status = status;
       console.log('row',row);
-      this.is_standard = row.is_standard || '';
+      this.is_standard = row.is_standard || 1;
       console.log(this.status, 'this.status');
       this.dialogVisible = true;
       this.editTitle = `${row.guild_name}公会流水详情`
