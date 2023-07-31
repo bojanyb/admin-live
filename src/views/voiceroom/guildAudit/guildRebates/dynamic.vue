@@ -309,7 +309,7 @@ export default {
                 {
                   props: { type: "info" },
                   style: {
-                    display: +params.row.resettle !== 1 ? "unset" : "none",
+                    display: (+params.row.resettle !== 1 || this.form.status === 4) ? "unset" : "none",
                   },
                   on: {
                     click: () => {
