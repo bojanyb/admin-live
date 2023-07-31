@@ -110,6 +110,9 @@
         <template slot-scope="scope">
           {{ `${scope.row.success_number || 0}条成功 / 共查单${scope.row.total_number || 0}条记录` }}
         </template>
+        <!-- <template slot-scope="scope">
+          正在查单，请等待...
+        </template> -->
         </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -129,13 +132,13 @@
         style="width: 100%">
         <el-table-column
           prop="trade_no"
-          label="序号"
+          label="商户单号"
           show-overflow-tooltip
           >
         </el-table-column>
         <el-table-column
           prop="remark"
-          label="成功商户单号"
+          label="查单结果"
           show-overflow-tooltip
           >
         </el-table-column>
