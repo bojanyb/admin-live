@@ -133,6 +133,7 @@ import { add } from '@/api/shopping.js'
 import { fileReader } from '@/utils/fileReader.js'
 // 引入公共方法
 import { isProportion } from '@/utils/common.js'
+import { debounce } from '@/utils'
 
 export default {
     components: {
@@ -373,8 +374,8 @@ export default {
             }
         },
         // 提交
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
+        submitForm: debounce(function (){
+            this.$refs["ruleForm"].validate((valid) => {
                 if (valid) {
                     let params = { ...this.ruleForm }
                     params.start_time = Math.floor(params.start_time / 1000)
@@ -397,7 +398,7 @@ export default {
                     return false;
                 }
             });
-        },
+        }, 500),
         // 新增商品出售期限
         addData() {
             let s = this.ruleForm
