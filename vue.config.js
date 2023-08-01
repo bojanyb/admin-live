@@ -125,6 +125,19 @@ const option = {
     logo: 'images/logokb.png',
     title: 'aidoo管理平台'
   },
+  // 灰度环境
+  '--aidoo.grey': {
+    publicPath: '/',
+    outputDir: 'dist',
+    assetsDir: 'static',
+    mode: 'grey',
+    domainHttps: '//api.grey.aidoo.live', // https环境地址
+    domainHttp: '//m.grey.aidoo.live', // app端接口
+    httpHeader: '', // 后台本地携带
+    favicon: 'favicon.ico',
+    logo: 'images/logo.png',
+    title: '喵喵星球管理平台'
+  },
   // 生产环境
   '--aidoo.prod': {
     publicPath: '/',
