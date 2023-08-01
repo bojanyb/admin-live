@@ -34,15 +34,29 @@
     ></editComp>
 
     <!-- 批量输入ID修改 -->
-    <el-dialog :visible.sync="inputIdUpdateVisible" title="批量输入ID修改" width="30%" append-to-body @close="inputIdForm = {}">
-      <el-form ref="inputIdForm" :model="inputIdForm" label-suffix=":" label-width="90px">
+    <el-dialog
+      :visible.sync="inputIdUpdateVisible"
+      title="批量输入ID修改"
+      width="30%"
+      append-to-body
+      @close="inputIdForm = {}"
+    >
+      <el-form
+        ref="inputIdForm"
+        :model="inputIdForm"
+        label-suffix=":"
+        label-width="90px"
+      >
         <el-form-item label="用户ID">
-          <el-input type="textarea" v-model="inputIdForm.user_number"></el-input>
+          <el-input
+            type="textarea"
+            v-model="inputIdForm.user_number"
+          ></el-input>
         </el-form-item>
         <el-row style="padding: 20px">
           <el-col :span="12">
             <el-form-item label="支付宝提现通道" label-width="80">
-             <el-select
+              <el-select
                 v-model="inputIdForm.alipay_cash_channel"
                 placeholder="请选择修改提现通道"
                 style="width: 80%"
@@ -55,12 +69,12 @@
                   :disabled="item.disabled"
                 ></el-option>
               </el-select>
-        </el-form-item>
+            </el-form-item>
           </el-col>
 
-      <el-col :span="12">
-        <el-form-item label="银行卡提现通道" label-width="80">
-             <el-select
+          <el-col :span="12">
+            <el-form-item label="银行卡提现通道" label-width="80">
+              <el-select
                 v-model="inputIdForm.cash_channel"
                 placeholder="请选择修改提现通道"
                 style="width: 80%"
@@ -73,28 +87,39 @@
                   :disabled="item.disabled"
                 ></el-option>
               </el-select>
-        </el-form-item>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-form-item>
           <el-button type="primary" @click="submitForm">提交</el-button>
-          <el-button  @click="inputIdForm = {}">重置</el-button>
+          <el-button @click="inputIdForm = {}">重置</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
 
     <!-- 批量修改返回 -->
-     <el-dialog :visible.sync="respsoneDataVisible" title="批量修改执行结果" width="30%" append-to-body center>
-      <div style="padding: 20px;">
-          <div style="padding: 10px;">
-              <span style="color: #F56C6C;">{{
-              (respsoneData.error_user && respsoneData.error_user.split(',').length) ? respsoneData.error_user.split(',').length : 0
-              }}</span>条执行失败
-            </div>
-          <div style="padding: 10px;">{{ `请排查：${respsoneData.error_user || '无'}` }}</div>
+    <el-dialog
+      :visible.sync="respsoneDataVisible"
+      title="批量修改执行结果"
+      width="30%"
+      append-to-body
+      center
+    >
+      <div style="padding: 20px">
+        <div style="padding: 10px">
+          <span style="color: #f56c6c">{{
+            respsoneData.error_user && respsoneData.error_user.split(",").length
+              ? respsoneData.error_user.split(",").length
+              : 0
+          }}</span
+          >条执行失败
+        </div>
+        <div style="padding: 10px">
+          {{ `请排查：${respsoneData.error_user || "无"}` }}
+        </div>
       </div>
       <div slot="footer">
-         <el-button type="primary" @click="handleCloseRespsone">确定</el-button>
+        <el-button type="primary" @click="handleCloseRespsone">确定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -133,14 +158,15 @@ export default {
       selectionList: [],
 
       inputIdUpdateVisible: false, // 批量输入ID弹框
-      respsoneDataVisible: false,  // 批量输入ID返回弹框
+      respsoneDataVisible: false, // 批量输入ID返回弹框
       cashList: MAPDATA.CASHCHANNEL,
       alipayCashList: MAPDATA.ALIPAYCASHCHANNEL,
       bankCashList: MAPDATA.BANKCASHCHANNEL,
       inputIdForm: {}, // 批量输入ID表单
-      respsoneData: {  // 批量输入ID返回表单
-        error_user: ""
-      }
+      respsoneData: {
+        // 批量输入ID返回表单
+        error_user: "",
+      },
     };
   },
   computed: {
@@ -187,23 +213,23 @@ export default {
         isShowCheckbox: true,
         url: REQUEST.CashHisity.cashChannel,
         search: {
-          sizes: [10, 30, 50, 100,300,500,1000]
+          sizes: [10, 30, 50, 100, 300, 500, 1000],
         },
         columns: [
           {
             label: "身份证",
             prop: "id_card",
-            width: "170px"
+            width: "170px",
           },
           {
             label: "姓名",
             prop: "name",
-            width: "100px"
+            width: "100px",
           },
           {
             label: "用户ID",
             prop: "user_number",
-            width: "100px"
+            width: "100px",
           },
           {
             label: "小猪通道余额",
@@ -211,9 +237,9 @@ export default {
             minWidth: "130px",
             sortable: "custom",
             render: (h, params) => {
-              const result = params.row.pig_quota.map(item => {
-                return h("div",  `${item.name}：${item.quota}`)
-              })
+              const result = params.row.pig_quota.map((item) => {
+                return h("div", `${item.name}：${item.quota}`);
+              });
               return h("div", result);
             },
           },
@@ -223,9 +249,9 @@ export default {
             minWidth: "130px",
             sortable: "custom",
             render: (h, params) => {
-              const result = params.row.cat_quota.map(item => {
-                return h("div",  `${item.name}：${item.quota}`)
-              })
+              const result = params.row.cat_quota.map((item) => {
+                return h("div", `${item.name}：${item.quota}`);
+              });
               return h("div", result);
             },
           },
@@ -235,9 +261,9 @@ export default {
             minWidth: "150px",
             sortable: "custom",
             render: (h, params) => {
-              const result = params.row.mst_quota.map(item => {
-                return h("div",  `${item.name}：${item.quota}`)
-              })
+              const result = params.row.mst_quota.map((item) => {
+                return h("div", `${item.name}：${item.quota}`);
+              });
               return h("div", result);
             },
           },
@@ -247,9 +273,21 @@ export default {
             minWidth: "130px",
             sortable: "custom",
             render: (h, params) => {
-              const result = params.row.fusui_quota.map(item => {
-                return h("div",  `${item.name}：${item.quota}`)
-              })
+              const result = params.row.fusui_quota.map((item) => {
+                return h("div", `${item.name}：${item.quota}`);
+              });
+              return h("div", result);
+            },
+          },
+          {
+            label: "薪遇见通道余额",
+            prop: "xin_quota",
+            minWidth: "150px",
+            sortable: "custom",
+            render: (h, params) => {
+              const result = params.row.xin_quota.map((item) => {
+                return h("div", `${item.name}：${item.quota}`);
+              });
               return h("div", result);
             },
           },
@@ -281,7 +319,7 @@ export default {
             width: "100px",
             render: (h, params) => {
               return h("span", params.row.aiyi_bank ? "已签署" : "未签署");
-            }
+            },
           },
           {
             label: "公司-支付宝",
@@ -289,7 +327,7 @@ export default {
             width: "100px",
             render: (h, params) => {
               return h("span", params.row.aiyi_alipay ? "已签署" : "未签署");
-            }
+            },
           },
           {
             label: "小猪-支付宝",
@@ -297,7 +335,7 @@ export default {
             width: "100px",
             render: (h, params) => {
               return h("span", params.row.pig_alipay ? "已签署" : "未签署");
-            }
+            },
           },
           {
             label: "小猪-银行卡",
@@ -305,7 +343,7 @@ export default {
             width: "100px",
             render: (h, params) => {
               return h("span", params.row.pig_bank ? "已签署" : "未签署");
-            }
+            },
           },
           {
             label: "工猫-银行卡",
@@ -313,7 +351,7 @@ export default {
             prop: "cat_bank",
             render: (h, params) => {
               return h("span", params.row.cat_bank ? "已签署" : "未签署");
-            }
+            },
           },
           {
             label: "工猫-支付宝",
@@ -321,7 +359,7 @@ export default {
             width: "100px",
             render: (h, params) => {
               return h("span", params.row.cat_alipay ? "已签署" : "未签署");
-            }
+            },
           },
           {
             label: "美事通-银行卡",
@@ -329,7 +367,7 @@ export default {
             width: "110px",
             render: (h, params) => {
               return h("span", params.row.mst_bank ? "已签署" : "未签署");
-            }
+            },
           },
           {
             label: "美事通-支付宝",
@@ -337,7 +375,7 @@ export default {
             width: "110px",
             render: (h, params) => {
               return h("span", params.row.mst_alipay ? "已签署" : "未签署");
-            }
+            },
           },
           {
             label: "福穗-银行卡",
@@ -345,7 +383,7 @@ export default {
             width: "100px",
             render: (h, params) => {
               return h("span", params.row.fusui_bank ? "已签署" : "未签署");
-            }
+            },
           },
           {
             label: "福穗-支付宝",
@@ -353,7 +391,23 @@ export default {
             width: "100px",
             render: (h, params) => {
               return h("span", params.row.fusui_alipay ? "已签署" : "未签署");
-            }
+            },
+          },
+          {
+            label: "薪遇见-银行卡",
+            prop: "fusui_bank",
+            width: "120px",
+            render: (h, params) => {
+              return h("span", params.row.xin_bank ? "已签署" : "未签署");
+            },
+          },
+          {
+            label: "薪遇见-支付宝",
+            prop: "fusui_alipay",
+            width: "120px",
+            render: (h, params) => {
+              return h("span", params.row.xin_alipay ? "已签署" : "未签署");
+            },
           },
           {
             label: "操作",
@@ -400,8 +454,8 @@ export default {
     // 批量
     batch() {
       if (!(this.selectionList && this.selectionList.length)) {
-        this.$message.error('至少要选择一个修改对象')
-        return false
+        this.$message.error("至少要选择一个修改对象");
+        return false;
       }
       const parma = this.selectionList || [];
       this.load("batch", parma);
@@ -444,7 +498,7 @@ export default {
           let temp = {
             user_number: this.inputIdForm.user_number,
             cash_channel: this.inputIdForm.cash_channel,
-            alipay_cash_channel: this.inputIdForm.alipay_cash_channel
+            alipay_cash_channel: this.inputIdForm.alipay_cash_channel,
           };
           const res = await updateCashChannel(temp);
           if (res.code + "" === "2000") {
@@ -460,7 +514,7 @@ export default {
           console.log("error submit!!");
           return false;
         }
-      })
+      });
     },
     async BatchRurn() {
       let s = this.beforeSearch();
@@ -469,27 +523,27 @@ export default {
       s.pagesize = search ? search.size : null;
       const loading = this.$loading({
         lock: true,
-        text: 'Loading',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      })
+        text: "Loading",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
       let res = await cashChannel(s);
       try {
         let arr = JSON.parse(JSON.stringify(res.data.list));
         if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
         arr = arr.map((item, index) => {
-          const pigResult = item.pig_quota.map(cur => {
-            return `${cur.name}：${cur.quota}`
-          })
-          const catResult = item.cat_quota.map(cur => {
-            return `${cur.name}：${cur.quota}`
-          })
-          const mstResult = item.mst_quota.map(cur => {
-            return `${cur.name}：${cur.quota}`
-          })
-          const fusuiResult = item.fusui_quota.map(cur => {
-            return `${cur.name}：${cur.quota}`
-          })
+          const pigResult = item.pig_quota.map((cur) => {
+            return `${cur.name}：${cur.quota}`;
+          });
+          const catResult = item.cat_quota.map((cur) => {
+            return `${cur.name}：${cur.quota}`;
+          });
+          const mstResult = item.mst_quota.map((cur) => {
+            return `${cur.name}：${cur.quota}`;
+          });
+          const fusuiResult = item.fusui_quota.map((cur) => {
+            return `${cur.name}：${cur.quota}`;
+          });
           let params = {
             id_card: item.id_card,
             name: item.name,
@@ -521,7 +575,7 @@ export default {
       this.respsoneDataVisible = false;
       this.inputIdUpdateVisible = false;
       this.getList();
-    }
+    },
   },
 };
 </script>
@@ -547,7 +601,7 @@ export default {
     }
   }
 }
-.el-table__fixed-body-wrapper{
+.el-table__fixed-body-wrapper {
   bottom: 0;
 }
 </style>
