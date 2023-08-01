@@ -318,6 +318,14 @@ const CASHCHANNEL = [
   {
     value: 12,
     name: '对公转账',
+  },
+  {
+    value: 13,
+    name: '薪遇见银行卡',
+  },
+  {
+    value: 14,
+    name: '薪遇见支付宝',
   }
 ]
 
@@ -346,6 +354,10 @@ const BANKCASHCHANNEL = [
     value: 10,
     name: '福穗银行卡',
   },
+  {
+    value: 13,
+    name: '薪遇见银行卡',
+  }
 ]
 
 /*
@@ -372,6 +384,10 @@ const ALIPAYCASHCHANNEL = [
   {
     value: 11,
     name: '福穗支付宝',
+  },
+  {
+    value: 14,
+    name: '薪遇见支付宝',
   }
 ]
 
