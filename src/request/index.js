@@ -208,6 +208,8 @@ const request = {
         list: `${HTTPHEADER}/User/getUserInfo`,
         defaultFace: `${HTTPHEADER}/user/defaultFace`,
         autonymlist: `${HTTPHEADER}/Verify`,
+        getVerifyOptions: `${HTTPHEADER}/Verify/options`, // 获取实名列表筛选项
+        riskList: `${HTTPHEADER}/Verify/rbiList`, // 风险列表
         edit: `${HTTPHEADER}/User/userEdit`, // 编辑用户
         userSave: `${HTTPHEADER}/User/userSave`, // 用户封禁/启用
         musicList: `${HTTPHEADER}/music/index`, // 音乐列表
@@ -480,6 +482,8 @@ const request = {
         deleteMsg: `${HTTPHEADER}/moments/deleteMsg`, // 删除评论
         msgListAll: `${HTTPHEADER}/moments/msgListAll`, // 评论列表
         multiDeleteMsg: `${HTTPHEADER}/moments/multiDeleteMsg`, // 批量删评论文案
+        checkList: `${HTTPHEADER}/moments/checkMomentIndex`, // 获取动态审核列表
+        check: `${HTTPHEADER}/moments/checkMomentUpdate`, // 动态审核操作
     },
 
     // 活动管理
