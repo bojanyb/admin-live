@@ -105,8 +105,8 @@ const option = {
     outputDir: 'dist',
     assetsDir: 'static',
     mode: 'aidoo.test',
-    domainHttps: 'http://api.aidoo.vip', // https环境地址
-    domainHttp: 'http://m.aidoo.vip', // app端接口
+    domainHttps: 'http://api.test.aidoo.live', // https环境地址
+    domainHttp: 'http://m.test.aidoo.live', // app端接口
     httpHeader: '', // 后台本地携带
     favicon: 'faviconkb.ico', // 图标
     logo: 'images/logokb.png',
@@ -123,6 +123,19 @@ const option = {
     httpHeader: '', // 后台本地携带
     favicon: 'faviconkb.ico', // 图标
     logo: 'images/logokb.png',
+    title: 'aidoo管理平台'
+  },
+  // 灰度环境
+  '--aidoo.grey': {
+    publicPath: '/',
+    outputDir: 'dist',
+    assetsDir: 'static',
+    mode: 'aidoo.grey',
+    domainHttps: '//api.grey.aidoo.live', // https环境地址
+    domainHttp: '//m.grey.aidoo.live', // app端接口
+    httpHeader: '', // 后台本地携带
+    favicon: 'faviconkb.ico',
+    logo: 'images/logo.png',
     title: 'aidoo管理平台'
   },
   // 生产环境
