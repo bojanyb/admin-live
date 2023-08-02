@@ -53,7 +53,7 @@ export default {
                     { required: true, message: '请选择运营主管', trigger: 'blur' }
                 ],
                 member_ids: [
-                    { required: true, message: '请选择公会运营', trigger: 'blur' }
+                    { required: false, message: '请选择公会运营', trigger: 'blur' }
                 ]
             },
             mainOptions: [],
