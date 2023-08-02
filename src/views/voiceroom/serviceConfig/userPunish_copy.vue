@@ -341,7 +341,7 @@ export default {
         },
         {
           label: "处罚结果",
-          minWidth: "520px",
+          minWidth: "180px",
           render: (h, params) => {
             const vnode =
               params.row.res &&
