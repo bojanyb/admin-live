@@ -83,21 +83,21 @@ export default {
             if(status === 'update') {
                 let params = JSON.parse(JSON.stringify(row))
                 console.log('params',params);
-                this.getOptions(params.lead_id);
-                this.$set(this.$data, 'ruleForm', params)
+                this.getOptions(params);
             }
         },
-        getOptions(leadId) {
-            let params = {}
-            if(leadId) {
-                params.lead_id = leadId
+        getOptions(row) {
+            let params = {} 
+            if(row && row.lead_id) {
+                params.lead_id = row.lead_id;
             }
             getGuildManager(params).then(res => {
                 console.log(res);
                 if(res.code === 2000) {
                     const data = res.data || [];
-                    if(leadId) {
+                    if(row && row.lead_id) {
                         this.staffOptions = data
+                        this.$set(this.$data, 'ruleForm', row)
                     }else {
                         this.mainOptions = data
                     }
