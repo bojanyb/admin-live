@@ -97,11 +97,8 @@ export default {
                     const data = res.data || [];
                     if(row && row.lead_id) {
                         let ids = [];
-                        let nameArr = row.member_name.split('，');
                         data.forEach(item => {
-                            if(nameArr.includes(item.nickname)) {
-                                ids.push(item.id)
-                            }
+                            item.selected&&ids.push(item.id)
                         })
                         row.member_ids = ids;
                         this.staffOptions = data;
