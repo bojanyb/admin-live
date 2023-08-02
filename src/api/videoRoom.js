@@ -791,6 +791,24 @@ export function getGuildDealReport(data) {
   })
 }
 
+// 公会投诉处理（客服）
+export function handleUserComplain(data) {
+  return request({
+    url: '/UserComplaint/handle',
+    method: 'post',
+    data
+  })
+}
+
+// 公会投诉类型筛选项（风险客服）
+export function getUserComplainOptions(data) {
+  return request({
+    url: '/UserComplaint/init',
+    method: 'post',
+    data
+  })
+}
+
 // 公会举报 72小时非公会厅收入查询
 export function getNotGuildFree(data) {
   return request({
