@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" :showYesterday="true" :showRecentSeven="true" :showToday="true" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" layout="total, sizes, prev, pager, next, jumper"></tableList>
 
         <!-- 详情组件 -->
         <discussComp v-if="isDestoryComp" ref="discussComp" :msg_id="msg_id" @destoryComp="destoryComp"></discussComp>
@@ -113,6 +113,9 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.dynamic.getMoments,
+                search: {
+                  sizes: [10, 30, 50, 100]
+                },
                 columns: [
                     {
                         label: '发送时间',
@@ -292,5 +295,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    
+
 </style>
