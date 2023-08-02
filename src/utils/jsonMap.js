@@ -2471,6 +2471,11 @@ const USERPUNISHTYPELISTCOPYTWO = [
     disabled: false
   },
   {
+    name: '禁用猫粮',
+    value: 15,
+    disabled: false
+  },
+  {
     name: '房间冻结',
     value: 6,
     disabled: false
@@ -2605,6 +2610,10 @@ const TIMEPENALTYSTATUS = [
   {
     name: '房间冻结',
     value: 6
+  },
+  {
+    name: '禁用猫粮',
+    value: 15
   },
 ]
 
