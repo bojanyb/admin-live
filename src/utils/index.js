@@ -326,6 +326,16 @@ export function createUniqueString() {
 }
 
 /**
+ * 创建唯一的traceId
+ * @returns {string}
+ */
+export function createUniqueTraceId() {
+  const timestamp = +new Date() + ''
+  const randomString = createUniqueString()
+  return timestamp + '_'+ randomString
+}
+
+/**
  * Check if an element has a class
  * @param {HTMLElement} elm
  * @param {string} cls
