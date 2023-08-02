@@ -210,8 +210,6 @@ const request = {
         autonymlist: `${HTTPHEADER}/Verify/list`,
         getVerifyOptions: `${HTTPHEADER}/Verify/options`, // 获取实名列表筛选项
         riskList: `${HTTPHEADER}/Verify/rbiList`, // 风险列表
-        getVerifyOptions: `${HTTPHEADER}/Verify/options`, // 获取实名列表筛选项
-        riskList: `${HTTPHEADER}/Verify/rbiList`, // 风险列表
         edit: `${HTTPHEADER}/User/userEdit`, // 编辑用户
         userSave: `${HTTPHEADER}/User/userSave`, // 用户封禁/启用
         musicList: `${HTTPHEADER}/music/index`, // 音乐列表
