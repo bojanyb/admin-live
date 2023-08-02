@@ -33,15 +33,18 @@
 			cfgs() {
 				return {
 					vm: this,
-					url: REQUEST.system.riches.userRank,
+					url: REQUEST.system.operate.getManagerList,
 					columns: [
 						{
 							label: '运营主管',
-							prop: 'user_rank'
+							prop: 'lead_name'
 						},
 						{
 							label: '公会运营成员',
-							prop: 'spending'
+							prop: 'member_name',
+							render: (h, params) => {
+								return h('span', params.row.member_name || '无')
+							}
 						},
 						{
 							label: '修改时间',

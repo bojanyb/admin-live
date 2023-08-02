@@ -7,23 +7,23 @@
         :before-close="handleClose"
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="运营主管" prop="user_rank">
-                    <el-select v-model="ruleForm.user_rank" placeholder="请选择">
+                <el-form-item label="运营主管" prop="lead_id">
+                    <el-select v-model="ruleForm.lead_id" placeholder="请选择" :disabled="status === 'update'">
                         <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                        v-for="item in mainOptions"
+                        :key="item.id"
+                        :label="item.nickname"
+                        :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="公会运营" prop="spending" v-if="status === 'update'">
-                    <el-select v-model="ruleForm.spending" placeholder="请选择">
+                <el-form-item label="公会运营" prop="member_ids" v-if="status === 'update'">
+                    <el-select v-model="ruleForm.member_ids" placeholder="请选择" multiple>
                         <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                        v-for="item in staffOptions"
+                        :key="item.id"
+                        :label="item.nickname"
+                        :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -38,26 +38,30 @@
 
 <script>
 // 引入api
-import { getUserRankConfig } from '@/api/videoRoom'
+import { getGuildManager, saveGuildManager } from '@/api/videoRoom'
 export default {
     data() {
         return {
             dialogVisible: false,
             status: 'add', // 当前状态
             ruleForm: {
-                spending: '',
-                user_rank: ''
+                lead_id: '',
+                member_ids: ''
             },
             rules: {
-                spending: [
-                    { required: true, message: '请填写总财富贡献', trigger: 'blur' }
+                lead_id: [
+                    { required: true, message: '请选择运营主管', trigger: 'blur' }
                 ],
-                user_rank: [
-                    { required: true, message: '请输入等级', trigger: 'blur' }
+                member_ids: [
+                    { required: true, message: '请选择公会运营', trigger: 'blur' }
                 ]
             },
-            options: []
+            mainOptions: [],
+            staffOptions: []
         };
+    },
+    mounted() {
+        this.getOptions();
     },
     computed: {
         title() {
@@ -76,10 +80,29 @@ export default {
         loadParams(status, row) {
             this.dialogVisible = true
             this.status = status
-            if(status !== 'add') {
+            if(status === 'update') {
                 let params = JSON.parse(JSON.stringify(row))
+                console.log('params',params);
+                this.getOptions(params.lead_id);
                 this.$set(this.$data, 'ruleForm', params)
             }
+        },
+        getOptions(leadId) {
+            let params = {}
+            if(leadId) {
+                params.lead_id = leadId
+            }
+            getGuildManager(params).then(res => {
+                console.log(res);
+                if(res.code === 2000) {
+                    const data = res.data || [];
+                    if(leadId) {
+                        this.staffOptions = data
+                    }else {
+                        this.mainOptions = data
+                    }
+                }
+            })
         },
         // 提交
         async submitForm(formName) {
@@ -87,11 +110,12 @@ export default {
                 if (valid) {
                     let s = this.ruleForm
                     let params = {
-                        user_rank: s.user_rank,
-                        diamond_total: s.spending,
-                        spending: s.spending
+                        lead_id: s.lead_id
                     }
-                    let res = await getUserRankConfig(params)
+                    if(this.status === 'update') {
+                        params.member_ids = Array.isArray(s.member_ids)?s.member_ids.join(','):s.member_ids;
+                    }
+                    let res = await saveGuildManager(params)
                     if(res.code === 2000) {
                         this.$message.success('操作成功！')
                         this.dialogVisible = false
