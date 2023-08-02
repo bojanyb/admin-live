@@ -55,6 +55,15 @@ export function review(data) {
     })
 }
 
+// 图片审核-客服列表
+export function customerServiceList(data) {
+  return request({
+    url: api.risk.customerServiceList,
+    method: 'post',
+    data
+  })
+}
+
 // 处罚 -列表
 export function UserPunishLog(data) {
   return request({
