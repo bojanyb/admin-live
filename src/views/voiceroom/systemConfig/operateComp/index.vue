@@ -96,7 +96,15 @@ export default {
                 if(res.code === 2000) {
                     const data = res.data || [];
                     if(row && row.lead_id) {
-                        this.staffOptions = data
+                        let ids = [];
+                        let nameArr = row.member_name.split('，');
+                        data.forEach(item => {
+                            if(nameArr.includes(item.nickname)) {
+                                ids.push(item.id)
+                            }
+                        })
+                        row.member_ids = ids;
+                        this.staffOptions = data;
                         this.$set(this.$data, 'ruleForm', row)
                     }else {
                         this.mainOptions = data
