@@ -3,7 +3,7 @@
         <div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :show-add="permissionArr.includes('UserPunishLog@add')" :show-batch-rurn="true" @onReset="reset" @onSearch="onSearch" @add="add" batchRurnName="导出EXCEL" @BatchRurn="BatchRurn"></SearchPanel>
         </div>
-		    <tableList :cfgs="cfgs" ref="tableList"></tableList>
+		    <tableList :cfgs="cfgs" ref="tableList" layout="total, sizes, prev, pager, next, jumper"></tableList>
         <!-- 新增组件 -->
         <userComp v-if="isDestoryComp" ref="userComp" @destoryComp="destoryComp" @getList="getList"></userComp>
         <!-- 修改证据弹窗 -->
@@ -380,6 +380,9 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.risk.UserPunishLog,
+                search: {
+                  sizes: [10, 30, 50, 100]
+                },
                 columns: this.permissionArr.includes('UserPunishLog@index') ? arr : []
             }
         }

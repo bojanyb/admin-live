@@ -4,7 +4,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" :showYesterday="true" :showRecentSeven="true" :showToday="true" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" layout="total, sizes, prev, pager, next, jumper"></tableList>
 
         <!-- 详情组件 -->
         <discussComp v-if="isDestoryComp" ref="discussComp" :msg_id="msg_id" @destoryComp="destoryComp"></discussComp>
@@ -38,12 +38,35 @@ export default {
             msg_id: null,
             isDestoryComp: false, // 是否销毁组件
             searchParams: {
-                dateTimeParams: []
+                dateTimeParams: [],
+                check_status: '',
+                user_number: ''
             },
             dateTimeParams: {
                 start_time: null,
                 end_time: null
-            }
+            },
+            checkStatusList: [
+            {
+                name: '全部',
+                value: ''
+            },
+            {
+                name: '未审核',
+                value: '0'
+            },
+            {
+                name: '拒绝',
+                value: '1'
+            },
+            {
+                name: '忽略',
+                value: '2'
+            },
+            {
+                name: '通过',
+                value: '3'
+            }],
         };
     },
     computed: {
@@ -56,6 +79,16 @@ export default {
                     label: '用户ID',
                     isNum: true,
                     placeholder: '请输入用户ID'
+                },
+                {
+                    name: 'check_status',
+                    type: 'select',
+                    value: '',
+                    keyName: 'value',
+                    optionLabel: 'name',
+                    label: '审核状态',
+                    placeholder: '请选择',
+                    options: this.checkStatusList
                 },
                 {
                     name: 'dateTimeParams',
@@ -80,11 +113,22 @@ export default {
             return {
                 vm: this,
                 url: REQUEST.dynamic.getMoments,
+                search: {
+                  sizes: [10, 30, 50, 100]
+                },
                 columns: [
                     {
                         label: '发送时间',
                         prop: 'create_time',
                         minWidth: '100px'
+                    },
+                    {
+                        label: '审核时间',
+                        prop: 'check_time',
+                        minWidth: '100px',
+                        render: (h, params) => {
+                            return h('span', params.row.check_time ? timeFormat(params.row.check_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
+                        }
                     },
                     {
                         label: '用户ID',
@@ -116,12 +160,20 @@ export default {
                         prop: 'msg_number'
                     },
                     {
+                        label: '审核状态',
+                        prop: 'check_status',
+                        render: (h, params) => {
+                            const item = this.checkStatusList.find(item => item.value == params.row.check_status)
+                            return h('span', item ? item.name : '无')
+                        }
+                    },
+                    {
                         label: '操作',
                         minWidth: '100px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.seeDetails(params.row.id)}}}, '评论详情'),
-                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
+                                h('el-button', { props: { type: 'primary', size: 'mini'}, on: {click:()=>{this.seeDetails(params.row.id)}}}, '评论详情'),
+                                h('el-button', { props: { type: 'danger', size: 'mini'}, on: {click:()=>{this.deleteParams(params.row.id)}}}, '删除')
                             ])
                         }
                     }
@@ -179,7 +231,8 @@ export default {
                 pagesize: params.size,
                 start_time: s.start_time ? Math.floor(s.start_time / 1000) : s.start_time,
                 end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
-                user_number: s.user_number
+                user_number: s.user_number,
+                check_status: s.check_status,
             }
         },
         // 刷新列表
@@ -242,5 +295,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    
+
 </style>
