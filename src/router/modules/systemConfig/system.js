@@ -47,6 +47,15 @@ const systemConfigRouter = {
 				// 	},
 				// 	name: 'rebates'
 				// }
+				{
+					path: 'operate-manage',
+					component: () => import('@/views/voiceroom/systemConfig/operate-manage'),
+					name: 'operate-manage',
+					meta: {
+						title: '运营管理配置',
+						noCache: true
+					}
+				},
 			]
 		},
 		{

@@ -110,6 +110,11 @@ const request = {
 
 
             statisticsroomS: `${HTTPHEADER}/guild/statisticsroomS`, // 统计24小时房间列表
+        },
+        operate: {
+            getManagerList: `${HTTPHEADER}/Guild/getManagerList`, // 公会运营列表
+            getManager: `${HTTPHEADER}/Guild/getManager`, // 公会运营人员选项
+            saveManager: `${HTTPHEADER}/Guild/saveManager`, // 保存公会运营人员配置
         }
     },
 
