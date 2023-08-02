@@ -12,7 +12,7 @@ import { createUniqueTraceId } from '@/utils/index'
 
 let isRefreshFail = true;
 // 时间戳+随机字符串
-let traceId = createUniqueTraceId();
+let traceId = '';
 // create an axios instance
 const service = axios.create({
 	baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -31,6 +31,7 @@ service.interceptors.request.use(
 			// please modify it according to the actual situation
 			config.headers['X-Token'] = getToken()
 		}
+		traceId = createUniqueTraceId();
 		config.headers['X-REQUEST-ID'] = traceId;
 		return config
 	},
@@ -57,11 +58,7 @@ service.interceptors.response.use(
 		const res = response.data
 		// if the custom code is not 20000, it is judged as an error.
 		if (res.code !== 20000) {
-			let message = res.message || 'Error';
-			if(res.code === 400 || res.code === 500) {
-				message = message + traceId
-			}
-			error(message)
+			error(res.message || 'Error')
 
 			// 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
 			if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
@@ -97,14 +94,17 @@ service.interceptors.response.use(
 				return
 			}
 
-			return Promise.reject(new Error(message))
+			return Promise.reject(new Error(res.message || 'Error'))
 		} else {
 			return res
 		}
 	},
 	error => {
-		console.log('err' + error) // for debug
-		error(error.message)
+		let message = error.message;
+		if(error.response && [400, 500].includes(error.response.status)) {
+			message = message + traceId
+		}
+		error(message)
 		return Promise.reject(error)
 	}
 )

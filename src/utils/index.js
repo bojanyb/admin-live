@@ -326,7 +326,7 @@ export function createUniqueString() {
 }
 
 /**
- * 创建唯一的traceId
+ * 创建唯一的traceId（时间戳+随机字符串）
  * @returns {string}
  */
 export function createUniqueTraceId() {

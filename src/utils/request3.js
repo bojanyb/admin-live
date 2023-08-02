@@ -6,6 +6,8 @@ import {
 import store from '@/store'
 import { getToken } from '@/utils/auth' // get token from cookie
 import { error } from '@/utils/common'
+import { createUniqueTraceId } from '@/utils/index'
+
 let isRefreshFail = true;
 var baseUrlApi = ENV_DOMAINHTTP;
 // switch (process.env.NODE_ENV) {
@@ -25,6 +27,8 @@ var baseUrlApi = ENV_DOMAINHTTP;
 // 		break
 // }
 console.log(baseUrlApi);
+// 时间戳+随机字符串
+let traceId = '';
 
 // create an axios instance
 const service = axios.create({
@@ -40,6 +44,8 @@ service.interceptors.request.use(
 		// do something before request is sent
 		const hasToken = getToken()
 		config.headers['Admin-Token'] = hasToken
+		traceId = createUniqueTraceId();
+		config.headers['X-REQUEST-ID'] = traceId;
 		return config
 	},
 	error => {
@@ -104,7 +110,11 @@ service.interceptors.response.use(
 	},
 	error => {
 		store.commit('app/SET_LOADING', false)
-		error(error.message)
+		let message = error.message;
+		if(error.response && [400, 500].includes(error.response.status)) {
+			message = message + traceId
+		}
+		error(message)
 		return Promise.reject(error)
 	}
 )
