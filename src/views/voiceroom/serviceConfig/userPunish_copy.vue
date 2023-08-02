@@ -307,41 +307,6 @@ export default {
                       }
                     },
                     {
-                      label: '处罚操作人',
-                      minWidth: '120px',
-                      render: (h, params) => {
-                          return h('span', params.row.penalty_admin || '无')
-                      }
-                    },
-                    {
-                      label: '解除操作人',
-                      minWidth: '120px',
-                      render: (h, params) => {
-                          return h('span', params.row.undo_admin || '无')
-                      }
-                    },
-                    {
-                      label: '忽略操作人',
-                      minWidth: '120px',
-                      render: (h, params) => {
-                          return h('span', params.row.ignore_admin || '无')
-                      }
-                    },
-                    {
-                      label: '受理操作人',
-                      minWidth: '120px',
-                      render: (h, params) => {
-                          return h('span', params.row.accept_admin || '无')
-                      }
-                    },
-                    {
-                      label: '修改证据人',
-                      minWidth: '120px',
-                      render: (h, params) => {
-                          return h('span', params.row.admin || '无')
-                      }
-                    },
-                    {
                       label: '备注说明',
                       minWidth: '180px',
                       render: (h, params) => {
