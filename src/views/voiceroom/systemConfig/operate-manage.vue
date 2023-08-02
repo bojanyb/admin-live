@@ -4,7 +4,7 @@
 			<el-button type="success" @click="add">新增主管</el-button>
 		</div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList ref="tableList" :cfgs="cfgs" :is-hide-page="true"></tableList>
 
 		<!-- 新增 - 修改组件 -->
 		<operateComp v-if="isDestoryComp" ref="operateComp" @destoryComp="destoryComp" @getList="getList"></operateComp>
@@ -77,8 +77,8 @@
 			// 配置参数
 			beforeSearch(params) {
 				return {
-					page: params.page,
-					pagesize: params.size
+					// page: params.page,
+					// pagesize: params.size
 				}
 			},
 			// 重置
