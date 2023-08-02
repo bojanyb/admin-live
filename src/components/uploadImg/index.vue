@@ -28,6 +28,9 @@
         :baseOptions="{ controls: false, autoplay: true, loop: true }"
         :style="{ width: '178px', height: '178px' }"
       ></videoPlayerComp>
+      <span class="fileName" v-if="url && isSpecial === 'json'"
+        >已上传json文件</span
+      >
     </el-upload>
   </div>
 </template>
@@ -125,6 +128,8 @@ export default {
           return "zip";
         } else if (this.url.indexOf(".mp4") !== -1) {
           return "mp4";
+        } else if (this.url.indexOf(".json") !== -1) {
+          return "json";
         }
       }
     },
