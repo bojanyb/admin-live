@@ -122,7 +122,7 @@ export default {
     // 请求完回调
     onSearchSuccess(res) {
       const data = res.data;
-      this.dateTimeParams = [data.start_time, data.end_time];
+      this.dateTimeParams = [data.start_time * 1000, data.end_time * 1000];
       this.isRefresh = data.status ? false : true; // 0-启用/1-停用
       return {
         data: data.list || [],
@@ -151,8 +151,8 @@ export default {
       if(!value) return;
       const params = {
         type: 2, // 类型: 1- 更新状态/2-更新生效时间
-        start_time: value[0],
-        end_time: value[1]
+        start_time: value[0] / 1000,
+        end_time: value[1] / 1000,
       };
       updateTabbarStatus(params).then((res) => {
         if (res.code !== 2000) return;
