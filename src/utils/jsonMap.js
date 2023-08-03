@@ -384,6 +384,7 @@ const ALIPAYCASHCHANNEL = [
   {
     value: 14,
     name: '薪遇见支付宝',
+    disabled: true
   }
 ]
 
