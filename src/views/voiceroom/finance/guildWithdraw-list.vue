@@ -996,7 +996,7 @@ export default {
     startTimer() {
       if(!this.orderPayData || !this.orderPayData.length) return;
       // 判断是否存在任务未完成的情况
-      const index = this.orderPayData.findIndex(item => item.status > 2)
+      const index = this.orderPayData.findIndex(item => item.status < 2)
       if(index === -1) return;
       // 执行5秒定时刷新
       this.orderPayStatusTimer = setTimeout(() => {
