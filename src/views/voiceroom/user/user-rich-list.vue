@@ -154,6 +154,7 @@ export default {
         user_number: s.user_number,
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : "",
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : "",
+        level: 30
       };
     },
     // 刷新列表
@@ -194,7 +195,7 @@ export default {
       }
 
       this.disabled = true;
-      const res = await supperUList({ ...this.infoParams, level: 20 });
+      const res = await supperUList({ ...this.infoParams, level: 30 });
       this.loading = false;
 
       if (+res.code !== 2000) {
