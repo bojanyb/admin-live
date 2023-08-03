@@ -117,6 +117,11 @@ const request = {
             getManagerList: `${HTTPHEADER}/Guild/getManagerList`, // 公会运营列表
             getManager: `${HTTPHEADER}/Guild/getManager`, // 公会运营人员选项
             saveManager: `${HTTPHEADER}/Guild/saveManager`, // 保存公会运营人员配置
+        },
+        tabbar: {
+            getConfigList: `${HTTPHEADER}/App`, // 获取tabbar图标配置列表
+            updateStatus: `${HTTPHEADER}/App/update`, // 更新tabbar配置状态
+            updateConfig: `${HTTPHEADER}/App/updateData`, // 更新tabbar图标配置数据
         }
     },
 
