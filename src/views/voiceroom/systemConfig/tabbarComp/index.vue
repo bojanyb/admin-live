@@ -6,15 +6,20 @@
         width="450px"
         :before-close="handleClose"
         @closed="closed">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="130px" class="demo-ruleForm">
-                <el-form-item label="文字" prop="name">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+                <el-form-item label="文字" prop="name" v-if="ruleForm.id !== 5">
                     <el-input v-model="ruleForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="文字选中后变色的色值" prop="color">
-                    <el-input v-model="ruleForm.color"></el-input>
+                <el-form-item label="文字选中色值" prop="color" v-if="ruleForm.id !== 5">
+                    <el-input v-model="ruleForm.color">
+                        <template slot="suffix">
+                            <el-color-picker v-model="ruleForm.color"></el-color-picker>
+                        </template>
+                    </el-input>
                 </el-form-item>
                 <el-form-item label="图片" prop="icon">
-                    <uploadImg ref="uploadImg" v-model="ruleForm.icon" :imgUrl="ruleForm.icon" name="icon" @validateField="validateField" accept=".png"></uploadImg>
+                    <uploadImg ref="uploadImg" v-model="ruleForm.icon" :imgUrl="ruleForm.icon" name="icon" @validateField="validateField" accept=".png,.jpg,.jpeg"></uploadImg>
+                    <div v-if="ruleForm.id === 4" class="el-upload__tip">强制覆盖（只会显示上传的图片）</div>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -43,6 +48,7 @@ export default {
         return {
             dialogVisible: false,
             ruleForm: {
+                id: null,
                 name: '',
                 color: '',
                 icon: '',
@@ -77,9 +83,9 @@ export default {
                     let s = this.ruleForm
                     let params = {
                         id: s.id,
-                        name: s.title,
-                        color: s.pic,
-                        icon: s.type,
+                        name: s.name,
+                        color: s.color,
+                        icon: s.icon,
                     }
                     let res = await updateTabbarConfig(params)
                     if(res.code === 2000) {
@@ -108,3 +114,13 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+.tabbarComp-box {
+    .el-color-picker__trigger {
+        border: none;
+    }
+    .el-upload__tip {
+        color: #f56c6c;
+    }
+}
+</style>

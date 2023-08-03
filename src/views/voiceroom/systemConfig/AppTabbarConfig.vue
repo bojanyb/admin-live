@@ -16,14 +16,14 @@
           >
           </el-date-picker>
         </div>
-		<div class="refreshBox">
-		<el-switch
-			v-model="isRefresh"
-			active-text="启用"
-			inactive-text="停用"
-			@change="switchChange"
-		>
-		</el-switch>
+        <div class="refreshBox">
+          <el-switch
+            v-model="isRefresh"
+            active-text="启用"
+            inactive-text="停用"
+            @change="switchChange"
+          >
+          </el-switch>
         </div>
       </div>
     </div>
@@ -42,7 +42,7 @@
 
 <script>
 // 引入api
-import { updateTabbarStatus } from '@/api/system'
+import { updateTabbarStatus } from "@/api/system";
 // 引入修改组件
 import tabbarComp from "./tabbarComp/index.vue";
 // 引入列表组件
@@ -84,10 +84,10 @@ export default {
           {
             label: "图片",
             prop: "icon",
-			isimg: true,
-			imgWidth: '50px',
-			imgHeight: '50px'
-          },  
+            isimg: true,
+            imgWidth: "50px",
+            imgHeight: "50px",
+          },
           {
             label: "操作",
             render: (h, params) => {
@@ -119,13 +119,15 @@ export default {
         pagesize: params.size,
       };
     },
-	// 请求完回调
-	onSearchSuccess(res) {
-		const data = res.data;
-		return {
-			data: data.list || [],
-		}
-	},
+    // 请求完回调
+    onSearchSuccess(res) {
+      const data = res.data;
+      this.dateTimeParams = [data.start_time, data.end_time];
+      this.isRefresh = data.status ? false : true; // 0-启用/1-停用
+      return {
+        data: data.list || [],
+      };
+    },
     // 刷新列表
     getList() {
       this.$refs.tableList.getData();
@@ -145,17 +147,28 @@ export default {
       this.isDestoryComp = false;
     },
     // 日期更改
-    changeDate() {},
+    changeDate(value) {
+      if(!value) return;
+      const params = {
+        type: 2, // 类型: 1- 更新状态/2-更新生效时间
+        start_time: value[0],
+        end_time: value[1]
+      };
+      updateTabbarStatus(params).then((res) => {
+        if (res.code !== 2000) return;
+        this.$success("操作成功");
+      });
+    },
     // 是否启用配置
     switchChange(value) {
-		const params = {
-			type: 1, // 类型: 1- 更新状态/2-更新生效时间
-			status: value ? 0 : 1
-		}
-		updateTabbarStatus().then(res => {
-			if(res.code !== 20000) return;
-			this.$success("已开启");
-		})
+      const params = {
+        type: 1, // 类型: 1- 更新状态/2-更新生效时间
+        status: value ? 0 : 1, // 0-启用/1-停用
+      };
+      updateTabbarStatus(params).then((res) => {
+        if (res.code !== 2000) return;
+        this.$success(value?"已启用":"已停用");
+      });
     },
   },
 };
@@ -191,10 +204,10 @@ export default {
         }
       }
     }
-	.refreshBox {
-		margin-bottom: 20px;
-		margin-left: 10px;
-	}
+    .refreshBox {
+      margin-bottom: 20px;
+      margin-left: 10px;
+    }
   }
 }
 </style>
