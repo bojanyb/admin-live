@@ -21,7 +21,11 @@
                     </el-form-item>
                     <el-form-item label="处罚类型" prop="type">
                         <div>
-                            <el-select v-model="ruleForm.type" multiple placeholder="请选择" :disabled="disabled">
+                            <el-radio-group v-model="ruleForm.category" :disabled="disabled" @change="handleCategoryChange">
+                                <el-radio label="1">行为处罚</el-radio>
+                                <el-radio label="2">警告</el-radio>
+                            </el-radio-group>
+                            <el-select v-if="ruleForm.category === '1'" v-model="ruleForm.type" multiple placeholder="请选择" :disabled="disabled">
                                 <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                             </el-select>
                         </div>
@@ -126,6 +130,7 @@ export default {
             userList: [], // 查询用户
             ruleForm: {
                 user_number: '',
+                category: '1',
                 type: [],
                 ban_duration: '',
                 remark: '',
@@ -143,7 +148,7 @@ export default {
                     { required: true, message: '请选择处罚类别', trigger: 'change' }
                 ],
                 type: [
-                    { required: true, message: '请选择处罚类型', trigger: 'change' }
+                    { required: true, message: '请选择处罚类型', trigger: 'blur' }
                 ],
                 reset: [
                     { required: false, message: '请选择重置资料', trigger: 'change' }
@@ -428,6 +433,14 @@ export default {
           }, []) || [];
       }
     },
+    // 处罚类型变化
+    handleCategoryChange(value) {
+        if(value === '2') {
+            this.rules.type[0].required = false
+        } else {
+            this.rules.type[0].required = true
+        }
+    }
   },
   created() {
    this.getPunishType();
