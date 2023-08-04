@@ -436,9 +436,16 @@ export default {
     // 处罚类型变化
     handleCategoryChange(value) {
         if(value === '2') {
-            this.rules.type[0].required = false
+            this.rules.type[0].required = false;
+            if(this.ruleForm.punish_type_id && this.punishTypeList.length) {
+                const curType = this.punishTypeList.find(item => item.id === this.ruleForm.punish_type_id);
+                console.log('[ curType ] >', curType)
+                if(curType) {
+                    this.ruleForm.remark = curType.warning_msg
+                }
+            }
         } else {
-            this.rules.type[0].required = true
+            this.rules.type[0].required = true;
         }
     }
   },
