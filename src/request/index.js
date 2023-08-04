@@ -110,6 +110,11 @@ const request = {
 
 
             statisticsroomS: `${HTTPHEADER}/guild/statisticsroomS`, // 统计24小时房间列表
+        },
+        operate: {
+            getManagerList: `${HTTPHEADER}/Guild/getManagerList`, // 公会运营列表
+            getManager: `${HTTPHEADER}/Guild/getManager`, // 公会运营人员选项
+            saveManager: `${HTTPHEADER}/Guild/saveManager`, // 保存公会运营人员配置
         }
     },
 
@@ -207,7 +212,7 @@ const request = {
     user: {
         list: `${HTTPHEADER}/User/getUserInfo`,
         defaultFace: `${HTTPHEADER}/user/defaultFace`,
-        autonymlist: `${HTTPHEADER}/Verify`,
+        autonymlist: `${HTTPHEADER}/Verify/list`,
         getVerifyOptions: `${HTTPHEADER}/Verify/options`, // 获取实名列表筛选项
         riskList: `${HTTPHEADER}/Verify/rbiList`, // 风险列表
         edit: `${HTTPHEADER}/User/userEdit`, // 编辑用户

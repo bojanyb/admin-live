@@ -69,6 +69,9 @@
               <el-form-item label="礼物特效" prop="gift_gif">
                   <uploadImg ref="uploadImg" :key="componentKey" v-model="ruleForm.gift_gif" :imgUrl="ruleForm.gift_gif" name="gift_gif" @validateField="validateField" :accept="limitImgType"></uploadImg>
               </el-form-item>
+              <el-form-item label="礼物特效文件" prop="mp4_conf_url" v-if="ruleForm.play_type == 3">
+                  <uploadImg ref="uploadImg" v-model="ruleForm.mp4_conf_url" :imgUrl="ruleForm.mp4_conf_url" name="mp4_conf_url" @validateField="validateField" accept=".json"></uploadImg>
+              </el-form-item>
               <el-form-item label="礼物版本号" prop="gift_version" v-if="status !== 'add'">
                   <el-input v-model="ruleForm.gift_version" onkeydown="this.value=this.value.replace(/^0+/,'');" oninput="this.value=this.value.replace(/[^\d.]/g,'');" placeholder="请输入礼物版本号"></el-input>
               </el-form-item>
@@ -157,6 +160,7 @@ export default {
                 gift_banner: [],
                 gift_photo: '',
                 gift_gif: '',
+                mp4_conf_url: '',
                 gift_version: '',
                 gift_diamond: null,
                 start_time: null,
@@ -196,6 +200,9 @@ export default {
                 ],
                 gift_gif: [
                     { required: true, message: '请上传礼物特效', trigger: 'change' }
+                ],
+                mp4_conf_url: [
+                    { required: true, message: '请上传礼物特效文件', trigger: 'change' }
                 ],
                 gift_version: [
                     { required: true, message: '请输入礼物版本号', trigger: 'change' }
@@ -331,8 +338,14 @@ export default {
           this.nobilityList = res.data.list || []
       },
       handleChangePlayType() {
-      this.componentKey += 1
-      this.ruleForm.gift_gif = ''
+        this.componentKey += 1
+        this.ruleForm.gift_gif = ''
+        this.ruleForm.mp4_conf_url = ''
+        if(this.ruleForm.play_type === 3) {
+            this.rule.mp4_conf_url = false
+        } else {
+            this.rule.mp4_conf_url = false
+        }
       },
       // 重新上传图片
       reUpload(name) {
