@@ -15,14 +15,20 @@
                         <el-button type="success" @click="seeUser">查询</el-button>
                     </el-form-item>
                     <el-form-item label="处罚类别" prop="punish_type_id">
-                        <el-select v-model="ruleForm.punish_type_id" placeholder="请选择" :disabled="disabled">
+                        <el-select v-model="ruleForm.punish_type_id" placeholder="请选择" :disabled="disabled" @change="handleTypeChange">
                             <el-option v-for="item in punishTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="处罚类型" prop="type">
-                        <el-select v-model="ruleForm.type" multiple placeholder="请选择" :disabled="disabled">
-                            <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
-                        </el-select>
+                        <div>
+                            <el-radio-group v-model="ruleForm.category" :disabled="disabled" @change="handleCategoryChange">
+                                <el-radio label="1">行为处罚</el-radio>
+                                <el-radio label="2">警告</el-radio>
+                            </el-radio-group>
+                            <el-select v-if="ruleForm.category === '1'" v-model="ruleForm.type" multiple placeholder="请选择" :disabled="disabled">
+                                <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                            </el-select>
+                        </div>
                     </el-form-item>
                     <!-- <el-form-item label="重置资料" prop="reset" v-if="!ruleForm.ban_duration">
                         <el-select v-model="ruleForm.reset" multiple placeholder="请选择" :disabled="disabled" clearable>
@@ -124,6 +130,7 @@ export default {
             userList: [], // 查询用户
             ruleForm: {
                 user_number: '',
+                category: '1',
                 type: [],
                 ban_duration: '',
                 remark: '',
@@ -141,7 +148,7 @@ export default {
                     { required: true, message: '请选择处罚类别', trigger: 'change' }
                 ],
                 type: [
-                    { required: true, message: '请选择处罚类型', trigger: 'change' }
+                    { required: true, message: '请选择处罚类型', trigger: 'blur' }
                 ],
                 reset: [
                     { required: false, message: '请选择重置资料', trigger: 'change' }
@@ -421,10 +428,33 @@ export default {
             prev.push({
               name: curr.name,
               value: curr.id,
+              msg: curr.warning_msg
             });
             return prev;
           }, []) || [];
       }
+    },
+    // 处罚类型变化
+    handleCategoryChange(value) {
+        if(value === '2') {
+            this.rules.type[0].required = false;
+            if(this.ruleForm.punish_type_id && this.punishTypeList.length) {
+                const curItem = this.punishTypeList.find(item => item.value === this.ruleForm.punish_type_id);
+                if(!curItem) return;
+                this.ruleForm.remark = curItem.msg
+            }
+        } else {
+            this.rules.type[0].required = true;
+            this.ruleForm.remark = '';
+        }
+    },
+    // 处罚类别变化
+    handleTypeChange(value) {
+        if(this.ruleForm.category === '2') {
+            const curItem = this.punishTypeList.find(item => item.value === value);
+            if(!curItem) return;
+            this.ruleForm.remark = curItem.msg
+        }
     },
   },
   created() {
