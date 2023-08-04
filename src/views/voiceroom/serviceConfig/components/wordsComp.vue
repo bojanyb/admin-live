@@ -8,35 +8,35 @@
       :before-close="handleClose"
       @closed="closed"
     >
-    <div class="wrap">
       <div class="button-wrap">
         <el-button type="danger" @click="batchEdit">批量编辑</el-button>
       </div>
-      <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="name" label="类型" align="center">
-        </el-table-column>
-        <el-table-column prop="warning_msg" label="警告提示" align="center">
-        </el-table-column>
-        <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button
-              @click.native.prevent="update(scope.row)"
-              type="primary"
-              size="small">
-              编辑
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- 工具条 -->
-      <pagination
-        v-show="lookTotal > 0"
-        :total="lookTotal"
-        :page.sync="lookPage.page"
-        :limit.sync="lookPage.limit"
-        @pagination="load"
-      />
-    </div>
+      <div class="wrap">
+        <el-table :data="tableData" style="width: 100%">
+          <el-table-column prop="name" label="类型" align="center">
+          </el-table-column>
+          <el-table-column prop="warning_msg" label="警告提示" align="center">
+          </el-table-column>
+          <el-table-column label="操作" align="center">
+            <template slot-scope="scope">
+              <el-button
+                @click.native.prevent="update(scope.row)"
+                type="primary"
+                size="small">
+                编辑
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 工具条 -->
+        <pagination
+          v-show="lookTotal > 0"
+          :total="lookTotal"
+          :page.sync="lookPage.page"
+          :limit.sync="lookPage.limit"
+          @pagination="load"
+        />
+      </div>
     </el-dialog>
     <!-- 风控文案编辑 -->
     <wordsEditComp v-if="isDestoryComp" ref="wordsEditComp" @getList="getList" @destoryComp="destoryComp"></wordsEditComp>
@@ -106,9 +106,27 @@ export default {
 
 <style lang="scss">
 .wordsComp-box {
-  .wrap {
-    padding: 10px;
+  .el-dialog__body {
+    padding: 0 0 20px;
+  }
+  .button-wrap {
+    margin-left: 20px;
     margin-bottom: 20px;
+  }
+  .wrap {
+    max-height: 50vh;
+    padding: 0 20px;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      height: 10px;
+      width: 10px;
+      background: #e8e8e8;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #c7c7c7;
+      border-radius: 5px;
+    }
 
     .text {
       font-size: 16px;
@@ -132,21 +150,6 @@ export default {
       width: 100%;
       margin-bottom: 10px;
     }
-  }
-  .el-dialog__body {
-    max-height: 70vh;
-    overflow-y: scroll;
-    padding: 10px;
-      &::-webkit-scrollbar {
-        height: 10px;
-        width: 10px;
-        background: #e8e8e8;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: #c7c7c7;
-        border-radius: 5px;
-      }
   }
 }
 </style>
