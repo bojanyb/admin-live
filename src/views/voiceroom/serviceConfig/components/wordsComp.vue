@@ -3,7 +3,7 @@
     <el-dialog
       title="风控文案库"
       :visible.sync="dialogVisible"
-      width="500px"
+      width="50%"
       :close-on-click-modal="false"
       :before-close="handleClose"
       @closed="closed"
@@ -13,11 +13,19 @@
         <el-button type="danger" @click="batchEdit">批量编辑</el-button>
       </div>
       <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="type" label="类型" align="center">
+        <el-table-column prop="name" label="类型" align="center">
         </el-table-column>
-        <el-table-column prop="explain" label="警告提示" align="center">
+        <el-table-column prop="warning_msg" label="警告提示" align="center">
         </el-table-column>
-        <el-table-column prop="admin" label="操作" align="center">
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button
+              @click.native.prevent="update(scope.row)"
+              type="primary"
+              size="small">
+              编辑
+            </el-button>
+          </template>
         </el-table-column>
       </el-table>
       <!-- 工具条 -->
@@ -31,17 +39,15 @@
     </div>
     </el-dialog>
     <!-- 风控文案编辑 -->
-    <wordsEditComp ref="wordsEditComp"></wordsEditComp>
+    <wordsEditComp v-if="isDestoryComp" ref="wordsEditComp" @getList="getList" @destoryComp="destoryComp"></wordsEditComp>
   </div>
 </template>
 
 <script>
 // 引入api
-import { punishOperateLog } from "@/api/risk";
+import { getPunishWordsList } from "@/api/risk";
 // 分页
 import Pagination from "@/components/Pagination";
-// 引入公共map
-import MAPDATA from '@/utils/jsonMap.js'
 // 引入风控文案编辑组件
 import wordsEditComp from "./wordsEditComp.vue"
 export default {
@@ -52,6 +58,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      isDestoryComp: false, // 是否销毁组件
       tableData: [],
       lookTotal: 0,
       lookPage: {
@@ -66,20 +73,33 @@ export default {
     },
     load() {
       this.dialogVisible = true;
-      // let res = await punishOperateLog({
-      //   ...this.lookPage,
-      // });
-      this.tableData = [];
+      this.getList();
     },
     // 销毁组件
     closed() {
       this.$emit("destoryComp");
     },
     batchEdit() {
+      this.isDestoryComp = true;
       setTimeout(() => {
-        this.$refs.wordsEditComp.loadParams();
+        this.$refs.wordsEditComp.loadParams(this.tableData);
       }, 50);
-    }
+    },
+    update(row) {
+      this.isDestoryComp = true;
+      setTimeout(() => {
+        this.$refs.wordsEditComp.loadParams(row);
+      }, 50);
+    },
+    async getList() {
+      const res = await getPunishWordsList();
+      if(res.code !== 2000) return;
+      this.tableData = res.data || [];
+    },
+    // 销毁组件
+    destoryComp() {
+      this.isDestoryComp = false;
+    },
   },
 };
 </script>

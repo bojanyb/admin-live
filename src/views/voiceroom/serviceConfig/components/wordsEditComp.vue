@@ -1,114 +1,105 @@
 <template>
-  <div class="serviceConfig-audioComp-box">
-    <drawer
-      size="400px"
+  <div class="wordsEditComp-box">
+    <el-dialog
       :title="title"
-      ref="drawer"
-      @cancel="cancel"
-      @submitForm="submitForm"
+      :visible.sync="dialogVisible"
+      width="50%"
+      :close-on-click-modal="false"
+      :before-close="handleClose"
+      @closed="closed"
     >
-      <el-form
-        slot="body"
-        ref="ruleForm"
-        class="demo-ruleForm"
-        :model="ruleForm"
-        :rules="rules"
-        label-position="top"
-      >
-        <el-form-item label="类型" prop="type">
-          <el-radio-group v-model="ruleForm.type">
-            <el-radio :label="3">备选项</el-radio>
-            <el-radio :label="6">备选项</el-radio>
-            <el-radio :label="9">备选项</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="警告提示" prop="remark">
-          <el-input
-            type="textarea"
-            placeholder="请输入警告提示"
-            :rows="4"
-            v-model="ruleForm.remark"
-          ></el-input>
-        </el-form-item>
-      </el-form>
-    </drawer>
+      <template v-if="isBatch">
+        <el-tabs v-model="tabsValue" @tab-click="handleClick">
+          <el-tab-pane
+            v-for="item in formList"
+            :key="item.id"
+            :label="item.name"
+            :name="String(item.id)"
+          >
+              <el-form class="demo-ruleForm" :model="item">
+                <el-form-item prop="warning_msg">
+                  <el-input
+                    type="textarea"
+                    placeholder="请输入警告提示"
+                    :rows="4"
+                    v-model="item.warning_msg"
+                  ></el-input>
+                </el-form-item>
+              </el-form>
+          </el-tab-pane>
+        </el-tabs>
+      </template>
+      <template v-else>
+        <el-form v-if="formList[0]" class="demo-ruleForm" :model="formList[0]">
+          <el-form-item prop="warning_msg">
+            <el-input
+              type="textarea"
+              placeholder="请输入警告提示"
+              :rows="4"
+              v-model="formList[0].warning_msg"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+      </template>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-// 引入抽屉组件
-import drawer from "@/components/drawer/index";
-// 引入公共map
-import MAPDATA from "@/utils/jsonMap.js";
+// 引入api
+import { updatePunishWords } from "@/api/risk";
 export default {
-  components: {
-    drawer,
-  },
-  computed: {
-    title() {
-      // 标题
-      if (this.status === "0") {
-        return "编辑";
-      } else {
-        return "批量编辑";
-      }
-    },
-  },
   data() {
     return {
-      status: "",
-      roleList: MAPDATA.RISKSYSTEMROLELIST, // 角色列表
-      ruleForm: {},
-      rules: {},
+      dialogVisible: false,
+      isBatch: false,
+      title: "编辑",
+      formList: [],
+      tabsValue: '',
     };
   },
   methods: {
+    // 关闭弹窗
+    handleClose() {
+      this.dialogVisible = false
+    },
     // 获取数据
     loadParams(row) {
-      this.openComp();
-      if (row) {
+      this.dialogVisible = true
+      console.log('[ row ] >', row)
+      if (Array.isArray(row)) {
+        this.isBatch = true;
+        this.title = "批量编辑";
+        this.formList = row;
+        this.tabsValue = String(row[0].id);
+      } else {
         let params = JSON.parse(JSON.stringify(row));
-        this.$set(this.$data, "ruleForm", params);
+        this.formList.push(params);
       }
     },
-    openComp(status = true) {
-      this.$refs.drawer.loadParams(status);
-    },
-    cancel() {
-      this.openComp(false);
+    // 销毁组件
+    closed() {
+      this.$emit('destoryComp')
     },
     // 提交
-    async submitForm(formName) {
-      this.$refs[formName].validate(async (valid) => {
-        if (valid) {
-          let params = { ...this.ruleForm };
-          // let res = await coverCheck(params)
-          // if(res.code === 2000) {
-          //     this.$success('操作成功')
-          //     this.openComp(false)
-          // }
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+    async submitForm() {
+      let params = { data: this.formList };
+      let res = await updatePunishWords(params);
+      if (res.code === 2000) {
+        this.$success("操作成功!");
+        this.dialogVisible = false
+        this.$emit('getList')
+      }
+    },
+    handleClick(value) {
+      console.log('[ value ] >', value)
     },
   },
 };
 </script>
 
-<style lang="scss">
-.serviceConfig-audioComp-box {
-  .el-select {
-    width: 305px;
-  }
-  .el-date-editor {
-    width: 305px;
-  }
-  .audioBox {
-    .el-form-item__label {
-      line-height: 55px;
-    }
-  }
-}
-</style>
+<style lang="scss"></style>

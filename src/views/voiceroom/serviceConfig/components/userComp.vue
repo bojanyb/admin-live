@@ -20,9 +20,11 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="处罚类型" prop="type">
-                        <el-select v-model="ruleForm.type" multiple placeholder="请选择" :disabled="disabled">
-                            <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
-                        </el-select>
+                        <div>
+                            <el-select v-model="ruleForm.type" multiple placeholder="请选择" :disabled="disabled">
+                                <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                            </el-select>
+                        </div>
                     </el-form-item>
                     <!-- <el-form-item label="重置资料" prop="reset" v-if="!ruleForm.ban_duration">
                         <el-select v-model="ruleForm.reset" multiple placeholder="请选择" :disabled="disabled" clearable>
