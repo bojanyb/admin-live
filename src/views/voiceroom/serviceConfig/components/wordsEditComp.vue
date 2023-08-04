@@ -52,6 +52,7 @@
 <script>
 // 引入api
 import { updatePunishWords } from "@/api/risk";
+import { deepClone } from "@/utils/index"
 export default {
   data() {
     return {
@@ -74,10 +75,10 @@ export default {
       if (Array.isArray(row)) {
         this.isBatch = true;
         this.title = "批量编辑";
-        this.formList = row;
+        this.formList = deepClone(row);
         this.tabsValue = String(row[0].id);
       } else {
-        let params = JSON.parse(JSON.stringify(row));
+        let params = deepClone(row);
         this.formList.push(params);
       }
     },

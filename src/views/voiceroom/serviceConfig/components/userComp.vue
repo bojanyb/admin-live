@@ -15,7 +15,7 @@
                         <el-button type="success" @click="seeUser">查询</el-button>
                     </el-form-item>
                     <el-form-item label="处罚类别" prop="punish_type_id">
-                        <el-select v-model="ruleForm.punish_type_id" placeholder="请选择" :disabled="disabled">
+                        <el-select v-model="ruleForm.punish_type_id" placeholder="请选择" :disabled="disabled" @change="handleTypeChange">
                             <el-option v-for="item in punishTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
@@ -428,6 +428,7 @@ export default {
             prev.push({
               name: curr.name,
               value: curr.id,
+              msg: curr.warning_msg
             });
             return prev;
           }, []) || [];
@@ -438,16 +439,23 @@ export default {
         if(value === '2') {
             this.rules.type[0].required = false;
             if(this.ruleForm.punish_type_id && this.punishTypeList.length) {
-                const curType = this.punishTypeList.find(item => item.id === this.ruleForm.punish_type_id);
-                console.log('[ curType ] >', curType)
-                if(curType) {
-                    this.ruleForm.remark = curType.warning_msg
-                }
+                const curItem = this.punishTypeList.find(item => item.value === this.ruleForm.punish_type_id);
+                if(!curItem) return;
+                this.ruleForm.remark = curItem.msg
             }
         } else {
             this.rules.type[0].required = true;
+            this.ruleForm.remark = '';
         }
-    }
+    },
+    // 处罚类别变化
+    handleTypeChange(value) {
+        if(this.ruleForm.category === '2') {
+            const curItem = this.punishTypeList.find(item => item.value === value);
+            if(!curItem) return;
+            this.ruleForm.remark = curItem.msg
+        }
+    },
   },
   created() {
    this.getPunishType();
