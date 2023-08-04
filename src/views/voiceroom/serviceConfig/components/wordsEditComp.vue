@@ -103,4 +103,10 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.wordsEditComp-box {
+  .el-dialog__body {
+    padding: 30px 20px 0;
+  }
+}
+</style>

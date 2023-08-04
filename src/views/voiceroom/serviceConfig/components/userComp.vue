@@ -35,7 +35,7 @@
                             <el-option v-for="item in resetList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item> -->
-                    <el-form-item label="处罚时间" prop="ban_duration" v-if="!isIncludeReset">
+                    <el-form-item label="处罚时间" prop="ban_duration" v-if="!isIncludeReset && ruleForm.category === '1'">
                         <el-select v-model="ruleForm.ban_duration" placeholder="请选择" :disabled="disabled" clearable>
                             <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
                         </el-select>
@@ -57,7 +57,7 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="备注说明" prop="remark">
-                        <el-input type="textarea" placeholder="请输入备注内容，该内容用户可看到，建议20个字以内。" :rows="4" maxlength="20" show-word-limit v-model="ruleForm.remark" :disabled="disabled"></el-input>
+                        <el-input type="textarea" placeholder="请输入备注内容，该内容用户可看到，建议20个字以内。" :rows="4" maxlength="20" show-word-limit v-model="ruleForm.remark" :disabled="disabled || ruleForm.category === '2'"></el-input>
                     </el-form-item>
                 </div>
                 <div class="infoBox" :class="[{'infoBox_hign': status === 'blocked' && !isIncludeReset},{'infoBox_hign_copy_box': status !== 'blocked' && !isIncludeReset},{'infoBox_hign_copy': status !== 'blocked' && isIncludeReset},{'infoBox_hign_copy_box_two': status === 'blocked' && isIncludeReset}]" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
@@ -546,7 +546,8 @@ export default {
     }
 
     .infoBox_hign_copy_box {
-        height: 370px;
+        // height: 370px;
+        height: auto;
         .downBox {
             margin-top: 30px;
             p {
