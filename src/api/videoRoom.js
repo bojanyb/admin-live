@@ -1562,6 +1562,15 @@ export function delChannels(data) {
   })
 }
 
+// 获取渠道
+export function getChannels(data) {
+  return request({
+    url: api.room.getChannels,
+    method: 'post',
+    data
+  })
+}
+
 // 更新提现账户
 export function updateCashChannel(data) {
   return request({
