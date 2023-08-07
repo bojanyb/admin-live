@@ -16,18 +16,30 @@
         :hide-required-asterisk="status === 'see'"
       >
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="渠道编号" prop="code">
-              <el-input
+              <!-- <el-input
                 v-model="ruleForm.code"
                 placeholder="请输入渠道编号"
                 :disabled="status === 'update'"
-              ></el-input>
+              ></el-input> -->
+              <el-select
+                v-model="ruleForm.code"
+                :disabled="status === 'update'"
+                placeholder="请选择渠道编号"
+              >
+                <el-option
+                  v-for="item in channelsList"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="用户性别" prop="sex" v-if="tabIndex === '0'">
-              <el-select
+              <!-- <el-select
                 v-model="ruleForm.sex"
                 :disabled="disabled"
                 placeholder="请选择用户性别"
@@ -38,7 +50,12 @@
                   :label="item.name"
                   :value="item.value"
                 ></el-option>
-              </el-select>
+              </el-select> -->
+                <el-radio-group v-model="ruleForm.sex">
+                  <el-radio label="0">全部</el-radio>
+                  <el-radio label="1">男</el-radio>
+                  <el-radio label="2">女</el-radio>
+                </el-radio-group>
             </el-form-item>
             <el-form-item label="渠道名称" prop="name" v-else>
               <el-input
@@ -48,7 +65,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row v-if="tabIndex === '0'">
+        <!-- <el-row v-if="tabIndex === '0'">
            <el-col :span="24">
               <el-form-item label="是否限时" prop="rule_type">
                 <el-radio-group v-model="ruleForm.rule_type">
@@ -57,7 +74,7 @@
                 </el-radio-group>
               </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
 
         <el-row v-if="tabIndex === '0' && ruleForm.rule_type === '1'">
            <el-col :span="24">
@@ -99,6 +116,17 @@
             </el-form-item>
           </el-col>
         </el-row>
+
+        <el-form-item label="进入人数" prop="number" v-if="tabIndex === '0'">
+          <el-row>
+            <el-col :span="16">
+              <el-input
+                v-model="ruleForm.number"
+                placeholder="请输入进入人数"
+              ></el-input>
+            </el-col>
+          </el-row>
+        </el-form-item>
 
         <el-form-item label="房间ID" prop="room_number" v-if="tabIndex === '0'">
           <el-row>
@@ -170,7 +198,8 @@ import {
   checkAutoJoinRule,
   getHasConfigRoom,
   insertChannels,
-  updateChannels
+  updateChannels,
+  getChannels
 } from "@/api/videoRoom";
 import { param } from "@/utils";
 // 引入公共map
@@ -194,7 +223,7 @@ export default {
       guildTypeList: MAPDATA.GUILDCONFIGTYPELIST,
       ruleForm: {
         code: "",
-        sex: "",
+        sex: "0",
         start_time: null,
         end_time: null,
         room_ids: [],
@@ -230,12 +259,16 @@ export default {
         ],
         rule_type: [{ required: true, message: "请选择是否限时", trigger: "blur" }],
         effect_time: [{ required: true, message: "请选择生效日期", trigger: "change" }],
+        number: [
+          { required: true, message: "请输入进入人数", trigger: "blur" },
+        ],
       },
       tableData: [],
       sexList: [
         { name: "男", value: "1" },
         { name: "女", value: "2" },
       ],
+      channelsList: [],
     };
   },
   computed: {
@@ -319,6 +352,7 @@ export default {
         const ZeroPoint = new Date(new Date().toLocaleDateString()).getTime();
         para.code = params.code || "";
         para.name = params.name || "";
+        para.number = params.number || "";
         para.channels = params.channels || "";
         para.sex = params.sex + "" || "";
 
@@ -348,6 +382,7 @@ export default {
       }
 
       this.oldParams = JSON.parse(JSON.stringify(this.ruleForm));
+      this.getChannelsList();
     },
     openComp(status = true) {
       this.isEditComp = status;
@@ -403,6 +438,8 @@ export default {
              params.invalid_at = params.effect_time[1] / 1000;
           }
           delete params.effect_time;
+
+          // 渠道编号全选
 
           console.log(params.start_time, params.end_time);
           let temp = {
@@ -483,6 +520,33 @@ export default {
           resolve(res);
         }
       });
+    },
+    // 获取渠道
+    async getChannelsList() {
+      const params = {
+        page: 1,
+        pagesize: 100
+      }
+      const response = await getChannels(params)
+      if(response.code == 2000){
+        const tempArr = Array.from(
+          Array.isArray(response.data.list) ? response.data.list : []
+        )
+        this.channelsList = tempArr.reduce((prev, curr) => {
+          prev.push({
+            name: curr.name,
+            value: curr.code
+          })
+          return prev
+        }, []) || [];
+
+        const channelsAllString = this.channelsList.map(curr => {
+          console.log(curr.value);
+          return curr.value
+        }).join(",")
+
+        this.channelsList.unshift({ name: "全部", value: channelsAllString })
+      }
     },
   },
 };
