@@ -19,7 +19,6 @@
 
 				localStorage.removeItem("permissionList");
 
-				// 监听页面关闭
 				window.addEventListener("beforeunload",() => {
 					let permissionList = that.$store.state.user.permissionList
 					localStorage.setItem("permissionList", JSON.stringify(permissionList));
