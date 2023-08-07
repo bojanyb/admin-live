@@ -38,10 +38,28 @@ export function del(data) {
     })
 }
 
-// 提示语-修改
-export function update(data) {
+// 提示语-新增
+export function addSuperMsg(data) {
     return request({
-        url: REQUEST.system.super.update,
+        url: REQUEST.system.super.addSuperMsg,
+        method: 'post',
+        data
+    })
+}
+
+// 提示语-修改
+export function updateSuperMsg(data) {
+    return request({
+        url: REQUEST.system.super.updateSuperMsg,
+        method: 'post',
+        data
+    })
+}
+
+// 提示语-删除
+export function delSuperMsg(data) {
+    return request({
+        url: REQUEST.system.super.delSuperMsg,
         method: 'post',
         data
     })

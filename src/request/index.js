@@ -68,7 +68,9 @@ const request = {
             add: `${HTTPHEADER}/OfficialAccount/add`, // 官方用户-新增
             del: `${HTTPHEADER}/OfficialAccount/del`, // 官方用户-删除
             superMsg: `${HTTPHEADER}/SuperMsg`, // 提示语-列表
-            update: `${HTTPHEADER}/SuperMsg/update`, // 提示语-修改
+            addSuperMsg: `${HTTPHEADER}/SuperMsg/add`, // 提示语-新增
+            updateSuperMsg: `${HTTPHEADER}/SuperMsg/update`, // 提示语-修改
+            delSuperMsg: `${HTTPHEADER}/SuperMsg/del`, // 提示语-删除
         },
         menu: {
             addRule: `${HTTPHEADER}/admin/addRule`, // 添加菜单
@@ -115,6 +117,11 @@ const request = {
             getManagerList: `${HTTPHEADER}/Guild/getManagerList`, // 公会运营列表
             getManager: `${HTTPHEADER}/Guild/getManager`, // 公会运营人员选项
             saveManager: `${HTTPHEADER}/Guild/saveManager`, // 保存公会运营人员配置
+        },
+        tabbar: {
+            getConfigList: `${HTTPHEADER}/App`, // 获取tabbar图标配置列表
+            updateStatus: `${HTTPHEADER}/App/update`, // 更新tabbar配置状态
+            updateConfig: `${HTTPHEADER}/App/updateData`, // 更新tabbar图标配置数据
         }
     },
 
@@ -480,6 +487,9 @@ const request = {
 
         punishOperateLog: `${HTTPHEADER}/UserPunishLog/punishOperateLog`, // 处罚举报-操作日志
         acceptPunish: `${HTTPHEADER}/UserPunishLog/acceptPunish`, // 处罚举报-审核受理
+        
+        punishWordsList: `${HTTPHEADER}/Punish`, // 获取风控文案库列表
+        updatePunishWords: `${HTTPHEADER}/Punish/update`, // 修改风控文案
     },
 
     // 心动速配
