@@ -16,7 +16,7 @@
         :hide-required-asterisk="status === 'see'"
       >
         <el-row>
-          <el-col :span="21">
+          <el-col :span="24">
             <el-form-item label="渠道编号" prop="code">
               <!-- <el-input
                 v-model="ruleForm.code"
@@ -37,7 +37,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="16">
+          <el-col :span="24">
             <el-form-item label="用户性别" prop="sex" v-if="tabIndex === '0'">
               <!-- <el-select
                 v-model="ruleForm.sex"
