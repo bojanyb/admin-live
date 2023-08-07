@@ -35,10 +35,10 @@ service.interceptors.request.use(
 		config.headers['X-REQUEST-ID'] = traceId;
 		return config
 	},
-	error => {
+	err => {
 		// do something with request error
-		console.log(error) // for debug
-		return Promise.reject(error)
+		console.log(err) // for debug
+		return Promise.reject(err)
 	}
 )
 
@@ -99,13 +99,13 @@ service.interceptors.response.use(
 			return res
 		}
 	},
-	error => {
-		let message = error.message;
-		if(error.response && [400, 500].includes(error.response.status)) {
+	err => {
+		let message = err.message;
+		if(err.response && [400, 500].includes(err.response.status)) {
 			message = message + traceId
 		}
 		error(message)
-		return Promise.reject(error)
+		return Promise.reject(err)
 	}
 )
 

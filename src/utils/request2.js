@@ -32,9 +32,9 @@ service.interceptors.request.use(
 		config.headers['X-REQUEST-ID'] = traceId;
 		return config
 	},
-	error => {
+	err => {
 		// do something with request error
-		return Promise.reject(error)
+		return Promise.reject(err)
 	}
 )
 
@@ -92,14 +92,14 @@ service.interceptors.response.use(
 			return res
 		}
 	},
-	error => {
+	err => {
 		store.commit('app/SET_LOADING', false)
-		let message = error.message;
-		if(error.response && [400, 500].includes(error.response.status)) {
+		let message = err.message;
+		if(err.response && [400, 500].includes(err.response.status)) {
 			message = message + traceId
 		}
 		error(message)
-		return Promise.reject(error)
+		return Promise.reject(err)
 	}
 )
 
