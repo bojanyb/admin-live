@@ -8,7 +8,7 @@
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="运营主管" prop="lead_id">
-                    <el-select v-model="ruleForm.lead_id" placeholder="请选择" :disabled="status === 'update'">
+                    <el-select v-model="ruleForm.lead_id" filterable placeholder="请选择" :disabled="status === 'update'">
                         <el-option
                         v-for="item in mainOptions"
                         :key="item.id"
@@ -18,7 +18,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="公会运营" prop="member_ids" v-if="status === 'update'">
-                    <el-select v-model="ruleForm.member_ids" placeholder="请选择" multiple>
+                    <el-select v-model="ruleForm.member_ids" placeholder="请选择" filterable multiple>
                         <el-option
                         v-for="item in staffOptions"
                         :key="item.id"
