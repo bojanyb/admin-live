@@ -327,13 +327,13 @@ export function createUniqueString() {
 
 
 /**
- * 创建唯一的traceId（"web-" +"毫秒时间戳"-"6位随机字符"）
+ * 创建唯一的traceId（web-毫秒时间戳-6位随机字符）
  * @returns {string}
  */
 export function createUniqueTraceId() {
   const timestamp = +new Date() + ''
   const randomString = createUniqueString().substring(0, 6)
-  return 'web-'+ timestamp + '_'+ randomString
+  return 'web-'+ timestamp + '-'+ randomString
 }
 
 /**
