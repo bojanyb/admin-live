@@ -56,7 +56,7 @@ export default {
                     let s = this.ruleForm
                     let params = {
                         kv_id: s.kv_id,
-                        kv_value: s.kv_value
+                        kv_value: s.kv_value.replace(/\s*/g,'')
                     }
                     let res = await update(params)
                     if(res.code === 2000) {
