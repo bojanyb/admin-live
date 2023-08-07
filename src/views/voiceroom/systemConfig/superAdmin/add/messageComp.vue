@@ -50,15 +50,7 @@ export default {
         sort: "",
       },
       rules: {
-        content: [
-          { required: true, message: "请输入文案", trigger: "blur" },
-          {
-            min: 1,
-            max: 99,
-            message: "文案最大限制输入99个字符",
-            trigger: "blur",
-          },
-        ],
+        content: [{ required: true, message: "请输入文案", trigger: "blur" }],
         sort: [{ required: true, message: "请输入序号", trigger: "blur" }],
       },
     };
