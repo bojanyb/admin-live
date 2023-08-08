@@ -531,7 +531,14 @@ export default {
             label: "状态",
             render: (h, params) => {
               let stateName = this.fileStateList.find((item) => { return item.state == params.row.export_status} )
-              return h("span", stateName.name || "无");
+              let temp;
+              if (params.row.export_status === 3) {
+                temp = h("span", { attrs: { title: params.row.remark } }, stateName.name || "无");
+              } else {
+                temp = h("span", stateName.name || "无");
+              }
+
+              return temp;
             },
           },
           {
