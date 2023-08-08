@@ -89,7 +89,7 @@
     </el-dialog>
 
     <!-- 批量查单结果 -->
-    <el-dialog class="queryPayResult" title="批量查单结果" width="50%" :visible.sync="queryOrderResultVisible">
+    <el-dialog class="queryPayResult" title="批量查单结果" width="50%" :visible.sync="queryOrderResultVisible" @close="stopTimer">
       <el-table
         :data="orderPayData"
         style="width: 100%">
@@ -107,9 +107,10 @@
           label="结果"
           show-overflow-tooltip
           >
-        <template slot-scope="scope">
-          {{ `${scope.row.success_number || 0}条成功 / 共查单${scope.row.total_number || 0}条记录` }}
-        </template>
+          <template slot-scope="scope">
+            <template v-if="[2,3].includes(scope.row.status)">{{ `${scope.row.success_number || 0}条成功 / 共查单${scope.row.total_number || 0}条记录` }}</template>
+            <template v-else>正在查单，请等待...</template>
+          </template>
         </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -123,19 +124,19 @@
     </el-dialog>
 
     <!-- 查单明细 -->
-    <el-dialog class="queryOrderResult" title="成功查单明细" width="50%" :visible.sync="queryOrderDetailVisible">
+    <el-dialog class="queryOrderResult" title="成功查单明细" width="50%" :visible.sync="queryOrderDetailVisible" @close="startTimer">
       <el-table
         :data="orderDetailData"
         style="width: 100%">
         <el-table-column
           prop="trade_no"
-          label="序号"
+          label="商户单号"
           show-overflow-tooltip
           >
         </el-table-column>
         <el-table-column
           prop="remark"
-          label="成功商户单号"
+          label="查单结果"
           show-overflow-tooltip
           >
         </el-table-column>
@@ -578,6 +579,8 @@ export default {
       queryOrderResultVisible: false,
       orderPayData: [],
       orderPayTotal: 0,
+      // 定时器
+      orderPayStatusTimer: null,
       payResulPage: {
           page: 1,
           limit: 10,
@@ -612,7 +615,7 @@ export default {
           page: 1,
           limit: 10,
       },
-      queryOrderData: {}
+      queryOrderData: {},
     };
   },
   methods: {
@@ -967,12 +970,16 @@ export default {
         this.orderPayData = response.data.list;
         this.orderPayTotal = response.data.count;
       }
+      // 开始定时刷新
+      this.startTimer();
     },
     // 查单明细
     hanldeQueryDetail(row) {
       this.queryOrderData = row;
       this.queryOrderDetailVisible = true;
       this.getDetails()
+      // 停止计时
+      this.stopTimer()
     },
     async getDetails() {
       const response = await getQueryPayDetails({
@@ -983,6 +990,23 @@ export default {
       if (response.code === 2000) {
         this.orderDetailData = response.data.list;
         this.orderDetailTotal = response.data.count;
+      }
+    },
+    // 开始5秒定时刷新
+    startTimer() {
+      if(!this.orderPayData || !this.orderPayData.length) return;
+      // 判断是否存在任务未完成的情况
+      const index = this.orderPayData.findIndex(item => item.status < 2)
+      if(index === -1) return;
+      // 执行5秒定时刷新
+      this.orderPayStatusTimer = setTimeout(() => {
+        this.getPayResult()
+      }, 5000);
+    },
+    // 结束定时刷新
+    stopTimer() {
+      if(this.orderPayStatusTimer) {
+        clearTimeout(this.orderPayStatusTimer)
       }
     }
   },
@@ -1000,6 +1024,9 @@ export default {
     this.getWXMerchantList();
   },
   mounted(){},
+  beforeDestroy() {
+    this.stopTimer();
+  },
 };
 </script>
 
