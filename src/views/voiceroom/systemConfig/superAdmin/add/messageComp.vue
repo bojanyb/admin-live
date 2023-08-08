@@ -96,7 +96,7 @@ export default {
           let s = this.ruleForm;
           let params = {
             type: s.type,
-            content: s.content.replace(/\s*/g,''),
+            content: s.content.replace(/\t|\n|\v|\r|\f|\s|\r\n/g,''),
             sort: s.sort,
           };
           let res;
