@@ -176,6 +176,15 @@ const systemConfigRouter = {
 			  title: '超管处罚记录',
 			  noCache: true
 			}
+		},
+		{
+			path: 'AppTabbarConfig',
+			component: () => import('@/views/voiceroom/systemConfig/AppTabbarConfig'),
+			name: 'AppTabbarConfig',
+			meta: {
+			  title: '首页底部Tab',
+			  noCache: true
+			}
 		}
 	]
 }

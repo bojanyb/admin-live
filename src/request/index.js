@@ -112,6 +112,11 @@ const request = {
 
 
             statisticsroomS: `${HTTPHEADER}/guild/statisticsroomS`, // 统计24小时房间列表
+        },
+        tabbar: {
+            getConfigList: `${HTTPHEADER}/App`, // 获取tabbar图标配置列表
+            updateStatus: `${HTTPHEADER}/App/update`, // 更新tabbar配置状态
+            updateConfig: `${HTTPHEADER}/App/updateData`, // 更新tabbar图标配置数据
         }
     },
 

@@ -156,3 +156,21 @@ export function getSwitchValue(data) {
     data
   })
 }
+
+// app tabbar图标状态更新
+export function updateTabbarStatus(data) {
+    return request({
+        url: api.system.tabbar.updateStatus,
+        method: 'post',
+        data
+    })
+}
+
+// app tabbar图标配置更新
+export function updateTabbarConfig(data) {
+    return request({
+        url: api.system.tabbar.updateConfig,
+        method: 'post',
+        data
+    })
+}
