@@ -62,8 +62,17 @@
         </div>
         <div class="sunBox">
           <span>公会运营</span>
-          <el-select v-model="form.operator" placeholder="请选择公会运营"  @change="change">
-              <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+          <el-select
+            v-model="form.operator"
+            placeholder="请选择公会运营"
+            @change="change"
+          >
+            <el-option
+              v-for="item in operatorList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </div>
         <div class="btnBox">
@@ -103,7 +112,12 @@
 // 引入公会列表接口
 import { guildList } from "@/api/user";
 // 引入api
-import { doSettlement, settlementLog, guildWeekListV2, adminUserList } from "@/api/videoRoom";
+import {
+  doSettlement,
+  settlementLog,
+  guildWeekListV2,
+  adminUserList,
+} from "@/api/videoRoom";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
@@ -163,11 +177,11 @@ export default {
           minWidth: "100px",
           prop: "guild_name",
         },
-				{
-					label: '公会运营',
-					minWidth: '100px',
-					prop: 'operator_name'
-				},
+        {
+          label: "公会运营",
+          minWidth: "100px",
+          prop: "operator_name",
+        },
         {
           label: "公会长昵称",
           minWidth: "120px",
@@ -185,14 +199,20 @@ export default {
           },
         },
         {
-          label: "流水",
+          label:
+            this.form.status === 5 || this.form.status === 6
+              ? "未达标流水"
+              : "流水",
           minWidth: "120px",
           render: (h, params) => {
             return h("span", params.row.flow + "钻石");
           },
         },
         {
-          label: "总流水（含冻结）",
+          label:
+            this.form.status === 5 || this.form.status === 6
+              ? "未达标总流水（含冻结）"
+              : "总流水（含冻结）",
           minWidth: "140px",
           render: (h, params) => {
             return h("span", params.row.t_flow + "钻石");
@@ -206,7 +226,10 @@ export default {
         // 	}
         // },
         {
-          label: "周返点金额",
+          label:
+            this.form.status === 5 || this.form.status === 6
+              ? "未达标周返点金额"
+              : "周返点金额",
           minWidth: "120px",
           render: (h, params) => {
             return h("span", params.row.settlement + "喵粮");
@@ -223,8 +246,12 @@ export default {
               name = "未结算";
             } else if (this.form.status === 3) {
               name = "已结算";
-            } else {
+            } else if (this.form.status === 4) {
               name = "已忽略";
+            } else if (this.form.status === 5) {
+              name = "未达标";
+            } else if (this.form.status === 6) {
+              name = "未达标结算";
             }
             return h("span", name);
           },
@@ -305,6 +332,48 @@ export default {
                 {
                   props: { type: "info" },
                   style: {
+                    display: (+params.row.resettle !== 1 || this.form.status === 4)? "unset" : "none",
+                  },
+                  on: {
+                    click: () => {
+                      this.handleLook(params.row, "guildWeekWater");
+                    },
+                  },
+                },
+                "详情"
+              ),
+            ]);
+          },
+        },
+      ];
+
+      let arr2 = [
+        {
+          label: "操作",
+          minWidth: "280px",
+          fixed: "right",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "el-button",
+                {
+                  props: { type: "primary" },
+                  style: {
+                    display: (+params.row.resettle !== 1 && this.form.status === 5) ? "unset" : "none",
+                  },
+                  on: {
+                    click: () => {
+                      this.rebateFunc(params.row.id, 1);
+                    },
+                  },
+                },
+                "结算"
+              ),
+              h(
+                "el-button",
+                {
+                  props: { type: "info" },
+                  style: {
                     display: +params.row.resettle !== 1 ? "unset" : "none",
                   },
                   on: {
@@ -319,21 +388,29 @@ export default {
           },
         },
       ];
+
+      let columns = [];
+      if (this.form.status === 1 || this.form.status === 3 || this.form.status === 4) {
+        columns = [...arr, ...arr1];
+      } else if (this.form.status === 5 || this.form.status === 6) {
+        columns = [...arr, ...arr2];
+      } else {
+        columns = [...arr];
+      }
+
       return {
         vm: this,
         url: REQUEST.guild[name],
         isShowCheckbox: this.form.status === 1,
         isShowIndex: true,
-        columns: (this.form.status === 1 || this.form.status === 4) ? [...arr, ...arr1] : [...arr]
+        columns,
       };
     },
   },
   watch: {
     "form.status": {
       handler(n, o) {
-        if ((o === 1 || o === 3 || o == 4) && (n === 1 || n === 3 || n === 4)) {
-          this.getList();
-        }
+        this.getList();
       },
       deep: true,
     },
@@ -341,7 +418,19 @@ export default {
   data() {
     return {
       guildList: [], // 公会列表
-      closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST, // 结算状态
+      closeStatusList: [
+        ...MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST,
+        ...[
+          {
+            name: "未达标",
+            value: 5,
+          },
+          {
+            name: "未达标结算",
+            value: 6,
+          },
+        ],
+      ], // 结算状态
       form: {
         // 表单数据
         guild_number: "",
@@ -364,7 +453,7 @@ export default {
           name: "相守、个播",
         },
       ],
-      operatorList: []
+      operatorList: [],
     };
   },
   created() {
@@ -389,10 +478,21 @@ export default {
       };
       if (this.form.status === 1) {
         data.status = 0;
+        data.is_standard = 1;
       } else if (this.form.status === 3) {
         data.status = 1;
+        data.is_standard = 1;
       } else if (this.form.status === 4) {
         data.status = 2;
+        data.is_standard = 1;
+      } else if (this.form.status === 5) {
+        // 未达标
+        data.status = 0;
+        data.is_standard = 0;
+      } else if (this.form.status === 6) {
+        // 未达标结算
+        data.status = 1;
+        data.is_standard = 0;
       }
       if (s.status === 2) {
         delete data.status;
@@ -553,8 +653,12 @@ export default {
           status_name = "未结算";
         } else if (this.form.status === 3) {
           status_name = "已结算";
-        } else {
+        } else if (this.form.status === 4) {
           status_name = "已忽略";
+        } else if (this.form.status === 5) {
+          status_name = "未达标";
+        } else if (this.form.status === 6) {
+          status_name = "未达标结算";
         }
         let params = {
           num: index + 1,
@@ -594,23 +698,24 @@ export default {
       ];
       exportTableData(arr, nameList, "公会周流水结算");
     },
-     // 获取公会运营
-     async getAdminUserList() {
-       const response = await adminUserList()
-       if(response.code === 2000) {
-         const tempArr =  Array.from(
-           Array.isArray(response.data.list) ? response.data.list : []
-       )
-       this.operatorList = tempArr.reduce((prev, curr) => {
-         prev.push({
-             name: curr.username,
-             value: curr.id
-         })
-         return prev
-       }, []) || []
-       this.isAuth = response.data.is_auth;
-       }
-     },
+    // 获取公会运营
+    async getAdminUserList() {
+      const response = await adminUserList();
+      if (response.code === 2000) {
+        const tempArr = Array.from(
+          Array.isArray(response.data.list) ? response.data.list : []
+        );
+        this.operatorList =
+          tempArr.reduce((prev, curr) => {
+            prev.push({
+              name: curr.username,
+              value: curr.id,
+            });
+            return prev;
+          }, []) || [];
+        this.isAuth = response.data.is_auth;
+      }
+    },
   },
 };
 </script>
