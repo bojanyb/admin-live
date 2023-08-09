@@ -199,6 +199,16 @@ export function supperUList(data) {
   })
 }
 
+// 新进用户导出
+export function registerUserExport(data) {
+  return request({
+    url: api.user.registerUserExport,
+    method: 'post',
+    data
+  })
+}
+
+
 // 获取实名列表筛选项
 export function getVerifyOptions(data) {
   return request({
