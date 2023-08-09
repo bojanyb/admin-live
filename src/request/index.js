@@ -467,6 +467,9 @@ const request = {
 
         punishOperateLog: `${HTTPHEADER}/UserPunishLog/punishOperateLog`, // 处罚举报-操作日志
         acceptPunish: `${HTTPHEADER}/UserPunishLog/acceptPunish`, // 处罚举报-审核受理
+        
+        punishWordsList: `${HTTPHEADER}/Punish`, // 获取风控文案库列表
+        updatePunishWords: `${HTTPHEADER}/Punish/update`, // 修改风控文案
     },
 
     // 心动速配

@@ -15,21 +15,27 @@
                         <el-button type="success" @click="seeUser">查询</el-button>
                     </el-form-item>
                     <el-form-item label="处罚类别" prop="punish_type_id">
-                        <el-select v-model="ruleForm.punish_type_id" placeholder="请选择" :disabled="disabled">
+                        <el-select v-model="ruleForm.punish_type_id" placeholder="请选择" :disabled="disabled" @change="handleTypeChange">
                             <el-option v-for="item in punishTypeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="处罚类型" prop="type">
-                        <el-select v-model="ruleForm.type" multiple placeholder="请选择" :disabled="disabled">
-                            <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
-                        </el-select>
+                        <div>
+                            <el-radio-group v-model="ruleForm.category" :disabled="disabled" @change="handleCategoryChange">
+                                <el-radio label="1">行为处罚</el-radio>
+                                <el-radio label="2">警告</el-radio>
+                            </el-radio-group>
+                            <el-select v-if="ruleForm.category === '1'" v-model="ruleForm.type" multiple placeholder="请选择" :disabled="disabled">
+                                <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                            </el-select>
+                        </div>
                     </el-form-item>
                     <!-- <el-form-item label="重置资料" prop="reset" v-if="!ruleForm.ban_duration">
                         <el-select v-model="ruleForm.reset" multiple placeholder="请选择" :disabled="disabled" clearable>
                             <el-option v-for="item in resetList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item> -->
-                    <el-form-item label="处罚时间" prop="ban_duration" v-if="!isIncludeReset">
+                    <el-form-item label="处罚时间" prop="ban_duration" v-if="!isIncludeReset && ruleForm.category === '1'">
                         <el-select v-model="ruleForm.ban_duration" placeholder="请选择" :disabled="disabled" clearable>
                             <el-option v-for="(item,index) in timeList" :key="index" :label="item.name" :value="item.value"></el-option>
                         </el-select>
@@ -51,7 +57,7 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="备注说明" prop="remark">
-                        <el-input type="textarea" placeholder="请输入备注内容，该内容用户可看到，建议20个字以内。" :rows="4" maxlength="20" show-word-limit v-model="ruleForm.remark" :disabled="disabled"></el-input>
+                        <el-input type="textarea" placeholder="请输入备注内容，该内容用户可看到，建议20个字以内。" :rows="4" maxlength="20" show-word-limit v-model="ruleForm.remark" :disabled="disabled || ruleForm.category === '2'"></el-input>
                     </el-form-item>
                 </div>
                 <div class="infoBox" :class="[{'infoBox_hign': status === 'blocked' && !isIncludeReset},{'infoBox_hign_copy_box': status !== 'blocked' && !isIncludeReset},{'infoBox_hign_copy': status !== 'blocked' && isIncludeReset},{'infoBox_hign_copy_box_two': status === 'blocked' && isIncludeReset}]" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
@@ -124,6 +130,7 @@ export default {
             userList: [], // 查询用户
             ruleForm: {
                 user_number: '',
+                category: '1',
                 type: [],
                 ban_duration: '',
                 remark: '',
@@ -141,7 +148,7 @@ export default {
                     { required: true, message: '请选择处罚类别', trigger: 'change' }
                 ],
                 type: [
-                    { required: true, message: '请选择处罚类型', trigger: 'change' }
+                    { required: true, message: '请选择处罚类型', trigger: 'blur' }
                 ],
                 reset: [
                     { required: false, message: '请选择重置资料', trigger: 'change' }
@@ -421,10 +428,33 @@ export default {
             prev.push({
               name: curr.name,
               value: curr.id,
+              msg: curr.warning_msg
             });
             return prev;
           }, []) || [];
       }
+    },
+    // 处罚类型变化
+    handleCategoryChange(value) {
+        if(value === '2') {
+            this.rules.type[0].required = false;
+            if(this.ruleForm.punish_type_id && this.punishTypeList.length) {
+                const curItem = this.punishTypeList.find(item => item.value === this.ruleForm.punish_type_id);
+                if(!curItem) return;
+                this.ruleForm.remark = curItem.msg
+            }
+        } else {
+            this.rules.type[0].required = true;
+            this.ruleForm.remark = '';
+        }
+    },
+    // 处罚类别变化
+    handleTypeChange(value) {
+        if(this.ruleForm.category === '2') {
+            const curItem = this.punishTypeList.find(item => item.value === value);
+            if(!curItem) return;
+            this.ruleForm.remark = curItem.msg
+        }
     },
   },
   created() {
@@ -516,7 +546,8 @@ export default {
     }
 
     .infoBox_hign_copy_box {
-        height: 370px;
+        // height: 370px;
+        height: auto;
         .downBox {
             margin-top: 30px;
             p {

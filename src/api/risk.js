@@ -172,3 +172,21 @@ export function exprotAudio(data) {
     data
   })
 }
+
+// 获取风控文案库列表
+export function getPunishWordsList(data) {
+  return request({
+    url: api.risk.punishWordsList,
+    method: 'post',
+    data
+  })
+}
+
+// 更新风控文案
+export function updatePunishWords(data) {
+  return request({
+    url: api.risk.updatePunishWords,
+    method: 'post',
+    data
+  })
+}
