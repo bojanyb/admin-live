@@ -72,7 +72,15 @@ const userRouter = {
         title: '登录记录',
         noCache: true
       }
-    }
+    },{
+		path: 'register-data',
+		component: () => import('@/views/voiceroom/user/register-data'),
+		name: 'register-data',
+		meta: {
+		  title: '注册数据',
+		  noCache: true
+		}
+	  }
 	]
 }
 
