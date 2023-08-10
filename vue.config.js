@@ -105,8 +105,8 @@ const option = {
     outputDir: 'dist',
     assetsDir: 'static',
     mode: 'aidoo.test',
-    domainHttps: 'http://api.test.aidoo.live', // https环境地址
-    domainHttp: 'http://m.test.aidoo.live', // app端接口
+    domainHttps: '//api.test.aidoo.live', // https环境地址
+    domainHttp: '//m.test.aidoo.live', // app端接口
     httpHeader: '', // 后台本地携带
     favicon: 'faviconkb.ico', // 图标
     logo: 'images/logokb.png',

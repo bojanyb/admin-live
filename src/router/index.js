@@ -39,7 +39,7 @@ import activityManagerRouter from './modules/activityManager/index.js'
 import liveManageRouter from './modules/liveManage/index.js'
 import accompanyManageRouter from './modules/accompanyManage/index.js'
 import homeRouter from './modules/home/index.js'
-
+import substituteRouter from './modules/substitute/index.js'
 
 
 
@@ -134,6 +134,7 @@ export const asyncRoutes = [
   accompanyManageRouter,
   homeRouter,
 	systemConfigRouter,
+	substituteRouter,
 	// 404 page must be placed at the end !!!
 	{
 		path: '/animate',
