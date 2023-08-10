@@ -208,6 +208,15 @@ export function getVerifyOptions(data) {
   })
 }
 
+// 新进用户导出
+export function registerUserExport(data) {
+  return request({
+    url: api.user.registerUserExport,
+    method: 'post',
+    data
+  })
+}
+
 /***********公会v2******************/
 
 // 主播申请审核
