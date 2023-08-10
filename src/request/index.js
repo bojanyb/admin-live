@@ -68,7 +68,9 @@ const request = {
             add: `${HTTPHEADER}/OfficialAccount/add`, // 官方用户-新增
             del: `${HTTPHEADER}/OfficialAccount/del`, // 官方用户-删除
             superMsg: `${HTTPHEADER}/SuperMsg`, // 提示语-列表
-            update: `${HTTPHEADER}/SuperMsg/update`, // 提示语-修改
+            addSuperMsg: `${HTTPHEADER}/SuperMsg/add`, // 提示语-新增
+            updateSuperMsg: `${HTTPHEADER}/SuperMsg/update`, // 提示语-修改
+            delSuperMsg: `${HTTPHEADER}/SuperMsg/del`, // 提示语-删除
         },
         menu: {
             addRule: `${HTTPHEADER}/admin/addRule`, // 添加菜单

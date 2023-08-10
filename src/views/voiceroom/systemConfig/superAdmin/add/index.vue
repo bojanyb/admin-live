@@ -1,4 +1,4 @@
-// 设置超管
+<!-- 设置超管 -->
 <template>
     <div class="superAdmin-add-box">
         <el-dialog
