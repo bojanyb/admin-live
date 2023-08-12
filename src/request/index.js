@@ -265,6 +265,8 @@ const request = {
         disbandGuild: `${HTTPHEADER}/guild/disbandGuild`, // 解散公会
         joinApply: `${HTTPHEADER}/Guild/joinApply`, // 公会厅申请信息处理
         guildUserReport: `${HTTPHEADER}/guild/guildUserReport`, // 公会举报处理
+        getUserComplainList: `${HTTPHEADER}/UserComplaint/index`, // 公会投诉列表（风险客服）
+        handleUserComplain: `${HTTPHEADER}/UserComplaint/handle`, // 公会投诉处理（风险客服）
         settlementLog: `${HTTPHEADER}/Guild/settlementLog`, // 返点操作日志
         newGuildApplyList: `${HTTPHEADER}/guild/newGuildApplyList`, // 创建工会申请列表
         newGuildApplyCheck: `${HTTPHEADER}/guild/newGuildApplyCheck`, // 创建工会审核已联系或者驳回
