@@ -259,15 +259,10 @@ const request = {
 
     // 公会管理
     guild: {
-        list: `${HTTPHEADER}/Guild/guildListV2`, // 公会列表
-        getGuildUsers: `${HTTPHEADER}/guild/guildUsers`, // 成员列表
-        guildUserApply: `${HTTPHEADER}/guild/guildUserApply`, // 主播申请列表
-        guildUserApplyCheck: `${HTTPHEADER}/guild/guildUserApplyCheck`, // 主播申请审核
         getGuildUserList: `${HTTPHEADER}/guild/getGuildUserList`, // 成员明细
         addGuildUser: `${HTTPHEADER}/guild/addGuildUser`, // 添加公会成员
         getGuildRoomList: `${HTTPHEADER}/guild/getGuildRoomList`, // 绑定厅列表
         removeGuildUser: `${HTTPHEADER}/guild/removeGuildUser`, // 删除公会成员
-        rmGuildUser: `${HTTPHEADER}/guild/rmGuildUser`, // 删除公会成员
         removeGuildRoom: `${HTTPHEADER}/guild/removeGuildRoom`, // 移除大厅
         disbandGuild: `${HTTPHEADER}/guild/disbandGuild`, // 解散公会
         joinApply: `${HTTPHEADER}/Guild/joinApply`, // 公会厅申请信息处理
@@ -487,7 +482,7 @@ const request = {
 
         punishOperateLog: `${HTTPHEADER}/UserPunishLog/punishOperateLog`, // 处罚举报-操作日志
         acceptPunish: `${HTTPHEADER}/UserPunishLog/acceptPunish`, // 处罚举报-审核受理
-        
+
         punishWordsList: `${HTTPHEADER}/Punish`, // 获取风控文案库列表
         updatePunishWords: `${HTTPHEADER}/Punish/update`, // 修改风控文案
     },
