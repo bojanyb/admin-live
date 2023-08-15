@@ -156,11 +156,6 @@ export default {
                     },
                 },
                 {
-                    label: '税源地',
-                    width: '160px',
-                    prop: 'card_id'
-                },
-                {
                     label: '提现状态',
                     render: (h, params) => {
                         let paramsData = MAPDATA.STATUSLIST.find(item => { return item.value === params.row.status })
