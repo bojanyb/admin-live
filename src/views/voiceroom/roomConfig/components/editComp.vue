@@ -260,7 +260,7 @@ export default {
         rule_type: [{ required: true, message: "请选择是否限时", trigger: "blur" }],
         effect_time: [{ required: true, message: "请选择生效日期", trigger: "change" }],
         number: [
-          { required: true, message: "请输入进入人数", trigger: "blur" },
+          { required: false, message: "请输入进入人数", trigger: "blur" },
         ],
       },
       tableData: [],
