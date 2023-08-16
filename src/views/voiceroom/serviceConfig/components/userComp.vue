@@ -338,6 +338,7 @@ export default {
                             ban_duration: data.ban_duration,
                             remark: data.remark,
                             punish_type_id: data.punish_type_id,
+                            category: data.category,
                         }
                         let arr = JSON.parse(JSON.stringify(data.type))
                         s.reset = arr.filter(item => { return item > 10 && item !== 15 })
@@ -526,7 +527,8 @@ export default {
     }
 
     .infoBox_hign {
-        height: 270px;
+        // height: 270px;
+        height: auto;
         .downBox {
             margin-top: 10px;
             p {
