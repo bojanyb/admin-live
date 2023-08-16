@@ -262,7 +262,12 @@ export default {
         rule_type: [{ required: true, message: "请选择是否限时", trigger: "blur" }],
         effect_time: [{ required: true, message: "请选择生效日期", trigger: "change" }],
         number: [
-          { required: false, message: "请输入进入人数", trigger: "blur" },
+          { required: true, message: "请输入正整数,-1代表全部", trigger: "blur" },
+          {
+            message: "请输入正整数,-1代表全部",
+            trigger: "blur",
+            pattern: /^(-1|[1-9]\d*)$/,
+          },
         ],
       },
       tableData: [],
