@@ -81,7 +81,7 @@
               <el-form-item label="生效日期" prop="effect_time">
                 <el-date-picker
                   v-model="ruleForm.effect_time"
-                  type="datetimerange"
+                  type="daterange"
                   value-format="timestamp"
                   range-separator="至"
                   start-placeholder="开始日期"
@@ -206,6 +206,8 @@ import { param } from "@/utils";
 import MAPDATA from "@/utils/jsonMap.js";
 // 引入格式化时间包
 import moment from "moment";
+// 引入公共方法
+import { timeFormat } from '@/utils/common.js'
 export default {
   components: {},
   props: {
@@ -260,7 +262,7 @@ export default {
         rule_type: [{ required: true, message: "请选择是否限时", trigger: "blur" }],
         effect_time: [{ required: true, message: "请选择生效日期", trigger: "change" }],
         number: [
-          { required: true, message: "请输入进入人数", trigger: "blur" },
+          { required: false, message: "请输入进入人数", trigger: "blur" },
         ],
       },
       tableData: [],
@@ -340,6 +342,14 @@ export default {
         return "渠道设置";
       }
     },
+  },
+  mounted() {
+    // 开始时间和结束时间
+    let date = timeFormat(new Date(), "YYYY-MM-DD", false);
+    let start_time = new Date(date + " 00:00:00").getTime();
+    let end_time = new Date(date + " 23:59:59").getTime();
+    this.ruleForm.start_time = start_time;
+    this.ruleForm.end_time =  end_time;
   },
   methods: {
     // 新增 - 修改
@@ -535,7 +545,7 @@ export default {
         this.channelsList = tempArr.reduce((prev, curr) => {
           prev.push({
             name: curr.name,
-            value: curr.code
+            value: curr.code + ""
           })
           return prev
         }, []) || [];
