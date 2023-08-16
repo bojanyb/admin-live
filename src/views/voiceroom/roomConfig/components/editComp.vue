@@ -440,8 +440,8 @@ export default {
             new Date(new Date().toLocaleDateString()).getTime() / 1000;
           const startTime = Math.floor(params.start_time / 1000);
           const endTime = Math.floor(params.end_time / 1000);
-          params.start_time = (startTime - ZeroPoint - 1) >= 0  ? startTime - ZeroPoint - 1 : 0;
-          params.end_time = (endTime - ZeroPoint - 1) >= 0 ? endTime - ZeroPoint - 1 : 0;
+          params.start_time = (startTime - ZeroPoint) >= 0  ? startTime - ZeroPoint : 0;
+          params.end_time = (endTime - ZeroPoint) >= 0 ? endTime - ZeroPoint : 0;
           // 生效时间
           if (params && params.effect_time) {
              params.valid_at = params.effect_time[0] / 1000;
