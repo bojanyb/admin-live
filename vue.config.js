@@ -135,7 +135,7 @@ const option = {
     domainHttp: '//m.grey.aidoo.live', // app端接口
     httpHeader: '', // 后台本地携带
     favicon: 'faviconkb.ico',
-    logo: 'images/logo.png',
+    logo: 'images/logokb.png',
     title: 'aidoo管理平台'
   },
   // 生产环境
