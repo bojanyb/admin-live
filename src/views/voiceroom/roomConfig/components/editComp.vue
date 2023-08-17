@@ -262,7 +262,12 @@ export default {
         rule_type: [{ required: true, message: "请选择是否限时", trigger: "blur" }],
         effect_time: [{ required: true, message: "请选择生效日期", trigger: "change" }],
         number: [
-          { required: false, message: "请输入进入人数", trigger: "blur" },
+          { required: true, message: "请输入正整数,-1代表全部", trigger: "blur" },
+          {
+            message: "请输入正整数,-1代表全部",
+            trigger: "blur",
+            pattern: /^(-1|[1-9]\d*)$/,
+          },
         ],
       },
       tableData: [],
@@ -440,8 +445,8 @@ export default {
             new Date(new Date().toLocaleDateString()).getTime() / 1000;
           const startTime = Math.floor(params.start_time / 1000);
           const endTime = Math.floor(params.end_time / 1000);
-          params.start_time = (startTime - ZeroPoint - 1) >= 0  ? startTime - ZeroPoint - 1 : 0;
-          params.end_time = (endTime - ZeroPoint - 1) >= 0 ? endTime - ZeroPoint - 1 : 0;
+          params.start_time = (startTime - ZeroPoint) >= 0  ? startTime - ZeroPoint : 0;
+          params.end_time = (endTime - ZeroPoint) >= 0 ? endTime - ZeroPoint : 0;
           // 生效时间
           if (params && params.effect_time) {
              params.valid_at = params.effect_time[0] / 1000;

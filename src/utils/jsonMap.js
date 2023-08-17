@@ -1163,6 +1163,14 @@ const PARTYGAMELIST = [
     value: '1461297734886621238',
     feature: '经典玩法，双重操作防误操作',
     url: require('@/assets/game/gobang.png')
+  },
+  {
+    index: 12,
+    name: '怪物消消乐',
+    nickname: 'xiaoxiaole',
+    value: '1664525565526667266',
+    feature: '经典有趣的休闲消除类游戏',
+    url: require('@/assets/game/xiaoxiaole.png')
   }
 ]
 
