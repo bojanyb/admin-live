@@ -132,7 +132,7 @@ export default {
       // 举报类型筛选项
       reportTypeList: [],
       // 处罚类型筛选项
-      reportTypeList: [],
+      punishTypeList: [],
       // 选择的列表
       selectList: [],
       isDestoryComp: false // 是否销毁组件

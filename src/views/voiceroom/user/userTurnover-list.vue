@@ -344,7 +344,6 @@
 				this.searchParams = {
 					flow_type: 0
 				}
-				this.dateTimeParams = {}
 				this.getList()
 			},
 			// 查询
