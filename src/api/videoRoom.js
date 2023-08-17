@@ -1423,6 +1423,25 @@ export function cpWeekRewardList(data) {
     data
   })
 }
+
+// 获取公会运营人员选项
+export function getGuildManager(data) {
+  return request({
+    url: api.system.operate.getManager,
+    method: 'post',
+    data
+  })
+}
+
+// 保存公会运营人员配置
+export function saveGuildManager(data) {
+  return request({
+    url: api.system.operate.saveManager,
+    method: 'post',
+    data
+  })
+}
+
 /***********广播******************/
 
 // 发送广播消息
@@ -1556,6 +1575,15 @@ export function updateChannels(data) {
 export function delChannels(data) {
   return request({
     url: api.room.delChannels,
+    method: 'post',
+    data
+  })
+}
+
+// 获取渠道
+export function getChannels(data) {
+  return request({
+    url: api.room.getChannels,
     method: 'post',
     data
   })

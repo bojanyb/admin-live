@@ -113,6 +113,11 @@ const request = {
 
             statisticsroomS: `${HTTPHEADER}/guild/statisticsroomS`, // 统计24小时房间列表
         },
+        operate: {
+            getManagerList: `${HTTPHEADER}/Guild/getManagerList`, // 公会运营列表
+            getManager: `${HTTPHEADER}/Guild/getManager`, // 公会运营人员选项
+            saveManager: `${HTTPHEADER}/Guild/saveManager`, // 保存公会运营人员配置
+        },
         tabbar: {
             getConfigList: `${HTTPHEADER}/App`, // 获取tabbar图标配置列表
             updateStatus: `${HTTPHEADER}/App/update`, // 更新tabbar配置状态
@@ -252,22 +257,16 @@ const request = {
 
     // 公会管理
     guild: {
-        list: `${HTTPHEADER}/Guild/guildListV2`, // 公会列表
-        getGuildUsers: `${HTTPHEADER}/guild/guildUsers`, // 成员列表
-        guildUserApply: `${HTTPHEADER}/guild/guildUserApply`, // 主播申请列表
-        guildUserApplyCheck: `${HTTPHEADER}/guild/guildUserApplyCheck`, // 主播申请审核
         getGuildUserList: `${HTTPHEADER}/guild/getGuildUserList`, // 成员明细
         addGuildUser: `${HTTPHEADER}/guild/addGuildUser`, // 添加公会成员
         getGuildRoomList: `${HTTPHEADER}/guild/getGuildRoomList`, // 绑定厅列表
         removeGuildUser: `${HTTPHEADER}/guild/removeGuildUser`, // 删除公会成员
-        rmGuildUser: `${HTTPHEADER}/guild/rmGuildUser`, // 删除公会成员
         removeGuildRoom: `${HTTPHEADER}/guild/removeGuildRoom`, // 移除大厅
         disbandGuild: `${HTTPHEADER}/guild/disbandGuild`, // 解散公会
         joinApply: `${HTTPHEADER}/Guild/joinApply`, // 公会厅申请信息处理
         guildUserReport: `${HTTPHEADER}/guild/guildUserReport`, // 公会举报处理
         getUserComplainList: `${HTTPHEADER}/UserComplaint/index`, // 公会投诉列表（风险客服）
         handleUserComplain: `${HTTPHEADER}/UserComplaint/handle`, // 公会投诉处理（风险客服）
-        guildWeekList: `${HTTPHEADER}/Guild/guildWeekList`, // 公会举报处理
         settlementLog: `${HTTPHEADER}/Guild/settlementLog`, // 返点操作日志
         newGuildApplyList: `${HTTPHEADER}/guild/newGuildApplyList`, // 创建工会申请列表
         newGuildApplyCheck: `${HTTPHEADER}/guild/newGuildApplyCheck`, // 创建工会审核已联系或者驳回
@@ -470,7 +469,7 @@ const request = {
 
         punishOperateLog: `${HTTPHEADER}/UserPunishLog/punishOperateLog`, // 处罚举报-操作日志
         acceptPunish: `${HTTPHEADER}/UserPunishLog/acceptPunish`, // 处罚举报-审核受理
-        
+
         punishWordsList: `${HTTPHEADER}/Punish`, // 获取风控文案库列表
         updatePunishWords: `${HTTPHEADER}/Punish/update`, // 修改风控文案
     },
