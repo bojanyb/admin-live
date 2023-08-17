@@ -287,7 +287,7 @@ export default {
                 {
                   props: { type: "primary" },
                   style: {
-                    display: +params.row.resettle !== 1 ? "unset" : "none",
+                    display: (+params.row.resettle !== 1 && params.row.status === 1) ? "unset" : "none",
                   },
                   on: {
                     click: () => {
@@ -317,7 +317,7 @@ export default {
                 {
                   props: { type: "primary" },
                   style: {
-                    display: +params.row.resettle === 1 ? "unset" : "none",
+                    display: (+params.row.resettle === 1 && params.row.status === 2) ? "unset" : "none",
                   },
                   on: {
                     click: () => {
