@@ -81,14 +81,12 @@ export default {
                 url: REQUEST.move.heartAnchor,
                 columns: [
                     {
-                        label: '用户ID',
-                        prop: 'user_number'
+                        label: '排名',
+                        prop: ''
                     },
                     {
-                        label: '音色分类名',
-                        render: (h, params) => {
-                            return h('span', params.row.sound_tag ? params.row.sound_tag : '无')
-                        }
+                        label: '用户ID',
+                        prop: 'user_number'
                     },
                     {
                         label: '用户昵称',
@@ -102,25 +100,36 @@ export default {
                         imgHeight: '50px'
                     },
                     {
-                        label: '用户性别',
+                        label: '用户状态',
+                        prop: ''
+                    },
+                    {
+                        label: '音色',
+                        render: (h, params) => {
+                            return h('span', params.row.sound_tag ? params.row.sound_tag : '无')
+                        }
+                    },
+                    {
+                        label: '性别',
                         render: (h, params) => {
                             let data = MAPDATA.SEXLIST.find(item => { return item.value === params.row.sex })
                             return h('span', data ? data.name : '无')
                         }
                     },
                     {
-                        label: '个性签名',
-                        showOverFlow: true,
+                        label: '主播积分',
                         render: (h, params) => {
-                            return h('span', params.row.autograph || '无')
+                            return h('span', '0')
                         }
                     },
                     {
                         label: '操作',
+                        width: 250,
                         render: (h, params) => {
                             return h('div', [
-                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.editParams(params.row)}}}, '编辑'),
-                                h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.deleteParams(params.row.user_number)}}}, '移除')
+                            h('el-button', { props: { type: 'primary', size: 'small'}, on: {click:()=>{this.editParams(params.row)}}}, '编辑'),
+                            h('el-button', { props: { type: 'danger', size: 'small'}, on: {click:()=>{this.deleteParams(params.row.user_number)}}}, '移除'),
+                            h('el-button', { props: { type: 'success', size: 'small'}, on: {click:()=>{this.deleteParams(params.row.user_number)}}}, '评价记录')
                             ])
                         }
                     }

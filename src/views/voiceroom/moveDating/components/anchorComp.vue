@@ -53,6 +53,12 @@
                         </el-option>
                     </el-select>
                 </div>
+                <div class="formItem" v-if="status !=='add'">
+                    <div class="formName">主播积分:</div>
+                    <div class="inputBox">
+                        <el-input v-model="user_number" type="number" placeholder="请输入主播积分"></el-input>
+                    </div>
+                </div>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
