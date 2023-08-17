@@ -88,6 +88,10 @@ export default {
     },
     // 提交
     async submitForm() {
+      if(!this.isBatch&&!this.formList[0].warning_msg) {
+        this.$warning("警告提示不能为空!");
+        return;
+      }
       let params = { data: this.formList };
       let res = await updatePunishWords(params);
       if (res.code === 2000) {
@@ -106,7 +110,7 @@ export default {
 <style lang="scss">
 .wordsEditComp-box {
   .el-dialog__body {
-    padding: 30px 20px 0;
+    padding: 30px 20px 0 !important;
   }
 }
 </style>
