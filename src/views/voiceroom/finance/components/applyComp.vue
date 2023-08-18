@@ -10,33 +10,16 @@
         </div>
         <!-- <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp> -->
         <div class="searchParams" v-if="tabIndex === '0'">
-            <SearchPanel
-              v-model="searchParams"
-              :forms="forms"
-              :showExport="true"
-              :show-search-btn="true"
-              :showYesterday="true"
-              :showRecentSeven="true"
-              :showToday="true"
-              @onSearch="onSearch"
-              :show-batch-pass="true"
-              @export="handleExcelExport"
-              @batchPass="batchPass"
-              :show-batch-rurn="true"
-              :showBeforeYesterday="true"
-              @BatchRurn="BatchRurn"
-              @yesterday="yesterday"
-              @recentSeven="recentSeven"
-              @today="today"
-              @beforeYesterday="beforeYesterday"
-
-              :show-custom="true"
-              custom-name="批量支付(小猪)"
-              @custom="handleBatchTopUp"
-              ></SearchPanel>
+            <SearchPanel v-model="searchParams" :forms="forms" :showExport="true" :show-search-btn="true"
+                :showYesterday="true" :showRecentSeven="true" :showToday="true" @onSearch="onSearch" :show-batch-pass="true"
+                @export="handleExcelExport" @batchPass="batchPass" :show-batch-rurn="true" :showBeforeYesterday="true"
+                @BatchRurn="BatchRurn" @yesterday="yesterday" @recentSeven="recentSeven" @today="today"
+                @beforeYesterday="beforeYesterday" :show-custom="true" custom-name="批量支付(小猪)" @custom="handleBatchTopUp">
+            </SearchPanel>
         </div>
         <div class="tableList">
-            <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt" layout="total, sizes, prev, pager, next, jumper"></tableList>
+            <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt"
+                layout="total, sizes, prev, pager, next, jumper"></tableList>
         </div>
     </div>
 </template>
@@ -166,10 +149,10 @@ export default {
                     width: '160px',
                     prop: 'channel',
                     render: (h, params) => {
-                      let data = MAPDATA.CASHCHANNEL.find((item) => {
-                        return item.value === params.row.channel;
-                      });
-                      return h("span", data ? data.name : "无");
+                        let data = MAPDATA.CASHCHANNEL.find((item) => {
+                            return item.value === params.row.channel;
+                        });
+                        return h("span", data ? data.name : "无");
                     },
                 },
                 {
@@ -208,8 +191,8 @@ export default {
                     width: '200px',
                     render: (h, params) => {
                         return h('div', [
-                            h('el-button', { props: { type: 'primary'}, on: {click:()=>{this.doCashFunc(params.row, 'success')}}}, '通过'),
-                            h('el-button', { props: { type: 'danger'}, on: {click:()=>{this.doCashFunc(params.row, 'reject')}}}, '退回')
+                            h('el-button', { props: { type: 'primary' }, on: { click: () => { this.doCashFunc(params.row, 'success') } } }, '通过'),
+                            h('el-button', { props: { type: 'danger' }, on: { click: () => { this.doCashFunc(params.row, 'reject') } } }, '退回')
                         ])
                     }
                 }
@@ -231,9 +214,11 @@ export default {
                     label: '操作',
                     render: (h, params) => {
                         return h('div', [
-                            h('el-button', { props: { type: 'primary'}, style: {
-                                display: params.row.status === 0 ? 'unset' : 'none'
-                            }, on: {click:()=>{this.audit(params.row.id, 1)}}}, '通过')
+                            h('el-button', {
+                                props: { type: 'primary' }, style: {
+                                    display: params.row.status === 0 ? 'unset' : 'none'
+                                }, on: { click: () => { this.audit(params.row.id, 1) } }
+                            }, '通过')
                         ])
                     }
                 },
@@ -242,11 +227,11 @@ export default {
                 vm: this,
                 url: REQUEST.CashHisity.apply,
                 search: {
-                  sizes: [10, 30, 50, 100]
+                    sizes: [10, 30, 50, 100, 200]
                 },
                 keyId: 'id',
                 isShowCheckbox: this.tabIndex === '0' ? true : false,
-                columns: this.tabIndex === '0' ? [ ...arr ] : [ ...arr1 ]
+                columns: this.tabIndex === '0' ? [...arr] : [...arr1]
             }
         }
     },
@@ -279,8 +264,8 @@ export default {
     watch: {
         arr: {
             handler(n) {
-                if(n) {
-                    if(this.arr.length > 0) {
+                if (n) {
+                    if (this.arr.length > 0) {
                         let params = this.arr[0]
                         this.doCashFunc(params, this.isType, 'batch')
                     }
@@ -329,7 +314,7 @@ export default {
                     break;
             }
             start = new Date(now + ' 00:00:00')
-            if( index == 0) {
+            if (index == 0) {
                 end = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false))
             } else {
                 end = new Date(now1 + ' 23:59:59')
@@ -348,12 +333,12 @@ export default {
                 status: type === 'success' ? 2 : 3
             }
             doCash(params).then(res => {
-                if(res.code === 2000) {
+                if (res.code === 2000) {
                     let message = type === 'success' ? '通过审核' : '退回成功'
                     this.$success(message)
-                    if(batch) {
+                    if (batch) {
                         this.arr.splice(0, 1)
-                        if(this.arr.length <= 0) {
+                        if (this.arr.length <= 0) {
                             this.getList()
                         }
                     } else {
@@ -361,9 +346,9 @@ export default {
                     }
                 }
             }).catch(err => {
-                if(batch) {
+                if (batch) {
                     this.arr.splice(0, 1)
-                    if(this.arr.length <= 0) {
+                    if (this.arr.length <= 0) {
                         this.getList()
                     }
                 }
@@ -375,7 +360,7 @@ export default {
         },
         // 配置参数
         beforeSearch(params) {
-            let s = {...this.searchParams, ...this.dateTimeParams}
+            let s = { ...this.searchParams, ...this.dateTimeParams }
             return {
                 page: params ? params.page : null,
                 pagesize: params ? params.size : null,
@@ -391,7 +376,7 @@ export default {
         },
         // 批量通过
         batchPass() {
-            if(this.list.length > 0) {
+            if (this.list.length > 0) {
                 this.arr = JSON.parse(JSON.stringify(this.list))
                 this.isType = 'success'
             } else {
@@ -400,7 +385,7 @@ export default {
         },
         // 批量拒绝
         BatchRurn() {
-            if(this.list.length > 0) {
+            if (this.list.length > 0) {
                 this.arr = JSON.parse(JSON.stringify(this.list))
                 this.isType = 'error'
             } else {
@@ -408,96 +393,125 @@ export default {
             }
         },
         // 导出
-      async  handleExcelExport() {
-          let s = this.beforeSearch();
-          console.log(s, 's');
-          delete s.page;
-          s.is_all = "1";
-          const loading = this.$loading({
-            lock: true,
-            text: 'Loading',
-            spinner: 'el-icon-loading',
-            background: 'rgba(0, 0, 0, 0.7)'
-          })
-          let res = await exprotCash(s);
-          try {
-            let arr = JSON.parse(JSON.stringify(res.data.list));
-              if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
-              arr = arr.map((item, index) => {
-              let data = MAPDATA.CASHCHANNEL.find((v) => {
-                return v.value === item.channel;
-              });
-              let data1 = MAPDATA.STATUSLIST.find((v) => {
-                return v.value === item.status;
-              });
-              let params = {
-                addtime: timeFormat(item.addtime, 'YYYY-MM-DD HH:mm:ss', true) || '--',
-                room_number: item.user_number || '--',
-                role: item.role || '--',
-                money: item.money || '--',
-                cash: item.money / 100 || '--',
-                cash_rate: Math.floor((item.money / 10000 * item.cash_rate).toFixed(5) * 100) / 100 || '--',
-                real_money: item.real_money / 100 || '--',
-                card_id: item.card_id || '--',
-                channel: data ? data.name : '--',
-                status: data1 ? data1.name : '--',
-                today_count: `第${item.today_count}次` || '--',
-                remark: item.remark || '无',
-              };
-              return params;
-            });
-            let nameList = [
-              "提现时间",
-              "用户ID",
-              "用户角色",
-              "喵粮",
-              "提现金额",
-              "手续费",
-              "到账金额",
-              "提现账号",
-              "本次提现通道",
-              "提现状态",
-
-              "今日次数",
-              "备注说明",
-            ];
-            exportTableData(arr, nameList, "公会房间列表");
-            loading.close();
-          } catch (error) {
-            console.log(error);
-            loading.close();
-          }
+        async handleExcelExport() {
+            let s = this.beforeSearch();
+            delete s.page;
+            s.is_all = "1";
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            })
+            let res = await exprotCash(s);
+            try {
+                let arr = JSON.parse(JSON.stringify(res.data.list));
+                let arr_tax = JSON.parse(JSON.stringify(res.data.taxFundList));
+                let obj2 = {};
+                let arr2 = [];
+                if(arr_tax.length > 0){
+                    for(let key in arr_tax){
+                        let item = arr_tax[key];
+                        obj2[item.field] = "";
+                    }
+                    arr_tax.map(res=>{
+                        arr2.push(res.title);
+                    })
+                }
+                if(arr.length <= 0){
+                    loading.close();
+                    this.$warning("当前没有数据可以导出");
+                    return
+                }
+                arr = arr.map((item, index) => {
+                    let data = MAPDATA.CASHCHANNEL.find((v) => {
+                        return v.value === item.channel;
+                    });
+                    let data1 = MAPDATA.STATUSLIST.find((v) => {
+                        return v.value === item.status;
+                    });
+                    let obj1 = {
+                        addtime: timeFormat(item.addtime, 'YYYY-MM-DD HH:mm:ss', true) || '--',
+                        id_card: (item.id_card + ',') || '--',
+                        name: item.name,
+                        room_number: item.user_number || '--',
+                        role: item.role || '--',
+                        money: item.money || '--',
+                        cash: item.money / 100 || '--',
+                        cash_rate: Math.floor((item.money / 10000 * item.cash_rate).toFixed(5) * 100) / 100 || '--',
+                        real_money: item.real_money / 100 || '--',
+                        card_id:  (item.card_id + ',') || '--',
+                        channel: data ? data.name : '--',
+                    }
+                    let obj3 = {
+                        status: data1 ? data1.name : '--',
+                        today_count: `第${item.today_count}次` || '--',
+                        remark: item.remark || '无',
+                    }
+                    if(arr_tax.length > 0){
+                        for(let key in obj2){
+                            obj2[key] = item[key] ? item[key] :  "0";
+                        }
+                    }
+                    let params = Object.assign({}, obj1,obj2,obj3);
+                    return params;
+                });
+                let arr1 = [
+                    "提现时间",
+                    "身份证",
+                    "姓名",
+                    "用户ID",
+                    "用户角色",
+                    "喵粮",
+                    "提现金额",
+                    "手续费",
+                    "到账金额",
+                    "提现账号",
+                    "本次提现通道",
+                ]
+                let arr3 = [
+                    "提现状态",
+                    "今日次数",
+                    "备注说明",
+                ]
+                let nameList = arr1.concat(arr2).concat(arr3);
+                exportTableData(arr, nameList, "提现申请列表");
+                loading.close();
+            } catch (error) {
+                console.log(error);
+                loading.close();
+            }
         },
         // 批量支付
-      handleBatchTopUp() {
+        handleBatchTopUp() {
 
-        if (!(this.list && this.list.length)) {
-          this.$warning('请至少选择一条数据')
-          return
-        }
+            if (!(this.list && this.list.length)) {
+                this.$warning('请至少选择一条数据')
+                return
+            }
 
-        const result = this.list.reduce((prev, curr) => {
-          prev.push(curr.id)
-          return prev;
-        }, []).join(",");
+            const result = this.list.reduce((prev, curr) => {
+                prev.push(curr.id)
+                return prev;
+            }, []).join(",");
 
-       const loading = this.$loading({
-          lock: true,
-          text: 'Loading',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        })
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            })
 
-        batchCash({ id: result, channel: 4 }).then(response => {
-          if (response.code + "" === "2000") {
-            this.$success(response.msg || "操作成功");
-            this.getList();
-            loading.close();
-          }
-        }).catch(error => {
-          console.log(error);
-          loading.close();
-        })
+            batchCash({ id: result, channel: 4 }).then(response => {
+                if (response.code + "" === "2000") {
+                    this.$success(response.msg || "操作成功");
+                    this.getList();
+                    loading.close();
+                }
+            }).catch(error => {
+                console.log(error);
+                loading.close();
+            })
 
         },
         // 设置时间段
@@ -519,13 +533,13 @@ export default {
         // 列表返回数据
         saleAmunt(data) {
             const result = data.list.reduce((prev, curr) => {
-              prev += curr.real_money ? +curr.real_money : 0
-              return prev;
+                prev += curr.real_money ? +curr.real_money : 0
+                return prev;
             }, 0)
 
             this.ruleForm = {
-              ...data,
-              realMoneyTotal: result
+                ...data,
+                realMoneyTotal: result
             }
         }
     },
@@ -545,18 +559,20 @@ export default {
 
 <style lang="scss">
 .finance-embodyApply {
+
     // padding: 20px;
     // box-sizing: border-box;
     .model {
         width: 100%;
         height: 40px;
-        background: rgba(0,0,0,0.8);
+        background: rgba(0, 0, 0, 0.8);
         display: flex;
         align-items: center;
         padding: 0px 30px;
         box-sizing: border-box;
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
         margin-bottom: 20px;
+
         >span {
             font-size: 15px;
             color: #fff;
