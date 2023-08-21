@@ -367,7 +367,7 @@ const ALIPAYCASHCHANNEL = [
   {
     value: 5,
     name: '小猪支付宝',
-    disabled: true
+    // disabled: true
   },
   {
     value: 7,
@@ -384,7 +384,7 @@ const ALIPAYCASHCHANNEL = [
   {
     value: 14,
     name: '薪遇见支付宝',
-    disabled: true
+    // disabled: true
   }
 ]
 
