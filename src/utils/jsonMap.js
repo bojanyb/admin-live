@@ -326,6 +326,14 @@ const CASHCHANNEL = [
   {
     value: 14,
     name: '薪遇见支付宝',
+  },
+  {
+    value: 15,
+    name: '中职银行卡',
+  },
+  {
+    value: 16,
+    name: '中职支付宝',
   }
 ]
 
@@ -357,6 +365,10 @@ const BANKCASHCHANNEL = [
   {
     value: 13,
     name: '薪遇见银行卡',
+  },
+  {
+    value: 15,
+    name: '中职银行卡',
   }
 ]
 
@@ -389,6 +401,10 @@ const ALIPAYCASHCHANNEL = [
     value: 14,
     name: '薪遇见支付宝',
     // disabled: true
+  },
+  {
+    value: 16,
+    name: '中职支付宝',
   }
 ]
 
