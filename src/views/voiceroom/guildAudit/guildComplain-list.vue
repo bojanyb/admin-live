@@ -206,7 +206,7 @@ export default {
                 style: {
                   display:
                     (params.row.status || params.row.status === 0) &&
-                    this.permissionArr.includes("UserPunishLog@remove")
+                    this.permissionArr.includes("UserComplaint@handle")
                       ? "unset"
                       : "none",
                 },
@@ -224,7 +224,7 @@ export default {
       return {
         vm: this,
         url: REQUEST.guild.getUserComplainList,
-        columns: this.permissionArr.includes("UserPunishLog@index") ? arr : [],
+        columns: this.permissionArr.includes("UserComplaint@index") ? arr : [],
       };
     },
   },
