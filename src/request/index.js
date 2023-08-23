@@ -630,6 +630,17 @@ const request = {
         getRanking: `${HTTPHEADER}/hdMusicfestLog/getRanking`, // 后台-排名数据
         getGift: `${HTTPHEADER}/hdMusicfestLog/getGift`, // 后台-礼物列表
         giftLog: `${HTTPHEADER}/hdMusicfestLog/giftLog`, // 后台-收送礼数据
+    },
+    // 代充管理
+    substitute: {
+        accountlist: `${HTTPHEADER}/ProxyRecharge/accountlist`, // 后台-代充账号列表
+        createFun: `${HTTPHEADER}/ProxyRecharge/create`, // 后台-添加代充用户
+        deleteFun: `${HTTPHEADER}/ProxyRecharge/delete`, // 后台-删除代充用户
+        recharge: `${HTTPHEADER}/ProxyRecharge/recharge`, // 后台-充值/扣款代充账户
+        diamondLog: `${HTTPHEADER}/ProxyRecharge/diamondLog`, // 后台-红钻明细
+        rechargeLog: `${HTTPHEADER}/ProxyRecharge/rechargeLog`, // 后台-充值金币记录
+        rechargeLogExport: `${HTTPHEADER}/ProxyRecharge/rechargeLogExport`, // 后台-充值金币记录导出
+        diamondLogExport: `${HTTPHEADER}/ProxyRecharge/diamondLogExport`, // 后台-红钻明细导出
     }
 }
 
