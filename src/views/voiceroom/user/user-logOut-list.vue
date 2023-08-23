@@ -143,9 +143,7 @@ export default {
             prop: "remark",
             showOverFlow: true,
             render: (h, params) => {
-                return h('div', [
-                    h('span', params.row.remark || '--')
-                ])
+              return h('span', params.row.remark || '--')
             }
           },
           {
