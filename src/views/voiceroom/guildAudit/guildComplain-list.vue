@@ -50,19 +50,19 @@ export default {
       dateTimeParams: {},
       statusOptions: [
         {
-          value: '',
-          name: '全部'
+          value: "",
+          name: "全部",
         },
         {
           value: 1,
-          name: '已受理'
+          name: "已受理",
         },
         {
           value: 0,
-          name: '未受理'
-        }
+          name: "未受理",
+        },
       ],
-      typeOption:{}
+      typeOption: {},
     };
   },
   computed: {
@@ -114,115 +114,117 @@ export default {
       ];
     },
     cfgs() {
+      const arr = [
+        {
+          label: "投诉时间",
+          minWidth: 120,
+          prop: "create_time",
+        },
+        {
+          label: "投诉用户",
+          prop: "user_name",
+        },
+        {
+          label: "投诉用户ID",
+          prop: "user_id",
+        },
+        {
+          label: "被投诉公会",
+          prop: "guild_name",
+        },
+        {
+          label: "被投诉公会所属公会长",
+          prop: "guild_user_name",
+        },
+        {
+          label: "公会长ID",
+          prop: "guild_user_id",
+        },
+        {
+          label: "公会所属运营",
+          prop: "operator",
+        },
+        {
+          label: "投诉类型",
+          showOverFlow: true,
+          render: (h, params) => {
+            const arr = params.row.complaint_ids;
+            let data = [];
+            arr.forEach((item) => {
+              data.push(this.typeOption[item]);
+            });
+            return h("span", data.join(","));
+          },
+        },
+        {
+          label: "投诉原因",
+          showOverFlow: true,
+          render: (h, params) => {
+            return h("span", params.row.content || "无");
+          },
+        },
+        {
+          label: "投诉证据",
+          isimgList: true,
+          prop: "img_path",
+          propCopy: "video_path",
+          imgWidth: "70px",
+          imgHeight: "70px",
+          width: "200px",
+        },
+        {
+          label: "受理操作人",
+          render: (h, params) => {
+            return h("span", params.row.admin || "无");
+          },
+        },
+        {
+          label: "受理时间",
+          minWidth: 120,
+          render: (h, params) => {
+            return h("span", params.row.update_time || "无");
+          },
+        },
+        {
+          label: "备注",
+          render: (h, params) => {
+            return h("span", params.row.remark || "无");
+          },
+        },
+        {
+          label: "操作",
+          width: 100,
+          fixed: "right",
+          render: (h, params) => {
+            return h(
+              "el-button",
+              {
+                props: {
+                  type: params.row.status === 0 ? "danger" : "info",
+                  size: "mini",
+                },
+                style: {
+                  display:
+                    (params.row.status || params.row.status === 0) &&
+                    this.permissionArr.includes("UserComplaint@handle")
+                      ? "unset"
+                      : "none",
+                },
+                on: {
+                  click: () => {
+                    this.func(params.row);
+                  },
+                },
+              },
+              `${params.row.status === 0 ? "未受理" : "已受理"}`
+            );
+          },
+        },
+      ];
       return {
         vm: this,
         url: REQUEST.guild.getUserComplainList,
-        columns: [
-          {
-            label: "投诉时间",
-            minWidth: 120,
-            prop: "create_time",
-          },
-          {
-            label: "投诉用户",
-            prop: "user_name",
-          },
-          {
-            label: "投诉用户ID",
-            prop: "user_id",
-          },
-          {
-            label: "被投诉公会",
-            prop: "guild_name",
-          },
-          {
-            label: "被投诉公会所属公会长",
-            prop: "guild_user_name",
-          },
-          {
-            label: "公会长ID",
-            prop: "guild_user_id",
-          },
-          {
-            label: "公会所属运营",
-            prop: "operator",
-          },
-          {
-            label: "投诉类型",
-            showOverFlow: true,
-            render: (h, params) => {
-              const arr = params.row.complaint_ids;
-              let data = []
-              arr.forEach(item => {
-                data.push(this.typeOption[item]);
-              })
-              return h("span", data.join(','));
-            },
-          },
-          {
-            label: "投诉原因",
-            showOverFlow: true,
-            render: (h, params) => {
-              return h("span", params.row.content || "无");
-            },
-          },
-          {
-            label: "投诉证据",
-            isimgList: true,
-            prop: 'img_path',
-            propCopy: 'video_path',
-            imgWidth: '70px',
-            imgHeight: '70px',
-            width: '200px'
-          },
-          {
-            label: "受理操作人",
-            render: (h, params) => {
-              return h("span", params.row.admin || "无");
-            },
-          },
-          {
-            label: "受理时间",
-            minWidth: 120,
-            render: (h, params) => {
-              return h("span", params.row.update_time || "无");
-            },
-          },
-          {
-            label: "备注",
-            render: (h, params) => {
-              return h("span", params.row.remark || "无");
-            },
-          },
-          {
-            label: "操作",
-            width: 100,
-            fixed: 'right',
-            render: (h, params) => {
-              return h(
-                "el-button",
-                {
-                  props: {
-                    type: params.row.status === 0 ? "danger" : "info",
-                    size: 'mini'
-                  },
-                  style: {
-                    display:
-                      params.row.status || params.row.status === 0
-                        ? "unset"
-                        : "none",
-                  },
-                  on: {
-                    click: () => {
-                      this.func(params.row);
-                    },
-                  },
-                },
-                `${params.row.status === 0 ? "未受理" : "已受理"}`
-              );
-            },
-          },
-        ],
+        columns: this.permissionArr.includes("UserComplaint@index") ? arr : [],
       };
     },
   },
@@ -250,9 +252,9 @@ export default {
         if (res.code === 2000) {
           const data = res.data;
           console.log(data);
-          this.typeOption = data.complaint_type
+          this.typeOption = data.complaint_type;
         }
-      })
+      });
     },
     // 刷新列表
     getList() {
@@ -284,7 +286,7 @@ export default {
     },
     // 操作
     func(row) {
-      if(row.status === 1) return;
+      if (row.status === 1) return;
       this.showDialog(row);
     },
     // 销毁组件
