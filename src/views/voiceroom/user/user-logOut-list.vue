@@ -141,6 +141,7 @@ export default {
           {
             label: "注销原因",
             prop: "remark",
+            showOverFlow: true,
             render: (h, params) => {
                 return h('div', [
                     h('span', params.row.remark || '--')
@@ -158,6 +159,7 @@ export default {
           },
           {
             label: "操作",
+            width: 180,
             render: (h, params) => {
               return h("div", [
                 h(
