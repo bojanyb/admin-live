@@ -139,6 +139,24 @@ export default {
             },
           },
           {
+            label: "注销原因",
+            prop: "remark",
+            render: (h, params) => {
+                return h('div', [
+                    h('span', params.row.remark || '--')
+                ])
+            }
+          },
+          {
+            label: "联系方式",
+            prop: "relation",
+            render: (h, params) => {
+                return h('div', [
+                    h('span', params.row.relation || '--')
+                ])
+            }
+          },
+          {
             label: "操作",
             render: (h, params) => {
               return h("div", [

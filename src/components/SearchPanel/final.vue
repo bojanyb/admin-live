@@ -98,7 +98,7 @@
 
           </el-form-item>
           <el-form-item>
-            <el-button v-if="showSearchBtn" type="primary" @click="onSearch">查询</el-button>
+            <el-button v-if="showSearchBtn" type="primary" :loading="isLock" @click="onSearch">查询</el-button>
             <el-button v-if="showAdd" type="success" @click="add">{{ addName || '新增' }}</el-button>
             <el-button v-if="showSave" type="success" @click="onSave">保存</el-button>
             <el-button v-if="showToday" @click="today">今天</el-button>
@@ -383,6 +383,9 @@ export default {
     // 是否
     hasSearchCode() {
       return this.forms.filter(d => d.type === 'searchCode').length > 0
+    },
+    isLock() {
+      return this.$store.state.app.isLock
     }
   },
   watch: {
