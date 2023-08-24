@@ -322,6 +322,14 @@ const CASHCHANNEL = [
   {
     value: 14,
     name: '薪遇见支付宝',
+  },
+  {
+    value: 15,
+    name: '中职银行卡',
+  },
+  {
+    value: 16,
+    name: '中职支付宝',
   }
 ]
 
@@ -353,6 +361,10 @@ const BANKCASHCHANNEL = [
   {
     value: 13,
     name: '薪遇见银行卡',
+  },
+  {
+    value: 15,
+    name: '中职银行卡',
   }
 ]
 
@@ -385,6 +397,10 @@ const ALIPAYCASHCHANNEL = [
     value: 14,
     name: '薪遇见支付宝',
     disabled: true
+  },
+  {
+    value: 16,
+    name: '中职支付宝',
   }
 ]
 
@@ -1159,6 +1175,14 @@ const DISSOLUTIONTYPELISTCOPY = [
     value: '1461297734886621238',
     feature: '经典玩法，双重操作防误操作',
     url: require('@/assets/game/gobang.png')
+  },
+  {
+    index: 12,
+    name: '怪物消消乐',
+    nickname: 'xiaoxiaole',
+    value: '1664525565526667266',
+    feature: '经典有趣的休闲消除类游戏',
+    url: require('@/assets/game/xiaoxiaole.png')
   }
 ]
 
