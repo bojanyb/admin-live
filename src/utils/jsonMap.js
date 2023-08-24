@@ -306,6 +306,7 @@ const CASHCHANNEL = [
   {
     value: 9,
     name: '美事通支付宝',
+    disabled: true
   },
   {
     value: 10,
@@ -314,6 +315,7 @@ const CASHCHANNEL = [
   {
     value: 11,
     name: '福穗支付宝',
+    disabled: true
   },
   {
     value: 12,
@@ -326,6 +328,7 @@ const CASHCHANNEL = [
   {
     value: 14,
     name: '薪遇见支付宝',
+    disabled: true
   },
   {
     value: 15,
@@ -334,6 +337,7 @@ const CASHCHANNEL = [
   {
     value: 16,
     name: '中职支付宝',
+    disabled: true
   }
 ]
 
@@ -392,10 +396,12 @@ const ALIPAYCASHCHANNEL = [
   {
     value: 9,
     name: '美事通支付宝',
+    disabled: true
   },
   {
     value: 11,
     name: '福穗支付宝',
+    disabled: true
   },
   {
     value: 14,
@@ -405,6 +411,7 @@ const ALIPAYCASHCHANNEL = [
   {
     value: 16,
     name: '中职支付宝',
+    disabled: true
   }
 ]
 
