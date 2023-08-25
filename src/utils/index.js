@@ -325,6 +325,17 @@ export function createUniqueString() {
   return (+(randomNum + timestamp)).toString(32)
 }
 
+
+/**
+ * 创建唯一的traceId（web-毫秒时间戳-6位随机字符）
+ * @returns {string}
+ */
+export function createUniqueTraceId() {
+  const timestamp = +new Date() + ''
+  const randomString = createUniqueString().substring(0, 6)
+  return 'web-'+ timestamp + '-'+ randomString
+}
+
 /**
  * Check if an element has a class
  * @param {HTMLElement} elm

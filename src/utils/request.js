@@ -8,8 +8,11 @@ import {
 	getToken
 } from '@/utils/auth'
 import { error } from '@/utils/common'
+import { createUniqueTraceId } from '@/utils/index'
 
 let isRefreshFail = true;
+// 时间戳+随机字符串
+let traceId = '';
 // create an axios instance
 const service = axios.create({
 	baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -28,12 +31,14 @@ service.interceptors.request.use(
 			// please modify it according to the actual situation
 			config.headers['X-Token'] = getToken()
 		}
+		traceId = createUniqueTraceId();
+		config.headers['X-REQUEST-ID'] = traceId;
 		return config
 	},
-	error => {
+	err => {
 		// do something with request error
-		console.log(error) // for debug
-		return Promise.reject(error)
+		console.log(err) // for debug
+		return Promise.reject(err)
 	}
 )
 
@@ -94,10 +99,13 @@ service.interceptors.response.use(
 			return res
 		}
 	},
-	error => {
-		console.log('err' + error) // for debug
-		error(error.message)
-		return Promise.reject(error)
+	err => {
+		let message = err.message;
+		if(err.response && [400, 500].includes(err.response.status)) {
+			message = message + traceId
+		}
+		error(message)
+		return Promise.reject(err)
 	}
 )
 
