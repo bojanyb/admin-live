@@ -292,6 +292,18 @@ export default {
             },
           },
           {
+            label: "中职通道余额",
+            prop: "mtc_quota",
+            minWidth: "150px",
+            sortable: "custom",
+            render: (h, params) => {
+              const result = params.row.mtc_quota.map((item) => {
+                return h("div", `${item.name}：${item.quota}`);
+              });
+              return h("div", result);
+            },
+          },
+          {
             label: "支付宝提现通道",
             prop: "alipay_cash_channel",
             width: "120px",
@@ -407,6 +419,22 @@ export default {
             width: "120px",
             render: (h, params) => {
               return h("span", params.row.xin_alipay ? "已签署" : "未签署");
+            },
+          },
+          {
+            label: "中职-银行卡",
+            prop: "fusui_bank",
+            width: "120px",
+            render: (h, params) => {
+              return h("span", params.row.mtc_bank ? "已签署" : "未签署");
+            },
+          },
+          {
+            label: "中职-支付宝",
+            prop: "fusui_alipay",
+            width: "120px",
+            render: (h, params) => {
+              return h("span", params.row.mtc_alipay ? "已签署" : "未签署");
             },
           },
           {
