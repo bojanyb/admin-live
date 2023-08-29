@@ -487,6 +487,8 @@ const request = {
         rmHeartAnchor: `${HTTPHEADER}/Heartbeat/rmHeartAnchor`, // 移除心动主播
         heartOrder: `${HTTPHEADER}/Heartbeat/heartOrder`, // 心动记录
         serachTag: `${HTTPHEADER}/Heartbeat/serachTag`, // 获取音色分类
+        getChatConfig: `${HTTPHEADER}/System/getSyetermConfigChat`, // 心动分成配置
+        saveChatConfig: `${HTTPHEADER}/System/saveSyetermConfigChat`, // 设置心动分成配置
     },
 
     // 动态管理

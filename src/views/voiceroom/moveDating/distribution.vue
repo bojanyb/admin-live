@@ -20,7 +20,7 @@
 </template>
 
 <script>
-	import { getCardConfig, saveCardConfig } from '@/api/moveDating'
+	import { getChatConfig, saveChatConfig } from '@/api/moveDating'
 	export default {
 		name: 'platform-rebate',
 		data() {
@@ -30,27 +30,27 @@
                         name: '公会主播',
                         value: null,
                         unit: '%',
-						key: 'heartbeat_call_minute'
+						key: 'guild_anchor_rebate'
                     },
                     {
                         name: '公会长实时返点',
                         value: null,
                         unit: '%',
-						key: 'heartbeat_call_price'
+						key: 'guild_account_rebate'
                     },
                     {
                         name: '无公会主播',
                         value: null,
                         unit: '%',
-						key: 'heartbeat_call_discount_ratio'
+						key: 'private_anchor_rebate'
                     }
                 ]
 			}
 		},
 		methods: {
 			// 获取配置
-			async getCardConfigFunc() {
-				let res = await getCardConfig()
+			async getChatConfigFunc() {
+				let res = await getChatConfig()
 				if(res.code === 2000) {
 					if(res.data.config) {
 						for (const key in res.data.config) {
@@ -64,8 +64,8 @@
 				}
 			},
 
-			// 设置心动配置
-			async saveCardConfigFunc(row) {
+			// 设置心动分成配置
+			async saveChatConfigFunc(row) {
 				if(!row.value) {
 					this.$message.error('请设置' + row.name)
 					return false
@@ -74,15 +74,15 @@
 					key: row.key,
 					value: row.value
 				}
-				let res = await saveCardConfig(params)
+				let res = await saveChatConfig(params)
 				if(res.code === 2000) {
 					this.$success('设置成功')
-					this.getCardConfigFunc()
+					this.getChatConfigFunc()
 				}
 			}
 		},
 		mounted() {
-			this.getCardConfigFunc()
+			this.getChatConfigFunc()
 		}
 	}
 </script>

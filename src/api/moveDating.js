@@ -72,3 +72,21 @@ export function serachTag(data) {
         data
     })
 }
+
+// 获取心动分成配置
+export function getChatConfig(data) {
+    return request({
+        url: api.move.getChatConfig,
+        method: 'post',
+        data
+    })
+}
+
+// 设置心动分成配置
+export function saveChatConfig(data) {
+    return request({
+        url: api.move.saveChatConfig,
+        method: 'post',
+        data
+    })
+}
