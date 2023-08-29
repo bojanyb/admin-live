@@ -1,5 +1,5 @@
 <template>
-  <div class="guildRebate-list-box">
+  <div class="guildMonth-list-box">
     <div class="model">
       <span>总条数：{{ ruleForm.count || 0 }}</span>
       <span
@@ -580,7 +580,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.guildRebate-list-box {
+.guildMonth-list-box {
   .model {
     width: 100%;
     height: 40px;
@@ -649,6 +649,9 @@ export default {
         margin-bottom: 20px;
       }
     }
+  }
+  .el-table__body-wrapper {
+    max-height: none !important;
   }
 }
 </style>
