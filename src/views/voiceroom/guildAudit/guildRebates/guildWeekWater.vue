@@ -100,6 +100,7 @@
     <tableList
       :cfgs="cfgs"
       ref="tableList"
+      layout="total, sizes, prev, pager, next, jumper"
       @saleAmunt="saleAmunt"
       @handleSizeChange="handleSizeChange"
     ></tableList>
@@ -401,6 +402,9 @@ export default {
       return {
         vm: this,
         url: REQUEST.guild[name],
+        search: {
+          sizes: [10, 30, 50, 100]
+        },
         isShowCheckbox: this.form.status === 1,
         isShowIndex: true,
         columns,
