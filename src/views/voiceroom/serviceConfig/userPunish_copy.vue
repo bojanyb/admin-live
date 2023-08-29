@@ -170,6 +170,16 @@ export default {
           options: MAPDATA.USERPUNISHSTATUSLISTCOPY,
         },
         {
+          name: "risk_level",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "风险级别",
+          placeholder: "请选择",
+          options: MAPDATA.RISKLEVELLIST,
+        },
+        {
           name: "dateTimeParams",
           type: "datePicker",
           dateType: "datetimerange",
@@ -352,6 +362,16 @@ export default {
             return h("div", vnode || "无");
           },
           showOverFlow: true,
+        },
+        {
+          label: "风险级别",
+          minWidth: "100px",
+          render: (h, params) => {
+            let data = MAPDATA.RISKLEVELLIST.find((item) => {
+              return item.value === params.row.risk_level;
+            });
+            return h("span", data ? data.name : "无");
+          },
         },
         {
           label: "解除时间",
@@ -620,6 +640,9 @@ export default {
         let data = MAPDATA.USERPUNISHSTATUSLISTCOPY.find((v) => {
           return v.value === item.status;
         });
+        let riskLevelData = MAPDATA.RISKLEVELLIST.find((v) => {
+          return v.value === item.risk_level;
+        })
         let params = {
           create_time: item.create_time,
           from: item.from,
@@ -642,6 +665,7 @@ export default {
             item.report_user_guild_operator_user_name,
           status: data ? data.name : "无",
           punish_type_str: item.punish_type_str,
+          risk_level: riskLevelData ? riskLevelData.name : "无",
           res: item.res,
           remove_time: item.remove_time,
           penalty_admin: item.penalty_admin || "无",

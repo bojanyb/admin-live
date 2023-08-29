@@ -3254,6 +3254,21 @@ const TYPEAUDITLIST = [
   },
 ]
 
+const RISKLEVELLIST = [
+  {
+    name: '轻微',
+    value: 1
+  },
+  {
+    name: '一般',
+    value: 2
+  },
+  {
+    name: '严重',
+    value: 3
+  },
+]
+
 export default {
   USERINVITE,
   DOWNLOADSOURCE,
@@ -3402,5 +3417,6 @@ export default {
   ISACTIVETYLIST,
   REVIEWSTATUSLIST,
   CASHAUDITLIST,
-  TYPEAUDITLIST
+  TYPEAUDITLIST,
+  RISKLEVELLIST,
 }
