@@ -45,7 +45,7 @@
 			<!-- <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel> -->
 		</div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt" @handleSizeChange="handleSizeChange"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" layout="total, sizes, prev, pager, next, jumper" @saleAmunt="saleAmunt" @handleSizeChange="handleSizeChange"></tableList>
 	</div>
 </template>
 
@@ -201,6 +201,9 @@ export default {
 			return {
 				vm: this,
 				url: REQUEST.guild[name],
+        search: {
+          sizes: [10, 30, 50, 100]
+        },
 				isShowCheckbox: this.form.status === 1,
 				isShowIndex: true,
 				columns: (this.form.status === 1 || this.form.status === 4) ? [...arr, ...arr1] : [...arr]
