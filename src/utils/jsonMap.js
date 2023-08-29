@@ -789,7 +789,7 @@ const BANKLIST = [
   },
   {
     url: require('@/assets/img/img_03130011.png'),
-    name: '03130011',
+    code: '03130011',
     name: '北京银行'
   },
   {
