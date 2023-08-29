@@ -1,5 +1,5 @@
 <template>
-	<div class="guildRebate-dynamic-box">
+	<div class="guildReward-list-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
 			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}
@@ -430,7 +430,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.guildRebate-dynamic-box {
+.guildReward-list-box {
 	.model {
 		width: 100%;
 		height: 40px;
@@ -500,5 +500,8 @@ export default {
 			}
 		}
 	}
+  .el-table__body-wrapper {
+    max-height: none !important;
+  }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<div class="guildRebate-dynamic-box">
+	<div class="guildClap-dynamic-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
 			<span>流水总计：{{ ruleForm.total_flow || 0 }}
@@ -449,7 +449,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.guildRebate-dynamic-box {
+.guildClap-dynamic-box {
 	.model {
 		width: 100%;
 		height: 40px;
@@ -519,5 +519,8 @@ export default {
 			}
 		}
 	}
+  .el-table__body-wrapper {
+    max-height: none !important;
+  }
 }
 </style>

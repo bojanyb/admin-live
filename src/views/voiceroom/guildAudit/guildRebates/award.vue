@@ -702,5 +702,8 @@ export default {
       }
     }
   }
+  .el-table__body-wrapper {
+    max-height: none !important;
+  }
 }
 </style>
