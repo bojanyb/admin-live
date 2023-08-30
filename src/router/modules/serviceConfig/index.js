@@ -7,7 +7,7 @@ const serviceConfigRouter = {
 	redirect: 'noRedirect',
 	name: 'serviceConfig',
 	meta: {
-		title: '风控管理',
+		title: '风控客服',
     icon: 'el-icon-s-custom'
 	},
 	children: [
@@ -72,6 +72,15 @@ const serviceConfigRouter = {
 			meta: {
 				title: '动态评论记录',
 				noCache: true
+			}
+		},
+    {
+			path: 'user-search',
+			component: () => import('@/views/voiceroom/serviceConfig/user-search'),
+			name: 'user-search',
+			meta: {
+				title: '用户列表',
+				noCache: false
 			}
 		},
 	]
