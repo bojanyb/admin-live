@@ -3239,6 +3239,21 @@ const RISKLEVELLIST = [
   },
 ]
 
+const RISKLEVELLISTCOPY = [
+  {
+    name: '轻微',
+    value: 1
+  },
+  {
+    name: '一般',
+    value: 2
+  },
+  {
+    name: '严重',
+    value: 3
+  },
+]
+
 export default {
   USERINVITE,
   DOWNLOADSOURCE,
@@ -3386,5 +3401,6 @@ export default {
   GIFTACTIVETYLIST,
   ISACTIVETYLIST,
   REVIEWSTATUSLIST,
-  RISKLEVELLIST
+  RISKLEVELLIST,
+  RISKLEVELLISTCOPY,
 }
