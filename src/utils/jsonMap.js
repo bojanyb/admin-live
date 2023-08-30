@@ -793,7 +793,7 @@ const BANKLIST = [
   },
   {
     url: require('@/assets/img/img_03130011.png'),
-    name: '03130011',
+    code: '03130011',
     name: '北京银行'
   },
   {
@@ -3254,6 +3254,21 @@ const TYPEAUDITLIST = [
   },
 ]
 
+const RISKLEVELLIST = [
+  {
+    name: '轻微',
+    value: 1
+  },
+  {
+    name: '一般',
+    value: 2
+  },
+  {
+    name: '严重',
+    value: 3
+  },
+]
+
 // 充值记录 - 是否被投诉
 const COMPLAINLIST = [
   {
@@ -3419,5 +3434,6 @@ export default {
   REVIEWSTATUSLIST,
   CASHAUDITLIST,
   TYPEAUDITLIST,
+  RISKLEVELLIST,
   COMPLAINLIST
 }

@@ -30,6 +30,11 @@
                             </el-select>
                         </div>
                     </el-form-item>
+                    <el-form-item label="风险级别" prop="risk_level">
+                        <el-select v-model="ruleForm.risk_level" placeholder="请选择" :disabled="disabled">
+                            <el-option v-for="item in riskLevelList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
                     <!-- <el-form-item label="重置资料" prop="reset" v-if="!ruleForm.ban_duration">
                         <el-select v-model="ruleForm.reset" multiple placeholder="请选择" :disabled="disabled" clearable>
                             <el-option v-for="item in resetList" :key="item.value" :label="item.name" :value="item.value"></el-option>
@@ -47,7 +52,7 @@
                         :on-preview="handlePreview"
                         :on-remove="handleRemove"
                         :before-remove="beforeRemove"
-                        :limit="1"
+                        :limit="4"
                         accept=".png,.jpg,.jpeg,.mp4"
                         :on-exceed="handleExceed"
                         :file-list="fileList"
@@ -126,12 +131,14 @@ export default {
             timeList: MAPDATA.DURATIONCOPY, // 处罚时长
             // typeList: MAPDATA.USERPUNISHTYPELISTCOPYTWO, // 处罚类型
             resetList: MAPDATA.USERPUNIRESETLISTCOPY,
+            riskLevelList: MAPDATA.RISKLEVELLIST,
             status: 'add',
             userList: [], // 查询用户
             ruleForm: {
                 user_number: '',
                 category: '1',
                 type: [],
+                risk_level: '',
                 ban_duration: '',
                 remark: '',
                 reset: [],
@@ -150,6 +157,9 @@ export default {
                 type: [
                     { required: true, message: '请选择处罚类型', trigger: 'blur' }
                 ],
+                risk_level: [
+                    { required: true, message: '请选择风险级别', trigger: 'blur' }
+                ],
                 reset: [
                     { required: false, message: '请选择重置资料', trigger: 'change' }
                 ],
@@ -160,7 +170,7 @@ export default {
                     { required: true, message: '请输入处罚备注', trigger: 'blur' }
                 ]
             },
-            punishTypeList: []
+            punishTypeList: [],
         };
     },
     computed: {
@@ -227,8 +237,10 @@ export default {
     methods: {
         // 移除之后
         handleRemove(file, fileList) {
-            console.log(file, fileList);
-            this.ruleForm.img = ''
+            console.log('[ file ] >', file)
+            console.log('[ fileList ] >', fileList)
+            console.log('[ this.fileList ] >', this.fileList)
+            this.fileList = fileList;
         },
         // 预览
         handlePreview(file) {
@@ -246,7 +258,9 @@ export default {
         upLoad(file) {
             uploadOSS(file.file).then(res => {
                 if(res.url) {
-                    this.ruleForm.img = res.url
+                    console.log('[ res ] >', res)
+                    this.fileList.push({ name: file.file.name, url: res.url });
+                    // this.ruleForm.img = res.url;
                 }
             }).catch(err => {
                 this.$message.error(err)
@@ -328,7 +342,7 @@ export default {
             this.$refs.drawer.loadParams(status)
         },
         // 提交
-      submitForm: debounce(async function (formName) {
+        submitForm: debounce(async function (formName) {
             this.$refs[formName].validate(async (valid) => {
                 if (valid) {
                     if(this.status !== 'add') {
@@ -339,6 +353,7 @@ export default {
                             remark: data.remark,
                             punish_type_id: data.punish_type_id,
                             category: data.category,
+                            risk_level: data.risk_level,
                         }
                         let arr = JSON.parse(JSON.stringify(data.type))
                         s.reset = arr.filter(item => { return item > 10 && item !== 15 })
@@ -360,13 +375,17 @@ export default {
                         }
                     } else {
                         let params = { ...this.ruleForm }
-                        if(params.img) {
-                            if(params.img.indexOf('.mp4') !== -1) {
-                                params.video_path = params.img
-                            } else {
-                                params.img_path = params.img
-                            }
-                            delete params.img
+                        if(this.fileList.length) {
+                            const videoList = [], imgList = [];
+                            this.fileList.forEach(item => {
+                                if(item.url.indexOf('.mp4') !== -1) {
+                                    videoList.push(item.url)
+                                } else {
+                                    imgList.push(item.url)
+                                }
+                            })
+                            params.video_path = videoList.join(',')
+                            params.img_path = imgList.join(',')
                         }
                         let arr = JSON.parse(JSON.stringify(params.type))
                         params.reset = arr.filter(item => { return item > 10 && item !== 15 })
