@@ -248,7 +248,7 @@ export default {
         },
         // 超出文件数量最大上传
         handleExceed(files, fileList) {
-            this.$warning(`最大上传一个文件`);
+            this.$warning(`最大上传四个文件`);
         },
         // 移除文件之前
         beforeRemove(file, fileList) {
