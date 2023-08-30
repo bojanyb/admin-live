@@ -373,7 +373,8 @@ export default {
             let arr = JSON.parse(JSON.stringify(res.data.list))
             if(arr.length <= 0) return this.$warning('当前没有数据可以导出')
             arr = arr.map((item,index) => {
-                let name = MAPDATA.STATUSLIST.find(a => { return a.value === item.status })
+                const name = MAPDATA.STATUSLIST.find(a => { return a.value === item.status })
+                const channelName = MAPDATA.CASHCHANNEL.find(a => { return a.value === item.channel })
                 let params = {
                     user_id: item.user_id,
                     addtime: timeFormat(item.addtime, 'YYYY-MM-DD HH:mm:ss', true),
@@ -384,13 +385,15 @@ export default {
                     status: name.name,
                     toMoney: item.status != 3 ? item.real_money / 100 : item.money / 100,
                     toTime: item.status != 3 ? item.pay_time ? timeFormat(item.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无' : item.remark,
+                    card_id: item.card_id,
+                    channel: channelName.name,
                     order_id: item.order_id,
                     outer_trade_no: item.outer_trade_no,
                     admin_id: item.admin_id
                 }
                 return params
             })
-            let nameList = [ '用户ID','申请时间', '扣除喵粮', '申请金额','手续费','处理时间','处理状态','到账金额/退回金额','到账时间/原因','交易单号','第三方交易单号','操作人' ]
+            let nameList = [ '用户ID','申请时间', '扣除喵粮', '申请金额','手续费','处理时间','处理状态','到账金额/退回金额','到账时间/原因','本次提现账号','本次提现通道','交易单号','第三方交易单号','操作人' ]
             exportTableData(arr, nameList, '提现记录')
         }
     },
