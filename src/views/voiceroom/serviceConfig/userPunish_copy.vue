@@ -172,7 +172,7 @@ export default {
         {
           name: "risk_level",
           type: "select",
-          value: "",
+          value: -1,
           keyName: "value",
           optionLabel: "name",
           label: "风险级别",
@@ -571,6 +571,7 @@ export default {
     reset() {
       this.searchParams = {
         status: -1,
+        userPunish: -1,
       };
       this.dateTimeParams = {};
       this.getList();
