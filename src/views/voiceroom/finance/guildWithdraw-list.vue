@@ -42,6 +42,9 @@
         :showCurrentPeriodOrder="true"
         currentPeriodOrderName="当前时间段补单"
         @currentPeriodOrder="handleCurrentPeriodOrder"
+        :showCurrentPeriodOrderRes="true"
+        currentPeriodOrderResName="当前时间段补单结果"
+        @currentPeriodOrderRes="handleCurrentPeriodOrderRes"
       ></SearchPanel>
     </div>
     <div class="tableList">
@@ -126,6 +129,8 @@
 					:limit.sync="payResulPage.limit" @pagination="getPayResult" />
     </el-dialog>
 
+
+    
     <!-- 补单明细 -->
     <el-dialog class="queryOrderResult" title="成功补单明细" width="50%" :visible.sync="queryOrderDetailVisible" @close="startTimer">
       <el-table
@@ -148,12 +153,70 @@
 				<pagination v-show="orderDetailTotal>0" :total="orderDetailTotal" :page.sync="orderDetailPage.page"
 					:limit.sync="orderDetailPage.limit" @pagination="getDetails" />
     </el-dialog>
+
+    <!-- 当前时间段补单 -->
+    <el-dialog class="queryPayResult" title="当前时间段补单结果" width="50%" :visible.sync="currentPeriodVisible" @close="stopTimer">
+      <el-table
+        :data="currentPeriodOrderPayData"
+        style="width: 100%">
+        <el-table-column
+          prop="add_time"
+          label="当前时间段补单时间"
+          show-overflow-tooltip
+          >
+          <template slot-scope="scope">
+              {{ scope.row.create_time  }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="success_number"
+          label="结果"
+          show-overflow-tooltip
+          >
+          <template slot-scope="scope">
+            <template v-if="[2,3].includes(scope.row.status)">{{ `${scope.row.success_number || 0}条成功 / 共补单${scope.row.total_number || 0}条记录` }}</template>
+            <template v-else>正在补单，请等待...</template>
+          </template>
+        </el-table-column>
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button type="primary" @click="hanldeQueryCurPeriodDetail(scope.row)">查看明细</el-button>
+                </template>
+            </el-table-column>
+      </el-table>
+				<!--工具条-->
+				<pagination v-show="currentPeriodOrderPayTotal>0" :total="currentPeriodOrderPayTotal" :page.sync="currentPeriodOrderPayPage.page"
+					:limit.sync="currentPeriodOrderPayPage.limit" @pagination="handleCurrentPeriodOrderRes" />
+    </el-dialog>
+
+    <!-- 当前时间段补单明细 -->
+    <el-dialog class="queryOrderResult" title="当前时间段成功补单明细" width="50%" :visible.sync="curPeriodOrderDetailVisible" @close="startTimer">
+      <el-table
+        :data="currentPeriodOrderDetailData"
+        style="width: 100%">
+        <el-table-column
+          prop="trade_no"
+          label="商户单号"
+          show-overflow-tooltip
+          >
+        </el-table-column>
+        <el-table-column
+          prop="remark"
+          label="补单结果"
+          show-overflow-tooltip
+          >
+        </el-table-column>
+      </el-table>
+				<!--工具条-->
+				<!-- <pagination v-show="currentPeriodOrderDetailTotal>0" :total="currentPeriodOrderDetailTotal" :page.sync="currentPeriodOrderDetailPage.page"
+					:limit.sync="currentPeriodOrderDetailPage.limit" @pagination="getCurrentPeriodOrderDetails" /> -->
+    </el-dialog>    
   </div>
 </template>
 
 <script>
 // 引入api
-import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails } from "@/api/finance.js";
+import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails, addTask,getTaskList,getTaskDetail} from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
@@ -626,6 +689,24 @@ export default {
           limit: 10,
       },
       queryOrderData: {},
+
+      queryCurPeriodOrderDetailVisible:false,
+      currentPeriodVisible:false,
+      currentPeriodOrderPayData:[],
+      currentPeriodOrderPayTotal:0,
+      currentPeriodOrderPayPage:{
+        page: 1,
+        limit: 10,
+      },
+      
+      currentPeriodOrderDetailData: [],
+      currentPeriodOrderDetailTotal: 0,
+      currentPeriodOrderDetailPage: {
+          page: 1,
+          limit: 10,
+      },
+      queryCurPeriodOrderData: {},
+      curPeriodOrderDetailVisible:false
     };
   },
   methods: {
@@ -991,10 +1072,9 @@ export default {
       // 停止计时
       this.stopTimer()
     },
-    //当前时间段补单
-    handleCurrentPeriodOrder(dta){
-    debugger
-    },
+
+
+
     async getDetails() {
       const response = await getQueryPayDetails({
         task_id: this.queryOrderData.task_id,
@@ -1022,7 +1102,55 @@ export default {
       if(this.orderPayStatusTimer) {
         clearTimeout(this.orderPayStatusTimer)
       }
-    }
+    },
+
+   //当前时间段补单
+   async handleCurrentPeriodOrder(){
+    const {start_time,end_time}  = this.dateTimeParams;
+     addTask({
+        start_time:  Math.floor( start_time / 1000),
+        end_time:  Math.floor( end_time / 1000)  
+      }).then(({code,data:{task_id}})=>{
+        // this.currentPeriodVisible = true
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+
+    // 当前时间段补单明细
+    hanldeQueryCurPeriodDetail(row) {
+      this.queryCurPeriodOrderData = row;
+      this.queryCurPeriodOrderDetailVisible = true;
+      this.getCurrentPeriodOrderDetails()
+ 
+    },
+
+    //当前时间段补单结果
+    handleCurrentPeriodOrderRes(){
+      this.currentPeriodVisible = true;
+      getTaskList({
+        page: this.currentPeriodOrderPayPage.page,
+        pagesize: this.currentPeriodOrderPayPage.limit
+      }).then(({code,data:{list,count}})=>{
+        console.log(list,count)
+        if(code === 2000){
+          this.currentPeriodOrderPayData = list;
+          this.currentPeriodOrderPayTotal = count;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    async getCurrentPeriodOrderDetails() {
+      const response = await getTaskDetail({
+        task_id: this.queryCurPeriodOrderData.id,
+      })
+      console.log(response)
+      if (response.code === 2000) {
+        this.currentPeriodOrderDetailData = response.data.list;
+        this.curPeriodOrderDetailVisible = true
+      }
+    },
   },
   created() {
     let time = new Date();
