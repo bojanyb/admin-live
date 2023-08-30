@@ -3269,6 +3269,22 @@ const RISKLEVELLIST = [
   },
 ]
 
+// 充值记录 - 是否被投诉
+const COMPLAINLIST = [
+  {
+    name: '全部',
+    value: -1
+  },
+  {
+    name: '是',
+    value: 1
+  },
+  {
+    name: '否',
+    value: 0
+  }
+]
+
 export default {
   USERINVITE,
   DOWNLOADSOURCE,
@@ -3419,4 +3435,5 @@ export default {
   CASHAUDITLIST,
   TYPEAUDITLIST,
   RISKLEVELLIST,
+  COMPLAINLIST
 }
