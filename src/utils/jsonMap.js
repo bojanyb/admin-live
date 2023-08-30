@@ -3222,6 +3222,10 @@ const REVIEWSTATUSLIST = [
 
 const RISKLEVELLIST = [
   {
+    name: '全部',
+    value: -1
+  },
+  {
     name: '轻微',
     value: 1
   },
