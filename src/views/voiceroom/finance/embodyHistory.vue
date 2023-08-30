@@ -204,7 +204,7 @@ export default {
                     },
                     {
                         label: '本次提现账号',
-                        prop: 'order_id',
+                        prop: 'card_id',
                         width: '200'
                     },
                     {
@@ -385,7 +385,7 @@ export default {
                     status: name.name,
                     toMoney: item.status != 3 ? item.real_money / 100 : item.money / 100,
                     toTime: item.status != 3 ? item.pay_time ? timeFormat(item.pay_time, 'YYYY-MM-DD HH:mm:ss', true) : '无' : item.remark,
-                    account: item.order_id,
+                    card_id: item.card_id,
                     channel: channelName.name,
                     order_id: item.order_id,
                     outer_trade_no: item.outer_trade_no,
