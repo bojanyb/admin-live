@@ -31,14 +31,17 @@
         @BatchRurn="batchRurnFileName"
         @beforeYesterday="beforeYesterday"
         :show-custom="true"
-        custom-name="批量查单"
+        custom-name="批量补单"
         @custom="handleBatchQurtyOrder"
         :show-batch-pass="true"
         batchFuncName="文件查询"
         @batchPass="batchFileSearch"
         :showQuery="true"
-        queryName="批量查单结果"
+        queryName="批量补单结果"
         @query="handleBatchQurtyResult"
+        :showCurrentPeriodOrder="true"
+        currentPeriodOrderName="当前时间段补单"
+        @currentPeriodOrder="handleCurrentPeriodOrder"
       ></SearchPanel>
     </div>
     <div class="tableList">
@@ -51,7 +54,7 @@
       ></tableList>
     </div>
 
-    <!-- 批量查单 -->
+    <!-- 批量补单 -->
     <el-dialog title="批量查询反馈" width="30%" :visible.sync="batchDialogVisible">
       <div style="padding: 10px;">
         查询出共{{ batchResultData && batchResultData.length }}条数据已支付成功
@@ -88,14 +91,14 @@
       ></tableList>
     </el-dialog>
 
-    <!-- 批量查单结果 -->
-    <el-dialog class="queryPayResult" title="批量查单结果" width="50%" :visible.sync="queryOrderResultVisible" @close="stopTimer">
+    <!-- 批量补单结果 -->
+    <el-dialog class="queryPayResult" title="批量补单结果" width="50%" :visible.sync="queryOrderResultVisible" @close="stopTimer">
       <el-table
         :data="orderPayData"
         style="width: 100%">
         <el-table-column
           prop="add_time"
-          label="批量查单时间"
+          label="批量补单时间"
           show-overflow-tooltip
           >
           <template slot-scope="scope">
@@ -108,8 +111,8 @@
           show-overflow-tooltip
           >
           <template slot-scope="scope">
-            <template v-if="[2,3].includes(scope.row.status)">{{ `${scope.row.success_number || 0}条成功 / 共查单${scope.row.total_number || 0}条记录` }}</template>
-            <template v-else>正在查单，请等待...</template>
+            <template v-if="[2,3].includes(scope.row.status)">{{ `${scope.row.success_number || 0}条成功 / 共补单${scope.row.total_number || 0}条记录` }}</template>
+            <template v-else>正在补单，请等待...</template>
           </template>
         </el-table-column>
             <el-table-column label="操作">
@@ -123,8 +126,8 @@
 					:limit.sync="payResulPage.limit" @pagination="getPayResult" />
     </el-dialog>
 
-    <!-- 查单明细 -->
-    <el-dialog class="queryOrderResult" title="成功查单明细" width="50%" :visible.sync="queryOrderDetailVisible" @close="startTimer">
+    <!-- 补单明细 -->
+    <el-dialog class="queryOrderResult" title="成功补单明细" width="50%" :visible.sync="queryOrderDetailVisible" @close="startTimer">
       <el-table
         :data="orderDetailData"
         style="width: 100%">
@@ -136,7 +139,7 @@
         </el-table-column>
         <el-table-column
           prop="remark"
-          label="查单结果"
+          label="补单结果"
           show-overflow-tooltip
           >
         </el-table-column>
@@ -510,7 +513,7 @@ export default {
                         display: params.row.status === 3 ? 'unset' : 'none'
                     },
                     on: { click: () => { this.handleQueryOrder(params.row) } }
-                  }, "查单")
+                  }, "补单")
                 ])
             }
           }
@@ -901,11 +904,11 @@ export default {
     selectionChange(val) {
       this.list = val
     },
-    // 批量查单
+    // 批量补单
     handleBatchQurtyOrder() {
 
       if (this.topupStatus + '' !== '3') {
-        this.$warning('未支付状态才能批量查单')
+        this.$warning('未支付状态才能批量补单')
         return
       }
 
@@ -963,7 +966,7 @@ export default {
     downFile(row){
       window.location.href = row.export_url;
     },
-    // 批量查单结果
+    // 批量补单结果
     handleBatchQurtyResult() {
       this.queryOrderResultVisible = true;
       this.getPayResult()
@@ -980,13 +983,17 @@ export default {
       // 开始定时刷新
       this.startTimer();
     },
-    // 查单明细
+    // 补单明细
     hanldeQueryDetail(row) {
       this.queryOrderData = row;
       this.queryOrderDetailVisible = true;
       this.getDetails()
       // 停止计时
       this.stopTimer()
+    },
+    //当前时间段补单
+    handleCurrentPeriodOrder(dta){
+    debugger
     },
     async getDetails() {
       const response = await getQueryPayDetails({

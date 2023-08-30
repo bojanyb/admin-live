@@ -196,6 +196,8 @@
             <el-button v-if="showExport" :type="customType ||'info'" @click="handleExport">{{ exportName || '导出Excel' }}</el-button>
             <el-button v-if="showCustom" type="warning" @click="handleCustom">{{ customName || '自定义' }}</el-button>
             <el-button v-if="showQuery" type="primary" @click="handleQuery">{{ queryName || '查询' }}</el-button>
+            <el-button v-if="showCurrentPeriodOrder" type="warning" @click="handleCurrentPeriodOrder">{{ currentPeriodOrderName || '当前时间段补单' }}</el-button>
+
           </el-form-item>
         </el-form>
       </div>
@@ -296,6 +298,11 @@ export default {
       type: Boolean,
       default: false
     },
+    //当前时间段补单
+    showCurrentPeriodOrder: {
+      type: Boolean,
+      default: false
+    },
     // 显示搜索按钮
     showSearchBtn: {
       type: Boolean,
@@ -333,6 +340,11 @@ export default {
     },
     // 查询 - 按钮名称
     queryName: {
+      type: String,
+      default: ''
+    },
+    //当前时间段内补单
+    currentPeriodOrderName: {
       type: String,
       default: ''
     },
@@ -624,6 +636,7 @@ export default {
       setTimeout(() => {
         if (this.searchOnChange && !this.clickLock) {
           this.clickLock = true
+
           this.$refs.dataForm.validate((valid) => {
             if (valid) {
               const params = this.searchData(this.form)
@@ -631,6 +644,7 @@ export default {
                 // 重置翻页
                 this.$parent.currentPage = 1
               }
+
               this.$set(this, 'form', params)
               this.$emit('onSearch', params)
             }
@@ -734,6 +748,9 @@ export default {
       } else {
         return false
       }
+    },
+    handleCurrentPeriodOrder(data){
+      this.$emit('currentPeriodOrder',data)
     }
   }
 }
