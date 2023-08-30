@@ -8,13 +8,38 @@
       <span>未支付金额{{ Number(ruleForm.no_recharge_amount) / 100 || 0 }}元</span>
     </div>
     <div class="searchParams">
-      <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" :showYesterday="true"
-        :showBigBeforeYesterday="true" :showCurrentWeek="true" :showToday="true" :show-batch-rurn="true"
-        :showBeforeYesterday="true" batchRurnName="导出EXCEL" @onReset="reset" @onSearch="onSearch" @yesterday="yesterday"
-        @bigBeforeYesterday="bigBeforeYesterday" @currentWeek="currentWeek" @today="today" @BatchRurn="batchRurnFileName"
-        @beforeYesterday="beforeYesterday" :show-custom="true" custom-name="批量查单" @custom="handleBatchQurtyOrder"
-        :show-batch-pass="true" batchFuncName="文件查询" @batchPass="batchFileSearch" :showQuery="true" queryName="批量查单结果"
-        @query="handleBatchQurtyResult"></SearchPanel>
+      <!-- 当前时间前6个月 不包含当前月 preMonth -->
+      <SearchPanel
+        v-model="searchParams"
+        :forms="forms"
+        :preMonth="6"
+        :show-reset="true"
+        :show-search-btn="true"
+        :showYesterday="true"
+        :showBigBeforeYesterday="true"
+        :showCurrentWeek="true"
+        :showToday="true"
+        :show-batch-rurn="true"
+        :showBeforeYesterday="true"
+        batchRurnName="导出EXCEL"
+        @onReset="reset"
+        @onSearch="onSearch"
+        @yesterday="yesterday"
+        @bigBeforeYesterday="bigBeforeYesterday"
+        @currentWeek="currentWeek"
+        @today="today"
+        @BatchRurn="batchRurnFileName"
+        @beforeYesterday="beforeYesterday"
+        :show-custom="true"
+        custom-name="批量查单"
+        @custom="handleBatchQurtyOrder"
+        :show-batch-pass="true"
+        batchFuncName="文件查询"
+        @batchPass="batchFileSearch"
+        :showQuery="true"
+        queryName="批量查单结果"
+        @query="handleBatchQurtyResult"
+      ></SearchPanel>
     </div>
     <div class="tableList">
       <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt"
