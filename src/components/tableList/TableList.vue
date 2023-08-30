@@ -161,6 +161,10 @@
       layout: {
         type: String,
         default: "total, prev, pager, next, jumper"
+      },
+      isInitial: { // 是否初始请求数据
+        type: Boolean,
+        default: true
       }
     },
     data() {
@@ -388,7 +392,9 @@
       }
     },
     created() {
-      this.getData();
+      if (this.isInitial) {
+        this.getData();
+      }
     },
     activated() {
       this.$nextTick(() => {
