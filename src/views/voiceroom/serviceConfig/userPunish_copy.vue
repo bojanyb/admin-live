@@ -546,6 +546,7 @@ export default {
           : s.start_time,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
         punish_type_id: s.punish_type_id,
+        risk_level: s.risk_level,
       };
     },
     // 刷新列表
