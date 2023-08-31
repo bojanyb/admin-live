@@ -360,6 +360,11 @@ const request = {
         completeCash: `${HTTPHEADER}/GuildCash/completeCash`, // 确定结算
         getBillDetail: `${HTTPHEADER}/GuildCash/getBillDetail`, // 账单明细列表
         refuseApply: `${HTTPHEADER}/GuildCash/refuseApply`, // 确定结算
+
+        addTask: `${HTTPHEADER}/Recharge/addTask`, // 按时间批量查单
+        getTaskList: `${HTTPHEADER}/Recharge/getTaskList`, // 按时间批量查单-获取结果
+        getTaskDetail: `${HTTPHEADER}/Recharge/getTaskDetail`, // 按时间批量查单-获取明细
+        getTaskDetailLog: `${HTTPHEADER}/Recharge/getTaskDetailLog`, // 按时间批量查单-获取补单明细
     },
 
     // 消息管理

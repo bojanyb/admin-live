@@ -31,14 +31,20 @@
         @BatchRurn="batchRurnFileName"
         @beforeYesterday="beforeYesterday"
         :show-custom="true"
-        custom-name="批量查单"
+        custom-name="批量补单"
         @custom="handleBatchQurtyOrder"
         :show-batch-pass="true"
         batchFuncName="文件查询"
         @batchPass="batchFileSearch"
         :showQuery="true"
-        queryName="批量查单结果"
+        queryName="批量补单结果"
         @query="handleBatchQurtyResult"
+        :showCurrentPeriodOrder="true"
+        currentPeriodOrderName="当前时段补单"
+        @currentPeriodOrder="handleCurrentPeriodOrder"
+        :showCurrentPeriodOrderRes="true"
+        currentPeriodOrderResName="当前时段补单结果"
+        @currentPeriodOrderRes="getCurPeriodOrderResult"
       ></SearchPanel>
     </div>
     <div class="tableList">
@@ -46,7 +52,7 @@
         layout="total, sizes, prev, pager, next, jumper"></tableList>
     </div>
 
-    <!-- 批量查单 -->
+    <!-- 批量补单 -->
     <el-dialog title="批量查询反馈" width="30%" :visible.sync="batchDialogVisible">
       <div style="padding: 10px;">
         查询出共{{ batchResultData && batchResultData.length }}条数据已支付成功
@@ -120,12 +126,115 @@
       <pagination v-show="orderDetailTotal > 0" :total="orderDetailTotal" :page.sync="orderDetailPage.page"
         :limit.sync="orderDetailPage.limit" @pagination="getDetails" />
     </el-dialog>
+
+
+
+    <!-- 当前时段补单 -->
+    <el-dialog class="queryPayResult" title="当前时段补单结果" width="50%" :visible.sync="showCurPeriodOrderResult">
+      <el-table
+        :data="currentPeriodOrderPayData"
+        style="width: 100%">
+        <el-table-column
+          prop="add_time"
+          label="当前时段补单时间"
+          show-overflow-tooltip
+          >
+          <template slot-scope="scope">
+              {{ scope.row.create_time  }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="success_number"
+          label="结果"
+          show-overflow-tooltip
+          >
+          <template slot-scope="scope">
+            {{scope.row.status}}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+            <template slot-scope="scope">
+                <el-button type="primary" @click="hanldeQueryCurPeriodDetail(scope.row)">查看明细</el-button>
+            </template>
+        </el-table-column>
+      </el-table>
+				<!--工具条-->
+				<pagination v-show="currentPeriodOrderPayTotal>0" :total="currentPeriodOrderPayTotal" :page.sync="currentPeriodOrderPayPage.page"
+					:limit.sync="currentPeriodOrderPayPage.limit" @pagination="getCurPeriodOrderResult" />
+    </el-dialog>
+
+    <!-- 当前时段补单任务列表 -->
+    <el-dialog class="queryOrderResult" title="当前时段补单任务" width="50%" :visible.sync="curPeriodOrderDetailVisible">
+      <el-table
+        :data="currentPeriodOrderDetailData"
+        style="width: 100%">
+        <el-table-column
+          prop="id"
+          label="任务id"
+          show-overflow-tooltip
+          >
+        </el-table-column>
+        <el-table-column
+          prop="status"
+          label="任务状态"
+          show-overflow-tooltip
+          >
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <!--  -->
+              <el-button type="primary" @click="openTaskOrderLog(scope.row)">查看明细</el-button>
+          </template>
+      </el-table-column>
+      </el-table>
+      				<!--工具条-->
+				<pagination v-show="currentPeriodOrderDetailTotal>0" :total="currentPeriodOrderDetailTotal" :page.sync="currentPeriodOrderDetailPage.page"
+					:limit.sync="currentPeriodOrderDetailPage.limit" @pagination="getCurPeriodOrderDetails" />
+    </el-dialog>    
+
+    <!-- 当前时段补单明细 -->
+    <el-dialog class="queryOrderResult" title="当前时段补单明细" width="50%" :visible.sync=" showCurPeriodOrderLogList ">
+      <el-table
+        :data="curPeriodDetailLogList"
+        style="width: 100%">
+        <el-table-column
+          prop="trade_no"
+          label="商户单号"
+          width="250"
+          show-overflow-tooltip
+          >
+        </el-table-column>
+        <el-table-column
+          prop="status"
+          label="补单结果"
+          show-overflow-tooltip
+          >
+        </el-table-column>
+        <el-table-column
+          prop="remark"
+          label="备注"
+          width="360"
+          show-overflow-tooltip
+          >
+        </el-table-column>
+      </el-table>
+      <pagination v-show="curPeriodOrderDetailLogTotal>0" :total="curPeriodOrderDetailLogTotal" :page.sync="curPeriodOrderDetailLogPage.page"
+        :limit.sync="curPeriodOrderDetailLogPage.limit" @pagination="openTaskOrderLog" />
+    </el-dialog>    
+
+      <!-- 当前时段补单反馈 -->
+      <el-dialog title="当前时段补单反馈" width="30%" :visible.sync="curPeriodOrderDialogVisible">
+        <div style="padding: 10px;">
+             操作成功
+        </div>
+      </el-dialog>
+    
   </div>
 </template>
 
 <script>
 // 引入api
-import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails } from "@/api/finance.js";
+import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails, addTask,getTaskList,getTaskDetail,getTaskDetailLog} from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
@@ -560,7 +669,7 @@ export default {
   filters: {
     filtersTime(str) {
       return timeFormat(str, "YYYY-MM-DD HH:mm:ss", true) || "无"
-    }
+    },
   },
   data() {
     return {
@@ -625,6 +734,34 @@ export default {
         limit: 10,
       },
       queryOrderData: {},
+
+      queryCurPeriodOrderDetailVisible:false,
+      showCurPeriodOrderResult:false,
+      currentPeriodOrderPayData:[],
+      currentPeriodOrderPayTotal:0,
+      currentPeriodOrderPayPage:{
+        page: 1,
+        limit: 10,
+      },
+      
+      currentPeriodOrderDetailData: [],
+      currentPeriodOrderDetailTotal: 0,
+      currentPeriodOrderDetailPage: {
+          page: 1,
+          limit: 10,
+      },
+      queryCurPeriodOrderData: {},
+      curPeriodOrderDetailVisible:false,
+      curPeriodOrderDialogVisible: false,
+
+      curPeriodDetailLogList:[],
+      showCurPeriodOrderLogList:false,
+      curPeriodOrderDetailLogTotal:0,
+      curPeriodOrderDetailLogPage:{
+        page: 1,
+        limit: 10,
+      },
+      curPeriodDetailLogData:null
     };
   },
   methods: {
@@ -903,11 +1040,11 @@ export default {
     selectionChange(val) {
       this.list = val
     },
-    // 批量查单
+    // 批量补单
     handleBatchQurtyOrder() {
 
       if (this.topupStatus + '' !== '3') {
-        this.$warning('未支付状态才能批量查单')
+        this.$warning('未支付状态才能批量补单')
         return
       }
 
@@ -965,7 +1102,7 @@ export default {
     downFile(row) {
       window.location.href = row.export_url;
     },
-    // 批量查单结果
+    // 批量补单结果
     handleBatchQurtyResult() {
       this.queryOrderResultVisible = true;
       this.getPayResult()
@@ -982,7 +1119,7 @@ export default {
       // 开始定时刷新
       this.startTimer();
     },
-    // 查单明细
+    // 补单明细
     hanldeQueryDetail(row) {
       this.queryOrderData = row;
       this.queryOrderDetailVisible = true;
@@ -990,6 +1127,9 @@ export default {
       // 停止计时
       this.stopTimer()
     },
+
+
+
     async getDetails() {
       const response = await getQueryPayDetails({
         task_id: this.queryOrderData.task_id,
@@ -997,6 +1137,7 @@ export default {
         pagesize: this.orderDetailPage.limit
       })
       if (response.code === 2000) {
+ 
         this.orderDetailData = response.data.list;
         this.orderDetailTotal = response.data.count;
       }
@@ -1016,6 +1157,82 @@ export default {
     stopTimer() {
       if (this.orderPayStatusTimer) {
         clearTimeout(this.orderPayStatusTimer)
+      }
+    },
+
+   //当前时段补单
+   async handleCurrentPeriodOrder(){
+    const {start_time,end_time}  = this.dateTimeParams;
+     addTask({
+        start_time:  Math.floor( start_time / 1000),
+        end_time:  Math.floor( end_time / 1000)  
+      }).then(({code,data})=>{
+        console.log(data)
+        this.curPeriodOrderDialogVisible = true
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+
+    // 当前时段补单明细
+    hanldeQueryCurPeriodDetail(row) {
+      this.queryCurPeriodOrderData = row;
+      this.queryCurPeriodOrderDetailVisible = true;
+      this.currentPeriodOrderDetailPage.page = 1;//重置页码
+      this.getCurPeriodOrderDetails()
+ 
+    },
+
+    //当前时段补单结果
+    getCurPeriodOrderResult(){
+      this.showCurPeriodOrderResult = true;
+      getTaskList({
+        page: this.currentPeriodOrderPayPage.page,
+        pagesize: this.currentPeriodOrderPayPage.limit
+      }).then(({code,data:{list,count}})=>{
+        console.log(list,count)
+        if(code === 2000){
+          this.currentPeriodOrderPayData = list;
+          this.currentPeriodOrderPayTotal = count;
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    async getCurPeriodOrderDetails() {
+      const {code,data} = await getTaskDetail({
+        task_id: this.queryCurPeriodOrderData.id,
+        page: this.currentPeriodOrderDetailPage.page,
+        pagesize:this.currentPeriodOrderDetailPage.limit
+
+      })
+      console.log(data)
+      if (code === 2000) {
+        this.currentPeriodOrderDetailData = data.list;
+        this.currentPeriodOrderDetailTotal = data.count
+        this.curPeriodOrderDetailVisible = true
+      }
+    },
+
+    async openTaskOrderLog(params){
+      // 初次打开
+       if(params && params.id){
+         this.curPeriodDetailLogData =  params;   // 当前点击的记录
+         this.curPeriodOrderDetailLogPage.page = 1; //重置
+       }
+      //  debugger
+       const {code,data} = await getTaskDetailLog({
+        task_id: this.queryCurPeriodOrderData.id,
+        detail_id: this.curPeriodDetailLogData.id,
+        page: this.curPeriodOrderDetailLogPage.page,
+        pagesize:this.curPeriodOrderDetailLogPage.limit
+
+      })
+      console.log(data)
+      if (code === 2000) {
+        this.curPeriodDetailLogList = data.list;
+        this.curPeriodOrderDetailLogTotal = data.count
+        this.showCurPeriodOrderLogList = true;
       }
     }
   },
