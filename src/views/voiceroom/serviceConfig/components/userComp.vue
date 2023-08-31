@@ -62,7 +62,7 @@
                         </el-upload>
                     </el-form-item>
                     <el-form-item label="备注说明" prop="remark">
-                        <el-input type="textarea" placeholder="请输入备注内容，该内容用户可看到，建议20个字以内。" :rows="4" maxlength="20" show-word-limit v-model="ruleForm.remark" :disabled="disabled || ruleForm.category === '2'"></el-input>
+                        <el-input type="textarea" placeholder="请输入备注内容，此内容用户不会看到，建议20个字以内。" :rows="4" maxlength="20" show-word-limit v-model="ruleForm.remark" :disabled="disabled || ruleForm.category === '2'"></el-input>
                     </el-form-item>
                 </div>
                 <div class="infoBox" :class="[{'infoBox_hign': status === 'blocked' && !isIncludeReset},{'infoBox_hign_copy_box': status !== 'blocked' && !isIncludeReset},{'infoBox_hign_copy': status !== 'blocked' && isIncludeReset},{'infoBox_hign_copy_box_two': status === 'blocked' && isIncludeReset}]" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
@@ -131,7 +131,7 @@ export default {
             timeList: MAPDATA.DURATIONCOPY, // 处罚时长
             // typeList: MAPDATA.USERPUNISHTYPELISTCOPYTWO, // 处罚类型
             resetList: MAPDATA.USERPUNIRESETLISTCOPY,
-            riskLevelList: MAPDATA.RISKLEVELLIST,
+            riskLevelList: MAPDATA.RISKLEVELLISTCOPY,
             status: 'add',
             userList: [], // 查询用户
             ruleForm: {

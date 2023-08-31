@@ -3273,6 +3273,21 @@ const RISKLEVELLIST = [
   },
 ]
 
+const RISKLEVELLISTCOPY = [
+  {
+    name: '轻微',
+    value: 1
+  },
+  {
+    name: '一般',
+    value: 2
+  },
+  {
+    name: '严重',
+    value: 3
+  },
+]
+
 // 充值记录 - 是否被投诉
 const COMPLAINLIST = [
   {
@@ -3438,6 +3453,7 @@ export default {
   REVIEWSTATUSLIST,
   CASHAUDITLIST,
   TYPEAUDITLIST,
+  COMPLAINLIST,
   RISKLEVELLIST,
-  COMPLAINLIST
+  RISKLEVELLISTCOPY,
 }
