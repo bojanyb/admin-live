@@ -173,15 +173,26 @@ export default {
     forms() {
       return [
         {
+          name: "alipay_cash_channel",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "当前支付宝提现通道",
+          placeholder: "请选择支付宝提现通道",
+          clearable: true,
+          options: MAPDATA.ALIPAYCASHCHANNEL,
+        },
+        {
           name: "cash_channel",
           type: "select",
           value: "",
           keyName: "value",
           optionLabel: "name",
-          label: "当前提现通道",
-          placeholder: "请选择当前提现通道",
+          label: "当前银行卡提现通道",
+          placeholder: "请选择银行卡提现通道",
           clearable: true,
-          options: MAPDATA.CASHCHANNEL,
+          options: MAPDATA.BANKCASHCHANNEL,
         },
         {
           name: "id_card",
@@ -473,6 +484,7 @@ export default {
         id_card: s.id_card,
         name: s.name,
         cash_channel: s.cash_channel,
+        alipay_cash_channel: s.alipay_cash_channel
       };
     },
     // 刷新列表
