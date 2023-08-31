@@ -170,6 +170,16 @@ export default {
           options: MAPDATA.USERPUNISHSTATUSLISTCOPY,
         },
         {
+          name: "risk_level",
+          type: "select",
+          value: -1,
+          keyName: "value",
+          optionLabel: "name",
+          label: "风险级别",
+          placeholder: "请选择",
+          options: MAPDATA.RISKLEVELLIST,
+        },
+        {
           name: "dateTimeParams",
           type: "datePicker",
           dateType: "datetimerange",
@@ -354,6 +364,16 @@ export default {
           showOverFlow: true,
         },
         {
+          label: "风险级别",
+          minWidth: "100px",
+          render: (h, params) => {
+            let data = MAPDATA.RISKLEVELLIST.find((item) => {
+              return item.value === params.row.risk_level;
+            });
+            return h("span", data ? data.name : "无");
+          },
+        },
+        {
           label: "解除时间",
           minWidth: "170px",
           render: (h, params) => {
@@ -526,6 +546,7 @@ export default {
           : s.start_time,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
         punish_type_id: s.punish_type_id,
+        risk_level: s.risk_level,
       };
     },
     // 刷新列表
@@ -550,6 +571,7 @@ export default {
     reset() {
       this.searchParams = {
         status: -1,
+        userPunish: -1,
       };
       this.dateTimeParams = {};
       this.getList();
@@ -620,6 +642,9 @@ export default {
         let data = MAPDATA.USERPUNISHSTATUSLISTCOPY.find((v) => {
           return v.value === item.status;
         });
+        let riskLevelData = MAPDATA.RISKLEVELLIST.find((v) => {
+          return v.value === item.risk_level;
+        })
         let params = {
           create_time: item.create_time,
           from: item.from,
@@ -642,6 +667,7 @@ export default {
             item.report_user_guild_operator_user_name,
           status: data ? data.name : "无",
           punish_type_str: item.punish_type_str,
+          risk_level: riskLevelData ? riskLevelData.name : "无",
           res: item.res,
           remove_time: item.remove_time,
           penalty_admin: item.penalty_admin || "无",
@@ -673,6 +699,7 @@ export default {
         "举报用户所属运营",
         "处理状态",
         "处罚类别",
+        "风险级别",
         "处罚结果",
         "解除时间",
         "处罚操作人",
