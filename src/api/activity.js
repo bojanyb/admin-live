@@ -218,6 +218,14 @@ export function poolDetailV5(data) {
     data
   })
 }
+// 榜单配置
+export function luckyConfigV5(data) {
+  return request({
+    url: api.activity.luckyConfigV5,
+    method: 'post',
+    data
+  })
+}
 // 获取轮次
 export function getRoundV5(data) {
   return request({
@@ -230,14 +238,6 @@ export function getRoundV5(data) {
 export function luckyListV5(data) {
   return request({
     url: api.activity.luckyListV5,
-    method: 'post',
-    data
-  })
-}
-// 榜单配置
-export function luckyConfigV5(data) {
-  return request({
-    url: api.activity.luckyConfigV5,
     method: 'post',
     data
   })
@@ -428,27 +428,10 @@ export function getAuditNoPass(data) {
     data
   })
 }
-/*******欢乐钓鱼季**********/
-// 获取奖池列表
-export function getPoolNameV6(data) {
-  return request({
-    url: api.activity.getPoolNameV6,
-    method: 'post',
-    data
-  })
-}
 // 总决赛实力榜修改
 export function editPowerRanking(data) {
   return request({
     url: api.summerSign.editPowerRanking,
-    method: 'post',
-    data
-  })
-}
-// 获取抽奖数据
-export function poolDetailV6(data) {
-  return request({
-    url: api.activity.poolDetailV6,
     method: 'post',
     data
   })
@@ -461,18 +444,35 @@ export function getGiftVsummer(data) {
     data
   })
 }
-// 获取轮次
-export function getRoundV6(data) {
-  return request({
-    url: api.activity.getRoundV6,
-    method: 'post',
-    data
-  })
-}
 // 总决赛实力榜修改
 export function giftLogVsummer(data) {
   return request({
     url: api.summerSign.giftLog,
+    method: 'post',
+    data
+  })
+}
+/*******欢乐钓鱼季**********/
+// 获取奖池列表
+export function getPoolNameV6(data) {
+  return request({
+    url: api.activity.getPoolNameV6,
+    method: 'post',
+    data
+  })
+}
+// 获取抽奖数据
+export function poolDetailV6(data) {
+  return request({
+    url: api.activity.poolDetailV6,
+    method: 'post',
+    data
+  })
+}
+// 获取轮次
+export function getRoundV6(data) {
+  return request({
+    url: api.activity.getRoundV6,
     method: 'post',
     data
   })
@@ -493,4 +493,3 @@ export function luckyConfigV6(data) {
     data
   })
 }
-

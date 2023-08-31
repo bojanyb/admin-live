@@ -1,5 +1,5 @@
 <template>
-	<div class="guildRebate-list-box">
+	<div class="guildWater-list-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
 			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}</span>
@@ -367,7 +367,7 @@
 	}
 </script>
 <style lang="scss">
-.guildRebate-list-box {
+.guildWater-list-box {
 	.model {
         width: 100%;
         height: 40px;
@@ -426,5 +426,8 @@
 			}
 		}
 	}
+  .el-table__body-wrapper {
+    max-height: none !important;
+  }
 }
 </style>

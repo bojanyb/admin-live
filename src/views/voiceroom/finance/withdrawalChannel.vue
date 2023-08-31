@@ -173,15 +173,26 @@ export default {
     forms() {
       return [
         {
+          name: "alipay_cash_channel",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "当前支付宝提现通道",
+          placeholder: "请选择支付宝提现通道",
+          clearable: true,
+          options: MAPDATA.ALIPAYCASHCHANNEL,
+        },
+        {
           name: "cash_channel",
           type: "select",
           value: "",
           keyName: "value",
           optionLabel: "name",
-          label: "当前提现通道",
-          placeholder: "请选择当前提现通道",
+          label: "当前银行卡提现通道",
+          placeholder: "请选择银行卡提现通道",
           clearable: true,
-          options: MAPDATA.CASHCHANNEL,
+          options: MAPDATA.BANKCASHCHANNEL,
         },
         {
           name: "id_card",
@@ -286,6 +297,18 @@ export default {
             sortable: "custom",
             render: (h, params) => {
               const result = params.row.xin_quota.map((item) => {
+                return h("div", `${item.name}：${item.quota}`);
+              });
+              return h("div", result);
+            },
+          },
+          {
+            label: "中职通道余额",
+            prop: "mtc_quota",
+            minWidth: "150px",
+            sortable: "custom",
+            render: (h, params) => {
+              const result = params.row.mtc_quota.map((item) => {
                 return h("div", `${item.name}：${item.quota}`);
               });
               return h("div", result);
@@ -410,6 +433,22 @@ export default {
             },
           },
           {
+            label: "中职-银行卡",
+            prop: "fusui_bank",
+            width: "120px",
+            render: (h, params) => {
+              return h("span", params.row.mtc_bank ? "已签署" : "未签署");
+            },
+          },
+          {
+            label: "中职-支付宝",
+            prop: "fusui_alipay",
+            width: "120px",
+            render: (h, params) => {
+              return h("span", params.row.mtc_alipay ? "已签署" : "未签署");
+            },
+          },
+          {
             label: "操作",
             minWidth: "120px",
             fixed: "right",
@@ -445,6 +484,7 @@ export default {
         id_card: s.id_card,
         name: s.name,
         cash_channel: s.cash_channel,
+        alipay_cash_channel: s.alipay_cash_channel
       };
     },
     // 刷新列表
@@ -511,7 +551,7 @@ export default {
             }
           }
         } else {
-          console.log("error submit!!");
+          console.log("error submit!!!");
           return false;
         }
       });

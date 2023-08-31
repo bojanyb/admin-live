@@ -370,7 +370,7 @@ export default {
 				})
 				this.guildList = res.data.list || []
 			}
-    },
+    	},
 		// 导出excel.
 		async BatchRurn() {
 			if (this.ruleForm.list.length == 0) {
@@ -419,8 +419,8 @@ export default {
 					rebate: item.rebate + "%",
 					settlement: item.settlement + "喵粮",
 					status: status_name,
-          op_time: item.op_time ? timeFormat(item.op_time, 'YYYY-MM-DD HH:mm:ss', true) : '-',
-          op_user: item.op_user ? item.op_user : '-'
+					op_time: item.op_time ? JSON.stringify(timeFormat(item.op_time, 'YYYY-MM-DD HH:mm:ss', true)) : '-',
+					op_user: item.op_user ? item.op_user : '-'
 				};
 				return params;
 			});
@@ -437,8 +437,8 @@ export default {
 				"周返点比例",
 				"周返点金额",
 				"结算状态",
-        "操作时间",
-        "操作人",
+				"操作时间",
+				"操作人",
 			];
 			exportTableData(arr, nameList, "直播公会周流水结算");
 		},

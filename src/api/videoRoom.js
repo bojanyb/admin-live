@@ -1660,3 +1660,12 @@ export function userFlow1Count(data) {
     data
   })
 }
+
+// 修改二维码
+export function saveWechatCode(data) {
+  return request({
+    url: api.guild.saveWechatCode,
+    method: 'post',
+    data
+  })
+}

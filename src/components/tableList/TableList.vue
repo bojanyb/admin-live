@@ -161,6 +161,10 @@
       layout: {
         type: String,
         default: "total, prev, pager, next, jumper"
+      },
+      isInitial: { // 是否初始请求数据
+        type: Boolean,
+        default: true
       }
     },
     data() {
@@ -283,7 +287,6 @@
             break;
           }
           params.sort_field = sort_field
-
           params.sort = this.search.sort.split(",")[1] === 'asc' ? 'asc' : 'desc'
         }
         // 用来比对分页 - 重置分页
@@ -388,7 +391,9 @@
       }
     },
     created() {
-      this.getData();
+      if (this.isInitial) {
+        this.getData();
+      }
     },
     activated() {
       this.$nextTick(() => {
