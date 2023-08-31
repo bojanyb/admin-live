@@ -14,7 +14,6 @@
     <tableList :cfgs="cfgs" ref="tableList" :isInitial="false"></tableList>
 
     <bindStuck ref="bindStuck"></bindStuck>
-
   </div>
 </template>
 
@@ -43,7 +42,7 @@ export default {
   components: {
     bindStuck,
     tableList,
-    SearchPanel
+    SearchPanel,
   },
   data() {
     return {
@@ -100,7 +99,7 @@ export default {
           value: "",
           label: "注册设备",
           placeholder: "请输入注册设备",
-        }
+        },
       ];
     },
     cfgs() {
@@ -320,12 +319,12 @@ export default {
           label: "最后一次登录设备",
           width: "200px",
           prop: "last_login_device_id",
-        }
+        },
       ];
       return {
         vm: this,
         url: REQUEST.user.list,
-        columns: this.permissionArr.includes("User@index") ? arr : [],
+        columns: arr,
       };
     },
   },
@@ -361,6 +360,15 @@ export default {
     },
     // 刷新列表
     getList() {
+      const formData = this.beforeSearch();
+      const { user_number, phone, nickname, real_name, ip, reg_device_id } =
+        formData;
+      if (
+        !(user_number || phone || nickname || real_name || ip || reg_device_id)
+      ) {
+        this.$message.error("请至少选择一个搜索项！");
+        return;
+      }
       this.$refs.tableList.getData();
     },
     // 设置时间段
