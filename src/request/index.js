@@ -499,6 +499,9 @@ const request = {
         multiDeleteMsg: `${HTTPHEADER}/moments/multiDeleteMsg`, // 批量删评论文案
         checkList: `${HTTPHEADER}/moments/checkMomentIndex`, // 获取动态审核列表
         check: `${HTTPHEADER}/moments/checkMomentUpdate`, // 动态审核操作
+        topMomentList: `${HTTPHEADER}/moments/pushMomentList`, // 置顶动态列表
+        setTopMoment: `${HTTPHEADER}/moments/setPushMoment`, // 置顶动态
+        delTopList: `${HTTPHEADER}/moments/delPushMoment`, // 删除置顶动态
     },
 
     // 活动管理

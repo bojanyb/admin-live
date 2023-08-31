@@ -11,11 +11,14 @@
         batch-rurn-name="批量删除"
         :show-custom="true"
         custom-name="批量忽略"
+        :show-query="true"
+        query-name="推荐动态"
         @batchPass="handleBatchPass"
         @BatchRurn="handleBatchDelete"
         @custom="handleBatchIgnore"
         @onReset="reset"
         @onSearch="onSearch"
+        @query="handleQuery"
       ></SearchPanel>
     </div>
 
@@ -24,6 +27,11 @@
       ref="tableList"
       @selectionChange="selectionChange"
     ></tableList>
+
+    <!-- 推荐设置弹窗 -->
+    <top-comp ref="topComp"></top-comp>
+    <!-- 推荐动态弹窗 -->
+    <top-list-comp v-if="isDestoryComp" ref="topListComp" @destoryComp="destoryComp"></top-list-comp>
   </div>
 </template>
 
@@ -38,11 +46,15 @@ import tableList from "@/components/tableList/TableList.vue";
 import REQUEST from "@/request/index.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
+import TopComp from './components/topComp.vue';
+import TopListComp from './components/topListComp.vue';
 export default {
   mixins: [mixins],
   components: {
     SearchPanel,
     tableList,
+    TopComp,
+    TopListComp,
   },
   data() {
     return {
@@ -51,6 +63,7 @@ export default {
         id: "",
       },
       selectList: [],
+      isDestoryComp: false, // 是否销毁组件
     };
   },
   computed: {
@@ -138,6 +151,18 @@ export default {
             label: "操作",
             render: (h, params) => {
               return h("div", [
+                h(
+                  "el-button",
+                  {
+                    props: { type: "primary", size: "mini" },
+                    on: {
+                      click: () => {
+                        this.recommend(params.row.id);
+                      },
+                    },
+                  },
+                  "推荐"
+                ),
                 h(
                   "el-button",
                   {
@@ -260,6 +285,12 @@ export default {
         })
         .catch(() => {});
     },
+    // 推荐
+    recommend(id) {
+      setTimeout(() => {
+        this.$refs.topComp.load(id);
+      }, 100);
+    },
     // 选中
     selectionChange(v) {
       this.selectList = v;
@@ -275,6 +306,16 @@ export default {
     // 批量忽略
     handleBatchIgnore() {
       this.batchAudit(1, "批量忽略");
+    },
+    // 推荐动态
+    handleQuery() {
+      this.isDestoryComp = true;
+      setTimeout(() => {
+        this.$refs.topListComp.load();
+      }, 100);
+    },
+    destoryComp() {
+      this.isDestoryComp = false;
     },
   },
 };
