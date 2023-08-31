@@ -197,7 +197,7 @@
             <el-button v-if="showCustom" type="warning" @click="handleCustom">{{ customName || '自定义' }}</el-button>
             <el-button v-if="showQuery" type="primary" @click="handleQuery">{{ queryName || '查询' }}</el-button>
             <el-button v-if="showCurrentPeriodOrder" type="warning" @click="handleCurrentPeriodOrder">{{ currentPeriodOrderName || '当前时间段补单' }}</el-button>
-            <el-button v-if="showCurrentPeriodOrderRes" type="warning" @click="handleCurrentPeriodOrderRes">{{ currentPeriodOrderResName || '当前时间段补单' }}</el-button>
+            <el-button v-if="showCurrentPeriodOrderRes" type="primary" @click="handleCurrentPeriodOrderRes">{{ currentPeriodOrderResName || '当前时间段补单' }}</el-button>
 
           </el-form-item>
         </el-form>

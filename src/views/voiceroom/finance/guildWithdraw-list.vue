@@ -201,16 +201,21 @@
           >
         </el-table-column>
         <el-table-column
-          prop="remark"
+          prop="status"
           label="补单结果"
           show-overflow-tooltip
           >
         </el-table-column>
       </el-table>
-				<!--工具条-->
-				<!-- <pagination v-show="currentPeriodOrderDetailTotal>0" :total="currentPeriodOrderDetailTotal" :page.sync="currentPeriodOrderDetailPage.page"
-					:limit.sync="currentPeriodOrderDetailPage.limit" @pagination="getCurrentPeriodOrderDetails" /> -->
     </el-dialog>    
+
+      <!-- 当前时间段补单反馈 -->
+      <el-dialog title="当前时间段补单反馈" width="30%" :visible.sync="curPeriodOrderDialogVisible">
+        <div style="padding: 10px;">
+             操作成功
+        </div>
+      </el-dialog>
+    
   </div>
 </template>
 
@@ -706,7 +711,8 @@ export default {
           limit: 10,
       },
       queryCurPeriodOrderData: {},
-      curPeriodOrderDetailVisible:false
+      curPeriodOrderDetailVisible:false,
+      curPeriodOrderDialogVisible: false,
     };
   },
   methods: {
@@ -1110,8 +1116,11 @@ export default {
      addTask({
         start_time:  Math.floor( start_time / 1000),
         end_time:  Math.floor( end_time / 1000)  
-      }).then(({code,data:{task_id}})=>{
+      }).then(({code,data})=>{
+        // :{task_id}
         // this.currentPeriodVisible = true
+        this.curPeriodOrderDialogVisible = true
+        // this.getPayStatus()
       }).catch(err=>{
         console.log(err)
       })
@@ -1142,15 +1151,16 @@ export default {
       })
     },
     async getCurrentPeriodOrderDetails() {
-      const response = await getTaskDetail({
-        task_id: this.queryCurPeriodOrderData.id,
+      const {code,data} = await getTaskDetail({
+        task_id: 17,
       })
-      console.log(response)
-      if (response.code === 2000) {
-        this.currentPeriodOrderDetailData = response.data.list;
+      console.log(data)
+      if (code === 2000) {
+        this.currentPeriodOrderDetailData = data.list;
         this.curPeriodOrderDetailVisible = true
       }
     },
+
   },
   created() {
     let time = new Date();
