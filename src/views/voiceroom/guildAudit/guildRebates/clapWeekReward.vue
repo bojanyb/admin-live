@@ -1,5 +1,5 @@
 <template>
-	<div class="guildRebate-dynamic-box">
+	<div class="guildReward-list-box">
 		<div class="model">
 			<span>总条数：{{ ruleForm.count || 0 }}</span>
 			<span>流水总计：{{ (this.form.status !== 2 ? ruleForm.all_flow : ruleForm.total_flow) || 0 }}
@@ -45,7 +45,7 @@
 			<!-- <SearchPanel ref="SearchPanel" v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch" batch-func-name="批量返佣" :show-batch-pass="true" @batchPass="batchFunc"></SearchPanel> -->
 		</div>
 
-		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt" @handleSizeChange="handleSizeChange"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" layout="total, sizes, prev, pager, next, jumper" @saleAmunt="saleAmunt" @handleSizeChange="handleSizeChange"></tableList>
 	</div>
 </template>
 
@@ -201,6 +201,9 @@ export default {
 			return {
 				vm: this,
 				url: REQUEST.guild[name],
+        search: {
+          sizes: [10, 30, 50, 100]
+        },
 				isShowCheckbox: this.form.status === 1,
 				isShowIndex: true,
 				columns: (this.form.status === 1 || this.form.status === 4) ? [...arr, ...arr1] : [...arr]
@@ -427,7 +430,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.guildRebate-dynamic-box {
+.guildReward-list-box {
 	.model {
 		width: 100%;
 		height: 40px;
@@ -497,5 +500,8 @@ export default {
 			}
 		}
 	}
+  .el-table__body-wrapper {
+    max-height: none !important;
+  }
 }
 </style>

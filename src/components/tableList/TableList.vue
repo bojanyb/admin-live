@@ -161,6 +161,10 @@
       layout: {
         type: String,
         default: "total, prev, pager, next, jumper"
+      },
+      isInitial: { // 是否初始请求数据
+        type: Boolean,
+        default: true
       }
     },
     data() {
@@ -252,6 +256,7 @@
       },
       getData(max_id, tabIndex) {
         this.loading = true;
+        this.$store.commit("app/SET_IS_LOCK", true);
         let search = this.search,
           vm = this.cfgs.vm,
           acstatus = this.cfgs.activistatus;
@@ -296,6 +301,7 @@
             data: params
           }).then(res => {
             this.loading = false;
+            this.$store.commit("app/SET_IS_LOCK", false);
             // if (res.data.list === null) {
             //   res.data.list = [];
             // }
@@ -305,10 +311,12 @@
             this.data = []
             this.$emit('saleAmunt', { list: [], baoxiang: {}});
             this.loading = false;
+            this.$store.commit("app/SET_IS_LOCK", false);
             // this.$message.error(err.msg || '获取数据失败');
           })
         } else {
           this.loading = false;
+          this.$store.commit("app/SET_IS_LOCK", false);
         }
       },
       // 数据处理
@@ -384,7 +392,9 @@
       }
     },
     created() {
-      this.getData();
+      if (this.isInitial) {
+        this.getData();
+      }
     },
     activated() {
       this.$nextTick(() => {
