@@ -14,17 +14,6 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="推荐时间" prop="start_time">
-          <el-select v-model="ruleForm.start_time" placeholder="请选择">
-            <el-option
-              v-for="item in timeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="结束时间" prop="end_time">
           <el-date-picker
             v-model="ruleForm.end_time"
@@ -57,35 +46,10 @@ export default {
         end_time: "",
       },
       rules: {
-        start_time: [
-          { required: true, message: "请选择开始时间", trigger: "blur" },
-        ],
         end_time: [
           { required: true, message: "请选择结束时间", trigger: "blur" },
         ],
       },
-      timeOptions: [
-        {
-          value: "1",
-          label: "1小时",
-        },
-        {
-          value: "2",
-          label: "2小时",
-        },
-        {
-          value: "3",
-          label: "3小时",
-        },
-        {
-          value: "4",
-          label: "4小时",
-        },
-        {
-          value: "5",
-          label: "5小时",
-        },
-      ],
     };
   },
   methods: {
@@ -106,6 +70,7 @@ export default {
           console.log(this.ruleForm);
           const params = {
             ...this.ruleForm,
+            start_time: Math.floor(Number(new Date()) / 1000), // 当前时间
             end_time: Math.floor(this.ruleForm.end_time / 1000)
           }
           let res = await setTopMoment(params);
