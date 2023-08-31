@@ -192,3 +192,12 @@ export function addTask(data) {
     data
   })
 }
+
+// 按时间批量查单-获取补单明细
+export function getTaskDetailLog(data) {
+  return request({
+    url: REQUEST.finance.getTaskDetailLog,
+    method: 'post',
+    data
+  })
+}

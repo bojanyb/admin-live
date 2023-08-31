@@ -40,11 +40,11 @@
         queryName="批量补单结果"
         @query="handleBatchQurtyResult"
         :showCurrentPeriodOrder="true"
-        currentPeriodOrderName="当前时间段补单"
+        currentPeriodOrderName="当前时段补单"
         @currentPeriodOrder="handleCurrentPeriodOrder"
         :showCurrentPeriodOrderRes="true"
-        currentPeriodOrderResName="当前时间段补单结果"
-        @currentPeriodOrderRes="handleCurrentPeriodOrderRes"
+        currentPeriodOrderResName="当前时段补单结果"
+        @currentPeriodOrderRes="getCurPeriodOrderResult"
       ></SearchPanel>
     </div>
     <div class="tableList">
@@ -129,7 +129,6 @@
 					:limit.sync="payResulPage.limit" @pagination="getPayResult" />
     </el-dialog>
 
-
     
     <!-- 补单明细 -->
     <el-dialog class="queryOrderResult" title="成功补单明细" width="50%" :visible.sync="queryOrderDetailVisible" @close="startTimer">
@@ -154,14 +153,16 @@
 					:limit.sync="orderDetailPage.limit" @pagination="getDetails" />
     </el-dialog>
 
-    <!-- 当前时间段补单 -->
-    <el-dialog class="queryPayResult" title="当前时间段补单结果" width="50%" :visible.sync="currentPeriodVisible" @close="stopTimer">
+
+
+    <!-- 当前时段补单 -->
+    <el-dialog class="queryPayResult" title="当前时段补单结果" width="50%" :visible.sync="showCurPeriodOrderResult">
       <el-table
         :data="currentPeriodOrderPayData"
         style="width: 100%">
         <el-table-column
           prop="add_time"
-          label="当前时间段补单时间"
+          label="当前时段补单时间"
           show-overflow-tooltip
           >
           <template slot-scope="scope">
@@ -174,29 +175,58 @@
           show-overflow-tooltip
           >
           <template slot-scope="scope">
-            <template v-if="[2,3].includes(scope.row.status)">{{ `${scope.row.success_number || 0}条成功 / 共补单${scope.row.total_number || 0}条记录` }}</template>
-            <template v-else>正在补单，请等待...</template>
+            {{scope.row.status}}
           </template>
         </el-table-column>
-            <el-table-column label="操作">
-                <template slot-scope="scope">
-                    <el-button type="primary" @click="hanldeQueryCurPeriodDetail(scope.row)">查看明细</el-button>
-                </template>
-            </el-table-column>
+        <el-table-column label="操作">
+            <template slot-scope="scope">
+                <el-button type="primary" @click="hanldeQueryCurPeriodDetail(scope.row)">查看明细</el-button>
+            </template>
+        </el-table-column>
       </el-table>
 				<!--工具条-->
 				<pagination v-show="currentPeriodOrderPayTotal>0" :total="currentPeriodOrderPayTotal" :page.sync="currentPeriodOrderPayPage.page"
-					:limit.sync="currentPeriodOrderPayPage.limit" @pagination="handleCurrentPeriodOrderRes" />
+					:limit.sync="currentPeriodOrderPayPage.limit" @pagination="getCurPeriodOrderResult" />
     </el-dialog>
 
-    <!-- 当前时间段补单明细 -->
-    <el-dialog class="queryOrderResult" title="当前时间段成功补单明细" width="50%" :visible.sync="curPeriodOrderDetailVisible" @close="startTimer">
+    <!-- 当前时段补单任务列表 -->
+    <el-dialog class="queryOrderResult" title="当前时段补单任务" width="50%" :visible.sync="curPeriodOrderDetailVisible">
       <el-table
         :data="currentPeriodOrderDetailData"
         style="width: 100%">
         <el-table-column
+          prop="id"
+          label="任务id"
+          show-overflow-tooltip
+          >
+        </el-table-column>
+        <el-table-column
+          prop="status"
+          label="任务状态"
+          show-overflow-tooltip
+          >
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <!--  -->
+              <el-button type="primary" @click="openTaskOrderLog(scope.row)">查看明细</el-button>
+          </template>
+      </el-table-column>
+      </el-table>
+      				<!--工具条-->
+				<pagination v-show="currentPeriodOrderDetailTotal>0" :total="currentPeriodOrderDetailTotal" :page.sync="currentPeriodOrderDetailPage.page"
+					:limit.sync="currentPeriodOrderDetailPage.limit" @pagination="getCurPeriodOrderDetails" />
+    </el-dialog>    
+
+    <!-- 当前时段补单明细 -->
+    <el-dialog class="queryOrderResult" title="当前时段补单明细" width="50%" :visible.sync=" showCurPeriodOrderLogList ">
+      <el-table
+        :data="curPeriodDetailLogList"
+        style="width: 100%">
+        <el-table-column
           prop="trade_no"
           label="商户单号"
+          width="250"
           show-overflow-tooltip
           >
         </el-table-column>
@@ -206,11 +236,20 @@
           show-overflow-tooltip
           >
         </el-table-column>
+        <el-table-column
+          prop="remark"
+          label="备注"
+          width="360"
+          show-overflow-tooltip
+          >
+        </el-table-column>
       </el-table>
+      <pagination v-show="curPeriodOrderDetailLogTotal>0" :total="curPeriodOrderDetailLogTotal" :page.sync="curPeriodOrderDetailLogPage.page"
+        :limit.sync="curPeriodOrderDetailLogPage.limit" @pagination="openTaskOrderLog" />
     </el-dialog>    
 
-      <!-- 当前时间段补单反馈 -->
-      <el-dialog title="当前时间段补单反馈" width="30%" :visible.sync="curPeriodOrderDialogVisible">
+      <!-- 当前时段补单反馈 -->
+      <el-dialog title="当前时段补单反馈" width="30%" :visible.sync="curPeriodOrderDialogVisible">
         <div style="padding: 10px;">
              操作成功
         </div>
@@ -221,7 +260,7 @@
 
 <script>
 // 引入api
-import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails, addTask,getTaskList,getTaskDetail} from "@/api/finance.js";
+import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails, addTask,getTaskList,getTaskDetail,getTaskDetailLog} from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
@@ -629,7 +668,7 @@ export default {
   filters: {
     filtersTime(str) {
       return timeFormat(str, "YYYY-MM-DD HH:mm:ss", true) || "无"
-    }
+    },
   },
   data() {
     return {
@@ -696,7 +735,7 @@ export default {
       queryOrderData: {},
 
       queryCurPeriodOrderDetailVisible:false,
-      currentPeriodVisible:false,
+      showCurPeriodOrderResult:false,
       currentPeriodOrderPayData:[],
       currentPeriodOrderPayTotal:0,
       currentPeriodOrderPayPage:{
@@ -713,6 +752,15 @@ export default {
       queryCurPeriodOrderData: {},
       curPeriodOrderDetailVisible:false,
       curPeriodOrderDialogVisible: false,
+
+      curPeriodDetailLogList:[],
+      showCurPeriodOrderLogList:false,
+      curPeriodOrderDetailLogTotal:0,
+      curPeriodOrderDetailLogPage:{
+        page: 1,
+        limit: 10,
+      },
+      curPeriodDetailLogData:null
     };
   },
   methods: {
@@ -1088,6 +1136,7 @@ export default {
         pagesize: this.orderDetailPage.limit
       })
       if (response.code === 2000) {
+ 
         this.orderDetailData = response.data.list;
         this.orderDetailTotal = response.data.count;
       }
@@ -1110,33 +1159,32 @@ export default {
       }
     },
 
-   //当前时间段补单
+   //当前时段补单
    async handleCurrentPeriodOrder(){
     const {start_time,end_time}  = this.dateTimeParams;
      addTask({
         start_time:  Math.floor( start_time / 1000),
         end_time:  Math.floor( end_time / 1000)  
       }).then(({code,data})=>{
-        // :{task_id}
-        // this.currentPeriodVisible = true
+        console.log(data)
         this.curPeriodOrderDialogVisible = true
-        // this.getPayStatus()
       }).catch(err=>{
         console.log(err)
       })
     },
 
-    // 当前时间段补单明细
+    // 当前时段补单明细
     hanldeQueryCurPeriodDetail(row) {
       this.queryCurPeriodOrderData = row;
       this.queryCurPeriodOrderDetailVisible = true;
-      this.getCurrentPeriodOrderDetails()
+      this.currentPeriodOrderDetailPage.page = 1;//重置页码
+      this.getCurPeriodOrderDetails()
  
     },
 
-    //当前时间段补单结果
-    handleCurrentPeriodOrderRes(){
-      this.currentPeriodVisible = true;
+    //当前时段补单结果
+    getCurPeriodOrderResult(){
+      this.showCurPeriodOrderResult = true;
       getTaskList({
         page: this.currentPeriodOrderPayPage.page,
         pagesize: this.currentPeriodOrderPayPage.limit
@@ -1150,17 +1198,42 @@ export default {
         console.log(err)
       })
     },
-    async getCurrentPeriodOrderDetails() {
+    async getCurPeriodOrderDetails() {
       const {code,data} = await getTaskDetail({
-        task_id: 17,
+        task_id: this.queryCurPeriodOrderData.id,
+        page: this.currentPeriodOrderDetailPage.page,
+        pagesize:this.currentPeriodOrderDetailPage.limit
+
       })
       console.log(data)
       if (code === 2000) {
         this.currentPeriodOrderDetailData = data.list;
+        this.currentPeriodOrderDetailTotal = data.count
         this.curPeriodOrderDetailVisible = true
       }
     },
 
+    async openTaskOrderLog(params){
+      // 初次打开
+       if(params && params.id){
+         this.curPeriodDetailLogData =  params;   // 当前点击的记录
+         this.curPeriodOrderDetailLogPage.page = 1; //重置
+       }
+      //  debugger
+       const {code,data} = await getTaskDetailLog({
+        task_id: this.queryCurPeriodOrderData.id,
+        detail_id: this.curPeriodDetailLogData.id,
+        page: this.curPeriodOrderDetailLogPage.page,
+        pagesize:this.curPeriodOrderDetailLogPage.limit
+
+      })
+      console.log(data)
+      if (code === 2000) {
+        this.curPeriodDetailLogList = data.list;
+        this.curPeriodOrderDetailLogTotal = data.count
+        this.showCurPeriodOrderLogList = true;
+      }
+    }
   },
   created() {
     let time = new Date();

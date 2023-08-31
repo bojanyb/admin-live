@@ -111,7 +111,7 @@
               @clear="mergeEvent(arguments, item, 'clear')"
             />
             <zr-search
-              v-else-if="item.type === 'popupSearch'"
+              v-else-if="item.type === 'popupSearch'"00
               v-model="form[item.name]"
               class="search"
               popper-class="popup-search"
@@ -196,8 +196,8 @@
             <el-button v-if="showExport" :type="customType ||'info'" @click="handleExport">{{ exportName || '导出Excel' }}</el-button>
             <el-button v-if="showCustom" type="warning" @click="handleCustom">{{ customName || '自定义' }}</el-button>
             <el-button v-if="showQuery" type="primary" @click="handleQuery">{{ queryName || '查询' }}</el-button>
-            <el-button v-if="showCurrentPeriodOrder" type="warning" @click="handleCurrentPeriodOrder">{{ currentPeriodOrderName || '当前时间段补单' }}</el-button>
-            <el-button v-if="showCurrentPeriodOrderRes" type="primary" @click="handleCurrentPeriodOrderRes">{{ currentPeriodOrderResName || '当前时间段补单' }}</el-button>
+            <el-button v-if="showCurrentPeriodOrder" type="warning" @click="handleCurrentPeriodOrder">{{ currentPeriodOrderName || '当前时段补单' }}</el-button>
+            <el-button v-if="showCurrentPeriodOrderRes" type="primary" @click="handleCurrentPeriodOrderRes">{{ currentPeriodOrderResName || '当前时段补单' }}</el-button>
 
           </el-form-item>
         </el-form>
@@ -299,12 +299,12 @@ export default {
       type: Boolean,
       default: false
     },
-    //当前时间段补单
+    //当前时段补单
     showCurrentPeriodOrder: {
       type: Boolean,
       default: false
     },
-    //当前时间段补单结果
+    //当前时段补单结果
     showCurrentPeriodOrderRes: {
       type: Boolean,
       default: false
@@ -349,12 +349,12 @@ export default {
       type: String,
       default: ''
     },
-    //当前时间段内补单
+    //当前时段内补单
     currentPeriodOrderName: {
       type: String,
       default: ''
     },
-    //当前时间段内补单结果
+    //当前时段内补单结果
     currentPeriodOrderResName: {
       type: String,
       default: ''
