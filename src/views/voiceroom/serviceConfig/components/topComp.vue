@@ -35,7 +35,7 @@
 
 <script>
 // 引入api
-import { setTopMoment } from "@/api/dynamic";
+import { setTopMoment, check } from "@/api/dynamic";
 export default {
   data() {
     return {
@@ -64,8 +64,8 @@ export default {
       this.dialogVisible = true;
     },
     // 提交
-    async submitForm(formName) {
-      this.$refs[formName].validate(async (valid) => {
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log(this.ruleForm);
           const params = {
@@ -73,12 +73,16 @@ export default {
             start_time: Math.floor(Number(new Date()) / 1000), // 当前时间
             end_time: Math.floor(this.ruleForm.end_time / 1000)
           }
-          let res = await setTopMoment(params);
-          if (res.code === 2000) {
-            this.dialogVisible = false;
-            this.$success("设置成功");
-            this.$emit("getList");
-          }
+          let setTop = setTopMoment(params);
+          let setPass = check({ moments_ids: this.ruleForm.moment_id, check_status: 3 });
+          Promise.all([setTop, setPass]).then((res) => {
+            console.log('res',res);
+            if(res[0].code === 2000 && res[1].code === 2000) {
+              this.dialogVisible = false;
+              this.$success("设置成功");
+              this.$emit("getList");
+            }
+          });
         } else {
           console.log("error submit!!");
           return false;
