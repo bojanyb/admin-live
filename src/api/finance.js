@@ -20,6 +20,15 @@ export function diamondRecharge(data) {
   })
 }
 
+// 充值记录顶部
+export function diamondRechargeTotal(data) {
+  return request({
+    url: REQUEST.diamondRecharge.diamondRechargeTotal,
+    method: 'post',
+    data
+  })
+}
+
 // 提现导出excel
 export function exprotCash(data) {
   return request({
