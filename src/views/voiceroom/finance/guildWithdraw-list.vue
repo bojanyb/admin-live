@@ -2,11 +2,17 @@
 <template>
   <div class="finance-guildWithdraw-list">
     <div class="model">
-      <span>充值人数{{ ruleForm.recharge_user_count || 0 }}人</span>
-      <span>已支付金额{{ Number(ruleForm.recharge_amount) / 100 || 0 }}元</span>
-      <span>已退款金额{{ Number(ruleForm.refund_amount) / 100 || 0 }}元</span>
+      <span>充值人数{{ ruleForm.recharge_user_count || "--" }}人</span>
       <span
-        >未支付金额{{ Number(ruleForm.no_recharge_amount) / 100 || 0 }}元</span
+        >已支付金额{{ Number(ruleForm.recharge_amount) / 100 || "--" }}元</span
+      >
+      <span
+        >已退款金额{{ Number(ruleForm.refund_amount) / 100 || "--" }}元</span
+      >
+      <span
+        >未支付金额{{
+          Number(ruleForm.no_recharge_amount) / 100 || "--"
+        }}元</span
       >
     </div>
     <div class="searchParams">
