@@ -342,11 +342,11 @@ export default {
             change: (v) => {
               this.emptyDateTime();
               this.setDateTime(v);
-              this.getList();
+              // this.getList();
             },
             selectChange: (v, key) => {
               this.emptyDateTime();
-              this.getList();
+              // this.getList();
             },
           },
         },
@@ -777,10 +777,10 @@ export default {
       this.dateTimeParams.start_time = time[0];
       this.dateTimeParams.end_time = time[1];
       this.getList();
+      this.getDiamondRechargeTotal();
     },
     // 刷新列表
     getList() {
-      this.getDiamondRechargeTotal();
       this.$refs.tableList.getData();
     },
     // 配置参数
@@ -833,11 +833,12 @@ export default {
       };
       this.dateTimeParams = {};
       this.changeIndex(0);
-      this.getList();
+      // this.getList();
     },
     // 查询
     onSearch() {
       this.getList();
+      this.getDiamondRechargeTotal();
     },
     // 列表返回数据
     saleAmunt() {
@@ -1121,6 +1122,7 @@ export default {
     },
     // 获取充值记录顶部信息
     async getDiamondRechargeTotal() {
+      this.ruleForm = {};
       let parmas = this.beforeSearch();
       const response = await diamondRechargeTotal(parmas);
       if (response.code + "" === "2000") {
