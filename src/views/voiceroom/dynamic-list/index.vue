@@ -378,7 +378,7 @@ export default {
     // 推荐
     recommend(id) {
       setTimeout(() => {
-        this.$refs.topComp.load(id);
+        this.$refs.topComp.load(id, true);
       }, 100);
     },
     // 推荐动态

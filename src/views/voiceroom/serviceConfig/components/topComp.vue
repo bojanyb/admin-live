@@ -3,7 +3,7 @@
     <el-dialog
       title="请选择置顶时间"
       :visible.sync="dialogVisible"
-      width="600px"
+      width="500px"
       :before-close="handleClose"
       @closed="closed"
     >
@@ -50,6 +50,8 @@ export default {
           { required: true, message: "请选择结束时间", trigger: "blur" },
         ],
       },
+      // 是否通过审核
+      isPass: false,
     };
   },
   methods: {
@@ -59,13 +61,14 @@ export default {
       this.dialogVisible = false;
     },
     // 打开弹窗
-    load(id) {
+    load(id, isPass = false) {
       this.ruleForm.moment_id = id;
+      this.isPass = isPass;
       this.dialogVisible = true;
     },
     // 提交
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
           console.log(this.ruleForm);
           const params = {
@@ -73,16 +76,15 @@ export default {
             start_time: Math.floor(Number(new Date()) / 1000), // 当前时间
             end_time: Math.floor(this.ruleForm.end_time / 1000)
           }
-          let setTop = setTopMoment(params);
-          let setPass = check({ moments_ids: this.ruleForm.moment_id, check_status: 3 });
-          Promise.all([setTop, setPass]).then((res) => {
-            console.log('res',res);
-            if(res[0].code === 2000 && res[1].code === 2000) {
-              this.dialogVisible = false;
-              this.$success("设置成功");
-              this.$emit("getList");
-            }
-          });
+          const setTop = await setTopMoment(params);
+          if(!this.isPass) {
+            await check({ moments_ids: this.ruleForm.moment_id, check_status: 3 });
+          }
+          if(setTop.code === 2000) {
+            this.dialogVisible = false;
+            this.$success("推荐成功");
+            this.$emit("getList");
+          }
         } else {
           console.log("error submit!!");
           return false;
