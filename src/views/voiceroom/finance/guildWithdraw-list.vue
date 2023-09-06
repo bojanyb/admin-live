@@ -2,11 +2,17 @@
 <template>
   <div class="finance-guildWithdraw-list">
     <div class="model">
-      <span>充值人数{{ ruleForm.recharge_user_count || 0 }}人</span>
-      <span>已支付金额{{ Number(ruleForm.recharge_amount) / 100 || 0 }}元</span>
-      <span>已退款金额{{ Number(ruleForm.refund_amount) / 100 || 0 }}元</span>
+      <span>充值人数{{ ruleForm.recharge_user_count || "--" }}人</span>
       <span
-        >未支付金额{{ Number(ruleForm.no_recharge_amount) / 100 || 0 }}元</span
+        >已支付金额{{ Number(ruleForm.recharge_amount) / 100 || "--" }}元</span
+      >
+      <span
+        >已退款金额{{ Number(ruleForm.refund_amount) / 100 || "--" }}元</span
+      >
+      <span
+        >未支付金额{{
+          Number(ruleForm.no_recharge_amount) / 100 || "--"
+        }}元</span
       >
     </div>
     <div class="searchParams">
@@ -198,6 +204,7 @@ import {
   queryPayStatus,
   getQueryPayTask,
   getQueryPayDetails,
+  diamondRechargeTotal,
 } from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
@@ -810,6 +817,7 @@ export default {
     },
     // 刷新列表
     getList() {
+      this.getDiamondRechargeTotal();
       this.$refs.tableList.getData();
     },
     // 配置参数
@@ -870,8 +878,8 @@ export default {
       this.getList();
     },
     // 列表返回数据
-    saleAmunt(data) {
-      this.ruleForm = { ...data };
+    saleAmunt() {
+      // this.ruleForm = { ...data };
       let timer = JSON.parse(JSON.stringify(this.dateTimeParams));
       let start_time = timer.start_time;
       let end_time = timer.end_time;
@@ -1149,6 +1157,18 @@ export default {
         clearTimeout(this.orderPayStatusTimer);
       }
     },
+    // 获取充值记录顶部信息
+    async getDiamondRechargeTotal() {
+      let parmas = this.beforeSearch();
+      const response = await diamondRechargeTotal(parmas);
+      if (response.code + "" === "2000") {
+        if (
+          Object.prototype.toString.call(response.data) === "[object Object]"
+        ) {
+          this.ruleForm = response.data;
+        }
+      }
+    },
   },
   created() {
     let time = new Date();
@@ -1164,6 +1184,7 @@ export default {
     };
     this.getTypeList();
     this.getWXMerchantList();
+    this.getDiamondRechargeTotal();
   },
   mounted() {},
   beforeDestroy() {
