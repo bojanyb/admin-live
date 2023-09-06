@@ -845,6 +845,7 @@ export default {
       let start_time = timer.start_time;
       let end_time = timer.end_time;
       this.$set(this.searchParams, "dateTimeParams", [start_time, end_time]);
+      this.getDiamondRechargeTotal();
     },
     // 导出excel
     BatchRurn() {
