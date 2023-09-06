@@ -780,6 +780,7 @@ export default {
     },
     // 刷新列表
     getList() {
+      this.getDiamondRechargeTotal();
       this.$refs.tableList.getData();
     },
     // 配置参数
@@ -845,7 +846,6 @@ export default {
       let start_time = timer.start_time;
       let end_time = timer.end_time;
       this.$set(this.searchParams, "dateTimeParams", [start_time, end_time]);
-      this.getDiamondRechargeTotal();
     },
     // 导出excel
     BatchRurn() {
@@ -1121,7 +1121,8 @@ export default {
     },
     // 获取充值记录顶部信息
     async getDiamondRechargeTotal() {
-      const response = await diamondRechargeTotal();
+      let parmas = this.beforeSearch();
+      const response = await diamondRechargeTotal(parmas);
       if (response.code + "" === "2000") {
         if (
           Object.prototype.toString.call(response.data) === "[object Object]"
