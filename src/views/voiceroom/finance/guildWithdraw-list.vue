@@ -5,7 +5,9 @@
       <span>充值人数{{ ruleForm.recharge_user_count || 0 }}人</span>
       <span>已支付金额{{ Number(ruleForm.recharge_amount) / 100 || 0 }}元</span>
       <span>已退款金额{{ Number(ruleForm.refund_amount) / 100 || 0 }}元</span>
-      <span>未支付金额{{ Number(ruleForm.no_recharge_amount) / 100 || 0 }}元</span>
+      <span
+        >未支付金额{{ Number(ruleForm.no_recharge_amount) / 100 || 0 }}元</span
+      >
     </div>
     <div class="searchParams">
       <!-- 当前时间前6个月 不包含当前月 preMonth -->
@@ -42,31 +44,58 @@
       ></SearchPanel>
     </div>
     <div class="tableList">
-      <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange" @saleAmunt="saleAmunt"
-        layout="total, sizes, prev, pager, next, jumper"></tableList>
+      <tableList
+        :cfgs="cfgs"
+        ref="tableList"
+        @selectionChange="selectionChange"
+        @saleAmunt="saleAmunt"
+        layout="total, sizes, prev, pager, next, jumper"
+      ></tableList>
     </div>
 
     <!-- 批量查单 -->
-    <el-dialog title="批量查询反馈" width="30%" :visible.sync="batchDialogVisible">
-      <div style="padding: 10px;">
+    <el-dialog
+      title="批量查询反馈"
+      width="30%"
+      :visible.sync="batchDialogVisible"
+    >
+      <div style="padding: 10px">
         查询出共{{ batchResultData && batchResultData.length }}条数据已支付成功
       </div>
-      <div style="padding: 10px;" v-if="batchResultData && batchResultData.length">
+      <div
+        style="padding: 10px"
+        v-if="batchResultData && batchResultData.length"
+      >
         <div>详情：</div>
-        <div v-for="(item, index) in batchResultData" :key="index"><span>{{ item.trade_no }}</span></div>
+        <div v-for="(item, index) in batchResultData" :key="index">
+          <span>{{ item.trade_no }}</span>
+        </div>
       </div>
     </el-dialog>
 
     <!-- 导出文件名称 -->
-    <el-dialog class="downFilePop" title="导出文件名称" width="50%" :visible.sync="batchFileNameVisible">
+    <el-dialog
+      class="downFilePop"
+      title="导出文件名称"
+      width="50%"
+      :visible.sync="batchFileNameVisible"
+    >
       <div>
-        由于导出数据量较大，现采取异步导出的方案进行，导出文件需要一段时间进行，请稍后自行点击 "文件查询" 下载。
+        由于导出数据量较大，现采取异步导出的方案进行，导出文件需要一段时间进行，请稍后自行点击
+        "文件查询" 下载。
       </div>
       <el-form>
         <div class="inputBox">
-          <el-form-item label="请输入本次文件名称：" prop="file_name" class="numberBox">
+          <el-form-item
+            label="请输入本次文件名称："
+            prop="file_name"
+            class="numberBox"
+          >
             <!-- <el-input v-model="file_name" placeholder="请输入本次文件名称" @input="fileNameInput" onkeyup="this.value=this.value.replace(/\s+/g,'')"></el-input> -->
-            <el-input v-model="file_name" placeholder="请输入本次文件名称"></el-input>
+            <el-input
+              v-model="file_name"
+              placeholder="请输入本次文件名称"
+            ></el-input>
           </el-form-item>
         </div>
       </el-form>
@@ -76,40 +105,72 @@
     </el-dialog>
 
     <!-- 文件查询 -->
-    <el-dialog class="downFileSearchPop" title="文件查询" width="50%" :visible.sync="batchFileVisible">
+    <el-dialog
+      class="downFileSearchPop"
+      title="文件查询"
+      width="50%"
+      :visible.sync="batchFileVisible"
+    >
       <tableList :cfgs="cfgs1" ref="tableList2"></tableList>
     </el-dialog>
 
     <!-- 批量查单结果 -->
-    <el-dialog class="queryPayResult" title="批量查单结果" width="50%" :visible.sync="queryOrderResultVisible"
-      @close="stopTimer">
+    <el-dialog
+      class="queryPayResult"
+      title="批量查单结果"
+      width="50%"
+      :visible.sync="queryOrderResultVisible"
+      @close="stopTimer"
+    >
       <el-table :data="orderPayData" style="width: 100%">
-        <el-table-column prop="add_time" label="批量查单时间" show-overflow-tooltip>
+        <el-table-column
+          prop="add_time"
+          label="批量查单时间"
+          show-overflow-tooltip
+        >
           <template slot-scope="scope">
             {{ scope.row.add_time | filtersTime }}
           </template>
         </el-table-column>
-        <el-table-column prop="success_number" label="结果" show-overflow-tooltip>
+        <el-table-column
+          prop="success_number"
+          label="结果"
+          show-overflow-tooltip
+        >
           <template slot-scope="scope">
-            <template v-if="[2, 3].includes(scope.row.status)">{{ `${scope.row.success_number || 0}条成功 /
-                          共查单${scope.row.total_number || 0}条记录` }}</template>
+            <template v-if="[2, 3].includes(scope.row.status)">{{
+              `${scope.row.success_number || 0}条成功 /
+                          共查单${scope.row.total_number || 0}条记录`
+            }}</template>
             <template v-else>正在查单，请等待...</template>
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" @click="hanldeQueryDetail(scope.row)">查看明细</el-button>
+            <el-button type="primary" @click="hanldeQueryDetail(scope.row)"
+              >查看明细</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
       <!--工具条-->
-      <pagination v-show="orderPayTotal > 0" :total="orderPayTotal" :page.sync="payResulPage.page"
-        :limit.sync="payResulPage.limit" @pagination="getPayResult" />
+      <pagination
+        v-show="orderPayTotal > 0"
+        :total="orderPayTotal"
+        :page.sync="payResulPage.page"
+        :limit.sync="payResulPage.limit"
+        @pagination="getPayResult"
+      />
     </el-dialog>
 
     <!-- 查单明细 -->
-    <el-dialog class="queryOrderResult" title="成功查单明细" width="50%" :visible.sync="queryOrderDetailVisible"
-      @close="startTimer">
+    <el-dialog
+      class="queryOrderResult"
+      title="成功查单明细"
+      width="50%"
+      :visible.sync="queryOrderDetailVisible"
+      @close="startTimer"
+    >
       <el-table :data="orderDetailData" style="width: 100%">
         <el-table-column prop="trade_no" label="商户单号" show-overflow-tooltip>
         </el-table-column>
@@ -117,21 +178,33 @@
         </el-table-column>
       </el-table>
       <!--工具条-->
-      <pagination v-show="orderDetailTotal > 0" :total="orderDetailTotal" :page.sync="orderDetailPage.page"
-        :limit.sync="orderDetailPage.limit" @pagination="getDetails" />
+      <pagination
+        v-show="orderDetailTotal > 0"
+        :total="orderDetailTotal"
+        :page.sync="orderDetailPage.page"
+        :limit.sync="orderDetailPage.limit"
+        @pagination="getDetails"
+      />
     </el-dialog>
   </div>
 </template>
 
 <script>
 // 引入api
-import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails } from "@/api/finance.js";
+import {
+  diamondRechargeAll,
+  getMerchantList,
+  wxMerchantList,
+  queryPayStatus,
+  getQueryPayTask,
+  getQueryPayDetails,
+} from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 分页
-import Pagination from '@/components/Pagination'
+import Pagination from "@/components/Pagination";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
 // 引入api
@@ -146,7 +219,7 @@ export default {
   components: {
     tableList,
     SearchPanel,
-    Pagination
+    Pagination,
   },
   mixins: [mixins],
   computed: {
@@ -189,8 +262,8 @@ export default {
           handler: {
             change: (val) => {
               this.topupStatus = val;
-            }
-          }
+            },
+          },
         },
         {
           name: "purpose",
@@ -231,8 +304,8 @@ export default {
               if (!v) {
                 this.$set(this.searchParams, "risk_status", "");
               }
-            }
-          }
+            },
+          },
         },
         {
           name: "risk_status",
@@ -255,7 +328,7 @@ export default {
           optionLabel: "name",
           label: "是否被投诉",
           placeholder: "请选择",
-          options: MAPDATA.COMPLAINLIST
+          options: MAPDATA.COMPLAINLIST,
         },
         // {
         //     name: 'time',
@@ -288,7 +361,7 @@ export default {
         vm: this,
         url: REQUEST.diamondRecharge.list,
         search: {
-          sizes: [10, 30, 50, 100, 300, 500]
+          sizes: [10, 30, 50, 100, 300, 500],
         },
         isShowCheckbox: true,
         columns: [
@@ -300,10 +373,10 @@ export default {
                 "span",
                 params.row.create_time
                   ? timeFormat(
-                    params.row.create_time,
-                    "YYYY-MM-DD HH:mm:ss",
-                    true
-                  )
+                      params.row.create_time,
+                      "YYYY-MM-DD HH:mm:ss",
+                      true
+                    )
                   : "无"
               );
             },
@@ -354,7 +427,10 @@ export default {
             label: "实际到账金额",
             minWidth: "150px",
             render: (h, params) => {
-              return h("span", (params.row.amount / 100) - (params.row.refund_amount / 100));
+              return h(
+                "span",
+                params.row.amount / 100 - params.row.refund_amount / 100
+              );
             },
           },
           {
@@ -387,20 +463,36 @@ export default {
             minWidth: "430px",
             render: (h, params) => {
               const data = MAPDATA.IDENTIFICATION.find((item) => {
-                return item.value === ((params.row.wx_merchant_status >= 0) ? params.row.wx_merchant_status : params.row.ali_merchant_status);
+                return (
+                  item.value ===
+                  (params.row.wx_merchant_status >= 0
+                    ? params.row.wx_merchant_status
+                    : params.row.ali_merchant_status)
+                );
               });
-              return (data && params.row.buyer_id) ? (
+              return data && params.row.buyer_id ? (
                 <div style="display: flex">
                   <div style="text-align: left;" title={data.name}>
                     <el-tag type={data.type}>
                       {params.row.buyer_id ? params.row.buyer_id : "-"}
                       <span>
-                        （{params.row.wx_merchant ? params.row.wx_merchant : (params.row.ali_merchant ? params.row.ali_merchant : "-")}
+                        （
+                        {params.row.wx_merchant
+                          ? params.row.wx_merchant
+                          : params.row.ali_merchant
+                          ? params.row.ali_merchant
+                          : "-"}
                         ）
                       </span>
                     </el-tag>
                   </div>
-                  {params.row.is_complaint + "" === "1" ? <el-tag type="danger" style="margin-left: 10px;">(被投诉订单)</el-tag> : ""}
+                  {params.row.is_complaint + "" === "1" ? (
+                    <el-tag type="danger" style="margin-left: 10px;">
+                      (被投诉订单)
+                    </el-tag>
+                  ) : (
+                    ""
+                  )}
                 </div>
               ) : (
                 <div>无</div>
@@ -478,19 +570,19 @@ export default {
             minWidth: "240px",
             prop: "out_trade_no",
             render: (h, params) => {
-              return h('span', params.row.out_trade_no || '无')
-            }
+              return h("span", params.row.out_trade_no || "无");
+            },
           },
           {
             label: "充值人IP",
             render: (h, params) => {
-              return h("span", params.row.ip ? params.row.ip : '无');
+              return h("span", params.row.ip ? params.row.ip : "无");
             },
           },
           {
             label: "地区",
             render: (h, params) => {
-              return h("span", params.row.addr ? params.row.addr : '未知');
+              return h("span", params.row.addr ? params.row.addr : "未知");
             },
           },
           // {
@@ -506,16 +598,24 @@ export default {
             minWidth: "120px",
             render: (h, params) => {
               return h("div", [
-                h("el-button", {
-                  props: { type: "primary" },
-                  style: {
-                    display: params.row.status === 3 ? 'unset' : 'none'
+                h(
+                  "el-button",
+                  {
+                    props: { type: "primary" },
+                    style: {
+                      display: params.row.status === 3 ? "unset" : "none",
+                    },
+                    on: {
+                      click: () => {
+                        this.handleQueryOrder(params.row);
+                      },
+                    },
                   },
-                  on: { click: () => { this.handleQueryOrder(params.row) } }
-                }, "查单")
-              ])
-            }
-          }
+                  "查单"
+                ),
+              ]);
+            },
+          },
         ],
       };
     },
@@ -533,10 +633,16 @@ export default {
           {
             label: "状态",
             render: (h, params) => {
-              let stateName = this.fileStateList.find((item) => { return item.state == params.row.export_status })
+              let stateName = this.fileStateList.find((item) => {
+                return item.state == params.row.export_status;
+              });
               let temp;
               if (params.row.export_status === 3) {
-                temp = h("span", { attrs: { title: params.row.remark } }, stateName.name || "无");
+                temp = h(
+                  "span",
+                  { attrs: { title: params.row.remark } },
+                  stateName.name || "无"
+                );
               } else {
                 temp = h("span", stateName.name || "无");
               }
@@ -549,7 +655,21 @@ export default {
             fixed: "right",
             render: (h, params) => {
               return h("div", [
-                h("el-button", { props: { type: "primary" }, style: { display: params.row.export_url !== '' ? 'unset' : 'none' }, on: { click: () => { this.downFile(params.row); } } }, "下载"),
+                h(
+                  "el-button",
+                  {
+                    props: { type: "primary" },
+                    style: {
+                      display: params.row.export_url !== "" ? "unset" : "none",
+                    },
+                    on: {
+                      click: () => {
+                        this.downFile(params.row);
+                      },
+                    },
+                  },
+                  "下载"
+                ),
               ]);
             },
           },
@@ -559,8 +679,8 @@ export default {
   },
   filters: {
     filtersTime(str) {
-      return timeFormat(str, "YYYY-MM-DD HH:mm:ss", true) || "无"
-    }
+      return timeFormat(str, "YYYY-MM-DD HH:mm:ss", true) || "无";
+    },
   },
   data() {
     return {
@@ -600,23 +720,23 @@ export default {
         {
           id: 1,
           state: 0,
-          name: "待导出"
+          name: "待导出",
         },
         {
           id: 2,
           state: 1,
-          name: "导出中"
+          name: "导出中",
         },
         {
           id: 3,
           state: 2,
-          name: "导出成功"
+          name: "导出成功",
         },
         {
           id: 4,
           state: 3,
-          name: "导出失败"
-        }
+          name: "导出失败",
+        },
       ],
       orderDetailData: [],
       orderDetailTotal: 0,
@@ -699,9 +819,9 @@ export default {
         let s = {
           page: params ? params.page : null,
           pagesize: params ? params.size : null,
-          export_type: 1 // 1、财务管理-充值记录导出  2、交易管理-流水记录
-        }
-        return s
+          export_type: 1, // 1、财务管理-充值记录导出  2、交易管理-流水记录
+        };
+        return s;
       } else {
         let s = { ...this.searchParams, ...this.dateTimeParams };
         return {
@@ -726,9 +846,9 @@ export default {
     setDateTime(arr) {
       const date = arr
         ? {
-          start_time: arr[0],
-          end_time: arr[1],
-        }
+            start_time: arr[0],
+            end_time: arr[1],
+          }
         : {};
       this.$set(this, "dateTimeParams", date);
     },
@@ -761,72 +881,78 @@ export default {
     BatchRurn() {
       if (this.file_name == "") {
         this.$message.warning("请先输入有效的文件名");
-        return
+        return;
       }
       let s = this.beforeSearch();
       delete s.page;
       s.file_name = this.file_name;
       const loading = this.$loading({
         lock: true,
-        text: 'Loading',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      })
-      diamondRechargeAll(s).then(res => {
-        let arr = JSON.parse(JSON.stringify(res.data.list));
-        if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
-        arr = arr.map((item, index) => {
-          let name = MAPDATA.RECHARGEHISTORYTYPELIST.find((a) => {
-            return a.value === item.purpose;
-          });
-          let status = MAPDATA.ORDERSTATUS.find((a) => {
-            return a.value.indexOf(item.status) !== -1;
-          });
-          let params = {
-            create_time: timeFormat(
-              item.create_time,
-              "YYYY-MM-DD HH:mm:ss",
-              true
-            ) + ';',
-            pay_time: timeFormat(item.pay_time, "YYYY-MM-DD HH:mm:ss", true) + ';',
-            user_number: item.user_number,
-            nickname: item.nickname,
-            amount: item.amount / 100,
-            type: name.name,
-            remark: item.remark,
-            channel: item.channel,
-            identity: `${item.buyer_id ? item.buyer_id : "-"}(${item.wx_merchant ? item.wx_merchant : (item.ali_merchant ? item.ali_merchant : "-")})`,
-            status: status.name,
-            trade_no: item.trade_no,
-            out_trade_no: JSON.stringify(item.out_trade_no),
-            ip: item.ip,
-            addr: item.addr,
-          };
-          return params;
-        });
-        let nameList = [
-          "订单时间",
-          "到账时间",
-          "用户ID",
-          "用户昵称",
-          "充值金额（元）",
-          "充值类型",
-          "充值说明",
-          "充值平台",
-          "微信/支付宝支付标识",
-          "充值状态",
-          "商户单号",
-          "支付单号",
-          "充值人IP",
-          "地区"
-        ];
-        exportTableData(arr, nameList, this.file_name);
-        loading.close();
-        this.file_name = "";
-      }).catch(err => {
-        loading.close();
-        this.file_name = "";
+        text: "Loading",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
       });
+      diamondRechargeAll(s)
+        .then((res) => {
+          let arr = JSON.parse(JSON.stringify(res.data.list));
+          if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
+          arr = arr.map((item, index) => {
+            let name = MAPDATA.RECHARGEHISTORYTYPELIST.find((a) => {
+              return a.value === item.purpose;
+            });
+            let status = MAPDATA.ORDERSTATUS.find((a) => {
+              return a.value.indexOf(item.status) !== -1;
+            });
+            let params = {
+              create_time:
+                timeFormat(item.create_time, "YYYY-MM-DD HH:mm:ss", true) + ";",
+              pay_time:
+                timeFormat(item.pay_time, "YYYY-MM-DD HH:mm:ss", true) + ";",
+              user_number: item.user_number,
+              nickname: item.nickname,
+              amount: item.amount / 100,
+              type: name.name,
+              remark: item.remark,
+              channel: item.channel,
+              identity: `${item.buyer_id ? item.buyer_id : "-"}(${
+                item.wx_merchant
+                  ? item.wx_merchant
+                  : item.ali_merchant
+                  ? item.ali_merchant
+                  : "-"
+              })`,
+              status: status.name,
+              trade_no: item.trade_no,
+              out_trade_no: JSON.stringify(item.out_trade_no),
+              ip: item.ip,
+              addr: item.addr,
+            };
+            return params;
+          });
+          let nameList = [
+            "订单时间",
+            "到账时间",
+            "用户ID",
+            "用户昵称",
+            "充值金额（元）",
+            "充值类型",
+            "充值说明",
+            "充值平台",
+            "微信/支付宝支付标识",
+            "充值状态",
+            "商户单号",
+            "支付单号",
+            "充值人IP",
+            "地区",
+          ];
+          exportTableData(arr, nameList, this.file_name);
+          loading.close();
+          this.file_name = "";
+        })
+        .catch((err) => {
+          loading.close();
+          this.file_name = "";
+        });
       this.batchFileNameVisible = false;
     },
     // 获取当前周的开始结束时间
@@ -851,12 +977,13 @@ export default {
         this.guildTypeList =
           tempArr.reduce((prev, curr) => {
             prev.push({
-              name: `${curr.merchant_name}-(${curr.channel + "" === "2"
+              name: `${curr.merchant_name}-(${
+                curr.channel + "" === "2"
                   ? "微信"
                   : curr.channel + "" === "3"
-                    ? "阿里"
-                    : "无"
-                })`,
+                  ? "阿里"
+                  : "无"
+              })`,
               value: curr.appid,
             });
             return prev;
@@ -864,8 +991,8 @@ export default {
 
         this.guildTypeList.unshift({
           name: "全部",
-          value: ""
-        })
+          value: "",
+        });
       }
     },
     // 获取商户号
@@ -886,69 +1013,73 @@ export default {
 
         this.merchantIdList.unshift({
           name: "全部",
-          value: ""
-        })
+          value: "",
+        });
       }
     },
     // 查询充值订单支付状态
     async handleQueryOrder(row) {
-      const response = await queryPayStatus({ trade_no: row.trade_no })
+      const response = await queryPayStatus({ trade_no: row.trade_no });
       this.$notify.warning({
-        title: '消息',
+        title: "消息",
         message: response.data && response.data.list[0].msg,
       });
       this.getList();
     },
     // 选中
     selectionChange(val) {
-      this.list = val
+      this.list = val;
     },
     // 批量查单
     handleBatchQurtyOrder() {
-
-      if (this.topupStatus + '' !== '3') {
-        this.$warning('未支付状态才能批量查单')
-        return
+      if (this.topupStatus + "" !== "3") {
+        this.$warning("未支付状态才能批量查单");
+        return;
       }
 
       if (!(this.list && this.list.length)) {
-        this.$warning('请至少选择一条数据')
-        return
+        this.$warning("请至少选择一条数据");
+        return;
       }
 
-      const result = this.list.reduce((prev, curr) => {
-        prev.push(curr.trade_no)
-        return prev;
-      }, []).join(",");
+      const result = this.list
+        .reduce((prev, curr) => {
+          prev.push(curr.trade_no);
+          return prev;
+        }, [])
+        .join(",");
 
       const loading = this.$loading({
         lock: true,
-        text: 'Loading',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      })
+        text: "Loading",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
 
-      queryPayStatus({ trade_no: result }).then(response => {
-        if (response.code + "" === "2000") {
-          this.batchDialogVisible = true;
-          this.batchResultData = response.data && response.data.list.reduce((prev, curr) => {
-            if (curr.status + "" === "1") {
-              prev.push(curr)
-            }
-            return prev;
-          }, [])
-          this.getList();
+      queryPayStatus({ trade_no: result })
+        .then((response) => {
+          if (response.code + "" === "2000") {
+            this.batchDialogVisible = true;
+            this.batchResultData =
+              response.data &&
+              response.data.list.reduce((prev, curr) => {
+                if (curr.status + "" === "1") {
+                  prev.push(curr);
+                }
+                return prev;
+              }, []);
+            this.getList();
+            loading.close();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
           loading.close();
-        }
-      }).catch(error => {
-        console.log(error);
-        loading.close();
-      })
-
+        });
     },
     // 限制id输入
     fileNameInput() {
-      this.file_name = this.file_name.replace(/[/\\]*/g, '')
+      this.file_name = this.file_name.replace(/[/\\]*/g, "");
     },
     // 导出文件名称弹框
     batchRurnFileName() {
@@ -968,13 +1099,13 @@ export default {
     // 批量查单结果
     handleBatchQurtyResult() {
       this.queryOrderResultVisible = true;
-      this.getPayResult()
+      this.getPayResult();
     },
     async getPayResult() {
       const response = await getQueryPayTask({
         page: this.payResulPage.page,
-        pagesize: this.payResulPage.limit
-      })
+        pagesize: this.payResulPage.limit,
+      });
       if (response.code === 2000) {
         this.orderPayData = response.data.list;
         this.orderPayTotal = response.data.count;
@@ -986,16 +1117,16 @@ export default {
     hanldeQueryDetail(row) {
       this.queryOrderData = row;
       this.queryOrderDetailVisible = true;
-      this.getDetails()
+      this.getDetails();
       // 停止计时
-      this.stopTimer()
+      this.stopTimer();
     },
     async getDetails() {
       const response = await getQueryPayDetails({
         task_id: this.queryOrderData.task_id,
         page: this.orderDetailPage.page,
-        pagesize: this.orderDetailPage.limit
-      })
+        pagesize: this.orderDetailPage.limit,
+      });
       if (response.code === 2000) {
         this.orderDetailData = response.data.list;
         this.orderDetailTotal = response.data.count;
@@ -1005,25 +1136,27 @@ export default {
     startTimer() {
       if (!this.orderPayData || !this.orderPayData.length) return;
       // 判断是否存在任务未完成的情况
-      const index = this.orderPayData.findIndex(item => item.status < 2)
+      const index = this.orderPayData.findIndex((item) => item.status < 2);
       if (index === -1) return;
       // 执行5秒定时刷新
       this.orderPayStatusTimer = setTimeout(() => {
-        this.getPayResult()
+        this.getPayResult();
       }, 5000);
     },
     // 结束定时刷新
     stopTimer() {
       if (this.orderPayStatusTimer) {
-        clearTimeout(this.orderPayStatusTimer)
+        clearTimeout(this.orderPayStatusTimer);
       }
-    }
+    },
   },
   created() {
     let time = new Date();
     let date = timeFormat(time, "YYYY-MM-DD", false);
     let start = new Date(date + " 00:00:00").getTime();
-    let end = new Date(timeFormat(time, "YYYY-MM-DD HH:mm:ss", false)).getTime();
+    let end = new Date(
+      timeFormat(time, "YYYY-MM-DD HH:mm:ss", false)
+    ).getTime();
     this.searchParams.dateTimeParams = [start, end];
     this.dateTimeParams = {
       start_time: start,
@@ -1032,7 +1165,7 @@ export default {
     this.getTypeList();
     this.getWXMerchantList();
   },
-  mounted() { },
+  mounted() {},
   beforeDestroy() {
     this.stopTimer();
   },
@@ -1055,7 +1188,7 @@ export default {
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
     margin-bottom: 20px;
 
-    >span {
+    > span {
       font-size: 15px;
       color: #fff;
       margin-right: 100px;
