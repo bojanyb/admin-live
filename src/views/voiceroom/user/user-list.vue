@@ -70,6 +70,7 @@ import channelInfoComp from "./components/channelInfoComp.vue";
 import REQUEST from "@/request/index.js";
 // 引入公共方法
 import { timeFormat } from "@/utils/common.js";
+import { isEmpty } from "@/utils";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
 // 引入公共map
@@ -309,8 +310,8 @@ export default {
               "span",
               {
                 style: {
-                  color: params.row.third ? "#409eff" : "#666666",
-                  cursor: params.row.third ? "pointer" : "",
+                  color: isEmpty(params.row.third) ? "#666666" : "#409eff",
+                  cursor: isEmpty(params.row.third) ? "" : "pointer",
                 },
                 on: {
                   click: () => {
@@ -318,7 +319,7 @@ export default {
                   },
                 },
               },
-              params.row.third ? "详情" : "无"
+              isEmpty(params.row.third) ? "无" : "详情"
             );
           },
         },
@@ -605,12 +606,11 @@ export default {
     },
     // 查看渠道内容
     viewChannelFunc(row) {
-      if(row.third) {
-        this.isDestoryComp = true;
-        setTimeout(() => {
-          this.$refs.channelInfoComp.loadParams(row);
-        }, 50);
-      }
+      if(isEmpty(row.third)) return;
+      this.isDestoryComp = true;
+      setTimeout(() => {
+        this.$refs.channelInfoComp.loadParams(row);
+      }, 50);
     },
   },
 };

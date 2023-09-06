@@ -18,7 +18,7 @@
           <el-image
             style="width: 100px; height: 100px"
             :src="ruleForm.face || defaultImg"
-            :preview-src-list="ruleForm.face || defaultImg"
+            :preview-src-list="[ruleForm.face || defaultImg]"
           >
           </el-image>
         </el-form-item>
