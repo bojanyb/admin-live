@@ -39,6 +39,12 @@
       @getList="getList"
     ></upatePassComp>
 
+    <!-- 渠道内容组件 -->
+    <channelInfoComp
+      ref="channelInfoComp"
+      v-if="isDestoryComp"
+      @destoryComp="destoryComp"
+    ></channelInfoComp>
   </div>
 </template>
 
@@ -58,6 +64,8 @@ import SearchPanel from "@/components/SearchPanel/final.vue";
 import tableList from "@/components/tableList/TableList.vue";
 // 引入编辑组件
 import userEdit from "./components/userEdit.vue";
+// 引入渠道内容组件
+import channelInfoComp from "./components/channelInfoComp.vue";
 // 引入api
 import REQUEST from "@/request/index.js";
 // 引入公共方法
@@ -77,6 +85,7 @@ export default {
     userEdit,
     punishComp,
     upatePassComp,
+    channelInfoComp,
   },
   data() {
     return {
@@ -291,6 +300,26 @@ export default {
           width: "110px",
           render: (h, params) => {
             return h("span", params.row.register_type || "无");
+          },
+        },
+        {
+          label: "渠道内容",
+          render: (h, params) => {
+            return h(
+              "span",
+              {
+                style: {
+                  color: params.row.third ? "#409eff" : "#666666",
+                  cursor: params.row.third ? "pointer" : "",
+                },
+                on: {
+                  click: () => {
+                    this.viewChannelFunc(params.row);
+                  },
+                },
+              },
+              params.row.third ? "详情" : "无"
+            );
           },
         },
         {
@@ -572,6 +601,15 @@ export default {
       if (row.is_bindcard) {
         this.$refs.bindStuck.dialogVisible = true;
         this.$refs.bindStuck.getList(row.id);
+      }
+    },
+    // 查看渠道内容
+    viewChannelFunc(row) {
+      if(row.third) {
+        this.isDestoryComp = true;
+        setTimeout(() => {
+          this.$refs.channelInfoComp.loadParams(row);
+        }, 50);
       }
     },
   },
