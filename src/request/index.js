@@ -159,6 +159,7 @@ const request = {
     // 充值记录
     diamondRecharge: {
         list: `${HTTPHEADER}/Recharge/diamondRecharge`, // 充值记录
+        diamondRechargeTotal: `${HTTPHEADER}/Recharge/diamondRechargeTotal`, // 充值记录顶部
         exportTask: `${HTTPHEADER}/Recharge/getExportTask`, // 文件查询
         getQueryPayTask: `${HTTPHEADER}/Recharge/getQueryPayTask`, // 文件查询
         getQueryPayDetails: `${HTTPHEADER}/Recharge/getQueryPayDetails`, // 文件查询
