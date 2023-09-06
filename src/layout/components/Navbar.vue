@@ -4,6 +4,7 @@
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     <div class="right-menu">
       <template v-if="device!=='mobile'">
+        <div class="navbar-title">喵喵星球</div>
         <search id="header-search" class="right-menu-item" />
         <error-log class="errLog-container right-menu-item hover-effect" />
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
@@ -101,6 +102,16 @@ export default {
     float: right;
     height: 100%;
     line-height: 50px;
+    display: flex;
+    align-items: center;
+    color: #303133;
+
+    .navbar-title {
+      height: 100%;
+      line-height: 50px;
+      font-weight: 700;
+      font-size: 15px;
+    }
 
     &:focus {
       outline: none;
