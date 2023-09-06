@@ -29,7 +29,7 @@
     ></tableList>
 
     <!-- 推荐设置弹窗 -->
-    <top-comp ref="topComp"></top-comp>
+    <top-comp ref="topComp" @getList="getList"></top-comp>
     <!-- 推荐动态弹窗 -->
     <top-list-comp v-if="isDestoryComp" ref="topListComp" @destoryComp="destoryComp"></top-list-comp>
   </div>
