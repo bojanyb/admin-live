@@ -98,7 +98,7 @@
 
           </el-form-item>
           <el-form-item>
-            <el-button v-if="showSearchBtn" type="primary" :loading="isLock" @click="onSearch">查询</el-button>
+            <el-button class="search-box-primary" v-if="showSearchBtn" type="primary" :loading="isLock" @click="onSearch">查询</el-button>
             <el-button v-if="showAdd" type="success" @click="add">{{ addName || '新增' }}</el-button>
             <el-button v-if="showSave" type="success" @click="onSave">保存</el-button>
             <el-button v-if="showToday" @click="today">今天</el-button>
@@ -279,7 +279,7 @@ export default {
     currentPeriodOrderResName: {
       type: String,
       default: ''
-    },    
+    },
     // 昨日 - 操作
     showYesterday: {
       type: Boolean,
@@ -773,5 +773,9 @@ export default {
        width: 350px;
      }
    }
+
+   .search-box-primary {
+      min-width: 90px;
+    }
 }
 </style>
