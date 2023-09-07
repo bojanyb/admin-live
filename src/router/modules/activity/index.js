@@ -127,6 +127,7 @@ const activityRouter = {
 				title: '奇妙跳跳屋榜单排名表',
 				noCache: true
 			},
+			name: 'jump-rank-list'
 		},
 		{
 			path: 'may-list',

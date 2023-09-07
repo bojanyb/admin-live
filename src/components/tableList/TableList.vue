@@ -287,7 +287,6 @@
             break;
           }
           params.sort_field = sort_field
-
           params.sort = this.search.sort.split(",")[1] === 'asc' ? 'asc' : 'desc'
         }
         // 用来比对分页 - 重置分页

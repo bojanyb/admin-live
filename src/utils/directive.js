@@ -130,3 +130,24 @@ directives.num = Vue.directive('input-num', {
 	}
 })
 
+
+directives.downLoad = Vue.directive('downLoad', {
+  inserted(el, binding) {
+    el.addEventListener('click', () => {
+      const a = document.createElement('a');
+      const url = binding.value; // 完整的url则直接使用
+      // 这里是将url转成blob地址，
+      fetch(url).then(res => res.blob()).then(blob => { // 将链接地址字符内容转变成blob地址
+        a.href = URL.createObjectURL(blob);
+        // 下载文件的名字
+        a.download = url.split('/')[url.split('/').length - 1];
+        document.body.appendChild(a);
+        a.click();
+        return a
+      }).then(doc => {
+        //最后把新建的节点删除
+        document.body.removeChild(doc);
+      });
+    });
+  },
+});

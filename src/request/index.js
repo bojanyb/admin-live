@@ -152,7 +152,8 @@ const request = {
         regPeplenishment: `${HTTPHEADER}/Promoter/regReplenishment`, // 推广补单
         replenishmentDel: `${HTTPHEADER}/Promoter/replenishmentDel`, // 删除补单
         NewUserStat: `${HTTPHEADER}/NewUserStat/list`, // 新人广场
-        setBindStatus: `${HTTPHEADER}/Promoter/setBindStatus  `, // 解绑/绑定
+        setBindStatus: `${HTTPHEADER}/Promoter/setBindStatus`, // 解绑/绑定
+        unbindStatistical: `${HTTPHEADER}/Statistical/unbinding`, // 推广记录解绑
     },
 
     // 充值记录
@@ -223,6 +224,8 @@ const request = {
         autonymlist: `${HTTPHEADER}/Verify/list`,
         getVerifyOptions: `${HTTPHEADER}/Verify/options`, // 获取实名列表筛选项
         riskList: `${HTTPHEADER}/Verify/rbiList`, // 风险列表
+        getVerifyOptions: `${HTTPHEADER}/Verify/options`, // 获取实名列表筛选项
+        riskList: `${HTTPHEADER}/Verify/rbiList`, // 风险列表
         edit: `${HTTPHEADER}/User/userEdit`, // 编辑用户
         userSave: `${HTTPHEADER}/User/userSave`, // 用户封禁/启用
         musicList: `${HTTPHEADER}/music/index`, // 音乐列表
@@ -278,6 +281,9 @@ const request = {
         roomS: `${HTTPHEADER}/guild/roomS`, // 查询房间流水列表
         delStatisticsroom: `${HTTPHEADER}/guild/delStatisticsroom`, // 移除24小时房间统计
         roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 移除24小时房间统计
+        guildOperateList: `${HTTPHEADER}/GuildOperate/list`, // 公会运营二维码列表
+        saveWechatCode: `${HTTPHEADER}/GuildOperate/saveWechatCode`, // 修改二维码
+
 
 
         // v2
@@ -348,6 +354,18 @@ const request = {
         getMerchantList: `${HTTPHEADER}/Recharge/getMerchantList`, // 获取appid
         getWXMerchantList: `${HTTPHEADER}/Recharge/getWXMerchantList`, // 获取商户号
         queryPayStatus: `${HTTPHEADER}/Recharge/queryPayStatus`, // 查询充值订单支付状态
+
+        getCashList: `${HTTPHEADER}/GuildCash/getCashList`, // 对公转账列表
+        getCashDetail: `${HTTPHEADER}/GuildCash/getCashDetail`, // 对公转账详情
+        refuseCash: `${HTTPHEADER}/GuildCash/refuseCash`, // 审核退回
+        completeCash: `${HTTPHEADER}/GuildCash/completeCash`, // 确定结算
+        getBillDetail: `${HTTPHEADER}/GuildCash/getBillDetail`, // 账单明细列表
+        refuseApply: `${HTTPHEADER}/GuildCash/refuseApply`, // 确定结算
+
+        addTask: `${HTTPHEADER}/Recharge/addTask`, // 按时间批量查单
+        getTaskList: `${HTTPHEADER}/Recharge/getTaskList`, // 按时间批量查单-获取结果
+        getTaskDetail: `${HTTPHEADER}/Recharge/getTaskDetail`, // 按时间批量查单-获取明细
+        getTaskDetailLog: `${HTTPHEADER}/Recharge/getTaskDetailLog`, // 按时间批量查单-获取补单明细
     },
 
     // 消息管理
@@ -500,6 +518,9 @@ const request = {
         multiDeleteMsg: `${HTTPHEADER}/moments/multiDeleteMsg`, // 批量删评论文案
         checkList: `${HTTPHEADER}/moments/checkMomentIndex`, // 获取动态审核列表
         check: `${HTTPHEADER}/moments/checkMomentUpdate`, // 动态审核操作
+        topMomentList: `${HTTPHEADER}/moments/pushMomentList`, // 置顶动态列表
+        setTopMoment: `${HTTPHEADER}/moments/setPushMoment`, // 置顶动态
+        delTopList: `${HTTPHEADER}/moments/delPushMoment`, // 删除置顶动态
     },
 
     // 活动管理
@@ -602,6 +623,23 @@ const request = {
         recycle: `${HTTPHEADER}/PrettyNumber/recycle`, // 靓号回收
         recycleLog: `${HTTPHEADER}/PrettyNumber/recycleLog`, // 回收记录
         refund: `${HTTPHEADER}/PrettyNumber/refund`, // 退款
+    },
+
+    // 快乐披萨屋
+    pizza:{
+        myMaterialsInfo :  `${HTTPHEADER}/hdPizza/myInfo`, // 获取用户信息
+        getRanking :  `${HTTPHEADER}/hdPizza/getRanking`, // 获取排行榜列表
+        exchangeList :  `${HTTPHEADER}/hdPizza/exchangeList`, // 获取兑换列表
+        exchange :  `${HTTPHEADER}/hdPizza/exchange`, // 兑换商品
+        getProduceMaterial :  `${HTTPHEADER}/hdPizza/getProduceMaterial`, // 获取制作披萨材料列表
+        markProduce :  `${HTTPHEADER}/hdPizza/produce`, // 制作披萨
+        getUserProduceLog :  `${HTTPHEADER}/hdPizza/getUserProduceLog`, // 获取用户披萨制作日志
+        getUserSpeedUpLog :  `${HTTPHEADER}/hdPizza/getUserSpeedUpLog`, // 获取用户的加速披萨日志
+        myExchangeLog :  `${HTTPHEADER}/hdPizza/myExchangeLog`, // 我的兑换记录
+        getPizzaProduceRanking :  `${HTTPHEADER}/hdPizza/getPizzaProduceRanking`, // 获取制作披萨排行榜
+        getGetRanking :  `${HTTPHEADER}/hdPizza/getRanking`, // 我的兑换记录
+        signInGetPizza :  `${HTTPHEADER}/hdPizza/signInGetPizza`, // 签到领披萨
+        getSpeedUp :  `${HTTPHEADER}/hdPizza/speedUp`, // 加速披萨制作
     },
 
     //  浓情端午

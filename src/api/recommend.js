@@ -55,3 +55,12 @@ export function setBindStatus(data) {
     data
   })
 }
+
+// 推广记录解绑
+export function unbindStatistical(data) {
+    return request({
+        url: REQUEST.userHistory.unbindStatistical,
+        method: 'post',
+        data
+    })
+}

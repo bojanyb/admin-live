@@ -53,8 +53,8 @@ const option = {
 	  outputDir: 'dist',
 	  assetsDir: 'static',
 	  mode: 'test',
-    domainHttps: 'http://api.test.aiyi.live', // https环境地址
-    domainHttp: 'http://m.test.aiyi.live', // app端接口
+    domainHttps: '//api.test.aiyi.live', // https环境地址
+    domainHttp: '//m.test.aiyi.live', // app端接口
 	  httpHeader: '', // 后台本地携带
     favicon: 'favicon.ico',
     logo: 'images/logo.png',
@@ -173,6 +173,7 @@ module.exports = {
   devServer: {
     port: port,
     open: true,
+    host: '0.0.0.0', // 允许外部ip访问
     overlay: {
       warnings: false,
       errors: false
