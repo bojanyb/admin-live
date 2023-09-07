@@ -602,7 +602,7 @@ export default {
     // 批量封禁
     batchBan() {
       if (!(this.selectionList && this.selectionList.length)) {
-        this.$message.error("至少要选择一个修改对象");
+        this.$message.error("至少要选择一个封禁对象");
         return false;
       }
       const params = this.selectionList || [];

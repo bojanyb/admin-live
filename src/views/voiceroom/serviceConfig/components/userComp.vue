@@ -52,7 +52,6 @@
                         :on-preview="handlePreview"
                         :on-remove="handleRemove"
                         :before-remove="beforeRemove"
-                        :limit="4"
                         accept=".png,.jpg,.jpeg,.mp4"
                         :on-exceed="handleExceed"
                         :file-list="fileList"
@@ -255,7 +254,6 @@ export default {
         upLoad(file) {
             uploadOSS(file.file).then(res => {
                 if(res.url) {
-                    console.log('[ res ] >', res)
                     this.fileList.push({ name: file.file.name, url: res.url });
                     // this.ruleForm.img = res.url;
                 }

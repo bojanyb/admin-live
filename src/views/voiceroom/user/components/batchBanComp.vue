@@ -1,9 +1,9 @@
 <template>
-  <div class="user-punishComp-box">
+  <div class="batchBanComp-box">
     <el-dialog
       title="批量封禁"
       :visible.sync="dialogVisible"
-      width="450px"
+      width="600px"
       :close-on-click-modal="false"
       :before-close="handleClose"
       @closed="closed"
@@ -17,13 +17,21 @@
         label-suffix=":"
       >
         <el-form-item label="用户" prop="user_number">
-          <el-select v-model="ruleForm.type" placeholder="请选择">
+          <el-select
+            v-model="ruleForm.user_number"
+            placeholder="请选择"
+            multiple
+            clearable
+          >
             <el-option
               v-for="item in userList"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-            ></el-option>
+              :key="item.id"
+              :label="item.nickname"
+              :value="item.id"
+            >
+              <span style="float: left">{{ item.nickname }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px; padding-right: 20px;">{{ item.user_number }}</span>
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="处罚类别" prop="punish_type_id">
@@ -134,7 +142,7 @@
 <script>
 // 引入api
 import { getPunishTypeList } from "@/api/videoRoom";
-import { addUserPunish } from "@/api/risk";
+import { addBatchUserPunish } from "@/api/risk";
 // 引入公共map
 import MAPDATA from "@/utils/jsonMap.js";
 // 引入oss
@@ -157,7 +165,7 @@ export default {
       userList: [], // 用户列表
       fileList: [], // 文件列表
       ruleForm: {
-        user_number: "",
+        user_number: [],
         category: "1",
         type: [],
         risk_level: "",
@@ -211,12 +219,9 @@ export default {
     typeList() {
       // 处罚类型
       let arr = JSON.parse(JSON.stringify(MAPDATA.USERPUNISHTYPELISTCOPYTWO));
-      let arr1 = [];
-      if (this.ruleForm.type) {
-        arr1 = this.ruleForm.type.filter((item) => {
-          return item > 10;
-        });
-      }
+      let arr1 = this.ruleForm.type.filter((item) => {
+        return item > 10;
+      });
 
       let arr2 = arr.map((item) => {
         let params = {
@@ -284,7 +289,8 @@ export default {
     loadParams(params) {
       this.dialogVisible = true;
       this.userList = params;
-      // this.$set(this.ruleForm, 'user_number', params.user_number)
+      const ids = params.map((item) => item.id);
+      this.$set(this.ruleForm, 'user_number', ids)
     },
     // 获取处罚类别
     async getPunishType(params) {
@@ -332,9 +338,13 @@ export default {
     },
     // 提交
     submitForm: debounce(async function (formName) {
+      console.log('[ this.ruleForm ] >', this.ruleForm)
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          let params = { ...this.ruleForm };
+          let params = { 
+            ...this.ruleForm,
+            user_ids: this.ruleForm.user_number.join(",")
+          };
           if (this.fileList.length) {
             const videoList = [],
               imgList = [];
@@ -364,9 +374,9 @@ export default {
           if (params.reset.length <= 0) {
             delete params.reset;
           }
-          let res = await addUserPunish(params);
+          let res = await addBatchUserPunish(params);
           if (res.code === 2000) {
-            this.$success("添加成功");
+            this.$success("操作成功");
             this.dialogVisible = false;
             this.$emit("getList");
           }
@@ -389,9 +399,9 @@ export default {
 </script>
 
 <style lang="scss">
-.user-punishComp-box {
-  .el-select {
-    width: 310px;
+.batchBanComp-box {
+  .el-select, .el-textarea {
+    width: 420px;
   }
 }
 </style>
