@@ -29,7 +29,7 @@
     ></tableList>
 
     <!-- 推荐设置弹窗 -->
-    <top-comp ref="topComp"></top-comp>
+    <top-comp ref="topComp" @getList="getList"></top-comp>
     <!-- 推荐动态弹窗 -->
     <top-list-comp v-if="isDestoryComp" ref="topListComp" @destoryComp="destoryComp"></top-list-comp>
   </div>
@@ -46,7 +46,9 @@ import tableList from "@/components/tableList/TableList.vue";
 import REQUEST from "@/request/index.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
+// 推荐组件
 import TopComp from './components/topComp.vue';
+// 推荐列表组件
 import TopListComp from './components/topListComp.vue';
 export default {
   mixins: [mixins],
