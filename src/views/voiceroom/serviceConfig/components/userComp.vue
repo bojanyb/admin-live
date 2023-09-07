@@ -237,9 +237,6 @@ export default {
     methods: {
         // 移除之后
         handleRemove(file, fileList) {
-            console.log('[ file ] >', file)
-            console.log('[ fileList ] >', fileList)
-            console.log('[ this.fileList ] >', this.fileList)
             this.fileList = fileList;
         },
         // 预览

@@ -6,12 +6,15 @@
         :forms="forms"
         :show-reset="true"
         :show-search-btn="true"
+        :show-batch-rurn="true"
+        batch-rurn-name="批量封禁"
         @onReset="reset"
         @onSearch="onSearch"
+        @BatchRurn="batchBan"
       ></SearchPanel>
     </div>
 
-    <tableList :cfgs="cfgs" ref="tableList"></tableList>
+    <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange"></tableList>
 
     <bindStuck ref="bindStuck"></bindStuck>
 
@@ -39,6 +42,14 @@
       @getList="getList"
     ></upatePassComp>
 
+    <!-- 批量封禁组件 -->
+    <batchBanComp
+      v-if="isDestoryComp"
+      ref="batchBanComp"
+      @destoryComp="destoryComp"
+      @getList="getList"
+    ></batchBanComp>
+
   </div>
 </template>
 
@@ -52,6 +63,8 @@ import bindStuck from "./components/bindStuck.vue";
 import upatePassComp from "./components/upatePassComp.vue";
 // 引入处罚组件
 import punishComp from "./components/punishComp.vue";
+// 引入批量封禁组件
+import batchBanComp from "./components/batchBanComp.vue";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
@@ -77,6 +90,7 @@ export default {
     userEdit,
     punishComp,
     upatePassComp,
+    batchBanComp
   },
   data() {
     return {
@@ -85,6 +99,7 @@ export default {
         start_time: null,
         end_time: null,
       },
+      selectionList: [],
     };
   },
   computed: {
@@ -448,6 +463,7 @@ export default {
       return {
         vm: this,
         url: REQUEST.user.list,
+        isShowCheckbox: true,
         columns: this.permissionArr.includes("User@index") ? arr : [],
       };
     },
@@ -573,6 +589,27 @@ export default {
         this.$refs.bindStuck.dialogVisible = true;
         this.$refs.bindStuck.getList(row.id);
       }
+    },
+    // 选择
+    selectionChange(callbackList) {
+      const res = callbackList.reduce((prev, curr) => {
+        prev.push(curr);
+        return prev;
+      }, []);
+
+      this.selectionList = res;
+    },
+    // 批量封禁
+    batchBan() {
+      if (!(this.selectionList && this.selectionList.length)) {
+        this.$message.error("至少要选择一个修改对象");
+        return false;
+      }
+      const params = this.selectionList || [];
+      this.isDestoryComp = true;
+      setTimeout(() => {
+        this.$refs.batchBanComp.loadParams(params);
+      }, 50);
     },
   },
 };
