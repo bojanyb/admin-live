@@ -39,6 +39,12 @@
       @getList="getList"
     ></upatePassComp>
 
+    <!-- 渠道内容组件 -->
+    <channelInfoComp
+      ref="channelInfoComp"
+      v-if="isDestoryComp"
+      @destoryComp="destoryComp"
+    ></channelInfoComp>
   </div>
 </template>
 
@@ -58,10 +64,13 @@ import SearchPanel from "@/components/SearchPanel/final.vue";
 import tableList from "@/components/tableList/TableList.vue";
 // 引入编辑组件
 import userEdit from "./components/userEdit.vue";
+// 引入渠道内容组件
+import channelInfoComp from "./components/channelInfoComp.vue";
 // 引入api
 import REQUEST from "@/request/index.js";
 // 引入公共方法
 import { timeFormat } from "@/utils/common.js";
+import { isEmpty } from "@/utils";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
 // 引入公共map
@@ -77,6 +86,7 @@ export default {
     userEdit,
     punishComp,
     upatePassComp,
+    channelInfoComp,
   },
   data() {
     return {
@@ -291,6 +301,26 @@ export default {
           width: "110px",
           render: (h, params) => {
             return h("span", params.row.register_type || "无");
+          },
+        },
+        {
+          label: "渠道内容",
+          render: (h, params) => {
+            return h(
+              "span",
+              {
+                style: {
+                  color: isEmpty(params.row.third) ? "#666666" : "#409eff",
+                  cursor: isEmpty(params.row.third) ? "" : "pointer",
+                },
+                on: {
+                  click: () => {
+                    this.viewChannelFunc(params.row);
+                  },
+                },
+              },
+              isEmpty(params.row.third) ? "无" : "详情"
+            );
           },
         },
         {
@@ -573,6 +603,14 @@ export default {
         this.$refs.bindStuck.dialogVisible = true;
         this.$refs.bindStuck.getList(row.id);
       }
+    },
+    // 查看渠道内容
+    viewChannelFunc(row) {
+      if(isEmpty(row.third)) return;
+      this.isDestoryComp = true;
+      setTimeout(() => {
+        this.$refs.channelInfoComp.loadParams(row);
+      }, 50);
     },
   },
 };

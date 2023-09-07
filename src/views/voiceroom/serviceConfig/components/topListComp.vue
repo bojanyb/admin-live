@@ -109,8 +109,24 @@ export default {
           },
         },
         {
+          label: "推荐结束时间",
+          width: 160,
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.end_time
+                ? timeFormat(
+                    params.row.end_time,
+                    "YYYY-MM-DD HH:mm:ss",
+                    true
+                  )
+                : "无"
+            );
+          },
+        },
+        {
           label: "用户ID",
-          prop: "user_id",
+          prop: "user_number",
         },
         {
           label: "用户昵称",
@@ -141,13 +157,6 @@ export default {
         {
           label: "推荐人",
           prop: "push_user_name",
-        },
-        {
-          label: "推荐时长",
-          prop: "start_time",
-          render: (h, params) => {
-            return h("span", params.row.start_time + "小时");
-          },
         },
         {
           label: "操作",
