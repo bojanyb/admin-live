@@ -138,6 +138,8 @@ export default {
           {
             label: '创建时间',
             width: '160px',
+            prop: "create_time",
+            sortable: 'custom',
             render: (h, params) => {
               return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
             }
