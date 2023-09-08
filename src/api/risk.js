@@ -82,6 +82,15 @@ export function addUserPunish(data) {
     })
 }
 
+// 处罚 -批量新增
+export function addBatchUserPunish(data) {
+    return request({
+        url: api.risk.addBatchUserPunish,
+        method: 'post',
+        data
+    })
+}
+
 // 处罚-封禁
 export function saveUserPunish(data) {
     return request({
