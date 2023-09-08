@@ -1,5 +1,5 @@
 <template>
-    <div class="serviceConfig-historyComp-box">
+    <div class="serviceConfig-warnComp-box">
         <el-dialog
         title="添加消息内容"
         :visible.sync="dialogVisible"
@@ -78,9 +78,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss">
-.serviceConfig-historyComp-box {
-
-}
-</style>

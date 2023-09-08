@@ -152,7 +152,8 @@ const request = {
         regPeplenishment: `${HTTPHEADER}/Promoter/regReplenishment`, // 推广补单
         replenishmentDel: `${HTTPHEADER}/Promoter/replenishmentDel`, // 删除补单
         NewUserStat: `${HTTPHEADER}/NewUserStat/list`, // 新人广场
-        setBindStatus: `${HTTPHEADER}/Promoter/setBindStatus  `, // 解绑/绑定
+        setBindStatus: `${HTTPHEADER}/Promoter/setBindStatus`, // 解绑/绑定
+        unbindStatistical: `${HTTPHEADER}/Statistical/unbinding`, // 推广记录解绑
     },
 
     // 充值记录
@@ -504,6 +505,9 @@ const request = {
         multiDeleteMsg: `${HTTPHEADER}/moments/multiDeleteMsg`, // 批量删评论文案
         checkList: `${HTTPHEADER}/moments/checkMomentIndex`, // 获取动态审核列表
         check: `${HTTPHEADER}/moments/checkMomentUpdate`, // 动态审核操作
+        topMomentList: `${HTTPHEADER}/moments/pushMomentList`, // 置顶动态列表
+        setTopMoment: `${HTTPHEADER}/moments/setPushMoment`, // 置顶动态
+        delTopList: `${HTTPHEADER}/moments/delPushMoment`, // 删除置顶动态
     },
 
     // 活动管理

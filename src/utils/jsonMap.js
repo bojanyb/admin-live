@@ -3254,6 +3254,26 @@ const RISKLEVELLISTCOPY = [
   },
 ]
 
+// 推荐状态 0-全部 1-生效中 2-待生效 3-已过期
+const RECOMMENDSTATUSLIST = [
+  {
+    name: '全部',
+    value: 0
+  },
+  {
+    name: '生效中',
+    value: 1
+  },
+  {
+    name: '待生效',
+    value: 2
+  },
+  {
+    name: '已过期',
+    value: 3
+  },
+]
+
 export default {
   USERINVITE,
   DOWNLOADSOURCE,
@@ -3403,4 +3423,5 @@ export default {
   REVIEWSTATUSLIST,
   RISKLEVELLIST,
   RISKLEVELLISTCOPY,
+  RECOMMENDSTATUSLIST,
 }
