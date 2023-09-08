@@ -34,7 +34,8 @@ import { unbindStatistical } from "@/api/recommend";
 // 引入公共方法
 import { timeFormat } from "@/utils/common.js";
 // 引入公共参数
-import mixins from "@/utils/mixins.js";
+import mixins from '@/utils/mixins.js'
+import moment from 'moment'
 
 export default {
   components: {
@@ -164,7 +165,16 @@ export default {
           dateType: "datetimerange",
           format: "yyyy-MM-dd HH:mm:ss",
           label: "时间选择",
-          value: "",
+          clearable:true,
+          value: [new Date(this.start_time),new Date(this.end_time)],
+          pickerOptions: {
+            disabledDate: (time) => {
+                const currentTime = moment().valueOf();
+                const min =   moment(currentTime).subtract(6,'month').valueOf()
+                return   time < min || time > currentTime
+          }
+
+          },
           handler: {
             change: (v) => {
               this.emptyDateTime();
@@ -294,12 +304,16 @@ export default {
     return {
       diamond_recharge: null,
       count: null,
+      start_time:moment().subtract(6,'month').valueOf(),
+      end_time:moment().valueOf()
     };
   },
   methods: {
     // 配置参数
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams };
+      s.start_time =  s.start_time ? s.start_time : this.start_time;
+      s.end_time =  s.end_time ? s.end_time : this.end_time;
       return {
         page: params.page,
         pagesize: params.size,
