@@ -225,7 +225,7 @@ export default {
         {
           label: "用户身份",
           render: (h, params) => {
-            return h("span", params.row.type || "无");
+            return h("span", params.row.punished_user_role || "无");
           },
         },
         {
@@ -308,7 +308,7 @@ export default {
         {
           label: "举报用户身份",
           render: (h, params) => {
-            return h("span", params.row.f_type || "无");
+            return h("span", params.row.report_user_role || "无");
           },
         },
         {

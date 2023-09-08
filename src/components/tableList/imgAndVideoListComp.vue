@@ -1,9 +1,9 @@
 <template>
   <div class="imgAndVideoListComp-box">
-    <div class="imgBox">
+    <div class="list-wrap" v-if="imgSrcList.length || videoSrcList.length">
       <el-image
         v-for="(item, index) in imgSrcList"
-        :key="index"
+        :key="'img' + index"
         :src="item"
         :style="{ width: width, height: height }"
         :preview-src-list="imgSrcList"
@@ -13,27 +13,28 @@
           <img :src="imgUrl" />
         </div>
       </el-image>
+      <div
+        class="video-box"
+        v-for="(item, index) in videoSrcList"
+        :key="'vide' + index"
+        :alt="item"
+        :style="{ width: width, height: height }"
+        @click="zoomClick(item)"
+      >
+        <videoPlayerComp
+          class="videoPlayComp"
+          ref="videoPlayerComp"
+          :url="item"
+        ></videoPlayerComp>
+      </div>
     </div>
-
-    <div
-      class="videoBox"
-      v-for="(item, index) in videoSrcList"
-      :key="index"
-      :style="{ width: width, height: height }"
-      @click="zoomClick"
-    >
-      <videoPlayerComp
-        class="videoPlayComp"
-        ref="videoPlayerComp"
-        :url="item"
-      ></videoPlayerComp>
-    </div>
+    <div v-else>无</div>
 
     <!-- 视频放大组件 -->
     <videoComp
       v-if="isDestoryComp"
       ref="videoComp"
-      :url="videoSrcList[0]"
+      :url="currentVideoSrc"
       @destoryComp="destoryComp"
     ></videoComp>
   </div>
@@ -75,13 +76,15 @@ export default {
     return {
       isDestoryComp: false,
       imgUrl: require("@/assets/error.png"),
+      currentVideoSrc: "",
     };
   },
   mounted() {},
   methods: {
     // 放大
-    zoomClick() {
+    zoomClick(item) {
       this.isDestoryComp = true;
+      this.currentVideoSrc = item;
       setTimeout(() => {
         this.$refs.videoComp.dialogVisible = true;
       }, 50);
@@ -111,7 +114,7 @@ export default {
 .imgAndVideoListComp-box {
   display: flex;
   justify-content: center;
-  .imgBox {
+  .list-wrap {
     display: flex;
     flex-wrap: wrap;
   }
@@ -121,8 +124,9 @@ export default {
       height: 100%;
     }
   }
-  .videoBox {
+  .video-box {
     cursor: pointer;
+    overflow: hidden;
     .videoPlayComp {
       pointer-events: none;
     }

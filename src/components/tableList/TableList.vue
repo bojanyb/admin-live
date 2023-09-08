@@ -67,8 +67,8 @@
           <!-- 同时显示视频和图片 -->
           <imgAndVideoListComp
             v-if="item.isImgAndVideoList"
-            :imgSrcList="returnImg(scope.row[item.prop])"
-            :videoSrcList="returnImg(scope.row[item.propCopy])"
+            :imgSrcList="returnImgOrVideo(scope.row[item.prop])"
+            :videoSrcList="returnImgOrVideo(scope.row[item.propCopy])"
             :width="item.imgWidth"
             :height="item.imgHeight"
             ref="imgAndVideoComp">
@@ -220,6 +220,15 @@
         } else {
           return [val]
         }
+      },
+      // 图片和视频列表显示
+      returnImgOrVideo(val) {
+        let list = [];
+        if(val) {
+          // 首先将值转为数组
+          list = Array.isArray(val) ? val : val.split(',');
+        }
+        return list;
       },
       // 是否禁止开关
       disabledFunc(item, index) {

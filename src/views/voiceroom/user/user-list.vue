@@ -6,7 +6,7 @@
         :forms="forms"
         :show-reset="true"
         :show-search-btn="true"
-        :show-batch-rurn="true"
+        :show-batch-rurn="permissionArr.includes('UserPunishLog@addBatch')"
         batch-rurn-name="批量封禁"
         @onReset="reset"
         @onSearch="onSearch"
@@ -14,7 +14,11 @@
       ></SearchPanel>
     </div>
 
-    <tableList :cfgs="cfgs" ref="tableList" @selectionChange="selectionChange"></tableList>
+    <tableList
+      :cfgs="cfgs"
+      ref="tableList"
+      @selectionChange="selectionChange"
+    ></tableList>
 
     <bindStuck ref="bindStuck"></bindStuck>
 
@@ -49,7 +53,6 @@
       @destoryComp="destoryComp"
       @getList="getList"
     ></batchBanComp>
-
   </div>
 </template>
 
@@ -90,7 +93,7 @@ export default {
     userEdit,
     punishComp,
     upatePassComp,
-    batchBanComp
+    batchBanComp,
   },
   data() {
     return {
