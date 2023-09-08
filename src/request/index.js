@@ -152,7 +152,8 @@ const request = {
         regPeplenishment: `${HTTPHEADER}/Promoter/regReplenishment`, // 推广补单
         replenishmentDel: `${HTTPHEADER}/Promoter/replenishmentDel`, // 删除补单
         NewUserStat: `${HTTPHEADER}/NewUserStat/list`, // 新人广场
-        setBindStatus: `${HTTPHEADER}/Promoter/setBindStatus  `, // 解绑/绑定
+        setBindStatus: `${HTTPHEADER}/Promoter/setBindStatus`, // 解绑/绑定
+        unbindStatistical: `${HTTPHEADER}/Statistical/unbinding`, // 推广记录解绑
     },
 
     // 充值记录
