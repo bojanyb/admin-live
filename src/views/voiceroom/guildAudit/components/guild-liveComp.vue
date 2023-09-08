@@ -107,20 +107,24 @@
         const isMainArr = [
 						{
 							label: '创建时间',
+              width: '160px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
             {
 							label: '公会ID',
+              width: '100px',
 							prop: 'guild_number'
 						},
             {
 							label: '公会名称',
+              width: '100px',
 							prop: 'name'
 						},
             {
 							label: '公会长',
+              width: '130px',
 							prop: 'guild_user_nickname'
 						},
 						{
@@ -132,6 +136,7 @@
 						},
             {
 							label: '公司主体',
+              width: '120px',
               prop: 'company',
 							render: (h, params) => {
 								return h('span', params.row.company ? params.row.company : '--')
@@ -139,7 +144,7 @@
 						},
 						{
 							label: '主播人数',
-              minWidth: '90px',
+              width: '100px',
               prop: 'user_count',
               sortable: "custom",
 							render: (h, params) => {
@@ -150,7 +155,7 @@
 						},
 						{
 							label: '昨日流水',
-              minWidth: '90px',
+              width: '130px',
               prop: 'yestoday_flow',
               sortable: "custom",
 							render: (h, params) => {
@@ -161,7 +166,7 @@
 						},
 						{
 							label: '今日流水',
-              minWidth: '100px',
+              width: '130px',
               prop: 'today_flow',
               sortable: "custom",
 							render: (h, params) => {
@@ -177,7 +182,7 @@
 						},
 						{
 							label: '上周流水',
-              minWidth: '90px',
+              width: '130px',
               prop: 'last_week',
               sortable: "custom",
 							render: (h, params) => {
@@ -188,7 +193,7 @@
 						},
 						{
 							label: '本周流水',
-              minWidth: '100px',
+              width: '130px',
               prop: 'week_flow',
               sortable: "custom",
 							render: (h, params) => {
@@ -206,7 +211,7 @@
 						},
 						{
 							label: '上月流水',
-              minWidth: '90px',
+              width: '130px',
               prop: 'last_month',
               sortable: "custom",
 							render: (h, params) => {
@@ -217,7 +222,7 @@
 						},
 						{
 							label: '本月流水',
-              minWidth: '100px',
+              width: '130px',
               prop: 'month_flow',
               sortable: "custom",
 							render: (h, params) => {
@@ -283,20 +288,24 @@
         const arr = [
 						{
 							label: '创建时间',
+              width: '160px',
 							render: (h, params) => {
 								return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 							}
 						},
             {
 							label: '公会ID',
+              width: '100px',
 							prop: 'guild_number'
 						},
             {
 							label: '公会名称',
+              width: '100px',
 							prop: 'name'
 						},
             {
 							label: '公会长',
+              width: '130px',
 							prop: 'guild_user_nickname'
 						},
 						{
@@ -308,7 +317,7 @@
 						},
 						{
 							label: '主播人数',
-              minWidth: '90px',
+              width: '100px',
               prop: 'user_count',
               sortable: "custom",
 							render: (h, params) => {
@@ -319,7 +328,7 @@
 						},
 						{
 							label: '昨日流水',
-              minWidth: '90px',
+              width: '130px',
               prop: 'yestoday_flow',
               sortable: "custom",
 							render: (h, params) => {
@@ -330,7 +339,7 @@
 						},
 						{
 							label: '今日流水',
-              minWidth: '100px',
+              width: '130px',
               prop: 'today_flow',
               sortable: "custom",
 							render: (h, params) => {
@@ -346,7 +355,7 @@
 						},
 						{
 							label: '上周流水',
-              minWidth: '90px',
+              width: '130px',
               prop: 'last_week',
               sortable: "custom",
 							render: (h, params) => {
@@ -357,7 +366,7 @@
 						},
 						{
 							label: '本周流水',
-              minWidth: '100px',
+              width: '130px',
               prop: 'week_flow',
               sortable: "custom",
 							render: (h, params) => {
@@ -375,7 +384,7 @@
 						},
 						{
 							label: '上月流水',
-              minWidth: '90px',
+              width: '130px',
               prop: 'last_month',
               sortable: "custom",
 							render: (h, params) => {
@@ -386,7 +395,7 @@
 						},
 						{
 							label: '本月流水',
-              minWidth: '100px',
+              width: '130px',
               prop: 'month_flow',
               sortable: "custom",
 							render: (h, params) => {
