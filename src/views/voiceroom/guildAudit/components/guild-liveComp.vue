@@ -139,7 +139,7 @@
 						},
 						{
 							label: '主播人数',
-              minWidth: '92px',
+              minWidth: '90px',
               prop: 'user_count',
               sortable: "custom",
 							render: (h, params) => {
@@ -150,7 +150,7 @@
 						},
 						{
 							label: '昨日流水',
-              minWidth: '92px',
+              minWidth: '90px',
               prop: 'yestoday_flow',
               sortable: "custom",
 							render: (h, params) => {
@@ -161,18 +161,23 @@
 						},
 						{
 							label: '今日流水',
-              minWidth: '92px',
+              minWidth: '100px',
               prop: 'today_flow',
               sortable: "custom",
 							render: (h, params) => {
 								return h('div', [
-									h('span', params.row.today_flow + '钻石'),
+									h('div', params.row.today_flow + '钻石'),
+                  h('div',{ class : `${params.row.day_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
+                  style: {
+                    display: params.row.day_growth > 0 ? 'unset' : 'none',
+                    color: `${params.row.day_growth > 0 ? '#F56C6C' : '#67C23A' }`}},
+                    `${params.row.day_growth}%`),
 								])
 							}
 						},
 						{
 							label: '上周流水',
-              minWidth: '92px',
+              minWidth: '90px',
               prop: 'last_week',
               sortable: "custom",
 							render: (h, params) => {
@@ -183,15 +188,14 @@
 						},
 						{
 							label: '本周流水',
-              minWidth: '110px',
+              minWidth: '100px',
               prop: 'week_flow',
               sortable: "custom",
 							render: (h, params) => {
 								return h('div', [
-									h('span', params.row.week_flow + '钻石'),
-                  h('span',{ class : `${params.row.week_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
+									h('div', params.row.week_flow + '钻石'),
+                  h('div',{ class : `${params.row.week_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
                   style: {
-                    marginLeft: '2px',
                     display: params.row.week_growth > 0 ? 'unset' : 'none',
                     color: `${params.row.week_growth > 0 ? '#F56C6C' : '#67C23A' }`
                   }
@@ -202,7 +206,7 @@
 						},
 						{
 							label: '上月流水',
-              minWidth: '92px',
+              minWidth: '90px',
               prop: 'last_month',
               sortable: "custom",
 							render: (h, params) => {
@@ -213,15 +217,14 @@
 						},
 						{
 							label: '本月流水',
-              minWidth: '110px',
+              minWidth: '100px',
               prop: 'month_flow',
               sortable: "custom",
 							render: (h, params) => {
 								return h('div', [
-									h('span', params.row.month_flow + '钻石'),
-                  h('span',{ class : `${params.row.month_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
+									h('div', params.row.month_flow + '钻石'),
+                  h('div',{ class : `${params.row.month_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
                   style: {
-                    marginLeft: '2px',
                     display: params.row.month_growth > 0 ? 'unset' : 'none',
                     color: `${params.row.month_growth > 0 ? '#F56C6C' : '#67C23A' }`
                   }
@@ -241,7 +244,7 @@
 						},
 						{
 							label: '操作',
-							minWidth: '280px',
+							minWidth: '300px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
@@ -305,7 +308,7 @@
 						},
 						{
 							label: '主播人数',
-              minWidth: '92px',
+              minWidth: '90px',
               prop: 'user_count',
               sortable: "custom",
 							render: (h, params) => {
@@ -316,7 +319,7 @@
 						},
 						{
 							label: '昨日流水',
-              minWidth: '92px',
+              minWidth: '90px',
               prop: 'yestoday_flow',
               sortable: "custom",
 							render: (h, params) => {
@@ -327,18 +330,23 @@
 						},
 						{
 							label: '今日流水',
-              minWidth: '92px',
+              minWidth: '100px',
               prop: 'today_flow',
               sortable: "custom",
 							render: (h, params) => {
 								return h('div', [
-									h('span', params.row.today_flow + '钻石'),
+									h('div', params.row.today_flow + '钻石'),
+                  h('div',{ class : `${params.row.day_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
+                  style: {
+                    display: params.row.day_growth > 0 ? 'unset' : 'none',
+                    color: `${params.row.day_growth > 0 ? '#F56C6C' : '#67C23A' }`}},
+                    `${params.row.day_growth}%`),
 								])
 							}
 						},
 						{
 							label: '上周流水',
-              minWidth: '92px',
+              minWidth: '90px',
               prop: 'last_week',
               sortable: "custom",
 							render: (h, params) => {
@@ -349,15 +357,14 @@
 						},
 						{
 							label: '本周流水',
-              minWidth: '110px',
+              minWidth: '100px',
               prop: 'week_flow',
               sortable: "custom",
 							render: (h, params) => {
 								return h('div', [
-									h('span', params.row.week_flow + '钻石'),
-                  h('span',{ class : `${params.row.week_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
+									h('div', params.row.week_flow + '钻石'),
+                  h('div',{ class : `${params.row.week_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
                   style: {
-                    marginLeft: '2px',
                     display: params.row.week_growth > 0 ? 'unset' : 'none',
                     color: `${params.row.week_growth > 0 ? '#F56C6C' : '#67C23A' }`
                     }
@@ -368,7 +375,7 @@
 						},
 						{
 							label: '上月流水',
-              minWidth: '92px',
+              minWidth: '90px',
               prop: 'last_month',
               sortable: "custom",
 							render: (h, params) => {
@@ -379,16 +386,15 @@
 						},
 						{
 							label: '本月流水',
-              minWidth: '110px',
+              minWidth: '100px',
               prop: 'month_flow',
               sortable: "custom",
 							render: (h, params) => {
 								return h('div', [
-									h('span', params.row.month_flow + '钻石'),
-                  h('span',{
+									h('div', params.row.month_flow + '钻石'),
+                  h('div',{
                     class : `${params.row.month_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
                     style: {
-                      marginLeft: '2px',
                       display: params.row.month_growth > 0 ? 'unset' : 'none',
                       color: `${params.row.month_growth > 0 ? '#F56C6C' : '#67C23A' }`
                      }
@@ -409,7 +415,7 @@
 						},
 						{
 							label: '操作',
-							minWidth: '280px',
+							minWidth: '300px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
