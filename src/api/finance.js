@@ -173,3 +173,40 @@ export function getQueryPayDetails(data) {
     data
   })
 }
+
+
+ // 按时间批量查单
+export function addTask(data) {
+  return request({
+    url: REQUEST.finance.addTask,
+    method: 'post',
+    data
+  })
+}
+
+// 按时间批量查单-获取结果
+ export function getTaskList(data) {
+  return request({
+    url: REQUEST.finance.getTaskList,
+    method: 'post',
+    data
+  })
+}
+
+// 按时间批量查单-获取明细
+ export function getTaskDetail(data) {
+  return request({
+    url: REQUEST.finance.getTaskDetail,
+    method: 'post',
+    data
+  })
+}
+
+// 按时间批量查单-获取补单明细
+export function getTaskDetailLog(data) {
+  return request({
+    url: REQUEST.finance.getTaskDetailLog,
+    method: 'post',
+    data
+  })
+}

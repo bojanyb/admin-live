@@ -111,7 +111,7 @@
               @clear="mergeEvent(arguments, item, 'clear')"
             />
             <zr-search
-              v-else-if="item.type === 'popupSearch'"
+              v-else-if="item.type === 'popupSearch'"00
               v-model="form[item.name]"
               class="search"
               popper-class="popup-search"
@@ -196,6 +196,9 @@
             <el-button v-if="showExport" :type="customType ||'info'" @click="handleExport">{{ exportName || '导出Excel' }}</el-button>
             <el-button v-if="showCustom" type="warning" @click="handleCustom">{{ customName || '自定义' }}</el-button>
             <el-button v-if="showQuery" type="primary" @click="handleQuery">{{ queryName || '查询' }}</el-button>
+            <el-button v-if="showCurrentPeriodOrder" type="warning" @click="handleCurrentPeriodOrder">{{ currentPeriodOrderName || '当前时段补单' }}</el-button>
+            <el-button v-if="showCurrentPeriodOrderRes" type="primary" @click="handleCurrentPeriodOrderRes">{{ currentPeriodOrderResName || '当前时段补单' }}</el-button>
+
           </el-form-item>
         </el-form>
       </div>
@@ -296,6 +299,16 @@ export default {
       type: Boolean,
       default: false
     },
+    //当前时段补单
+    showCurrentPeriodOrder: {
+      type: Boolean,
+      default: false
+    },
+    //当前时段补单结果
+    showCurrentPeriodOrderRes: {
+      type: Boolean,
+      default: false
+    },
     // 显示搜索按钮
     showSearchBtn: {
       type: Boolean,
@@ -336,6 +349,16 @@ export default {
       type: String,
       default: ''
     },
+    //当前时段内补单
+    currentPeriodOrderName: {
+      type: String,
+      default: ''
+    },
+    //当前时段内补单结果
+    currentPeriodOrderResName: {
+      type: String,
+      default: ''
+    },    
     // 昨日 - 操作
     showYesterday: {
       type: Boolean,
@@ -624,6 +647,7 @@ export default {
       setTimeout(() => {
         if (this.searchOnChange && !this.clickLock) {
           this.clickLock = true
+
           this.$refs.dataForm.validate((valid) => {
             if (valid) {
               const params = this.searchData(this.form)
@@ -631,6 +655,7 @@ export default {
                 // 重置翻页
                 this.$parent.currentPage = 1
               }
+
               this.$set(this, 'form', params)
               this.$emit('onSearch', params)
             }
@@ -734,6 +759,12 @@ export default {
       } else {
         return false
       }
+    },
+    handleCurrentPeriodOrder(){
+      this.$emit('currentPeriodOrder')
+    },
+    handleCurrentPeriodOrderRes(){
+      this.$emit('currentPeriodOrderRes')
     }
   }
 }

@@ -348,6 +348,10 @@ const request = {
         getMerchantList: `${HTTPHEADER}/Recharge/getMerchantList`, // 获取appid
         getWXMerchantList: `${HTTPHEADER}/Recharge/getWXMerchantList`, // 获取商户号
         queryPayStatus: `${HTTPHEADER}/Recharge/queryPayStatus`, // 查询充值订单支付状态
+        addTask: `${HTTPHEADER}/Recharge/addTask`, // 按时间批量查单
+        getTaskList: `${HTTPHEADER}/Recharge/getTaskList`, // 按时间批量查单-获取结果
+        getTaskDetail: `${HTTPHEADER}/Recharge/getTaskDetail`, // 按时间批量查单-获取明细
+        getTaskDetailLog: `${HTTPHEADER}/Recharge/getTaskDetailLog`, // 按时间批量查单-获取补单明细
     },
 
     // 消息管理
