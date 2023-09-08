@@ -120,7 +120,7 @@
               :limit="1"
               @onSelect="searchSelect(...arguments,item)"
             >
-              <template slot="list" :data="item">
+              <template slot="list">
                 <slot name="popup-search" :data="item" />
               </template>
             </zr-search>
@@ -170,7 +170,6 @@
               :disabled="item.disabled"
               :clearable="item.clearable || false"
               @focus="onFocus"
-              clearable
               @change="mergeEvent(arguments, item)"
             >
               <template v-if="item.append" slot="append">{{ item.append }}</template>

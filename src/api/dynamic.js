@@ -38,3 +38,21 @@ export function check(data) {
       data
   })
 }
+
+// 置顶动态
+export function setTopMoment(data) {
+  return request({
+      url: api.dynamic.setTopMoment,
+      method: 'post',
+      data
+  })
+}
+
+// 删除置顶动态
+export function delTopList(data) {
+  return request({
+      url: api.dynamic.delTopList,
+      method: 'post',
+      data
+  })
+}
