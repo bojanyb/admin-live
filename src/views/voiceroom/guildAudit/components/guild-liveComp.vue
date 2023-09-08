@@ -139,6 +139,7 @@
 						},
 						{
 							label: '主播人数',
+              minWidth: '92px',
               prop: 'user_count',
               sortable: "custom",
 							render: (h, params) => {
@@ -148,17 +149,8 @@
 							}
 						},
 						{
-							label: '今日流水',
-              prop: 'today_flow',
-              sortable: "custom",
-							render: (h, params) => {
-								return h('div', [
-									h('span', params.row.today_flow + '钻石'),
-								])
-							}
-						},
-						{
 							label: '昨日流水',
+              minWidth: '92px',
               prop: 'yestoday_flow',
               sortable: "custom",
 							render: (h, params) => {
@@ -168,22 +160,72 @@
 							}
 						},
 						{
+							label: '今日流水',
+              minWidth: '92px',
+              prop: 'today_flow',
+              sortable: "custom",
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.today_flow + '钻石'),
+								])
+							}
+						},
+						{
+							label: '上周流水',
+              minWidth: '92px',
+              prop: 'last_week',
+              sortable: "custom",
+							render: (h, params) => {
+								return h('div', [
+									h('span', `${params.row.last_week + '钻石'}`)
+								])
+							}
+						},
+						{
 							label: '本周流水',
+              minWidth: '110px',
               prop: 'week_flow',
               sortable: "custom",
 							render: (h, params) => {
 								return h('div', [
 									h('span', params.row.week_flow + '钻石'),
+                  h('span',{ class : `${params.row.week_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
+                  style: {
+                    marginLeft: '2px',
+                    display: params.row.week_growth > 0 ? 'unset' : 'none',
+                    color: `${params.row.week_growth > 0 ? '#F56C6C' : '#67C23A' }`
+                  }
+                },
+                  `${params.row.week_growth}%`),
+								])
+							}
+						},
+						{
+							label: '上月流水',
+              minWidth: '92px',
+              prop: 'last_month',
+              sortable: "custom",
+							render: (h, params) => {
+								return h('div', [
+									h('span', `${params.row.last_month + '钻石'}`)
 								])
 							}
 						},
 						{
 							label: '本月流水',
+              minWidth: '110px',
               prop: 'month_flow',
               sortable: "custom",
 							render: (h, params) => {
 								return h('div', [
 									h('span', params.row.month_flow + '钻石'),
+                  h('span',{ class : `${params.row.month_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
+                  style: {
+                    marginLeft: '2px',
+                    display: params.row.month_growth > 0 ? 'unset' : 'none',
+                    color: `${params.row.month_growth > 0 ? '#F56C6C' : '#67C23A' }`
+                  }
+                }, `${params.row.month_growth}%`),
 								])
 							}
 						},
@@ -217,36 +259,36 @@
 						},
 						{
 							label: '操作',
-							minWidth: '320px',
+							minWidth: '280px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
                   h('el-button', {
-                    props: { type: 'primary' },
+                    props: { type: 'primary', size: 'small' },
                     style: { display: (params.row.status !== 3 && this.permissionArr.includes('Guild@updateLiveReplace')) ? 'unset' : 'none' },
                     on: { click: () => { this.change(params.row) } }
                   }, '更换会长'),
                   h('el-button', {
-                    props: { type: 'primary' },
+                    props: { type: 'primary', size: 'small' },
                     style: { display: (params.row.status !== 3 && this.permissionArr.includes('Guild@updateLiveInfo')) ? 'unset' : 'none' },
                     on: { click: () => { this.update(params.row) } }
                   }, '修改'),
                   h('el-button', {
-                    props: { type: 'danger' },
+                    props: { type: 'danger', size: 'small' },
                     style: { display: ((params.row.status === 1 && params.row.status !== 3) && this.permissionArr.includes('Guild@updateLiveFreeze')) ? 'unset' : 'none' },
                     on: { click: () => { this.freezeFunc(2, params.row) } }
                   }, '冻结'),
                   h('el-button', {
-                    props: { type: 'success' },
+                    props: { type: 'success', size: 'small' },
                     style: { display: ((params.row.status === 2 && params.row.status !== 3) &&  this.permissionArr.includes('Guild@updateLiveFreeze')) ? 'unset' : 'none' },
                     on: { click: () => { this.freezeFunc(1, params.row) } }
                   }, '解冻'),
                   h('el-button', {
-                    props: { type: 'danger' },
+                    props: { type: 'danger', size: 'small' },
                     style: { display: (params.row.status !== 3 && this.permissionArr.includes('Guild@updateLiveDisband')) ? 'unset' : 'none' },
                     on: { click: () => { this.deleteParams(params.row) } }
                   }, '解散'),
-									h('el-button', { props: { type: 'danger'},style:{display: params.row.status == 3 ? 'unset' : 'none'}}, '已解散'),
+									h('el-button', { props: { type: 'danger', size: 'small' },style:{display: params.row.status == 3 ? 'unset' : 'none'}}, '已解散'),
 								])
 							}
 						}
@@ -281,6 +323,7 @@
 						},
 						{
 							label: '主播人数',
+              minWidth: '92px',
               prop: 'user_count',
               sortable: "custom",
 							render: (h, params) => {
@@ -290,17 +333,8 @@
 							}
 						},
 						{
-							label: '今日流水',
-              prop: 'today_flow',
-              sortable: "custom",
-							render: (h, params) => {
-								return h('div', [
-									h('span', params.row.today_flow + '钻石'),
-								])
-							}
-						},
-						{
 							label: '昨日流水',
+              minWidth: '92px',
               prop: 'yestoday_flow',
               sortable: "custom",
 							render: (h, params) => {
@@ -310,22 +344,74 @@
 							}
 						},
 						{
+							label: '今日流水',
+              minWidth: '92px',
+              prop: 'today_flow',
+              sortable: "custom",
+							render: (h, params) => {
+								return h('div', [
+									h('span', params.row.today_flow + '钻石'),
+								])
+							}
+						},
+						{
+							label: '上周流水',
+              minWidth: '92px',
+              prop: 'last_week',
+              sortable: "custom",
+							render: (h, params) => {
+								return h('div', [
+									h('span', `${params.row.last_week + '钻石'}`)
+								])
+							}
+						},
+						{
 							label: '本周流水',
+              minWidth: '110px',
               prop: 'week_flow',
               sortable: "custom",
 							render: (h, params) => {
 								return h('div', [
 									h('span', params.row.week_flow + '钻石'),
+                  h('span',{ class : `${params.row.week_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
+                  style: {
+                    marginLeft: '2px',
+                    display: params.row.week_growth > 0 ? 'unset' : 'none',
+                    color: `${params.row.week_growth > 0 ? '#F56C6C' : '#67C23A' }`
+                    }
+                  },
+                    `${params.row.week_growth}%`),
+								])
+							}
+						},
+						{
+							label: '上月流水',
+              minWidth: '92px',
+              prop: 'last_month',
+              sortable: "custom",
+							render: (h, params) => {
+								return h('div', [
+									h('span', `${params.row.last_month + '钻石'}`)
 								])
 							}
 						},
 						{
 							label: '本月流水',
+              minWidth: '110px',
               prop: 'month_flow',
               sortable: "custom",
 							render: (h, params) => {
 								return h('div', [
 									h('span', params.row.month_flow + '钻石'),
+                  h('span',{
+                    class : `${params.row.month_growth < 0 ? 'el-icon-bottom' : 'el-icon-top'}`,
+                    style: {
+                      marginLeft: '2px',
+                      display: params.row.month_growth > 0 ? 'unset' : 'none',
+                      color: `${params.row.month_growth > 0 ? '#F56C6C' : '#67C23A' }`
+                     }
+                    },
+                    `${params.row.month_growth}%`),
 								])
 							}
 						},
@@ -341,36 +427,36 @@
 						},
 						{
 							label: '操作',
-							minWidth: '320px',
+							minWidth: '280px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
                   h('el-button', {
-                    props: { type: 'primary' },
+                    props: { type: 'primary', size: 'small' },
                     style: { display: (params.row.status !== 3 && this.permissionArr.includes('Guild@updateLiveReplace')) ? 'unset' : 'none' },
                     on: { click: () => { this.change(params.row) } }
                   }, '更换会长'),
                   h('el-button', {
-                    props: { type: 'primary' },
+                    props: { type: 'primary', size: 'small' },
                     style: { display: (params.row.status !== 3 && this.permissionArr.includes('Guild@updateLiveInfo')) ? 'unset' : 'none' },
                     on: { click: () => { this.update(params.row) } }
                   }, '修改'),
                   h('el-button', {
-                    props: { type: 'danger' },
+                    props: { type: 'danger', size: 'small' },
                     style: { display: ((params.row.status === 1 && params.row.status !== 3) && this.permissionArr.includes('Guild@updateLiveFreeze')) ? 'unset' : 'none' },
                     on: { click: () => { this.freezeFunc(2, params.row) } }
                   }, '冻结'),
                   h('el-button', {
-                    props: { type: 'success' },
+                    props: { type: 'success', size: 'small' },
                     style: { display: ((params.row.status === 2 && params.row.status !== 3) &&  this.permissionArr.includes('Guild@updateLiveFreeze')) ? 'unset' : 'none' },
                     on: { click: () => { this.freezeFunc(1, params.row) } }
                   }, '解冻'),
                   h('el-button', {
-                    props: { type: 'danger' },
+                    props: { type: 'danger', size: 'small' },
                     style: { display: (params.row.status !== 3 && this.permissionArr.includes('Guild@updateLiveDisband')) ? 'unset' : 'none' },
                     on: { click: () => { this.deleteParams(params.row) } }
                   }, '解散'),
-									h('el-button', { props: { type: 'danger'},style:{display: params.row.status == 3 ? 'unset' : 'none'}}, '已解散'),
+									h('el-button', { props: { type: 'danger', size: 'small' },style:{display: params.row.status == 3 ? 'unset' : 'none'}}, '已解散'),
 								])
 							}
 						}
