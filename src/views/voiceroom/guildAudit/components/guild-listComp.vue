@@ -265,7 +265,7 @@
 						},
 						{
 							label: '操作',
-							minWidth: '280px',
+							minWidth: '300px',
 							fixed: 'right',
 							render: (h, params) => {
 								return h('div', [
