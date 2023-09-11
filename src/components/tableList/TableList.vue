@@ -312,7 +312,6 @@
         // 用来比对分页 - 重置分页
         this.oldPage = params.page
         this.oldParams = params
-
         if (this.cfgs.url) {
           request({
             url: this.cfgs.url,
