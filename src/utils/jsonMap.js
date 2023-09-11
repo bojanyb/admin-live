@@ -604,8 +604,8 @@ const DURATIONCOPY = [
     name: '7天'
   },
   {
-    value: 1296000,
-    name: '15天'
+    value: 1209600,
+    name: '14天'
   },
   {
     value: 2592000,
