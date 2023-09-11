@@ -66,12 +66,8 @@
     </div>
 
     <!-- 批量补单 -->
-    <el-dialog
-      title="批量查询反馈"
-      width="30%"
-      :visible.sync="batchDialogVisible"
-    >
-      <div style="padding: 10px">
+    <el-dialog title="批量查询反馈" width="30%" :visible.sync="batchDialogVisible">
+      <div style="padding: 10px;">
         查询出共{{ batchResultData && batchResultData.length }}条数据已支付成功
       </div>
       <div
@@ -126,15 +122,11 @@
       <tableList :cfgs="cfgs1" ref="tableList2"></tableList>
     </el-dialog>
 
-    <!-- 批量查单结果 -->
-    <el-dialog
-      class="queryPayResult"
-      title="批量查单结果"
-      width="50%"
-      :visible.sync="queryOrderResultVisible"
-      @close="stopTimer"
-    >
-      <el-table :data="orderPayData" style="width: 100%">
+    <!-- 批量补单结果 -->
+    <el-dialog class="queryPayResult" title="批量补单结果" width="50%" :visible.sync="queryOrderResultVisible" @close="stopTimer">
+      <el-table
+        :data="orderPayData"
+        style="width: 100%">
         <el-table-column
           prop="add_time"
           label="批量查单时间"
@@ -150,11 +142,8 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <template v-if="[2, 3].includes(scope.row.status)">{{
-              `${scope.row.success_number || 0}条成功 /
-                          共查单${scope.row.total_number || 0}条记录`
-            }}</template>
-            <template v-else>正在查单，请等待...</template>
+            <template v-if="[2,3].includes(scope.row.status)">{{ `${scope.row.success_number || 0}条成功 / 共补单${scope.row.total_number || 0}条记录` }}</template>
+            <template v-else>正在补单，请等待...</template>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -175,18 +164,23 @@
       />
     </el-dialog>
 
-    <!-- 查单明细 -->
-    <el-dialog
-      class="queryOrderResult"
-      title="成功查单明细"
-      width="50%"
-      :visible.sync="queryOrderDetailVisible"
-      @close="startTimer"
-    >
-      <el-table :data="orderDetailData" style="width: 100%">
-        <el-table-column prop="trade_no" label="商户单号" show-overflow-tooltip>
+
+    <!-- 补单明细 -->
+    <el-dialog class="queryOrderResult" title="成功补单明细" width="50%" :visible.sync="queryOrderDetailVisible" @close="startTimer">
+      <el-table
+        :data="orderDetailData"
+        style="width: 100%">
+        <el-table-column
+          prop="trade_no"
+          label="商户单号"
+          show-overflow-tooltip
+          >
         </el-table-column>
-        <el-table-column prop="remark" label="查单结果" show-overflow-tooltip>
+        <el-table-column
+          prop="remark"
+          label="补单结果"
+          show-overflow-tooltip
+          >
         </el-table-column>
       </el-table>
       <!--工具条-->
@@ -266,14 +260,9 @@
           </template>
         </el-table-column>
       </el-table>
-      <!--工具条-->
-      <pagination
-        v-show="currentPeriodOrderDetailTotal > 0"
-        :total="currentPeriodOrderDetailTotal"
-        :page.sync="currentPeriodOrderDetailPage.page"
-        :limit.sync="currentPeriodOrderDetailPage.limit"
-        @pagination="getCurPeriodOrderDetails"
-      />
+      				<!--工具条-->
+				<pagination v-show="currentPeriodOrderDetailTotal>0" :total="currentPeriodOrderDetailTotal" :page.sync="currentPeriodOrderDetailPage.page"
+					:limit.sync="currentPeriodOrderDetailPage.limit" @pagination="getCurPeriodOrderDetails" />
     </el-dialog>
 
     <!-- 当前时段补单明细 -->
@@ -301,41 +290,23 @@
         >
         </el-table-column>
       </el-table>
-      <pagination
-        v-show="curPeriodOrderDetailLogTotal > 0"
-        :total="curPeriodOrderDetailLogTotal"
-        :page.sync="curPeriodOrderDetailLogPage.page"
-        :limit.sync="curPeriodOrderDetailLogPage.limit"
-        @pagination="openTaskOrderLog"
-      />
+      <pagination v-show="curPeriodOrderDetailLogTotal>0" :total="curPeriodOrderDetailLogTotal" :page.sync="curPeriodOrderDetailLogPage.page"
+        :limit.sync="curPeriodOrderDetailLogPage.limit" @pagination="openTaskOrderLog" />
     </el-dialog>
 
-    <!-- 当前时段补单反馈 -->
-    <el-dialog
-      title="当前时段补单反馈"
-      width="30%"
-      :visible.sync="curPeriodOrderDialogVisible"
-    >
-      <div style="padding: 10px">操作成功</div>
-    </el-dialog>
+      <!-- 当前时段补单反馈 -->
+      <el-dialog title="当前时段补单反馈" width="30%" :visible.sync="curPeriodOrderDialogVisible">
+        <div style="padding: 10px;">
+             操作成功
+        </div>
+      </el-dialog>
+
   </div>
 </template>
 
 <script>
 // 引入api
-import {
-  diamondRechargeAll,
-  getMerchantList,
-  wxMerchantList,
-  queryPayStatus,
-  getQueryPayTask,
-  getQueryPayDetails,
-  addTask,
-  getTaskList,
-  getTaskDetail,
-  getTaskDetailLog,
-  diamondRechargeTotal
-} from "@/api/finance.js";
+import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails, addTask,getTaskList,getTaskDetail,getTaskDetailLog, diamondRechargeTotal} from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
@@ -742,17 +713,11 @@ export default {
                     style: {
                       display: params.row.status === 3 ? "unset" : "none",
                     },
-                    on: {
-                      click: () => {
-                        this.handleQueryOrder(params.row);
-                      },
-                    },
-                  },
-                  "查单"
-                ),
-              ]);
-            },
-          },
+                    on: { click: () => { this.handleQueryOrder(params.row) } }
+                  }, "补单")
+                ])
+            }
+          }
         ],
       };
     },
@@ -816,7 +781,7 @@ export default {
   },
   filters: {
     filtersTime(str) {
-      return timeFormat(str, "YYYY-MM-DD HH:mm:ss", true) || "无";
+      return timeFormat(str, "YYYY-MM-DD HH:mm:ss", true) || "无"
     },
   },
   data() {
@@ -1199,9 +1164,10 @@ export default {
     },
     // 批量补单
     handleBatchQurtyOrder() {
-      if (this.topupStatus + "" !== "3") {
-        this.$warning("未支付状态才能批量补单");
-        return;
+
+      if (this.topupStatus + '' !== '3') {
+        this.$warning('未支付状态才能批量补单')
+        return
       }
 
       if (!(this.list && this.list.length)) {
@@ -1318,12 +1284,17 @@ export default {
       }
     },
 
-    //当前时段补单
-    async handleCurrentPeriodOrder() {
-      const { start_time, end_time } = this.dateTimeParams;
-      addTask({
-        start_time: Math.floor(start_time / 1000),
-        end_time: Math.floor(end_time / 1000),
+   //当前时段补单
+   async handleCurrentPeriodOrder(){
+    const {start_time,end_time}  = this.dateTimeParams;
+     addTask({
+        start_time:  Math.floor( start_time / 1000),
+        end_time:  Math.floor( end_time / 1000)
+      }).then(({code,data})=>{
+        console.log(data)
+        this.curPeriodOrderDialogVisible = true
+      }).catch(err=>{
+        console.log(err)
       })
         .then(({ code, data }) => {
           console.log(data);
@@ -1338,8 +1309,9 @@ export default {
     hanldeQueryCurPeriodDetail(row) {
       this.queryCurPeriodOrderData = row;
       this.queryCurPeriodOrderDetailVisible = true;
-      this.currentPeriodOrderDetailPage.page = 1; //重置页码
-      this.getCurPeriodOrderDetails();
+      this.currentPeriodOrderDetailPage.page = 1;//重置页码
+      this.getCurPeriodOrderDetails()
+
     },
 
     //当前时段补单结果
