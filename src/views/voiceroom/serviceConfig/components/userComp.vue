@@ -406,7 +406,10 @@ export default {
                     return false;
                 }
             });
-        }, 300),
+        }, 1000, {
+          'leading': true,
+          'trailing': false
+        }),
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
