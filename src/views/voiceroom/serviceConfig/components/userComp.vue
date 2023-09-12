@@ -406,7 +406,10 @@ export default {
                     return false;
                 }
             });
-        }, 300),
+        }, 1000, {
+          'leading': true,
+          'trailing': false
+        }),
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
@@ -480,6 +483,9 @@ export default {
 
 <style lang="scss">
 .serviceConfig-userComp-box {
+    .el-upload-list__item.is-ready {
+      display: none;
+    }
     .el-upload-list__item-name {
         width: 240px;
     }

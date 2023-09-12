@@ -107,7 +107,6 @@
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :before-remove="beforeRemove"
-            :limit="1"
             accept=".png,.jpg,.jpeg,.mp4"
             :on-exceed="handleExceed"
             :file-list="fileList"
@@ -385,7 +384,10 @@ export default {
           return false;
         }
       });
-    }, 1000),
+    }, 1000, {
+      'leading': true,
+      'trailing': false
+    }),
     // 重置
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -402,6 +404,9 @@ export default {
 .batchBanComp-box {
   .el-select, .el-textarea {
     width: 420px;
+  }
+  .el-upload-list__item.is-ready {
+    display: none;
   }
 }
 </style>
