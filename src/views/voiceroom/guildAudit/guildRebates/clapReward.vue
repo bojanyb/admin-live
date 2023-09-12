@@ -38,8 +38,8 @@
 				<div class="btnBox">
 					<el-button class="seeBox" type="primary" @click="getList">查询</el-button>
 					<el-button icon="el-icon-refresh" @click="reset">重置</el-button>
-					<el-button type="success" v-if="form.status === 1" @click="batchFunc(1)">批量通过</el-button>
-					<el-button type="danger" v-if="form.status === 1" @click="batchFunc(2)">批量忽略</el-button>
+					<el-button type="success" :loading="isBatchPassLoading" v-if="form.status === 1" @click="batchFunc(1)">批量通过</el-button>
+					<el-button type="danger" :loading="isBatchIgnoreLoading" v-if="form.status === 1" @click="batchFunc(2)">批量忽略</el-button>
 					<el-button type="danger" @click="BatchRurn()">导出EXCEL</el-button>
 				</div>
 			</div>
@@ -217,7 +217,7 @@ export default {
 				vm: this,
 				url: REQUEST.guild[name],
         search: {
-          sizes: [10, 30, 50, 100]
+          sizes: [10, 30, 50]
         },
 				isShowCheckbox: this.form.status === 1,
 				isShowIndex: true,
@@ -243,6 +243,8 @@ export default {
 				end_time: null
 			},
 			page: 1,
+      isBatchPassLoading: false,
+      isBatchIgnoreLoading: false
 		}
 	},
 	watch: {
@@ -329,12 +331,16 @@ export default {
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
+        status + "" === "1" ? this.isBatchPassLoading = true : (status + "" === "2" ? this.isBatchIgnoreLoading = true : "");
 				let res = await doSettlement({ ids, type: 6, status, guild_type: 2 })
 				if (res.code === 2000) {
 					this.$success("批量操作成功");
 				}
+        status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
 				this.getList()
-			}).catch(() => {});
+			}).catch(() => {
+        status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
+      });
 		},
 		// 单个返点
 		async rebateFunc(id, status) {
