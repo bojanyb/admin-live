@@ -326,13 +326,27 @@ export default {
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
+
+        const loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
+
         status + "" === "1" ? this.isBatchPassLoading = true : (status + "" === "2" ? this.isBatchIgnoreLoading = true : "");
 				let res = await doSettlement({ ids, type: 2, status, guild_type: 1 })
-				if (res.code === 2000) {
-					this.$success("批量操作成功");
-				}
-        status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
-				this.getList()
+        try {
+          if (res.code === 2000) {
+				  	this.$success("批量操作成功");
+          }
+          status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
+          this.getList()
+          loading.close();
+        } catch (error) {
+          console.log(error);
+          loading.close();
+        }
 			}).catch(() => {
         status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
       });
