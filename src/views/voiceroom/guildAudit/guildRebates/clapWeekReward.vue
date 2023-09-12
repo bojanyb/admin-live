@@ -305,9 +305,6 @@ export default {
 				this.$warning('请至少选择一条数据')
 				return false
 			}
-      if (status) {
-        this.isBatchPassLoading = true;
-      }
 			let text = status == 1 ?  "通过" : "忽略";
 			this.$confirm("你确定要批量"+text+"此次数据吗？", "操作提醒", {
 				type: "warning",
