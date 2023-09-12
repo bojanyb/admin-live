@@ -484,28 +484,16 @@ export default {
           this.selectList.forEach((item) => {
             ids.push(item.id);
           });
-          if (status + "" === "1") {
-            this.isBatchPassLoading = true;
-          } else if (status + "" === "2") {
-            this.isBatchIgnoreLoading = true;
-          }
+          status + "" === "1" ? this.isBatchPassLoading = true : (status + "" === "2" ? this.isBatchIgnoreLoading = true : "");
           let res = await doSettlement({ ids, status, guild_type: 2 });
           if (res.code === 2000) {
             this.$success("批量操作成功");
           }
-          if (status + "" === "1") {
-          this.isBatchPassLoading = false;
-          } else if (status + "" === "2") {
-            this.isBatchIgnoreLoading = false;
-          }
+          status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
           this.getList();
         })
         .catch(() => {
-          if (status + "" === "1") {
-          this.isBatchPassLoading = false;
-          } else if (status + "" === "2") {
-            this.isBatchIgnoreLoading = false;
-          }
+          status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
         });
     },
     // 单个返点

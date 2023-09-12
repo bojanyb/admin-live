@@ -543,7 +543,6 @@ export default {
         this.$warning("请至少选择一条数据");
         return false;
       }
-      status + "" === "1" ? this.isBatchPassLoading = true : (status + "" === "2" ? this.isBatchIgnoreLoading = true : "");
       let text = status == 1 ? "通过" : "忽略";
       this.$confirm("你确定要批量" + text + "此次数据吗？", "操作提醒", {
         type: "warning",
@@ -555,6 +554,7 @@ export default {
           this.selectList.forEach((item) => {
             ids.push(item.id);
           });
+          status + "" === "1" ? this.isBatchPassLoading = true : (status + "" === "2" ? this.isBatchIgnoreLoading = true : "");
           let res = await doSettlement({ ids, type: 1, status, guild_type: 2 });
           if (res.code === 2000) {
             this.$success("批量操作成功");

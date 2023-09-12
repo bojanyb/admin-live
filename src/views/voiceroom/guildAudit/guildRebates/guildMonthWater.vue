@@ -432,7 +432,6 @@ export default {
     },
     // 批量返佣
     async batchFunc(status) {
-      console.log(status, "status");
       if (this.selectList.length <= 0) {
         this.$warning("请至少选择一条数据");
         return false;
