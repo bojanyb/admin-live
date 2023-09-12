@@ -190,7 +190,7 @@ export default {
           },
         },
         {
-          label: (this.form.status === 5 || this.form.status === 6)?'未达标流水':'流水',
+          label: (this.form.status === 5 || this.form.status === 6)?'未达标实际流水':'实际流水',
           minWidth: "120px",
           render: (h, params) => {
             return h(
@@ -202,7 +202,7 @@ export default {
           },
         },
         {
-          label: (this.form.status === 5 || this.form.status === 6)?'未达标总流水（含冻结）':'总流水（含冻结）',
+          label: (this.form.status === 5 || this.form.status === 6)?'未达标收礼流水':'收礼流水',
           minWidth: "140px",
           render: (h, params) => {
             return h("span", params.row.t_flow + "钻石");
@@ -690,8 +690,8 @@ export default {
         "公会运营",
         "公会长昵称",
         "公会类型",
-        "流水",
-        "总流水（含冻结）",
+        "实际流水",
+        "收礼流水",
         "周返点金额",
         "结算状态",
         "操作时间",
