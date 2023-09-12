@@ -126,7 +126,7 @@ export default {
 					}
 				},
 				{
-					label: '总流水（含冻结）',
+					label: '收礼流水',
 					minWidth: '140px',
 					render: (h, params) => {
 						return h('span', params.row.t_flow + '钻石')
@@ -456,7 +456,7 @@ export default {
 				"房间标题",
 				"拍一拍房间流水",
 				"拍成次数",
-				"总流水（含冻结）",
+				"收礼流水",
 				"奖励名称",
 				"周奖励金额",
 				"结算状态",
