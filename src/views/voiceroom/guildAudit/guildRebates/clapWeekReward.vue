@@ -305,9 +305,6 @@ export default {
 				this.$warning('请至少选择一条数据')
 				return false
 			}
-      if (status) {
-        this.isBatchPassLoading = true;
-      }
 			let text = status == 1 ?  "通过" : "忽略";
 			this.$confirm("你确定要批量"+text+"此次数据吗？", "操作提醒", {
 				type: "warning",
@@ -319,13 +316,27 @@ export default {
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
+
+        const loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
+
         status + "" === "1" ? this.isBatchPassLoading = true : (status + "" === "2" ? this.isBatchIgnoreLoading = true : "");
 				let res = await doSettlement({ ids, type: 7, status, guild_type: 2 })
-				if (res.code === 2000) {
-					this.$success("批量操作成功");
-				}
-        status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
-				this.getList()
+        try {
+          if (res.code === 2000) {
+				  	this.$success("批量操作成功");
+          }
+          status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
+          this.getList();
+          loading.close();
+        } catch (error) {
+          console.log(error);
+          loading.close();
+        }
 			}).catch(() => {
         status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
       });
