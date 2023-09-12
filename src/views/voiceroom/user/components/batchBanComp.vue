@@ -107,7 +107,6 @@
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :before-remove="beforeRemove"
-            :limit="1"
             accept=".png,.jpg,.jpeg,.mp4"
             :on-exceed="handleExceed"
             :file-list="fileList"
@@ -405,6 +404,9 @@ export default {
 .batchBanComp-box {
   .el-select, .el-textarea {
     width: 420px;
+  }
+  .el-upload-list__item.is-ready {
+    display: none;
   }
 }
 </style>
