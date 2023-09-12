@@ -82,12 +82,14 @@
           <el-button icon="el-icon-refresh" @click="reset">重置</el-button>
           <el-button
             type="success"
+            :loading="isBatchPassLoading"
             v-if="form.status === 1"
             @click="batchFunc(1)"
             >批量通过</el-button
           >
           <el-button
             type="danger"
+            :loading="isBatchIgnoreLoading"
             v-if="form.status === 1"
             @click="batchFunc(2)"
             >批量忽略</el-button
@@ -403,7 +405,7 @@ export default {
         vm: this,
         url: REQUEST.guild[name],
         search: {
-          sizes: [10, 30, 50, 100]
+          sizes: [10, 30, 50]
         },
         isShowCheckbox: this.form.status === 1,
         isShowIndex: true,
@@ -458,6 +460,8 @@ export default {
         },
       ],
       operatorList: [],
+      isBatchPassLoading: false,
+      isBatchIgnoreLoading: false
     };
   },
   created() {
@@ -539,6 +543,7 @@ export default {
         this.$warning("请至少选择一条数据");
         return false;
       }
+      status + "" === "1" ? this.isBatchPassLoading = true : (status + "" === "2" ? this.isBatchIgnoreLoading = true : "");
       let text = status == 1 ? "通过" : "忽略";
       this.$confirm("你确定要批量" + text + "此次数据吗？", "操作提醒", {
         type: "warning",
@@ -554,9 +559,12 @@ export default {
           if (res.code === 2000) {
             this.$success("批量操作成功");
           }
+          status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
           this.getList();
         })
-        .catch(() => {});
+        .catch(() => {
+          status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
+        });
     },
     // 单个返点
     async rebateFunc(id, status) {
