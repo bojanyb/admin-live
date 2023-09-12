@@ -194,17 +194,54 @@ export default {
         },
         {
           label: "实际流水",
-          minWidth: "120px",
+          minWidth: "170px",
           render: (h, params) => {
-            return h("span", params.row.flow + "钻石");
-          },
+            return h('div', [
+                h(
+                  "span",
+                  this.form.status === 2
+                    ? params.row.flow + "钻石"
+                    : params.row.flow + "钻石"
+                ),
+                h("i",
+                  {
+                    class: {
+                      "el-icon-question": true
+                    },
+                    style: {
+                      "margin-left": '4px',
+                      display: ((params.row.resettle !== undefined && params.row.resettle !== 1) || this.form.status === 1 || this.form.status === 4) ? "unset" : "none",
+                    },
+                    on: {
+                      click:()=>{ this.handleLook(params.row, "dynamic") }
+                    }
+                  },
+                ),
+            ])
+          }
         },
         {
           label: "收礼流水",
-          minWidth: "140px",
+          minWidth: "170px",
           render: (h, params) => {
-            return h("span", params.row.t_flow + "钻石");
-          },
+            return h("div", [
+                h("span", params.row.t_flow + "钻石"),
+                h("i",
+                  {
+                    class: {
+                      "el-icon-question": true
+                    },
+                    style: {
+                      "margin-left": "4px",
+                      display: ((params.row.resettle !== undefined && params.row.resettle !== 1) || this.form.status === 1 || this.form.status === 4) ? "unset" : "none",
+                    },
+                    on: {
+                      click:()=>{ this.handleLook(params.row, "dynamic") }
+                    }
+                  },
+                ),
+            ])
+          }
         },
         {
           label: "月奖励金额",
@@ -304,21 +341,21 @@ export default {
                 },
                 "再次结算"
               ),
-              h(
-                "el-button",
-                {
-                  props: { type: "info" },
-                  style: {
-                    display: +params.row.resettle !== 1 ? "unset" : "none",
-                  },
-                  on: {
-                    click: () => {
-                      this.handleLook(params.row, "guildMonthWater");
-                    },
-                  },
-                },
-                "详情"
-              ),
+              // h(
+              //   "el-button",
+              //   {
+              //     props: { type: "info" },
+              //     style: {
+              //       display: +params.row.resettle !== 1 ? "unset" : "none",
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.handleLook(params.row, "guildMonthWater");
+              //       },
+              //     },
+              //   },
+              //   "详情"
+              // ),
             ]);
           },
         },
