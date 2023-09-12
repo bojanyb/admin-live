@@ -8,20 +8,20 @@
       :before-close="handleClose"
       @closed="closed"
     >
-    <div class="wrap">
+    <div class="wrap" v-if="dialogVisible">
 
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>详情</span>
         </div>
-      <el-table :data="tableData.list" style="width: 100%">
+      <el-table :data="tableData.list" style="width: 100%"  v-loading="tableLoading" element-loading-text="数据加载中" element-loading-spinner="el-icon-loading">
         <el-table-column prop="room_title" label="房间名" align="center" width="120px">
         </el-table-column>
         <el-table-column prop="room_type_name" label="房间类型" align="center">
         </el-table-column>
-        <el-table-column prop="flow" label="流水" align="center">
+        <el-table-column prop="flow" label="实际流水" align="center">
         </el-table-column>
-        <el-table-column prop="t_flow" label="流水(含冻结）" align="center" width="120px">
+        <el-table-column prop="t_flow" label="收礼流水" align="center" width="120px">
         </el-table-column>
         <template v-if="status === 'guildWeekWater' || status === 'dynamic'">
         <el-table-column prop="Mon" label="周一" align="left" width="210px">
@@ -81,7 +81,7 @@
         <div slot="header" class="clearfix">
           <span>统计</span>
         </div>
-      <el-table :data="tableData.reward_list" style="width: 100%">
+      <el-table :data="tableData.reward_list" style="width: 100%" v-loading="tableLoading" element-loading-text="数据加载中" element-loading-spinner="el-icon-loading">
         <el-table-column prop="type_name" label="房间类型" align="center">
         </el-table-column>
         <el-table-column prop="flow" :label="is_standard === 0?'未达标流水':'达标流水'" align="center">
@@ -151,7 +151,8 @@ export default {
       },
       editTitle: "",
       status: "",
-      is_standard: 1
+      is_standard: 1,
+      tableLoading: false
     };
   },
   beforeCreate: function () {
@@ -168,15 +169,20 @@ export default {
       console.log(this.status, 'this.status');
       this.dialogVisible = true;
       this.editTitle = `${row.guild_name}公会流水详情`
+      this.tableLoading = true;
       let res = await roomFlow({
         ...this.lookPage,
         settle_id: row.id || "",
       });
-      this.tableData = res.data || [];
+      if (res.code + "" === "2000") {
+        this.tableData = res.data || [];
+      }
+      this.tableLoading = false;
     },
     // 销毁组件
     closed() {
       this.$emit("destoryComp");
+      this.tableData = [];
     },
   },
 };
