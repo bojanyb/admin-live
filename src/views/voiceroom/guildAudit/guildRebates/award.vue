@@ -356,7 +356,7 @@ export default {
             : REQUEST.guild[name],
         // url: REQUEST.system.guild[name],
         search: {
-          sizes: [10, 30, 50]
+          sizes: [10, 30, 50, 100, 300]
         },
         isShowCheckbox: true,
         isShowIndex: true,

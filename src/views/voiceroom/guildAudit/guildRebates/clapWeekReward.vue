@@ -202,7 +202,7 @@ export default {
 				vm: this,
 				url: REQUEST.guild[name],
         search: {
-          sizes: [10, 30, 50]
+          sizes: [10, 30, 50, 100, 300]
         },
 				isShowCheckbox: this.form.status === 1,
 				isShowIndex: true,
