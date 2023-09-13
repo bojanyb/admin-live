@@ -126,7 +126,7 @@ export default {
 					}
 				},
 				{
-					label: '总流水（含冻结）',
+					label: '收礼流水',
 					minWidth: '140px',
 					render: (h, params) => {
 						return h('span', params.row.t_flow + '钻石')
@@ -217,7 +217,7 @@ export default {
 				vm: this,
 				url: REQUEST.guild[name],
         search: {
-          sizes: [10, 30, 50]
+          sizes: [10, 30, 50, 100, 300]
         },
 				isShowCheckbox: this.form.status === 1,
 				isShowIndex: true,
@@ -331,13 +331,27 @@ export default {
 				this.selectList.forEach(item => {
 					ids.push(item.id)
 				})
+
+        const loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
+
         status + "" === "1" ? this.isBatchPassLoading = true : (status + "" === "2" ? this.isBatchIgnoreLoading = true : "");
 				let res = await doSettlement({ ids, type: 6, status, guild_type: 2 })
-				if (res.code === 2000) {
-					this.$success("批量操作成功");
-				}
-        status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
-				this.getList()
+        try {
+          if (res.code === 2000) {
+					  this.$success("批量操作成功");
+          }
+          status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
+          this.getList();
+          loading.close();
+        } catch (error) {
+          console.log(error);
+          loading.close();
+        }
 			}).catch(() => {
         status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
       });
@@ -442,7 +456,7 @@ export default {
 				"房间标题",
 				"拍一拍房间流水",
 				"拍成次数",
-				"总流水（含冻结）",
+				"收礼流水",
 				"奖励名称",
 				"周奖励金额",
 				"结算状态",

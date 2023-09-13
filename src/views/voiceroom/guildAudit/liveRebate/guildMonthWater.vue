@@ -193,14 +193,14 @@ export default {
           },
         },
         {
-          label: "流水",
+          label: "实际流水",
           minWidth: "120px",
           render: (h, params) => {
             return h("span", params.row.flow + "钻石");
           },
         },
         {
-          label: "总流水（含冻结）",
+          label: "收礼流水",
           minWidth: "140px",
           render: (h, params) => {
             return h("span", params.row.t_flow + "钻石");
@@ -312,7 +312,7 @@ export default {
         vm: this,
         url: REQUEST.guild[name],
         search: {
-          sizes: [10, 30, 50]
+          sizes: [10, 30, 50, 100, 300]
         },
         isShowCheckbox: this.form.status === 1,
         isShowIndex: true,
@@ -433,13 +433,27 @@ export default {
           this.selectList.forEach((item) => {
             ids.push(item.id);
           });
+
+          const loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
+
           status + "" === "1" ? this.isBatchPassLoading = true : (status + "" === "2" ? this.isBatchIgnoreLoading = true : "");
           let res = await doSettlement({ ids, type: 1, status, guild_type: 1 });
-          if (res.code === 2000) {
-            this.$success("批量操作成功");
+          try {
+            if (res.code === 2000) {
+              this.$success("批量操作成功");
+            }
+            status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
+            this.getList();
+            loading.close();
+          } catch (error) {
+            console.log(error);
+            loading.close();
           }
-          status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
-          this.getList();
         })
         .catch(() => {
           status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
@@ -556,8 +570,8 @@ export default {
         "公会名称",
         "公会长昵称",
         "公会类型",
-        "流水",
-        "总流水（含冻结）",
+        "实际流水",
+        "收礼流水",
         "月奖励金额",
         "结算状态",
         "操作时间",

@@ -193,18 +193,55 @@ export default {
           },
         },
         {
-          label: "流水",
-          minWidth: "120px",
+          label: "实际流水",
+          minWidth: "170px",
           render: (h, params) => {
-            return h("span", params.row.flow + "钻石");
-          },
+            return h('div', [
+                h(
+                  "span",
+                  this.form.status === 2
+                    ? params.row.flow + "钻石"
+                    : params.row.flow + "钻石"
+                ),
+                h("i",
+                  {
+                    class: {
+                      "el-icon-question": true
+                    },
+                    style: {
+                      "margin-left": '4px',
+                      display: ((params.row.resettle !== undefined && params.row.resettle !== 1) || this.form.status === 1 || this.form.status === 4) ? "unset" : "none",
+                    },
+                    on: {
+                      click:()=>{ this.handleLook(params.row, "dynamic") }
+                    }
+                  },
+                ),
+            ])
+          }
         },
         {
-          label: "总流水（含冻结）",
-          minWidth: "140px",
+          label: "收礼流水",
+          minWidth: "170px",
           render: (h, params) => {
-            return h("span", params.row.t_flow + "钻石");
-          },
+            return h("div", [
+                h("span", params.row.t_flow + "钻石"),
+                h("i",
+                  {
+                    class: {
+                      "el-icon-question": true
+                    },
+                    style: {
+                      "margin-left": "4px",
+                      display: ((params.row.resettle !== undefined && params.row.resettle !== 1) || this.form.status === 1 || this.form.status === 4) ? "unset" : "none",
+                    },
+                    on: {
+                      click:()=>{ this.handleLook(params.row, "dynamic") }
+                    }
+                  },
+                ),
+            ])
+          }
         },
         {
           label: "月奖励金额",
@@ -304,21 +341,21 @@ export default {
                 },
                 "再次结算"
               ),
-              h(
-                "el-button",
-                {
-                  props: { type: "info" },
-                  style: {
-                    display: +params.row.resettle !== 1 ? "unset" : "none",
-                  },
-                  on: {
-                    click: () => {
-                      this.handleLook(params.row, "guildMonthWater");
-                    },
-                  },
-                },
-                "详情"
-              ),
+              // h(
+              //   "el-button",
+              //   {
+              //     props: { type: "info" },
+              //     style: {
+              //       display: +params.row.resettle !== 1 ? "unset" : "none",
+              //     },
+              //     on: {
+              //       click: () => {
+              //         this.handleLook(params.row, "guildMonthWater");
+              //       },
+              //     },
+              //   },
+              //   "详情"
+              // ),
             ]);
           },
         },
@@ -327,7 +364,7 @@ export default {
         vm: this,
         url: REQUEST.guild[name],
         search: {
-          sizes: [10, 30, 50]
+          sizes: [10, 30, 50, 100, 300]
         },
         isShowCheckbox: this.form.status === 1,
         isShowIndex: true,
@@ -447,13 +484,27 @@ export default {
           this.selectList.forEach((item) => {
             ids.push(item.id);
           });
+
+          const loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
+
           status + "" === "1" ? this.isBatchPassLoading = true : (status + "" === "2" ? this.isBatchIgnoreLoading = true : "");
           let res = await doSettlement({ ids, type: 1, status, guild_type: 2 });
-          if (res.code === 2000) {
-            this.$success("批量操作成功");
+          try {
+            if (res.code === 2000) {
+               this.$success("批量操作成功");
+            }
+            status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
+            this.getList();
+            loading.close();
+          } catch (error) {
+            console.log(error);
+            loading.close();
           }
-          status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
-          this.getList();
         })
         .catch(() => {
           status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
@@ -575,8 +626,8 @@ export default {
         "公会名称",
         "公会长昵称",
         "公会类型",
-        "流水",
-        "总流水（含冻结）",
+        "实际流水",
+        "收礼流水",
         "月奖励金额",
         "结算状态",
         "操作时间",
