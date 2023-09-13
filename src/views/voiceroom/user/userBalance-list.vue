@@ -115,6 +115,12 @@ export default {
             }
           },
           {
+            label: '冻结金额',
+            render: (h, params) => {
+              return h('span', params.row.freeze_balance ? Number(params.row.freeze_balance) : '0')
+            }
+          },
+          {
             label: '余额',
             render: (h, params) => {
               return h('span', params.row.balance ? Number(params.row.balance) : '0')
