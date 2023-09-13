@@ -169,7 +169,7 @@ export default {
   },
   created() {
     this.getRelationTypeFunc()
-    this.changeIndex(0, true)
+    this.changeIndex(0, false)
   },
   methods: {
     // 配置参数
