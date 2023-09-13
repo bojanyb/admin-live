@@ -4,71 +4,139 @@
     <slot name="left" />
     <div class="container">
       <div class="center">
-        <el-form ref="dataForm" :model="form" :rules="rules" label-position="right" label-width="auto" :inline="true"
-          style="width: 100%;">
+        <el-form ref="dataForm" :model="form" :rules="rules" label-position="right" label-width="auto" :inline="true" style="width: 100%;">
           <el-form-item v-for="(item, index) in finalForms" :key="index" :label="item.label" :prop="item.name">
             <!--下拉框 -->
-            <el-select v-if="item.type === 'select'" v-model="form[item.name]" :placeholder="item.placeholder"
-              class="filter-item" :style="{ width: (item.width || '100%') }" :disabled="cDisabled(item)"
-              :clearable="item.clearable || false" :multiple="item.multiple || false"
-              @change="mergeEvent(arguments, item)">
-              <el-option v-for="option in item.options" :key="option[item.keyName || 'key']"
-                :label="option[item.optionLabel || 'label']" :value="option[item.keyName || 'key']" />
+            <el-select
+              v-if="item.type === 'select'"
+              v-model="form[item.name]"
+              :placeholder="item.placeholder"
+              class="filter-item"
+              :style="{width: (item.width || '100%')}"
+              :disabled="cDisabled(item)"
+              :clearable="item.clearable || false"
+              :multiple="item.multiple || false"
+              @change="mergeEvent(arguments, item)"
+            >
+              <el-option
+                v-for="option in item.options"
+                :key="option[item.keyName || 'key']"
+                :label="option[item.optionLabel || 'label']"
+                :value="option[item.keyName || 'key']"
+              />
             </el-select>
             <!-- 下拉框带输入建议 -->
-            <el-autocomplete v-else-if="item.type === 'autocomplete'" v-model="form[item.name]" class="inline-input"
-              :fetch-suggestions="querySearch" :placeholder="item.placeholder || ''" :trigger-on-focus="false"
-              @select="mergeEvent(arguments, item, 'select')" />
+            <el-autocomplete
+              v-else-if="item.type === 'autocomplete'"
+              v-model="form[item.name]"
+              class="inline-input"
+              :fetch-suggestions="querySearch"
+              :placeholder="item.placeholder || ''"
+              :trigger-on-focus="false"
+              @select="mergeEvent(arguments, item, 'select')"
+            />
             <!--带下拉框选项切换的输入框-->
-            <el-input v-else-if="item.type === 'inputSelect'" v-model="form[item.name]" :placeholder="item.placeholder"
-              clearable class="input-with-select" style="width: 100%;" :disabled="cDisabled(item)"
-              @change="mergeEvent(arguments, item)" @blur="mergeEvent(arguments, item, 'blur')"
-              @focus="mergeEvent(arguments, item, 'focus')" @clear="mergeEvent(arguments, item, 'clear')">
-              <el-select slot="prepend" v-model="form[item.selectName]" :disabled="cDisabled(item)"
-                :placeholder="item.selectPlaceholder" @change="item.handler.change" :style="{ 'width': item.selectWidth }">
-                <el-option v-for="option in item.options" :key="option[item.keyName || 'key']"
-                  :label="option[item.optionLabel || 'label']" :value="option[item.keyName || 'key']" />
+            <el-input
+              v-else-if="item.type === 'inputSelect'"
+              v-model="form[item.name]"
+              :placeholder="item.placeholder"
+              clearable
+              class="input-with-select"
+              style="width: 100%;"
+              :disabled="cDisabled(item)"
+              @change="mergeEvent(arguments, item)"
+              @blur="mergeEvent(arguments, item, 'blur')"
+              @focus="mergeEvent(arguments, item, 'focus')"
+              @clear="mergeEvent(arguments, item, 'clear')"
+            >
+              <el-select
+                slot="prepend"
+                v-model="form[item.selectName]"
+                :disabled="cDisabled(item)"
+                :placeholder="item.selectPlaceholder"
+                @change="item.handler.change"
+                :style="{'width': item.selectWidth}"
+              >
+                <el-option v-for="option in item.options" :key="option[item.keyName||'key']" :label="option[item.optionLabel||'label']" :value="option[item.keyName||'key']" />
               </el-select>
-              <el-button v-if="item.showButton" slot="append" icon="el-icon-search"
-                @click="item.handler.onSearch(form[item.name], form[item.selectName])" />
+              <el-button v-if="item.showButton" slot="append" icon="el-icon-search" @click="item.handler.onSearch(form[item.name], form[item.selectName])" />
             </el-input>
             <!--datePicker -->
             <template v-else-if="item.type === 'datePicker'">
               <div class="datePicker">
                 <div v-if="item.options && item.options.length > 0">
-                  <el-select v-model="form[item.selectName]" :disabled="cDisabled(item)" value-key="key"
-                    :placeholder="item.selectPlaceholder || ''" :style="{ width: (item.selectWidth || 110) + 'px' }"
-                    @change="mergeEvent(arguments, item, 'selectChange')">
-                    <el-option v-for="option in item.options" :key="option[item.keyName || 'key']"
-                      :label="option[item.optionLabel || 'label']" :value="option[item.keyName || 'key']" />
+                  <el-select
+                    v-model="form[item.selectName]"
+                    :disabled="cDisabled(item)"
+                    value-key="key"
+                    :placeholder="item.selectPlaceholder || ''"
+                    :style="{width: (item.selectWidth || 110) + 'px'}"
+                    @change="mergeEvent(arguments, item, 'selectChange')"
+                  >
+                    <el-option
+                      v-for="option in item.options"
+                      :key="option[item.keyName || 'key']"
+                      :label="option[item.optionLabel||'label']"
+                      :value="option[item.keyName || 'key']"
+                    />
                   </el-select>
                 </div>
-                <el-date-picker :popper-class="item.class" v-model="form[item.name]" :disabled="cDisabled(item)"
-                  :type="item.dateType || dateParams.dateType" :picker-options="(preMonth && preMonth > 0) ? pickerOptions : (item.pickerOptions || dateParams.pickerOptions)" range-separator="-"
-                  :start-placeholder="item.startPlaceholder || '开始时间'" :end-placeholder="item.endPlaceholder || '结束时间'"
-                  :clearable="!item.clearable" :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
+                <el-date-picker
+                  :popper-class="item.class"
+                  v-model="form[item.name]"
+                  :disabled="cDisabled(item)"
+                  :type="item.dateType || dateParams.dateType"
+                  :picker-options="item.pickerOptions || dateParams.pickerOptions"
+                  range-separator="-"
+                  :start-placeholder="item.startPlaceholder || '开始时间'"
+                  :end-placeholder="item.endPlaceholder || '结束时间'"
+                  :clearable="!item.clearable"
+                  :format="item.format || 'yyyy-MM-dd HH:mm:ss'"
                   :value-format="item.valueFormat || 'timestamp'"
-                  :default-time="item.defaultTime || ['00:00:00', '23:59:59']" @change="mergeEvent(arguments, item)"
-                  @blur="mergeEvent(arguments, item, 'blur')" @focus="mergeEvent(arguments, item, 'focus')"
-                  @clear="mergeEvent(arguments, item, 'clear')" />
+                  :default-time="item.defaultTime || ['00:00:00', '23:59:59']"
+                  @change="mergeEvent(arguments, item)"
+                  @blur="mergeEvent(arguments, item, 'blur')"
+                  @focus="mergeEvent(arguments, item, 'focus')"
+                  @clear="mergeEvent(arguments, item, 'clear')"
+                />
               </div>
             </template>
             <!--searchCode-->
-            <search-code v-else-if="item.type === 'searchCode'" v-model="form[item.name]"
-              :placeholder="item.placeholder || '请输入股票代码或名称'" :data-filter="dataFilter"
-              @onSelect="onSelectStock(arguments, item)" @clear="mergeEvent(arguments, item, 'clear')" />
-            <zr-search v-else-if="item.type === 'popupSearch'" v-model="form[item.name]" class="search"
-              popper-class="popup-search" :init-search="true" :query="item.handler.search" :limit="1"
-              @onSelect="searchSelect(...arguments, item)">
-              <template slot="list" :data="item">
+            <search-code
+              v-else-if="item.type === 'searchCode'"
+              v-model="form[item.name]"
+              :placeholder="item.placeholder || '请输入股票代码或名称'"
+              :data-filter="dataFilter"
+              @onSelect="onSelectStock(arguments, item)"
+              @clear="mergeEvent(arguments, item, 'clear')"
+            />
+            <zr-search
+              v-else-if="item.type === 'popupSearch'"
+              v-model="form[item.name]"
+              class="search"
+              popper-class="popup-search"
+              :init-search="true"
+              :query="item.handler.search"
+              :limit="1"
+              @onSelect="searchSelect(...arguments,item)"
+            >
+              <template slot="list">
                 <slot name="popup-search" :data="item" />
               </template>
             </zr-search>
             <!-- 下拉框 可以创建并选中选项中不存在的条目-->
-            <z-select v-else-if="item.type === 'selectWithInput'" v-model="form[item.name]" :options="item.options"
-              :allow-create="true" :label-key="item.optionLabel || 'name'" :value-key="item.keyName || 'value'"
-              :clearable="item.clearable || false" :type="item.selectType || 'number'" :min="item.min"
-              @input="mergeEvent(arguments, item)" />
+            <z-select
+              v-else-if="item.type === 'selectWithInput'"
+              v-model="form[item.name]"
+              :options="item.options"
+              :allow-create="true"
+              :label-key="item.optionLabel || 'name'"
+              :value-key="item.keyName || 'value'"
+              :clearable="item.clearable || false"
+              :type="item.selectType || 'number'"
+              :min="item.min"
+              @input="mergeEvent(arguments, item)"
+            />
             <!--级联选择器-->
             <el-cascader
               class="v-cascader"
@@ -85,14 +153,25 @@
             />
             <!--日期控件-->
             <!--日期输入 - 不弹出选择时间弹窗-->
-            <dateControl v-else-if="item.type === 'dateControl'" v-model="form[item.name]" ref="dateControl">
+            <dateControl
+            v-else-if="item.type === 'dateControl'"
+            v-model="form[item.name]"
+            ref="dateControl">
             </dateControl>
             <!--输入框-->
             <!--新增输入过滤和输入长度限制-->
             <!--{inputType}值必须为 inputLimited中fnType的键名-->
-            <el-input v-else v-model="form[item.name]" :maxlength="item.maxlength || '--'" v-input-num="item.isNum"
-              :placeholder="item.placeholder" :disabled="item.disabled" :clearable="item.clearable || false"
-              @focus="onFocus" clearable @change="mergeEvent(arguments, item)">
+            <el-input
+              v-else
+              v-model="form[item.name]"
+              :maxlength="item.maxlength|| '--'"
+              v-input-num="item.isNum"
+              :placeholder="item.placeholder"
+              :disabled="item.disabled"
+              :clearable="item.clearable || false"
+              @focus="onFocus"
+              @change="mergeEvent(arguments, item)"
+            >
               <template v-if="item.append" slot="append">{{ item.append }}</template>
             </el-input>
 
@@ -117,7 +196,7 @@
             <el-button v-if="showCustom" type="warning" @click="handleCustom">{{ customName || '自定义' }}</el-button>
             <el-button v-if="showQuery" type="primary" @click="handleQuery">{{ queryName || '查询' }}</el-button>
             <el-button v-if="showCurrentPeriodOrder" type="warning" @click="handleCurrentPeriodOrder">{{ currentPeriodOrderName || '当前时段补单' }}</el-button>
-            <el-button v-if="showCurrentPeriodOrderRes" type="primary" @click="handleCurrentPeriodOrderRes">{{ currentPeriodOrderResName || '当前时段补单结果' }}</el-button>
+            <el-button v-if="showCurrentPeriodOrderRes" type="primary" @click="handleCurrentPeriodOrderRes">{{ currentPeriodOrderResName || '当前时段补单' }}</el-button>
 
           </el-form-item>
         </el-form>
@@ -134,7 +213,6 @@ import ZrSearch from './search/index.vue'
 import zSelect from './select/index.vue'
 // 引入日期控件
 import dateControl from '@/components/dateControl/index.vue'
-import moment from 'moment'
 export default {
   name: 'TableSearch',
   components: {
@@ -147,7 +225,7 @@ export default {
     // 列表数据
     value: {
       type: Object,
-      default: function () {
+      default: function() {
         return {}
       }
     },
@@ -159,14 +237,14 @@ export default {
     // 搜索字段
     forms: {
       type: Array,
-      default: function () {
+      default: function() {
         return []
       }
     },
     // 按钮
     buttons: {
       type: Array,
-      default: function () {
+      default: function() {
         return []
       }
     },
@@ -279,7 +357,7 @@ export default {
     currentPeriodOrderResName: {
       type: String,
       default: ''
-    },
+    },    
     // 昨日 - 操作
     showYesterday: {
       type: Boolean,
@@ -291,7 +369,7 @@ export default {
       default: false
     },
     // 大前天 - 操作
-    showBigBeforeYesterday: {
+    showBigBeforeYesterday :{
       type: Boolean,
       default: false
     },
@@ -301,7 +379,7 @@ export default {
       default: false
     },
     // 本周 - 操作
-    showCurrentWeek: {
+    showCurrentWeek :{
       type: Boolean,
       default: false
     },
@@ -325,11 +403,6 @@ export default {
       type: Boolean,
       default: false
     },
-    // 时间段 当前时间前几个月，不包含当前月
-    preMonth:{
-      type: Number,
-      default: 0
-    },
     // 自定义按钮颜色
     customType: {
       type: String,
@@ -347,22 +420,7 @@ export default {
       dateParams: {
         dateType: null,
         pickerOptions: null
-      },
-      pickerOptions: { // 时间选择区间时间限制当前时间前6个月
-        onPick: ({ maxDate, minDate }) => {
-          this.choiceDate = minDate.getTime();
-          if (maxDate) {
-            this.choiceDate = ''
-          }
-        },
-        disabledDate: (time) => {
-          let preNum = this.preMonth + 1;
-          let minTime = new Date(moment().subtract(preNum,'month').format('YYYY-MM-DD') +' 00:00:00').getTime();
-          let maxTime = new Date(moment().format("YYYY-MM-DD") + ' 23:59:59').getTime();
-          return time.getTime() < minTime || time.getTime() > maxTime
-        }
-      },
-      choiceDate: ''
+      }
     }
   },
   computed: {
@@ -422,7 +480,7 @@ export default {
             if (form.type === 'inputSelect') {
               this.$set(this.form, form.selectName, form.selctValue)
               this.$watch(`form.${form.selectName}`, n => {
-                if (!form.noClear) {
+                if(!form.noClear) {
                   this.$set(this.form, form.name, '')
                 }
               })
@@ -430,7 +488,7 @@ export default {
             if (form.type === 'datePicker') {
               let dateType = 'datetimerange'
               let pickerOptions = {
-                disabledDate(time) { }
+                disabledDate(time) {}
               }
               let dateOptis = []
               if (form.options && form.options.length > 0) {
@@ -505,9 +563,9 @@ export default {
       immediate: true
     }
   },
-  created() { },
-  mounted() { },
-  beforeDestroy() { },
+  created() {},
+  mounted() {},
+  beforeDestroy() {},
   methods: {
     // 更新视图
     updateView(val, name) {
@@ -712,70 +770,64 @@ export default {
 </script>
 
 <style lang="scss">
-.share-filter-grid-box {
-  display: flex;
-  justify-content: space-between;
+	.share-filter-grid-box {
+		display: flex;
+		justify-content: space-between;
 
-  .container {
-    flex: 1;
+		.container {
+			flex: 1;
 
-    .datePicker {
-      display: flex;
+			.datePicker {
+				display: flex;
+			}
+		}
+
+    .el-form-item__label-wrap {
+      margin-left: 0px !important;
+      // display: flex;
+      .el-form-item__label {
+        float: left !important;
+      }
     }
-  }
 
-  .el-form-item__label-wrap {
-    margin-left: 0px !important;
-
-    // display: flex;
-    .el-form-item__label {
-      float: left !important;
+    .el-input {
+      >input {
+        background: #F5F7FA;
+        border: none;
+        border-radius: 0;
+      }
     }
-  }
-
-  .el-input {
-    >input {
-      background: #F5F7FA;
+    .el-input-group__prepend {
       border: none;
-      border-radius: 0;
     }
-  }
-
-  .el-input-group__prepend {
-    border: none;
-  }
-
-  .el-date-editor {
-    border: none;
-    background: #F5F7FA;
-    border-radius: 0;
-
-    >input {
+    .el-date-editor {
+      border: none;
       background: #F5F7FA;
+      border-radius: 0;
+      >input {
+        background: #F5F7FA;
+      }
+      .el-input__icon {
+        line-height: 32px;
+      }
+    }
+    .v-cascader {
+       margin-right: 30px;
+      .el-cascader__search-input {
+        background: #F5F7FA;
+        border: none;
+        border-radius: 0;
+      }
+      .el-input {
+        width: 350px;
+      }
+      .el-cascader__tags {
+        width: 350px;
+      }
     }
 
-    .el-input__icon {
-      line-height: 32px;
-    }
-  }
-
-   .v-cascader {
-      margin-right: 30px;
-     .el-cascader__search-input {
-       background: #F5F7FA;
-       border: none;
-       border-radius: 0;
-     }
-     .el-input {
-       width: 350px;
-     }
-     .el-cascader__tags {
-       width: 350px;
-     }
-   }
-
-   .search-box-primary {
+    .search-box-primary {
       min-width: 90px;
     }
-}
+	}
 </style>
