@@ -505,8 +505,8 @@ export default {
         reg_device_id: s.reg_device_id,
         start_time: s.start_time
           ? Math.floor(s.start_time / 1000)
-          : s.start_time,
-        end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
+          : "",
+        end_time: s.end_time ? Math.floor(s.end_time / 1000) : "",
         user_rank: s.user_rank,
         live_rank: s.live_rank,
         register_type: s.register_type,
@@ -620,11 +620,9 @@ export default {
     let end = new Date(
       timeFormat(time, "YYYY-MM-DD HH:mm:ss", false)
     ).getTime();
+
     this.searchParams.dateTimeParams = [start, end];
-    this.dateTimeParams = {
-      start_time: start,
-      end_time: end,
-    };
+    this.setDateTime([start, end])
   }
 };
 </script>

@@ -95,12 +95,12 @@ export default {
   mixins: [mixins],
   data() {
     return {
-      searchParams: {
-        status: "",
-        rbiStatus: "",
-        reportType: "",
-        punishType: "",
+      dateTimeParams: {
+        start_time: "",
+        end_time: "",
       },
+      searchParams: {},
+      copySeachParams: {},
       dialogVisible: false,
       ruleForm: {
         id: "",
@@ -181,6 +181,7 @@ export default {
           format: "yyyy-MM-dd HH:mm:ss",
           label: "时间选择",
           value: "",
+          linkage: true,
           handler: {
             change: (v) => {
               this.emptyDateTime();
@@ -502,6 +503,10 @@ export default {
       this.reportTypeList = arr.concat(data.report_list);
       this.punishTypeList = arr.concat(data.punish_list);
     });
+
+    this.$nextTick(() => {
+      this.setToday();
+    });
   },
   methods: {
     // 名称脱敏
@@ -555,12 +560,7 @@ export default {
     },
     // 重置
     reset() {
-      this.searchParams = {
-        status: "",
-        rbiStatus: "",
-        reportType: "",
-        punishType: "",
-      };
+      this.searchParams = {};
       this.dateTimeParams = {};
       this.getList();
     },
@@ -688,19 +688,22 @@ export default {
     destoryComp() {
       this.isDestoryComp = false
     },
+    // 设置当天
+    setToday() {
+      let time = new Date();
+      let date = timeFormat(time, "YYYY-MM-DD", false);
+      let start = new Date(date + " 00:00:00").getTime();
+      let end = new Date(
+        timeFormat(time, "YYYY-MM-DD HH:mm:ss", false)
+      ).getTime();
+
+      this.searchParams.dateTimeParams = [start, end];
+      this.setDateTime([start, end])
+      this.copySeachParams = JSON.parse(JSON.stringify(this.searchParams));
+    },
   },
   created() {
-    let time = new Date();
-    let date = timeFormat(time, "YYYY-MM-DD", false);
-    let start = new Date(date + " 00:00:00").getTime();
-    let end = new Date(
-      timeFormat(time, "YYYY-MM-DD HH:mm:ss", false)
-    ).getTime();
-    this.searchParams.dateTimeParams = [start, end];
-    this.dateTimeParams = {
-      start_time: start,
-      end_time: end,
-    };
+    this.setToday();
   }
 };
 </script>
