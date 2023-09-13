@@ -654,6 +654,19 @@ export default {
       }, 50);
     },
   },
+  created() {
+    let time = new Date();
+    let date = timeFormat(time, "YYYY-MM-DD", false);
+    let start = new Date(date + " 00:00:00").getTime();
+    let end = new Date(
+      timeFormat(time, "YYYY-MM-DD HH:mm:ss", false)
+    ).getTime();
+    this.searchParams.dateTimeParams = [start, end];
+    this.dateTimeParams = {
+      start_time: start,
+      end_time: end,
+    };
+  }
 };
 </script>
 <style>
