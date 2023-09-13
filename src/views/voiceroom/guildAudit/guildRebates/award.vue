@@ -227,14 +227,14 @@ export default {
           },
         },
         {
-          label: "本周流水",
+          label: "本周实际流水",
           minWidth: "120px",
           render: (h, params) => {
             return h("span", params.row.flow + "钻石");
           },
         },
         {
-          label: "总流水（含冻结）",
+          label: "收礼流水",
           minWidth: "140px",
           render: (h, params) => {
             return h(
@@ -356,7 +356,7 @@ export default {
             : REQUEST.guild[name],
         // url: REQUEST.system.guild[name],
         search: {
-          sizes: [10, 30, 50]
+          sizes: [10, 30, 50, 100, 300]
         },
         isShowCheckbox: true,
         isShowIndex: true,
@@ -640,8 +640,8 @@ export default {
         "所属公会ID",
         "所属公会名称",
         "本周营业时长",
-        "本周流水",
-        "总流水（含冻结）",
+        "本周实际流水",
+        "收礼流水",
         "时长奖励",
         "结算状态",
         "操作时间",

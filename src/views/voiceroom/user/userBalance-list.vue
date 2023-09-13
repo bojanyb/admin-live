@@ -165,7 +165,7 @@ export default {
   },
   created() {
     this.getRelationTypeFunc()
-    this.changeIndex(0, true)
+    this.changeIndex(0, false)
   },
   methods: {
     // 配置参数
@@ -262,22 +262,22 @@ export default {
               now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
               break;
       }
-      start = new Date(now + ' 00:00:00')
+      start = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false)).getTime();
       if( index == 0) {
-        end = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false))
+        end = (new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false)).getTime()) + 3600000;
       } else {
         end = new Date(now1 + ' 23:59:59')
       }
       if(isFirst) {
         let timer = setTimeout(() => {
-          let time = [start.getTime(), end.getTime()]
+          let time = [start, end]
           this.searchParams.dateTimeParams = time
           this.dateTimeParams.start_time = time[0]
           this.dateTimeParams.end_time = time[1]
           clearTimeout(timer)
         }, 200);
       } else {
-        let time = [start.getTime(), end.getTime()]
+        let time = [start, end]
         this.searchParams.dateTimeParams = time
         this.dateTimeParams.start_time = time[0]
         this.dateTimeParams.end_time = time[1]

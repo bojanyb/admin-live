@@ -184,7 +184,7 @@ export default {
           },
         },
         {
-          label: "流水",
+          label: "实际流水",
           minWidth: "120px",
           render: (h, params) => {
             return h(
@@ -196,7 +196,7 @@ export default {
           },
         },
         {
-          label: "总流水（含冻结）",
+          label: "收礼流水",
           minWidth: "140px",
           render: (h, params) => {
             return h("span", params.row.t_flow + "钻石");
@@ -308,7 +308,7 @@ export default {
         vm: this,
         url: REQUEST.guild[name],
         search: {
-          sizes: [10, 30, 50]
+          sizes: [10, 30, 50, 100, 300]
         },
         isShowCheckbox: this.form.status === 1,
         isShowIndex: true,
@@ -573,8 +573,8 @@ export default {
         "公会运营",
         "公会长昵称",
         "公会类型",
-        "流水",
-        "总流水（含冻结）",
+        "实际流水",
+        "收礼流水",
         "周返点金额",
         "结算状态",
         "操作时间",
