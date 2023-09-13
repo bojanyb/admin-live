@@ -111,7 +111,7 @@
               @clear="mergeEvent(arguments, item, 'clear')"
             />
             <zr-search
-              v-else-if="item.type === 'popupSearch'"00
+              v-else-if="item.type === 'popupSearch'"
               v-model="form[item.name]"
               class="search"
               popper-class="popup-search"
