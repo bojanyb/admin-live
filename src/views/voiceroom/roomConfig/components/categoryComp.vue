@@ -16,7 +16,7 @@
         :model="ruleForm"
         :rules="rules"
         ref="ruleForm"
-        label-width="85px"
+        label-width="90px"
         class="demo-ruleForm"
         label-suffix=":"
         :hide-required-asterisk="status === 'see'"
@@ -70,6 +70,28 @@
             :disabled="disabled"
           ></uploadImg>
         </el-form-item>
+        <el-form-item label="分类图标1" prop="icon_1">
+          <uploadImg
+            ref="uploadImg"
+            v-model="ruleForm.icon_1"
+            :imgUrl="ruleForm.icon_1"
+            name="icon_1"
+            @validateField="validateField"
+            accept=".png,.jpg,.jpeg"
+            :disabled="disabled"
+          ></uploadImg>
+        </el-form-item>
+        <el-form-item label="分类图标2" prop="icon_2">
+          <uploadImg
+            ref="uploadImg"
+            v-model="ruleForm.icon_2"
+            :imgUrl="ruleForm.icon_2"
+            name="icon_2"
+            @validateField="validateField"
+            accept=".png,.jpg,.jpeg"
+            :disabled="disabled"
+          ></uploadImg>
+        </el-form-item>
         <el-form-item label="类型图标" prop="img">
           <uploadImg
             ref="uploadImg"
@@ -115,6 +137,8 @@ export default {
         belong: null,
         sort: null,
         icon: "",
+        icon_1: "",
+        icon_2: "",
         color: null,
         img: "",
       },
@@ -141,7 +165,13 @@ export default {
         ],
         color: [{ required: true, message: "请输入色值", trigger: "blur" }],
         icon: [
-          { required: true, message: "请上传品类图标", trigger: "change" },
+          { required: true, message: "请上传分类图标", trigger: "change" },
+        ],
+        icon_1: [
+          { required: true, message: "请上传分类图标1", trigger: "change" },
+        ],
+        icon_2: [
+          { required: true, message: "请上传分类图标2", trigger: "change" },
         ],
         img: [{ required: true, message: "请上传类型图标", trigger: "change" }],
         belong: [{ required: true, message: "请选择业务类型", trigger: "change" }],
