@@ -90,3 +90,41 @@ export function saveChatConfig(data) {
         data
     })
 }
+
+// ---------------- 新版接口 ------------- //
+
+// 移除心动主播
+export function rmHeartAnchorV2(data) {
+  return request({
+      url: api.move.rmHeartAnchorV2,
+      method: 'post',
+      data
+  })
+}
+
+// 添加心动主播
+export function addHeartAnchorV2(data) {
+  return request({
+      url: api.move.addHeartAnchorV2,
+      method: 'post',
+      data
+  })
+}
+
+// 编辑心动主播
+export function editHeartAnchorV2(data) {
+  return request({
+      url: api.move.editHeartAnchorV2,
+      method: 'post',
+      data
+  })
+}
+
+// 获取音色分类
+export function serachTagV2(data) {
+  return request({
+      url: api.move.serachTagV2,
+      method: 'post',
+      data
+  })
+}
