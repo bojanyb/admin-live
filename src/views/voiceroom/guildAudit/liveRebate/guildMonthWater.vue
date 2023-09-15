@@ -177,6 +177,11 @@ export default {
           prop: "guild_name",
         },
         {
+          label: "公会运营",
+          minWidth: "100px",
+          prop: "operator_name",
+        },
+        {
           label: "公会长昵称",
           minWidth: "120px",
           prop: "guild_owner_nickname",
