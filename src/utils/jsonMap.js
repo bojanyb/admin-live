@@ -2046,6 +2046,10 @@ const DEALSOURCELIST = [
   {
     id: 4,
     name: '个人私聊'
+  },
+  {
+    id: 5,
+    name: '心动岛房间'
   }
 ]
 // 流水记录 - 类型
