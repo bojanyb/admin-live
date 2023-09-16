@@ -3282,18 +3282,18 @@ const RECOMMENDSTATUSLIST = [
   },
 ]
 
-// 是否有效流水 0-全部 1-有效流水 2-无效流水
+// 是否有效流水 0-全部 1-无效流水 2-有效流水
 const EFFECTIVESTATUSDATA = [
   {
     name: '全部',
     value: ''
   },
   {
-    name: '有效流水',
+    name: '无效流水',
     value: 1
   },
   {
-    name: '无效流水',
+    name: '有效流水',
     value: 2
   }
 ]
