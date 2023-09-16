@@ -507,6 +507,15 @@ const request = {
         rmHeartAnchor: `${HTTPHEADER}/Heartbeat/rmHeartAnchor`, // 移除心动主播
         heartOrder: `${HTTPHEADER}/Heartbeat/heartOrder`, // 心动记录
         serachTag: `${HTTPHEADER}/Heartbeat/serachTag`, // 获取音色分类
+        getChatConfig: `${HTTPHEADER}/System/getSyetermConfigChat`, // 心动分成配置
+        saveChatConfig: `${HTTPHEADER}/System/saveSyetermConfigChat`, // 设置心动分成配置
+        
+        
+        heartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/list`, // 心动主播
+        addHeartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/add`, // 添加心动主播
+        editHeartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/update`, // 编辑心动主播
+        rmHeartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/delete`, // 移除心动主播
+        serachTagV2: `${HTTPHEADER}/ChatCardAnchorRecommend/common`, // 获取音色分类
     },
 
     // 动态管理
