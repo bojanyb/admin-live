@@ -535,6 +535,13 @@ export default {
         guild_type: 2,
         is_standard: s.is_standard || ''
       };
+			if (this.form.status === 1) {
+				data.status = 0
+			} else if (this.form.status === 3) {
+				data.status = 1
+			} else if (this.form.status === 4) {
+				data.status = 2
+			}
       // if (this.form.status === 1) {
       //   data.status = 0;
       //   data.is_standard = 1;
