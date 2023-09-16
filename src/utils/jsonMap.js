@@ -457,10 +457,6 @@ const INSTITUTION = [
     value: 7,
     name: '新生支付'
   },
-  {
-    value: 10,
-    name: '钻石支付'
-  }
 
 ]
 
@@ -1944,10 +1940,6 @@ const PAYCONFIGURATIONPLATFORMLIST = [
     name: '新生支付',
     value: 7
   },
-  {
-    value: 10,
-    name: '钻石支付'
-  }
   // {
   //     name: '银联支付',
   //     value: 4
