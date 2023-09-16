@@ -5,6 +5,8 @@
         <span>房间数量：{{ ruleForm.room_count || 0 }}个</span>
         <span>公会数量：{{ ruleForm.guild_count || 0 }}个</span>
         <span>选择时间内总金额：{{ ruleForm.total_amount || 0 }}喵粮</span>
+        <span>有效流水：{{ ruleForm.notFreeze_total_amount || 0 }}</span>
+        <span>无效流水：{{ ruleForm.freeze_total_amount || 0 }}</span>
     </div>
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"
@@ -116,15 +118,15 @@
 						placeholder: '请选择',
 						options: MAPDATA.DEALSOURCELIST
 					},
-          			{
-						name: 'guild_type',
+          {
+						name: 'is_freeze',
 						type: 'select',
-						value: 0,
-						keyName: 'id',
+						value: '',
+						keyName: 'value',
 						optionLabel: 'name',
-						label: '房间类型',
+						label: '是否有效流水',
 						placeholder: '请选择',
-						options: this.roomTypeList
+						options: MAPDATA.EFFECTIVESTATUSDATA
 					},
 					{
 						name: 'dateTimeParams',
@@ -214,6 +216,10 @@
 							prop: 'amount'
 						},
 						{
+							label: '是否有效',
+							prop: 'is_freeze'
+						},
+						{
 						label: "收礼人IP",
 						minWidth: "80px",
 							render: (h, params) => {
@@ -259,7 +265,8 @@
 				ruleForm: {},
 				searchParams: {
 					dateTimeParams: [],
-					flow_type: 0
+					flow_type: 0,
+          is_freeze: ''
 				},
 				dateTimeParams: {
 					start_time: null,
@@ -333,6 +340,7 @@
 						start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
 						end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
 						flow_type: s.flow_type,
+            is_freeze: s.is_freeze,
 						guild_type: s.guild_type,
 						source: s.source
 					}
@@ -342,7 +350,8 @@
 			reset() {
 				this.changeIndex(0)
 				this.searchParams = {
-					flow_type: 0
+					flow_type: 0,
+          is_freeze: ''
 				}
 				this.getList()
 			},
@@ -436,6 +445,7 @@
 					arr = arr.map((item) => {
 						let source = MAPDATA.DEALSOURCETYPELIST.find(it => { return it.value === item.source })
 						let flow_type = MAPDATA.DEALSOURCELIST.find(it => { return it.id === item.flow_type })
+            let is_freeze = MAPDATA.EFFECTIVESTATUSDATA.find(it => { return it.id === item.is_freeze })
 						let guild_type = this.roomTypeList.find(it => { return it.id === item.guild_type });
 						let params = {
 							create_time: timeFormat(
@@ -450,6 +460,7 @@
 							source: source.name? source.name: "无",
 							flow_type: flow_type.name? flow_type.name: "无",
 							guild_type: guild_type.name? guild_type.name: "无",
+              is_freeze: is_freeze.name ? is_freeze.name : "无",
 							amount: item.amount,
 							receive_ip: item.receive_ip,
 						};
@@ -464,6 +475,7 @@
 					"流水类型",
 					"房间来源",
 					"房间类型",
+          "是否有效",
 					"金额",
 					"收礼人IP"
 					];
