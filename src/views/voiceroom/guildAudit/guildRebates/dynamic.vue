@@ -45,6 +45,18 @@
             </el-option>
           </el-select>
         </div>
+        <div class="sunBox">
+          <span>达标状态</span>
+          <el-select v-model="form.is_standard" placeholder="请选择">
+            <el-option
+              v-for="item in standardList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
         <div class="sunBox" v-if="form.status !== 2">
           <span>时间</span>
           <el-date-picker
@@ -263,6 +275,16 @@ export default {
           },
         },
         {
+          label: "达标状态",
+          minWidth: "120px",
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.is_standard + "" === "1" ? "达标" : "未达标"
+            );
+          },
+        },
+        {
           label: "结算状态",
           minWidth: "120px",
           render: (h, params) => {
@@ -438,18 +460,22 @@ export default {
     return {
       guildList: [], // 公会列表
       closeStatusList: [
-        ...MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST,
-        ...[
-          {
-            name: "未达标",
-            value: 5,
-          },
-          {
-            name: "未达标结算",
-            value: 6,
-          },
-        ],
+        ...MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST
       ], // 结算状态
+      standardList: [
+      {
+          name: '全部',
+          value: ''
+        },
+        {
+          name: '未达标',
+          value: 0
+        },
+        {
+          name: '已达标',
+          value: 1
+        },
+      ],
       form: {
         // 表单数据
         guild_number: "",
@@ -458,6 +484,7 @@ export default {
         time: [],
         start_time: null,
         end_time: null,
+        is_standard: ''
       },
       selectList: [], // 选中
       ruleForm: {},
@@ -506,23 +533,24 @@ export default {
         type: 2,
         status: s.status,
         guild_type: 2,
+        is_standard: s.is_standard || ''
       };
-      if (this.form.status === 1) {
-        data.status = 0;
-        data.is_standard = 1;
-      } else if (this.form.status === 3) {
-        data.status = 1;
-        data.is_standard = 1;
-      } else if (this.form.status === 4) {
-        data.status = 2;
-        data.is_standard = 1;
-      } else if (this.form.status === 5) { // 未达标
-        data.status = 0
-        data.is_standard = 0;
-      } else if(this.form.status === 6) { // 未达标结算
-        data.status = 1
-        data.is_standard = 0;
-      }
+      // if (this.form.status === 1) {
+      //   data.status = 0;
+      //   data.is_standard = 1;
+      // } else if (this.form.status === 3) {
+      //   data.status = 1;
+      //   data.is_standard = 1;
+      // } else if (this.form.status === 4) {
+      //   data.status = 2;
+      //   data.is_standard = 1;
+      // } else if (this.form.status === 5) { // 未达标
+      //   data.status = 0
+      //   data.is_standard = 0;
+      // } else if(this.form.status === 6) { // 未达标结算
+      //   data.status = 1
+      //   data.is_standard = 0;
+      // }
       if (s.status === 2) {
         delete data.status;
         delete data.start_time, delete data.end_time;
