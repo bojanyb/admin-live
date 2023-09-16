@@ -465,7 +465,7 @@ export default {
       standardList: [
       {
           name: '全部',
-          value: ''
+          value: null
         },
         {
           name: '未达标',
@@ -484,7 +484,7 @@ export default {
         time: [],
         start_time: null,
         end_time: null,
-        is_standard: ''
+        is_standard: null
       },
       selectList: [], // 选中
       ruleForm: {},
@@ -533,7 +533,7 @@ export default {
         type: 2,
         status: s.status,
         guild_type: 2,
-        is_standard: s.is_standard || ''
+        is_standard: s.is_standard || null
       };
 			if (this.form.status === 1) {
 				data.status = 0
