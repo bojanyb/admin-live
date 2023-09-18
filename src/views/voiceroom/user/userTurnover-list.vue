@@ -129,14 +129,14 @@
 						options: MAPDATA.EFFECTIVESTATUSDATA
 					},
 					{
-						name: 'room_category',
+						name: 'guild_type',
 						type: 'select',
 						value: '',
 						keyName: 'value',
 						optionLabel: 'name',
-						label: '房间类型',
+						label: '公会类型',
 						placeholder: '请选择',
-						options: MAPDATA.CATEGORYBUSINESSTYPELIST
+						options: MAPDATA.GUILDTYPELIST
 					},
 					{
 						name: 'dateTimeParams',
@@ -277,7 +277,7 @@
 					dateTimeParams: [],
 					flow_type: 0,
           is_freeze: 2,
-          room_category: ''
+          guild_type: ''
 				},
 				dateTimeParams: {
 					start_time: null,
@@ -356,8 +356,7 @@
 						end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
 						flow_type: s.flow_type,
             is_freeze: s.is_freeze,
-            room_category: s.room_category,
-						guild_type: s.guild_type,
+            guild_type: s.guild_type,
 						source: s.source
 					}
 				}
@@ -368,7 +367,7 @@
 				this.searchParams = {
 					flow_type: 0,
           is_freeze: 2,
-          room_category: ''
+          guild_type: ''
 				}
 				this.getList()
 			},

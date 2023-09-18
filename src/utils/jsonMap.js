@@ -3356,6 +3356,22 @@ const EFFECTIVESTATUSDATA = [
   }
 ]
 
+// 交易管理 - 流水记录
+const GUILDTYPELIST = [
+  {
+    name: '全部',
+    value: ''
+  },
+  {
+    name: '派对公会',
+    value: 2
+  },
+  {
+    name: '直播公会',
+    value: 1
+  }
+]
+
 export default {
   USERINVITE,
   DOWNLOADSOURCE,
@@ -3509,5 +3525,6 @@ export default {
   RISKLEVELLIST,
   RISKLEVELLISTCOPY,
   RECOMMENDSTATUSLIST,
-  EFFECTIVESTATUSDATA
+  EFFECTIVESTATUSDATA,
+  GUILDTYPELIST
 }
