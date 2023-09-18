@@ -121,7 +121,7 @@
           {
 						name: 'is_freeze',
 						type: 'select',
-						value: '',
+						value: 2,
 						keyName: 'value',
 						optionLabel: 'name',
 						label: '是否有效流水',
@@ -152,7 +152,7 @@
 					vm: this,
 					url: REQUEST.deal.userFlow1,
 					search: {
-						sizes: [10, 30, 50, 100,300,500]
+						sizes: [10, 30, 50, 100, 300, 500]
 					},
 					columns: [
 						{
@@ -266,7 +266,7 @@
 				searchParams: {
 					dateTimeParams: [],
 					flow_type: 0,
-          is_freeze: ''
+          is_freeze: 2
 				},
 				dateTimeParams: {
 					start_time: null,
@@ -355,7 +355,7 @@
 				this.changeIndex(0)
 				this.searchParams = {
 					flow_type: 0,
-          is_freeze: ''
+          is_freeze: 2
 				}
 				this.getList()
 			},

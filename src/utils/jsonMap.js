@@ -215,7 +215,7 @@ const STATUSLIST = [
   },
   {
     value: 3,
-    name: '退回'
+    name: '财务退回'
   },
   {
     value: 4,
@@ -228,6 +228,10 @@ const STATUSLIST = [
   {
     value: 6,
     name: '部分完成'
+  },
+  {
+    value: 7,
+    name: '用户取消'
   }
 ]
 
@@ -3339,16 +3343,12 @@ const RECOMMENDSTATUSLIST = [
 // 是否有效流水 0-全部 1-无效流水 2-有效流水
 const EFFECTIVESTATUSDATA = [
   {
-    name: '全部',
-    value: ''
+    name: '有效流水',
+    value: 2
   },
   {
     name: '无效流水',
     value: 1
-  },
-  {
-    name: '有效流水',
-    value: 2
   }
 ]
 

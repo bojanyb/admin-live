@@ -47,7 +47,7 @@
         </div>
         <div class="sunBox">
           <span>达标状态</span>
-          <el-select v-model="form.is_standard" placeholder="请选择">
+          <el-select v-model="form.is_standard" placeholder="请选择" @change="change">
             <el-option
               v-for="item in standardList"
               :key="item.value"
@@ -280,7 +280,7 @@ export default {
           render: (h, params) => {
             return h(
               "span",
-              params.row.is_standard + "" === "1" ? "达标" : "未达标"
+              params.row.is_standard + "" === "1" ? "已达标" : "未达标"
             );
           },
         },
@@ -463,17 +463,17 @@ export default {
         ...MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST
       ], // 结算状态
       standardList: [
-      {
-          name: '全部',
-          value: ''
-        },
         {
-          name: '未达标',
-          value: 0
+          name: '全部',
+          value: null
         },
         {
           name: '已达标',
           value: 1
+        },
+        {
+          name: '未达标',
+          value: 0
         },
       ],
       form: {
@@ -484,7 +484,7 @@ export default {
         time: [],
         start_time: null,
         end_time: null,
-        is_standard: ''
+        is_standard: null
       },
       selectList: [], // 选中
       ruleForm: {},
@@ -533,7 +533,7 @@ export default {
         type: 2,
         status: s.status,
         guild_type: 2,
-        is_standard: s.is_standard || ''
+        is_standard: s.is_standard
       };
 			if (this.form.status === 1) {
 				data.status = 0
