@@ -129,6 +129,16 @@
 						options: MAPDATA.EFFECTIVESTATUSDATA
 					},
 					{
+						name: 'room_category',
+						type: 'select',
+						value: '',
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '房间类型',
+						placeholder: '请选择',
+						options: MAPDATA.CATEGORYBUSINESSTYPELIST
+					},
+					{
 						name: 'dateTimeParams',
 						type: 'datePicker',
 						dateType: 'datetimerange',
@@ -266,7 +276,8 @@
 				searchParams: {
 					dateTimeParams: [],
 					flow_type: 0,
-          is_freeze: 2
+          is_freeze: 2,
+          room_category: ''
 				},
 				dateTimeParams: {
 					start_time: null,
@@ -345,6 +356,7 @@
 						end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
 						flow_type: s.flow_type,
             is_freeze: s.is_freeze,
+            room_category: s.room_category,
 						guild_type: s.guild_type,
 						source: s.source
 					}
@@ -355,7 +367,8 @@
 				this.changeIndex(0)
 				this.searchParams = {
 					flow_type: 0,
-          is_freeze: 2
+          is_freeze: 2,
+          room_category: ''
 				}
 				this.getList()
 			},
