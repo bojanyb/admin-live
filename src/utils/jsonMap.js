@@ -2263,6 +2263,10 @@ const HOUSEMESSAGELIVELIST = [
 // 房间品类管理 - 业务类型
 const CATEGORYBUSINESSTYPELIST = [
   {
+    name: '全部',
+    value: ''
+  },
+  {
     name: '派对',
     value: 2
   },

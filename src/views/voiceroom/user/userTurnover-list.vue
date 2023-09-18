@@ -119,6 +119,16 @@
 						options: MAPDATA.DEALSOURCELIST
 					},
           {
+						name: 'guild_type',
+						type: 'select',
+						value: 0,
+						keyName: 'id',
+						optionLabel: 'name',
+						label: '房间类型',
+						placeholder: '请选择',
+						options: this.roomTypeList
+					},
+          {
 						name: 'is_freeze',
 						type: 'select',
 						value: 2,
@@ -266,7 +276,8 @@
 				searchParams: {
 					dateTimeParams: [],
 					flow_type: 0,
-          is_freeze: 2
+          is_freeze: 2,
+          guild_type: ''
 				},
 				dateTimeParams: {
 					start_time: null,
@@ -341,7 +352,7 @@
 						end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
 						flow_type: s.flow_type,
             is_freeze: s.is_freeze,
-						guild_type: s.guild_type,
+            guild_type: s.guild_type,
 						source: s.source
 					}
 				}
@@ -351,7 +362,8 @@
 				this.changeIndex(0)
 				this.searchParams = {
 					flow_type: 0,
-          is_freeze: 2
+          is_freeze: 2,
+          guild_type: ''
 				}
 				this.getList()
 			},
