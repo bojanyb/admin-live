@@ -277,7 +277,7 @@
 					dateTimeParams: [],
 					flow_type: 0,
           is_freeze: 2,
-          guild_type: ''
+          guild_type: 0
 				},
 				dateTimeParams: {
 					start_time: null,
@@ -367,7 +367,7 @@
 				this.searchParams = {
 					flow_type: 0,
           is_freeze: 2,
-          guild_type: ''
+          guild_type: 0
 				}
 				this.getList()
 			},
