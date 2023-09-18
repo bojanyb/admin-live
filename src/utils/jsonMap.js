@@ -215,7 +215,7 @@ const STATUSLIST = [
   },
   {
     value: 3,
-    name: '退回'
+    name: '财务退回'
   },
   {
     value: 4,
@@ -228,6 +228,10 @@ const STATUSLIST = [
   {
     value: 6,
     name: '部分完成'
+  },
+  {
+    value: 7,
+    name: '用户取消'
   }
 ]
 
