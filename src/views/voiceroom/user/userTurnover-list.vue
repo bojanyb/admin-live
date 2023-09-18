@@ -134,7 +134,7 @@
 						value: 2,
 						keyName: 'value',
 						optionLabel: 'name',
-						label: '是否有效流水',
+						label: '有效流水',
 						placeholder: '请选择',
 						options: MAPDATA.EFFECTIVESTATUSDATA
 					},
