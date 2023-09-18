@@ -119,6 +119,16 @@
 						options: MAPDATA.DEALSOURCELIST
 					},
           {
+						name: 'guild_type',
+						type: 'select',
+						value: 0,
+						keyName: 'id',
+						optionLabel: 'name',
+						label: '房间类型',
+						placeholder: '请选择',
+						options: this.roomTypeList
+					},
+          {
 						name: 'is_freeze',
 						type: 'select',
 						value: 2,
@@ -127,16 +137,6 @@
 						label: '是否有效流水',
 						placeholder: '请选择',
 						options: MAPDATA.EFFECTIVESTATUSDATA
-					},
-					{
-						name: 'guild_type',
-						type: 'select',
-						value: '',
-						keyName: 'value',
-						optionLabel: 'name',
-						label: '公会类型',
-						placeholder: '请选择',
-						options: MAPDATA.GUILDTYPELIST
 					},
 					{
 						name: 'dateTimeParams',
