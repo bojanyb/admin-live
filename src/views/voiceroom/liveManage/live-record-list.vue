@@ -1,6 +1,14 @@
 <template>
-	<div class="room-livelist">
+	<div class="app-container room-livelist">
 		<menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
+    <div class="model" v-if="tabIndex === '1'">
+      <span>开播记录：{{ 0 }}条</span>
+        <span>直播总时长：{{ 0 }}</span>
+        <span>有效直播总时长：{{ 0 }}</span>
+        <span>直播总流水：{{ 0 }}</span>
+        <span>进房总人数：{{ 0 }}人</span>
+        <span>送礼总人数：{{ 0 }}人</span>
+    </div>
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
@@ -177,6 +185,11 @@
 				]
 
 				let arr1 = [
+          {
+						label: '房间ID',
+						minWidth: '100px',
+						prop: 'user_number'
+					},
 					{
 						label: '开播时间',
 						minWidth: '180px',
@@ -192,12 +205,12 @@
 						}
 					},
 					{
-						label: '房间ID',
+						label: '房间类型',
 						minWidth: '100px',
-						prop: 'user_number'
+						prop: 'room_type'
 					},
 					{
-						label: '房间标题',
+						label: '房间名称',
 						minWidth: '120px',
 						prop: 'room_title'
 					},
@@ -207,21 +220,6 @@
 						prop: 'room_cover',
 						imgHeight: '50px',
 						minWidth: '100px'
-					},
-					{
-						label: '房间类型',
-						minWidth: '100px',
-						prop: 'room_type'
-					},
-					{
-						label: '房主',
-						minWidth: '120px',
-						render: (h, params) => {
-							return h('div', [
-								h('div', params.row.nickname),
-								h('div', params.row.user_number || '无')
-							])
-						}
 					},
 					{
 						label: '所属公会',
@@ -234,6 +232,16 @@
 						}
 					},
 					{
+						label: '房主',
+						minWidth: '120px',
+						render: (h, params) => {
+							return h('div', [
+								h('div', params.row.nickname),
+								h('div', params.row.user_number || '无')
+							])
+						}
+					},
+					{
 						label: '开播时长',
 						minWidth: '120px',
 						render: (h, params) => {
@@ -241,7 +249,14 @@
 						}
 					},
 					{
-						label: '流水（钻石）',
+						label: '有效开播时长',
+						minWidth: '120px',
+						render: (h, params) => {
+							return h('span', params.row.live_time || '无')
+						}
+					},
+					{
+						label: '直播流水',
 						minWidth: '120px',
 						prop: 'total_gain'
 					},
@@ -251,22 +266,19 @@
 						prop: 'enter_user_count'
 					},
 					{
-						label: '送礼用户数',
+						label: '送礼人数',
 						minWidth: '120px',
 						prop: 'consume_user_count'
 					},
 					{
-						label: '关闭类型',
-						minWidth: '100px',
+						label: '操作',
+						minWidth : '100px',
+						fixed: 'right',
 						render: (h, params) => {
-							let data = MAPDATA.DISSOLUTIONTYPELISTCOPY.find(item => { return item.value === params.row.disband_type })
-							return h('span', data ? data.name : '无')
+							return h('div', [
+								h('el-button', { props: { type: 'danger' }, on: {click:()=>{this.dissolveFunc(params.row)}}}, '关播')
+							])
 						}
-					},
-					{
-						label: '关闭人',
-						minWidth: '120px',
-						prop: 'disband_username'
 					}
 				]
 				let name;
@@ -373,5 +385,22 @@
 .room-livelist {
 	padding: 20px;
 	box-sizing: border-box;
+  .model {
+        width: 100%;
+        height: 40px;
+        background: rgba(0,0,0,0.8);
+        display: flex;
+        align-items: center;
+        padding: 0px 30px;
+        box-sizing: border-box;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+        margin-bottom: 20px;
+        border-radius: 10px;
+        >span {
+            font-size: 15px;
+            color: #fff;
+            margin-right: 100px;
+        }
+    }
 }
 </style>
