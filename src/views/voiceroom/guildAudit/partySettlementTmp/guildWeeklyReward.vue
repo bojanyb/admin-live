@@ -224,9 +224,9 @@ export default {
                     on: {
                       click:()=>{
                         if (this.form.status === 1 || this.form.status === 3 || this.form.status === 4) {
-                          this.handleLook(params.row, "guildWeeklyReward")
+                          this.handleLook(params.row, "dynamic")
                         } else if (this.form.status === 5 || this.form.status === 6) {
-                          this.handleLook(params.row, "guildWeeklyTurnover")
+                          this.handleLook(params.row, "guildWeekWater")
                         }
                       }
                     }
@@ -253,9 +253,9 @@ export default {
                     on: {
                       click:()=>{
                         if (this.form.status === 1 || this.form.status === 3 || this.form.status === 4) {
-                          this.handleLook(params.row, "guildWeeklyReward")
+                          this.handleLook(params.row, "dynamic")
                         } else if (this.form.status === 5 || this.form.status === 6) {
-                          this.handleLook(params.row, "guildWeeklyTurnover")
+                          this.handleLook(params.row, "guildWeekWater")
                         }
                       }
                     }
