@@ -82,6 +82,15 @@ const guildAuditRouter = {
 				noCache: true
 			}
 		},
+		{
+			path: 'newGuildRebate-list',
+			component: () => import('@/views/voiceroom/guildAudit/newGuildRebate-list'),
+			name: 'newGuildRebate-list',
+			meta: {
+				title: '派对结算（新）',
+				noCache: true
+			}
+		},
     {
 			path: 'liveRebate-list',
 			component: () => import('@/views/voiceroom/guildAudit/liveRebate-list'),
