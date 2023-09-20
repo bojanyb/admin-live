@@ -278,7 +278,8 @@ const request = {
         statisticsroomS: `${HTTPHEADER}/guild/statisticsroomS`, // 统计24小时房间列表
         roomS: `${HTTPHEADER}/guild/roomS`, // 查询房间流水列表
         delStatisticsroom: `${HTTPHEADER}/guild/delStatisticsroom`, // 移除24小时房间统计
-        roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 移除24小时房间统计
+        roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 房间流水明细
+        roomFlowNew: `${HTTPHEADER}/RoomFlow/indexNew`, // 房间流水明细(新)
 
 
         // v2
