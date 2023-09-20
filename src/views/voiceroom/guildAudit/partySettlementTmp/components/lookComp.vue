@@ -43,7 +43,7 @@
             >
             </el-table-column>
             <template
-              v-if="status === 'guildWeeklyTurnover' || status === 'guildWeeklyReward'"
+              v-if="status === 'guildWeekWater' || status === 'dynamic'"
             >
               <el-table-column
                 prop="Mon"
@@ -203,14 +203,14 @@ export default {
     statusFilters(val) {
       let msg = "";
       switch (val) {
-        case "guildWeeklyTurnover":
+        case "guildWeekWater":
           if (that.is_standard === 0) {
             msg = "未达标周结算";
           } else {
             msg = "达标周结算";
           }
           break;
-        case "guildWeeklyReward":
+        case "dynamic":
           msg = "周奖励结算";
           break;
         case "guildMonthWater":
