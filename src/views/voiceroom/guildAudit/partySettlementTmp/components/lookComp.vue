@@ -43,7 +43,7 @@
             >
             </el-table-column>
             <template
-              v-if="status === 'guildWeekWater' || status === 'dynamic'"
+              v-if="status === 'guildWeeklyTurnover' || status === 'guildWeeklyReward'"
             >
               <el-table-column
                 prop="Mon"
@@ -189,7 +189,7 @@
 
 <script>
 // 引入api
-import { roomFlow, roomFlowNew } from "@/api/videoRoom";
+import { roomFlowNew } from "@/api/videoRoom";
 // 分页
 import Pagination from "@/components/Pagination";
 // 引入公共方法
@@ -203,14 +203,14 @@ export default {
     statusFilters(val) {
       let msg = "";
       switch (val) {
-        case "guildWeekWater":
+        case "guildWeeklyTurnover":
           if (that.is_standard === 0) {
             msg = "未达标周结算";
           } else {
             msg = "达标周结算";
           }
           break;
-        case "dynamic":
+        case "guildWeeklyReward":
           msg = "周奖励结算";
           break;
         case "guildMonthWater":
@@ -247,7 +247,6 @@ export default {
       this.dialogVisible = false;
     },
     async load(row, status) {
-      console.log(status, "status");
       this.status = status;
       console.log("row", row);
       this.is_standard = row.is_standard;
@@ -255,21 +254,10 @@ export default {
       this.dialogVisible = true;
       this.editTitle = `${row.guild_name}公会流水详情`;
       this.tableLoading = true;
-
-      let res;
-
-      if (status === "guildWeeklyReward" || status === "guildWeeklyTurnover") {
-        res = await roomFlowNew({
-          ...this.lookPage,
-          settle_id: row.id || "",
-        });
-      } else {
-        res = await roomFlow({
-          ...this.lookPage,
-          settle_id: row.id || "",
-        });
-      }
-
+      let res = await roomFlowNew({
+        ...this.lookPage,
+        settle_id: row.id || "",
+      });
       if (res.code + "" === "2000") {
         this.tableData = res.data || [];
       }
