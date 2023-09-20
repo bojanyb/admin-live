@@ -283,6 +283,7 @@ const request = {
         roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 移除24小时房间统计
         guildOperateList: `${HTTPHEADER}/GuildOperate/list`, // 公会运营二维码列表
         saveWechatCode: `${HTTPHEADER}/GuildOperate/saveWechatCode`, // 修改二维码
+        roomFlowNew: `${HTTPHEADER}/RoomFlow/indexNew`, // 房间流水明细(新)
 
 
 
@@ -509,8 +510,8 @@ const request = {
         serachTag: `${HTTPHEADER}/Heartbeat/serachTag`, // 获取音色分类
         getChatConfig: `${HTTPHEADER}/System/getSyetermConfigChat`, // 心动分成配置
         saveChatConfig: `${HTTPHEADER}/System/saveSyetermConfigChat`, // 设置心动分成配置
-        
-        
+
+
         heartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/list`, // 心动主播
         addHeartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/add`, // 添加心动主播
         editHeartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/update`, // 编辑心动主播
