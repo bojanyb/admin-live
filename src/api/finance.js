@@ -29,6 +29,15 @@ export function diamondRechargeTotal(data) {
   })
 }
 
+// 获取全部商户配置
+export function fetchMerchantList(data) {
+  return request({
+    url: REQUEST.diamondRecharge.fetchMerchantList,
+    method: 'post',
+    data
+  })
+}
+
 // 提现导出excel
 export function exprotCash(data) {
   return request({
