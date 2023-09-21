@@ -298,7 +298,7 @@
 
 <script>
 // 引入api
-import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails, addTask,getTaskList,getTaskDetail,getTaskDetailLog, diamondRechargeTotal} from "@/api/finance.js";
+import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails, addTask,getTaskList,getTaskDetail,getTaskDetailLog, diamondRechargeTotal, fetchMerchantList} from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
@@ -416,15 +416,18 @@ export default {
           label: "风控等级",
           placeholder: "请选择",
           options: MAPDATA.IDENTIFICATION,
-          // disabled: () => {
-          //   return this.searchParams.appid === "";
-          // }
         },
-        // {
-        //     name: 'time',
-        //     type: 'dateControl',
-        //     label: '时间选择',
-        // },
+        {
+          name: "pay_config_id",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "支付场景",
+          placeholder: "请选择",
+          clearable: true,
+          options: this.allMerchantList,
+        },
         {
           name: "dateTimeParams",
           type: "datePicker",
@@ -625,6 +628,14 @@ export default {
           //     }
           // },
           {
+            label: "支付场景",
+            minWidth: "150px",
+            prop: "merchant_name",
+            render: (h, params) => {
+              return h("span", params.row.merchant_name || "无");
+            },
+          },
+          {
             label: "商户单号",
             minWidth: "200px",
             prop: "trade_no",
@@ -639,12 +650,14 @@ export default {
           },
           {
             label: "充值人IP",
+            minWidth: "180px",
             render: (h, params) => {
               return h("span", params.row.ip ? params.row.ip : "无");
             },
           },
           {
             label: "地区",
+            minWidth: "100px",
             render: (h, params) => {
               return h("span", params.row.addr ? params.row.addr : "未知");
             },
@@ -830,7 +843,8 @@ export default {
         page: 1,
         limit: 10,
       },
-      curPeriodDetailLogData:null
+      curPeriodDetailLogData:null,
+      allMerchantList: []
     };
   },
   methods: {
@@ -925,6 +939,7 @@ export default {
           purpose: s.purpose,
           risk_status: s.risk_status,
           wx_merchant_id: s.wx_merchant_id,
+          pay_config_id: s.pay_config_id,
         };
       }
     },
@@ -1331,6 +1346,24 @@ export default {
         }
       }
     },
+
+    // 获取全部商户配置
+    async getAllMerchantList() {
+      const response = await fetchMerchantList();
+      if (response.code + "" === "2000") {
+        const tempArr = Array.from(
+          Array.isArray(response.data.list) ? response.data.list : []
+        );
+        this.allMerchantList =
+          tempArr.reduce((prev, curr) => {
+            prev.push({
+              name: curr.merchant_name,
+              value: curr.id,
+            });
+            return prev;
+          }, []) || [];
+      }
+    },
   },
   created() {
     let time = new Date();
@@ -1347,6 +1380,7 @@ export default {
     this.getTypeList();
     this.getWXMerchantList();
     this.getDiamondRechargeTotal();
+    this.getAllMerchantList();
   },
   mounted() {},
   beforeDestroy() {
