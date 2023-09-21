@@ -381,6 +381,10 @@ export default {
           },
         },
         {
+            label: "审核人",
+            prop: "username",
+          },
+        {
           label: "备注说明",
           minWidth: "180px",
           render: (h, params) => {

@@ -15,7 +15,6 @@
                     :on-preview="handlePreview"
                     :on-remove="handleRemove"
                     :before-remove="beforeRemove"
-                    :limit="1"
                     accept=".png,.jpg,.jpeg,.mp4"
                     :on-exceed="handleExceed"
                     :file-list="fileList"
@@ -90,6 +89,7 @@ export default {
         },
         // 获取数据
         loadParams(row) {
+          console.log(row, "row");
             this.dialogVisible = true
             this.form = row
             if(row.video_path) {

@@ -131,6 +131,16 @@ export default {
           options: this.checkStatusList,
         },
         {
+          name: "aaa",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "审核人",
+          placeholder: "请选择",
+          options: this.checkStatusList,
+        },
+        {
           name: "dateTimeParams",
           type: "datePicker",
           dateType: "datetimerange",
@@ -207,6 +217,10 @@ export default {
           {
             label: "评论数量",
             prop: "msg_number",
+          },
+          {
+            label: "审核人",
+            prop: "username",
           },
           {
             label: "审核状态",
