@@ -119,12 +119,22 @@
 						options: MAPDATA.DEALSOURCELIST
 					},
           {
+						name: 'guild_type',
+						type: 'select',
+						value: 0,
+						keyName: 'id',
+						optionLabel: 'name',
+						label: '房间类型',
+						placeholder: '请选择',
+						options: this.roomTypeList
+					},
+          {
 						name: 'is_freeze',
 						type: 'select',
-						value: '',
+						value: 2,
 						keyName: 'value',
 						optionLabel: 'name',
-						label: '是否有效流水',
+						label: '有效流水',
 						placeholder: '请选择',
 						options: MAPDATA.EFFECTIVESTATUSDATA
 					},
@@ -152,7 +162,7 @@
 					vm: this,
 					url: REQUEST.deal.userFlow1,
 					search: {
-						sizes: [10, 30, 50, 100,300,500]
+						sizes: [10, 30, 50, 100, 300, 500]
 					},
 					columns: [
 						{
@@ -266,7 +276,8 @@
 				searchParams: {
 					dateTimeParams: [],
 					flow_type: 0,
-          is_freeze: ''
+          is_freeze: 2,
+          guild_type: 0
 				},
 				dateTimeParams: {
 					start_time: null,
@@ -341,7 +352,7 @@
 						end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
 						flow_type: s.flow_type,
             is_freeze: s.is_freeze,
-						guild_type: s.guild_type,
+            guild_type: s.guild_type,
 						source: s.source
 					}
 				}
@@ -351,7 +362,8 @@
 				this.changeIndex(0)
 				this.searchParams = {
 					flow_type: 0,
-          is_freeze: ''
+          is_freeze: 2,
+          guild_type: 0
 				}
 				this.getList()
 			},
