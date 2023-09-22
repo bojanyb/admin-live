@@ -1,7 +1,12 @@
 <template>
   <div class="app-container room-livelist">
     <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
-    <div class="model" v-if="tabIndex === '1'">
+    <div class="model"
+       v-if="tabIndex === '1'"
+       v-loading="modelLoading"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.8)"
+    >
       <span>开播记录：{{ liveHistoryTotalData.allPage || "0" }}条</span>
       <span>直播总时长：{{ liveHistoryTotalData.all_time || "0" }}</span>
       <span>有效直播总时长：{{ liveHistoryTotalData.effective_time || "0" }}</span>
@@ -75,7 +80,8 @@ export default {
       classifyList: [], // 房间类型列表
       isDestoryComp: false, // 是否销毁组件
       liveHistoryTotalData: {},
-      tableData: {}
+      tableData: {},
+      modelLoading: true
     };
   },
   computed: {
@@ -447,12 +453,15 @@ export default {
       const searchParams = this.beforeSearch();
 
       try {
+        this.modelLoading = true;
         const { code, data } = await liveHistoryTotal(searchParams);
         if (code === 2000 && typeof data === "object") {
           this.liveHistoryTotalData = { ...data.list, allPage: this.tableData.count };
           console.log(this.liveHistoryTotalData );
         }
+        this.modelLoading = false;
       } catch (error) {
+        this.modelLoading = false;
         console.error("获取直播历史总数出错:", error);
       }
     },
@@ -487,6 +496,9 @@ export default {
       color: #fff;
       margin-right: 100px;
     }
+  }
+  .el-loading-spinner {
+    margin-top: -8px;
   }
 }
 </style>
