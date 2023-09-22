@@ -1,5 +1,5 @@
 <template>
-	<div class="room-livelist">
+	<div class="guild-live-list">
 		<menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
     <div class="model"
        v-if="tabIndex === '1'"
@@ -229,7 +229,7 @@
               "span",
               params.row.end_time
                 ? timeFormat(params.row.end_time, "YYYY-MM-DD HH:mm:ss", true)
-                : "无"
+                : "--"
             );
           },
         },
@@ -455,7 +455,7 @@
 	}
 </script>
 <style lang="scss">
-.room-livelist {
+.guild-live-list {
   padding: 20px;
   box-sizing: border-box;
   .model {
