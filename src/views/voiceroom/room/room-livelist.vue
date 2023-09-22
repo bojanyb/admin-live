@@ -7,7 +7,7 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.8)"
     >
-      <span>开播记录：{{ liveHistoryTotalData.allPage || "0" }}条</span>
+      <span>开播记录：{{ tableData.count || "0" }}条</span>
       <span>直播总时长：{{ liveHistoryTotalData.all_time || "0" }}</span>
       <span>有效直播总时长：{{ liveHistoryTotalData.effective_time || "0" }}</span>
       <span>直播总流水：{{ liveHistoryTotalData.total_gain || "0" }}</span>
@@ -440,8 +440,7 @@
         this.modelLoading = true;
         const { code, data } = await liveHistoryTotal(searchParams);
         if (code === 2000 && typeof data === "object") {
-          this.liveHistoryTotalData = { ...data.list, allPage: this.tableData.count };
-          console.log(this.liveHistoryTotalData );
+          this.liveHistoryTotalData = data.list;
         }
         this.modelLoading = false;
       } catch (error) {
