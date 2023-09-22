@@ -2,12 +2,12 @@
   <div class="app-container room-livelist">
     <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
     <div class="model" v-if="tabIndex === '1'">
-      <span>开播记录：{{ liveHistoryTotalData.allPage || "--" }}条</span>
-      <span>直播总时长：{{ liveHistoryTotalData.all_time || "--" }}</span>
-      <span>有效直播总时长：{{ liveHistoryTotalData.effective_time || "--" }}</span>
-      <span>直播总流水：{{ liveHistoryTotalData.total_gain || "--" }}</span>
-      <span>进房总人数：{{ liveHistoryTotalData.enter_user_count || "--" }}人</span>
-      <span>送礼总人数：{{ liveHistoryTotalData.consume_user_count || "--" }}人</span>
+      <span>开播记录：{{ liveHistoryTotalData.allPage || "0" }}条</span>
+      <span>直播总时长：{{ liveHistoryTotalData.all_time || "0" }}</span>
+      <span>有效直播总时长：{{ liveHistoryTotalData.effective_time || "0" }}</span>
+      <span>直播总流水：{{ liveHistoryTotalData.total_gain || "0" }}</span>
+      <span>进房总人数：{{ liveHistoryTotalData.enter_user_count || "0" }}人</span>
+      <span>送礼总人数：{{ liveHistoryTotalData.consume_user_count || "0" }}人</span>
     </div>
     <div class="searchParams">
       <SearchPanel
@@ -52,9 +52,7 @@ import { timeFormat } from "@/utils/common.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
 // 引入公共方法
-import { formatTime } from "@/utils/common.js";
-// 引入公共map
-import MAPDATA from "@/utils/jsonMap.js";
+import { formatTimeTwo } from "@/utils/common.js";
 
 export default {
   name: "RoomList",
@@ -79,6 +77,7 @@ export default {
       classifyList: [], // 房间类型列表
       isDestoryComp: false, // 是否销毁组件
       liveHistoryTotalData: {},
+      tableData: {}
     };
   },
   computed: {
@@ -251,7 +250,7 @@ export default {
         },
         {
           label: "房间名称",
-          minWidth: "120px",
+          minWidth: "140px",
           prop: "room_title",
         },
         {
@@ -306,7 +305,7 @@ export default {
           label: "有效直播时长",
           minWidth: "120px",
           render: (h, params) => {
-            return h("span", params.row.effective_time || "无");
+            return h("span", params.row.effective_time ? formatTimeTwo(params.row.effective_time) : '');
           },
         },
         {
@@ -452,7 +451,8 @@ export default {
       try {
         const { code, data } = await liveHistoryTotal(searchParams);
         if (code === 2000 && typeof data === "object") {
-          this.liveHistoryTotalData = data;
+          this.liveHistoryTotalData = { ...data.list, allPage: this.tableData.count };
+          console.log(this.liveHistoryTotalData );
         }
       } catch (error) {
         console.error("获取直播历史总数出错:", error);
@@ -460,7 +460,7 @@ export default {
     },
     // table 返回数据
     saleAmunt(row) {
-      this.liveHistoryTotalData.allPage = row.count;
+      this.tableData = row;
     },
   },
   created() {
