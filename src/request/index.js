@@ -446,6 +446,7 @@ const request = {
       anchorData: `${HTTPHEADER}/roomV2/anchorData`, // 直播数据
       effective: `${HTTPHEADER}/RoomV2/effective`, // 有效直播时长
       saveEff: `${HTTPHEADER}/RoomV2/saveEff`, // 有效直播时长 -- 保存
+      liveHistoryTotal: `${HTTPHEADER}/RoomV2/liveHistoryTotal`, // 历史列表统计
     },
 
     // 相守管理
