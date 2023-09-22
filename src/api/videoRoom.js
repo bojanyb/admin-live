@@ -1669,3 +1669,12 @@ export function saveWechatCode(data) {
     data
   })
 }
+
+// 直播房间 - 历史列表统计
+export function liveHistoryTotal(data) {
+  return request({
+    url: api.live.liveHistoryTotal,
+    method: 'post',
+    data
+  })
+}
