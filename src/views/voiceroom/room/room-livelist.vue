@@ -399,7 +399,7 @@
 				}).then(async () => {
 					let params = {
 						"room_id": row.room_id,
-						"uid": row.uid,
+						"uid": row.uid || "1",
 						"admin-token": this.$store.getters.token
 					}
 					let res = await liveEnd(params)
