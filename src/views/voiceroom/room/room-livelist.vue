@@ -18,7 +18,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
 
 		<!-- 房间直播详情组件 -->
 		<liveDetails v-if="isDestoryComp" ref="liveDetails" @destoryComp="destoryComp" @getList="getList"></liveDetails>
@@ -323,6 +323,7 @@
                 "el-button",
                 {
                   props: { type: "danger" },
+                  style: { display: params.row.live_status === 1 ? "unset" : "none" },
                   on: {
                     click: () => {
                       this.dissolveFunc(params.row);
@@ -447,6 +448,10 @@
         this.modelLoading = false;
         console.error("获取直播历史总数出错:", error);
       }
+    },
+    // table 返回数据
+    saleAmunt(row) {
+      this.tableData = row;
     },
 		},
 		created() {
