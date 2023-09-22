@@ -386,7 +386,8 @@
 			},
 			// 查询
 			onSearch() {
-				this.getList()
+				this.getList();
+        this.getLiveHistoryTotal();
 			},
 			// 解散房间
 			async dissolveFunc(row) {
