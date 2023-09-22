@@ -51,8 +51,6 @@ import REQUEST from "@/request/index.js";
 import { timeFormat } from "@/utils/common.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
-// 引入公共方法
-import { formatTimeTwo } from "@/utils/common.js";
 
 export default {
   name: "RoomList",
@@ -305,7 +303,7 @@ export default {
           label: "有效直播时长",
           minWidth: "120px",
           render: (h, params) => {
-            return h("span", params.row.effective_time ? formatTimeTwo(params.row.effective_time) : '');
+            return h("span", params.row.effective_time || "无");
           },
         },
         {
