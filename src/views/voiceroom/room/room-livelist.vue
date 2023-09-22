@@ -229,7 +229,7 @@
               "span",
               params.row.end_time
                 ? timeFormat(params.row.end_time, "YYYY-MM-DD HH:mm:ss", true)
-                : "无"
+                : "--"
             );
           },
         },
