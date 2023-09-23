@@ -128,16 +128,16 @@
 			},
 			cfgs() {
 				let arr = [
+        {
+						label: '房间ID',
+						prop: 'room_number'
+					},
 					{
 						label: '开播时间',
 						minWidth: '180px',
 						render: (h, params) => {
 							return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 						}
-					},
-					{
-						label: '房间ID',
-						prop: 'room_number'
 					},
 					{
 						label: '房间类型',
