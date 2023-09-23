@@ -3,13 +3,13 @@
         <el-dialog
         :title="title"
         :visible.sync="dialogVisible"
-        width="730px"
+        width="760px"
         :before-close="handleClose"
         :close-on-click-modal="false"
         @closed="closed">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <div class="inputBox">
-                    <el-form-item label="用户ID" prop="user_number" class="numberBox">
+                    <el-form-item label="用户/房间ID" prop="user_number" class="numberBox">
                         <el-input v-model="ruleForm.user_number" :disabled="status === 'blocked'" @input="numberInput"></el-input>
 
                         <el-button type="success" @click="seeUser">查询</el-button>
