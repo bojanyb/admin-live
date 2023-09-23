@@ -1,5 +1,5 @@
 <template>
-	<div class="room-livelist">
+	<div class="guild-live-list">
 		<menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
     <div class="model"
        v-if="tabIndex === '1'"
@@ -7,7 +7,7 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.8)"
     >
-      <span>开播记录：{{ liveHistoryTotalData.allPage || "0" }}条</span>
+      <span>开播记录：{{ tableData.count || "0" }}条</span>
       <span>直播总时长：{{ liveHistoryTotalData.all_time || "0" }}</span>
       <span>有效直播总时长：{{ liveHistoryTotalData.effective_time || "0" }}</span>
       <span>直播总流水：{{ liveHistoryTotalData.total_gain || "0" }}</span>
@@ -18,7 +18,7 @@
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
 
 		<!-- 房间直播详情组件 -->
 		<liveDetails v-if="isDestoryComp" ref="liveDetails" @destoryComp="destoryComp" @getList="getList"></liveDetails>
@@ -229,7 +229,7 @@
               "span",
               params.row.end_time
                 ? timeFormat(params.row.end_time, "YYYY-MM-DD HH:mm:ss", true)
-                : "无"
+                : "--"
             );
           },
         },
@@ -323,6 +323,7 @@
                 "el-button",
                 {
                   props: { type: "danger" },
+                  style: { display: params.row.live_status === 1 ? "unset" : "none" },
                   on: {
                     click: () => {
                       this.dissolveFunc(params.row);
@@ -386,7 +387,8 @@
 			},
 			// 查询
 			onSearch() {
-				this.getList()
+				this.getList();
+        this.getLiveHistoryTotal();
 			},
 			// 解散房间
 			async dissolveFunc(row) {
@@ -397,7 +399,7 @@
 				}).then(async () => {
 					let params = {
 						"room_id": row.room_id,
-						"uid": row.uid,
+						"uid": row.uid || "1",
 						"admin-token": this.$store.getters.token
 					}
 					let res = await liveEnd(params)
@@ -438,14 +440,17 @@
         this.modelLoading = true;
         const { code, data } = await liveHistoryTotal(searchParams);
         if (code === 2000 && typeof data === "object") {
-          this.liveHistoryTotalData = { ...data.list, allPage: this.tableData.count };
-          console.log(this.liveHistoryTotalData );
+          this.liveHistoryTotalData = data.list;
         }
         this.modelLoading = false;
       } catch (error) {
         this.modelLoading = false;
         console.error("获取直播历史总数出错:", error);
       }
+    },
+    // table 返回数据
+    saleAmunt(row) {
+      this.tableData = row;
     },
 		},
 		created() {
@@ -455,7 +460,7 @@
 	}
 </script>
 <style lang="scss">
-.room-livelist {
+.guild-live-list {
   padding: 20px;
   box-sizing: border-box;
   .model {
