@@ -491,7 +491,7 @@
     > span {
       font-size: 15px;
       color: #fff;
-      margin-right: 100px;
+      margin-right: 50px;
     }
   }
   .el-loading-spinner {
