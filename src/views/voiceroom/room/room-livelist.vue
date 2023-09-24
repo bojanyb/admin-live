@@ -1,11 +1,24 @@
 <template>
-	<div class="room-livelist">
+	<div class="guild-live-list">
 		<menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
+    <div class="model"
+       v-if="tabIndex === '1'"
+       v-loading="modelLoading"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.8)"
+    >
+      <span>开播记录：{{ tableData.count || "0" }}条</span>
+      <span>直播总时长：{{ liveHistoryTotalData.all_time || "0" }}</span>
+      <span>有效直播总时长：{{ liveHistoryTotalData.effective_time || "0" }}</span>
+      <span>直播总流水：{{ liveHistoryTotalData.total_gain || "0" }}</span>
+      <span>进房总人数：{{ liveHistoryTotalData.enter_user_count || "0" }}人</span>
+      <span>送礼总人数：{{ liveHistoryTotalData.consume_user_count || "0" }}人</span>
+    </div>
 		<div class="searchParams">
             <SearchPanel v-model="searchParams" :forms="forms" :show-reset="true" :show-search-btn="true" @onReset="reset" @onSearch="onSearch"></SearchPanel>
         </div>
 
-		<tableList :cfgs="cfgs" ref="tableList"></tableList>
+		<tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
 
 		<!-- 房间直播详情组件 -->
 		<liveDetails v-if="isDestoryComp" ref="liveDetails" @destoryComp="destoryComp" @getList="getList"></liveDetails>
@@ -15,6 +28,7 @@
 <script>
 	// 引入api
 	import { genreList } from '@/api/house.js'
+  import { liveHistoryTotal } from "@/api/videoRoom.js";
 	import { liveEnd } from '@/api/callApp.js'
 	// 引入tab菜单组件
 	import menuComp from '@/components/menuComp/index.vue'
@@ -56,7 +70,10 @@
 					}
 				],
 				classifyList: [], // 房间类型列表
-				isDestoryComp: false // 是否销毁组件
+				isDestoryComp: false, // 是否销毁组件
+        liveHistoryTotalData: {},
+        tableData: {},
+        modelLoading: true
 			}
 		},
 		computed: {
@@ -95,6 +112,7 @@
 						format: "yyyy-MM-dd HH:mm:ss",
 						label: '开播时间',
 						value: '',
+            linkage: true,
 						handler: {
 							change: v => {
 								this.emptyDateTime()
@@ -111,16 +129,16 @@
 			},
 			cfgs() {
 				let arr = [
+        {
+						label: '房间ID',
+						prop: 'room_number'
+					},
 					{
 						label: '开播时间',
 						minWidth: '180px',
 						render: (h, params) => {
 							return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
 						}
-					},
-					{
-						label: '房间ID',
-						prop: 'room_number'
 					},
 					{
 						label: '房间类型',
@@ -186,97 +204,139 @@
 					}
 				]
 
-				let arr1 = [
-					{
-						label: '开播时间',
-						minWidth: '180px',
-						render: (h, params) => {
-							return h('span', params.row.start_time ? timeFormat(params.row.start_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-						}
-					},
-					{
-						label: '关播时间',
-						minWidth: '180px',
-						render: (h, params) => {
-							return h('span', params.row.end_time ? timeFormat(params.row.end_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
-						}
-					},
-					// {
-					// 	label: '直播次数',
-					// 	minWidth: '100px',
-					// 	prop: 'room_number'
-					// },
-					{
-						label: '房间ID',
-						minWidth: '100px',
-						prop: 'room_number'
-					},
-					{
-						label: '房间类型',
-						minWidth: '100px',
-						prop: 'room_type'
-					},
-					{
-						label: '房间标题',
-						minWidth: '120px',
-						prop: 'room_title'
-					},
-					{
-						label: '房主',
-						minWidth: '120px',
-						render: (h, params) => {
-							return h('div', [
-								h('div', params.row.nickname),
-								h('div', params.row.user_number || '无')
-							])
-						}
-					},
-					{
-						label: '所属公会',
-						minWidth: '120px',
-						render: (h, params) => {
-							return h('div', [
-								h('div', params.row.guild_name),
-								h('div', params.row.guild_number || '无')
-							])
-						}
-					},
-					{
-						label: '开播时长',
-						minWidth: '120px',
-						render: (h, params) => {
-							return h('span', params.row.live_time || '无')
-						}
-					},
-					{
-						label: '流水（钻石）',
-						minWidth: '120px',
-						prop: 'total_gain'
-					},
-					{
-						label: '进房人数',
-						minWidth: '100px',
-						prop: 'enter_user_count'
-					},
-					{
-						label: '送礼用户数',
-						minWidth: '120px',
-						prop: 'consume_user_count'
-					},
-					{
-						label: '关闭类型',
-						minWidth: '100px',
-						render: (h, params) => {
-							let data = MAPDATA.DISSOLUTIONTYPELISTCOPY.find(item => { return item.value === params.row.disband_type })
-							return h('span', data ? data.name : '无')
-						}
-					},
-					{
-						label: '关闭人',
-						minWidth: '120px',
-						prop: 'disband_username'
-					}
-				]
+        let arr1 = [
+        {
+          label: "房间ID",
+          minWidth: "100px",
+          prop: "user_number",
+        },
+        {
+          label: "开播时间",
+          minWidth: "180px",
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.start_time
+                ? timeFormat(params.row.start_time, "YYYY-MM-DD HH:mm:ss", true)
+                : "无"
+            );
+          },
+        },
+        {
+          label: "关播时间",
+          minWidth: "180px",
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.end_time
+                ? timeFormat(params.row.end_time, "YYYY-MM-DD HH:mm:ss", true)
+                : "--"
+            );
+          },
+        },
+        {
+          label: "房间类型",
+          minWidth: "100px",
+          prop: "room_type",
+        },
+        {
+          label: "房间名称",
+          minWidth: "140px",
+          prop: "room_title",
+        },
+        {
+          label: "房间封面",
+          isimg: true,
+          prop: "room_cover",
+          imgHeight: "50px",
+          minWidth: "100px",
+        },
+        {
+          label: "所属公会",
+          minWidth: "120px",
+          render: (h, params) => {
+            return h("div", [
+              h("div", params.row.guild_name),
+              h("div", params.row.guild_number || "无"),
+            ]);
+          },
+        },
+        {
+          label: "房主",
+          minWidth: "120px",
+          render: (h, params) => {
+            return h("div", [
+              h("div", params.row.nickname),
+              h("div", params.row.user_number || "无"),
+            ]);
+          },
+        },
+        {
+          label: "开播状态",
+          minWidth: "120px",
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.live_status === 1
+                ? "开播中"
+                : params.row.live_status === 2
+                ? "已关播"
+                : "无"
+            );
+          },
+        },
+        {
+          label: "直播时长",
+          minWidth: "120px",
+          render: (h, params) => {
+            return h("span", params.row.live_time || "无");
+          },
+        },
+        {
+          label: "有效直播时长",
+          minWidth: "120px",
+          render: (h, params) => {
+            return h("span", params.row.effective_time || "无");
+          },
+        },
+        {
+          label: "直播流水",
+          minWidth: "120px",
+          prop: "total_gain",
+        },
+        {
+          label: "进房人数",
+          minWidth: "100px",
+          prop: "enter_user_count",
+        },
+        {
+          label: "送礼人数",
+          minWidth: "120px",
+          prop: "consume_user_count",
+        },
+        {
+          label: "操作",
+          minWidth: "100px",
+          fixed: "right",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "el-button",
+                {
+                  props: { type: "danger" },
+                  style: { display: params.row.live_status === 1 ? "unset" : "none" },
+                  on: {
+                    click: () => {
+                      this.dissolveFunc(params.row);
+                    },
+                  },
+                },
+                "关播"
+              ),
+            ]);
+          },
+        },
+      ];
 				let name;
 				if(this.tabIndex === '0') {
 					name = 'liveList'
@@ -295,13 +355,13 @@
 			beforeSearch(params) {
 				let s = { ...this.searchParams, ...this.dateTimeParams }
 				return {
-					page: params.page,
-					pagesize: params.size,
+          page: params ? params.page : null,
+          pagesize: params ? params.size : null,
 					room_number: s.room_number,
 					room_category_id: s.room_category_id,
 					guild_number: s.guild_number,
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
-                	end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0
+          end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0
 				}
 			},
 			// 刷新列表
@@ -328,7 +388,8 @@
 			},
 			// 查询
 			onSearch() {
-				this.getList()
+				this.getList();
+        this.getLiveHistoryTotal();
 			},
 			// 解散房间
 			async dissolveFunc(row) {
@@ -339,7 +400,7 @@
 				}).then(async () => {
 					let params = {
 						"room_id": row.room_id,
-						"uid": row.uid,
+						"uid": row.uid || "1",
 						"admin-token": this.$store.getters.token
 					}
 					let res = await liveEnd(params)
@@ -370,16 +431,71 @@
 					})
 				}
 				this.classifyList = res.data.list || []
-			}
+			},
+    // 获取房间列表统计
+    async getLiveHistoryTotal() {
+      this.liveHistoryTotalData = {};
+      const searchParams = this.beforeSearch();
+
+      try {
+        this.modelLoading = true;
+        const { code, data } = await liveHistoryTotal(searchParams);
+        if (code === 2000 && typeof data === "object") {
+          this.liveHistoryTotalData = data.list;
+        }
+        this.modelLoading = false;
+      } catch (error) {
+        this.modelLoading = false;
+        console.error("获取直播历史总数出错:", error);
+      }
+    },
+    // table 返回数据
+    saleAmunt(row) {
+      this.tableData = row;
+    },
+    // 获取当天时间
+    getTodayTimestamps() {
+      let time = new Date();
+      let date = timeFormat(time, "YYYY-MM-DD", false);
+      let start = new Date(date + " 00:00:00").getTime();
+      let end = new Date(
+        timeFormat(time, "YYYY-MM-DD HH:mm:ss", false)
+      ).getTime();
+
+      this.searchParams.dateTimeParams = [start, end];
+      this.setDateTime([start, end])
+      }
 		},
 		created() {
-			this.getHouse()
+			this.getHouse();
+      this.getLiveHistoryTotal();
+      this.getTodayTimestamps();
 		}
 	}
 </script>
 <style lang="scss">
-.room-livelist {
-	padding: 20px;
-	box-sizing: border-box;
+.guild-live-list {
+  padding: 20px;
+  box-sizing: border-box;
+  .model {
+    width: 100%;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    padding: 0px 30px;
+    box-sizing: border-box;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+    margin-bottom: 20px;
+    border-radius: 10px;
+    > span {
+      font-size: 15px;
+      color: #fff;
+      margin-right: 50px;
+    }
+  }
+  .el-loading-spinner {
+    margin-top: -8px;
+  }
 }
 </style>
