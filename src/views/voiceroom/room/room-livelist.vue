@@ -112,6 +112,7 @@
 						format: "yyyy-MM-dd HH:mm:ss",
 						label: '开播时间',
 						value: '',
+            linkage: true,
 						handler: {
 							change: v => {
 								this.emptyDateTime()
@@ -452,10 +453,23 @@
     saleAmunt(row) {
       this.tableData = row;
     },
+    // 获取当天时间
+    getTodayTimestamps() {
+      let time = new Date();
+      let date = timeFormat(time, "YYYY-MM-DD", false);
+      let start = new Date(date + " 00:00:00").getTime();
+      let end = new Date(
+        timeFormat(time, "YYYY-MM-DD HH:mm:ss", false)
+      ).getTime();
+
+      this.searchParams.dateTimeParams = [start, end];
+      this.setDateTime([start, end])
+      }
 		},
 		created() {
 			this.getHouse();
       this.getLiveHistoryTotal();
+      this.getTodayTimestamps();
 		}
 	}
 </script>
@@ -477,7 +491,7 @@
     > span {
       font-size: 15px;
       color: #fff;
-      margin-right: 100px;
+      margin-right: 50px;
     }
   }
   .el-loading-spinner {
