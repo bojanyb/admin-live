@@ -632,6 +632,10 @@ const DURATIONCOPY = [
     name: '999天'
   },
   {
+    value: 863913600,
+    name: '9999天'
+  },
+  {
     value: -1,
     name: '永久'
   }
