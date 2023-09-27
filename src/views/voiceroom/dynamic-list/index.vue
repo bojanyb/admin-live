@@ -49,6 +49,7 @@
 import discussComp from "./components/discussComp.vue";
 // 引入api
 import { delMoments } from "@/api/dynamic";
+import { getReviewer } from "@/api/videoRoom";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
@@ -107,6 +108,7 @@ export default {
           value: "3",
         },
       ],
+      reviewerList: [],
     };
   },
   computed: {
@@ -131,14 +133,14 @@ export default {
           options: this.checkStatusList,
         },
         {
-          name: "aaa",
+          name: "check_user_id",
           type: "select",
           value: "",
           keyName: "value",
           optionLabel: "name",
           label: "审核人",
           placeholder: "请选择",
-          options: this.checkStatusList,
+          options: this.reviewerList,
         },
         {
           name: "dateTimeParams",
@@ -220,7 +222,7 @@ export default {
           },
           {
             label: "审核人",
-            prop: "username",
+            prop: "check_user_name",
           },
           {
             label: "审核状态",
@@ -405,9 +407,18 @@ export default {
     destoryComp() {
       this.isDestoryComp = false;
     },
+
+    // 获取审核人列表
+    async fetchReviewerList() {
+      const response = await getReviewer();
+      if (response.code === 2000) {
+        this.reviewerList = response.data;
+      }
+    }
   },
   created() {
     this.changeIndex(0);
+    this.fetchReviewerList();
   },
 };
 </script>

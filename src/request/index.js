@@ -463,6 +463,8 @@ const request = {
         getPunishTypeList: `${HTTPHEADER}/UserPunishLog/getPunishTypeList`, // 处罚举报-处罚类型
         getTencentLabel: `${HTTPHEADER}/Room/tencent_label`, // 处罚举报-风险类型
         customerServiceList: `${HTTPHEADER}/ScreenImgLog/customerServiceList`, // 处罚举报-客服列表
+        getReviewer: `${HTTPHEADER}/moments/init`, // 处罚举报-获取审核人
+
 
         // 用户处罚 - 用户举报二合一
         UserPunishLog: `${HTTPHEADER}/UserPunishLog`, // 处罚-列表

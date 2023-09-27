@@ -1,154 +1,179 @@
 <template>
-    <div class="serviceConfig-uploadImg-box">
-        <el-dialog
-        title="修改违规证据"
-        :visible.sync="dialogVisible"
-        width="500px"
-        :before-close="handleClose"
-        :close-on-click-modal="false"
-        @closed="closed">
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="85px" class="demo-ruleForm" label-suffix=":">
-                <el-form-item label="违规证据">
-                    <el-upload
-                    class="upload-demo"
-                    action="#"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :before-remove="beforeRemove"
-                    accept=".png,.jpg,.jpeg,.mp4"
-                    :on-exceed="handleExceed"
-                    :file-list="fileList"
-                    :http-request="upLoad">
-                        <el-button size="small" type="primary">点击上传</el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传jpg/png/mp4文件</div>
-                    </el-upload>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-            </span>
-        </el-dialog>
-    </div>
+  <div class="serviceConfig-uploadImg-box">
+    <el-dialog
+      title="修改违规证据"
+      :visible.sync="dialogVisible"
+      width="500px"
+      :before-close="handleClose"
+      :close-on-click-modal="false"
+      @closed="closed"
+    >
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+        label-width="85px"
+        class="demo-ruleForm"
+        label-suffix=":"
+      >
+        <el-form-item label="违规证据">
+          <el-upload
+            class="upload-demo"
+            action="#"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :before-remove="beforeRemove"
+            accept=".png,.jpg,.jpeg,.mp4"
+            :file-list="fileList"
+            :http-request="upLoad"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png/mp4文件</div>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
 // 引入api
-import { updateSource } from '@/api/risk.js'
+import { updateSource } from "@/api/risk.js";
 // 引入oss
-import { uploadOSS } from '@/utils/oss.js'
+import { uploadOSS } from "@/utils/oss.js";
 import { debounce } from "lodash";
 export default {
-    data() {
-        return {
-            dialogVisible: false,
-            fileList: [],
-            form: {},
-            ruleForm: {
-                img: ''
-            },
-            rules: {
-                img: [
-                    { required: true, message: '请输入违规证据', trigger: 'blur' },
-                    // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-                ]
-            }
-        };
+  data() {
+    return {
+      dialogVisible: false,
+      fileList: [],
+      form: {},
+      ruleForm: {},
+      rules: {
+        img: [
+          { required: true, message: "请输入违规证据", trigger: "blur" },
+          // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+      },
+    };
+  },
+  methods: {
+    // 移除之后
+    handleRemove(file, fileList) {
+      this.fileList = fileList;
     },
-    methods: {
-        // 移除之后
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-            this.ruleForm.img = ''
-        },
-        // 预览
-        handlePreview(file) {
-            console.log(file);
-        },
-        // 超出文件数量最大上传
-        handleExceed(files, fileList) {
-            this.$warning(`最大上传一个文件`);
-        },
-        // 移除文件之前
-        beforeRemove(file, fileList) {
-            return this.$confirm(`确定移除 ${ file.name }？`);
-        },
-        // 关闭弹窗
-        handleClose() {
-            this.dialogVisible = false
-        },
-        // 上传
-        upLoad(file) {
-            uploadOSS(file.file).then(res => {
-                if(res.url) {
-                    this.ruleForm.img = res.url
-                }
-            }).catch(err => {
-                this.$message.error(err)
-            })
-        },
-        // 获取数据
-        loadParams(row) {
-          console.log(row, "row");
-            this.dialogVisible = true
-            this.form = row
-            if(row.video_path) {
-                let name = row.video_path.split('.live/')[1]
-                this.fileList = [ { name: name, url: row.video_path } ]
-            } else if(row.img_path) {
-                let name = row.img_path.split('.live/')[1]
-                this.fileList = [ { name: name, url: row.img_path } ]
-                this.ruleForm.img = row.img_path
+    // 预览
+    handlePreview(file) {
+      console.log(file);
+    },
+    // 移除文件之前
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    // 关闭弹窗
+    handleClose() {
+      this.dialogVisible = false;
+    },
+    // 上传
+    upLoad(file) {
+      uploadOSS(file.file)
+        .then((response) => {
+          if (response.url) {
+            this.fileList.push({ name: file.file.name, url: response.url });
+          }
+        })
+        .catch((err) => {
+          this.$message.error(err);
+        });
+    },
+    // 获取数据并加载参数
+    loadParams(row) {
+      this.dialogVisible = true;
+      this.form = row;
+
+      const parsePath = (path) => {
+        const name = path.split(".live/")[1];
+        return {
+          name,
+          url: path,
+        };
+      };
+
+      const videoPaths = row.video_path ? row.video_path.split(",") : [];
+      const imgPaths = row.img_path ? row.img_path.split(",") : [];
+      this.fileList = [...videoPaths, ...imgPaths].map(parsePath);
+    },
+    // 处理表单提交
+    submitForm: debounce(async function (formName) {
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          if (!valid) {
+            console.log("error submit!!");
+            return false;
+          }
+
+          if (!this.fileList || this.fileList.length === 0) {
+            this.$warning("违规证据不能为空！");
+            return;
+          }
+
+          let params = {};
+          if (this.form.id_array.length > 1) {
+            params.ids = this.form.id_array;
+          } else {
+            params.id = this.form.id_array.join();
+          }
+
+          // 将文件列表拆分为视频路径和图片路径
+          const { videoPaths, imgPaths } = this.fileList.reduce(
+            (paths, item) => {
+              const targetPath = item.url.includes(".mp4")
+                ? "videoPaths"
+                : "imgPaths";
+              paths[targetPath].push(item.url);
+              return paths;
+            },
+            { videoPaths: [], imgPaths: [] }
+          );
+
+          params = {
+            ...params,
+            ...(videoPaths && { video_path: videoPaths.join(",") }),
+            ...(imgPaths && { img_path: imgPaths.join(",") }),
+          };
+
+          try {
+            const { code } = await updateSource(params);
+            if (code === 2000) {
+              this.$success("修改成功");
+              this.dialogVisible = false;
+              this.$emit("getList");
             }
-        },
-        // 提交
-        submitForm: debounce(async function (formName) {
-            this.$refs[formName].validate(async (valid) => {
-              if (valid) {
-
-                if (!this.ruleForm.img) {
-                  this.$warning('违规证据不能为空！');
-                  return
-                }
-
-                  let params = {}
-                  if (this.form.id_array.length > 1) {
-                    params.ids = this.form.id_array;
-                  } else {
-                    params.id = this.form.id_array.join();
-                  }
-                  if(this.ruleForm.img) {
-                      if(this.ruleForm.img.indexOf('.mp4') !== -1) {
-                          params.video_path = this.ruleForm.img
-                      } else {
-                          params.img_path = this.ruleForm.img
-                      }
-                  }
-                  let res = await updateSource(params)
-                  if(res.code === 2000) {
-                      this.$success('修改成功')
-                      this.dialogVisible = false
-                      this.$emit('getList')
-                  }
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        }, 300),
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-        },
-        // 销毁组件
-        closed() {
-            this.$emit('destoryComp')
+          } catch (error) {
+            this.$warning("修改失败");
+            this.dialogVisible = false;
+          }
         }
-    }
-}
+      });
+    }, 300),
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+    // 销毁组件
+    closed() {
+      this.$emit("destoryComp");
+    },
+  },
+};
 </script>
 
 <style lang="scss">
 .serviceConfig-uploadImg-box {
-
 }
 </style>
