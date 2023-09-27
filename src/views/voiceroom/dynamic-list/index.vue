@@ -80,6 +80,7 @@ export default {
       searchParams: {
         dateTimeParams: [],
         check_status: "",
+        check_user_id: "",
         user_number: "",
       },
       dateTimeParams: {
@@ -149,6 +150,7 @@ export default {
           format: "yyyy-MM-dd HH:mm:ss",
           label: "时间选择",
           value: "",
+          linkage: true,
           handler: {
             change: (v) => {
               this.emptyDateTime();
@@ -236,7 +238,7 @@ export default {
           },
           {
             label: "操作",
-            minWidth: "140px",
+            minWidth: "180px",
             render: (h, params) => {
               return h("div", [
                 h(
@@ -336,6 +338,7 @@ export default {
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
         user_number: s.user_number,
         check_status: s.check_status,
+        check_user_id: s.check_user_id,
       };
     },
     // 刷新列表
@@ -407,12 +410,19 @@ export default {
     destoryComp() {
       this.isDestoryComp = false;
     },
-
     // 获取审核人列表
     async fetchReviewerList() {
-      const response = await getReviewer();
-      if (response.code === 2000) {
-        this.reviewerList = response.data;
+      try {
+        const response = await getReviewer();
+        if (response.code === 2000) {
+          const reviewerList = response.data.list.map(({ id, username }) => ({
+            value: id,
+            name: username
+          }));
+          this.reviewerList = [{ value: '', name: '全部' }, ...reviewerList];
+        }
+      } catch (error) {
+        console.error(error);
       }
     }
   },

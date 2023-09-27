@@ -422,6 +422,7 @@
 </script>
 
 <style lang="scss">
+  @import '../../styles/index.scss';
   .share-table-list-box {
     // border: 1px solid #DCDCDC;
     // border-bottom: none;
@@ -474,6 +475,7 @@
   .share-table-list-box .el-table__body-wrapper {
     max-height: 40rem !important;
     overflow-y: auto;
+    @include scrollbar-style;
   }
 
   .el-tooltip__popper {
