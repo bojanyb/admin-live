@@ -583,8 +583,12 @@ export default {
       this.getList();
     },
     // 查询
-    onSearch() {
-      this.getList();
+    onSearch(params) {
+      this.dateTimeParams = {
+        start_time: params.dateTimeParams[0],
+        end_time: params.dateTimeParams[1]
+      };
+      this.getList()
     },
     destoryComp() {
       this.isDestoryComp = false;
