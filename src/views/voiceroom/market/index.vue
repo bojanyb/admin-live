@@ -8,19 +8,20 @@
         showReset
         showSearchBtn
         showAdd
+        showCustom
+        customName="监测链接管理"
         @onReset="resetForm"
         @onSearch="searchForm"
-        @add="addForm"
+        @custom="addForm"
       />
     </div>
     <div class="link-data-monitor__table-list">
       <TableList :cfgs="tableConfig" ref="tableList" />
     </div>
-    <!-- 新增/修改 -->
-    <DataEditor
-      ref="dataEditor"
+    <!-- 检测链接管理 -->
+    <LinkMonitor
+      ref="linkMonitor"
       v-if="isDestroyedComponent"
-      :type="'sysnotice'"
       @onSearch="searchForm"
       @destoryComp="handleComponentDestroyed"
     />
@@ -30,28 +31,27 @@
 <script>
 import mixins from "@/utils/mixins.js";
 import REQUEST from "@/request/index.js";
-import { timeFormat } from "@/utils/common.js";
-import MAPDATA from "@/utils/jsonMap.js";
+import { getChain } from "@/api/market";
 
 export default {
   components: {
     TableList: () => import("@/components/tableList/TableList.vue"),
     SearchPanel: () => import("@/components/SearchPanel/final.vue"),
-    DataEditor: () => import("./components/dataEditor.vue"),
+    LinkMonitor: () => import("./components/linkMonitor.vue"),
   },
   mixins: [mixins],
   computed: {
     searchFormFields() {
       return [
         {
-          name: "gift_type",
+          name: "chains",
           type: "select",
           value: "全部",
-          keyName: "id",
-          optionLabel: "title",
+          keyName: "value",
+          optionLabel: "name",
           label: "检测链接",
           placeholder: "请选择",
-          options: [],
+          options: this.chainList,
 		      clearable: true,
         },
         {
@@ -71,52 +71,59 @@ export default {
     tableConfig() {
       return {
         vm: this,
-        url: REQUEST.system.sysList,
+        url: REQUEST.market.monitorChainData,
         columns: [
           {
-            label: "发送时间",
-            minWidth: "50px",
-            render: (h, params) => {
-              const createTime = params.row.create_time;
-              const formattedTime = createTime
-                ? timeFormat(createTime, "YYYY-MM-DD HH:mm:ss", true)
-                : "--";
-
-              return h("span", formattedTime);
-            },
+            label: "日期",
+            prop: "register_date",
           },
           {
-            label: "用户",
-            minWidth: "50px",
-            prop: "target_val",
+            label: "注册",
+            prop: "register_people",
           },
           {
-            label: "消息标题",
-            minWidth: "50px",
-            render: (h, params) => {
-              const title = params.row.title || "--";
-              return h("span", title);
-            },
+            label: "当日付费人数",
+            prop: "first_day_people",
           },
           {
-            label: "消息内容",
-            showOverFlow: true,
-            render: (h, params) => {
-              const content = params.row.content || "--";
-              return h("span", { domProps: { innerHTML: content } });
-            },
+            label: "当日付费金额",
+            prop: "first_day_amount",
           },
           {
-            label: "跳转类型",
-            minWidth: "50px",
-            render: (h, params) => {
-              const pushType = params.row.push_type;
-              const data = MAPDATA.PATHTYPE2.find(
-                (item) => item.value === pushType
-              );
-              const typeName = data ? data.name : "--";
-              return h("span", typeName);
-            },
+            label: "次日付费人数/金额",
+            prop: "second_day",
+          },
+          {
+            label: "三日付费人数/金额",
+            prop: "third_day",
+          },
+          {
+            label: "七日付费人数/金额",
+            prop: "seven_day",
+          },
+          {
+            label: "三十日付费人数/金额",
+            prop: "thirty_day",
+          },
+          {
+            label: "日活用户",
+            prop: "use_app",
+          },
+          {
+            label: "渠道总付费人数",
+            prop: "channel_people",
+          },
+          {
+            label: "渠道总付费金额",
+            prop: "channel_amount",
+          },
+          {
+            label: "区间付费人数",
+            prop: "range_people",
+          },
+          {
+            label: "总付费人数/金额",
+            prop: "total",
           },
         ],
       };
@@ -125,6 +132,7 @@ export default {
   data() {
     return {
       isDestroyedComponent: false, // 销毁组件
+      chainList: []
     };
   },
   methods: {
@@ -140,7 +148,7 @@ export default {
       };
       return {
         page,
-        user_number: searchParams.user_number,
+        chains: searchParams.chains,
         start_time: Math.floor(searchParams.start_time / 1000),
         end_time: Math.floor(searchParams.end_time / 1000),
       };
@@ -170,8 +178,8 @@ export default {
     openDataEditorDialog(status, row) {
       this.isDestroyedComponent = true;
       this.$nextTick(() => {
-        this.$refs.dataEditor.dialogVisible = true;
-        this.$refs.dataEditor.load(status, row);
+        this.$refs.linkMonitor.dialogVisible = true;
+        this.$refs.linkMonitor.load(status, row);
       });
     },
     // 处理组件销毁逻辑
@@ -185,6 +193,25 @@ export default {
     handleDateTimeSelectChange() {
       this.dateTimeParams = {};
     },
+    /**
+     * 获取监测链接数据并处理
+     */
+     async fetchChainData() {
+      try {
+        const response = await getChain();
+        if (response.code === 2000) {
+          this.chainList = response.data.map((curr) => ({
+            value: curr.ad_type,
+            name: curr.channel,
+          }));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
+  created() {
+    this.fetchChainData();
   },
 };
 </script>

@@ -8,9 +8,11 @@
         showReset
         showSearchBtn
         showAdd
+        showExport
         @onReset="resetForm"
         @onSearch="searchForm"
         @add="addForm"
+        @export="exportForm"
       />
     </div>
     <!-- 表格 -->
@@ -88,6 +90,7 @@ export default {
       return {
         vm: this,
         url: REQUEST.market.onlineUserData,
+        isShowCheckbox: true,
         search: {
           sizes: [10, 30, 50, 100, 300],
         },
@@ -235,6 +238,8 @@ export default {
         console.error(error);
       }
     },
+    // 导出表格数据
+    exportForm() {}
   },
   created() {
     this.fetchChainData();
