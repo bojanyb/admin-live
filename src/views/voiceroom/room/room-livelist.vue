@@ -73,7 +73,11 @@
 				isDestoryComp: false, // 是否销毁组件
         liveHistoryTotalData: {},
         tableData: {},
-        modelLoading: true
+        modelLoading: true,
+        dateTimeParams: {
+          start_time: null,
+          end_time: null
+        },
 			}
 		},
 		computed: {
@@ -387,7 +391,11 @@
 				this.getList()
 			},
 			// 查询
-			onSearch() {
+			onSearch(params) {
+        this.dateTimeParams = {
+          start_time: params.dateTimeParams[0],
+          end_time: params.dateTimeParams[1]
+        };
 				this.getList();
         this.getLiveHistoryTotal();
 			},
