@@ -423,7 +423,7 @@ const request = {
         changePartyRoom: `${HTTPHEADER}/PartyRoom/change`, // 全部房间-修改房间类别
         canChangeType: `${HTTPHEADER}/PartyRoom/canChangeType`, // 全部房间-获取房间类别
 
-        charmTopByLive: `${HTTPHEADER}/guild/charmTopByLive`, // 每场直播的魅力榜单
+        charmTopByLive: `${HTTPHEADER}/RoomV2/charmTopByLive`, // 每场直播的魅力榜单
     },
 
     // 直播管理
