@@ -2,9 +2,7 @@
   <div class="charmComp-box">
     <el-dialog title="魅力榜" :visible.sync="dialogVisible" width="600px" :before-close="handleClose"
       :close-on-click-modal="false" :show-close="false" @closed="closed">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="日榜" name="2">
-          <div class="section">
+      <div class="section">
             <div class="time-box"></div>
             <div class="app-container">
               <div class="doc-card">
@@ -34,72 +32,6 @@
               </div>
             </div>
           </div>
-        </el-tab-pane>
-        <el-tab-pane label="本周榜" name="1">
-          <div class="section">
-            <div class="time-box"></div>
-            <div class="app-container">
-              <div class="doc-card">
-                <div class="doc-card-inner">
-                  <div class="doc-card-info" v-infinite-scroll="onLoad" infinite-scroll-disabled="disabled"
-                    infinite-scroll-distance="20">
-                    <el-card v-for="item in list" :key="item.id" style="margin-bottom: 10px">
-                      <div class="info-inner">
-                        <el-avatar :src="item.face"></el-avatar>
-                        <div class="info-detail">
-                          <div class="info-title">{{ item.nickname }}</div>
-                          <div class="info-dec">
-                            <div style="margin-right: 10px;">用户ID: {{ item.user_number }}</div>
-                            <div>魅力值：{{ item.total_amount }}</div>
-                          </div>
-                        </div>
-                      </div>
-                    </el-card>
-                    <p v-if="loading">加载中...</p>
-                    <p v-if="noMore && list.length">没有更多了</p>
-                    <div class="empty" v-if="!list.length">
-                      <i class="el-icon-document-delete"></i>
-                      <span>暂无数据</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane label="上周榜" name="3">
-          <div class="section">
-            <div class="time-box"></div>
-            <div class="app-container">
-              <div class="doc-card">
-                <div class="doc-card-inner">
-                  <div class="doc-card-info" v-infinite-scroll="onLoad" infinite-scroll-disabled="disabled"
-                    infinite-scroll-distance="20">
-                    <el-card v-for="item in list" :key="item.id" style="margin-bottom: 10px">
-                      <div class="info-inner">
-                        <el-avatar :src="item.face"></el-avatar>
-                        <div class="info-detail">
-                          <div class="info-title">{{ item.nickname }}</div>
-                          <div class="info-dec">
-                            <div style="margin-right: 10px;">用户ID: {{ item.user_number }}</div>
-                            <div>魅力值：{{ item.total_amount }}</div>
-                          </div>
-                        </div>
-                      </div>
-                    </el-card>
-                    <p v-if="loading">加载中...</p>
-                    <p v-if="noMore && list.length">没有更多了</p>
-                    <div class="empty" v-if="!list.length">
-                      <i class="el-icon-document-delete"></i>
-                      <span>暂无数据</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">关 闭</el-button>
       </span>
@@ -115,7 +47,6 @@ export default {
   data() {
     return {
       liveId: '',
-      activeName: "2",
       dialogVisible: false,
       list: [],
       loading: false,
@@ -128,17 +59,6 @@ export default {
     };
   },
   methods: {
-    handleClick() {
-      this.noMore = false;
-      this.loading = false;
-      this.disabled = false;
-      this.list = [];
-      this.infoParams = {
-        size: 10,
-        page: 1,
-      };
-      this.getInfoList();
-    },
     show(liveId) {
       this.liveId = liveId;
       this.dialogVisible = true;
@@ -153,7 +73,6 @@ export default {
       }
 
       let tabParams = {
-        type: this.activeName,
         id: this.liveId,
       }
 
