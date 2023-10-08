@@ -393,8 +393,8 @@
 			// 查询
 			onSearch(params) {
         this.dateTimeParams = {
-          start_time: params.dateTimeParams[0],
-          end_time: params.dateTimeParams[1]
+          start_time: params.dateTimeParams ? params.dateTimeParams[0] : null,
+          end_time: params.dateTimeParams ? params.dateTimeParams[1] : null
         };
 				this.getList();
         this.getLiveHistoryTotal();
