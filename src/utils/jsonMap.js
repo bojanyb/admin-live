@@ -600,6 +600,10 @@ const DURATIONCOPY = [
     name: '1天'
   },
   {
+    value: 172800,
+    name: '2天'
+  },
+  {
     value: 259200,
     name: '3天'
   },
