@@ -363,6 +363,10 @@ const request = {
         delete: `${HTTPHEADER}/ActivityPush/delete`, // 活动通知列表
         pushLogList: `${HTTPHEADER}/PushLog`, // 活动通知列表
         addPushLog: `${HTTPHEADER}/pushLog/add`, // 活动通知列表
+        recallRuleList: `${HTTPHEADER}/UserRecallRule/index`,
+        addRecallRule: `${HTTPHEADER}/UserRecallRule/add`,
+        updateRecallRule: `${HTTPHEADER}/UserRecallRule/update`,
+        delRecallRule: `${HTTPHEADER}/UserRecallRule/del`,
     },
 
     // 举报管理
