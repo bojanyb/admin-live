@@ -234,3 +234,12 @@ export function canChangeType(data) {
     data
   })
 }
+
+// 每场直播的魅力榜单
+export function charmTopByLive(data) {
+  return request({
+    url: api.house.charmTopByLive,
+    method: 'post',
+    data
+  })
+}
