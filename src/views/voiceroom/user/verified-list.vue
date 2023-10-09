@@ -565,8 +565,12 @@ export default {
       this.getList();
     },
     // 查询
-    onSearch() {
-      this.getList();
+    onSearch(params) {
+      this.dateTimeParams = {
+        start_time: params.dateTimeParams ? params.dateTimeParams[0] : null,
+        end_time: params.dateTimeParams ? params.dateTimeParams[1] : null
+      };
+      this.getList()
     },
     // 审核通过
     funcClick(id) {
