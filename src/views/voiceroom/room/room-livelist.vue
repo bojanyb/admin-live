@@ -118,6 +118,7 @@ export default {
           value: 2,
         },
       ],
+      dateTimeParams: {}
     };
   },
   computed: {
@@ -159,7 +160,7 @@ export default {
           optionLabel: "name",
           label: "房间类型",
           placeholder: "请选择",
-          options: this.classifyList,
+          // options: this.classifyList,
         },
         {
           name: "dateTimeParams",
@@ -173,11 +174,11 @@ export default {
             change: (v) => {
               this.emptyDateTime();
               this.setDateTime(v);
-              this.getList();
+              // this.getList();
             },
             selectChange: (v, key) => {
               this.emptyDateTime();
-              this.getList();
+              // this.getList();
             },
           },
         },
@@ -452,8 +453,8 @@ export default {
         room_category_id: s.room_category_id,
         guild_number: s.guild_number,
         live_status: s.live_status ? s.live_status : 1,
-        start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
-        end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
+        start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
+        end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
       };
     },
     // 刷新列表
@@ -480,11 +481,15 @@ export default {
       this.dateTimeParams = {};
       this.getList();
     },
-    // 查询
-    onSearch() {
-      this.getList();
-      this.getLiveHistoryTotal();
-    },
+			// 查询
+			onSearch(params) {
+        this.dateTimeParams = {
+          start_time: params.dateTimeParams ? params.dateTimeParams[0] : null,
+          end_time: params.dateTimeParams ? params.dateTimeParams[1] : null
+        };
+				this.getList();
+        this.getLiveHistoryTotal();
+			},
     // 解散房间
     async dissolveFunc(row) {
       this.$confirm("是否确认关闭当前直播间?", "提示", {
@@ -572,9 +577,11 @@ export default {
       }, 50);
     },
   },
-  created() {
+  mounted() {
     this.getHouse();
     this.getLiveHistoryTotal();
+  },
+  created() {
     this.getTodayTimestamps();
   },
 };
