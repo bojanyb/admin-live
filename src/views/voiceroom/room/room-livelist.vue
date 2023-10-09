@@ -118,6 +118,7 @@ export default {
           value: 2,
         },
       ],
+      dateTimeParams: {}
     };
   },
   computed: {
@@ -445,11 +446,6 @@ export default {
     // 配置参数
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams };
-      s = {
-        ...s,
-        start_time: s.dateTimeParams ? s.dateTimeParams[0] : null,
-        end_time: s.dateTimeParams ? s.dateTimeParams[1] : null,
-      }
       return {
         page: params ? params.page : null,
         pagesize: params ? params.size : null,
@@ -457,8 +453,8 @@ export default {
         room_category_id: s.room_category_id,
         guild_number: s.guild_number,
         live_status: s.live_status ? s.live_status : 1,
-        start_time: s.start_time ? Math.floor(s.start_time / 1000) : 0,
-        end_time: s.end_time ? Math.floor(s.end_time / 1000) : 0,
+        start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
+        end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
       };
     },
     // 刷新列表
@@ -544,7 +540,6 @@ export default {
     async getLiveHistoryTotal() {
       this.liveHistoryTotalData = {};
       const searchParams = this.beforeSearch();
-      console.log(searchParams, "searchParams");
 
       try {
         this.modelLoading = true;
@@ -573,7 +568,6 @@ export default {
 
       this.searchParams.dateTimeParams = [start, end];
       this.setDateTime([start, end]);
-      this.getLiveHistoryTotal();
     },
     // 查看榜单
     viewRank(liveId) {
@@ -584,8 +578,9 @@ export default {
     },
   },
   created() {
-    this.getHouse();
     this.getTodayTimestamps();
+    this.getHouse();
+    this.getLiveHistoryTotal();
   },
 };
 </script>
