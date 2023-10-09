@@ -452,7 +452,7 @@ export default {
         room_number: s.room_number,
         room_category_id: s.room_category_id,
         guild_number: s.guild_number,
-        live_status: s.live_status ? s.live_status : 1,
+        live_status: s.live_status,
         start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
       };
