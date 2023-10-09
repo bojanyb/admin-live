@@ -159,7 +159,7 @@ export default {
           optionLabel: "name",
           label: "房间类型",
           placeholder: "请选择",
-          options: this.classifyList,
+          // options: this.classifyList,
         },
         {
           name: "dateTimeParams",
@@ -173,11 +173,11 @@ export default {
             change: (v) => {
               this.emptyDateTime();
               this.setDateTime(v);
-              this.getList();
+              // this.getList();
             },
             selectChange: (v, key) => {
               this.emptyDateTime();
-              this.getList();
+              // this.getList();
             },
           },
         },
@@ -445,6 +445,11 @@ export default {
     // 配置参数
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams };
+      s = {
+        ...s,
+        start_time: s.dateTimeParams ? s.dateTimeParams[0] : null,
+        end_time: s.dateTimeParams ? s.dateTimeParams[1] : null,
+      }
       return {
         page: params ? params.page : null,
         pagesize: params ? params.size : null,
@@ -535,6 +540,7 @@ export default {
     async getLiveHistoryTotal() {
       this.liveHistoryTotalData = {};
       const searchParams = this.beforeSearch();
+      console.log(searchParams, "searchParams");
 
       try {
         this.modelLoading = true;
@@ -563,6 +569,7 @@ export default {
 
       this.searchParams.dateTimeParams = [start, end];
       this.setDateTime([start, end]);
+      this.getLiveHistoryTotal();
     },
     // 查看榜单
     viewRank(liveId) {
@@ -574,7 +581,6 @@ export default {
   },
   created() {
     this.getHouse();
-    this.getLiveHistoryTotal();
     this.getTodayTimestamps();
   },
 };
