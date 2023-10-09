@@ -28,3 +28,12 @@ export function getChain(data) {
   })
 }
 
+// 在线用户列表
+export function exportOnlineUserData(data) {
+  return request({
+    url: api.market.exportOnlineUserData,
+    method: 'post',
+    data
+  })
+}
+

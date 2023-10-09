@@ -652,6 +652,7 @@ const request = {
       delChain: `${HTTPHEADER}/NewUserData/delChain`, // 删除监测链接
       chain: `${HTTPHEADER}/NewUserData/chain`, // 获取监测链接
       monitorChainData: `${HTTPHEADER}/NewUserData/monitorChainData`, // 监测链接数据
+      exportOnlineUserData: `${HTTPHEADER}/NewUserData/exportOnlineUserData`, // 导出监测链接数据
   }
 }
 

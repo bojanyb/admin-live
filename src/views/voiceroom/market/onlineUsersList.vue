@@ -38,7 +38,9 @@
 import mixins from "@/utils/mixins.js";
 import REQUEST from "@/request/index.js";
 import MAPDATA from "@/utils/jsonMap.js";
-import { getChain } from "@/api/market";
+import { exportOnlineUserData } from "@/api/market";
+import { getChannels } from "@/api/system";
+import { exportTableData } from "@/utils/common.js";
 
 export default {
   components: {
@@ -63,9 +65,9 @@ export default {
           },
         },
         {
-          name: "channels",
+          name: "channel",
           type: "select",
-          value: "全部",
+          value: "",
           keyName: "value",
           optionLabel: "name",
           label: "注册渠道",
@@ -76,12 +78,25 @@ export default {
         {
           name: "sex",
           type: "select",
-          value: "全部",
+          value: "",
           keyName: "value",
           optionLabel: "name",
           label: "性别",
           placeholder: "请选择",
-          options: MAPDATA.SEXLIST,
+          options: [
+            {
+              name: "全部",
+              value: "",
+            },
+            {
+              name: "男",
+              value: 1,
+            },
+            {
+              name: "女",
+              value: 2,
+            },
+          ],
           clearable: true,
         },
       ];
@@ -90,9 +105,8 @@ export default {
       return {
         vm: this,
         url: REQUEST.market.onlineUserData,
-        isShowCheckbox: true,
         search: {
-          sizes: [10, 30, 50, 100, 300],
+          sizes: [10, 30, 50, 100],
         },
         columns: [
           {
@@ -175,9 +189,12 @@ export default {
         ...this.searchParams,
         ...this.dateTimeParams,
       };
+      searchParams.channel = searchParams.channel ? [searchParams.channel] : "";
+      searchParams.sex = searchParams.sex ? [searchParams.sex] : "";
       return {
         page,
-        user_number: searchParams.user_number,
+        channel: searchParams.channel,
+        sex: searchParams.sex,
         start_time: Math.floor(searchParams.start_time / 1000) || 1693497600,
         end_time: Math.floor(searchParams.end_time / 1000) || 1696089599,
       };
@@ -227,19 +244,76 @@ export default {
      */
     async fetchChainData() {
       try {
-        const response = await getChain();
+        const response = await getChannels();
         if (response.code === 2000) {
-          this.chainList = response.data.map((curr) => ({
-            value: curr.ad_type,
+          this.chainList = response.data.list.map((curr) => ({
+            value: curr.channel,
             name: curr.channel,
           }));
+          this.chainList.unshift({ value: "", name: "全部" });
         }
       } catch (error) {
         console.error(error);
       }
     },
     // 导出表格数据
-    exportForm() {}
+    async exportForm() {
+      const searchParams = this.beforeSearch();
+
+      const exportData = {
+        ...searchParams,
+        // page: searchParams.page || 1,
+        // pageSize: searchParams.pageSize || 10,
+        // export: 1,
+      };
+
+      const {
+        data: { list: dataList },
+      } = await exportOnlineUserData(exportData);
+
+      if (dataList.length === 0) {
+        return this.$warning("当前没有数据可以导出");
+      }
+
+      const columnNames = [
+        "注册时间",
+        "注册渠道",
+        "用户ID",
+        "用户昵称",
+        "性别",
+        "最后一次登录时间",
+        "充值金额",
+        "消费金额",
+      ];
+
+      const transformedData = dataList.map(
+        ({
+          create_time,
+          channel,
+          user_number,
+          nickname,
+          sex,
+          last_login,
+          recharge,
+          consume,
+        }) => {
+          const sexName =
+            MAPDATA.SEXLIST.find(({ value }) => value === sex)?.name || "";
+          return {
+            create_time,
+            channel,
+            user_number,
+            nickname,
+            sex: sexName,
+            last_login,
+            recharge,
+            consume,
+          };
+        }
+      );
+
+      exportTableData(transformedData, columnNames, "主播数据");
+    },
   },
   created() {
     this.fetchChainData();

@@ -8,7 +8,6 @@
         showReset
         showSearchBtn
         showAdd
-        showCustom
         customName="监测链接管理"
         @onReset="resetForm"
         @onSearch="searchForm"
@@ -16,7 +15,7 @@
       />
     </div>
     <div class="link-data-monitor__table-list">
-      <TableList :cfgs="tableConfig" ref="tableList" />
+      <TableList :cfgs="cfgs" ref="tableList" />
     </div>
     <!-- 检测链接管理 -->
     <LinkMonitor
@@ -31,7 +30,7 @@
 <script>
 import mixins from "@/utils/mixins.js";
 import REQUEST from "@/request/index.js";
-import { getChain } from "@/api/market";
+import { getChannels } from "@/api/system";
 
 export default {
   components: {
@@ -52,7 +51,7 @@ export default {
           label: "检测链接",
           placeholder: "请选择",
           options: this.chainList,
-		      clearable: true,
+          clearable: true,
         },
         {
           name: "dateTimeParams",
@@ -68,7 +67,7 @@ export default {
         },
       ];
     },
-    tableConfig() {
+    cfgs() {
       return {
         vm: this,
         url: REQUEST.market.monitorChainData,
@@ -132,7 +131,7 @@ export default {
   data() {
     return {
       isDestroyedComponent: false, // 销毁组件
-      chainList: []
+      chainList: [],
     };
   },
   methods: {
@@ -146,6 +145,7 @@ export default {
         ...this.searchParams,
         ...this.dateTimeParams,
       };
+      searchParams.chains = searchParams.chains ? [searchParams.chains] : "";
       return {
         page,
         chains: searchParams.chains,
@@ -175,11 +175,12 @@ export default {
     updateForm(row) {
       this.openDataEditorDialog("update", row);
     },
-    openDataEditorDialog(status, row) {
+    openDataEditorDialog() {
       this.isDestroyedComponent = true;
       this.$nextTick(() => {
-        this.$refs.linkMonitor.dialogVisible = true;
-        this.$refs.linkMonitor.load(status, row);
+        setTimeout(() => {
+          this.$refs.linkMonitor.dialogVisible = true;
+        }, 50);
       });
     },
     // 处理组件销毁逻辑
@@ -196,14 +197,15 @@ export default {
     /**
      * 获取监测链接数据并处理
      */
-     async fetchChainData() {
+    async fetchChainData() {
       try {
-        const response = await getChain();
+        const response = await getChannels();
         if (response.code === 2000) {
-          this.chainList = response.data.map((curr) => ({
-            value: curr.ad_type,
+          this.chainList = response.data.list.map((curr) => ({
+            value: curr.channel,
             name: curr.channel,
           }));
+          this.chainList.unshift({ value: "", name: "全部" });
         }
       } catch (error) {
         console.error(error);
