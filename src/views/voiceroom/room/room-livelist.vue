@@ -577,10 +577,12 @@ export default {
       }, 50);
     },
   },
-  created() {
-    this.getTodayTimestamps();
+  mounted() {
     this.getHouse();
     this.getLiveHistoryTotal();
+  },
+  created() {
+    this.getTodayTimestamps();
   },
 };
 </script>
