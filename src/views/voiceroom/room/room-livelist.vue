@@ -485,11 +485,15 @@ export default {
       this.dateTimeParams = {};
       this.getList();
     },
-    // 查询
-    onSearch() {
-      this.getList();
-      this.getLiveHistoryTotal();
-    },
+			// 查询
+			onSearch(params) {
+        this.dateTimeParams = {
+          start_time: params.dateTimeParams ? params.dateTimeParams[0] : null,
+          end_time: params.dateTimeParams ? params.dateTimeParams[1] : null
+        };
+				this.getList();
+        this.getLiveHistoryTotal();
+			},
     // 解散房间
     async dissolveFunc(row) {
       this.$confirm("是否确认关闭当前直播间?", "提示", {
