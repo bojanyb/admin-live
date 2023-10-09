@@ -129,6 +129,7 @@ export default {
           value: "",
           label: "房间ID",
           isNum: true,
+          clearable: true,
           placeholder: "请输入房间ID",
         },
         {
@@ -137,6 +138,7 @@ export default {
           value: "",
           label: "公会ID",
           isNum: true,
+          clearable: true,
           placeholder: "请输入公会ID",
         },
         {
@@ -278,7 +280,7 @@ export default {
         {
           label: "房间ID",
           minWidth: "100px",
-          prop: "user_number",
+          prop: "room_number",
         },
         {
           label: "开播时间",
