@@ -692,7 +692,17 @@ const request = {
         getRanking: `${HTTPHEADER}/hdMusicfestLog/getRanking`, // 后台-排名数据
         getGift: `${HTTPHEADER}/hdMusicfestLog/getGift`, // 后台-礼物列表
         giftLog: `${HTTPHEADER}/hdMusicfestLog/giftLog`, // 后台-收送礼数据
-    }
+    },
+
+    // 市场数据
+    market: {
+      onlineUserData: `${HTTPHEADER}/NewUserData/onlineUserData`, // 在线用户列表
+      configChain: `${HTTPHEADER}/NewUserData/configChain`, // 配置监测链接
+      delChain: `${HTTPHEADER}/NewUserData/delChain`, // 删除监测链接
+      chain: `${HTTPHEADER}/NewUserData/chain`, // 获取监测链接
+      monitorChainData: `${HTTPHEADER}/NewUserData/monitorChainData`, // 监测链接数据
+      exportOnlineUserData: `${HTTPHEADER}/NewUserData/exportOnlineUserData`, // 导出监测链接数据
+  }
 }
 
 export default request
