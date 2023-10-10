@@ -7,7 +7,6 @@
         :forms="searchFormFields"
         showReset
         showSearchBtn
-        showAdd
         showExport
         @onReset="resetForm"
         @onSearch="searchForm"
@@ -40,7 +39,7 @@ import REQUEST from "@/request/index.js";
 import MAPDATA from "@/utils/jsonMap.js";
 import { exportOnlineUserData } from "@/api/market";
 import { getChannels } from "@/api/system";
-import { exportTableData } from "@/utils/common.js";
+import { timeFormat, exportTableData } from "@/utils/common.js";
 
 export default {
   components: {
@@ -221,11 +220,12 @@ export default {
     updateForm(row) {
       this.openDataEditorDialog("update", row);
     },
-    openDataEditorDialog(status, row) {
+    openDataEditorDialog() {
       this.isDestroyedComponent = true;
       this.$nextTick(() => {
-        this.$refs.dataEditor.dialogVisible = true;
-        this.$refs.dataEditor.load(status, row);
+        setTimeout(() => {
+          this.$refs.dataEditor.dialogVisible = true;
+        }, 50);
       });
     },
     // 处理组件销毁逻辑
@@ -262,57 +262,30 @@ export default {
 
       const exportData = {
         ...searchParams,
-        // page: searchParams.page || 1,
-        // pageSize: searchParams.pageSize || 10,
-        // export: 1,
       };
 
-      const {
-        data: { list: dataList },
-      } = await exportOnlineUserData(exportData);
-
-      if (dataList.length === 0) {
-        return this.$warning("当前没有数据可以导出");
+      const response = await exportOnlineUserData(exportData);
+      const type = "xls";
+      const fileName = "主播数据";
+      this.downloadExportFile(response, fileName, type);
+    },
+    // 下载导出文件
+    downloadExportFile(blob, tagFileName, fileType) {
+      tagFileName =
+        tagFileName +
+        timeFormat(new Date(), "yyyyMMDDHHmmss", false) +
+        "." +
+        fileType;
+      if (window.navigator.msSaveOrOpenBlob) {
+        // IE浏览器下
+        navigator.msSaveBlob(blob, tagFileName);
+      } else {
+        let link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = tagFileName;
+        link.click();
+        window.URL.revokeObjectURL(link.href);
       }
-
-      const columnNames = [
-        "注册时间",
-        "注册渠道",
-        "用户ID",
-        "用户昵称",
-        "性别",
-        "最后一次登录时间",
-        "充值金额",
-        "消费金额",
-      ];
-
-      const transformedData = dataList.map(
-        ({
-          create_time,
-          channel,
-          user_number,
-          nickname,
-          sex,
-          last_login,
-          recharge,
-          consume,
-        }) => {
-          const sexName =
-            MAPDATA.SEXLIST.find(({ value }) => value === sex)?.name || "";
-          return {
-            create_time,
-            channel,
-            user_number,
-            nickname,
-            sex: sexName,
-            last_login,
-            recharge,
-            consume,
-          };
-        }
-      );
-
-      exportTableData(transformedData, columnNames, "主播数据");
     },
   },
   created() {

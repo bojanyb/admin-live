@@ -32,6 +32,7 @@ export function getChain(data) {
 export function exportOnlineUserData(data) {
   return request({
     url: api.market.exportOnlineUserData,
+    responseType: 'blob',
     method: 'post',
     data
   })
