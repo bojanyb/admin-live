@@ -160,7 +160,7 @@ export default {
           optionLabel: "name",
           label: "房间类型",
           placeholder: "请选择",
-          // options: this.classifyList,
+          options: this.classifyList,
         },
         {
           name: "dateTimeParams",
