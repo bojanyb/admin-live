@@ -1,9 +1,7 @@
 <template>
   <div class="guild-live-list">
-    <menuComp ref="menuComp" :menuList="menuList" v-model="tabIndex"></menuComp>
     <div
       class="model"
-      v-if="tabIndex === '1'"
       v-loading="modelLoading"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
@@ -89,15 +87,6 @@ export default {
   },
   data() {
     return {
-      tabIndex: "0",
-      menuList: [
-        {
-          name: "直播房间列表",
-        },
-        {
-          name: "直播历史记录",
-        },
-      ],
       classifyList: [], // 房间类型列表
       isDestoryComp: false, // 是否销毁组件
       isCharmDestoryComp: false, // 是否销毁组件
@@ -145,7 +134,7 @@ export default {
         {
           name: "live_status",
           type: "select",
-          value: 1,
+          value: 0,
           keyName: "value",
           optionLabel: "name",
           label: "开播状态",
@@ -170,6 +159,7 @@ export default {
           label: "开播时间",
           value: "",
           linkage: true,
+          clearable: true,
           handler: {
             change: (v) => {
               this.emptyDateTime();
@@ -185,98 +175,6 @@ export default {
       ];
     },
     cfgs() {
-      let arr = [
-        {
-          label: "房间ID",
-          prop: "room_number",
-        },
-        {
-          label: "开播时间",
-          minWidth: "180px",
-          render: (h, params) => {
-            return h(
-              "span",
-              params.row.start_time
-                ? timeFormat(params.row.start_time, "YYYY-MM-DD HH:mm:ss", true)
-                : "无"
-            );
-          },
-        },
-        {
-          label: "房间类型",
-          prop: "room_type",
-        },
-        {
-          label: "房间标题",
-          minWidth: "120px",
-          prop: "room_title",
-        },
-        {
-          label: "房间封面",
-          isimg: true,
-          prop: "room_cover",
-          imgHeight: "50px",
-          minWidth: "100px",
-        },
-        {
-          label: "房主",
-          minWidth: "120px",
-          render: (h, params) => {
-            return h("div", [
-              h("div", params.row.nickname),
-              h("div", params.row.user_number || "无"),
-            ]);
-          },
-        },
-        {
-          label: "所属公会",
-          minWidth: "100px",
-          render: (h, params) => {
-            return h("div", [
-              h("div", params.row.guild_name),
-              h("div", params.row.guild_number || "无"),
-            ]);
-          },
-        },
-        {
-          label: "已开播时长",
-          minWidth: "120px",
-          render: (h, params) => {
-            return h("span", params.row.live_time || "无");
-          },
-        },
-        {
-          label: "流水（钻石）",
-          minWidth: "100px",
-          prop: "now_flow",
-        },
-        {
-          label: "在线人数",
-          prop: "people",
-        },
-        {
-          label: "操作",
-          minWidth: "100px",
-          fixed: "right",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "el-button",
-                {
-                  props: { type: "danger" },
-                  on: {
-                    click: () => {
-                      this.dissolveFunc(params.row);
-                    },
-                  },
-                },
-                "关播"
-              ),
-            ]);
-          },
-        },
-      ];
-
       let arr1 = [
         {
           label: "房间ID",
@@ -429,16 +327,10 @@ export default {
           },
         },
       ];
-      let name;
-      if (this.tabIndex === "0") {
-        name = "liveList";
-      } else {
-        name = "liveHistoryList";
-      }
       return {
         vm: this,
-        url: REQUEST.room[name],
-        columns: this.tabIndex === "0" ? [...arr] : [...arr1],
+        url: REQUEST.room['liveHistoryList'],
+        columns: arr1,
       };
     },
   },
@@ -559,15 +451,14 @@ export default {
     },
     // 获取当天时间
     getTodayTimestamps() {
-      let time = new Date();
-      let date = timeFormat(time, "YYYY-MM-DD", false);
-      let start = new Date(date + " 00:00:00").getTime();
-      let end = new Date(
-        timeFormat(time, "YYYY-MM-DD HH:mm:ss", false)
-      ).getTime();
+      const currentTimestamp = Date.now();
+      const oneHourAgoTimestamp = currentTimestamp - 3600000;
 
-      this.searchParams.dateTimeParams = [start, end];
-      this.setDateTime([start, end]);
+			let time = [oneHourAgoTimestamp, currentTimestamp];
+			this.searchParams.dateTimeParams = time;
+			this.dateTimeParams.start_time = time[0];
+			this.dateTimeParams.end_time = time[1];
+      this.searchParams.dateTimeParams = [time[0], time[1]];
     },
     // 查看榜单
     viewRank(liveId) {
