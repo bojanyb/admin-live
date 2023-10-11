@@ -92,7 +92,7 @@
               </el-select>
             </el-form-item>
         <el-form-item>
-          <el-button @click="inputIdForm = {}">取消</el-button>
+          <el-button @click="handleCloseRespsone">取消</el-button>
           <el-button type="primary" @click="submitForm">开始切换</el-button>
         </el-form-item>
       </el-form>
@@ -622,6 +622,9 @@ export default {
     handleCloseRespsone() {
       this.respsoneDataVisible = false;
       this.inputIdUpdateVisible = false;
+      inputIdForm = {
+        channel_type: 0
+      }
       this.getList();
     },
   },
