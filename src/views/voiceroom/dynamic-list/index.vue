@@ -265,18 +265,18 @@ export default {
                   },
                   "评论详情"
                 ),
-                h(
-                  "el-button",
-                  {
-                    props: { type: "danger", size: "mini" },
-                    on: {
-                      click: () => {
-                        this.deleteParams(params.row.id);
-                      },
-                    },
-                  },
-                  "删除"
-                ),
+                // h(
+                //   "el-button",
+                //   {
+                //     props: { type: "danger", size: "mini" },
+                //     on: {
+                //       click: () => {
+                //         this.deleteParams(params.row.id);
+                //       },
+                //     },
+                //   },
+                //   "删除"
+                // ),
               ]);
             },
           },
