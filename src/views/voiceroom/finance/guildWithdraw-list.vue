@@ -435,11 +435,17 @@ export default {
           placeholder: "请选择",
           options: MAPDATA.COMPLAINLIST,
         },
-        // {
-        //     name: 'time',
-        //     type: 'dateControl',
-        //     label: '时间选择',
-        // },
+        {
+          name: "pay_config_id",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "支付场景",
+          placeholder: "请选择",
+          clearable: true,
+          options: this.allMerchantList,
+        },
         {
           name: "dateTimeParams",
           type: "datePicker",
@@ -881,7 +887,8 @@ export default {
         page: 1,
         limit: 10,
       },
-      curPeriodDetailLogData: null,
+      curPeriodDetailLogData:null,
+      allMerchantList: []
     };
   },
   methods: {
