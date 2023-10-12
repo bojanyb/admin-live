@@ -71,6 +71,7 @@ import { getGuildCreateV2, updatePartyInfo, updateLiveInfo, getGuildType, adminU
 import MAPDATA from '@/utils/jsonMap.js'
 // 引入公共参数
 import mixins from '@/utils/mixins.js'
+import { debounce } from "lodash";
 export default {
   	mixins: [mixins],
     data() {
@@ -210,8 +211,8 @@ export default {
             this.status = 'update'
         },
         // 提交
-        async submitForm() {
-            this.$refs.ruleForm.validate(async (valid) => {
+        submitForm: debounce(async function (formName) {
+          this.$refs.ruleForm.validate(async (valid) => {
                 if (valid) {
                   let params = { ...this.ruleForm }
                     if (+params.cash_type === 1) {
@@ -241,7 +242,7 @@ export default {
                     return false;
                 }
             });
-        },
+        }, 300),
         // 重置
         resetForm() {
             this.openComp(false)

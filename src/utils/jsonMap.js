@@ -604,6 +604,10 @@ const DURATIONCOPY = [
     name: '1天'
   },
   {
+    value: 172800,
+    name: '2天'
+  },
+  {
     value: 259200,
     name: '3天'
   },
@@ -626,6 +630,18 @@ const DURATIONCOPY = [
   {
     value: 15552000,
     name: '180天'
+  },
+  {
+    value: 31536000,
+    name: '365天'
+  },
+  {
+    value: 86313600,
+    name: '999天'
+  },
+  {
+    value: 863913600,
+    name: '9999天'
   },
   {
     value: -1,
