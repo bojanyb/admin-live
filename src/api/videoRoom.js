@@ -638,6 +638,15 @@ export function getCheckOperator(data) {
   })
 }
 
+// 处罚举报 - 获取审核人员
+export function getReviewer(data) {
+  return request({
+    url: api.risk.getReviewer,
+    method: 'post',
+    data
+  })
+}
+
 // 处罚举报 - 处罚类型
 export function getPunishTypeList(data) {
   return request({
