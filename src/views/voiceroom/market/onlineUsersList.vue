@@ -183,15 +183,16 @@ export default {
       this.$refs.tableList.getData();
     },
     // 配置参数
-    beforeSearch() {
-      const { page, ...searchParams } = {
+    beforeSearch(params) {
+      const { ...searchParams } = {
         ...this.searchParams,
         ...this.dateTimeParams,
       };
       searchParams.channel = searchParams.channel ? [searchParams.channel] : "";
       searchParams.sex = searchParams.sex ? [searchParams.sex] : "";
       return {
-        page,
+        page: params ? params.page : null,
+        pagesize: params ? params.size : null,
         channel: searchParams.channel,
         sex: searchParams.sex,
         start_time: Math.floor(searchParams.start_time / 1000) || 1693497600,

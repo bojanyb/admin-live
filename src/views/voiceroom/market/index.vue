@@ -7,7 +7,6 @@
         :forms="searchFormFields"
         showReset
         showSearchBtn
-        showAdd
         customName="监测链接管理"
         @onReset="resetForm"
         @onSearch="searchForm"
@@ -117,8 +116,12 @@ export default {
             prop: "channel_amount",
           },
           {
-            label: "区间付费人数",
+            label: "区间付费人数/金额",
             prop: "range_people",
+            minWidth: "100px",
+            render: (h, params) => {
+								return h('span', `${params.row.range_people}/${params.row.range_amount}`)
+							}
           },
           {
             label: "总付费人数/金额",
@@ -140,14 +143,15 @@ export default {
       this.$refs.tableList.getData();
     },
     // 配置参数
-    beforeSearch() {
-      const { page, ...searchParams } = {
+    beforeSearch(params) {
+      const { ...searchParams } = {
         ...this.searchParams,
         ...this.dateTimeParams,
       };
       searchParams.chains = searchParams.chains ? [searchParams.chains] : "";
       return {
-        page,
+        page: params ? params.page : null,
+        pagesize: params ? params.size : null,
         chains: searchParams.chains,
         start_time: Math.floor(searchParams.start_time / 1000),
         end_time: Math.floor(searchParams.end_time / 1000),
