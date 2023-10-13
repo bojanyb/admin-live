@@ -39,9 +39,6 @@
       title="批量输入ID修改"
       width="40%"
       append-to-body
-      @close="inputIdForm = {
-        channel_type: 0
-      }"
     >
       <el-form
         ref="inputIdForm"
@@ -626,7 +623,7 @@ export default {
         channel_type: 0
       }
       this.getList();
-    },
+    }
   },
 };
 </script>
