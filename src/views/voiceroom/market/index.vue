@@ -104,7 +104,7 @@ export default {
             prop: "thirty_day",
           },
           {
-            label: "日活用户",
+            label: "进房人数",
             prop: "use_app",
           },
           {
@@ -120,7 +120,7 @@ export default {
             prop: "range_people",
             minWidth: "100px",
             render: (h, params) => {
-								return h('span', `${params.row.range_people}/${params.row.range_amount}`)
+								return h('span', `${params.row.range_people}/${params.row.range_amount.toFixed(2)}`)
 							}
           },
           {
