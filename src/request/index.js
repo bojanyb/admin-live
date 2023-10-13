@@ -354,6 +354,11 @@ const request = {
         getTaskList: `${HTTPHEADER}/Recharge/getTaskList`, // 按时间批量查单-获取结果
         getTaskDetail: `${HTTPHEADER}/Recharge/getTaskDetail`, // 按时间批量查单-获取明细
         getTaskDetailLog: `${HTTPHEADER}/Recharge/getTaskDetailLog`, // 按时间批量查单-获取补单明细
+        getGuildCashList: `${HTTPHEADER}/guildCash/getGuildCashList`, // 对公结算记录
+        getGuildCashBill: `${HTTPHEADER}/guildCash/getGuildCashBill`, // 对公结算账单明细
+        applyAudit: `${HTTPHEADER}/guildCash/applyAudit`, // 对公结算申请审核
+        settlementAudit: `${HTTPHEADER}/guildCash/settlementAudit`, // 对公结算银行结算审核
+        invoiceAudit: `${HTTPHEADER}/guildCash/invoiceAudit`, // 对公结算发票审核
     },
 
     // 消息管理
