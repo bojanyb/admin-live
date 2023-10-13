@@ -29,7 +29,7 @@
 <script>
 import mixins from "@/utils/mixins.js";
 import REQUEST from "@/request/index.js";
-import { getChannels } from "@/api/system";
+import { getChain } from "@/api/market";
 
 export default {
   components: {
@@ -204,13 +204,14 @@ export default {
      */
     async fetchChainData() {
       try {
-        const response = await getChannels();
+        const response = await getChain();
         if (response.code === 2000) {
-          this.chainList = response.data.list.map((curr) => ({
-            value: curr.channel,
-            name: curr.channel,
+          this.chainList = response.data.map((curr) => ({
+            value: curr.ad_type,
+            name: curr.ad_type,
           }));
           this.chainList.unshift({ value: "", name: "全部" });
+          console.log(this.chainList, "this.chainList");
         }
       } catch (error) {
         console.error(error);
