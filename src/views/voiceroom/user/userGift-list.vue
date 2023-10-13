@@ -226,7 +226,7 @@
 			},
 			// 重置
 			reset() {
-				this.changeIndex(0)
+				this.changeIndex();
 				this.searchParams = {
 					iSelect: 'all',
 					inputSelect: ''
@@ -257,38 +257,18 @@
 				this.dateTimeParams = {}
 			},
 			// 更改日期
-			changeIndex(index) {
-				let date = new Date()
-				let now, now1, start, end;
-				switch (index) {
-					case 0:
-						now1 = timeFormat(date, 'YYYY-MM-DD', false)
-						now = timeFormat(date, 'YYYY-MM-DD', false)
-						break;
-					case 1:
-						now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
-						now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
-						break;
-					case 2:
-						now1 = timeFormat(date, 'YYYY-MM-DD', false)
-						now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
-						break;
-				}
-				start = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false)).getTime();
-				if( index == 0) {
-					end = (new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false)).getTime()) + 3600000;
-				} else {
-					end = new Date(now1 + ' 23:59:59')
-				}
+			changeIndex() {
+        const currentTimestamp = Date.now();
+        const oneHourAgoTimestamp = currentTimestamp - 3600000;
 
-				let time = [start, end]
-				this.searchParams.dateTimeParams = time
-				this.dateTimeParams.start_time = time[0]
-				this.dateTimeParams.end_time = time[1]
-			}
+				let time = [oneHourAgoTimestamp, currentTimestamp];
+				this.searchParams.dateTimeParams = time;
+				this.dateTimeParams.start_time = time[0];
+				this.dateTimeParams.end_time = time[1];
+			},
 		},
 		created() {
-			this.changeIndex(0)
+      this.changeIndex();
 		}
 	}
 </script>

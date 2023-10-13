@@ -1,6 +1,10 @@
 <template>
 	<div class="app-container userTurnover-list-box">
-		<div class="model">
+		<div class="model"
+      v-loading="modelLoading"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+    >
         <span>收礼人数：{{ ruleForm.user_count || 0 }}人</span>
         <span>房间数量：{{ ruleForm.room_count || 0 }}个</span>
         <span>公会数量：{{ ruleForm.guild_count || 0 }}个</span>
@@ -321,7 +325,8 @@
 					state : 3,
 					name : "导出失败"
 					}
-				]
+				],
+        modelLoading: true,
 			}
 		},
 		methods: {
@@ -359,7 +364,7 @@
 			},
 			// 重置
 			reset() {
-				this.changeIndex(0)
+				this.changeIndex();
 				this.searchParams = {
 					flow_type: 0,
           is_freeze: 2,
@@ -388,34 +393,14 @@
 				// this.ruleForm = { ...row }
 			},
 			// 更改日期
-			changeIndex(index) {
-				let date = new Date()
-				let now, now1, start, end;
-				switch (index) {
-					case 0:
-						now1 = timeFormat(date, 'YYYY-MM-DD', false)
-						now = timeFormat(date, 'YYYY-MM-DD', false)
-						break;
-					case 1:
-						now1 = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
-						now = timeFormat(date - 3600 * 1000 * 24 * 1, 'YYYY-MM-DD', false)
-						break;
-					case 2:
-						now1 = timeFormat(date, 'YYYY-MM-DD', false)
-						now = timeFormat(date - 3600 * 1000 * 24 * 6, 'YYYY-MM-DD', false)
-						break;
-				}
-				start = new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false)).getTime();
-				if( index == 0) {
-					end = (new Date(timeFormat(date, 'YYYY-MM-DD HH:mm:ss', false)).getTime()) + 3600000;
-				} else {
-					end = new Date(now1 + ' 23:59:59')
-				}
+			changeIndex() {
+        const currentTimestamp = Date.now();
+        const oneHourAgoTimestamp = currentTimestamp - 3600000;
 
-				let time = [start, end]
-				this.searchParams.dateTimeParams = time
-				this.dateTimeParams.start_time = time[0]
-				this.dateTimeParams.end_time = time[1]
+				let time = [oneHourAgoTimestamp, currentTimestamp];
+				this.searchParams.dateTimeParams = time;
+				this.dateTimeParams.start_time = time[0];
+				this.dateTimeParams.end_time = time[1];
 			},
 			// 导出文件名称弹框
 			batchRurnFileName(){
@@ -501,17 +486,25 @@
 			this.batchFileNameVisible = false;
     		},
 			// 获取汇总数据
-			async getUserFlow1Count(){
+      async getUserFlow1Count() {
+      this.ruleForm = {};
+      const searchParams = this.beforeSearch();
 
-				let s = this.beforeSearch();
-				let res = await userFlow1Count(s);
-				if(res.code == 2000){
-					this.ruleForm = res.data;
-				}
-			},
+      try {
+        this.modelLoading = true;
+        const { code, data } = await userFlow1Count(searchParams);
+        if (code === 2000 && typeof data === "object") {
+          this.ruleForm = data;
+        }
+        this.modelLoading = false;
+      } catch (error) {
+        this.modelLoading = false;
+        console.error("获取汇总数据出错:", error);
+      }
+    },
 		},
 		created() {
-			this.changeIndex(0)
+      this.changeIndex();
 			this.getUserFlow1Count();
 		}
 	}
@@ -535,5 +528,8 @@
             margin-right: 100px;
         }
     }
+  .el-loading-spinner {
+    margin-top: -8px;
+  }
 }
 </style>
