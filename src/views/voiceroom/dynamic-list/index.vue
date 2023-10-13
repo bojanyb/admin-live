@@ -49,6 +49,7 @@
 import discussComp from "./components/discussComp.vue";
 // 引入api
 import { delMoments } from "@/api/dynamic";
+import { getReviewer } from "@/api/videoRoom";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
@@ -79,6 +80,7 @@ export default {
       searchParams: {
         dateTimeParams: [],
         check_status: "",
+        check_user_id: "",
         user_number: "",
       },
       dateTimeParams: {
@@ -107,6 +109,7 @@ export default {
           value: "3",
         },
       ],
+      reviewerList: [],
     };
   },
   computed: {
@@ -131,12 +134,23 @@ export default {
           options: this.checkStatusList,
         },
         {
+          name: "check_user_id",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "name",
+          label: "审核人",
+          placeholder: "请选择",
+          options: this.reviewerList,
+        },
+        {
           name: "dateTimeParams",
           type: "datePicker",
           dateType: "datetimerange",
           format: "yyyy-MM-dd HH:mm:ss",
           label: "时间选择",
           value: "",
+          linkage: true,
           handler: {
             change: (v) => {
               this.emptyDateTime();
@@ -209,6 +223,10 @@ export default {
             prop: "msg_number",
           },
           {
+            label: "审核人",
+            prop: "check_user_name",
+          },
+          {
             label: "审核状态",
             prop: "check_status",
             render: (h, params) => {
@@ -220,7 +238,7 @@ export default {
           },
           {
             label: "操作",
-            minWidth: "140px",
+            minWidth: "180px",
             render: (h, params) => {
               return h("div", [
                 h(
@@ -247,18 +265,18 @@ export default {
                   },
                   "评论详情"
                 ),
-                h(
-                  "el-button",
-                  {
-                    props: { type: "danger", size: "mini" },
-                    on: {
-                      click: () => {
-                        this.deleteParams(params.row.id);
-                      },
-                    },
-                  },
-                  "删除"
-                ),
+                // h(
+                //   "el-button",
+                //   {
+                //     props: { type: "danger", size: "mini" },
+                //     on: {
+                //       click: () => {
+                //         this.deleteParams(params.row.id);
+                //       },
+                //     },
+                //   },
+                //   "删除"
+                // ),
               ]);
             },
           },
@@ -320,6 +338,7 @@ export default {
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
         user_number: s.user_number,
         check_status: s.check_status,
+        check_user_id: s.check_user_id,
       };
     },
     // 刷新列表
@@ -391,9 +410,25 @@ export default {
     destoryComp() {
       this.isDestoryComp = false;
     },
+    // 获取审核人列表
+    async fetchReviewerList() {
+      try {
+        const response = await getReviewer();
+        if (response.code === 2000) {
+          const reviewerList = response.data.list.map(({ id, username }) => ({
+            value: id,
+            name: username
+          }));
+          this.reviewerList = [{ value: '', name: '全部' }, ...reviewerList];
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
   },
   created() {
     this.changeIndex(0);
+    this.fetchReviewerList();
   },
 };
 </script>

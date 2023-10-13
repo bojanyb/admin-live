@@ -25,6 +25,7 @@
     <tableList
       :cfgs="cfgs"
       ref="tableList"
+      layout="total, sizes, prev, pager, next, jumper"
       @selectionChange="selectionChange"
     ></tableList>
 
@@ -110,6 +111,9 @@ export default {
       return {
         vm: this,
         isShowCheckbox: true,
+        search: {
+          sizes: [10, 30, 50, 100 ]
+        },
         url: REQUEST.dynamic.checkList,
         columns: [
           {

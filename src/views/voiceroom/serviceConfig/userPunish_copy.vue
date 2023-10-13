@@ -381,6 +381,14 @@ export default {
           },
         },
         {
+          label: "审核人",
+          minWidth: "100px",
+          prop: "admin",
+          render: (h, params) => {
+          return h("span", params.row.admin || "无");
+          },
+        },
+        {
           label: "备注说明",
           minWidth: "180px",
           render: (h, params) => {

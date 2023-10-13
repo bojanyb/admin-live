@@ -1,5 +1,5 @@
 <template>
-    <div class="serviceConfig-message-history-box">
+    <div class="image-audit-container">
         <div class="searchParams">
             <SearchPanel v-model="searchParams"
             :forms="forms"
@@ -22,7 +22,7 @@
             >
             </SearchPanel>
         </div>
-		<tableList :cfgs="cfgs" ref="tableList"  @selectionChange="selectionChange" layout="total, sizes, prev, pager, next, jumper"></tableList>
+		<tableList class="image-audit-table" :cfgs="cfgs" ref="tableList"  @selectionChange="selectionChange" layout="total, sizes, prev, pager, next, jumper"></tableList>
     </div>
 </template>
 
@@ -203,19 +203,19 @@ export default {
                     },
                     {
                         label: '操作',
-                        minWidth: '100px',
+                        minWidth: '140px',
                         render: (h, params) => {
                             return h('div', [
-                                h('el-button', { props: { type: 'primary'}, style: {
+                                h('el-button', { props: { type: 'primary', size: "mini" }, style: {
                                     display: params.row.status === 0 ? 'unset' : 'none'
                                 }, on: {click:()=>{this.func(params.row.id, 1, '通过',1)}}}, '通过'),
-                                h('el-button', { props: { type: 'danger'}, style: {
+                                h('el-button', { props: { type: 'danger', size: "mini" }, style: {
                                     display: params.row.status === 0 ? 'unset' : 'none'
                                 }, on: {click:()=>{this.func(params.row.id, -1, '拒绝',1)}}}, '拒绝'),
-                                h('el-button', { props: { type: 'success'}, style: {
+                                h('el-button', { props: { type: 'success', size: "mini" }, style: {
                                     display: params.row.status === 1 ? 'unset' : 'none'
                                 }, on: {click:()=>{}}}, '已通过'),
-                                h('el-button', { props: { type: 'danger'}, style: {
+                                h('el-button', { props: { type: 'danger', size: "mini" }, style: {
                                     display: params.row.status === -1 ? 'unset' : 'none'
                                 }, on: {click:()=>{}}}, '已拒绝'),
                             ])
@@ -392,8 +392,21 @@ export default {
 </script>
 
 <style lang="scss">
-.serviceConfig-message-history-box {
-    padding: 20px;
-    box-sizing: border-box;
+.image-audit-container {
+  padding: 20px;
+  box-sizing: border-box;
+  .image-audit-table {
+    .el-table__body-wrapper {
+      max-height: none !important;
+    }
+    .pagination {
+      background: #ffffff;
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      z-index: 999;
+    }
+  }
 }
 </style>
