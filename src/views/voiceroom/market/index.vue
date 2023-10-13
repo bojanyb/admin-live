@@ -44,7 +44,7 @@ export default {
         {
           name: "chains",
           type: "select",
-          value: "全部",
+          value: "",
           keyName: "value",
           optionLabel: "name",
           label: "检测链接",
@@ -104,7 +104,7 @@ export default {
             prop: "thirty_day",
           },
           {
-            label: "日活用户",
+            label: "进房人数",
             prop: "use_app",
           },
           {
@@ -120,7 +120,7 @@ export default {
             prop: "range_people",
             minWidth: "100px",
             render: (h, params) => {
-								return h('span', `${params.row.range_people}/${params.row.range_amount}`)
+								return h('span', `${params.row.range_people}/${params.row.range_amount.toFixed(2)}`)
 							}
           },
           {
@@ -148,6 +148,7 @@ export default {
         ...this.searchParams,
         ...this.dateTimeParams,
       };
+      console.log(searchParams.chains, "searchParams.chains");
       searchParams.chains = searchParams.chains ? [searchParams.chains] : "";
       return {
         page: params ? params.page : null,
