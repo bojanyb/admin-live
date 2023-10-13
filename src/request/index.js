@@ -473,6 +473,7 @@ const request = {
         // 用户处罚 - 用户举报二合一
         UserPunishLog: `${HTTPHEADER}/UserPunishLog`, // 处罚-列表
         addUserPunish: `${HTTPHEADER}/UserPunishLog/add`, // 处罚 -新增
+        addBatchUserPunish: `${HTTPHEADER}/UserPunishLog/addBatch`, // 处罚 -批量新增
         saveUserPunish: `${HTTPHEADER}/UserPunishLog/save`, // 处罚-封禁
         removeUserPunish: `${HTTPHEADER}/UserPunishLog/remove`, // 处罚-解除
         passUserPunish: `${HTTPHEADER}/UserPunishLog/pass`, // 处罚-忽略
