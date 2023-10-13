@@ -44,7 +44,7 @@ export default {
         {
           name: "chains",
           type: "select",
-          value: "全部",
+          value: "",
           keyName: "value",
           optionLabel: "name",
           label: "检测链接",
@@ -148,6 +148,7 @@ export default {
         ...this.searchParams,
         ...this.dateTimeParams,
       };
+      console.log(searchParams.chains, "searchParams.chains");
       searchParams.chains = searchParams.chains ? [searchParams.chains] : "";
       return {
         page: params ? params.page : null,
