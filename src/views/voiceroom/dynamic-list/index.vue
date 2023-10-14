@@ -269,7 +269,7 @@ export default {
                   "el-button",
                   {
                     props: { type: "danger", size: "mini" },
-                    style: { display: params.row.check_status === 3 ? "unset" : "none" },
+                    style: { display: (params.row.check_status === 3 || params.row.check_status === 2) ? "unset" : "none" },
                     on: {
                       click: () => {
                         this.deleteParams(params.row.id);
