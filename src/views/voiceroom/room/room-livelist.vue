@@ -10,9 +10,7 @@
       <span>直播总时长：{{ liveHistoryTotalData.all_time || "0" }}</span>
       <span
         >有效直播总时长：{{ liveHistoryTotalData.effective_time || "0" }}</span
-      ><span
-        >无效直播总时长：{{ liveHistoryTotalData.down_time || "0" }}</span
-      >
+      ><span>无效直播总时长：{{ liveHistoryTotalData.down_time || "0" }}</span>
       <span>直播总流水：{{ liveHistoryTotalData.total_gain || "0" }}</span>
       <span
         >进房总人数：{{ liveHistoryTotalData.enter_user_count || "0" }}人</span
@@ -45,7 +43,11 @@
     ></liveDetails>
 
     <!-- 魅力榜组件 -->
-    <charmComp v-if="isCharmDestoryComp" ref="charmComp" @destoryComp="destoryCharmComp"></charmComp>
+    <charmComp
+      v-if="isCharmDestoryComp"
+      ref="charmComp"
+      @destoryComp="destoryCharmComp"
+    ></charmComp>
   </div>
 </template>
 
@@ -107,7 +109,7 @@ export default {
           value: 2,
         },
       ],
-      dateTimeParams: {}
+      dateTimeParams: {},
     };
   },
   computed: {
@@ -197,11 +199,14 @@ export default {
           label: "关播时间",
           minWidth: "180px",
           render: (h, params) => {
+            const endTimeInSeconds = Math.floor(
+              this.dateTimeParams.end_time / 1000
+            );
             return h(
               "span",
               params.row.end_time
                 ? timeFormat(params.row.end_time, "YYYY-MM-DD HH:mm:ss", true)
-                : "--"
+                : timeFormat(endTimeInSeconds, "YYYY-MM-DD HH:mm:ss", true)
             );
           },
         },
@@ -292,14 +297,18 @@ export default {
           label: "魅力榜",
           minWidth: "100px",
           render: (h, params) => {
-            return h("el-link",{
-                  props: { type: "primary" },
-                  on: {
-                    click: () => {
-                      this.viewRank(params.row.id);
-                    },
+            return h(
+              "el-link",
+              {
+                props: { type: "primary" },
+                on: {
+                  click: () => {
+                    this.viewRank(params.row.id);
                   },
-                } ,"查看榜单");
+                },
+              },
+              "查看榜单"
+            );
           },
         },
         {
@@ -329,7 +338,7 @@ export default {
       ];
       return {
         vm: this,
-        url: REQUEST.room['liveHistoryList'],
+        url: REQUEST.room["liveHistoryList"],
         columns: arr1,
       };
     },
@@ -345,8 +354,8 @@ export default {
         room_category_id: s.room_category_id,
         guild_number: s.guild_number,
         live_status: s.live_status,
-        start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
-        end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
+        start_time: s.start_time ? Math.floor(s.start_time / 1000) : "",
+        end_time: s.end_time ? Math.floor(s.end_time / 1000) : "",
       };
     },
     // 刷新列表
@@ -373,15 +382,15 @@ export default {
       this.dateTimeParams = {};
       this.getList();
     },
-			// 查询
-			onSearch(params) {
-        this.dateTimeParams = {
-          start_time: params.dateTimeParams ? params.dateTimeParams[0] : null,
-          end_time: params.dateTimeParams ? params.dateTimeParams[1] : null
-        };
-				this.getList();
-        this.getLiveHistoryTotal();
-			},
+    // 查询
+    onSearch(params) {
+      this.dateTimeParams = {
+        start_time: params.dateTimeParams ? params.dateTimeParams[0] : null,
+        end_time: params.dateTimeParams ? params.dateTimeParams[1] : null,
+      };
+      this.getList();
+      this.getLiveHistoryTotal();
+    },
     // 解散房间
     async dissolveFunc(row) {
       this.$confirm("是否确认关闭当前直播间?", "提示", {
@@ -449,20 +458,20 @@ export default {
     saleAmunt(row) {
       this.tableData = row;
     },
-    // 获取当天时间
+    // 获取最近一小时时间
     getTodayTimestamps() {
       const currentTimestamp = Date.now();
       const oneHourAgoTimestamp = currentTimestamp - 3600000;
 
-			let time = [oneHourAgoTimestamp, currentTimestamp];
-			this.searchParams.dateTimeParams = time;
-			this.dateTimeParams.start_time = time[0];
-			this.dateTimeParams.end_time = time[1];
+      let time = [oneHourAgoTimestamp, currentTimestamp];
+      this.searchParams.dateTimeParams = time;
+      this.dateTimeParams.start_time = time[0];
+      this.dateTimeParams.end_time = time[1];
       this.searchParams.dateTimeParams = [time[0], time[1]];
     },
     // 查看榜单
     viewRank(liveId) {
-      this.isCharmDestoryComp = true
+      this.isCharmDestoryComp = true;
       setTimeout(() => {
         this.$refs.charmComp.show(liveId);
       }, 50);
