@@ -52,7 +52,6 @@
       v-if="isDestoryComp"
       @destoryComp="destoryComp"
     ></channelInfoComp>
-
     <!-- 批量封禁组件 -->
     <batchBanComp
       v-if="isDestoryComp"
@@ -624,14 +623,6 @@ export default {
         this.$refs.bindStuck.getList(row.id);
       }
     },
-    // 查看渠道内容
-    viewChannelFunc(row) {
-      if(isEmpty(row.third)) return;
-      this.isDestoryComp = true;
-      setTimeout(() => {
-        this.$refs.channelInfoComp.loadParams(row);
-      }, 50);
-    },
     // 选择
     selectionChange(callbackList) {
       const res = callbackList.reduce((prev, curr) => {
@@ -651,6 +642,14 @@ export default {
       this.isDestoryComp = true;
       setTimeout(() => {
         this.$refs.batchBanComp.loadParams(params);
+      }, 50);
+    },
+    // 查看渠道内容
+    viewChannelFunc(row) {
+      if(isEmpty(row.third)) return;
+      this.isDestoryComp = true;
+      setTimeout(() => {
+        this.$refs.channelInfoComp.loadParams(row);
       }, 50);
     },
   },
