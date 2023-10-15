@@ -490,6 +490,7 @@ export default {
       if (s.status === 2) {
         delete data.status;
         delete data.start_time, delete data.end_time;
+        delete data.is_standard;
       }
       return data;
     },
