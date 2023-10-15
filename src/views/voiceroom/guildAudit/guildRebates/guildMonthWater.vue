@@ -55,6 +55,18 @@
           </el-select>
         </div>
         <div class="sunBox" v-if="form.status !== 2">
+          <span>达标状态</span>
+          <el-select v-model="form.is_standard" placeholder="请选择" @change="change">
+            <el-option
+              v-for="item in standardList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
+        <div class="sunBox" v-if="form.status !== 2">
           <span>时间</span>
           <el-date-picker
             v-model="form.time"
@@ -259,6 +271,26 @@ export default {
           },
         },
         {
+							label: '本月流水',
+              width: '120px',
+              prop: 'now_flow',
+							render: (h, params) => {
+								return h('div', [
+									h('span', ` ${ (params.row.now_flow || params.row.now_flow === 0 ) ? params.row.now_flow + '钻石' : '--'}`)
+								])
+							}
+						},
+            {
+          label: "达标状态",
+          minWidth: "120px",
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.is_standard + "" === "1" ? "已达标" : params.row.is_standard + "" === "0" ? "未达标" : "--"
+            );
+          },
+        },
+        {
           label: "结算状态",
           minWidth: "120px",
           render: (h, params) => {
@@ -391,6 +423,20 @@ export default {
     return {
       guildList: [], // 公会列表
       closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST, // 结算状态
+      standardList: [
+        {
+          name: '全部',
+          value: null
+        },
+        {
+          name: '已达标',
+          value: 1
+        },
+        {
+          name: '未达标',
+          value: 0
+        },
+      ],
       form: {
         // 表单数据
         guild_number: "",
@@ -398,6 +444,7 @@ export default {
         time: [],
         start_time: null,
         end_time: null,
+        is_standard: null
       },
       selectList: [], // 选中
       ruleForm: {},
@@ -431,6 +478,7 @@ export default {
         end_time:
           s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
         guild_type: 2,
+        is_standard: s.is_standard
       };
       if (this.form.status === 1) {
         data.status = 0;
@@ -442,6 +490,7 @@ export default {
       if (s.status === 2) {
         delete data.status;
         delete data.start_time, delete data.end_time;
+        delete data.is_standard;
       }
       return data;
     },
@@ -616,6 +665,8 @@ export default {
           flow: item.flow + "钻石",
           t_flow: item.t_flow + "钻石",
           settlement: this.form.status === 2 ? "无" : item.settlement + "喵粮",
+          now_flow: (item.now_flow || item.now_flow === 0) ? item.now_flow + "钻石" : "--",
+          is_standard: item.is_standard + "" === "1" ? "已达标" : item.is_standard + "" === "0" ? "未达标" : "--",
           status: status_name,
           op_time: item.op_time
             ? timeFormat(item.op_time, "YYYY-MM-DD HH:mm:ss", true)
@@ -634,6 +685,8 @@ export default {
         "实际流水",
         "收礼流水",
         "月奖励金额",
+        "本月流水",
+        "达标状态",
         "结算状态",
         "操作时间",
         "操作人",
