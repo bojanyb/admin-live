@@ -664,6 +664,8 @@ export default {
           flow: item.flow + "钻石",
           t_flow: item.t_flow + "钻石",
           settlement: this.form.status === 2 ? "无" : item.settlement + "喵粮",
+          now_flow: item.now_flow + "钻石",
+          is_standard: item.is_standard + "" === "1" ? "已达标" : "未达标",
           status: status_name,
           op_time: item.op_time
             ? timeFormat(item.op_time, "YYYY-MM-DD HH:mm:ss", true)
@@ -682,6 +684,8 @@ export default {
         "实际流水",
         "收礼流水",
         "月奖励金额",
+        "本月流水",
+        "达标状态",
         "结算状态",
         "操作时间",
         "操作人",
