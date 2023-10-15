@@ -54,7 +54,7 @@
             </el-option>
           </el-select>
         </div>
-        <div class="sunBox">
+        <div class="sunBox" v-if="form.status !== 2">
           <span>达标状态</span>
           <el-select v-model="form.is_standard" placeholder="请选择" @change="change">
             <el-option
@@ -276,7 +276,7 @@ export default {
               prop: 'now_flow',
 							render: (h, params) => {
 								return h('div', [
-									h('span', `${params.row.now_flow + '钻石'}`)
+									h('span', ` ${ (params.row.now_flow || params.row.now_flow === 0 ) ? params.row.now_flow + '钻石' : '--'}`)
 								])
 							}
 						},
@@ -286,7 +286,7 @@ export default {
           render: (h, params) => {
             return h(
               "span",
-              params.row.is_standard + "" === "1" ? "已达标" : "未达标"
+              params.row.is_standard + "" === "1" ? "已达标" : params.row.is_standard + "" === "0" ? "未达标" : "--"
             );
           },
         },
@@ -490,6 +490,7 @@ export default {
       if (s.status === 2) {
         delete data.status;
         delete data.start_time, delete data.end_time;
+        delete data.is_standard;
       }
       return data;
     },
@@ -664,8 +665,8 @@ export default {
           flow: item.flow + "钻石",
           t_flow: item.t_flow + "钻石",
           settlement: this.form.status === 2 ? "无" : item.settlement + "喵粮",
-          now_flow: item.now_flow + "钻石",
-          is_standard: item.is_standard + "" === "1" ? "已达标" : "未达标",
+          now_flow: (item.now_flow || item.now_flow === 0) ? item.now_flow + "钻石" : "--",
+          is_standard: item.is_standard + "" === "1" ? "已达标" : item.is_standard + "" === "0" ? "未达标" : "--",
           status: status_name,
           op_time: item.op_time
             ? timeFormat(item.op_time, "YYYY-MM-DD HH:mm:ss", true)
