@@ -54,6 +54,18 @@
             </el-option>
           </el-select>
         </div>
+        <div class="sunBox">
+          <span>达标状态</span>
+          <el-select v-model="form.is_standard" placeholder="请选择" @change="change">
+            <el-option
+              v-for="item in standardList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
         <div class="sunBox" v-if="form.status !== 2">
           <span>时间</span>
           <el-date-picker
@@ -259,6 +271,26 @@ export default {
           },
         },
         {
+							label: '本月流水',
+              width: '120px',
+              prop: 'now_flow',
+							render: (h, params) => {
+								return h('div', [
+									h('span', `${params.row.now_flow + '钻石'}`)
+								])
+							}
+						},
+            {
+          label: "达标状态",
+          minWidth: "120px",
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.is_standard + "" === "1" ? "已达标" : "未达标"
+            );
+          },
+        },
+        {
           label: "结算状态",
           minWidth: "120px",
           render: (h, params) => {
@@ -391,6 +423,20 @@ export default {
     return {
       guildList: [], // 公会列表
       closeStatusList: MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST, // 结算状态
+      standardList: [
+        {
+          name: '全部',
+          value: null
+        },
+        {
+          name: '已达标',
+          value: 1
+        },
+        {
+          name: '未达标',
+          value: 0
+        },
+      ],
       form: {
         // 表单数据
         guild_number: "",
@@ -398,6 +444,7 @@ export default {
         time: [],
         start_time: null,
         end_time: null,
+        is_standard: null
       },
       selectList: [], // 选中
       ruleForm: {},
@@ -431,6 +478,7 @@ export default {
         end_time:
           s.time && s.time.length > 0 ? Math.floor(s.time[1] / 1000) : 0,
         guild_type: 2,
+        is_standard: s.is_standard
       };
       if (this.form.status === 1) {
         data.status = 0;
