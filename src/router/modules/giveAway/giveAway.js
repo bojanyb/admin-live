@@ -69,7 +69,7 @@ const giveAwayRouter = {
 			name: 'embodyApply-list',
 			meta: {
 				title: '提现申请',
-				noCache: true,
+				noCache: false,
 			},
 		},
     {
@@ -87,6 +87,15 @@ const giveAwayRouter = {
       name: 'withdrawal-account',
       meta: {
         title: '提现账户管理',
+        noCache: true,
+      },
+    },
+    {
+      path: 'public-transfer',
+      component: () => import('@/views/voiceroom/finance/public-transfer.vue'),
+      name: 'public-transfer',
+      meta: {
+        title: '对公转账申请',
         noCache: true,
       },
     },

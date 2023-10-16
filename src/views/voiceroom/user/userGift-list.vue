@@ -173,16 +173,20 @@
 					},
 					{
 						id: 1,
-						name: '派对房间'
+						name: '派对'
 					},
 					{
 						id: 3,
-						name: '直播房间'
+						name: '直播'
 					},
 					{
 						id: 2,
 						name: '私聊'
-          }
+					},
+					{
+						id: 4,
+						name: '心动岛房间'
+					}
 				],
 				id: null,
 				searchParams: {

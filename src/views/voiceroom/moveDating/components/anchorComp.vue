@@ -28,7 +28,7 @@
             </el-form>
         </drawer>
         <el-dialog
-        title="添加心动主播"
+        :title="editTitle"
         :visible.sync="dialogVisible"
         width="600px"
         :before-close="handleClose"
@@ -39,12 +39,12 @@
                 <div class="formItem">
                     <div class="formName">用户ID:</div>
                     <div class="inputBox">
-                        <el-input v-model="user_number" :disabled="status !=='add' ? true : false " placeholder="请输入用户ID"></el-input>
+                        <el-input v-model="anchor_id" :disabled="status !=='add' ? true : false " placeholder="请输入用户ID"></el-input>
                     </div>
                 </div>
                 <div class="formItem">
                     <div class="formName">音色分类名称:</div>
-                    <el-select v-model="sound_tag" clearable placeholder="请选择" >
+                    <el-select v-model="sound_type" clearable placeholder="请选择" >
                         <el-option
                         v-for="item in sound_tagList"
                         :key="item.id"
@@ -52,6 +52,12 @@
                         :value="item.id">
                         </el-option>
                     </el-select>
+                </div>
+                <div class="formItem" v-if="status !=='add'">
+                    <div class="formName">主播积分:</div>
+                    <div class="inputBox">
+                        <el-input v-model="score" type="number" placeholder="请输入主播积分"></el-input>
+                    </div>
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
@@ -66,7 +72,7 @@
 // 引入抽屉组件
 import drawer from '@/components/drawer/index'
 // 引入api
-import { addHeartAnchor,serachTag,editHeartAnchor } from '@/api/moveDating.js'
+import { addHeartAnchorV2,serachTagV2,editHeartAnchorV2 } from '@/api/moveDating.js'
 // 引入上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
 // 引入公共map
@@ -81,8 +87,9 @@ export default {
         return {
             status: 'add', // 当前状态
             dialogVisible: false,
-            user_number: null,
-            sound_tag: null,
+            anchor_id: null,
+            sound_type: null,
+            score: null,
             ruleForm: {},
             rules: {},
             sexList: MAPDATA.SEXLIST,
@@ -113,16 +120,18 @@ export default {
             if(status == 'upload') {
                 this.editTitle = "修改心动主播"
                 let params = JSON.parse(JSON.stringify(row));
-                this.user_number = params.user_number;
-                this.sound_tag = params.sound_tag;
+                this.anchor_id = params.anchor_id;
+                this.sound_type = params.sound_type;
+                this.score = params.score;
                 this.card_id = params.card_id;
                 this.id = params.id;
                 this.dialogVisible = true
             } else if(status == 'add'){
                 this.editTitle = "添加心动主播";
-                this.user_number = "";
-                this.sound_tag = "";
+                this.anchor_id = "";
+                this.sound_type = "";
                 this.card_id = "";
+                this.score = "";
                 this.dialogVisible = true
             } else {
                 this.openComp()
@@ -133,34 +142,33 @@ export default {
         },
         // 添加/修改心动主播
         async addAnchor() {
-            if(!this.user_number) {
+            if(!this.anchor_id) {
                 this.$warning('请输入用户ID')
                 return false
             }
-            if(!this.sound_tag) {
+            if(!this.sound_type) {
                 this.$warning('请先选择音色分类')
                 return
             }
             let params = {
-                user_number: this.user_number,
-                card_id: this.sound_tag
+                anchor_id: this.anchor_id,
+                sound_type: this.sound_type
             }
             if(this.status == 'add'){
-                let res = await addHeartAnchor(params)
+                let res = await addHeartAnchorV2(params)
                 if(res.code === 2000) {
                     this.handleClose()
                     this.$success('新增成功')
-                    this.user_number = ''
+                    this.anchor_id = ''
                     this.$emit('getList')
                 }
             }else if( this.status == "upload"){
-                params.id = this.id
-                params.card_id = this.sound_tag
-                let res = await editHeartAnchor(params)
+                params.score = this.score
+                let res = await editHeartAnchorV2(params)
                 if(res.code === 2000) {
                     this.handleClose()
                     this.$success('修改成功')
-                    this.user_number = ''
+                    this.anchor_id = ''
                     this.$emit('getList')
                 }
             }
@@ -175,8 +183,16 @@ export default {
         },
         // 获取音色分类
         async serachTagFunc() {
-            let res = await serachTag()
-            this.sound_tagList = res.data
+            let res = await serachTagV2()
+            const data = res.data.sound_type;
+            let list = [];
+            for (const item in data) {
+              if (Object.hasOwnProperty.call(data, item)) {
+                const name = data[item];
+                list.push({ sound_tag: name, id: Number(item) });
+              }
+            }
+            this.sound_tagList = list;
         }
     }
 }

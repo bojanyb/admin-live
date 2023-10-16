@@ -225,6 +225,8 @@ const request = {
         autonymlist: `${HTTPHEADER}/Verify/list`,
         getVerifyOptions: `${HTTPHEADER}/Verify/options`, // 获取实名列表筛选项
         riskList: `${HTTPHEADER}/Verify/rbiList`, // 风险列表
+        getVerifyOptions: `${HTTPHEADER}/Verify/options`, // 获取实名列表筛选项
+        riskList: `${HTTPHEADER}/Verify/rbiList`, // 风险列表
         edit: `${HTTPHEADER}/User/userEdit`, // 编辑用户
         userSave: `${HTTPHEADER}/User/userSave`, // 用户封禁/启用
         musicList: `${HTTPHEADER}/music/index`, // 音乐列表
@@ -280,6 +282,10 @@ const request = {
         roomS: `${HTTPHEADER}/guild/roomS`, // 查询房间流水列表
         delStatisticsroom: `${HTTPHEADER}/guild/delStatisticsroom`, // 移除24小时房间统计
         roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 移除24小时房间统计
+        guildOperateList: `${HTTPHEADER}/GuildOperate/list`, // 公会运营二维码列表
+        saveWechatCode: `${HTTPHEADER}/GuildOperate/saveWechatCode`, // 修改二维码
+        roomFlowNew: `${HTTPHEADER}/RoomFlow/indexNew`, // 房间流水明细(新)
+
 
 
         // v2
@@ -350,6 +356,14 @@ const request = {
         getMerchantList: `${HTTPHEADER}/Recharge/getMerchantList`, // 获取appid
         getWXMerchantList: `${HTTPHEADER}/Recharge/getWXMerchantList`, // 获取商户号
         queryPayStatus: `${HTTPHEADER}/Recharge/queryPayStatus`, // 查询充值订单支付状态
+
+        getCashList: `${HTTPHEADER}/GuildCash/getCashList`, // 对公转账列表
+        getCashDetail: `${HTTPHEADER}/GuildCash/getCashDetail`, // 对公转账详情
+        refuseCash: `${HTTPHEADER}/GuildCash/refuseCash`, // 审核退回
+        completeCash: `${HTTPHEADER}/GuildCash/completeCash`, // 确定结算
+        getBillDetail: `${HTTPHEADER}/GuildCash/getBillDetail`, // 账单明细列表
+        refuseApply: `${HTTPHEADER}/GuildCash/refuseApply`, // 确定结算
+
         addTask: `${HTTPHEADER}/Recharge/addTask`, // 按时间批量查单
         getTaskList: `${HTTPHEADER}/Recharge/getTaskList`, // 按时间批量查单-获取结果
         getTaskDetail: `${HTTPHEADER}/Recharge/getTaskDetail`, // 按时间批量查单-获取明细
@@ -363,6 +377,10 @@ const request = {
         delete: `${HTTPHEADER}/ActivityPush/delete`, // 活动通知列表
         pushLogList: `${HTTPHEADER}/PushLog`, // 活动通知列表
         addPushLog: `${HTTPHEADER}/pushLog/add`, // 活动通知列表
+        recallRuleList: `${HTTPHEADER}/UserRecallRule/index`,
+        addRecallRule: `${HTTPHEADER}/UserRecallRule/add`,
+        updateRecallRule: `${HTTPHEADER}/UserRecallRule/update`,
+        delRecallRule: `${HTTPHEADER}/UserRecallRule/del`,
     },
 
     // 举报管理
@@ -500,6 +518,15 @@ const request = {
         rmHeartAnchor: `${HTTPHEADER}/Heartbeat/rmHeartAnchor`, // 移除心动主播
         heartOrder: `${HTTPHEADER}/Heartbeat/heartOrder`, // 心动记录
         serachTag: `${HTTPHEADER}/Heartbeat/serachTag`, // 获取音色分类
+        getChatConfig: `${HTTPHEADER}/System/getSyetermConfigChat`, // 心动分成配置
+        saveChatConfig: `${HTTPHEADER}/System/saveSyetermConfigChat`, // 设置心动分成配置
+
+
+        heartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/list`, // 心动主播
+        addHeartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/add`, // 添加心动主播
+        editHeartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/update`, // 编辑心动主播
+        rmHeartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/delete`, // 移除心动主播
+        serachTagV2: `${HTTPHEADER}/ChatCardAnchorRecommend/common`, // 获取音色分类
     },
 
     // 动态管理
@@ -619,6 +646,23 @@ const request = {
         refund: `${HTTPHEADER}/PrettyNumber/refund`, // 退款
     },
 
+    // 快乐披萨屋
+    pizza:{
+        myMaterialsInfo :  `${HTTPHEADER}/hdPizza/myInfo`, // 获取用户信息
+        getRanking :  `${HTTPHEADER}/hdPizza/getRanking`, // 获取排行榜列表
+        exchangeList :  `${HTTPHEADER}/hdPizza/exchangeList`, // 获取兑换列表
+        exchange :  `${HTTPHEADER}/hdPizza/exchange`, // 兑换商品
+        getProduceMaterial :  `${HTTPHEADER}/hdPizza/getProduceMaterial`, // 获取制作披萨材料列表
+        markProduce :  `${HTTPHEADER}/hdPizza/produce`, // 制作披萨
+        getUserProduceLog :  `${HTTPHEADER}/hdPizza/getUserProduceLog`, // 获取用户披萨制作日志
+        getUserSpeedUpLog :  `${HTTPHEADER}/hdPizza/getUserSpeedUpLog`, // 获取用户的加速披萨日志
+        myExchangeLog :  `${HTTPHEADER}/hdPizza/myExchangeLog`, // 我的兑换记录
+        getPizzaProduceRanking :  `${HTTPHEADER}/hdPizza/getPizzaProduceRanking`, // 获取制作披萨排行榜
+        getGetRanking :  `${HTTPHEADER}/hdPizza/getRanking`, // 我的兑换记录
+        signInGetPizza :  `${HTTPHEADER}/hdPizza/signInGetPizza`, // 签到领披萨
+        getSpeedUp :  `${HTTPHEADER}/hdPizza/speedUp`, // 加速披萨制作
+    },
+
     //  浓情端午
     dragonBoat: {
         getGift: `${HTTPHEADER}/hdDuanwuLog/getGift`, // 获取礼物
@@ -648,7 +692,17 @@ const request = {
         getRanking: `${HTTPHEADER}/hdMusicfestLog/getRanking`, // 后台-排名数据
         getGift: `${HTTPHEADER}/hdMusicfestLog/getGift`, // 后台-礼物列表
         giftLog: `${HTTPHEADER}/hdMusicfestLog/giftLog`, // 后台-收送礼数据
-    }
+    },
+
+    // 市场数据
+    market: {
+      onlineUserData: `${HTTPHEADER}/NewUserData/onlineUserData`, // 在线用户列表
+      configChain: `${HTTPHEADER}/NewUserData/configChain`, // 配置监测链接
+      delChain: `${HTTPHEADER}/NewUserData/delChain`, // 删除监测链接
+      chain: `${HTTPHEADER}/NewUserData/chain`, // 获取监测链接
+      monitorChainData: `${HTTPHEADER}/NewUserData/monitorChainData`, // 监测链接数据
+      exportOnlineUserData: `${HTTPHEADER}/NewUserData/exportOnlineUserData`, // 导出监测链接数据
+  }
 }
 
 export default request
