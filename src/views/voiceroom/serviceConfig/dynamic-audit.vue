@@ -307,11 +307,11 @@ export default {
     },
     // 批量删除
     handleBatchDelete() {
-      this.batchAudit(2, "批量删除");
+      this.batchAudit(1, "批量删除");
     },
     // 批量忽略
     handleBatchIgnore() {
-      this.batchAudit(1, "批量忽略");
+      this.batchAudit(2, "批量忽略");
     },
     // 推荐动态
     handleQuery() {
