@@ -3,77 +3,6 @@
 import Layout from "@/layout";
 
 const giveAwayRouter = {
-<<<<<<< HEAD
-	path: '/giveAway',
-	component: Layout,
-	redirect: 'noRedirect',
-	name: 'giveAway',
-	meta: {
-		title: '财务管理',
-		icon: 'el-icon-goods'
-	},
-	children: [{
-			path: 'giveMe',
-			component: () => import('@/views/voiceroom/activity/giftHistory/giveAway'),
-			meta: {
-				title: '平台赠送',
-			},
-			name: 'giveMe'
-		},
-		{
-			path: 'giftHistory-list',
-			component: () => import('@/views/voiceroom/activity/giftHistory/giftHistory-list'),
-			meta: {
-				title: '赠送记录',
-			},
-			name: 'giftHistory-list'
-		},
-		{
-			path: 'payment-list',
-			component: () => import('@/views/voiceroom/finance/payment-list'),
-			name: 'payment-list',
-			meta: {
-				title: '支付配置管理',
-				noCache: true
-			},
-		},
-		{
-			path: 'commercial-list',
-			component: () => import('@/views/voiceroom/finance/commercial-list'),
-			name: 'commercial-list',
-			meta: {
-				title: '支付商户配置管理',
-				noCache: true
-			},
-		},
-		{
-			path: 'deposit-list',
-			component: () => import('@/views/voiceroom/finance/deposit-list'),
-			name: 'deposit-list',
-			meta: {
-				title: '提现商户配置管理',
-				noCache: true
-			},
-		},
-		{
-			path: 'guildWithdraw-list',
-			component: () => import('@/views/voiceroom/finance/guildWithdraw-list'),
-			name: 'guildWithdraw-list',
-			meta: {
-				title: '充值记录',
-				noCache: true
-			},
-		},
-		{
-			path: 'embodyApply-list',
-			component: () => import('@/views/voiceroom/finance/embodyApply'),
-			name: 'embodyApply-list',
-			meta: {
-				title: '提现申请',
-				noCache: false,
-			},
-		},
-=======
   path: "/giveAway",
   component: Layout,
   redirect: "noRedirect",
@@ -83,7 +12,6 @@ const giveAwayRouter = {
     icon: "el-icon-goods",
   },
   children: [
->>>>>>> @{-1}
     {
       path: "giveMe",
       component: () =>
