@@ -93,7 +93,7 @@ export default {
         { prop: "guild_id", exportable: true, label: "公会ID" },
         { prop: "guild_name", exportable: true, label: "公会名称" },
         { prop: "company_name", exportable: true, label: "企业名称" },
-        { prop: "owner_name", exportable: true, label: "开户银行" },
+        { prop: "bank_address", exportable: true, label: "开户银行" },
         { prop: "bank_name", exportable: true, label: "开户支行" },
         { prop: "bank_card", exportable: true, label: "银行账号" },
         { prop: "gain", exportable: true, label: "结算喵粮" },
