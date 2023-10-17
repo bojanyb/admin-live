@@ -18,6 +18,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       page: 1,
       pagesize: 10,
       total: 0,
@@ -65,8 +66,38 @@ export default {
         { prop: "owner_name", exportable: true, label: "开户银行" },
         { prop: "bank_name", exportable: true, label: "开户支行" },
         { prop: "bank_card", exportable: true, label: "银行账号" },
-        { prop: "", exportable: true, label: "营业执照" },
-        { prop: "", exportable: true, label: "公户资料" },
+        {
+          prop: "certificate_file",
+          exportable: true,
+          label: "营业执照",
+          render: (h, row) => {
+            if (row.certificate_file) {
+              // const test = 'https://photo.aiyi.live/7643ffdc0d787709235b744e02250935.rar'
+              return (
+                <el-button type="text" onClick={() => window.open(row.certificate_file)}>
+                  点击下载
+                </el-button>
+              );
+            }
+            return null;
+          },
+        },
+        {
+          prop: "bank_file",
+          exportable: true,
+          label: "公户资料",
+          render: (h, row) => {
+            if (row.bank_file) {
+              // const test = 'https://photo.aiyi.live/7643ffdc0d787709235b744e02250935.rar'
+              return (
+                <el-button type="text" onClick={() => window.open(row.bank_file)}>
+                  点击下载
+                </el-button>
+              );
+            }
+            return null;
+          },
+        },
         {
           prop: "status",
           exportable: true,
@@ -151,6 +182,7 @@ export default {
       this.fetchData();
     },
     async fetchData() {
+      this.loading = true;
       const res = await request({
         url: REQUEST.finance.getGuildCashBank,
         method: "post",
@@ -162,6 +194,7 @@ export default {
         this.total = res.data.count;
         this.data = res.data.list;
       }
+      this.loading = false;
     },
   },
   mounted() {
@@ -179,7 +212,11 @@ export default {
       @onSearch="onSearch"
     >
     </SearchPanel>
-    <el-table :data="data" @selection-change="(val) => (selected_rows = val)">
+    <el-table
+      :data="data"
+      @selection-change="(val) => (selected_rows = val)"
+      v-loading="loading"
+    >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column v-for="(item, i) in columns" align="center" :key="i" v-bind="item">
         <template v-if="item.render" #default="slotProps">

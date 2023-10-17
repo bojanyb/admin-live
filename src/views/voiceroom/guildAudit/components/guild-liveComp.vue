@@ -101,8 +101,23 @@ export default {
           options: this.operatorList,
         },
         {
+          name: "cash_type",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "label",
           label: "对公结算",
-          render: (h, { row }) => <span>{{ 0: "否", 1: "是" }[row.cash_type]}</span>,
+          placeholder: "请选择",
+          options: [
+            {
+              value: 0,
+              label: "否",
+            },
+            {
+              value: 1,
+              label: "是",
+            },
+          ],
         },
       ];
       let arr1 = [
@@ -124,9 +139,24 @@ export default {
           placeholder: "请选择",
           options: MAPDATA.GUILDSTATUS,
         },
-        {
+		{
+          name: "cash_type",
+          type: "select",
+          value: "",
+          keyName: "value",
+          optionLabel: "label",
           label: "对公结算",
-          render: (h, { row }) => <span>{{ 0: "否", 1: "是" }[row.cash_type]}</span>,
+          placeholder: "请选择",
+          options: [
+            {
+              value: 0,
+              label: "否",
+            },
+            {
+              value: 1,
+              label: "是",
+            },
+          ],
         },
       ];
       return this.isAuth ? arr : arr1;
@@ -327,6 +357,10 @@ export default {
               ),
             ]);
           },
+        },
+        {
+          label: "对公结算",
+          render: (h, { row }) => <span>{{ 0: "否", 1: "是" }[row.cash_type]}</span>,
         },
         {
           label: "操作",
@@ -632,6 +666,10 @@ export default {
           },
         },
         {
+          label: "对公结算",
+          render: (h, { row }) => <span>{{ 0: "否", 1: "是" }[row.cash_type]}</span>,
+        },
+        {
           label: "操作",
           minWidth: "300px",
           fixed: "right",
@@ -769,6 +807,7 @@ export default {
         status: s.status,
         operator: s.operator,
         guild_type: 1,
+		cash_type:s.cash_type,
       };
     },
     // 刷新列表

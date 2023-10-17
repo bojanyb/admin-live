@@ -20,6 +20,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       page: 1,
       pagesize: 10,
       total: 0,
@@ -108,7 +109,25 @@ export default {
             </el-button>
           ),
         },
-        { prop: "", label: "发票" },
+        {
+          prop: "file_url",
+          exportable: true,
+          label: "发票",
+          render: (h, row) => {
+            if (row.file_url) {
+              if (row.invoice_type === 1) {
+                // const test = "https://photo.aiyi.live/3e22531ef33448adeb74aea70191e8ba.pdf";
+                return (
+                  <el-button type="text" onClick={() => window.open(row.file_url)}>
+                    点击查看电子发票
+                  </el-button>
+                );
+              }
+              return <span>快递单号：{row.file_url}</span>;
+            }
+            return null;
+          },
+        },
         { prop: "remark", exportable: true, label: "备注" },
         {
           prop: "",
@@ -165,16 +184,12 @@ export default {
       this.fetchData();
     },
     onExportExcel() {
-      const keys = this.columns
-        .filter((c) => c.exportable === true)
-        .map((c) => c.prop);
+      const keys = this.columns.filter((c) => c.exportable === true).map((c) => c.prop);
       const header = this.columns
         .filter((c) => c.exportable === true)
         .map((c) => c.label);
-      const preset_data = this.selected_rows.map((row) =>
-        keys.map((k) => _.get(row, k))
-      );
-      export_json_to_excel({ data: preset_data, header, filename: '公会对公结算记录' });
+      const preset_data = this.selected_rows.map((row) => keys.map((k) => _.get(row, k)));
+      export_json_to_excel({ data: preset_data, header, filename: "公会对公结算记录" });
     },
     batchAction() {
       const uniq_statuses = _.uniq(this.selected_rows.map((row) => row.status));
@@ -244,6 +259,7 @@ export default {
       }
     },
     async fetchData() {
+      this.loading = true;
       const res = await request({
         url: REQUEST.finance.getGuildCashList,
         method: "post",
@@ -255,6 +271,7 @@ export default {
         this.total = res.data.count;
         this.data = res.data.list;
       }
+      this.loading = false;
     },
   },
   mounted() {
@@ -280,14 +297,13 @@ export default {
         >
       </template>
     </SearchPanel>
-    <el-table :data="data" @selection-change="(val) => (selected_rows = val)">
+    <el-table
+      :data="data"
+      @selection-change="(val) => (selected_rows = val)"
+      v-loading="loading"
+    >
       <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column
-        v-for="(item, i) in columns"
-        align="center"
-        :key="i"
-        v-bind="item"
-      >
+      <el-table-column v-for="(item, i) in columns" align="center" :key="i" v-bind="item">
         <template v-if="item.render" #default="slotProps">
           <vnode :row="slotProps.row" :col="item" />
         </template>
@@ -325,12 +341,8 @@ export default {
       destroy-on-close
     >
       <div class="action-btns">
-        <el-button @click="applyAudit(false, showApplyAuditDialog)"
-          >退回</el-button
-        >
-        <el-button
-          type="primary"
-          @click="applyAudit(true, showApplyAuditDialog)"
+        <el-button @click="applyAudit(false, showApplyAuditDialog)">退回</el-button>
+        <el-button type="primary" @click="applyAudit(true, showApplyAuditDialog)"
           >审核通过</el-button
         >
       </div>
@@ -368,9 +380,7 @@ export default {
           "
           >发票审核失败</el-button
         >
-        <el-button
-          type="primary"
-          @click="invoiceAudit(true, showInvoiceAuditDialog)"
+        <el-button type="primary" @click="invoiceAudit(true, showInvoiceAuditDialog)"
           >发票审核通过</el-button
         >
       </div>
@@ -396,9 +406,7 @@ export default {
           "
           >取消</el-button
         >
-        <el-button
-          type="primary"
-          @click="invoiceAudit(false, showInvoiceAuditDialog)"
+        <el-button type="primary" @click="invoiceAudit(false, showInvoiceAuditDialog)"
           >确定</el-button
         >
       </div>

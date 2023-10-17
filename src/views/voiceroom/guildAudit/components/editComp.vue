@@ -40,6 +40,11 @@
                         <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="对公结算" prop="cash_type" v-if="status === 'update'">
+                    <el-select v-model="ruleForm.cash_type" placeholder="请选择对公结算">
+                        <el-option v-for="item in [{value: 0, name: '否'}, {value: 1, name: '是'}]" :key="item.value" :label="item.name" :value="item.value"></el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">取 消</el-button>
@@ -73,6 +78,7 @@ export default {
                 // rebate: 0,
                 guild_type: this.type,
                 operator: null,
+                cash_type: 0,
             },
             oldParams: {}, // 老数据
             rules: {
@@ -97,6 +103,9 @@ export default {
                 // ],
                 remark: [
                     { required: false, message: '请输入公会简介', trigger: 'blur' }
+                ],
+                cash_type: [
+                    { required: true, message: '请输入对公结算', trigger: 'change' }
                 ]
             },
             operatorList: [],
@@ -152,6 +161,7 @@ export default {
                 para.company = params.company ? params.company : "";
                 para.status = params.status;
                 // para.rebate = params.rebate;
+                para.cash_type = params.cash_type
                 this.$set(this.$data, 'ruleForm', para)
             }
 

@@ -18,6 +18,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       page: 1,
       pagesize: 10,
       total: 0,
@@ -263,17 +264,19 @@ export default {
       });
     },
     async fetchData() {
+      this.loading = true;
       const res = await request({
         url: REQUEST.finance.getAnchorCash,
         method: "post",
         data: this.fetchParams,
       });
       if (res.code === 2000) {
-        this.page = res.data.page;
-        this.pagesize = res.data.pagesize;
+        // this.page = res.data.page;
+        // this.pagesize = res.data.pagesize;
         this.total = res.data.count;
         this.data = res.data.list;
       }
+      this.loading = false;
     },
   },
   mounted() {
@@ -302,7 +305,7 @@ export default {
         >
       </template>
     </SearchPanel>
-    <el-table :data="data" @selection-change="(val) => (selected_rows = val)">
+    <el-table :data="data" @selection-change="(val) => (selected_rows = val)" v-loading="loading">
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column v-for="(item, i) in columns" align="center" :key="i" v-bind="item">
         <template v-if="item.render" #default="slotProps">
