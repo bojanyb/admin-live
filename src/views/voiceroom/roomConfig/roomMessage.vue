@@ -17,7 +17,11 @@
       ></SearchPanel>
     </div>
 
-    <tableList :cfgs="cfgs" ref="tableList"   @selectionChange="selectionChange"></tableList>
+    <tableList
+      :cfgs="cfgs"
+      ref="tableList"
+      @selectionChange="selectionChange"
+    ></tableList>
 
     <!-- 引入新增 - 修改组件 -->
     <roomComp
@@ -36,18 +40,25 @@
       @getList="getList"
     ></typeComp>
 
-
     <!-- 批量修改类型 -->
+    <typeBatchComp
+      v-if="isDestoryComp"
+      ref="typeBatchComp"
+      @destoryComp="destoryComp"
+      @getList="getList"
+    ></typeBatchComp>
   </div>
 </template>
 
 <script>
 // 引入api
-import { partyRoomTypes,closeRoomLives } from "@/api/house.js";
+import { partyRoomTypes, closeRoomLives } from "@/api/house.js";
 // 引入房间类型详情组件
 import typeComp from "./components/typeNewComp.vue";
 // 引入新增 - 修改组件
 import roomComp from "./components/roomComp.vue";
+// 引入typeBatchComp组件
+import typeBatchComp from "./components/typeBatchComp.vue";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
@@ -65,6 +76,7 @@ export default {
     tableList,
     typeComp,
     roomComp,
+    typeBatchComp
   },
   data() {
     return {
@@ -389,6 +401,14 @@ export default {
         this.$refs.typeComp.loadParams(row);
       }, 50);
     },
+    // 批量设置房间分类
+    setTypeBatch(list) {
+      this.isDestoryComp = true;
+      console.log(this.selectList);
+      setTimeout(() => {
+        this.$refs.typeBatchComp.loadParams(this.selectList);
+      }, 50);
+    },
     // // 热门推荐
     // async hotRecommend(row, v) {
     //     let params = {
@@ -405,13 +425,13 @@ export default {
     //         this.getList()
     //     }
     // }
-   // 选中
-        selectionChange(val) {
+    // 选中
+    selectionChange(val) {
       this.selectList = val;
     },
     // 批量修改房间类型
     handleBatchPass() {
-      this.batchFunc(1);
+      this.setTypeBatch(1);
     },
     // 批量关停
     handleBatchRurn() {
@@ -429,11 +449,15 @@ export default {
       })
         .then(async () => {
           let params = {
-            user_ids:'',
-            room_ids:""
-          }
-          params.user_ids =  this.selectList.map(item=>item.user_id).join(',')
-          params.room_ids =  this.selectList.map(item=>item.room_id).join(',')
+            user_ids: "",
+            room_ids: "",
+          };
+          params.user_ids = this.selectList
+            .map((item) => item.user_id)
+            .join(",");
+          params.room_ids = this.selectList
+            .map((item) => item.room_id)
+            .join(",");
           let res = await closeRoomLives(params);
           if (res.code === 2000) {
             this.$success("批量操作成功");
