@@ -50,6 +50,21 @@
             </el-select>
           </el-form-item> -->
         </div>
+        <div class="flexBox">
+          <el-form-item label="房间类型" prop="room_category_id">
+            <el-select
+              v-model="ruleForm.room_category_id"
+              placeholder="请选择房间类型"
+            >
+            <el-option
+              v-for="item in classifyList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+          </el-form-item>
+        </div>
         <el-form-item label="房间封面" prop="room_cover">
           <uploadImg
             ref="uploadImg"
@@ -88,6 +103,12 @@ export default {
     uploadImg,
     drawer,
   },
+  props:{
+    classifyList: {
+      type: Array,
+      default: []
+    }
+  },
   data() {
     return {
       status: "add",
@@ -119,6 +140,9 @@ export default {
         // admin_recommend_status: [
         //   { required: true, message: "请输入热门推荐", trigger: "blur" },
         // ],
+        room_category_id: [
+          { required: false, message: "请选择房间类型", trigger: "blur" },
+        ],
         room_notice: [
           { required: false, message: "请输入房间公告", trigger: "blur" },
         ],
@@ -177,6 +201,7 @@ export default {
             // admin_recommend_status: s.admin_recommend_status,
             room_cover: s.room_cover,
             room_notice: s.room_notice,
+            user_id: s.user_id
           };
           let res = await updateParty(params);
           if (res.code === 2000) {
