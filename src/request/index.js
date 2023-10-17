@@ -361,6 +361,8 @@ const request = {
         settlementAudit: `${HTTPHEADER}/guildCash/settlementAudit`, // 对公结算银行结算审核
         invoiceAudit: `${HTTPHEADER}/guildCash/invoiceAudit`, // 对公结算发票审核
         doCash: `${HTTPHEADER}/guildCash/doCash`, // 对公结算审核操作（主播）
+        getGuildCashBank: `${HTTPHEADER}/guildCash/getGuildCashBank`, // 对公资质管理列表
+        bankAudit: `${HTTPHEADER}/guildCash/bankAudit`, // 对公资质审核
     },
 
     // 消息管理

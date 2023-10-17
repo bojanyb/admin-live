@@ -130,6 +130,15 @@ const giveAwayRouter = {
         noCache: true,
       },
     },
+    {
+      path: "reconciliation/qualification_manage",
+      component: () => import("@/views/voiceroom/reconciliation/qualification_manage.vue"),
+      name: "qualificationManage",
+      meta: {
+        title: "对公资质管理",
+        noCache: true,
+      },
+    },
   ],
 };
 

@@ -1,5 +1,5 @@
 <script>
-import GuideRecords from "./guide_records.vue";
+import GuideRecords from "./guild_records.vue";
 import StreamerRecords from "./streamer_records.vue";
 export default {
   components: {

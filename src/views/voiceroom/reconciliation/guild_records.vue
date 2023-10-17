@@ -7,7 +7,7 @@ import { export_json_to_excel } from "@/vendor/Export2Excel";
 import REQUEST from "@/request/index.js";
 import Detail from "./components/recordDetail.vue";
 export default {
-  name: "push-recall",
+  name: "guide-records",
   components: {
     SearchPanel,
     Detail,
@@ -113,6 +113,7 @@ export default {
         {
           prop: "",
           label: "操作",
+          fixed: "right",
           render: (h, row) => {
             let onClick;
             if (row.status === 10) {
@@ -271,7 +272,6 @@ export default {
       @onSearch="onSearch"
     >
       <template #bottom>
-        <!-- TODO 批量操作，需要根据选中的行显示不同按钮 -->
         <el-button :disabled="selected_rows.length === 0" @click="batchAction"
           >批量操作</el-button
         >
