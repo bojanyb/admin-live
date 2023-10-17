@@ -79,6 +79,10 @@
 						placeholder: '请选择',
 						options: this.operatorList
 					},
+		{
+          label: "对公结算",
+          render: (h, { row }) => <span>{{ 0: "否", 1: "是" }[row.cash_type]}</span>,
+        },
 				]
         let arr1 = [
 					{
@@ -99,6 +103,10 @@
 						placeholder: '请选择',
 						options: MAPDATA.GUILDSTATUS
 					},
+		{
+          label: "对公结算",
+          render: (h, { row }) => <span>{{ 0: "否", 1: "是" }[row.cash_type]}</span>,
+        },
 				]
         return this.isAuth ? arr : arr1;
 			},
