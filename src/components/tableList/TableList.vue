@@ -36,7 +36,7 @@
         </template>
 
         <template slot-scope="scope">
-          <WeTableCustomColumn :renderContent="item.render" v-if="!item.isimg && !item.isSwitch && !item.isimgList" :scope="scope" :prop="item.prop"></WeTableCustomColumn>
+          <WeTableCustomColumn :renderContent="item.render" v-if="!item.isimg && !item.isSwitch && !item.isimgList && !item.isImgAndVideoList" :scope="scope" :prop="item.prop"></WeTableCustomColumn>
           <!-- <el-image v-if="item.isimg" :src="scope.row[item.prop] || $store.state.defaultImg" :style="{width:item.imgWidth,height:item.imgHeight}"
             :preview-src-list="[scope.row[item.prop]||$store.state.defaultImg]">
             <div slot="error" class="image-slot">
@@ -64,6 +64,15 @@
           :preview-src-list="scope.row[item.prop]"
           ref="imgComp">
           </imgListComp>
+          <!-- 同时显示视频和图片 -->
+          <imgAndVideoListComp
+            v-if="item.isImgAndVideoList"
+            :imgSrcList="returnImgOrVideo(scope.row[item.prop])"
+            :videoSrcList="returnImgOrVideo(scope.row[item.propCopy])"
+            :width="item.imgWidth"
+            :height="item.imgHeight"
+            ref="imgAndVideoComp">
+          </imgAndVideoListComp>
           <div v-if="item.isImgOrText">
             <!-- 图片 -->
             <imgComp
@@ -123,6 +132,7 @@
   // 引入图片/svga组件
   import imgComp from './imgComp.vue'
   import imgListComp from './imgListComp.vue'
+  import imgAndVideoListComp from './imgAndVideoListComp.vue'
   // 引入视频组件
   import videoPlayerComp from '@/components/videoPlayer/index'
   // 获得元素的top位置
@@ -137,6 +147,7 @@
       WeTableCustomColumn,
       imgComp,
       imgListComp,
+      imgAndVideoListComp,
       videoPlayerComp
     },
     props: {
@@ -209,6 +220,15 @@
         } else {
           return [val]
         }
+      },
+      // 图片和视频列表显示
+      returnImgOrVideo(val) {
+        let list = [];
+        if(val) {
+          // 首先将值转为数组
+          list = Array.isArray(val) ? val : val.split(',');
+        }
+        return list;
       },
       // 是否禁止开关
       disabledFunc(item, index) {
@@ -422,6 +442,7 @@
 </script>
 
 <style lang="scss">
+  @import '../../styles/index.scss';
   .share-table-list-box {
     // border: 1px solid #DCDCDC;
     // border-bottom: none;
@@ -474,6 +495,7 @@
   .share-table-list-box .el-table__body-wrapper {
     max-height: 40rem !important;
     overflow-y: auto;
+    @include scrollbar-style;
   }
 
   .el-tooltip__popper {

@@ -476,10 +476,13 @@ const request = {
         getPunishTypeList: `${HTTPHEADER}/UserPunishLog/getPunishTypeList`, // 处罚举报-处罚类型
         getTencentLabel: `${HTTPHEADER}/Room/tencent_label`, // 处罚举报-风险类型
         customerServiceList: `${HTTPHEADER}/ScreenImgLog/customerServiceList`, // 处罚举报-客服列表
+        getReviewer: `${HTTPHEADER}/moments/init`, // 处罚举报-获取审核人
+
 
         // 用户处罚 - 用户举报二合一
         UserPunishLog: `${HTTPHEADER}/UserPunishLog`, // 处罚-列表
         addUserPunish: `${HTTPHEADER}/UserPunishLog/add`, // 处罚 -新增
+        addBatchUserPunish: `${HTTPHEADER}/UserPunishLog/addBatch`, // 处罚 -批量新增
         saveUserPunish: `${HTTPHEADER}/UserPunishLog/save`, // 处罚-封禁
         removeUserPunish: `${HTTPHEADER}/UserPunishLog/remove`, // 处罚-解除
         passUserPunish: `${HTTPHEADER}/UserPunishLog/pass`, // 处罚-忽略

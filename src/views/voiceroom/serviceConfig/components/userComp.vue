@@ -52,7 +52,6 @@
                         :on-preview="handlePreview"
                         :on-remove="handleRemove"
                         :before-remove="beforeRemove"
-                        :limit="4"
                         accept=".png,.jpg,.jpeg,.mp4"
                         :on-exceed="handleExceed"
                         :file-list="fileList"
@@ -237,9 +236,6 @@ export default {
     methods: {
         // 移除之后
         handleRemove(file, fileList) {
-            console.log('[ file ] >', file)
-            console.log('[ fileList ] >', fileList)
-            console.log('[ this.fileList ] >', this.fileList)
             this.fileList = fileList;
         },
         // 预览
@@ -258,7 +254,6 @@ export default {
         upLoad(file) {
             uploadOSS(file.file).then(res => {
                 if(res.url) {
-                    console.log('[ res ] >', res)
                     this.fileList.push({ name: file.file.name, url: res.url });
                     // this.ruleForm.img = res.url;
                 }
@@ -411,7 +406,10 @@ export default {
                     return false;
                 }
             });
-        }, 300),
+        }, 1000, {
+          'leading': true,
+          'trailing': false
+        }),
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
@@ -485,6 +483,9 @@ export default {
 
 <style lang="scss">
 .serviceConfig-userComp-box {
+    .el-upload-list__item.is-ready {
+      display: none;
+    }
     .el-upload-list__item-name {
         width: 240px;
     }

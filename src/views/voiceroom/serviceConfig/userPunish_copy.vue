@@ -223,6 +223,12 @@ export default {
           },
         },
         {
+          label: "用户身份",
+          render: (h, params) => {
+            return h("span", params.row.punished_user_role || "无");
+          },
+        },
+        {
           label: "被举报用户所属公会",
           minWidth: "150px",
           render: (h, params) => {
@@ -283,11 +289,11 @@ export default {
         },
         {
           label: "举报证据",
-          isimgList: true,
+          isImgAndVideoList: true,
           prop: "img_path",
           propCopy: "video_path",
-          imgWidth: "70px",
-          imgHeight: "70px",
+          imgWidth: "50px",
+          imgHeight: "50px",
           width: "200px",
         },
         {
@@ -297,6 +303,12 @@ export default {
             return h("div", [
               h("div", params.row.report_user_nickname || "无"),
             ]);
+          },
+        },
+        {
+          label: "举报用户身份",
+          render: (h, params) => {
+            return h("span", params.row.report_user_role || "无");
           },
         },
         {
@@ -378,6 +390,14 @@ export default {
           minWidth: "170px",
           render: (h, params) => {
             return h("span", params.row.remove_time || "无");
+          },
+        },
+        {
+          label: "审核人",
+          minWidth: "100px",
+          prop: "admin",
+          render: (h, params) => {
+          return h("span", params.row.admin || "无");
           },
         },
         {
