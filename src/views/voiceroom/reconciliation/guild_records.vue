@@ -90,7 +90,7 @@ export default {
       ],
       columns: [
         { prop: "create_time", exportable: true, label: "申请时间" },
-        { prop: "guild_id", exportable: true, label: "公会ID" },
+        { prop: "guild_number", exportable: true, label: "公会ID" },
         { prop: "guild_name", exportable: true, label: "公会名称" },
         { prop: "company_name", exportable: true, label: "企业名称" },
         { prop: "bank_address", exportable: true, label: "开户银行" },
@@ -285,19 +285,25 @@ export default {
       this.fetchData();
     },
     async fetchData() {
-      this.loading = true;
-      const res = await request({
-        url: REQUEST.finance.getGuildCashList,
-        method: "post",
-        data: this.fetchParams,
-      });
-      if (res.code === 2000) {
-        this.page = res.data.page;
-        this.pagesize = res.data.pagesize;
-        this.total = res.data.count;
-        this.data = res.data.list;
+      try {
+        this.loading = true;
+        const res = await request({
+          url: REQUEST.finance.getGuildCashList,
+          method: "post",
+          data: this.fetchParams,
+        });
+        if (res.code === 2000) {
+          this.page = res.data.page;
+          this.pagesize = res.data.pagesize;
+          this.total = res.data.count;
+          this.data = res.data.list;
+        }
+      } catch (e) {
+        this.data = []
+        console.error(e.message);
+      } finally {
+        this.loading = false;
       }
-      this.loading = false;
     },
   },
   mounted() {

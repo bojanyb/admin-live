@@ -254,7 +254,7 @@ export default {
         this.showAuditPassDialog = false;
         this.showAuditRejectDialog = false;
       }
-      this.fetchData()
+      this.fetchData();
     },
     onExportExcel() {
       const keys = this.columns
@@ -273,19 +273,25 @@ export default {
       });
     },
     async fetchData() {
-      this.loading = true;
-      const res = await request({
-        url: REQUEST.finance.getAnchorCash,
-        method: "post",
-        data: this.fetchParams,
-      });
-      if (res.code === 2000) {
-        // this.page = res.data.page;
-        // this.pagesize = res.data.pagesize;
-        this.total = res.data.count;
-        this.data = res.data.list;
+      try {
+        this.loading = true;
+        const res = await request({
+          url: REQUEST.finance.getAnchorCash,
+          method: "post",
+          data: this.fetchParams,
+        });
+        if (res.code === 2000) {
+          // this.page = res.data.page;
+          // this.pagesize = res.data.pagesize;
+          this.total = res.data.count;
+          this.data = res.data.list;
+        }
+      } catch (e) {
+        this.data = []
+        console.error(e.message);
+      } finally {
+        this.loading = false;
       }
-      this.loading = false;
     },
   },
   mounted() {
@@ -385,7 +391,7 @@ export default {
         }}
         <el-input
           v-model="reject_reason"
-          placeholder="请输入拒绝原因"
+          placeholder="请输入拒绝原因(必填)"
           style="margin-bottom: 20px"
         ></el-input>
         <div class="action-btns">
@@ -399,7 +405,7 @@ export default {
           >
             取消
           </el-button>
-          <el-button type="primary" @click="audit(false, showAuditRejectDialog)">
+          <el-button type="primary" :disabled="!reject_reason" @click="audit(false, showAuditRejectDialog)">
             确定退回
           </el-button>
         </div>
