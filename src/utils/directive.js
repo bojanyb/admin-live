@@ -1,5 +1,6 @@
 // 自定义指令
 import Vue from 'vue'
+import Clipboard from '@/directive/clipboard/clipboard'
 
 const directives = {}
 
@@ -129,4 +130,4 @@ directives.num = Vue.directive('input-num', {
 		})
 	}
 })
-
+Vue.directive('clipboard', Clipboard)

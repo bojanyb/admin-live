@@ -119,6 +119,8 @@ export default {
         },
         {
           prop: "file_url",
+          minWidth: "200px",
+          showOverflowTooltip: true,
           exportable: true,
           label: "发票",
           render: (h, row) => {
@@ -131,7 +133,16 @@ export default {
                   </el-button>
                 );
               }
-              return <span>快递单号：{row.file_url}</span>;
+              return (
+                <span
+                  v-clipboard={{
+                    text: row.file_url,
+                    onSuccess: () => this.$notify.success({ message: "复制成功" }),
+                  }}
+                >
+                  快递单号：{row.file_url}
+                </span>
+              );
             }
             return null;
           },
