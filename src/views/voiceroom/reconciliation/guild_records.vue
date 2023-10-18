@@ -244,6 +244,7 @@ export default {
       if (_.every(res, (r) => r.code === 2000)) {
         this.showApplyAuditDialog = false;
       }
+      this.fetchData();
     },
     async settlementAudit(isPass, rows) {
       const res = await Promise.all(
@@ -261,6 +262,7 @@ export default {
       if (_.every(res, (r) => r.code === 2000)) {
         this.showSettlementAuditDialog = false;
       }
+      this.fetchData();
     },
     async invoiceAudit(isPass, rows) {
       const res = await Promise.all(
@@ -280,6 +282,7 @@ export default {
         this.invoiceAuditFailReason = "";
         this.showInvoiceAuditDialog = false;
       }
+      this.fetchData();
     },
     async fetchData() {
       this.loading = true;

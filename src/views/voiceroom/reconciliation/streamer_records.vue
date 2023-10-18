@@ -254,6 +254,7 @@ export default {
         this.showAuditPassDialog = false;
         this.showAuditRejectDialog = false;
       }
+      this.fetchData()
     },
     onExportExcel() {
       const keys = this.columns
