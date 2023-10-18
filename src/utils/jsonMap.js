@@ -1905,8 +1905,16 @@ const FINANCEGIVETYPELIST = [
     value: 1
   },
   {
-    name: '喵粮',
+    name: '私聊喵粮',
     value: 2
+  },
+  {
+    name: '派对喵粮',
+    value: 3
+  },
+  {
+    name: '直播喵粮',
+    value: 4
   }
 ]
 
