@@ -98,7 +98,15 @@ export default {
         { prop: "bank_card", exportable: true, label: "银行账号" },
         { prop: "gain", exportable: true, label: "结算喵粮" },
         { prop: "deduct_money", exportable: true, label: "违规扣除" },
-        { prop: "real_money", exportable: true, label: "结算金额" },
+        {
+          prop: "real_money",
+          exportable: true,
+          export_format: (row) => {
+            return row.real_money / 100;
+          },
+          label: "结算金额",
+          render: (h, row) => <span>{row.real_money / 100}元</span>,
+        },
         { prop: "status_desc", exportable: true, label: "结算状态" },
         {
           prop: "",
@@ -184,11 +192,15 @@ export default {
       this.fetchData();
     },
     onExportExcel() {
-      const keys = this.columns.filter((c) => c.exportable === true).map((c) => c.prop);
+      const keys = this.columns
+        .filter((c) => c.exportable === true)
+        .map((c) =>
+          c.export_format ? (row) => c.export_format(row) : _.property(c.prop)
+        );
       const header = this.columns
         .filter((c) => c.exportable === true)
         .map((c) => c.label);
-      const preset_data = this.selected_rows.map((row) => keys.map((k) => _.get(row, k)));
+      const preset_data = this.selected_rows.map((row) => keys.map((k) => k(row)));
       export_json_to_excel({ data: preset_data, header, filename: "公会对公结算记录" });
     },
     batchAction() {
