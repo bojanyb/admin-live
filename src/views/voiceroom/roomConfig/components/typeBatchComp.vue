@@ -62,8 +62,8 @@ export default {
       this.ruleForm = {
         ...row,
       };
-      console.log(this.ruleForm);
-      this.getCanChangeTypeData(row.user_id);
+      let ids = row.map(item => item.room_id).join(',');
+      this.getCanChangeTypeData(ids);
     },
     // 销毁组件
     closed() {
