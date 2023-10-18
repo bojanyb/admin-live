@@ -67,14 +67,14 @@ export default {
               key: 4,
               value: "提现到账",
             },
-            {
-              key: 5,
-              value: "adapay提现失败",
-            },
-            {
-              key: 6,
-              value: "部分成功",
-            },
+            // {
+            //   key: 5,
+            //   value: "adapay提现失败",
+            // },
+            // {
+            //   key: 6,
+            //   value: "部分成功",
+            // },
             {
               key: 7,
               value: "用户取消",
@@ -117,7 +117,15 @@ export default {
         { prop: "nickname", exportable: true, label: "用户昵称" },
         { prop: "guild_name", exportable: true, label: "公会名称" },
         { prop: "gain", exportable: true, label: "结算喵粮" },
-        { prop: "real_money", exportable: true, label: "结算金额" },
+        {
+          prop: "real_money",
+          exportable: true,
+          export_format: (row) => {
+            return row.real_money / 100;
+          },
+          label: "结算金额",
+          render: (h, row) => <span>{row.real_money / 100}元</span>,
+        },
         {
           prop: "status",
           label: "申请状态",
@@ -305,7 +313,11 @@ export default {
         >
       </template>
     </SearchPanel>
-    <el-table :data="data" @selection-change="(val) => (selected_rows = val)" v-loading="loading">
+    <el-table
+      :data="data"
+      @selection-change="(val) => (selected_rows = val)"
+      v-loading="loading"
+    >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column v-for="(item, i) in columns" align="center" :key="i" v-bind="item">
         <template v-if="item.render" #default="slotProps">
