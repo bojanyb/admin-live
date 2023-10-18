@@ -1,5 +1,5 @@
 <template>
-  <div class="balance-container">
+  <div class="app-container balance-container">
     <div class="model">
       <span
         >用户收入统计：{{
