@@ -106,7 +106,7 @@ export default {
         room_category_id: "",
         live_status: "",
         sort_field: "",
-        sort_type: "",
+        sort: "",
       },
       // 选择的列表
       selectList: [],
@@ -404,7 +404,6 @@ export default {
     // 批量设置房间分类
     setTypeBatch(list) {
       this.isDestoryComp = true;
-      console.log(this.selectList);
       setTimeout(() => {
         this.$refs.typeBatchComp.loadParams(this.selectList);
       }, 50);
