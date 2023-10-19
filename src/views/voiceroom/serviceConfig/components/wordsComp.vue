@@ -1,7 +1,7 @@
 <template>
   <div class="wordsComp-box">
     <el-dialog
-      title="风控文案库"
+      title="举报/投诉配置"
       :visible.sync="dialogVisible"
       width="50%"
       :close-on-click-modal="false"
@@ -10,6 +10,7 @@
     >
       <div class="button-wrap">
         <el-button type="danger" @click="batchEdit">批量编辑</el-button>
+        <el-button type="primary" @click="update()">新增</el-button>
       </div>
       <div class="wrap">
         <el-table :data="tableData" style="width: 100%">
@@ -22,8 +23,17 @@
               <el-button
                 @click.native.prevent="update(scope.row)"
                 type="primary"
-                size="small">
+                size="small"
+              >
                 编辑
+              </el-button>
+
+              <el-button
+                @click.native.prevent="del(scope.row)"
+                type="danger"
+                size="small"
+              >
+                删除
               </el-button>
             </template>
           </el-table-column>
@@ -39,21 +49,37 @@
       </div>
     </el-dialog>
     <!-- 风控文案编辑 -->
-    <wordsEditComp v-if="isDestoryComp" ref="wordsEditComp" @getList="getList" @destoryComp="destoryComp"></wordsEditComp>
+    <!-- <wordsEditComp
+      v-if="isDestoryComp"
+      ref="wordsEditComp"
+      @getList="getList"
+      @destoryComp="destoryComp"
+    ></wordsEditComp> -->
+    <!-- 新增/编辑举报投诉配置 -->
+    <editPunishComp
+      v-if="isDestoryComp"
+      ref="editPunishComp"
+      @getList="getList"
+      @destoryComp="destoryComp"
+    >
+    </editPunishComp>
   </div>
 </template>
 
 <script>
 // 引入api
-import { getPunishWordsList } from "@/api/risk";
+import { getPunishWordsList, deletePunishWords } from "@/api/risk";
 // 分页
 import Pagination from "@/components/Pagination";
 // 引入风控文案编辑组件
-import wordsEditComp from "./wordsEditComp.vue"
+import wordsEditComp from "./wordsEditComp.vue";
+// 引入风控文案编辑组件
+import editPunishComp from "./editPunishComp.vue";
 export default {
   components: {
     Pagination,
-    wordsEditComp
+    wordsEditComp,
+    editPunishComp
   },
   data() {
     return {
@@ -88,12 +114,35 @@ export default {
     update(row) {
       this.isDestoryComp = true;
       setTimeout(() => {
-        this.$refs.wordsEditComp.loadParams(row);
+        this.$refs.editPunishComp.loadParams(row);
       }, 50);
+    },
+    del(row) {
+      this.$confirm("此操作将永久删除, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          console.log(row);
+          const { id } = row;
+          await deletePunishWords({ id });
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+          this.getList();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
     async getList() {
       const res = await getPunishWordsList();
-      if(res.code !== 2000) return;
+      if (res.code !== 2000) return;
       this.tableData = res.data || [];
     },
     // 销毁组件
@@ -143,7 +192,7 @@ export default {
       content: "";
     }
     .clearfix:after {
-      clear: both
+      clear: both;
     }
 
     .box-card {

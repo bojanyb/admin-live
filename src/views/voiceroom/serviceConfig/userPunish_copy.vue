@@ -14,7 +14,7 @@
         @add="add"
         batchRurnName="导出EXCEL"
         @BatchRurn="BatchRurn"
-        customName="风控文案库"
+        customName="投诉/举报配置"
         @custom="handleCustom"
       ></SearchPanel>
     </div>
@@ -52,6 +52,7 @@ import {
   passUserPunish,
   UserPunishLog,
   acceptPunish,
+  deletePunishWords
 } from "@/api/risk";
 // 引入api
 import { getPunishTypeList } from "@/api/videoRoom";
