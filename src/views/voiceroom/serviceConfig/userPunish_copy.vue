@@ -18,6 +18,16 @@
         @custom="handleCustom"
       ></SearchPanel>
     </div>
+    <el-row :gutter="10" style="margin-bottom: 10px;">
+      <el-col :span="10">
+        <el-radio-group v-model="filterType" size="small">
+          <el-radio-button label="all">全部</el-radio-button>
+          <el-radio-button label="guild">公会</el-radio-button>
+          <el-radio-button label="user">用户</el-radio-button>
+        </el-radio-group>
+      </el-col>
+      <right-toolbar :columns="filterColumns" @refreshTable="refreshTable"></right-toolbar>
+    </el-row>
     <tableList
       :cfgs="cfgs"
       ref="tableList"
@@ -61,6 +71,8 @@ import userComp from "./components/userComp.vue";
 import uploadImg from "./components/uploadImg.vue";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
+// 引入列表工具组件
+import RightToolbar from "@/components/RightToolbar/index.vue";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入api
@@ -80,6 +92,7 @@ export default {
   mixins: [mixins],
   components: {
     SearchPanel,
+    RightToolbar,
     tableList,
     userComp,
     uploadImg,
@@ -93,6 +106,40 @@ export default {
         status: -1,
       },
       punishTypeList: [],
+      operateStatusOptions: [{
+        name: '全部',
+        value: -1
+      },
+      {
+        name: '封禁中',
+        value: 1
+      },
+      {
+        name: '已解除',
+        value: 2
+      }],
+      filterType: 'all',
+      filterColumns: [{
+        label: "事件编号",
+        key: "create_time1",
+        visible: true,
+      },{
+        label: "创建时间",
+        key: "create_time",
+        visible: true,
+      },{
+        label: "提交渠道",
+        key: "from",
+        visible: true,
+      },{
+        label: "举报人身份",
+        key: "report_user_role",
+        visible: true,
+      },{
+        label: "举报账号",
+        key: "report_user_nickname",
+        visible: true,
+      }],
     };
   },
   computed: {
@@ -102,35 +149,48 @@ export default {
     forms() {
       return [
         {
-          name: "user_number",
-          type: "input",
-          value: "",
-          label: "用户ID",
-          isNum: true,
-          placeholder: "请输入用户ID",
+          name: 'userSelect',
+          value: '',
+          selectName: 'mUserSelect',
+          type: 'inputSelect',
+          placeholder: '请输入ID',
+          selectPlaceholder: '请选择',
+          selctValue: 'report_user_number',
+          selectWidth: '150px',
+          options: [
+            { key: 'report_user_number', label: '举报人用户ID' },
+            { key: 'punished_user_number', label: '被举报人用户ID' }
+          ],
+          handler: {
+            change: (v) => {
+              if(v == 'code') {
+                // this.$set(this.searchParams, 'live_user_number', )
+              }
+            }
+          },
         },
         {
-          name: "guild_number",
-          type: "input",
-          value: "",
-          label: "公会ID",
-          isNum: true,
-          placeholder: "请输入公会ID",
-        },
-        {
-          name: "guild_name",
-          type: "input",
-          value: "",
-          label: "所属公会",
-          placeholder: "请输入所属公会",
-        },
-        {
-          name: "report_user_number",
-          type: "input",
-          value: "",
-          label: "举报人ID",
-          isNum: true,
-          placeholder: "请输入举报人ID",
+          name: 'guildSelect',
+          value: '',
+          selectName: 'mGuildSelect',
+          type: 'inputSelect',
+          placeholder: '请输入',
+          selectPlaceholder: '请选择',
+          selctValue: 'guild_name',
+          selectWidth: '170px',
+          options: [
+            { key: 'guild_name', label: '举报所属公会昵称' },
+            { key: 'guild_number', label: '举报所属公会ID' },
+            { key: 'punished_user_guild_name', label: '被举报所属公会昵称' },
+            { key: 'punished_user_guild_number', label: '被举报所属公会ID' },
+          ],
+          handler: {
+            change: (v) => {
+              if(v == 'code') {
+                // this.$set(this.searchParams, 'live_user_number', )
+              }
+            }
+          },
         },
         {
           name: "operator",
@@ -180,6 +240,16 @@ export default {
           options: MAPDATA.RISKLEVELLIST,
         },
         {
+          name: "operate",
+          type: "select",
+          value: -1,
+          keyName: "value",
+          optionLabel: "name",
+          label: "公会运营选择",
+          placeholder: "请选择",
+          options: this.operateStatusOptions,
+        },
+        {
           name: "dateTimeParams",
           type: "datePicker",
           dateType: "datetimerange",
@@ -201,6 +271,11 @@ export default {
     cfgs() {
       const arr = [
         {
+          label: "事件编号",
+          prop: "create_time1",
+          minWidth: "160px",
+        },
+        {
           label: "时间",
           prop: "create_time",
           minWidth: "160px",
@@ -208,12 +283,13 @@ export default {
         {
           label: "来源",
           minWidth: "100px",
+          prop: "from",
           render: (h, params) => {
             return h("span", params.row.from || "无");
           },
         },
         {
-          label: "用户",
+          label: "被举报用户",
           minWidth: "120px",
           render: (h, params) => {
             return h("div", [
@@ -223,67 +299,42 @@ export default {
           },
         },
         {
-          label: "用户身份",
+          label: "被举报用户身份",
+          minWidth: "120px",
           render: (h, params) => {
-            return h("span", params.row.punished_user_role || "无");
-          },
-        },
-        {
-          label: "被举报用户所属公会",
-          minWidth: "150px",
-          render: (h, params) => {
-            if (
-              params.row.punished_user_guild_number &&
-              params.row.punished_user_guild_number !== "无"
-            ) {
-              return h("div", [
-                h("div", params.row.punished_user_guild_name),
-                h("div", params.row.punished_user_guild_number || "无"),
-              ]);
-            } else {
-              return h("div", "无");
-            }
-          },
-        },
-        {
-          label: "被举报用户所属公会状态",
-          minWidth: "180px",
-          render: (h, params) => {
-            return h("div", [
-              h("div", params.row.punished_user_guild_status || "无"),
-            ]);
-          },
-        },
-        {
-          label: "被举报用户加入公会时间",
-          prop: "punished_user_guild_join_time",
-          minWidth: "180px",
-        },
-        {
-          label: "被举报用户所属运营",
-          minWidth: "150px",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "div",
-                params.row.punished_user_guild_operator_user_name || "无"
-              ),
-            ]);
+            const content = [
+              h("div", "用户等级：12 魅力等级：12"),
+              h("div", "当前所属公会：今晚世界第五（ID192922） 状态：正常   加入时间：2012-12-12 12：00：00   所属运营：XXXX"),
+              h("div", "被举报时所属公会：今晚世界第五（ID192922） 状态：正常   加入时间：2012-12-12 12：00：00  所属运营：XXX"),
+              h("br", ""),
+              h("div", "违规信息：被举报X次  被处罚X次  被警告X次"),
+              h("div", "实名信息：潘明成"),
+              h("br", ""),
+              h("div", "注册信息：203-05-31  21:35:06"),
+              h("br", ""),
+              h("div", "用户状态：禁言15分钟"),
+            ]
+            return h("el-popover", 
+              {
+                props: {
+                  width: 500,
+                  trigger: 'hover',
+                  'popper-class': 'user-punish-popper-wrap'
+                }
+              },
+              [ 
+                h("div", content),
+                h("span", { slot: 'reference' }, params.row.punished_user_role || "无") 
+              ]
+            )
+            // return h("span", params.row.punished_user_role || "无");
           },
         },
         {
           label: "举报类型",
-          minWidth: "130px",
-          render: (h, params) => {
-            return h("span", params.row.genre || "无");
-          },
-          showOverFlow: true,
-        },
-        {
-          label: "举报说明",
           minWidth: "100px",
           render: (h, params) => {
-            return h("span", params.row.content || "无");
+            return h("span", params.row.genre || "无");
           },
           showOverFlow: true,
         },
@@ -297,53 +348,30 @@ export default {
           width: "200px",
         },
         {
+          label: "举报说明",
+          minWidth: "100px",
+          render: (h, params) => {
+            return h("span", params.row.content || "无");
+          },
+          showOverFlow: true,
+        },
+        {
           label: "举报用户",
-          minWidth: "160px",
+          minWidth: "120px",
+          prop: "report_user_nickname",
           render: (h, params) => {
             return h("div", [
-              h("div", params.row.report_user_nickname || "无"),
+              h("div", params.row.report_user_nickname),
+              h("div", params.row.report_user_number || "无"),
             ]);
           },
         },
         {
           label: "举报用户身份",
+          minWidth: "120px",
+          prop: "report_user_role",
           render: (h, params) => {
             return h("span", params.row.report_user_role || "无");
-          },
-        },
-        {
-          label: "举报用户所属公会",
-          minWidth: "140px",
-          render: (h, params) => {
-            if (
-              params.row.report_user_guild_number &&
-              params.row.report_user_guild_number !== "无"
-            ) {
-              return h("div", [
-                h("div", params.row.report_user_guild_name),
-                h("div", params.row.report_user_guild_number || "无"),
-              ]);
-            } else {
-              return h("div", "无");
-            }
-          },
-        },
-        {
-          label: "举报用户所属公会状态",
-          minWidth: "160px",
-          render: (h, params) => {
-            return h("div", [
-              h("div", params.row.report_user_guild_status || "无"),
-            ]);
-          },
-        },
-        {
-          label: "举报用户所属运营",
-          minWidth: "140px",
-          render: (h, params) => {
-            return h("div", [
-              h("div", params.row.report_user_guild_operator_user_name || "无"),
-            ]);
           },
         },
         {
@@ -358,12 +386,12 @@ export default {
         },
         {
           label: "处罚类别",
-          minWidth: "100px",
+          minWidth: "110px",
           prop: "punish_type_str",
         },
         {
           label: "处罚结果",
-          minWidth: "180px",
+          minWidth: "120px",
           render: (h, params) => {
             const vnode =
               params.row.res &&
@@ -377,7 +405,7 @@ export default {
         },
         {
           label: "风险级别",
-          minWidth: "100px",
+          minWidth: "80px",
           render: (h, params) => {
             let data = MAPDATA.RISKLEVELLIST.find((item) => {
               return item.value === params.row.risk_level;
@@ -387,14 +415,14 @@ export default {
         },
         {
           label: "解除时间",
-          minWidth: "170px",
+          minWidth: "160px",
           render: (h, params) => {
             return h("span", params.row.remove_time || "无");
           },
         },
         {
           label: "审核人",
-          minWidth: "100px",
+          minWidth: "80px",
           prop: "admin",
           render: (h, params) => {
           return h("span", params.row.admin || "无");
@@ -402,7 +430,7 @@ export default {
         },
         {
           label: "备注说明",
-          minWidth: "180px",
+          minWidth: "130px",
           render: (h, params) => {
             return h("span", params.row.remark || "无");
           },
@@ -410,7 +438,7 @@ export default {
         },
         {
           label: "操作",
-          minWidth: "430px",
+          minWidth: "300px",
           fixed: "right",
           render: (h, params) => {
             return h("div", [
@@ -418,11 +446,12 @@ export default {
                 "el-button",
                 {
                   props: {
-                    type: params.row.accept_type === 0 ? "danger" : "info",
+                    type: "danger",
+                    size: 'mini'
                   },
                   style: {
                     display:
-                      params.row.status || params.row.status === 0
+                    params.row.accept_type === 0 
                         ? "unset"
                         : "none",
                   },
@@ -432,12 +461,12 @@ export default {
                     },
                   },
                 },
-                `${params.row.accept_type === 0 ? "未受理" : "已受理"}`
+                "受理"
               ),
               h(
                 "el-button",
                 {
-                  props: { type: "success" },
+                  props: { type: "success",size: 'mini' },
                   style: {
                     display:
                       params.row.status === 1 &&
@@ -456,7 +485,7 @@ export default {
               h(
                 "el-button",
                 {
-                  props: { type: "danger" },
+                  props: { type: "danger",size: 'mini' },
                   style: {
                     display:
                       params.row.status === 0 &&
@@ -470,12 +499,12 @@ export default {
                     },
                   },
                 },
-                "封禁"
+                "处罚"
               ),
               h(
                 "el-button",
                 {
-                  props: { type: "primary" },
+                  props: { type: "primary",size: 'mini' },
                   style: {
                     display:
                       params.row.status === 0 &&
@@ -494,7 +523,26 @@ export default {
               h(
                 "el-button",
                 {
-                  props: { type: "primary" },
+                  props: { type: "danger",size: 'mini' },
+                  style: {
+                    display:
+                      params.row.status === 1 &&
+                      this.permissionArr.includes("UserPunishLog@save")
+                        ? "unset"
+                        : "none",
+                  },
+                  on: {
+                    click: () => {
+                      this.blocked(params.row);
+                    },
+                  },
+                },
+                "复审处罚"
+              ),
+              h(
+                "el-button",
+                {
+                  props: { type: "primary",size: 'mini' },
                   style: {
                     display:
                       params.row.from === "后台处罚" &&
@@ -509,12 +557,12 @@ export default {
                     },
                   },
                 },
-                "修改证据"
+                "补充/修改证据"
               ),
               h(
                 "el-button",
                 {
-                  props: { type: "primary" },
+                  props: { type: "primary",size: 'mini' },
                   style: {
                     display:
                       params.row.status || params.row.status === 0
@@ -533,13 +581,20 @@ export default {
           },
         },
       ];
+
+      let columns = this.permissionArr.includes("UserPunishLog@index") ? arr : [];
+      // 过滤不显示的账号
+      const invisibleKeyArr = this.filterColumns.filter(item => !item.visible).map(item => item.key);
+      console.log('[ invisibleKeyArr ] >', invisibleKeyArr)
+      columns = arr.filter(item => !invisibleKeyArr.includes(item.prop))
+
       return {
         vm: this,
         url: REQUEST.risk.UserPunishLog,
         search: {
           sizes: [10, 30, 50, 100],
         },
-        columns: this.permissionArr.includes("UserPunishLog@index") ? arr : [],
+        columns,
       };
     },
   },
@@ -772,6 +827,17 @@ export default {
       setTimeout(() => {
         this.$refs.wordsComp.load();
       }, 100);
+    },
+    // 刷新table显示
+    refreshTable(arr) {
+      this.filterColumns = this.filterColumns.map(item => {
+        if(arr.includes(item.key)) {
+          item.visible = false;
+        } else {
+          item.visible = true;
+        }
+        return item;
+      });
     }
   },
   created() {
@@ -780,6 +846,15 @@ export default {
 };
 </script>
 
+<style lang="scss">
+.user-punish-popper-wrap {
+  background: #303133;
+  color: #fff;
+  .popper__arrow::after {
+    border-bottom-color: #303133 !important;
+  }
+}
+</style>
 <style lang="scss" scoped>
 .serviceConfig-userPunish-box {
   ::v-deep .share-table-list-box .el-table__body-wrapper {
