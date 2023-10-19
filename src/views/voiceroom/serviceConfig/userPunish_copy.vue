@@ -149,48 +149,18 @@ export default {
     forms() {
       return [
         {
-          name: 'userSelect',
-          value: '',
-          selectName: 'mUserSelect',
-          type: 'inputSelect',
-          placeholder: '请输入ID',
-          selectPlaceholder: '请选择',
-          selctValue: 'report_user_number',
-          selectWidth: '150px',
-          options: [
-            { key: 'report_user_number', label: '举报人用户ID' },
-            { key: 'punished_user_number', label: '被举报人用户ID' }
-          ],
-          handler: {
-            change: (v) => {
-              if(v == 'code') {
-                // this.$set(this.searchParams, 'live_user_number', )
-              }
-            }
-          },
+          name: "operator1",
+          type: "input",
+          value: "",
+          label: "用户ID",
+          placeholder: "请输入ID",
         },
         {
-          name: 'guildSelect',
-          value: '',
-          selectName: 'mGuildSelect',
-          type: 'inputSelect',
-          placeholder: '请输入',
-          selectPlaceholder: '请选择',
-          selctValue: 'guild_name',
-          selectWidth: '170px',
-          options: [
-            { key: 'guild_name', label: '举报所属公会昵称' },
-            { key: 'guild_number', label: '举报所属公会ID' },
-            { key: 'punished_user_guild_name', label: '被举报所属公会昵称' },
-            { key: 'punished_user_guild_number', label: '被举报所属公会ID' },
-          ],
-          handler: {
-            change: (v) => {
-              if(v == 'code') {
-                // this.$set(this.searchParams, 'live_user_number', )
-              }
-            }
-          },
+          name: "operator2",
+          type: "input",
+          value: "",
+          label: "公会",
+          placeholder: "请输入昵称或ID",
         },
         {
           name: "operator",

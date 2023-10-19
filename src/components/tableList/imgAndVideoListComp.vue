@@ -1,6 +1,13 @@
 <template>
   <div class="imgAndVideoListComp-box">
-    <div class="list-wrap" v-if="imgSrcList.length || videoSrcList.length">
+    <div class="list-wrap" v-if="imgSrcList.length || videoSrcList.length || audioSrcList.length">
+      <div
+        class="audio-box"
+        v-for="(item, index) in audioSrcList"
+        :key="'audio' + index"
+      >
+        <audio :src="item.src" controls="controls" @play="playAudio"></audio>
+      </div>
       <el-image
         v-for="(item, index) in imgSrcList"
         :key="'img' + index"
@@ -16,7 +23,7 @@
       <div
         class="video-box"
         v-for="(item, index) in videoSrcList"
-        :key="'vide' + index"
+        :key="'video' + index"
         :alt="item"
         :style="{ width: width, height: height }"
         @click="zoomClick(item)"
@@ -58,6 +65,11 @@ export default {
     },
     videoSrcList: {
       // 视频地址
+      type: Array,
+      default: [],
+    },
+    audioSrcList: {
+      // 音频地址
       type: Array,
       default: [],
     },
@@ -106,6 +118,17 @@ export default {
         });
       });
     },
+    playAudio(e) {
+      this.pauseAll(e.target);
+    },
+    // 暂停音频播放
+    pauseAll(target) {
+      const audioList = document.getElementsByTagName("audio");
+      [].forEach.call(audioList, (item) => {
+          // 将audioList中其他的audio全部暂停
+          item.src !== target.src && item.pause();
+      })
+    }
   },
 };
 </script>
@@ -114,6 +137,9 @@ export default {
 .imgAndVideoListComp-box {
   display: flex;
   justify-content: center;
+  .audio-box {
+    padding: 0 10px;
+  }
   .list-wrap {
     display: flex;
     flex-wrap: wrap;
