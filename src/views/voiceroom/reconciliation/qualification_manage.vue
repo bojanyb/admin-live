@@ -40,7 +40,7 @@ export default {
           value: "",
           keyName: "key",
           optionLabel: "value",
-          label: "结算状态",
+          label: "审核状态",
           placeholder: "请选择",
           options: [
             { key: 0, value: "待审核" },
@@ -58,8 +58,16 @@ export default {
         },
       ],
       columns: [
-        { prop: "create_time", exportable: true, label: "申请时间" },
-        { prop: "guild_id", exportable: true, label: "公会ID" },
+        {
+          prop: "create_time",
+          exportable: true,
+          label: "申请时间",
+          width: "150px",
+          render: (h, row) => (
+            <span>{moment(row.create_time * 1000).format("YYYY-MM-DD HH:mm:ss")}</span>
+          ),
+        },
+        { prop: "guild_number", exportable: true, label: "公会ID" },
         { prop: "guild_name", exportable: true, label: "公会名称" },
         { prop: "company_name", exportable: true, label: "企业名称" },
         { prop: "company_code", exportable: true, label: "统一社会信用代码" },
@@ -75,7 +83,7 @@ export default {
               // const test = 'https://photo.aiyi.live/7643ffdc0d787709235b744e02250935.rar'
               return (
                 <el-button type="text" onClick={() => window.open(row.certificate_file)}>
-                  点击下载
+                  点击查看
                 </el-button>
               );
             }
@@ -91,7 +99,7 @@ export default {
               // const test = 'https://photo.aiyi.live/7643ffdc0d787709235b744e02250935.rar'
               return (
                 <el-button type="text" onClick={() => window.open(row.bank_file)}>
-                  点击下载
+                  点击查看
                 </el-button>
               );
             }
@@ -124,10 +132,10 @@ export default {
             return (
               <div>
                 <el-button type="text" onClick={onReject}>
-                  退回
+                  驳回
                 </el-button>
                 <el-button type="text" onClick={onPass}>
-                  通过
+                  审核通过
                 </el-button>
               </div>
             );
@@ -182,19 +190,25 @@ export default {
       this.fetchData();
     },
     async fetchData() {
-      this.loading = true;
-      const res = await request({
-        url: REQUEST.finance.getGuildCashBank,
-        method: "post",
-        data: this.fetchParams,
-      });
-      if (res.code === 2000) {
-        this.page = res.data.page;
-        this.pagesize = res.data.pagesize;
-        this.total = res.data.count;
-        this.data = res.data.list;
+      try {
+        this.loading = true;
+        const res = await request({
+          url: REQUEST.finance.getGuildCashBank,
+          method: "post",
+          data: this.fetchParams,
+        });
+        if (res.code === 2000) {
+          this.page = res.data.page;
+          this.pagesize = res.data.pagesize;
+          this.total = res.data.count;
+          this.data = res.data.list;
+        }
+      } catch (e) {
+        this.data = []
+        console.error(e.message);
+      } finally {
+        this.loading = false;
       }
-      this.loading = false;
     },
   },
   mounted() {
@@ -274,7 +288,7 @@ export default {
       <div class="dialog_content">
         <el-input
           v-model="reject_reason"
-          placeholder="请输入驳回原因"
+          placeholder="请输入驳回原因(必填)"
           style="margin-bottom: 20px"
         ></el-input>
         <div class="action-btns">
@@ -288,8 +302,8 @@ export default {
           >
             取消
           </el-button>
-          <el-button type="primary" @click="audit(false, showAuditRejectDialog)">
-            确定退回
+          <el-button type="primary" :disabled="!reject_reason" @click="audit(false, showAuditRejectDialog)">
+            确定驳回
           </el-button>
         </div>
       </div>

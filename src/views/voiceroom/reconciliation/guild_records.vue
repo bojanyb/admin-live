@@ -90,7 +90,7 @@ export default {
       ],
       columns: [
         { prop: "create_time", exportable: true, label: "申请时间" },
-        { prop: "guild_id", exportable: true, label: "公会ID" },
+        { prop: "guild_number", exportable: true, label: "公会ID" },
         { prop: "guild_name", exportable: true, label: "公会名称" },
         { prop: "company_name", exportable: true, label: "企业名称" },
         { prop: "bank_address", exportable: true, label: "开户银行" },
@@ -98,7 +98,15 @@ export default {
         { prop: "bank_card", exportable: true, label: "银行账号" },
         { prop: "gain", exportable: true, label: "结算喵粮" },
         { prop: "deduct_money", exportable: true, label: "违规扣除" },
-        { prop: "real_money", exportable: true, label: "结算金额" },
+        {
+          prop: "real_money",
+          exportable: true,
+          export_format: (row) => {
+            return row.real_money / 100;
+          },
+          label: "结算金额",
+          render: (h, row) => <span>{row.real_money / 100}元</span>,
+        },
         { prop: "status_desc", exportable: true, label: "结算状态" },
         {
           prop: "",
@@ -111,6 +119,8 @@ export default {
         },
         {
           prop: "file_url",
+          minWidth: "200px",
+          showOverflowTooltip: true,
           exportable: true,
           label: "发票",
           render: (h, row) => {
@@ -123,7 +133,16 @@ export default {
                   </el-button>
                 );
               }
-              return <span>快递单号：{row.file_url}</span>;
+              return (
+                <span
+                  v-clipboard={{
+                    text: row.file_url,
+                    onSuccess: () => this.$notify.success({ message: "复制成功" }),
+                  }}
+                >
+                  快递单号：{row.file_url}
+                </span>
+              );
             }
             return null;
           },
@@ -184,11 +203,15 @@ export default {
       this.fetchData();
     },
     onExportExcel() {
-      const keys = this.columns.filter((c) => c.exportable === true).map((c) => c.prop);
+      const keys = this.columns
+        .filter((c) => c.exportable === true)
+        .map((c) =>
+          c.export_format ? (row) => c.export_format(row) : _.property(c.prop)
+        );
       const header = this.columns
         .filter((c) => c.exportable === true)
         .map((c) => c.label);
-      const preset_data = this.selected_rows.map((row) => keys.map((k) => _.get(row, k)));
+      const preset_data = this.selected_rows.map((row) => keys.map((k) => k(row)));
       export_json_to_excel({ data: preset_data, header, filename: "公会对公结算记录" });
     },
     batchAction() {
@@ -221,6 +244,7 @@ export default {
       if (_.every(res, (r) => r.code === 2000)) {
         this.showApplyAuditDialog = false;
       }
+      this.fetchData();
     },
     async settlementAudit(isPass, rows) {
       const res = await Promise.all(
@@ -238,6 +262,7 @@ export default {
       if (_.every(res, (r) => r.code === 2000)) {
         this.showSettlementAuditDialog = false;
       }
+      this.fetchData();
     },
     async invoiceAudit(isPass, rows) {
       const res = await Promise.all(
@@ -257,21 +282,28 @@ export default {
         this.invoiceAuditFailReason = "";
         this.showInvoiceAuditDialog = false;
       }
+      this.fetchData();
     },
     async fetchData() {
-      this.loading = true;
-      const res = await request({
-        url: REQUEST.finance.getGuildCashList,
-        method: "post",
-        data: this.fetchParams,
-      });
-      if (res.code === 2000) {
-        this.page = res.data.page;
-        this.pagesize = res.data.pagesize;
-        this.total = res.data.count;
-        this.data = res.data.list;
+      try {
+        this.loading = true;
+        const res = await request({
+          url: REQUEST.finance.getGuildCashList,
+          method: "post",
+          data: this.fetchParams,
+        });
+        if (res.code === 2000) {
+          this.page = res.data.page;
+          this.pagesize = res.data.pagesize;
+          this.total = res.data.count;
+          this.data = res.data.list;
+        }
+      } catch (e) {
+        this.data = []
+        console.error(e.message);
+      } finally {
+        this.loading = false;
       }
-      this.loading = false;
     },
   },
   mounted() {
