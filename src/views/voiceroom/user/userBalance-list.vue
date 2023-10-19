@@ -28,13 +28,13 @@
     <tableList :cfgs="cfgs" ref="tableList" @saleAmunt="saleAmunt"></tableList>
     <el-dialog :visible.sync="balanceDetailsVisible" width="500px">
       <div class="balance-box">
-        <div>钻石余额：{{ balanceDetailsObj.balance || "--" }}</div>
+        <div>钻石余额：{{ balanceDetailsObj.real_diamond || "0" }}</div>
       </div>
       <div class="balance-box">
-        <div>喵粮余额：{{ balanceDetailsObj.diamond || "--" }}</div>
-        <div>派对喵粮：{{ balanceDetailsObj.party_gain || "--" }}</div>
-        <div>直播余额：{{ balanceDetailsObj.live_gain || "--" }}</div>
-        <div>私聊余额：{{ balanceDetailsObj.gain || "--" }}</div>
+        <div>喵粮余额：{{ calculateTotalBalance || "0" }}</div>
+        <div>派对喵粮：{{ balanceDetailsObj.party_gain_balance || "0" }}</div>
+        <div>直播余额：{{ balanceDetailsObj.live_gain_balance || "0" }}</div>
+        <div>私聊余额：{{ balanceDetailsObj.gain_balance || "0" }}</div>
       </div>
     </el-dialog>
   </div>
@@ -128,6 +128,7 @@ export default {
         columns: [
           {
             label: "时间",
+            minWidth: "80px",
             render: (h, params) => {
               return h(
                 "span",
@@ -143,10 +144,12 @@ export default {
           },
           {
             label: "用户ID",
+            minWidth: "80px",
             prop: "user_number",
           },
           {
             label: "金额",
+            minWidth: "80px",
             render: (h, params) => {
               let num = params.row.diamond ? Number(params.row.diamond) : 0;
               return h(
@@ -161,6 +164,7 @@ export default {
           },
           {
             label: "余额",
+            minWidth: "180px",
             render: (h, params) => {
               return h("div", [
                 h(
@@ -185,6 +189,7 @@ export default {
           },
           {
             label: "类型",
+            minWidth: "60px",
             render: (h, params) => {
               let data = MAPDATA.USERBALANCETYPE.find((item) => {
                 return params.row.genre === item.value;
@@ -194,14 +199,17 @@ export default {
           },
           {
             label: "主渠道",
+            minWidth: "60px",
             prop: "relation_type_name",
           },
           {
             label: "子渠道",
+            minWidth: "60px",
             prop: "relation_sub_type_name",
           },
           {
             label: "交易流水号",
+            minWidth: "120px",
             render: (h, params) => {
               let data =
                 params.row.genre === 1
@@ -212,6 +220,21 @@ export default {
           },
         ],
       };
+    },
+    calculateTotalBalance() {
+      const {
+        diamond = 0,
+        party_gain_balance = 0,
+        live_gain_balance = 0,
+        gain_balance = 0,
+      } = this.balanceDetailsObj;
+
+      return (
+        Number(diamond) +
+        Number(party_gain_balance) +
+        Number(live_gain_balance) +
+        Number(gain_balance)
+      );
     },
   },
   components: {
