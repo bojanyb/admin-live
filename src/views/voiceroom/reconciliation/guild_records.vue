@@ -97,15 +97,23 @@ export default {
         { prop: "bank_name", exportable: true, label: "开户支行" },
         { prop: "bank_card", exportable: true, label: "银行账号" },
         { prop: "gain", exportable: true, label: "结算喵粮" },
-        { prop: "deduct_money", exportable: true, label: "违规扣除" },
         {
-          prop: "real_money",
+          prop: "deduct_money",
+          exportable: true,
+          label: "违规扣除",
+          export_format: (row) => {
+            return row.deduct_money;
+          },
+          render: (h, row) => <span>{row.deduct_money}元</span>,
+        },
+        {
+          prop: "money",
           exportable: true,
           export_format: (row) => {
-            return row.real_money / 100;
+            return row.money;
           },
           label: "结算金额",
-          render: (h, row) => <span>{row.real_money / 100}元</span>,
+          render: (h, row) => <span>{row.money}元</span>,
         },
         { prop: "status_desc", exportable: true, label: "结算状态" },
         {
