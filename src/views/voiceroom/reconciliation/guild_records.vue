@@ -175,6 +175,8 @@ export default {
       showDetailRow: undefined,
       showApplyAuditDialog: false,
       showSettlementAuditDialog: false,
+      showSettlementAuditFailDialog: false,
+      settlementAuditFailReason: "",
       showInvoiceAuditDialog: false,
       showInvoiceAuditFailDialog: false,
       invoiceAuditFailReason: "",
@@ -260,7 +262,9 @@ export default {
         )
       );
       if (_.every(res, (r) => r.code === 2000)) {
+        this.settlementAuditFailReason = "";
         this.showSettlementAuditDialog = false;
+        this.showSettlementAuditFailDialog = false;
       }
       this.fetchData();
     },
@@ -281,6 +285,7 @@ export default {
       if (_.every(res, (r) => r.code === 2000)) {
         this.invoiceAuditFailReason = "";
         this.showInvoiceAuditDialog = false;
+        this.showInvoiceAuditFailDialog = false;
       }
       this.fetchData();
     },
@@ -299,7 +304,7 @@ export default {
           this.data = res.data.list;
         }
       } catch (e) {
-        this.data = []
+        this.data = [];
         console.error(e.message);
       } finally {
         this.loading = false;
@@ -366,6 +371,7 @@ export default {
     >
       <Detail v-if="showDetailRow" :record="showDetailRow" />
     </el-dialog>
+
     <el-dialog
       :width="'300px'"
       :visible.sync="showApplyAuditDialog"
@@ -379,6 +385,7 @@ export default {
         >
       </div>
     </el-dialog>
+
     <el-dialog
       :width="'300px'"
       :visible.sync="showSettlementAuditDialog"
@@ -386,7 +393,13 @@ export default {
       destroy-on-close
     >
       <div class="action-btns">
-        <el-button @click="settlementAudit(false, showSettlementAuditDialog)"
+        <el-button
+          @click="
+            () => {
+              settlementAuditFailReason = '';
+              showSettlementAuditFailDialog = true;
+            }
+          "
           >发放失败</el-button
         >
         <el-button
@@ -396,6 +409,35 @@ export default {
         >
       </div>
     </el-dialog>
+    <el-dialog
+      :width="'300px'"
+      :visible.sync="showSettlementAuditFailDialog"
+      title="提示"
+      destroy-on-close
+    >
+      <el-input
+        v-model="settlementAuditFailReason"
+        placeholder="请输入发放失败原因"
+        style="margin-bottom: 20px"
+      ></el-input>
+      <div class="action-btns">
+        <el-button
+          @click="
+            () => {
+              showSettlementAuditFailDialog = false;
+              settlementAuditFailReason = '';
+            }
+          "
+          >取消</el-button
+        >
+        <el-button
+          type="primary"
+          @click="settlementAudit(false, showSettlementAuditDialog)"
+          >确定</el-button
+        >
+      </div>
+    </el-dialog>
+
     <el-dialog
       :width="'300px'"
       :visible.sync="showInvoiceAuditDialog"
