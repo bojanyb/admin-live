@@ -244,6 +244,20 @@ export default {
           label: "事件编号",
           prop: "create_time1",
           minWidth: "160px",
+          render: (h, params) => {
+            return h(
+              "el-link",
+              {
+                props: { type: "primary" },
+                on: {
+                  click: () => {
+                    this.viewRecord(params.row.id);
+                  },
+                },
+              },
+              "EAT2312312312"
+            );
+          }
         },
         {
           label: "时间",
@@ -808,7 +822,14 @@ export default {
         }
         return item;
       });
-    }
+    },
+    // 查看记录
+    viewRecord(liveId) {
+      // this.isCharmDestoryComp = true;
+      setTimeout(() => {
+        // this.$refs.charmComp.show(liveId);
+      }, 50);
+    },
   },
   created() {
     this.getPunishType();
