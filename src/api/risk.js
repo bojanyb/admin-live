@@ -199,3 +199,12 @@ export function updatePunishWords(data) {
     data
   })
 }
+
+// 删除风控文案
+export function deletePunishWords(data) {
+  return request({
+    url: api.risk.deletePunishWords,
+    method: 'post',
+    data
+  })
+}
