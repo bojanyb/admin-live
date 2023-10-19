@@ -218,7 +218,7 @@ export default {
             }
             let res = await getUserWallet(params)
             this.form = { ...res.data }
-            this.form.balance = Number(this.form.diamond) + Number(this.form.gain)
+            this.form.balance = Number(this.form.diamond) + Number(this.form.gain) + + Number(this.form.party_gain) + + Number(this.form.live_gain)
         },
         // 销毁组件
         closed() {
