@@ -223,14 +223,12 @@ export default {
     },
     calculateTotalBalance() {
       const {
-        diamond = 0,
         party_gain_balance = 0,
         live_gain_balance = 0,
         gain_balance = 0,
       } = this.balanceDetailsObj;
 
       return (
-        Number(diamond) +
         Number(party_gain_balance) +
         Number(live_gain_balance) +
         Number(gain_balance)
