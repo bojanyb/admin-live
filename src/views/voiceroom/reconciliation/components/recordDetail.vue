@@ -111,7 +111,7 @@ export default {
         {
           prop: "real_money",
           label: "结算金额",
-          render: (h, row) => <span>{row.real_money / 100}元</span>,
+          render: (h, row) => <span>{(row.real_money / 100).toFixed(2)}元</span>,
         },
         {
           prop: "status",
@@ -234,7 +234,7 @@ export default {
 </template>
 <style lang="scss">
 .record-detail {
-  display:flex;
+  display: flex;
   flex-direction: column;
   .summary_data {
     margin: 20px auto;
