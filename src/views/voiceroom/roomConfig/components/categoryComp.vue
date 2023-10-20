@@ -16,7 +16,7 @@
         :model="ruleForm"
         :rules="rules"
         ref="ruleForm"
-        label-width="85px"
+        label-width="130px"
         class="demo-ruleForm"
         label-suffix=":"
         :hide-required-asterisk="status === 'see'"
@@ -59,12 +59,34 @@
         <el-form-item label="类型色值" prop="color">
           <el-input v-model="ruleForm.color" :disabled="disabled"></el-input>
         </el-form-item>
-        <el-form-item label="分类图标" prop="icon">
+        <el-form-item label="用户小图标" prop="icon">
           <uploadImg
             ref="uploadImg"
             v-model="ruleForm.icon"
             :imgUrl="ruleForm.icon"
             name="icon"
+            @validateField="validateField"
+            accept=".png,.jpg,.jpeg"
+            :disabled="disabled"
+          ></uploadImg>
+        </el-form-item>
+        <el-form-item label="TAB图标-未选中" prop="icon_1">
+          <uploadImg
+            ref="uploadImg"
+            v-model="ruleForm.icon_1"
+            :imgUrl="ruleForm.icon_1"
+            name="icon_1"
+            @validateField="validateField"
+            accept=".png,.jpg,.jpeg"
+            :disabled="disabled"
+          ></uploadImg>
+        </el-form-item>
+        <el-form-item label="TAB图标-选中" prop="icon_2">
+          <uploadImg
+            ref="uploadImg"
+            v-model="ruleForm.icon_2"
+            :imgUrl="ruleForm.icon_2"
+            name="icon_2"
             @validateField="validateField"
             accept=".png,.jpg,.jpeg"
             :disabled="disabled"
@@ -115,6 +137,8 @@ export default {
         belong: null,
         sort: null,
         icon: "",
+        icon_1: "",
+        icon_2: "",
         color: null,
         img: "",
       },
@@ -141,7 +165,13 @@ export default {
         ],
         color: [{ required: true, message: "请输入色值", trigger: "blur" }],
         icon: [
-          { required: true, message: "请上传品类图标", trigger: "change" },
+          { required: true, message: "请上传用户小图标", trigger: "change" },
+        ],
+        icon_1: [
+          { required: true, message: "请上传TAB图标-未选中", trigger: "change" },
+        ],
+        icon_2: [
+          { required: true, message: "请上传TAB图标-选中", trigger: "change" },
         ],
         img: [{ required: true, message: "请上传类型图标", trigger: "change" }],
         belong: [{ required: true, message: "请选择业务类型", trigger: "change" }],
@@ -252,7 +282,7 @@ export default {
 <style lang="scss" scoped>
 .roomConfig-categoryComp-box {
   .el-select {
-    width: 290px;
+    width: 260px;
   }
 }
 </style>
