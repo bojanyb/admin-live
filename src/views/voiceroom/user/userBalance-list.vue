@@ -243,25 +243,24 @@ export default {
     return {
       jsonMapList: [],
       ruleForm: {},
-      searchParams: {
-        dateTimeParams: [
-          new Date(timeFormat(new Date(), "YYYY-MM-DD", false) + " 00:00:00"),
-          new Date(timeFormat(new Date(), "YYYY-MM-DD", false) + " 23:59:59"),
-        ],
-      },
-      dateTimeParams: {
-        start_time: new Date(
-          timeFormat(new Date(), "YYYY-MM-DD", false) + " 00:00:00"
-        ),
-        end_time: new Date(
-          timeFormat(new Date(), "YYYY-MM-DD", false) + " 23:59:59"
-        ),
-      },
+      searchParams: {},
+      dateTimeParams: {},
       balanceDetailsVisible: false,
       balanceDetailsObj: {},
     };
   },
   created() {
+    // 默认选中今天
+    let time = new Date()
+    let date = timeFormat(time, 'YYYY-MM-DD')
+    let start = new Date(date + ' 00:00:00').getTime()
+    let end = new Date(date + ' 23:59:59').getTime()
+    this.searchParams.dateTimeParams = [start, end]
+    this.dateTimeParams = {
+      start_time: start,
+      end_time: end
+    }
+
     this.getRelationTypeFunc();
     this.changeIndex();
   },
@@ -321,6 +320,7 @@ export default {
     },
     // 查询
     onSearch(params) {
+      console.log('[ params.dateTimeParams ] >', params.dateTimeParams)
       this.dateTimeParams = {
         start_time: params.dateTimeParams ? params.dateTimeParams[0] : null,
         end_time: params.dateTimeParams ? params.dateTimeParams[1] : null,
@@ -350,6 +350,8 @@ export default {
     saleAmunt(row) {
       this.ruleForm = { ...row.total_sum };
       let time = JSON.parse(JSON.stringify(this.dateTimeParams));
+      // 判断时间是否存在值
+      if(!time || !time.start_time || !time.end_time) return;
       this.$set(this.searchParams, "dateTimeParams", [
         time.start_time,
         time.end_time,

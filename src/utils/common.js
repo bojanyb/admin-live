@@ -4,7 +4,7 @@ import moment from 'moment'
 import { Notification } from 'element-ui';
 
 // 格式化日期
-export function timeFormat(val, format = 'YYYY-MM-DD HH:mm:ss', boolean) {
+export function timeFormat(val, format = 'YYYY-MM-DD HH:mm:ss', boolean = false) {
     if(boolean) {
         return moment.unix(val).format(format)
     } else {
