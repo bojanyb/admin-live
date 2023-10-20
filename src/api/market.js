@@ -38,3 +38,29 @@ export function exportOnlineUserData(data) {
   })
 }
 
+// 市场监测配置管理 - 添加
+export function adConfList(data) {
+  return request({
+    url: api.market.addAdConf,
+    method: 'post',
+    data
+  })
+}
+
+// 市场监测配置管理 - 启用/停用
+export function handleAdConf(data) {
+  return request({
+    url: api.market.handleAdConf,
+    method: 'post',
+    data
+  })
+}
+
+// 市场监测配置管理 - 媒体下拉框列表
+export function getAdSelect(data) {
+  return request({
+    url: api.market.getAdSelect,
+    method: 'post',
+    data
+  })
+}
