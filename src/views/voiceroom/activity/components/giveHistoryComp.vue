@@ -257,7 +257,7 @@ export default {
         padding: 10px 20px;
         box-sizing: border-box;
         margin-left: 20px;
-        height: 380px;
+        // height: 380px;
         .upBox {
             display: flex;
             align-items: center;
