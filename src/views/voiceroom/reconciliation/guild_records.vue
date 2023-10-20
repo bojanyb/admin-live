@@ -101,10 +101,6 @@ export default {
           prop: "deduct_money",
           exportable: true,
           label: "违规扣除",
-          export_format: (row) => {
-            return row.deduct_money;
-          },
-          render: (h, row) => <span>{row.deduct_money}元</span>,
         },
         {
           prop: "money",
