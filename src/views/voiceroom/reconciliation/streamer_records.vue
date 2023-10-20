@@ -124,7 +124,7 @@ export default {
             return row.real_money / 100;
           },
           label: "结算金额",
-          render: (h, row) => <span>{row.real_money / 100}元</span>,
+          render: (h, row) => <span>{(row.real_money / 100).toFixed(2)}元</span>,
         },
         {
           prop: "status",
@@ -287,7 +287,7 @@ export default {
           this.data = res.data.list;
         }
       } catch (e) {
-        this.data = []
+        this.data = [];
         console.error(e.message);
       } finally {
         this.loading = false;
@@ -405,7 +405,11 @@ export default {
           >
             取消
           </el-button>
-          <el-button type="primary" :disabled="!reject_reason" @click="audit(false, showAuditRejectDialog)">
+          <el-button
+            type="primary"
+            :disabled="!reject_reason"
+            @click="audit(false, showAuditRejectDialog)"
+          >
             确定退回
           </el-button>
         </div>
