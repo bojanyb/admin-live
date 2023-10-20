@@ -490,6 +490,9 @@ const request = {
 
         punishWordsList: `${HTTPHEADER}/Punish`, // 获取风控文案库列表
         updatePunishWords: `${HTTPHEADER}/Punish/update`, // 修改风控文案
+        getReportingGuildList: `${HTTPHEADER}/BackendReport/getGuildList`, // 获取举报公会记录
+        getReportingUserList: `${HTTPHEADER}/BackendReport/getUserList`, // 获取举报用户记录
+        reportGuildOrUser: `${HTTPHEADER}/BackendReport/report`, // 提交举报公会/用户
     },
 
     // 心动速配
