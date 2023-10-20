@@ -113,7 +113,7 @@ export default {
             <span>{moment(row.addtime * 1000).format("YYYY-MM-DD HH:mm:ss")}</span>
           ),
         },
-        { prop: "user_id", exportable: true, label: "用户ID" },
+        { prop: "user_number", exportable: true, label: "用户ID" },
         { prop: "nickname", exportable: true, label: "用户昵称" },
         { prop: "guild_name", exportable: true, label: "公会名称" },
         { prop: "gain", exportable: true, label: "结算喵粮" },

@@ -71,8 +71,9 @@ export default {
         { prop: "guild_name", exportable: true, label: "公会名称" },
         { prop: "company_name", exportable: true, label: "企业名称" },
         { prop: "company_code", exportable: true, label: "统一社会信用代码" },
-        { prop: "owner_name", exportable: true, label: "开户银行" },
-        { prop: "bank_name", exportable: true, label: "开户支行" },
+        { prop: "company_address", exportable: true, label: "注册地址" },
+        { prop: "bank_name", exportable: true, label: "开户银行" },
+        { prop: "bank_address", exportable: true, label: "开户支行" },
         { prop: "bank_card", exportable: true, label: "银行账号" },
         {
           prop: "certificate_file",
