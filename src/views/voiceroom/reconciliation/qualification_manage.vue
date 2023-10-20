@@ -44,8 +44,9 @@ export default {
           placeholder: "请选择",
           options: [
             { key: 0, value: "待审核" },
-            { key: 1, value: "已通过" },
+            { key: 1, value: "使用中" },
             { key: 2, value: "已退回" },
+            { key: 3, value: "已更新" },
           ],
         },
         {
@@ -112,7 +113,9 @@ export default {
           exportable: true,
           label: "审核状态",
           render: (h, row) => (
-            <span>{{ 0: "待审核", 1: "已通过", 2: "已退回" }[row.status]}</span>
+            <span>
+              {{ 0: "待审核", 1: "使用中", 2: "已退回", 3: "已更新" }[row.status]}
+            </span>
           ),
         },
         { prop: "remark", exportable: true, label: "备注说明" },
@@ -205,7 +208,7 @@ export default {
           this.data = res.data.list;
         }
       } catch (e) {
-        this.data = []
+        this.data = [];
         console.error(e.message);
       } finally {
         this.loading = false;
@@ -303,7 +306,11 @@ export default {
           >
             取消
           </el-button>
-          <el-button type="primary" :disabled="!reject_reason" @click="audit(false, showAuditRejectDialog)">
+          <el-button
+            type="primary"
+            :disabled="!reject_reason"
+            @click="audit(false, showAuditRejectDialog)"
+          >
             确定驳回
           </el-button>
         </div>
