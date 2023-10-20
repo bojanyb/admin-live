@@ -2625,6 +2625,26 @@ const USERPUNISHSTATUSLIST = [
   }
 ]
 
+// 用户处罚 - 风险级别
+const USERPUNISHRISKLIST = [
+  {
+    name: '空',
+    value: 0
+  },
+  {
+    name: '轻微',
+    value: 1
+  },
+  {
+    name: '一般',
+    value: 2
+  },
+  {
+    name: '严重',
+    value: 3
+  }
+]
+
 // 用户处罚 - 状态 - 列表
 const USERPUNISHSTATUSLISTCOPY = [
   {
@@ -3455,6 +3475,7 @@ export default {
   USERPUNISHTYPELISTCOPY,
   USERPUNISHTYPELISTCOPYTWO,
   USERPUNISHSTATUSLIST,
+  USERPUNISHRISKLIST,
   USERPUNISHSTATUSLISTCOPY,
   OPERATIONTYPE,
   GIFTSHOWTYPELIST,
