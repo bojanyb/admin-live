@@ -160,6 +160,12 @@ export default {
           value: "net.huidapay.live",
         },
         {
+          key: "com.audio.aidoo",
+          isActive: true,
+          label: "喵喵星球2",
+          value: "com.audio.aidoo",
+        },
+        {
           key: "com.yhjc.oxygen",
           isActive: false,
           label: "声撩语音",
@@ -194,6 +200,11 @@ export default {
           key: "net.huidapay.live",
           label: "喵喵星球",
           value: "net.huidapay.live",
+        },
+        {
+          key: "com.audio.aidoo",
+          label: "喵喵星球2",
+          value: "com.audio.aidoo",
         },
         {
           key: "com.yhjc.oxygen",
