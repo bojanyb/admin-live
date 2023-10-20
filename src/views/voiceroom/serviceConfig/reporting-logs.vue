@@ -1,6 +1,11 @@
 <template>
   <div class="app-container serviceConfig-userPunish-box">
     <div class="searchParams">
+      <menuComp
+        ref="menuComp"
+        :menuList="menuList"
+        v-model="tabIndex"
+      ></menuComp>
       <SearchPanel
         v-model="searchParams"
         :forms="forms"
@@ -12,8 +17,12 @@
         @add="add"
       ></SearchPanel>
     </div>
-
-    <tableList :cfgs="cfgs" ref="tableList"></tableList>
+    <tableList :cfgs="cfgs" ref="tableList" v-if="tabIndex === '0'"></tableList>
+    <tableList
+      :cfgs="cfgs2"
+      ref="tableList"
+      v-if="tabIndex === '1'"
+    ></tableList>
 
     <!-- 新增组件 -->
     <userComp
@@ -27,7 +36,7 @@
 
 <script>
 // 引入api
-import { removeUser } from "@/api/risk";
+import { removeUser, reportGuildOrUser } from "@/api/risk";
 // 引入新增组件
 import userComp from "./components/userComp.vue";
 // 引入菜单组件
@@ -40,26 +49,38 @@ import REQUEST from "@/request/index.js";
 import mixins from "@/utils/mixins.js";
 // 引入公共map
 import MAPDATA from "@/utils/jsonMap.js";
+// 引入tab菜单组件
+import menuComp from "@/components/menuComp/index.vue";
 export default {
   mixins: [mixins],
   components: {
     SearchPanel,
     tableList,
     userComp,
+    menuComp,
   },
   data() {
     return {
       isDestoryComp: false, // 是否销毁组件
       searchParams: {
-        status: 1,
+        // status: 1,
       },
+      menuList: [
+        {
+          name: "用户",
+        },
+        {
+          name: "公会",
+        },
+      ],
+      tabIndex: "0",
     };
   },
   computed: {
     forms() {
       return [
         {
-          name: "user_number",
+          name: "object_number",
           type: "input",
           value: "",
           label: "举报用户ID",
@@ -98,23 +119,27 @@ export default {
     cfgs() {
       return {
         vm: this,
-        url: REQUEST.risk.UserPunish,
+        url: REQUEST.risk.getReportingUserList,
         columns: [
           {
-            label: "举报事件",
-            prop: "update_time",
+            label: "举报时间",
+            prop: "create_time",
             minWidth: "100px",
           },
           {
             label: "举报对象账号",
+            minWidth: "100px",
             render: (h, params) => {
-              return h("div", [h("div", params.row.user_number)]);
+              return h("div", [
+                h("div", params.row.feedback_number),
+                h("div", params.row.feedback_name || "无"),
+              ]);
             },
           },
           {
             label: "举报对象身份",
             render: (h, params) => {
-              return h("div", [h("div", params.row.nickname)]);
+              return h("div", [h("div", params.row.feedback_identity)]);
             },
           },
           {
@@ -128,99 +153,108 @@ export default {
           },
           {
             label: "举报内容",
-            prop: "remove_time",
+            prop: "feedback_content",
             minWidth: "100px",
             render: (h, params) => {
-              return h("span", params.row.remove_time || "无");
+              return h("span", params.row.feedback_content || "无");
             },
           },
           {
-            label: "举报证据",
-            render: (h, params) => {
-              let data = MAPDATA.USERPUNISHSTATUSLIST.find((item) => {
-                return item.value === params.row.status;
-              });
-              return h("span", data ? data.name : "无");
-            },
+            label: "图片证据",
+            isImgAndVideoList: true,
+            prop: "img_path",
+            type: 1,
+            imgWidth: "50px",
+            imgHeight: "50px",
+            minWidth: "150px",
           },
           {
-            label: "举报说明",
-            render: (h, params) => {
-              return h("span", params.row.remark || "无");
-            },
+            label: "视频证据",
+            isImgAndVideoList: true,
+            prop: "video_path",
+            type: 1,
+            imgWidth: "50px",
+            imgHeight: "50px",
+            minWidth: "150px",
           },
+          {
+            label: "音频证据",
+            isImgAndVideoList: true,
+            prop: "sound_path",
+            type: 1,
+            imgWidth: "50px",
+            imgHeight: "50px",
+            minWidth: "150px",
+          },
+          // {
+          //               label: '声音签名',
+          //               isimg: true,
+          //               prop: 'audio',
+          //               imgWidth: '50px',
+          //               imgHeight: '50px',
+          //               minWidth: '170px'
+          //           },
+          // {
+          // 		label: '音乐',
+          // 		isimg: true,
+          // 		prop: 'url',
+          // 		nameProp: 'name',
+          //     				subNameProp: 'singer',
+          // 		tagProp: 'tags',
+          // 		width: '300px'
+          // 	},
+          // 视频
+          // {
+          //   label: "图片",
+          //   isimgList: true,
+          //   prop: "media_list",
+          //   imgWidth: "50px",
+          //   imgHeight: "50px",
+          // },
           {
             label: "处理状态",
             render: (h, params) => {
-              return h("span", params.row.admin_name || "无");
+              return h("span", params.row.state || "无");
             },
           },
           {
             label: "处罚结果",
             render: (h, params) => {
-              return h("span", params.row.admin_name || "无");
+              return h("span", params.row.result || "无");
             },
           },
           {
             label: "风险级别",
             render: (h, params) => {
-              return h("span", params.row.admin_name || "无");
+              let data = MAPDATA.USERPUNISHRISKLIST.find((item) => {
+                return item.value === params.row.risk_level;
+              });
+              return h("span", data ? data.name : "无");
             },
           },
           {
             label: "解除时间",
             render: (h, params) => {
-              return h("span", params.row.admin_name || "无");
+              return h("span", params.row.remove_time || "无");
             },
           },
           {
             label: "审核人",
             render: (h, params) => {
-              return h("span", params.row.admin_name || "无");
+              return h("span", params.row.operator || "无");
             },
           },
           {
             label: "备注说明",
             render: (h, params) => {
-              return h("span", params.row.admin_name || "无");
-            },
-          },
-          {
-            label: "操作",
-            render: (h, params) => {
-              return h("div", [
-                h(
-                  "el-button",
-                  {
-                    props: { type: "danger" },
-                    style: {
-                      display: params.row.status === 1 ? "unset" : "none",
-                    },
-                    on: {
-                      click: () => {
-                        this.deleteParams(params.row.id);
-                      },
-                    },
-                  },
-                  "解除"
-                ),
-                h(
-                  "el-button",
-                  {
-                    props: { type: "success" },
-                    style: {
-                      marginLeft: "0px",
-                      display: params.row.status === 2 ? "unset" : "none",
-                    },
-                    on: { click: () => {} },
-                  },
-                  "已解除"
-                ),
-              ]);
+              return h("span", params.row.remark || "无");
             },
           },
         ],
       };
+    },
+    cfgs2() {
+      return { ...this.cfgs, url: REQUEST.risk.getReportingGuildList };
     },
   },
   methods: {
@@ -230,12 +264,12 @@ export default {
       return {
         page: params.page,
         page_size: params.size,
-        user_number: s.user_number,
+        // user_number: s.user_number,
         type: s.type,
-        status: s.status,
-        guild_number: s.guild_number,
-        guild_name: s.guild_name,
-        report_user_number: s.report_user_number,
+        // status: s.status,
+        object_number: s.object_number,
+        // guild_name: s.guild_name,
+        // report_user_number: s.report_user_number,
         start_time: s.start_time
           ? Math.floor(s.start_time / 1000)
           : s.start_time,
@@ -293,6 +327,11 @@ export default {
     // 销毁组件
     destoryComp() {
       this.isDestoryComp = false;
+    },
+  },
+  watch: {
+    tabIndex(newVal, oldVal) {
+      this.reset();
     },
   },
 };
