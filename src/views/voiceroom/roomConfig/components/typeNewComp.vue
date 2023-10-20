@@ -20,7 +20,7 @@
           >关播</el-button
         >
       </el-row>
-      <el-row>
+      <!-- <el-row>
         <div>修改房间类型</div>
       </el-row>
       <el-divider></el-divider>
@@ -42,7 +42,7 @@
 
           <el-button type="primary" @click="bindTypes">确 定</el-button>
         </div>
-      </el-row>
+      </el-row> -->
       <!-- <span slot="footer" class="dialog-footer">
         <el-button type="success" @click="bindTypes">确 定</el-button>
       </span> -->

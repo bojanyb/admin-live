@@ -6,14 +6,14 @@
         :forms="forms"
         :show-reset="true"
         :show-search-btn="true"
-        :show-batch-pass="true"
+        :show-batch-pass="false"
+        @batchPass="handleBatchPass"
+        batchFuncName="批量修改房间类型"
         :show-batch-rurn="true"
         @onReset="reset"
         @onSearch="onSearch"
-        @batchPass="handleBatchPass"
         @BatchRurn="handleBatchRurn"
         batchRurnName="批量停播"
-        batchFuncName="批量修改房间类型"
       ></SearchPanel>
     </div>
 
@@ -76,7 +76,7 @@ export default {
     tableList,
     typeComp,
     roomComp,
-    typeBatchComp
+    typeBatchComp,
   },
   data() {
     return {
@@ -120,16 +120,16 @@ export default {
           type: "input",
           value: "",
           label: "房间ID",
-          // isNum: true,
-          placeholder: "多个房间ID使用,间隔",
+          isNum: true,
+          placeholder: "请输入单个房间ID",
         },
         {
           name: "user_number",
           type: "input",
           value: "",
           label: "房主ID",
-          // isNum: true,
-          placeholder: "多个房主ID使用,间隔",
+          isNum: true,
+          placeholder: "请输入单个房间ID",
         },
         {
           name: "guild_number",
