@@ -126,25 +126,27 @@ export default {
           minWidth: "200px",
           showOverflowTooltip: true,
           exportable: true,
+          export_format: (row) => {
+            return row.file_url || row.courier_number;
+          },
           label: "发票",
           render: (h, row) => {
-            if (row.file_url) {
-              if (row.invoice_type === 1) {
-                // const test = "https://photo.aiyi.live/3e22531ef33448adeb74aea70191e8ba.pdf";
-                return (
-                  <el-button type="text" onClick={() => window.open(row.file_url)}>
-                    点击查看电子发票
-                  </el-button>
-                );
-              }
+            if (row.invoice_type === 1 && row.file_url) {
+              // const test = "https://photo.aiyi.live/3e22531ef33448adeb74aea70191e8ba.pdf";
+              return (
+                <el-button type="text" onClick={() => window.open(row.file_url)}>
+                  点击查看电子发票
+                </el-button>
+              );
+            } else if (row.courier_number) {
               return (
                 <span
                   v-clipboard={{
-                    text: row.file_url,
+                    text: row.courier_number,
                     onSuccess: () => this.$notify.success({ message: "复制成功" }),
                   }}
                 >
-                  快递单号：{row.file_url}
+                  快递单号：{row.courier_number}
                 </span>
               );
             }
