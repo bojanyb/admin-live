@@ -518,6 +518,10 @@ const request = {
         getReportingGuildList: `${HTTPHEADER}/BackendReport/getGuildList`, // 获取举报公会记录
         getReportingUserList: `${HTTPHEADER}/BackendReport/getUserList`, // 获取举报用户记录
         reportGuildOrUser: `${HTTPHEADER}/BackendReport/report`, // 提交举报公会/用户
+
+        usersPunishList: `${HTTPHEADER}/UserPunishLog/getPunishTypeList`, //获取用户举报类型列表
+        guildsPunishList: `${HTTPHEADER}/UserComplaint/init`, //获取公会举报类型列表
+        guildOrUserInfo: `${HTTPHEADER}/BackendReport/searchObject`, //搜索用户或公会
     },
 
     // 心动速配
