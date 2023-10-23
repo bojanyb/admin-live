@@ -17,28 +17,35 @@
         @add="add"
       ></SearchPanel>
     </div>
+    <!-- 用户 -->
     <tableList :cfgs="cfgs" ref="tableList" v-if="tabIndex === '0'"></tableList>
+    <!-- 公会 -->
     <tableList
       :cfgs="cfgs2"
-      ref="tableList"
-      v-if="tabIndex === '1'"
+      ref="tableList2"
+      v-else-if="tabIndex === '1'"
     ></tableList>
 
     <!-- 新增组件 -->
-    <userComp
+    <addReportComp
       v-if="isDestoryComp"
       ref="userComp"
       @destoryComp="destoryComp"
       @getList="getList"
-    ></userComp>
+    ></addReportComp>
   </div>
 </template>
 
 <script>
 // 引入api
-import { removeUser, reportGuildOrUser } from "@/api/risk";
+import {
+  removeUser,
+  reportGuildOrUser,
+  usersPunishList,
+  guildsPunishList,
+} from "@/api/risk";
 // 引入新增组件
-import userComp from "./components/userComp.vue";
+import addReportComp from "./components/addReportComp.vue";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
@@ -56,7 +63,7 @@ export default {
   components: {
     SearchPanel,
     tableList,
-    userComp,
+    addReportComp,
     menuComp,
   },
   data() {
@@ -74,6 +81,7 @@ export default {
         },
       ],
       tabIndex: "0",
+      typeList: [], //举报类型
     };
   },
   computed: {
@@ -91,11 +99,11 @@ export default {
           name: "type",
           type: "select",
           value: "",
-          keyName: "value",
+          keyName: "id",
           optionLabel: "name",
-          label: "反馈类型",
+          label: "举报类型",
           placeholder: "请选择",
-          options: MAPDATA.USERPUNISHTYPELISTCOPY,
+          options: this.typeList,
         },
         {
           name: "dateTimeParams",
@@ -145,14 +153,11 @@ export default {
           {
             label: "举报类型",
             render: (h, params) => {
-              let data = MAPDATA.USERPUNISHTYPELIST.find((item) => {
-                return item.value === params.row.type;
-              });
-              return h("span", data ? data.name : "无");
+              return h("span", params.row.feedback_type_str || "无");
             },
           },
           {
-            label: "举报内容",
+            label: "举报说明",
             prop: "feedback_content",
             minWidth: "100px",
             render: (h, params) => {
@@ -160,57 +165,15 @@ export default {
             },
           },
           {
-            label: "图片证据",
+            label: "举报证据",
             isImgAndVideoList: true,
             prop: "img_path",
+            propCopy: "video_path",
             type: 1,
             imgWidth: "50px",
             imgHeight: "50px",
-            minWidth: "150px",
+            width: "150px",
           },
-          {
-            label: "视频证据",
-            isImgAndVideoList: true,
-            prop: "video_path",
-            type: 1,
-            imgWidth: "50px",
-            imgHeight: "50px",
-            minWidth: "150px",
-          },
-          {
-            label: "音频证据",
-            isImgAndVideoList: true,
-            prop: "sound_path",
-            type: 1,
-            imgWidth: "50px",
-            imgHeight: "50px",
-            minWidth: "150px",
-          },
-          // {
-          //               label: '声音签名',
-          //               isimg: true,
-          //               prop: 'audio',
-          //               imgWidth: '50px',
-          //               imgHeight: '50px',
-          //               minWidth: '170px'
-          //           },
-          // {
-          // 		label: '音乐',
-          // 		isimg: true,
-          // 		prop: 'url',
-          // 		nameProp: 'name',
-          //     				subNameProp: 'singer',
-          // 		tagProp: 'tags',
-          // 		width: '300px'
-          // 	},
-          // 视频
-          // {
-          //   label: "图片",
-          //   isimgList: true,
-          //   prop: "media_list",
-          //   imgWidth: "50px",
-          //   imgHeight: "50px",
-          // },
           {
             label: "处理状态",
             render: (h, params) => {
@@ -278,7 +241,15 @@ export default {
     },
     // 刷新列表
     getList() {
-      this.$refs.tableList.getData();
+      if (this.tabIndex === "0") {
+        this.$nextTick(() => {
+          this.$refs.tableList.getData();
+        });
+      } else {
+        this.$nextTick(() => {
+          this.$refs.tableList2.getData();
+        });
+      }
     },
     // 设置时间段
     setDateTime(arr) {
@@ -328,9 +299,28 @@ export default {
     destoryComp() {
       this.isDestoryComp = false;
     },
+    async getType() {
+      if (this.tabIndex === "0") {
+        let { data } = await usersPunishList();
+        this.typeList = data;
+      } else {
+        let {
+          data: { complaint_type },
+        } = await guildsPunishList();
+        let arr = [];
+        for (let key in complaint_type) {
+          arr.push({ id: key, name: complaint_type[key] });
+          this.typeList = arr;
+        }
+      }
+    },
+  },
+  created() {
+    this.getType();
   },
   watch: {
     tabIndex(newVal, oldVal) {
+      this.getType();
       this.reset();
     },
   },

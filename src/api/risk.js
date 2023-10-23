@@ -226,3 +226,33 @@ export function reportGuildOrUser(data) {
     data
   })
 }
+
+
+// 用户举报列表
+export function usersPunishList(data) {
+  return request({
+    url: api.risk.usersPunishList,
+    method: 'post',
+    data
+  })
+}
+
+
+// 公会举报列表
+export function guildsPunishList(data) {
+  return request({
+    url: api.risk.guildsPunishList,
+    method: 'post',
+    data
+  })
+}
+
+
+// 搜索用户或公会
+export function guildOrUserInfo(data) {
+  return request({
+    url: api.risk.guildOrUserInfo,
+    method: 'post',
+    data
+  })
+}
