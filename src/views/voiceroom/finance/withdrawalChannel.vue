@@ -315,6 +315,18 @@ export default {
             },
           },
           {
+            label: "智变量通道余额",
+            prop: "zbl_quota",
+            minWidth: "150px",
+            sortable: "custom",
+            render: (h, params) => {
+              const result = params.row.zbl_quota.map((item) => {
+                return h("div", `${item.name}：${item.quota}`);
+              });
+              return h("div", result);
+            },
+          },
+          {
             label: "支付宝提现通道",
             prop: "alipay_cash_channel",
             width: "120px",
@@ -446,6 +458,22 @@ export default {
             width: "120px",
             render: (h, params) => {
               return h("span", params.row.mtc_alipay ? "已签署" : "未签署");
+            },
+          },
+          {
+            label: "智变量-银行卡",
+            prop: "zbl_bank",
+            width: "120px",
+            render: (h, params) => {
+              return h("span", params.row.zbl_bank ? "已签署" : "未签署");
+            },
+          },
+          {
+            label: "智变量-支付宝",
+            prop: "zbl_alipay",
+            width: "120px",
+            render: (h, params) => {
+              return h("span", params.row.zbl_alipay ? "已签署" : "未签署");
             },
           },
           {

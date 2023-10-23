@@ -334,6 +334,15 @@ const CASHCHANNEL = [
     value: 16,
     name: '中职支付宝',
     disabled: true
+  },
+  {
+    value: 17,
+    name: '智变量银行卡',
+  },
+  {
+    value: 18,
+    name: '智变量支付宝',
+    disabled: true
   }
 ]
 
@@ -369,7 +378,11 @@ const BANKCASHCHANNEL = [
   {
     value: 15,
     name: '中职银行卡',
-  }
+  },
+  {
+    value: 17,
+    name: '智变量银行卡',
+  },
 ]
 
 /*
@@ -407,6 +420,11 @@ const ALIPAYCASHCHANNEL = [
   {
     value: 16,
     name: '中职支付宝',
+    disabled: true
+  },
+  {
+    value: 18,
+    name: '智变量支付宝',
     disabled: true
   }
 ]
