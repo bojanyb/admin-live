@@ -206,6 +206,10 @@ export default {
       ];
       let arr2 = [
         {
+          label: "标题",
+          prop: "sort",
+        },
+        {
           label: "序号",
           prop: "sort",
         },

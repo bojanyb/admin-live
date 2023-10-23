@@ -151,6 +151,7 @@ export default {
           {
             label: "发布时间",
             prop: "create_time",
+            sortable: "custom",
             width: 180,
           },
           {
