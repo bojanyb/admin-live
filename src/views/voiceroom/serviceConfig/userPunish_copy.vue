@@ -1,5 +1,6 @@
 <template>
   <div class="app-container serviceConfig-userPunish-box">
+
     <div class="searchParams">
       <SearchPanel
         v-model="searchParams"
