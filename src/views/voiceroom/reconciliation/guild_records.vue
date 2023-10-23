@@ -93,19 +93,23 @@ export default {
         { prop: "guild_number", exportable: true, label: "公会ID" },
         { prop: "guild_name", exportable: true, label: "公会名称" },
         { prop: "company_name", exportable: true, label: "企业名称" },
-        { prop: "bank_address", exportable: true, label: "开户银行" },
-        { prop: "bank_name", exportable: true, label: "开户支行" },
+        { prop: "bank_name", exportable: true, label: "开户银行" },
+        { prop: "bank_address", exportable: true, label: "开户支行" },
         { prop: "bank_card", exportable: true, label: "银行账号" },
         { prop: "gain", exportable: true, label: "结算喵粮" },
-        { prop: "deduct_money", exportable: true, label: "违规扣除" },
         {
-          prop: "real_money",
+          prop: "deduct_money",
+          exportable: true,
+          label: "违规扣除",
+        },
+        {
+          prop: "money",
           exportable: true,
           export_format: (row) => {
-            return row.real_money / 100;
+            return row.money;
           },
           label: "结算金额",
-          render: (h, row) => <span>{row.real_money / 100}元</span>,
+          render: (h, row) => <span>{row.money}元</span>,
         },
         { prop: "status_desc", exportable: true, label: "结算状态" },
         {
@@ -175,6 +179,8 @@ export default {
       showDetailRow: undefined,
       showApplyAuditDialog: false,
       showSettlementAuditDialog: false,
+      showSettlementAuditFailDialog: false,
+      settlementAuditFailReason: "",
       showInvoiceAuditDialog: false,
       showInvoiceAuditFailDialog: false,
       invoiceAuditFailReason: "",
@@ -260,7 +266,9 @@ export default {
         )
       );
       if (_.every(res, (r) => r.code === 2000)) {
+        this.settlementAuditFailReason = "";
         this.showSettlementAuditDialog = false;
+        this.showSettlementAuditFailDialog = false;
       }
       this.fetchData();
     },
@@ -281,6 +289,7 @@ export default {
       if (_.every(res, (r) => r.code === 2000)) {
         this.invoiceAuditFailReason = "";
         this.showInvoiceAuditDialog = false;
+        this.showInvoiceAuditFailDialog = false;
       }
       this.fetchData();
     },
@@ -299,7 +308,7 @@ export default {
           this.data = res.data.list;
         }
       } catch (e) {
-        this.data = []
+        this.data = [];
         console.error(e.message);
       } finally {
         this.loading = false;
@@ -366,6 +375,7 @@ export default {
     >
       <Detail v-if="showDetailRow" :record="showDetailRow" />
     </el-dialog>
+
     <el-dialog
       :width="'300px'"
       :visible.sync="showApplyAuditDialog"
@@ -379,6 +389,7 @@ export default {
         >
       </div>
     </el-dialog>
+
     <el-dialog
       :width="'300px'"
       :visible.sync="showSettlementAuditDialog"
@@ -386,7 +397,13 @@ export default {
       destroy-on-close
     >
       <div class="action-btns">
-        <el-button @click="settlementAudit(false, showSettlementAuditDialog)"
+        <el-button
+          @click="
+            () => {
+              settlementAuditFailReason = '';
+              showSettlementAuditFailDialog = true;
+            }
+          "
           >发放失败</el-button
         >
         <el-button
@@ -396,6 +413,35 @@ export default {
         >
       </div>
     </el-dialog>
+    <el-dialog
+      :width="'300px'"
+      :visible.sync="showSettlementAuditFailDialog"
+      title="提示"
+      destroy-on-close
+    >
+      <el-input
+        v-model="settlementAuditFailReason"
+        placeholder="请输入发放失败原因"
+        style="margin-bottom: 20px"
+      ></el-input>
+      <div class="action-btns">
+        <el-button
+          @click="
+            () => {
+              showSettlementAuditFailDialog = false;
+              settlementAuditFailReason = '';
+            }
+          "
+          >取消</el-button
+        >
+        <el-button
+          type="primary"
+          @click="settlementAudit(false, showSettlementAuditDialog)"
+          >确定</el-button
+        >
+      </div>
+    </el-dialog>
+
     <el-dialog
       :width="'300px'"
       :visible.sync="showInvoiceAuditDialog"

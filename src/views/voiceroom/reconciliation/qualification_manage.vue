@@ -44,8 +44,9 @@ export default {
           placeholder: "请选择",
           options: [
             { key: 0, value: "待审核" },
-            { key: 1, value: "已通过" },
+            { key: 1, value: "使用中" },
             { key: 2, value: "已退回" },
+            { key: 3, value: "已更新" },
           ],
         },
         {
@@ -71,8 +72,9 @@ export default {
         { prop: "guild_name", exportable: true, label: "公会名称" },
         { prop: "company_name", exportable: true, label: "企业名称" },
         { prop: "company_code", exportable: true, label: "统一社会信用代码" },
-        { prop: "owner_name", exportable: true, label: "开户银行" },
-        { prop: "bank_name", exportable: true, label: "开户支行" },
+        { prop: "company_address", exportable: true, label: "注册地址" },
+        { prop: "bank_name", exportable: true, label: "开户银行" },
+        { prop: "bank_address", exportable: true, label: "开户支行" },
         { prop: "bank_card", exportable: true, label: "银行账号" },
         {
           prop: "certificate_file",
@@ -111,7 +113,9 @@ export default {
           exportable: true,
           label: "审核状态",
           render: (h, row) => (
-            <span>{{ 0: "待审核", 1: "已通过", 2: "已退回" }[row.status]}</span>
+            <span>
+              {{ 0: "待审核", 1: "使用中", 2: "已退回", 3: "已更新" }[row.status]}
+            </span>
           ),
         },
         { prop: "remark", exportable: true, label: "备注说明" },
@@ -204,7 +208,7 @@ export default {
           this.data = res.data.list;
         }
       } catch (e) {
-        this.data = []
+        this.data = [];
         console.error(e.message);
       } finally {
         this.loading = false;
@@ -302,7 +306,11 @@ export default {
           >
             取消
           </el-button>
-          <el-button type="primary" :disabled="!reject_reason" @click="audit(false, showAuditRejectDialog)">
+          <el-button
+            type="primary"
+            :disabled="!reject_reason"
+            @click="audit(false, showAuditRejectDialog)"
+          >
             确定驳回
           </el-button>
         </div>

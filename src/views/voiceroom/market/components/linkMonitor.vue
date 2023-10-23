@@ -2,129 +2,110 @@ vue Copy
 <template>
   <div class="link-monitor-container">
     <el-dialog
-      title="监测链接管理"
+      :title="title"
       :visible.sync="dialogVisible"
-      width="700px"
+      width="500px"
       :before-close="handleClose"
       :close-on-click-modal="false"
       @closed="destroyComp"
     >
-      <template v-if="initializeComponent">
-        <el-table
-          :data="tableData"
-          class="table"
-          style="width: 100%; margin-bottom: 30px"
-          border
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        label-suffix=":"
+        ref="ruleForm"
+        label-width="110px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="媒体" prop="category_id">
+          <el-select v-model="ruleForm.category_id" placeholder="请选择">
+            <el-option v-for="item in chainList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="活动名称" prop="name">
+          <el-input
+            v-model="ruleForm.name"
+            placeholder="请输入活动名称"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item label="代理名称" prop="remark">
+          <el-input
+            v-model="ruleForm.remark"
+            placeholder="请输入代理名称"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item label="链接编号" prop="ad_type">
+          <el-input
+            v-model="ruleForm.ad_type"
+            placeholder="请输入链接编号"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item label="选择房间" prop="room_number">
+          <el-input
+            v-model="ruleForm.room_number"
+            placeholder="请输入房间ID"
+            clearable
+          />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')"
+          >确 定</el-button
         >
-          <el-table-column label="序号" width="50">
-            <template slot-scope="scope">
-              <span class="channel-name">{{ scope.$index }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="渠道名称" width="180">
-            <template slot-scope="scope">
-              <span v-if="editingIndex !== scope.$index" class="channel-name">{{
-                scope.row.channel
-              }}</span>
-              <el-input
-                v-else
-                v-model="scope.row.channel"
-                size="mini"
-              ></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="监测链接" width="180">
-            <template slot-scope="scope">
-              <span v-if="editingIndex !== scope.$index" class="channel-name">{{
-                scope.row.ad_type
-              }}</span>
-              <el-input
-                v-else
-                v-model="scope.row.ad_type"
-                size="mini"
-              ></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <template v-if="editingIndex !== scope.$index">
-                <el-button
-                  size="mini"
-                  @click="handleEdit(scope.$index, scope.row)"
-                  >编辑</el-button
-                >
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleDelete(scope.$index, scope.row)"
-                  >删除</el-button
-                >
-              </template>
-              <template v-else>
-                <el-button
-                  size="mini"
-                  type="success"
-                  @click="handleSave(scope.$index, scope.row)"
-                  >保存</el-button
-                >
-                <el-button
-                  size="mini"
-                  @click="handleCancelEdit(scope.$index, scope.row)"
-                  >取消</el-button
-                >
-              </template>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="add-link-button">
-          <el-button type="primary" @click="handleAddLink"
-            >新增监测链接</el-button
-          >
-        </div>
-      </template>
+      </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { deepClone } from "@/utils/index";
-import { getChain, configChain } from "@/api/market";
+import { getAdSelect, adConfList } from "@/api/market";
 export default {
   data() {
     return {
+      status: "add",
       dialogVisible: false,
-      tableData: [
-        {
-          channel: "王小虎",
-        },
-      ],
-      editingIndex: -1,
-      initializeComponent: false,
-      editCurrentRowData: {},
+      ruleForm: {
+        category_id: "",
+        name: "",
+        remark: "",
+        ad_type: "",
+        room_number: "",
+      },
+      rules: {
+        category_id: [{ required: true, message: "请选择媒体", trigger: "blur" }],
+        name: [{ required: true, message: "请输入活动名称", trigger: "blur" }],
+        remark: [{ required: true, message: "请输入代理名称", trigger: "blur" }],
+        ad_type: [{ required: true, message: "请输入链接编号", trigger: "blur" }],
+      },
+      chainList: []
     };
   },
-  watch: {
-    dialogVisible(newVal) {
-      if (newVal) {
-        this.fetchChainData();
+  created() {
+    this.fetchChainData()
+  },
+  computed: {
+    title() {
+      // 标题
+      if (this.status === "add") {
+        return "创建推广活动";
+      } else if (this.status === "update") {
+        return "修改推广活动";
       }
-      this.initializeComponent = !!newVal;
     },
   },
   methods: {
-    handleEdit(index, row) {
-      this.editCurrentRowData = deepClone(row);
-      this.editingIndex = index;
-      console.log(this.tableData);
-    },
-    handleCancelEdit(index, row) {
-      if (!row.channel && !row.ad_type) {
-        this.tableData.pop();
-        return;
+    load(status, row) {
+      this.status = status;
+      if (status !== "add") {
+        let params = JSON.parse(JSON.stringify(row));
+        this.$set(this.$data, "ruleForm", params);
       }
-
-      this.tableData[index] = this.editCurrentRowData;
-      this.editingIndex = -1;
+      this.dialogVisible = true;
     },
     async handleSave(index, row) {
       console.log(index, row);
@@ -134,7 +115,7 @@ export default {
       };
       console.log(prama);
       try {
-        const response = await configChain(prama);
+        const response = await adConfList(prama);
         if (response.code === 2000) {
           this.$message({
             type: "success",
@@ -146,55 +127,61 @@ export default {
         console.error(error);
       }
     },
-    handleDelete(index, row) {
-      this.$confirm("确定要删除该渠道吗？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          this.tableData.splice(index, 1);
-          this.$message({
-            type: "success",
-            message: "删除成功",
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
-    },
-    handleAddLink() {
-      if (this.tableData.length - 1 === this.editingIndex) {
-        this.$message({
-          type: "warning",
-          message: "请保存或取消编辑行再进行操作!",
-        });
-        return;
-      }
-      this.tableData.push({ channel: "", ad_type: "" });
-      this.editingIndex = this.tableData.length - 1;
-    },
     handleClose() {
       this.dialogVisible = false;
     },
-    destroyComp() {
-      // 组件销毁逻辑
+    // 点击提交
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.handleSubmit();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    // 提交
+    handleSubmit() {
+      adConfList(this.ruleForm)
+        .then((res) => {
+          if (res.code === 2000) {
+            this.dialogVisible = false;
+            this.$emit("onSearch");
+          }
+        })
+        .catch((err) => {
+          this.$message.error(err);
+        });
     },
     /**
-     * 获取注册渠道数据并处理
+     * 获取监测链接数据并处理
      */
-    async fetchChainData() {
+     async fetchChainData() {
       try {
-        const response = await getChain();
+        const response = await getAdSelect();
         if (response.code === 2000) {
-          this.tableData = response.data;
+          this.chainList = response.data;
         }
       } catch (error) {
         console.error(error);
       }
+    },
+    // 重置
+    resetForm(formName) {
+      this.close();
+    },
+    // 关闭弹窗
+    close() {
+      this.dialogVisible = false;
+    },
+    // 销毁组件
+    destroyComp() {
+      this.$emit("destoryComp");
+    },
+    // 重置字段验证
+    validateField(name) {
+      this.$refs.ruleForm.validateField([name]);
     },
   },
 };
@@ -203,15 +190,8 @@ export default {
 <style lang="scss">
 .link-monitor-container {
   padding: 20px;
-}
-
-.channel-name {
-  margin-left: 10px;
-  text-align: center;
-}
-
-.add-link-button {
-  width: 100%;
-  text-align: center;
+  .el-input {
+    width: 300px;
+  }
 }
 </style>

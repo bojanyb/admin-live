@@ -96,10 +96,6 @@ export default {
             prop: "user_number",
           },
           {
-            label: "已累计成长值",
-            prop: "heap_value",
-          },
-          {
             label: "魅力成长值",
             render: (h, params) => {
               return h(
