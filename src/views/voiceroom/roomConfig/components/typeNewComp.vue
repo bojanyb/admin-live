@@ -76,7 +76,7 @@ export default {
       this.ruleForm = {
         ...row,
       };
-      this.getCanChangeTypeData(row.user_id);
+      // this.getCanChangeTypeData(row.user_id);
     },
     // 销毁组件
     closed() {
