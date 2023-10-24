@@ -375,8 +375,10 @@ const request = {
         getAnchorCash: `${HTTPHEADER}/cash/getAnchorCash`, // 对公结算记录（主播）
         getGuildCashBill: `${HTTPHEADER}/guildCash/getGuildCashBill`, // 对公结算账单明细
         applyAudit: `${HTTPHEADER}/guildCash/applyAudit`, // 对公结算申请审核
-        settlementAudit: `${HTTPHEADER}/guildCash/settlementAudit`, // 对公结算银行结算审核
+        applyConfirm: `${HTTPHEADER}/guildCash/applyConfirm`, // 对公结算出款审批
+        settlementAudit: `${HTTPHEADER}/guildCash/settlementAudit`, // 对公结算银行发放94%确认
         invoiceAudit: `${HTTPHEADER}/guildCash/invoiceAudit`, // 对公结算发票审核
+        applyComplete: `${HTTPHEADER}/guildCash/applyComplete`, // 对公结算银行发放6%确认
         doCash: `${HTTPHEADER}/guildCash/doCash`, // 对公结算审核操作（主播）
         getGuildCashBank: `${HTTPHEADER}/guildCash/getGuildCashBank`, // 对公资质管理列表
         bankAudit: `${HTTPHEADER}/guildCash/bankAudit`, // 对公资质审核

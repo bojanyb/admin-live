@@ -58,16 +58,24 @@ export default {
               value: "待财务审核",
             },
             {
+              key: 20,
+              value: "待出款审批",
+            },
+            {
               key: 30,
-              value: "待银行发放",
+              value: "待银行发放94%",
             },
             {
               key: 40,
               value: "待上传发票",
             },
             {
-              key: 60,
+              key: 50,
               value: "待审核发票",
+            },
+            {
+              key: 60,
+              value: "待银行发放6%",
             },
             {
               key: 70,
@@ -76,6 +84,10 @@ export default {
             {
               key: 80,
               value: "结算已完成",
+            },
+            {
+              key: 90,
+              value: "已取消",
             },
           ],
         },
@@ -162,10 +174,14 @@ export default {
             let onClick;
             if (row.status === 10) {
               onClick = () => (this.showApplyAuditDialog = [row]);
+            } else if (row.status === 20) {
+              onClick = () => (this.showApplyConfirmDialog = [row]);
             } else if (row.status === 30) {
               onClick = () => (this.showSettlementAuditDialog = [row]);
-            } else if (row.status === 60) {
+            } else if (row.status === 50) {
               onClick = () => (this.showInvoiceAuditDialog = [row]);
+            } else if (row.status === 60) {
+              onClick = () => (this.showApplyCompleteDialog = [row]);
             }
             if (!onClick) {
               return null;
@@ -180,12 +196,14 @@ export default {
       ],
       showDetailRow: undefined,
       showApplyAuditDialog: false,
+      showApplyConfirmDialog: false,
       showSettlementAuditDialog: false,
       showSettlementAuditFailDialog: false,
       settlementAuditFailReason: "",
       showInvoiceAuditDialog: false,
       showInvoiceAuditFailDialog: false,
       invoiceAuditFailReason: "",
+      showApplyCompleteDialog: false,
     };
   },
   computed: {
@@ -231,10 +249,14 @@ export default {
       const uniq_status = _.first(uniq_statuses);
       if (uniq_status === 10) {
         this.showApplyAuditDialog = this.selected_rows;
+      } else if (uniq_status === 20) {
+        this.showApplyConfirmDialog = this.selected_rows;
       } else if (uniq_status === 30) {
         this.showSettlementAuditDialog = this.selected_rows;
-      } else if (uniq_status === 60) {
+      } else if (uniq_status === 50) {
         this.showInvoiceAuditDialog = this.selected_rows;
+      } else if (uniq_status === 60) {
+        this.showApplyCompleteDialog = this.selected_rows;
       } else {
         this.$notify.warning({ message: "订单不支持操作" });
       }
@@ -254,6 +276,21 @@ export default {
       }
       this.fetchData();
     },
+    async applyConfirm(isPass, rows) {
+      const res = await Promise.all(
+        rows.map((row) =>
+          request({
+            url: REQUEST.finance.applyConfirm,
+            method: "post",
+            data: { id: row.id },
+          })
+        )
+      );
+      if (_.every(res, (r) => r.code === 2000)) {
+        this.showApplyConfirmDialog = false;
+      }
+      this.fetchData();
+    },
     async settlementAudit(isPass, rows) {
       const res = await Promise.all(
         rows.map((row) =>
@@ -262,7 +299,8 @@ export default {
             method: "post",
             data: {
               id: row.id,
-              status: isPass ? 40 : 50,
+              status: isPass ? 1 : 2,
+              remark: isPass ? "" : this.settlementAuditFailReason,
             },
           })
         )
@@ -282,8 +320,8 @@ export default {
             method: "post",
             data: {
               id: row.id,
-              status: isPass ? 80 : 70,
-              remark: this.invoiceAuditFailReason,
+              status: isPass ? 1 : 2,
+              remark: isPass ? '' : this.invoiceAuditFailReason,
             },
           })
         )
@@ -292,6 +330,23 @@ export default {
         this.invoiceAuditFailReason = "";
         this.showInvoiceAuditDialog = false;
         this.showInvoiceAuditFailDialog = false;
+      }
+      this.fetchData();
+    },
+    async applyComplete(isPass, rows) {
+      const res = await Promise.all(
+        rows.map((row) =>
+          request({
+            url: REQUEST.finance.applyComplete,
+            method: "post",
+            data: {
+              id: row.id,
+            },
+          })
+        )
+      );
+      if (_.every(res, (r) => r.code === 2000)) {
+        this.showApplyCompleteDialog = false;
       }
       this.fetchData();
     },
@@ -369,6 +424,7 @@ export default {
       >
       </el-pagination>
     </div>
+    <!-- 明细弹窗 -->
     <el-dialog
       :width="'1200px'"
       :visible.sync="showDetailRow"
@@ -378,6 +434,7 @@ export default {
       <Detail v-if="showDetailRow" :record="showDetailRow" />
     </el-dialog>
 
+    <!-- 待财务审核操作弹窗 -->
     <el-dialog
       :width="'300px'"
       :visible.sync="showApplyAuditDialog"
@@ -391,7 +448,21 @@ export default {
         >
       </div>
     </el-dialog>
+    <!-- 待出款审批操作弹窗 -->
+    <el-dialog
+      :width="'300px'"
+      :visible.sync="showApplyConfirmDialog"
+      title="请选择操作"
+      destroy-on-close
+    >
+      <div class="action-btns">
+        <el-button type="primary" @click="applyConfirm(true, showApplyConfirmDialog)"
+          >确认出款</el-button
+        >
+      </div>
+    </el-dialog>
 
+    <!-- 待银行发放94%操作弹窗 -->
     <el-dialog
       :width="'300px'"
       :visible.sync="showSettlementAuditDialog"
@@ -444,6 +515,7 @@ export default {
       </div>
     </el-dialog>
 
+    <!-- 待审核发票操作弹窗 -->
     <el-dialog
       :width="'300px'"
       :visible.sync="showInvoiceAuditDialog"
@@ -491,11 +563,25 @@ export default {
         >
       </div>
     </el-dialog>
+
+    <!-- 待银行发放6%操作弹窗 -->
+    <el-dialog
+      :width="'300px'"
+      :visible.sync="showApplyCompleteDialog"
+      title="请选择操作"
+      destroy-on-close
+    >
+      <div class="action-btns">
+        <el-button type="primary" @click="applyComplete(true, showApplyCompleteDialog)"
+          >发放成功</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 <style lang="scss" scoped>
 .action-btns {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 </style>
