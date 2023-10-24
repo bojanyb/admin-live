@@ -43,10 +43,10 @@ vue Copy
             clearable
           />
         </el-form-item>
-        <el-form-item label="选择房间" prop="room_number">
+        <el-form-item label="绑定用户ID" prop="user_number">
           <el-input
-            v-model="ruleForm.room_number"
-            placeholder="请输入房间ID"
+            v-model="ruleForm.user_number"
+            placeholder="请输入用户ID"
             clearable
           />
         </el-form-item>
