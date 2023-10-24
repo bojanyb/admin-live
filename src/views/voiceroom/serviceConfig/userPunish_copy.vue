@@ -827,14 +827,7 @@ export default {
     },
     // 刷新table显示
     refreshTable(arr) {
-      this.filterColumns = this.filterColumns.map(item => {
-        if(arr.includes(item.key)) {
-          item.visible = false;
-        } else {
-          item.visible = true;
-        }
-        return item;
-      });
+      this.filterColumns = arr;
     },
     // 查看记录
     viewRecord(report_event_id) {

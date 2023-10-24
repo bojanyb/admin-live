@@ -110,7 +110,7 @@ export default {
     },
     // 提交修改后的列表
     confirmColumn() {
-      this.$emit("refreshTable", this.value);
+      this.$emit("refreshTable", deepClone(this.transferData));
       this.open = false;
     }
   },
