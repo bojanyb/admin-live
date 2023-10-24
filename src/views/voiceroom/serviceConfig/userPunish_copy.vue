@@ -54,6 +54,10 @@
     <lookComp ref="lookComp"></lookComp>
     <!-- 相同事件编号列表 -->
     <eventListComp v-if="isEventListDestoryComp" ref="eventListComp" @destoryComp="destoryEventComp"></eventListComp>
+    <!-- 解封弹窗 -->
+    <unbanComp ref="unbanComp" @getList="getList"></unbanComp>
+    <!-- 忽略弹窗 -->
+    <ignoreComp ref="ignoreComp"></ignoreComp>
   </div>
 </template>
 
@@ -95,6 +99,10 @@ import wordsComp from "./components/wordsComp.vue"
 import lookComp from "./components/lookComp.vue";
 // 相同事件编号列表
 import eventListComp from "./components/eventListComp.vue";
+// 解封弹窗
+import unbanComp from "./components/unbanComp.vue";
+// 忽略弹窗
+import ignoreComp from "./components/ignoreComp.vue";
 export default {
   mixins: [mixins],
   components: {
@@ -106,7 +114,9 @@ export default {
     operationLogComp,
     wordsComp,
     lookComp,
-    eventListComp
+    eventListComp,
+    unbanComp,
+    ignoreComp
   },
   data() {
     return {
@@ -552,7 +562,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.blocked(params.row);
+                      this.reblocked(params.row);
                     },
                   },
                 },
@@ -679,6 +689,10 @@ export default {
     blocked(row) {
       this.load("blocked", row);
     },
+    // 再次封禁
+    reblocked(row) {
+      this.load("reblocked", row);
+    },
     // 修改
     update(row) {
       this.isDestoryComp = true;
@@ -694,33 +708,20 @@ export default {
     },
     // 解除
     async relieve(row) {
-      const temp = {};
+      const params = {
+        result: row.result,
+        remove_time: row.remove_time,
+      };
       if (row.id_array.length > 1) {
-        temp.ids = row.id_array;
+        params.ids = row.id_array;
       } else {
-        temp.id = row.id_array.join();
+        params.id = row.id_array.join();
       }
-      this.$confirm("是否确认解除当前封禁用户?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(async () => {
-          let res = await removeUserPunish(temp);
-          if (res.code === 2000) {
-            this.$success("解除成功");
-            this.getList();
-          }
-        })
-        .catch(() => {});
+      this.$refs.unbanComp.load(params)
     },
     // 忽略
-    async neglect(id) {
-      let res = await passUserPunish({ id });
-      if (res.code === 2000) {
-        this.$success("操作成功");
-        this.getList();
-      }
+    neglect(id) {
+      this.$refs.ignoreComp.load(id)
     },
     // 导出excel
     async BatchRurn() {

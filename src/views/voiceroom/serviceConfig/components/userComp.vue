@@ -9,7 +9,7 @@
         @closed="closed">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-suffix=":" :hide-required-asterisk="status === 'see'">
                 <div class="inputBox">
-                    <el-form-item label="用户/房间ID" prop="user_number" class="numberBox" label-width="110px">
+                    <el-form-item label="用户/房间ID" prop="user_number" class="numberBox" label-width="110px" v-if="status !== 'reblocked'">
                         <el-input v-model="ruleForm.user_number" :disabled="status === 'blocked'" @input="numberInput"></el-input>
 
                         <el-button type="success" @click="seeUser">查询</el-button>
@@ -105,7 +105,7 @@ import drawer from '@/components/drawer/index'
 // 引入上传组件
 import uploadImg from '@/components/uploadImg/index.vue'
 // 引入api
-import { addUserPunish, saveUserPunish, punishStatus } from '@/api/risk'
+import { addUserPunish, saveUserPunish, punishStatus, punishAgain } from '@/api/risk'
 // 引入公共map
 import MAPDATA from '@/utils/jsonMap.js'
 import moment from 'moment'
@@ -306,7 +306,7 @@ export default {
               this.$set(this.ruleForm, 'user_number', params.user_number)
               this.seeUser()
             }
-            if(status !== 'add' && status !== 'blocked') {
+            if(status !== 'add' && status !== 'blocked' && status !== 'reblocked') {
                 let params = JSON.parse(JSON.stringify(row))
                 let data = {}
                 data.user_number = params.feedback_number
@@ -329,6 +329,35 @@ export default {
                 this.$set(this.$data, 'ruleForm', data)
                 this.$set(this.$data, 'form', params)
                 this.seeUser()
+            } else if(status === 'reblocked') {
+              let params = JSON.parse(JSON.stringify(row))
+              let data = {
+                user_number: params.feedback_number,
+                category: String(params.type),
+                type: params.type_array,
+                risk_level: params.risk_level,
+                ban_duration: '',
+                remark: params.remark,
+                reset: [],
+                punish_type_id: params.punish_type_id
+              }
+              // 回显媒体资源
+              const soundArr = params.sound_path.split(',')
+              const videoArr = params.video_path.split(',')
+              const imgArr = params.img_path.split(',')
+              const mediaArr = [].concat(soundArr, videoArr, imgArr)
+              mediaArr.forEach(item => {
+                if(item) {
+                  const filename = item.substring(
+                    item.lastIndexOf('/') + 1,
+                    item.length
+                  );
+                  this.fileList.push({ name: filename, url: item });
+                }
+              })
+              this.$set(this.$data, 'ruleForm', data)
+              this.$set(this.$data, 'form', params)
+              this.seeUser()
             }
 
             this.oldParams = JSON.parse(JSON.stringify(this.ruleForm))
@@ -394,9 +423,14 @@ export default {
                         if(params.reset.length <= 0) {
                             delete params.reset
                         }
-                        let res = await addUserPunish(params)
+                        let res
+                        if(this.status === 'reblocked') {
+                          res = await punishAgain(params)
+                        } else {
+                          res = await addUserPunish(params)
+                        }
                         if(res.code === 2000) {
-                            this.$success('添加成功')
+                            this.$success('操作成功')
                             this.dialogVisible = false
                             this.$emit('getList')
                         }
@@ -558,7 +592,7 @@ export default {
     }
 
     .infoBox_hign_copy {
-        height: 311px;
+        height: auto;
         .downBox {
             margin-top: 30px;
             p {
