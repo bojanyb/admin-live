@@ -16,9 +16,11 @@
       >
     </div>
     <div class="searchParams">
+      <!-- 当前时间前6个月 不包含当前月 preMonth -->
       <SearchPanel
         v-model="searchParams"
         :forms="forms"
+        :preMonth="6"
         :show-reset="true"
         :show-search-btn="true"
         :showYesterday="true"
@@ -64,8 +66,12 @@
     </div>
 
     <!-- 批量补单 -->
-    <el-dialog title="批量查询反馈" width="30%" :visible.sync="batchDialogVisible">
-      <div style="padding: 10px;">
+    <el-dialog
+      title="批量查询反馈"
+      width="30%"
+      :visible.sync="batchDialogVisible"
+    >
+      <div style="padding: 10px">
         查询出共{{ batchResultData && batchResultData.length }}条数据已支付成功
       </div>
       <div
@@ -193,8 +199,6 @@
         @pagination="getDetails"
       />
     </el-dialog>
-
-
 
     <!-- 当前时段补单 -->
     <el-dialog
@@ -613,11 +617,23 @@ export default {
                     : params.row.ali_merchant_status)
                 );
               });
+              // return (
+
+              // );
               return data && params.row.buyer_id ? (
                 <div style="display: flex">
                   <div style="text-align: left;" title={data.name}>
                     <el-tag type={data.type}>
-                      {params.row.buyer_id ? params.row.buyer_id : "-"}
+                      {params.row.complaints_status ? (
+                        <span style="color:#ff4949;">
+                          {params.row.buyer_id ? params.row.buyer_id : "-"}
+                        </span>
+                      ) : (
+                        <span>
+                          {params.row.buyer_id ? params.row.buyer_id : "-"}
+                        </span>
+                      )}
+
                       <span>
                         （
                         {params.row.wx_merchant
@@ -638,8 +654,8 @@ export default {
                         >
                           <div>
                             {/* 微信 */}
-                            {
-                              params.row.channel==='微信' &&  <div>
+                            {params.row.channel === "微信" && (
+                              <div>
                               <div>
                                 投诉类型:
                                 {params.row.complaints.problem_description}
@@ -649,22 +665,23 @@ export default {
                                 {params.row.complaints.complaint_detail}
                               </div>
                             </div>
-                            }
+                            )}
                             {/* 支付宝 */}
-                            {
-                              params.row.channel==='支付宝' && <div>
+                            {params.row.channel === "支付宝" && (
                               <div>
-                                投诉诉求:
-                                {params.row.complaints.leaf_category_name}
+                                <div>
+                                  投诉诉求:
+                                  {params.row.complaints.leaf_category_name}
+                                </div>
+                                <div>
+                                  投诉原因:
+                                  {params.row.complaints.complain_reason}
+                                </div>
+                                <div>
+                                  投诉内容:{params.row.complaints.content}
+                                </div>
                               </div>
-                              <div>
-                                投诉原因:{params.row.complaints.complain_reason}
-                              </div>
-                              <div>
-                                投诉内容:{params.row.complaints.content}
-                              </div>
-                            </div>
-                            }
+                            )}
                           </div>
                           <div slot="reference" style="color:#ff4949;">
                             {params.row.complaints_status}
@@ -1394,6 +1411,13 @@ export default {
         .catch((err) => {
           console.log(err);
         })
+        .then(({ code, data }) => {
+          console.log(data);
+          this.curPeriodOrderDialogVisible = true;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     // 当前时段补单明细
