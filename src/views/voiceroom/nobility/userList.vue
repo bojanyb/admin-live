@@ -96,10 +96,6 @@ export default {
             prop: "user_number",
           },
           {
-            label: "已累计成长值",
-            prop: "heap_value",
-          },
-          {
             label: "魅力成长值",
             render: (h, params) => {
               return h(
@@ -126,9 +122,9 @@ export default {
             render: (h, params) => {
               return h(
                 "span",
-                params.row.create_time
+                params.row.last_create_time
                   ? timeFormat(
-                      params.row.create_time,
+                      params.row.last_create_time,
                       "YYYY-MM-DD HH:mm:ss",
                       true
                     )

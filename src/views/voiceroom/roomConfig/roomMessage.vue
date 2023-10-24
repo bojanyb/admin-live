@@ -236,7 +236,7 @@ export default {
             label: "今日流水",
             minWidth: "100px",
             prop: "today_flow",
-            sortable: true,
+            sortable: "custom",
             render: (h, params) => {
               return h("div", params.row.today_flow + "钻石");
             },
@@ -245,7 +245,7 @@ export default {
             label: "昨日流水",
             minWidth: "100px",
             prop: "yestoday_flow",
-            sortable: true,
+            sortable: "custom",
             render: (h, params) => {
               return h("div", params.row.yestoday_flow + "钻石");
             },
@@ -254,7 +254,7 @@ export default {
             label: "本周流水",
             minWidth: "100px",
             prop: "week_flow",
-            sortable: true,
+            sortable: "custom",
             render: (h, params) => {
               return h("div", params.row.week_flow + "钻石");
             },
@@ -263,18 +263,18 @@ export default {
             label: "上周流水",
             minWidth: "100px",
             prop: "last_week_flow",
-            sortable: true,
+            sortable: "custom",
             render: (h, params) => {
-              return h("div", params.row.last_week_flow + "钻石");
+              return h("div", params.row.last_week_flow + "钻石" );
             },
           },
-          {
-            label: "房间人数",
-            minWidth: "100px",
-            render: (h, params) => {
-              return h("span", params.row.numbers + "人");
-            },
-          },
+          // {
+          //   label: "房间人数",
+          //   minWidth: "100px",
+          //   render: (h, params) => {
+          //     return h("span", params.row.numbers + "人");
+          //   },
+          // },
           // {
           //     minWidth: '100px',
           //     label: '热门推荐',
@@ -293,7 +293,7 @@ export default {
           // },
           {
             label: "操作",
-            minWidth: "200px",
+            minWidth: "250px",
             fixed: "right",
             render: (h, params) => {
               return h("div", [
