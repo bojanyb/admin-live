@@ -309,7 +309,7 @@ export default {
             if(status !== 'add' && status !== 'blocked') {
                 let params = JSON.parse(JSON.stringify(row))
                 let data = {}
-                data.user_number = params.punished_user_number
+                data.user_number = params.feedback_number
                 data.ban_duration = null
                 data.remark = ''
                 data.type = []
@@ -320,7 +320,7 @@ export default {
             } else if(status === 'blocked') {
                 let params = JSON.parse(JSON.stringify(row))
                 let data = {}
-                data.user_number = params.punished_user_number
+                data.user_number = params.feedback_number
                 data.ban_duration = null
                 data.remark = ''
                 data.type = []

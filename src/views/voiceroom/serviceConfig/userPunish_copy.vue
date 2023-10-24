@@ -21,9 +21,8 @@
     <el-row :gutter="10" style="margin-bottom: 10px;">
       <el-col :span="10">
         <el-radio-group v-model="filterType" size="small">
-          <el-radio-button label="all">全部</el-radio-button>
+          <el-radio-button label="user">用户/主播</el-radio-button>
           <el-radio-button label="guild">公会</el-radio-button>
-          <el-radio-button label="user">用户</el-radio-button>
         </el-radio-group>
       </el-col>
       <right-toolbar :columns="filterColumns" @refreshTable="refreshTable"></right-toolbar>
@@ -51,6 +50,10 @@
     <operationLogComp ref="operationLogComp"></operationLogComp>
     <!-- 风控文案库 -->
     <wordsComp ref="wordsComp"></wordsComp>
+    <!-- 详情组件 -->
+    <lookComp ref="lookComp"></lookComp>
+    <!-- 相同事件编号列表 -->
+    <eventListComp v-if="isEventListDestoryComp" ref="eventListComp" @destoryComp="destoryEventComp"></eventListComp>
   </div>
 </template>
 
@@ -88,6 +91,10 @@ import { mapState } from "vuex";
 import operationLogComp from "./components/operationLogComp.vue";
 // 引入风控文案库组件
 import wordsComp from "./components/wordsComp.vue"
+// 引入详情组件
+import lookComp from "./components/lookComp.vue";
+// 相同事件编号列表
+import eventListComp from "./components/eventListComp.vue";
 export default {
   mixins: [mixins],
   components: {
@@ -97,18 +104,21 @@ export default {
     userComp,
     uploadImg,
     operationLogComp,
-    wordsComp
+    wordsComp,
+    lookComp,
+    eventListComp
   },
   data() {
     return {
       isDestoryComp: false, // 是否销毁组件
+      isEventListDestoryComp: false, // 是否销毁组件
       searchParams: {
-        status: -1,
+        group: 'event_number'
       },
       punishTypeList: [],
       operateStatusOptions: [{
         name: '全部',
-        value: -1
+        value: ''
       },
       {
         name: '封禁中',
@@ -118,10 +128,10 @@ export default {
         name: '已解除',
         value: 2
       }],
-      filterType: 'all',
+      filterType: 'user',
       filterColumns: [{
         label: "事件编号",
-        key: "create_time1",
+        key: "event_number",
         visible: true,
       },{
         label: "创建时间",
@@ -143,24 +153,28 @@ export default {
     };
   },
   computed: {
-    // ...mapState({
-    //   permissionArr: state => state.permission.permissionArr,
-    // }),
     forms() {
       return [
         {
-          name: "operator1",
+          name: "user_number",
           type: "input",
           value: "",
           label: "用户ID",
-          placeholder: "请输入ID",
+          placeholder: "请输入用户ID",
         },
         {
-          name: "operator2",
+          name: "guild_number",
           type: "input",
           value: "",
-          label: "公会",
-          placeholder: "请输入昵称或ID",
+          label: "公会ID",
+          placeholder: "请输入公会ID",
+        },
+        {
+          name: "guild_name",
+          type: "input",
+          value: "",
+          label: "公会昵称",
+          placeholder: "请输入公会昵称",
         },
         {
           name: "operator",
@@ -192,7 +206,7 @@ export default {
         {
           name: "status",
           type: "select",
-          value: -1,
+          value: "",
           keyName: "value",
           optionLabel: "name",
           label: "处罚状态",
@@ -202,7 +216,7 @@ export default {
         {
           name: "risk_level",
           type: "select",
-          value: -1,
+          value: "",
           keyName: "value",
           optionLabel: "name",
           label: "风险级别",
@@ -210,9 +224,9 @@ export default {
           options: MAPDATA.RISKLEVELLIST,
         },
         {
-          name: "operate",
+          name: "guild_operator",
           type: "select",
-          value: -1,
+          value: "",
           keyName: "value",
           optionLabel: "name",
           label: "公会运营选择",
@@ -242,7 +256,7 @@ export default {
       const arr = [
         {
           label: "事件编号",
-          prop: "create_time1",
+          prop: "event_number",
           minWidth: "160px",
           render: (h, params) => {
             return h(
@@ -251,11 +265,11 @@ export default {
                 props: { type: "primary" },
                 on: {
                   click: () => {
-                    this.viewRecord(params.row.id);
+                    this.viewRecord(params.row.report_event_id);
                   },
                 },
               },
-              "EAT2312312312"
+              params.row.event_number
             );
           }
         },
@@ -269,7 +283,7 @@ export default {
           minWidth: "100px",
           prop: "from",
           render: (h, params) => {
-            return h("span", params.row.from || "无");
+            return h("span", params.row.from || params.row.source || "无");
           },
         },
         {
@@ -277,8 +291,8 @@ export default {
           minWidth: "120px",
           render: (h, params) => {
             return h("div", [
-              h("div", params.row.punished_user_nickname),
-              h("div", params.row.punished_user_number || "无"),
+              h("div", params.row.feedback_name),
+              h("div", params.row.feedback_number || "无"),
             ]);
           },
         },
@@ -286,39 +300,36 @@ export default {
           label: "被举报用户身份",
           minWidth: "120px",
           render: (h, params) => {
-            const content = [
-              h("div", "用户等级：12 魅力等级：12"),
-              h("div", "当前所属公会：今晚世界第五（ID192922） 状态：正常   加入时间：2012-12-12 12：00：00   所属运营：XXXX"),
-              h("div", "被举报时所属公会：今晚世界第五（ID192922） 状态：正常   加入时间：2012-12-12 12：00：00  所属运营：XXX"),
-              h("br", ""),
-              h("div", "违规信息：被举报X次  被处罚X次  被警告X次"),
-              h("div", "实名信息：潘明成"),
-              h("br", ""),
-              h("div", "注册信息：203-05-31  21:35:06"),
-              h("br", ""),
-              h("div", "用户状态：禁言15分钟"),
-            ]
-            return h("el-popover", 
+            return h("div", 
               {
-                props: {
-                  width: 500,
-                  trigger: 'hover',
-                  'popper-class': 'user-punish-popper-wrap'
+                on: {
+                  click: ()=>{
+                    const { report_event_id, feedback_number } = params.row;
+                    this.handleLook({report_event_id, feedback_number, category: 'feedback' })
+                  }
                 }
               },
               [ 
-                h("div", content),
-                h("span", { slot: 'reference' }, params.row.punished_user_role || "无") 
+                h("span", params.row.feedback_identity || "无"), 
+                h("i",
+                  {
+                    class: {
+                      "el-icon-question": true
+                    },
+                    style: {
+                      "margin-left": '4px',
+                    },
+                  },
+                ),
               ]
             )
-            // return h("span", params.row.punished_user_role || "无");
           },
         },
         {
           label: "举报类型",
           minWidth: "100px",
           render: (h, params) => {
-            return h("span", params.row.genre || "无");
+            return h("span", params.row.feedback_type_str || params.row.feedback_type || "无");
           },
           showOverFlow: true,
         },
@@ -327,6 +338,7 @@ export default {
           isImgAndVideoList: true,
           prop: "img_path",
           propCopy: "video_path",
+          audio: "sound_path",
           imgWidth: "50px",
           imgHeight: "50px",
           width: "200px",
@@ -345,42 +357,65 @@ export default {
           prop: "report_user_nickname",
           render: (h, params) => {
             return h("div", [
-              h("div", params.row.report_user_nickname),
-              h("div", params.row.report_user_number || "无"),
+              h("div", params.row.report_name),
+              h("div", params.row.report_number || "无"),
             ]);
           },
         },
         {
           label: "举报用户身份",
           minWidth: "120px",
-          prop: "report_user_role",
+          prop: "report_identity",
           render: (h, params) => {
-            return h("span", params.row.report_user_role || "无");
+            return h("div", 
+              {
+                on: {
+                  click: ()=>{
+                    const { report_event_id, report_number } = params.row;
+                    // report_number字段为空，则不触发弹窗
+                    if(!report_number) return;
+                    this.handleLook({report_event_id, report_number, category: 'report' })
+                  }
+                }
+              },
+              [ 
+                h("span", params.row.report_identity || "无"), 
+                h("i",
+                  {
+                    class: {
+                      "el-icon-question": true
+                    },
+                    style: {
+                      "display":  params.row.report_number ? 'inline-block':'none',
+                      "margin-left": '4px',
+                    },
+                  },
+                ),
+              ]
+            )
           },
         },
         {
           label: "处理状态",
           minWidth: "100px",
           render: (h, params) => {
-            let data = MAPDATA.USERPUNISHSTATUSLISTCOPY.find((item) => {
-              return item.value === params.row.status;
-            });
-            return h("span", data ? data.name : "无");
+            return h("span", params.row.state || "无");
           },
         },
         {
           label: "处罚类别",
           minWidth: "110px",
-          prop: "punish_type_str",
+          prop: "punish_type",
+          render: (h, params) => {
+            return h("span", params.row.punish_type || "无");
+          },
         },
         {
           label: "处罚结果",
           minWidth: "120px",
           render: (h, params) => {
-            const vnode =
-              params.row.res &&
-              params.row.res.length &&
-              params.row.res.map((item) => {
+            const vnode = params.row.result.length &&
+              params.row.result.map((item) => {
                 return h("span", `${item};` || "无");
               });
             return h("div", vnode || "无");
@@ -407,9 +442,9 @@ export default {
         {
           label: "审核人",
           minWidth: "80px",
-          prop: "admin",
+          prop: "operator",
           render: (h, params) => {
-          return h("span", params.row.admin || "无");
+          return h("span", params.row.operator || "无");
           },
         },
         {
@@ -547,12 +582,6 @@ export default {
                 "el-button",
                 {
                   props: { type: "primary",size: 'mini' },
-                  style: {
-                    display:
-                      params.row.status || params.row.status === 0
-                        ? "unset"
-                        : "none",
-                  },
                   on: {
                     click: () => {
                       this.handleOperationLog(params.row);
@@ -569,12 +598,17 @@ export default {
       let columns = this.permissionArr.includes("UserPunishLog@index") ? arr : [];
       // 过滤不显示的账号
       const invisibleKeyArr = this.filterColumns.filter(item => !item.visible).map(item => item.key);
-      console.log('[ invisibleKeyArr ] >', invisibleKeyArr)
       columns = arr.filter(item => !invisibleKeyArr.includes(item.prop))
+
+      // 请求url
+      let url = REQUEST.risk.NewUserPunishLog
+      if(this.filterType === 'guild') {
+        url = REQUEST.risk.NewGuildPunishLog
+      }
 
       return {
         vm: this,
-        url: REQUEST.risk.UserPunishLog,
+        url,
         search: {
           sizes: [10, 30, 50, 100],
         },
@@ -594,18 +628,19 @@ export default {
       return {
         page: params ? params.page : 1,
         page_size: params ? params.size : 10,
+        group: s.group,
         user_number: s.user_number,
-        status: s.status,
         guild_number: s.guild_number,
         guild_name: s.guild_name,
         operator: s.operator,
-        report_user_number: s.report_user_number,
+        punish_type_id: s.punish_type_id,
+        status: s.status,
+        risk_level: s.risk_level,
+        guild_operator: s.guild_operator,
         start_time: s.start_time
           ? Math.floor(s.start_time / 1000)
           : s.start_time,
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : s.end_time,
-        punish_type_id: s.punish_type_id,
-        risk_level: s.risk_level,
       };
     },
     // 刷新列表
@@ -628,10 +663,7 @@ export default {
     },
     // 重置
     reset() {
-      this.searchParams = {
-        status: -1,
-        userPunish: -1,
-      };
+      this.searchParams = {};
       this.dateTimeParams = {};
       this.getList();
     },
@@ -698,81 +730,61 @@ export default {
       let arr = JSON.parse(JSON.stringify(res.data.list));
       if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
       arr = arr.map((item, index) => {
-        let data = MAPDATA.USERPUNISHSTATUSLISTCOPY.find((v) => {
-          return v.value === item.status;
-        });
         let riskLevelData = MAPDATA.RISKLEVELLIST.find((v) => {
           return v.value === item.risk_level;
         })
         let params = {
+          event_number: item.event_number,
           create_time: item.create_time,
-          from: item.from,
-          punished_user_number: item.punished_user_number,
-          punished_user_nickname: item.punished_user_nickname,
-          punished_user_guild_number: item.punished_user_guild_number,
-          punished_user_guild_name: item.punished_user_guild_name,
-          punished_user_guild_status: item.punished_user_guild_status,
-          punished_user_guild_join_time: item.punished_user_guild_join_time,
-          punished_user_guild_operator_user_name:
-            item.punished_user_guild_operator_user_name,
-          genre: item.genre,
-          content: item.content,
-          report_user_number: item.report_user_number,
-          report_user_nickname: item.report_user_nickname,
-          report_user_guild_number: item.report_user_guild_number,
-          report_user_guild_name: item.report_user_guild_name,
-          report_user_guild_status: item.report_user_guild_status,
-          report_user_guild_operator_user_name:
-            item.report_user_guild_operator_user_name,
-          status: data ? data.name : "无",
-          punish_type_str: item.punish_type_str,
+          from: item.from || item.source || "无",
+          feedback_number: item.feedback_number,
+          feedback_name: item.feedback_name,
+          feedback_identity: item.feedback_identity,
+          feedback_type: item.feedback_type || "无",
+          content: item.content || "无",
+          report_number: item.report_number,
+          report_name: item.report_name,
+          report_identity: item.report_identity,
+          state: item.state || "无",
+          punish_type: item.punish_type || "无",
+          result: item.result.join(";"),
           risk_level: riskLevelData ? riskLevelData.name : "无",
-          res: item.res,
-          remove_time: item.remove_time,
-          penalty_admin: item.penalty_admin || "无",
-          undo_admin: item.undo_admin || "无",
-          ignore_admin: item.ignore_admin || "无",
-          accept_admin: item.accept_admin || "无",
-          admin: item.admin || "无",
+          remove_time: item.remove_time || "无",
+          operator: item.operator || "无",
           remark: item.remark,
         };
         return params;
       });
       let nameList = [
+        "事件编号",
         "时间",
         "来源",
-        "用户ID",
-        "用户昵称",
-        "被举报用户所属公会ID",
-        "被举报用户所属公会昵称",
-        "被举报用户所属公会状态",
-        "被举报用户加入公会时间",
-        "被举报用户所属运营",
+        "被举报用户ID",
+        "被举报用户昵称",
+        "被举报用户身份",
         "举报类型",
         "举报说明",
         "举报用户ID",
         "举报用户昵称",
-        "举报用户所属公会ID",
-        "举报用户所属公会昵称",
-        "举报用户所属公会状态",
-        "举报用户所属运营",
+        "举报用户身份",
         "处理状态",
         "处罚类别",
-        "风险级别",
         "处罚结果",
+        "风险级别",
         "解除时间",
-        "处罚操作人",
-        "解除操作人",
-        "忽略操作人",
-        "受理操作人",
-        "修改证据人",
+        "审核人",
         "备注说明",
       ];
-      exportTableData(arr, nameList, "处罚举报记录");
+      let tableName = this.filterType === 'user' ? '用户/主播处罚举报记录':'公会处罚举报记录' 
+      exportTableData(arr, nameList, tableName);
     },
     // 销毁组件
     destoryComp() {
       this.isDestoryComp = false;
+    },
+    // 销毁组件
+    destoryEventComp() {
+      this.isEventListDestoryComp = false;
     },
     // 获取处罚类别
     async getPunishType(params) {
@@ -824,11 +836,18 @@ export default {
       });
     },
     // 查看记录
-    viewRecord(liveId) {
-      // this.isCharmDestoryComp = true;
+    viewRecord(report_event_id) {
+      this.isEventListDestoryComp = true;
       setTimeout(() => {
-        // this.$refs.charmComp.show(liveId);
+        this.$refs.eventListComp.load(report_event_id, this.filterType);
       }, 50);
+    },
+    // 查看详情
+    handleLook(params) {
+      setTimeout(() => {
+        params.type = this.filterType;
+        this.$refs.lookComp.load(params);
+      }, 100);
     },
   },
   created() {

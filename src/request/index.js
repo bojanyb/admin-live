@@ -469,7 +469,6 @@ const request = {
         customerServiceList: `${HTTPHEADER}/ScreenImgLog/customerServiceList`, // 处罚举报-客服列表
         getReviewer: `${HTTPHEADER}/moments/init`, // 处罚举报-获取审核人
 
-
         // 用户处罚 - 用户举报二合一
         UserPunishLog: `${HTTPHEADER}/UserPunishLog`, // 处罚-列表
         addUserPunish: `${HTTPHEADER}/UserPunishLog/add`, // 处罚 -新增
@@ -485,6 +484,13 @@ const request = {
 
         punishWordsList: `${HTTPHEADER}/Punish`, // 获取风控文案库列表
         updatePunishWords: `${HTTPHEADER}/Punish/update`, // 修改风控文案
+
+        NewUserPunishLog: `${HTTPHEADER}/NewPunishLog/getUserLogs`, // 获取举报用户记录
+        NewGuildPunishLog: `${HTTPHEADER}/NewPunishLog/getGuildLogs`, // 获取举报公会记录
+        getUserPunishDetail: `${HTTPHEADER}/UserPunishLog/getUserPunishDetail`, // 获取用户处罚相关详情
+        punishAgain: `${HTTPHEADER}/UserPunishLog/punishAgain`, // 处罚-复审处罚
+        getFeedbackGuildDetail: `${HTTPHEADER}/NewPunishLog/getFeedbackGuildDetail`, // 获取被举报公会信息
+        getReportGuildUserDetail: `${HTTPHEADER}/NewPunishLog/getReportGuildUserDetail`, // 查找举报公会的举报人的信息
     },
 
     // 心动速配

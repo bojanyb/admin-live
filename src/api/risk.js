@@ -199,3 +199,39 @@ export function updatePunishWords(data) {
     data
   })
 }
+
+// 获取用户处罚相关详情
+export function getUserPunishDetail(data) {
+  return request({
+    url: api.risk.getUserPunishDetail,
+    method: 'post',
+    data
+  })
+}
+
+// 处罚-复审处罚
+export function punishAgain(data) {
+  return request({
+    url: api.risk.punishAgain,
+    method: 'post',
+    data
+  })
+}
+
+// 获取被举报公会信息
+export function getFeedbackGuildDetail(data) {
+  return request({
+    url: api.risk.getFeedbackGuildDetail,
+    method: 'post',
+    data
+  })
+}
+
+// 查找举报公会的举报人的信息
+export function getReportGuildUserDetail(data) {
+  return request({
+    url: api.risk.getReportGuildUserDetail,
+    method: 'post',
+    data
+  })
+}
