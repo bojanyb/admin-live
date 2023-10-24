@@ -624,7 +624,16 @@ export default {
                 <div style="display: flex">
                   <div style="text-align: left;" title={data.name}>
                     <el-tag type={data.type}>
-                      {params.row.buyer_id ? params.row.buyer_id : "-"}
+                      {params.row.complaints_status ? (
+                        <span style="color:#ff4949;">
+                          {params.row.buyer_id ? params.row.buyer_id : "-"}
+                        </span>
+                      ) : (
+                        <span>
+                          {params.row.buyer_id ? params.row.buyer_id : "-"}
+                        </span>
+                      )}
+
                       <span>
                         （
                         {params.row.wx_merchant
@@ -645,33 +654,34 @@ export default {
                         >
                           <div>
                             {/* 微信 */}
-                            {
-                              params.row.channel==='微信' &&  <div>
+                            {params.row.channel === "微信" && (
                               <div>
-                                投诉类型:
-                                {params.row.complaints.problem_description}
+                                <div>
+                                  投诉类型:
+                                  {params.row.complaints.problem_description}
+                                </div>
+                                <div>
+                                  投诉详情:{" "}
+                                  {params.row.complaints.complaint_detail}
+                                </div>
                               </div>
-                              <div>
-                                投诉详情:{" "}
-                                {params.row.complaints.complaint_detail}
-                              </div>
-                            </div> 
-                            }
+                            )}
                             {/* 支付宝 */}
-                            {
-                              params.row.channel==='支付宝' && <div>
+                            {params.row.channel === "支付宝" && (
                               <div>
-                                投诉诉求:
-                                {params.row.complaints.leaf_category_name}
+                                <div>
+                                  投诉诉求:
+                                  {params.row.complaints.leaf_category_name}
+                                </div>
+                                <div>
+                                  投诉原因:
+                                  {params.row.complaints.complain_reason}
+                                </div>
+                                <div>
+                                  投诉内容:{params.row.complaints.content}
+                                </div>
                               </div>
-                              <div>
-                                投诉原因:{params.row.complaints.complain_reason}
-                              </div>
-                              <div>
-                                投诉内容:{params.row.complaints.content}
-                              </div>
-                            </div>
-                            }
+                            )}
                           </div>
                           <div slot="reference" style="color:#ff4949;">
                             {params.row.complaints_status}
