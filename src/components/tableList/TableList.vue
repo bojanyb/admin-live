@@ -111,16 +111,15 @@
             ref="imgComp"
           >
           </imgListComp>
-          <!-- 同时显示视频和图片 -->
-          <imgAndVideoListComp
+          <!-- 同时显示音视频和图片 -->
+          <mediaListComp
             v-if="item.isImgAndVideoList"
-            :imgSrcList="returnImgOrVideo(scope.row[item.prop])"
-            :videoSrcList="returnImgOrVideo(scope.row[item.propCopy])"
+            :imgSrcList="returnMedia(scope.row[item.prop])"
+            :videoSrcList="returnMedia(scope.row[item.propCopy])"
+            :audioSrcList="returnMedia(scope.row[item.audio])"
             :width="item.imgWidth"
-            :height="item.imgHeight"
-            ref="imgAndVideoComp"
-          >
-          </imgAndVideoListComp>
+            :height="item.imgHeight">
+          </mediaListComp>
           <div v-if="item.isImgOrText">
             <!-- 图片 -->
             <imgComp
@@ -192,9 +191,9 @@ import WeTableCustomColumn from "./WeTableCustomColumn.vue";
 // 引入api
 import request from "@/utils/request2";
 // 引入图片/svga组件
-import imgComp from "./imgComp.vue";
-import imgListComp from "./imgListComp.vue";
-import imgAndVideoListComp from "./imgAndVideoListComp.vue";
+  import imgComp from './imgComp.vue'
+  import imgListComp from './imgListComp.vue'
+  import mediaListComp from './mediaListComp.vue'
 // 引入视频组件
 import videoPlayerComp from "@/components/videoPlayer/index";
 // 获得元素的top位置
@@ -209,8 +208,8 @@ export default {
     WeTableCustomColumn,
     imgComp,
     imgListComp,
-    imgAndVideoListComp,
-    videoPlayerComp,
+    mediaListComp,
+    videoPlayerComp
   },
   props: {
     cfgs: {
@@ -285,18 +284,18 @@ export default {
         return [val];
       }
     },
-    // 图片和视频列表显示
-    returnImgOrVideo(val) {
-      let list = [];
-      if (val) {
-        // 首先将值转为数组
-        list = Array.isArray(val) ? val : val.split(",");
-      }
-      return list;
-    },
-    // 是否禁止开关
-    disabledFunc(item, index) {
-      if (item.disabledStatus) {
+      // 图片和音视频列表显示
+      returnMedia(val) {
+        let list = [];
+        if(val) {
+          // 首先将值转为数组
+          list = Array.isArray(val) ? val : val.split(',');
+        }
+        return list;
+      },
+      // 是否禁止开关
+      disabledFunc(item, index) {
+        if(item.disabledStatus) {
         return index === item.disabledIndex;
       }
       return item.disabled;

@@ -291,6 +291,7 @@ const request = {
         // v2
         list: `${HTTPHEADER}/Guild/guildListV2`, // 公会列表
         getGuildUsers: `${HTTPHEADER}/guild/guildUsers`, // 成员列表
+        guildLogByUserId: `${HTTPHEADER}/guild/guildLogByUserId`, // 获取公会成员的公会记录
         changePrivateChat: `${HTTPHEADER}/guild/changePrivateChat`, // 成员列表
         rmGuildUser: `${HTTPHEADER}/guild/rmGuildUser`, // 删除公会成员
         guildUserApply: `${HTTPHEADER}/guild/guildUserApply`, // 主播申请列表
@@ -503,7 +504,6 @@ const request = {
         customerServiceList: `${HTTPHEADER}/ScreenImgLog/customerServiceList`, // 处罚举报-客服列表
         getReviewer: `${HTTPHEADER}/moments/init`, // 处罚举报-获取审核人
 
-
         // 用户处罚 - 用户举报二合一
         UserPunishLog: `${HTTPHEADER}/UserPunishLog`, // 处罚-列表
         addUserPunish: `${HTTPHEADER}/UserPunishLog/add`, // 处罚 -新增
@@ -526,6 +526,13 @@ const request = {
         usersPunishList: `${HTTPHEADER}/UserPunishLog/getPunishTypeList`, //获取用户举报类型列表
         guildsPunishList: `${HTTPHEADER}/UserComplaint/init`, //获取公会举报类型列表
         guildOrUserInfo: `${HTTPHEADER}/BackendReport/searchObject`, //搜索用户或公会
+
+        NewUserPunishLog: `${HTTPHEADER}/NewPunishLog/getUserLogs`, // 获取举报用户记录
+        NewGuildPunishLog: `${HTTPHEADER}/NewPunishLog/getGuildLogs`, // 获取举报公会记录
+        getUserPunishDetail: `${HTTPHEADER}/UserPunishLog/getUserPunishDetail`, // 获取用户处罚相关详情
+        punishAgain: `${HTTPHEADER}/UserPunishLog/punishAgain`, // 处罚-复审处罚
+        getFeedbackGuildDetail: `${HTTPHEADER}/NewPunishLog/getFeedbackGuildDetail`, // 获取被举报公会信息
+        getReportGuildUserDetail: `${HTTPHEADER}/NewPunishLog/getReportGuildUserDetail`, // 查找举报公会的举报人的信息
     },
 
     // 心动速配

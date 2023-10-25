@@ -117,11 +117,14 @@ export default {
         {
           prop: "money",
           exportable: true,
-          export_format: (row) => {
-            return row.money;
-          },
-          label: "结算金额",
+          label: "应结算金额",
           render: (h, row) => <span>{row.money}元</span>,
+        },
+        {
+          prop: "settled_money",
+          exportable: true,
+          label: "已结算金额",
+          render: (h, row) => <span>{row.settled_money}元</span>,
         },
         { prop: "status_desc", exportable: true, label: "结算状态" },
         {
@@ -267,7 +270,7 @@ export default {
           request({
             url: REQUEST.finance.applyAudit,
             method: "post",
-            data: { id: row.id, status: isPass ? 30 : 20 },
+            data: { id: row.id, status: isPass ? 1 : 2 },
           })
         )
       );
@@ -321,7 +324,7 @@ export default {
             data: {
               id: row.id,
               status: isPass ? 1 : 2,
-              remark: isPass ? '' : this.invoiceAuditFailReason,
+              remark: isPass ? "" : this.invoiceAuditFailReason,
             },
           })
         )
