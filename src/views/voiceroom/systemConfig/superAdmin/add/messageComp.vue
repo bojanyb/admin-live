@@ -24,6 +24,9 @@
         <el-form-item label="序号" prop="sort">
           <el-input type="number" v-model="ruleForm.sort"></el-input>
         </el-form-item>
+        <el-form-item label="标题" prop="sort">
+          <el-input v-model="ruleForm.sort"></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
