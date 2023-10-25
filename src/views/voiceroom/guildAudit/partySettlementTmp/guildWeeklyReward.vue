@@ -46,8 +46,25 @@
           </el-select>
         </div>
         <div class="sunBox">
+          <span>房间类型</span>
+          <el-select v-model="form.room_type" placeholder="请选择">
+            <el-option
+              v-for="item in roomTypeList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
+
+        <div class="sunBox">
           <span>达标状态</span>
-          <el-select v-model="form.is_standard" placeholder="请选择" @change="change">
+          <el-select
+            v-model="form.is_standard"
+            placeholder="请选择"
+            @change="change"
+          >
             <el-option
               v-for="item in standardList"
               :key="item.value"
@@ -73,8 +90,17 @@
         </div>
         <div class="sunBox">
           <span>公会运营</span>
-          <el-select v-model="form.operator" placeholder="请选择公会运营" @change="change">
-              <el-option v-for="item in operatorList" :key="item.value" :label="item.name" :value="item.value"></el-option>
+          <el-select
+            v-model="form.operator"
+            placeholder="请选择公会运营"
+            @change="change"
+          >
+            <el-option
+              v-for="item in operatorList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </div>
         <div class="btnBox">
@@ -117,8 +143,14 @@
 <script>
 // 引入公会列表接口
 import { guildList } from "@/api/user";
+import { partyRoomTypes } from "@/api/house.js";
 // 引入api
-import { doSettlement, settlementLog, guildWeekListV2, adminUserList } from "@/api/videoRoom";
+import {
+  doSettlement,
+  settlementLog,
+  guildWeekListV2,
+  adminUserList,
+} from "@/api/videoRoom";
 // 引入菜单组件
 import SearchPanel from "@/components/SearchPanel/final.vue";
 // 引入列表组件
@@ -180,11 +212,11 @@ export default {
           minWidth: "100px",
           prop: "guild_name",
         },
-				{
-					label: '公会运营',
-					minWidth: '100px',
-					prop: 'operator_name'
-				},
+        {
+          label: "公会运营",
+          minWidth: "100px",
+          prop: "operator_name",
+        },
         {
           label: "公会长昵称",
           minWidth: "120px",
@@ -202,67 +234,106 @@ export default {
           },
         },
         {
-          label: (this.form.status === 5 || this.form.status === 6)?'未达标实际流水':'实际流水',
-          minWidth: "170px",
-          render: (h, params) => {
-            return h('div', [
-                h(
-                  "span",
-                  this.form.status === 2
-                    ? params.row.flow + "钻石"
-                    : params.row.flow + "钻石"
-                ),
-                h("i",
-                  {
-                    class: {
-                      "el-icon-question": true
-                    },
-                    style: {
-                      "margin-left": '4px',
-                      display: ((params.row.resettle !== undefined && params.row.resettle !== 1) || this.form.status === 1 || this.form.status === 3 || this.form.status === 4 || this.form.status === 5 || this.form.status === 6) ? "unset" : "none",
-                    },
-                    on: {
-                      click:()=>{
-                        if (this.form.status === 1 || this.form.status === 3 || this.form.status === 4) {
-                          this.handleLook(params.row, "dynamic")
-                        } else if (this.form.status === 5 || this.form.status === 6) {
-                          this.handleLook(params.row, "guildWeekWater")
-                        }
-                      }
-                    }
-                  },
-                ),
-            ])
-          }
+          label: "房间类型",
+          minWidth: "120px",
+          prop: "guild_owner_nickname",
         },
         {
-          label: (this.form.status === 5 || this.form.status === 6)?'未达标收礼流水':'收礼流水',
+          label:
+            this.form.status === 5 || this.form.status === 6
+              ? "未达标实际流水"
+              : "实际流水",
           minWidth: "170px",
           render: (h, params) => {
             return h("div", [
-                h("span", params.row.t_flow + "钻石"),
-                h("i",
-                  {
-                    class: {
-                      "el-icon-question": true
-                    },
-                    style: {
-                      "margin-left": "4px",
-                      display: ((params.row.resettle !== undefined && params.row.resettle !== 1) || this.form.status === 1 || this.form.status === 3 || this.form.status === 4 || this.form.status === 5 || this.form.status === 6) ? "unset" : "none",
-                    },
-                    on: {
-                      click:()=>{
-                        if (this.form.status === 1 || this.form.status === 3 || this.form.status === 4) {
-                          this.handleLook(params.row, "dynamic")
-                        } else if (this.form.status === 5 || this.form.status === 6) {
-                          this.handleLook(params.row, "guildWeekWater")
-                        }
-                      }
+              h(
+                "span",
+                this.form.status === 2
+                  ? params.row.flow + "钻石"
+                  : params.row.flow + "钻石"
+              ),
+              h("i", {
+                class: {
+                  "el-icon-question": true,
+                },
+                style: {
+                  "margin-left": "4px",
+                  display:
+                    (params.row.resettle !== undefined &&
+                      params.row.resettle !== 1) ||
+                    this.form.status === 1 ||
+                    this.form.status === 3 ||
+                    this.form.status === 4 ||
+                    this.form.status === 5 ||
+                    this.form.status === 6
+                      ? "unset"
+                      : "none",
+                },
+                on: {
+                  click: () => {
+                    if (
+                      this.form.status === 1 ||
+                      this.form.status === 3 ||
+                      this.form.status === 4
+                    ) {
+                      this.handleLook(params.row, "dynamic");
+                    } else if (
+                      this.form.status === 5 ||
+                      this.form.status === 6
+                    ) {
+                      this.handleLook(params.row, "guildWeekWater");
                     }
                   },
-                ),
-            ])
-          }
+                },
+              }),
+            ]);
+          },
+        },
+        {
+          label:
+            this.form.status === 5 || this.form.status === 6
+              ? "未达标收礼流水"
+              : "收礼流水",
+          minWidth: "170px",
+          render: (h, params) => {
+            return h("div", [
+              h("span", params.row.t_flow + "钻石"),
+              h("i", {
+                class: {
+                  "el-icon-question": true,
+                },
+                style: {
+                  "margin-left": "4px",
+                  display:
+                    (params.row.resettle !== undefined &&
+                      params.row.resettle !== 1) ||
+                    this.form.status === 1 ||
+                    this.form.status === 3 ||
+                    this.form.status === 4 ||
+                    this.form.status === 5 ||
+                    this.form.status === 6
+                      ? "unset"
+                      : "none",
+                },
+                on: {
+                  click: () => {
+                    if (
+                      this.form.status === 1 ||
+                      this.form.status === 3 ||
+                      this.form.status === 4
+                    ) {
+                      this.handleLook(params.row, "dynamic");
+                    } else if (
+                      this.form.status === 5 ||
+                      this.form.status === 6
+                    ) {
+                      this.handleLook(params.row, "guildWeekWater");
+                    }
+                  },
+                },
+              }),
+            ]);
+          },
         },
         {
           label: "周奖励金额",
@@ -295,11 +366,11 @@ export default {
               name = "未结算";
             } else if (this.form.status === 3) {
               name = "已结算";
-            } else if (this.form.status === 4){
+            } else if (this.form.status === 4) {
               name = "已忽略";
-            } else if (this.form.status === 5){
+            } else if (this.form.status === 5) {
               name = "未达标";
-            } else if (this.form.status === 6){
+            } else if (this.form.status === 6) {
               name = "未达标结算";
             }
             return h("span", name);
@@ -349,7 +420,9 @@ export default {
                 "el-button",
                 {
                   props: { type: "danger" },
-                  style: { display: +params.row.resettle !== 1 ? "unset" : "none" },
+                  style: {
+                    display: +params.row.resettle !== 1 ? "unset" : "none",
+                  },
                   on: {
                     click: () => {
                       this.rebateFunc(params.row.id, 2);
@@ -405,7 +478,10 @@ export default {
                 {
                   props: { type: "primary" },
                   style: {
-                    display: (+params.row.resettle !== 1 && this.form.status === 5) ? "unset" : "none",
+                    display:
+                      +params.row.resettle !== 1 && this.form.status === 5
+                        ? "unset"
+                        : "none",
                   },
                   on: {
                     click: () => {
@@ -436,7 +512,11 @@ export default {
       ];
 
       let columns = [];
-      if (this.form.status === 1 || this.form.status === 3 || this.form.status === 4) {
+      if (
+        this.form.status === 1 ||
+        this.form.status === 3 ||
+        this.form.status === 4
+      ) {
         columns = [...arr, ...arr1];
       } else if (this.form.status === 5 || this.form.status === 6) {
         columns = [...arr, ...arr2];
@@ -448,7 +528,7 @@ export default {
         vm: this,
         url: REQUEST.guild[name],
         search: {
-          sizes: [10, 30, 50, 100, 300]
+          sizes: [10, 30, 50, 100, 300],
         },
         isShowCheckbox: this.form.status === 1,
         isShowIndex: true,
@@ -459,21 +539,19 @@ export default {
   data() {
     return {
       guildList: [], // 公会列表
-      closeStatusList: [
-        ...MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST
-      ], // 结算状态
+      closeStatusList: [...MAPDATA.GUILDCLOSEANACCOUNTSTATUSLIST], // 结算状态
       standardList: [
         {
-          name: '全部',
-          value: null
+          name: "全部",
+          value: null,
         },
         {
-          name: '已达标',
-          value: 1
+          name: "已达标",
+          value: 1,
         },
         {
-          name: '未达标',
-          value: 0
+          name: "未达标",
+          value: 0,
         },
       ],
       form: {
@@ -484,7 +562,8 @@ export default {
         time: [],
         start_time: null,
         end_time: null,
-        is_standard: null
+        is_standard: null,
+        room_type:null,
       },
       selectList: [], // 选中
       ruleForm: {},
@@ -501,7 +580,8 @@ export default {
       ],
       operatorList: [],
       isBatchPassLoading: false,
-      isBatchIgnoreLoading: false
+      isBatchIgnoreLoading: false,
+      roomTypeList: [],
     };
   },
   watch: {
@@ -515,6 +595,7 @@ export default {
     },
   },
   created() {
+    this.getGenreList();
     this.getAdminUserList();
   },
   methods: {
@@ -533,15 +614,16 @@ export default {
         type: 2,
         status: s.status,
         guild_type: 2,
-        is_standard: s.is_standard
+        is_standard: s.is_standard,
+        room_type: s.room_type
       };
-			if (this.form.status === 1) {
-				data.status = 0
-			} else if (this.form.status === 3) {
-				data.status = 1
-			} else if (this.form.status === 4) {
-				data.status = 2
-			}
+      if (this.form.status === 1) {
+        data.status = 0;
+      } else if (this.form.status === 3) {
+        data.status = 1;
+      } else if (this.form.status === 4) {
+        data.status = 2;
+      }
       // if (this.form.status === 1) {
       //   data.status = 0;
       //   data.is_standard = 1;
@@ -564,6 +646,29 @@ export default {
       }
       return data;
     },
+    // 获取房间类型
+    async getGenreList() {
+      const response = await partyRoomTypes({ belong: 2 });
+      if (response.code == 2000) {
+        const tempArr = Array.from(
+          Array.isArray(response.data.list) ? response.data.list : []
+        );
+        this.roomTypeList =
+          tempArr.reduce((prev, curr) => {
+            if(curr.name === '拍拍' || curr.name === '相守') return prev
+            prev.push({
+              name: curr.name,
+              value: curr.id,
+            });
+            return prev;
+          }, []) || [];
+
+        this.roomTypeList.unshift({
+          name: "全部",
+          value: "",
+        });
+      }
+    },
     // 刷新列表
     getList() {
       this.$refs.tableList.getData();
@@ -577,6 +682,7 @@ export default {
         time: [],
         start_time: null,
         end_time: null,
+        room_type: null,
       };
       this.getList();
     },
@@ -612,18 +718,26 @@ export default {
 
           const loading = this.$loading({
             lock: true,
-            text: 'Loading',
-            spinner: 'el-icon-loading',
-            background: 'rgba(0, 0, 0, 0.7)'
-          })
+            text: "Loading",
+            spinner: "el-icon-loading",
+            background: "rgba(0, 0, 0, 0.7)",
+          });
 
-          status + "" === "1" ? this.isBatchPassLoading = true : (status + "" === "2" ? this.isBatchIgnoreLoading = true : "");
+          status + "" === "1"
+            ? (this.isBatchPassLoading = true)
+            : status + "" === "2"
+            ? (this.isBatchIgnoreLoading = true)
+            : "";
           let res = await doSettlement({ ids, type: 2, status, guild_type: 2 });
           try {
             if (res.code === 2000) {
               this.$success("批量操作成功");
             }
-            status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
+            status + "" === "1"
+              ? (this.isBatchPassLoading = false)
+              : status + "" === "2"
+              ? (this.isBatchIgnoreLoading = false)
+              : "";
             this.getList();
             loading.close();
           } catch (error) {
@@ -632,7 +746,11 @@ export default {
           }
         })
         .catch(() => {
-          status + "" === "1" ? this.isBatchPassLoading = false : (status + "" === "2" ? this.isBatchIgnoreLoading = false : "");
+          status + "" === "1"
+            ? (this.isBatchPassLoading = false)
+            : status + "" === "2"
+            ? (this.isBatchIgnoreLoading = false)
+            : "";
         });
     },
     // 单个返点
@@ -669,7 +787,6 @@ export default {
         ruleForm.total_flow = ruleForm.total_flow;
         ruleForm.total_settlement = ruleForm.total_settlement;
       }
-      console.log("ruleForm:", ruleForm);
       let timer = setTimeout(() => {
         this.$set(this, "ruleForm", ruleForm);
         clearTimeout(timer);
@@ -735,11 +852,11 @@ export default {
           status_name = "未结算";
         } else if (this.form.status === 3) {
           status_name = "已结算";
-        } else if (this.form.status === 4){
+        } else if (this.form.status === 4) {
           status_name = "已忽略";
-        } else if (this.form.status === 5){
+        } else if (this.form.status === 5) {
           status_name = "未达标";
-        } else if (this.form.status === 6){
+        } else if (this.form.status === 6) {
           status_name = "未达标结算";
         }
         let params = {
@@ -778,23 +895,24 @@ export default {
       ];
       exportTableData(arr, nameList, "公会周奖励结算");
     },
-     // 获取公会运营
-     async getAdminUserList() {
-       const response = await adminUserList()
-       if(response.code === 2000) {
-         const tempArr =  Array.from(
-           Array.isArray(response.data.list) ? response.data.list : []
-       )
-       this.operatorList = tempArr.reduce((prev, curr) => {
-         prev.push({
-             name: curr.username,
-             value: curr.id
-         })
-         return prev
-       }, []) || []
-       this.isAuth = response.data.is_auth;
-       }
-     },
+    // 获取公会运营
+    async getAdminUserList() {
+      const response = await adminUserList();
+      if (response.code === 2000) {
+        const tempArr = Array.from(
+          Array.isArray(response.data.list) ? response.data.list : []
+        );
+        this.operatorList =
+          tempArr.reduce((prev, curr) => {
+            prev.push({
+              name: curr.username,
+              value: curr.id,
+            });
+            return prev;
+          }, []) || [];
+        this.isAuth = response.data.is_auth;
+      }
+    },
   },
 };
 </script>
