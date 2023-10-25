@@ -376,8 +376,10 @@ const request = {
         getAnchorCash: `${HTTPHEADER}/cash/getAnchorCash`, // 对公结算记录（主播）
         getGuildCashBill: `${HTTPHEADER}/guildCash/getGuildCashBill`, // 对公结算账单明细
         applyAudit: `${HTTPHEADER}/guildCash/applyAudit`, // 对公结算申请审核
-        settlementAudit: `${HTTPHEADER}/guildCash/settlementAudit`, // 对公结算银行结算审核
+        applyConfirm: `${HTTPHEADER}/guildCash/applyConfirm`, // 对公结算出款审批
+        settlementAudit: `${HTTPHEADER}/guildCash/settlementAudit`, // 对公结算银行发放94%确认
         invoiceAudit: `${HTTPHEADER}/guildCash/invoiceAudit`, // 对公结算发票审核
+        applyComplete: `${HTTPHEADER}/guildCash/applyComplete`, // 对公结算银行发放6%确认
         doCash: `${HTTPHEADER}/guildCash/doCash`, // 对公结算审核操作（主播）
         getGuildCashBank: `${HTTPHEADER}/guildCash/getGuildCashBank`, // 对公资质管理列表
         bankAudit: `${HTTPHEADER}/guildCash/bankAudit`, // 对公资质审核
@@ -518,6 +520,13 @@ const request = {
 
         punishWordsList: `${HTTPHEADER}/Punish`, // 获取风控文案库列表
         updatePunishWords: `${HTTPHEADER}/Punish/update`, // 修改风控文案
+        getReportingGuildList: `${HTTPHEADER}/BackendReport/getGuildList`, // 获取举报公会记录
+        getReportingUserList: `${HTTPHEADER}/BackendReport/getUserList`, // 获取举报用户记录
+        reportGuildOrUser: `${HTTPHEADER}/BackendReport/report`, // 提交举报公会/用户
+
+        usersPunishList: `${HTTPHEADER}/UserPunishLog/getPunishTypeList`, //获取用户举报类型列表
+        guildsPunishList: `${HTTPHEADER}/UserComplaint/init`, //获取公会举报类型列表
+        guildOrUserInfo: `${HTTPHEADER}/BackendReport/searchObject`, //搜索用户或公会
     },
 
     // 心动速配
