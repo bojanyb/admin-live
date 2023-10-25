@@ -267,7 +267,7 @@ export default {
           request({
             url: REQUEST.finance.applyAudit,
             method: "post",
-            data: { id: row.id, status: isPass ? 30 : 20 },
+            data: { id: row.id, status: isPass ? 1 : 2 },
           })
         )
       );
@@ -321,7 +321,7 @@ export default {
             data: {
               id: row.id,
               status: isPass ? 1 : 2,
-              remark: isPass ? '' : this.invoiceAuditFailReason,
+              remark: isPass ? "" : this.invoiceAuditFailReason,
             },
           })
         )
