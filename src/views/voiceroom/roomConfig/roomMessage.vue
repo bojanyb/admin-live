@@ -265,7 +265,7 @@ export default {
             prop: "last_week_flow",
             sortable: "custom",
             render: (h, params) => {
-              return h("div", params.row.last_week_flow + "钻石" );
+              return h("div", params.row.last_week_flow + "钻石");
             },
           },
           // {
@@ -363,6 +363,15 @@ export default {
         // party_status: 2,
         // admin_recommend_status: -1
       };
+      this.$refs.tableList.search.sort = "";
+      this.$refs.tableList.$el
+        .querySelectorAll(".is-sortable")
+        .forEach((item) => {
+          // 移除table表头中的排序样式descending和ascending
+          item.classList.remove("descending");
+          item.classList.remove("ascending");
+        });
+
       this.getList();
     },
     // 查询
@@ -441,7 +450,7 @@ export default {
         this.$warning("请至少选择一条数据");
         return false;
       }
-      this.$confirm("你确定要批量关停此批数据吗？", "操作提醒", {
+      this.$confirm("确定批量关播当前选中的房间吗？", "提示", {
         type: "warning",
         confirmButtonText: "确定",
         cancelButtonText: "取消",
