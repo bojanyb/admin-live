@@ -228,7 +228,7 @@ export default {
         summary_data.total_count
       }}，结算总喵粮：{{ summary_data.total_gain }}；违规扣除：{{
         summary_data.total_deduct_money
-      }}；结算总金额：{{ summary_data.total_money }}元
+      }}；应结算总金额：{{ summary_data.total_money }}元
     </div>
   </div>
 </template>
