@@ -137,32 +137,40 @@ export default {
           ),
         },
         {
-          prop: "file_url",
+          prop: "",
           minWidth: "200px",
           showOverflowTooltip: true,
           exportable: true,
           export_format: (row) => {
-            return row.file_url || row.courier_number;
+            return row.invoice_type === 1
+              ? row.file_url
+              : row.invoice_type === 2
+              ? `${row.courier_company}：${row.courier_number}`
+              : undefined;
           },
           label: "发票",
           render: (h, row) => {
             if (row.invoice_type === 1 && row.file_url) {
               // const test = "https://photo.aiyi.live/3e22531ef33448adeb74aea70191e8ba.pdf";
               return (
-                <el-button type="text" onClick={() => window.open(row.file_url)}>
-                  点击查看电子发票
-                </el-button>
+                <div>
+                  电子发票：
+                  <el-button type="text" onClick={() => window.open(row.file_url)}>
+                    点击查看
+                  </el-button>
+                </div>
               );
             } else if (row.courier_number) {
               return (
-                <span
+                <div
                   v-clipboard={{
                     text: row.courier_number,
                     onSuccess: () => this.$notify.success({ message: "复制成功" }),
                   }}
                 >
-                  快递单号：{row.courier_number}
-                </span>
+                  <p>快递公司：{row.courier_company}</p>
+                  <p>快递单号：{row.courier_number}</p>
+                </div>
               );
             }
             return null;
