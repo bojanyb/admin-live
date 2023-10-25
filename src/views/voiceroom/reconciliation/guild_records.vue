@@ -117,11 +117,14 @@ export default {
         {
           prop: "money",
           exportable: true,
-          export_format: (row) => {
-            return row.money;
-          },
-          label: "结算金额",
+          label: "应结算金额",
           render: (h, row) => <span>{row.money}元</span>,
+        },
+        {
+          prop: "settled_money",
+          exportable: true,
+          label: "已结算金额",
+          render: (h, row) => <span>{row.settled_money}元</span>,
         },
         { prop: "status_desc", exportable: true, label: "结算状态" },
         {
