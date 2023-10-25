@@ -31,6 +31,9 @@
             <div slot="tip" class="el-upload__tip">只能上传jpg/png/mp4文件</div>
           </el-upload>
         </el-form-item>
+        <el-form-item label="备注说明" prop="remark">
+          <el-input v-model="ruleForm.remark" type="textarea" placeholder="请输入备注内容，此内容用户不会看到，建议20个字以内。" :rows="4" maxlength="20" show-word-limit></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -54,12 +57,17 @@ export default {
       dialogVisible: false,
       fileList: [],
       form: {},
-      ruleForm: {},
+      ruleForm: {
+        remark: ''
+      },
       rules: {
         img: [
           { required: true, message: "请输入违规证据", trigger: "blur" },
           // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
+        remark: [
+          { required: false, message: '请输入备注说明', trigger: 'blur' }
+        ]
       },
     };
   },
@@ -96,6 +104,7 @@ export default {
     loadParams(row) {
       this.dialogVisible = true;
       this.form = row;
+      this.ruleForm.remark = '';
 
       const parsePath = (path) => {
         const name = path.split(".live/")[1];
@@ -123,7 +132,9 @@ export default {
             return;
           }
 
-          let params = {};
+          let params = {
+            remark: this.ruleForm.remark
+          };
           if (this.form.id_array.length > 1) {
             params.ids = this.form.id_array;
           } else {
