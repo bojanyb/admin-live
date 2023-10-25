@@ -19,6 +19,15 @@ const guildAuditRouter = {
 				noCache: true
 			}
 		},
+    {
+			path: 'guild-apply',
+			component: () => import('@/views/voiceroom/guildAudit/components/guild-list-applyComp'),
+			name: 'guild-apply',
+			meta: {
+				title: '公会申请',
+				noCache: true
+			}
+		},
 		{
 			path: 'guild-apply-list',
 			component: () => import('@/views/voiceroom/guildAudit/guild-apply-list'),
@@ -43,6 +52,15 @@ const guildAuditRouter = {
 			name: 'guildRoom',
 			meta: {
 				title: '公会房间',
+				noCache: true
+			}
+		},
+		{
+			path: 'guildApply',
+			component: () => import('@/views/voiceroom/guildAudit/guildApplication/components/guild-apply'),
+			name: 'guildApply',
+			meta: {
+				title: '房间申请',
 				noCache: true
 			}
 		},
