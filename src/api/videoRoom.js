@@ -1401,6 +1401,15 @@ export function settlementLog(data) {
 }
 
 // 公会批量结算
+export function settlementLogNew(data) {
+  return request({
+    url: api.guild.settlementLogNew,
+    method: 'post',
+    data
+  })
+}
+
+// 公会批量结算
 export function guildWeekListV2(data) {
   return request({
     url: api.guild.guildWeekListV2,

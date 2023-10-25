@@ -273,6 +273,7 @@ const request = {
         getUserComplainList: `${HTTPHEADER}/UserComplaint/index`, // 公会投诉列表（风险客服）
         handleUserComplain: `${HTTPHEADER}/UserComplaint/handle`, // 公会投诉处理（风险客服）
         settlementLog: `${HTTPHEADER}/Guild/settlementLog`, // 返点操作日志
+        settlementLogNew: `${HTTPHEADER}/Guild/settlementLogWeekV2`, // 返点操作日志新
         newGuildApplyList: `${HTTPHEADER}/guild/newGuildApplyList`, // 创建工会申请列表
         newGuildApplyCheck: `${HTTPHEADER}/guild/newGuildApplyCheck`, // 创建工会审核已联系或者驳回
         bindRoom: `${HTTPHEADER}/guild/bindRoom`, // 绑定工会厅

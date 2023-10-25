@@ -12,6 +12,8 @@ import menuComp from '@/components/menuComp/index.vue'
 import guildWeeklyTurnover from './partySettlementTmp/guildWeeklyTurnover.vue'
 // 引入公会评级奖励组件
 import guildWeeklyReward from './partySettlementTmp/guildWeeklyReward.vue'
+// 引入公会评级奖励组件新
+import guildWeeklyRewardNew from './partySettlementTmp/guildWeeklyRewardNew.vue'
 // 引入公会流水结算记录组件
 import guildMonthWater from './guildRebates/guildMonthWater.vue'
 // 引入24小时房间奖励
@@ -24,6 +26,7 @@ export default {
 	components: {
 		guildWeeklyTurnover,
     guildWeeklyReward,
+    guildWeeklyRewardNew,
 		guildMonthWater,
 		award,
 		menuComp,
@@ -40,16 +43,19 @@ export default {
 				case '1': // 派对公会类型周奖励
 					compText = "guildWeeklyReward"
 					break;
-				case '2': // 24小时房间奖励
+        case '2': // 派对公会类型周奖励新
+					compText = "guildWeeklyRewardNew"
+					break;          
+				case '3': // 24小时房间奖励
 					compText = "award"
 					break;
-				case '3': // 月奖励
+				case '4': // 月奖励
 					compText = "guildMonthWater"
 					break;
-				case '4': // 拍一拍房间次数结算
+				case '5': // 拍一拍房间次数结算
 					compText = "clapReward"
 					break;
-				case '5': // 拍一拍房间周奖励结算
+				case '6': // 拍一拍房间周奖励结算
 					compText = "clapWeekReward"
 					break;
 				default:
@@ -65,7 +71,10 @@ export default {
 					name: '派对公会周流水奖励结算'
 				},
 				{
-					name: '派对公会类型周奖励'
+					name: '派对公会类型周奖励(旧)'
+				},
+        {
+					name: '派对公会类型周奖励(新)'
 				},
 				{
 					name: '派对公会24小时房间奖励结算'
