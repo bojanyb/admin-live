@@ -623,28 +623,7 @@ export default {
               return data && params.row.buyer_id ? (
                 <div style="display: flex">
                   <div style="text-align: left;" title={data.name}>
-                    <el-tag type={data.type}>
-                      {params.row.complaints_status ? (
-                        <span style="color:#ff4949;">
-                          {params.row.buyer_id ? params.row.buyer_id : "-"}
-                        </span>
-                      ) : (
-                        <span>
-                          {params.row.buyer_id ? params.row.buyer_id : "-"}
-                        </span>
-                      )}
-
-                      <span>
-                        （
-                        {params.row.wx_merchant
-                          ? params.row.wx_merchant
-                          : params.row.ali_merchant
-                          ? params.row.ali_merchant
-                          : "-"}
-                        ）
-                      </span>
-                    </el-tag>
-                    {params.row && params.row.complaints_status && (
+                    {params.row && params.row.complaint_id > 0 && (
                       <span>
                         <el-popover
                           placement="top-start"
@@ -658,11 +637,11 @@ export default {
                               <div>
                                 <div>
                                   投诉类型:
-                                  {params.row.complaints.problem_description}
+                                  {params.row.complaint_description}
                                 </div>
                                 <div>
                                   投诉详情:{" "}
-                                  {params.row.complaints.complaint_detail}
+                                  {params.row.complaint_detail}
                                 </div>
                               </div>
                             )}
@@ -671,20 +650,47 @@ export default {
                               <div>
                                 <div>
                                   投诉诉求:
-                                  {params.row.complaints.leaf_category_name}
+                                  {params.row.complaint_require}
                                 </div>
                                 <div>
                                   投诉原因:
-                                  {params.row.complaints.complain_reason}
+                                  {params.row.complaint_description}
                                 </div>
                                 <div>
-                                  投诉内容:{params.row.complaints.content}
+                                  投诉内容:{params.row.complaint_detail}
                                 </div>
                               </div>
                             )}
                           </div>
-                          <div slot="reference" style="color:#ff4949;">
-                            {params.row.complaints_status}
+                          <div slot="reference">
+                            <el-tag type={data.type}>
+                              {params.row.complaint_id > 0 ? (
+                                <span style="color:#ff4949;">
+                                  {params.row.buyer_id
+                                    ? params.row.buyer_id
+                                    : "-"}
+                                </span>
+                              ) : (
+                                <span>
+                                  {params.row.buyer_id
+                                    ? params.row.buyer_id
+                                    : "-"}
+                                </span>
+                              )}
+
+                              <span>
+                                （
+                                {params.row.wx_merchant
+                                  ? params.row.wx_merchant
+                                  : params.row.ali_merchant
+                                  ? params.row.ali_merchant
+                                  : "-"}
+                                ）
+                              </span>
+                            </el-tag>
+                            <span style="color:#ff4949;">
+                              {params.row.complaint_status_desc}
+                            </span>
                           </div>
                         </el-popover>
                       </span>
