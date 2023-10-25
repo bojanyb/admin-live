@@ -162,15 +162,31 @@ export default {
           label: "注册设备",
           placeholder: "请输入注册设备",
         },
+        // {
+        //   name: "user_rank",
+        //   type: "select",
+        //   value: "",
+        //   keyName: "value",
+        //   optionLabel: "name",
+        //   label: "用户等级",
+        //   placeholder: "请选择",
+        //   options: MAPDATA.USERRANKLIST,
+        // },
         {
-          name: "user_rank",
-          type: "select",
+          name: "user_rank_start",
+          type: "validateInput",
           value: "",
-          keyName: "value",
-          optionLabel: "name",
+          isNum: true,
           label: "用户等级",
-          placeholder: "请选择",
-          options: MAPDATA.USERRANKLIST,
+          placeholder: "请输入用户等级",
+        },
+        {
+          name: "user_rank_end",
+          type: "validateInput",
+          value: "",
+          isNum: true,
+          label: "-",
+          placeholder: "请输入用户等级",
         },
         // {
         // 	name: 'live_rank',
@@ -522,11 +538,11 @@ export default {
         ip: s.ip,
         phone: s.phone,
         reg_device_id: s.reg_device_id,
-        start_time: s.start_time
-          ? Math.floor(s.start_time / 1000)
-          : "",
+        start_time: s.start_time ? Math.floor(s.start_time / 1000) : "",
         end_time: s.end_time ? Math.floor(s.end_time / 1000) : "",
         user_rank: s.user_rank,
+        user_rank_start: s.user_rank_start,
+        user_rank_end: s.user_rank_end,
         live_rank: s.live_rank,
         register_type: s.register_type,
       };
@@ -557,6 +573,23 @@ export default {
     },
     // 查询
     onSearch() {
+      const { user_rank_start, user_rank_end } = this.searchParams;
+
+      if (
+        (user_rank_start && !user_rank_end) ||
+        (!user_rank_start && user_rank_end)
+      ) {
+        return this.$message.error("用户等级不能只选择一个值");
+      }
+
+      if (
+        ![user_rank_start, user_rank_end].every(
+          (val) => val === undefined || !isNaN(Number(val))
+        )
+      ) {
+        return this.$message.error("用户等级值必须为数字");
+      }
+
       this.getList();
     },
     // 编辑
@@ -646,7 +679,7 @@ export default {
     },
     // 查看渠道内容
     viewChannelFunc(row) {
-      if(isEmpty(row.third)) return;
+      if (isEmpty(row.third)) return;
       this.isDestoryComp = true;
       setTimeout(() => {
         this.$refs.channelInfoComp.loadParams(row);
@@ -662,8 +695,8 @@ export default {
     ).getTime();
 
     this.searchParams.dateTimeParams = [start, end];
-    this.setDateTime([start, end])
-  }
+    this.setDateTime([start, end]);
+  },
 };
 </script>
 <style>
