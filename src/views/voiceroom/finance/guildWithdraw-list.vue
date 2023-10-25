@@ -627,7 +627,7 @@ export default {
                       <span>
                         <el-popover
                           placement="top-start"
-                          title="标题"
+                          title="投诉详情"
                           width="200"
                           trigger="hover"
                         >
