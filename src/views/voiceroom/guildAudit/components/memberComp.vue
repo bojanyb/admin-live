@@ -16,9 +16,12 @@
       class="downFileSearchPop"
       title="公会记录"
       width="50%"
-      :visible.sync="showGuildRecords"
+      :visible.sync="isGuildRecordsVisible"
     >
-      <tableList :cfgs="cfgs1" ref="tableList2"></tableList>
+      <tableList
+        :cfgs="tableConfigurations"
+        ref="guildRecordsTable"
+      ></tableList>
     </el-dialog>
   </div>
 </template>
@@ -42,7 +45,7 @@ import { timeFormat } from "@/utils/common.js";
 export default {
   data() {
     return {
-      showGuildRecords: false,
+      isGuildRecordsVisible: false,
     };
   },
   components: {
@@ -245,31 +248,27 @@ export default {
         columns: this.permissionArr.includes("Guild@guildUsers") ? arr : [],
       };
     },
-    cfgs1() {
+    tableConfigurations() {
       return {
         vm: this,
-        url: REQUEST.guild.getGuildUsers,
+        url: REQUEST.guild.guildLogByUserId,
         columns: [
           {
-            label: "文件名称",
+            label: "操作时间",
             render: (h, params) => {
-              return h("span", params.row.file_name || "无");
+              return h("span", params.row.create_time || "无");
             },
           },
           {
-            label: "状态",
+            label: "操作类型",
             render: (h, params) => {
-              let stateName = this.fileStateList.find((item) => { return item.state == params.row.export_status })
-              return h("span", stateName.name || "无");
+              return h("span", params.row.type || "无");
             },
           },
           {
-            label: "下载",
-            fixed: "right",
+            label: "公会",
             render: (h, params) => {
-              return h("div", [
-                h("el-button", { props: { type: "primary" }, style: { display: params.row.export_url !== '' ? 'unset' : 'none' }, on: { click: () => { this.downFile(params.row); } } }, "下载"),
-              ]);
+              return h("span", params.row.guild || "无");
             },
           },
         ],
@@ -280,6 +279,10 @@ export default {
     // 刷新列表
     getList() {
       this.$refs.tableList.getData();
+    },
+    // 刷新公会记录
+    getGuildRecordsTable() {
+      this.$refs.guildRecordsTable.getData();
     },
     // 配置参数
     beforeSearch(params) {
@@ -363,7 +366,8 @@ export default {
     },
     // 打开公会记录
     openGuildRecordDetails() {
-      this.showGuildRecords = true;
+      this.isGuildRecordsVisible = true;
+      this.getGuildRecordsTable();
     },
   },
 };
