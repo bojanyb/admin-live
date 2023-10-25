@@ -46,6 +46,19 @@
           </el-select>
         </div>
         <div class="sunBox">
+          <span>房间类型</span>
+          <el-select v-model="form.room_type" placeholder="请选择">
+            <el-option
+              v-for="item in roomTypeList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
+
+        <div class="sunBox">
           <span>达标状态</span>
           <el-select
             v-model="form.is_standard"
@@ -134,7 +147,7 @@ import { partyRoomTypes } from "@/api/house.js";
 // 引入api
 import {
   doSettlement,
-  settlementLog,
+  settlementLogNew,
   guildWeekListV2,
   adminUserList,
 } from "@/api/videoRoom";
@@ -165,7 +178,7 @@ export default {
   },
   computed: {
     cfgs() {
-      let name = this.form.status === 2 ? "guildWeekListV2" : "settlementLog";
+      let name = this.form.status === 2 ? "guildWeekListV2" : "settlementLogNew";
       let arr = [
         {
           label: "时间",
@@ -219,6 +232,11 @@ export default {
             });
             return h("span", data ? data.name : "无");
           },
+        },
+        {
+          label: "房间类型",
+          minWidth: "120px",
+          prop: "room_type_name",
         },
         {
           label:
@@ -545,6 +563,7 @@ export default {
         start_time: null,
         end_time: null,
         is_standard: null,
+        room_type:null,
       },
       selectList: [], // 选中
       ruleForm: {},
@@ -576,6 +595,7 @@ export default {
     },
   },
   created() {
+    this.getGenreList();
     this.getAdminUserList();
   },
   methods: {
@@ -595,6 +615,7 @@ export default {
         status: s.status,
         guild_type: 2,
         is_standard: s.is_standard,
+        room_type: s.room_type
       };
       if (this.form.status === 1) {
         data.status = 0;
@@ -625,6 +646,29 @@ export default {
       }
       return data;
     },
+    // 获取房间类型
+    async getGenreList() {
+      const response = await partyRoomTypes({ belong: 2 });
+      if (response.code == 2000) {
+        const tempArr = Array.from(
+          Array.isArray(response.data.list) ? response.data.list : []
+        );
+        this.roomTypeList =
+          tempArr.reduce((prev, curr) => {
+            if(curr.name === '拍拍' || curr.name === '相守') return prev
+            prev.push({
+              name: curr.name,
+              value: curr.id,
+            });
+            return prev;
+          }, []) || [];
+
+        this.roomTypeList.unshift({
+          name: "全部",
+          value: "",
+        });
+      }
+    },
     // 刷新列表
     getList() {
       this.$refs.tableList.getData();
@@ -638,6 +682,7 @@ export default {
         time: [],
         start_time: null,
         end_time: null,
+        room_type: null,
       };
       this.getList();
     },
@@ -777,7 +822,7 @@ export default {
       if (this.form.status === 2) {
         res = await guildWeekListV2(s);
       } else {
-        res = await settlementLog(s);
+        res = await settlementLogNew(s);
       }
       let arr = JSON.parse(JSON.stringify(res.data.list));
       if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
