@@ -117,11 +117,11 @@ export default {
             prop: "link",
           },
           {
-            label: "关联房间",
-            prop: "room_number",
+            label: "关联用户",
+            prop: "user_name",
             width: "150px",
             render: (h, params) => {
-              return h('span', params.row.room_number ? params.row.room_number : '--')
+              return h('span', params.row.user_name ? params.row.user_name : '--')
             }
           },
           {
