@@ -460,7 +460,7 @@ export default {
     >
       <div class="action-btns">
         <el-button type="primary" @click="applyConfirm(true, showApplyConfirmDialog)"
-          >确认出款</el-button
+          >确认</el-button
         >
       </div>
     </el-dialog>
