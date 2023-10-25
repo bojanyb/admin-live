@@ -57,7 +57,9 @@ export default {
       dialogVisible: false,
       fileList: [],
       form: {},
-      ruleForm: {},
+      ruleForm: {
+        remark: ''
+      },
       rules: {
         img: [
           { required: true, message: "请输入违规证据", trigger: "blur" },
@@ -102,6 +104,7 @@ export default {
     loadParams(row) {
       this.dialogVisible = true;
       this.form = row;
+      this.ruleForm.remark = '';
 
       const parsePath = (path) => {
         const name = path.split(".live/")[1];
@@ -129,7 +132,9 @@ export default {
             return;
           }
 
-          let params = {};
+          let params = {
+            remark: this.ruleForm.remark
+          };
           if (this.form.id_array.length > 1) {
             params.ids = this.form.id_array;
           } else {

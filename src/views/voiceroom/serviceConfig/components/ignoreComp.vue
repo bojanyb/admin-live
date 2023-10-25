@@ -6,9 +6,9 @@
       width="400px"
       :before-close="handleClose"
       @closed="closed">
-          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" label-position="top" class="demo-ruleForm">
-              <el-form-item label="备注说明" prop="content">
-                <el-input v-model="ruleForm.content" type="textarea" :rows="4" resize="none" placeholder="请输入备注说明"></el-input>
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+              <el-form-item label="" prop="remark">
+                <el-input v-model="ruleForm.remark" type="textarea" :rows="4" resize="none" placeholder="请输入备注说明"></el-input>
               </el-form-item>
           </el-form>
           <span slot="footer" class="dialog-footer">
@@ -27,12 +27,12 @@ export default {
       return {
           dialogVisible: false,
           ruleForm: {
-              content: ''
+            remark: ''
           },
           rules: {
-              content: [
-                  { required: false, message: '请输入备注说明', trigger: 'change' },
-              ]
+            remark: [
+              { required: false, message: '请输入备注说明', trigger: 'change' },
+            ]
           }
       };
   },
@@ -44,6 +44,7 @@ export default {
       // 打开弹窗
       load(id) {
         this.ruleForm.id = id;
+        this.ruleForm.remark = '';
         this.dialogVisible = true
       },
       // 提交

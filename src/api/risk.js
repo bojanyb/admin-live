@@ -200,6 +200,24 @@ export function updatePunishWords(data) {
   })
 }
 
+// 获取举报用户记录
+export function NewUserPunishLog(data) {
+  return request({
+    url: api.risk.NewUserPunishLog,
+    method: 'post',
+    data
+  })
+}
+
+// 获取举报公会记录
+export function NewGuildPunishLog(data) {
+  return request({
+    url: api.risk.NewGuildPunishLog,
+    method: 'post',
+    data
+  })
+}
+
 // 获取用户处罚相关详情
 export function getUserPunishDetail(data) {
   return request({

@@ -69,6 +69,8 @@ import {
   passUserPunish,
   UserPunishLog,
   acceptPunish,
+  NewUserPunishLog,
+  NewGuildPunishLog,
 } from "@/api/risk";
 // 引入api
 import { getPunishTypeList } from "@/api/videoRoom";
@@ -709,14 +711,10 @@ export default {
     // 解除
     async relieve(row) {
       const params = {
+        id: row.id,
         result: row.result,
         remove_time: row.remove_time,
       };
-      if (row.id_array.length > 1) {
-        params.ids = row.id_array;
-      } else {
-        params.id = row.id_array.join();
-      }
       this.$refs.unbanComp.load(params)
     },
     // 忽略
@@ -727,7 +725,13 @@ export default {
     async BatchRurn() {
       let s = this.beforeSearch();
       s.is_all = 1; // 导出数据时传1
-      let res = await UserPunishLog(s);
+      s.is_export = 1; // 导出数据时传1
+      let res;
+      if(this.filterType === 'guild') {
+        res = await NewGuildPunishLog(s)
+      } else {
+        res = await NewUserPunishLog(s)
+      }
       let arr = JSON.parse(JSON.stringify(res.data.list));
       if (arr.length <= 0) return this.$warning("当前没有数据可以导出");
       arr = arr.map((item, index) => {
@@ -741,6 +745,9 @@ export default {
           feedback_number: item.feedback_number,
           feedback_name: item.feedback_name,
           feedback_identity: item.feedback_identity,
+          feedback_guild_name: item.feedback_user_guild?item.feedback_user_guild.guild_name : "--",
+          feedback_add_time: item.feedback_user_guild?item.feedback_user_guild.add_time : "--",
+          feedback_status: item.feedback_user_guild?item.feedback_user_guild.status : "--",
           feedback_type: item.feedback_type || "无",
           content: item.content || "无",
           report_number: item.report_number,
@@ -748,7 +755,7 @@ export default {
           report_identity: item.report_identity,
           state: item.state || "无",
           punish_type: item.punish_type || "无",
-          result: item.result.join(";"),
+          result: Array.isArray(item.result)?item.result.join(";"):item.result,
           risk_level: riskLevelData ? riskLevelData.name : "无",
           remove_time: item.remove_time || "无",
           operator: item.operator || "无",
@@ -763,6 +770,9 @@ export default {
         "被举报用户ID",
         "被举报用户昵称",
         "被举报用户身份",
+        "被举报用户当前所属公会",
+        "被举报用户加入公会时间",
+        "被举报用户公会状态",
         "举报类型",
         "举报说明",
         "举报用户ID",
@@ -776,6 +786,9 @@ export default {
         "审核人",
         "备注说明",
       ];
+//       “被举报用户当前所属公会 / 加入公会时间 / 公会状态““被举报用户举报时所属公会 / 加入公会时间 / 公会状态”
+
+// “举报用户当前所属公会 / 加入公会时间 / 公会状态““举报用户举报时所属公会 / 加入公会时间 / 公会状态”
       let tableName = this.filterType === 'user' ? '用户/主播处罚举报记录':'公会处罚举报记录' 
       exportTableData(arr, nameList, tableName);
     },

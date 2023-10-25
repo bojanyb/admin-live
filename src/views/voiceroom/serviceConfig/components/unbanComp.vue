@@ -1,27 +1,30 @@
 <template>
-  <div class="unban-comp-box">
+  <div class="userPunish_unban-comp-box">
       <el-dialog
       title="解除处罚"
       :visible.sync="dialogVisible"
       width="500px"
       :before-close="handleClose"
       @closed="closed">
+        <div>
+          <div class="tips">{{Array.isArray(ruleForm.result) ? ruleForm.result.join(';') : ruleForm.result}}<span v-if="ruleForm.remove_time">{{ruleForm.remove_time}}到期解除</span></div>
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-              <el-form-item label="解封原因" prop="content">
-                <el-select v-model="ruleForm.content" placeholder="请选择解封原因">
-                  <el-option label="误封解除" value="1"></el-option>
-                  <el-option label="申诉解除" value="2"></el-option>
-                  <el-option label="其他解除" value="3"></el-option>
+              <el-form-item label="解封原因" prop="remove_reason">
+                <el-select v-model="ruleForm.remove_reason" placeholder="请选择解封原因" @change="handleChange">
+                  <el-option label="误封解除" value="误封解除"></el-option>
+                  <el-option label="申诉解除" value="申诉解除"></el-option>
+                  <el-option label="其他解除" value="其他解除"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="解封说明" prop="target_val">
-                <el-input v-model="ruleForm.target_val" type="textarea" :rows="4" resize="none"></el-input>
+              <el-form-item label="解封说明" prop="remove_illustrate">
+                <el-input v-model="ruleForm.remove_illustrate" type="textarea" :rows="4" resize="none" placeholder="请输入解封说明"></el-input>
               </el-form-item>
           </el-form>
-          <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-          </span>
+        </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+        </span>
       </el-dialog>
   </div>
 </template>
@@ -34,14 +37,16 @@ export default {
       return {
           dialogVisible: false,
           ruleForm: {
-              content: '',
-              target_val: ''
+              result: [],
+              remove_time: '',
+              remove_reason: '',
+              remove_illustrate: ''
           },
           rules: {
-              content: [
+              remove_reason: [
                   { required: true, message: '请选择解封原因', trigger: 'change' },
               ],
-              target_val: [
+              remove_illustrate: [
                   { required: false, message: '请输入解封说明', trigger: 'blur' },
               ]
           }
@@ -54,8 +59,10 @@ export default {
       },
       // 打开弹窗
       load(params) {
-        this.ruleForm = params;
         this.dialogVisible = true
+        params.remove_reason = '';
+        params.remove_illustrate = '';
+        this.$set(this.$data, 'ruleForm', params)
       },
       // 提交
       async submitForm(formName) {
@@ -80,12 +87,25 @@ export default {
       // 销毁组件
       closed() {
           this.$emit('destoryComp')
-      }
+      },
+      // 下拉选择变更
+      handleChange(val) {
+        console.log('[ val ] >', val)
+        if(val === '其他解除') {
+          this.rules.remove_illustrate[0].required = true;
+        } else {
+          this.rules.remove_illustrate[0].required = false;
+        }
+      },
   }
 }
 </script>
 <style lang="scss">
-.unban-comp-box {
+.userPunish_unban-comp-box {
+  .tips {
+    text-align: center;
+    margin-bottom: 20px;
+  }
   .el-input,.el-textarea {
     width: 300px;
   }
