@@ -60,7 +60,7 @@ const guildAuditRouter = {
 			component: () => import('@/views/voiceroom/guildAudit/guildApplication/components/guild-apply'),
 			name: 'guildApply',
 			meta: {
-				title: '房间申请',
+				title: '公会房间申请',
 				noCache: true
 			}
 		},
