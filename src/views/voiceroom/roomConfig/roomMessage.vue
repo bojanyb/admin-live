@@ -10,6 +10,8 @@
         @batchPass="handleBatchPass"
         batchFuncName="批量修改房间类型"
         :show-batch-rurn="true"
+        :show-export="true"
+        @export="BatchRurn"
         @onReset="reset"
         @onSearch="onSearch"
         @BatchRurn="handleBatchRurn"
@@ -236,7 +238,7 @@ export default {
             label: "今日流水",
             minWidth: "100px",
             prop: "today_flow",
-            sortable: "custom",
+            // sortable: "custom",
             render: (h, params) => {
               return h("div", params.row.today_flow + "钻石");
             },
@@ -245,7 +247,7 @@ export default {
             label: "昨日流水",
             minWidth: "100px",
             prop: "yestoday_flow",
-            sortable: "custom",
+            // sortable: "custom",
             render: (h, params) => {
               return h("div", params.row.yestoday_flow + "钻石");
             },
@@ -254,7 +256,7 @@ export default {
             label: "本周流水",
             minWidth: "100px",
             prop: "week_flow",
-            sortable: "custom",
+            // sortable: "custom",
             render: (h, params) => {
               return h("div", params.row.week_flow + "钻石");
             },
@@ -263,7 +265,7 @@ export default {
             label: "上周流水",
             minWidth: "100px",
             prop: "last_week_flow",
-            sortable: "custom",
+            // sortable: "custom",
             render: (h, params) => {
               return h("div", params.row.last_week_flow + "钻石");
             },
@@ -445,6 +447,27 @@ export default {
     // 批量关停
     handleBatchRurn() {
       this.batchClose();
+    },
+    // 导出excel
+    async BatchRurn() {
+      let s = {
+        page: 1,
+        pagesize: 10,
+        room_number: "",
+        user_number: "",
+        guild_number: "",
+        room_category_id: "",
+        is_all: 1
+      }
+      if (this.page > 1) {
+        s.page = this.page;
+      }
+      let res = {};
+      // res = await partyRoomsList(s);
+      // if (res.data.list.length == 0) {
+      //   this.$warning("当前没有数据可以导出");
+      //   return;
+      // }
     },
     batchClose() {
       if (this.selectList.length <= 0) {
