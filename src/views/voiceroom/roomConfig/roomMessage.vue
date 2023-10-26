@@ -454,26 +454,27 @@ export default {
     },
     // 导出excel
     async BatchRurn() {
-      // let s = {
-      //   page: 1,
-      //   pagesize: 10,
-      //   room_number: "",
-      //   user_number: "",
-      //   guild_number: "",
-      //   room_category_id: "",
-      //   is_all: 1,
-      // };
+      let s = {
+        page: 1,
+        pagesize: 10,
+        room_number: "",
+        user_number: "",
+        guild_number: "",
+        room_category_id: "",
+      };
       // let res = {};
-      // res = await partyRoomListExcel(s);
-      // if (res.data.list.length == 0) {
-      //   this.$warning("当前没有数据可以导出");
-      //   return;
-      // }
+      const res = await partyRoomListExcel(s);
+
+
+      if (res.code !== 2000) {
+        this.$warning("当前没有数据可以导出");
+        return;
+      }
 
       const link = document.createElement("a");
-      // link.href = 'https://license-plate-lottery.oss-cn-shenzhen.aliyuncs.com/%E5%85%AC%E4%BC%9A%E5%91%A8%E6%B5%81%E6%B0%B4%E7%BB%93%E7%AE%97.xls';
+      link.href = res.data.url;
       // link.download = timeFormat(new Date(), 'YYYY-MM-DD', false) + title + '.xls';
-      // link.download = "房间数据11809.xls";
+      link.download = "房间数据.xls";
       link.click();
     },
     batchClose() {

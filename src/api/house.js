@@ -257,7 +257,7 @@ export function closeRoomLives(data) {
 // 导出excel
 export function partyRoomListExcel(data) {
   return request({
-    url: api.house.getRoomListExcel,
+    url: api.house.partyRoomListExcel,
     method: 'post',
     data
   })
