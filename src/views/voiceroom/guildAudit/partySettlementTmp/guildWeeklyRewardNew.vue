@@ -166,7 +166,7 @@ import MAPDATA from "@/utils/jsonMap.js";
 // 引入格式化时间包
 import moment from "moment";
 // 引入详情组件
-import lookComp from "./components/lookComp.vue";
+import lookComp from "./components/lookCompNew.vue";
 
 export default {
   name: "guildRebate-list",
@@ -772,6 +772,7 @@ export default {
         .catch(() => {});
     },
     handleLook(row, status) {
+      console.log(row, status);
       setTimeout(() => {
         this.$refs.lookComp.load(row, status);
       }, 100);
