@@ -461,7 +461,10 @@ const INSTITUTION = [
     value: 7,
     name: '新生支付'
   },
-
+  {
+    value: 8,
+    name: '联动支付'
+  },
 ]
 
 
@@ -1959,6 +1962,10 @@ const PAYCONFIGURATIONPLATFORMLIST = [
   {
     name: '新生支付',
     value: 7
+  },
+  {
+    value: 8,
+    name: '联动支付'
   },
   // {
   //     name: '银联支付',
