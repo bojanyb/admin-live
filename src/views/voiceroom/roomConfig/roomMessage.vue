@@ -353,6 +353,8 @@ export default {
       // if(s.admin_recommend_status > -1){
       //     data.admin_recommend_status = s.admin_recommend_status
       // }
+
+
       return {
         page: params.page,
         pagesize: params.size,
@@ -454,16 +456,16 @@ export default {
     },
     // 导出excel
     async BatchRurn() {
-      let s = {
-        page: 1,
-        pagesize: 10,
-        room_number: "",
-        user_number: "",
-        guild_number: "",
-        room_category_id: "",
-      };
+      // let s = {
+      //   page: 1,
+      //   pagesize: 10,
+      //   room_number: "",
+      //   user_number: "",
+      //   guild_number: "",
+      //   room_category_id: "",
+      // };
       // let res = {};
-      const res = await partyRoomListExcel(s);
+      const res = await partyRoomListExcel(this.searchParams);
 
 
       if (res.code !== 2000) {
