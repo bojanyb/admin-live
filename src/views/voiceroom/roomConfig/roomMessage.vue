@@ -363,6 +363,7 @@ export default {
         // party_status: 2,
         // admin_recommend_status: -1
       };
+      // 去除排序样式
       this.$refs.tableList.search.sort = "";
       this.$refs.tableList.$el
         .querySelectorAll(".is-sortable")
