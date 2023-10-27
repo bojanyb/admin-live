@@ -58,6 +58,13 @@
     <unbanComp ref="unbanComp" @getList="getList"></unbanComp>
     <!-- 忽略弹窗 -->
     <ignoreComp ref="ignoreComp" @getList="getList"></ignoreComp>
+    <!-- 公会投诉组件 -->
+    <guildComplainComp
+      v-if="isDestoryComp"
+      ref="guildComplainComp"
+      @destoryComp="destoryComp"
+      @getList="getList"
+    ></guildComplainComp>
   </div>
 </template>
 
@@ -105,6 +112,8 @@ import eventListComp from "./components/eventListComp.vue";
 import unbanComp from "./components/unbanComp.vue";
 // 忽略弹窗
 import ignoreComp from "./components/ignoreComp.vue";
+// 引入公会投诉组件
+import guildComplainComp from "./components/guildComplainComp.vue";
 export default {
   mixins: [mixins],
   components: {
@@ -118,7 +127,8 @@ export default {
     lookComp,
     eventListComp,
     unbanComp,
-    ignoreComp
+    ignoreComp,
+    guildComplainComp,
   },
   data() {
     return {
@@ -472,137 +482,7 @@ export default {
           minWidth: "300px",
           fixed: "right",
           render: (h, params) => {
-            return h("div", [
-              h(
-                "el-button",
-                {
-                  props: {
-                    type: "danger",
-                    size: 'mini'
-                  },
-                  style: {
-                    display:
-                    params.row.accept_type === 0 
-                        ? "unset"
-                        : "none",
-                  },
-                  on: {
-                    click: () => {
-                      this.handleControl(params.row);
-                    },
-                  },
-                },
-                "受理"
-              ),
-              h(
-                "el-button",
-                {
-                  props: { type: "success",size: 'mini' },
-                  style: {
-                    display:
-                      params.row.status === 1 &&
-                      this.permissionArr.includes("UserPunishLog@remove")
-                        ? "unset"
-                        : "none",
-                  },
-                  on: {
-                    click: () => {
-                      this.relieve(params.row);
-                    },
-                  },
-                },
-                "解除"
-              ),
-              h(
-                "el-button",
-                {
-                  props: { type: "danger",size: 'mini' },
-                  style: {
-                    display:
-                      params.row.status === 0 &&
-                      this.permissionArr.includes("UserPunishLog@save")
-                        ? "unset"
-                        : "none",
-                  },
-                  on: {
-                    click: () => {
-                      this.blocked(params.row);
-                    },
-                  },
-                },
-                "处罚"
-              ),
-              h(
-                "el-button",
-                {
-                  props: { type: "primary",size: 'mini' },
-                  style: {
-                    display:
-                      params.row.status === 0 &&
-                      this.permissionArr.includes("UserPunishLog@pass")
-                        ? "unset"
-                        : "none",
-                  },
-                  on: {
-                    click: () => {
-                      this.neglect(params.row.id);
-                    },
-                  },
-                },
-                "忽略"
-              ),
-              h(
-                "el-button",
-                {
-                  props: { type: "danger",size: 'mini' },
-                  style: {
-                    display:
-                      params.row.status === 2 &&
-                      this.permissionArr.includes("UserPunishLog@save")
-                        ? "unset"
-                        : "none",
-                  },
-                  on: {
-                    click: () => {
-                      this.reblocked(params.row);
-                    },
-                  },
-                },
-                "复审处罚"
-              ),
-              h(
-                "el-button",
-                {
-                  props: { type: "primary",size: 'mini' },
-                  style: {
-                    display:
-                      params.row.from === "后台处罚" &&
-                      params.row.status === 1 &&
-                      this.permissionArr.includes("UserPunishLog@updateSource")
-                        ? "unset"
-                        : "none",
-                  },
-                  on: {
-                    click: () => {
-                      this.update(params.row);
-                    },
-                  },
-                },
-                "补充/修改证据"
-              ),
-              h(
-                "el-button",
-                {
-                  props: { type: "primary",size: 'mini' },
-                  on: {
-                    click: () => {
-                      this.handleOperationLog(params.row);
-                    },
-                  },
-                },
-                "操作日志"
-              ),
-            ]);
+            return h("div", this.getOperateArr(h, params));
           },
         },
       ];
@@ -634,6 +514,170 @@ export default {
   //   console.log(this.permissionArr, 'permissionArr');
   // },
   methods: {
+    // 获取操作按钮
+    getOperateArr(h, params) {
+      let operateArr = []
+      if(this.filterType === 'guild') {
+        operateArr = [
+          h(
+            "el-button",
+            {
+              props: {
+                type: params.row.status === 0 ? "danger" : "info",
+                size: "mini",
+              },
+              style: {
+                display:
+                  this.permissionArr.includes("UserComplaint@handle")
+                    ? "unset"
+                    : "none",
+              },
+              on: {
+                click: () => {
+                  if(params.row.status) return;
+                  this.handleGuildControl(params.row);
+                },
+              },
+            },
+            `${params.row.status === 0 ? "未受理" : "已受理"}`
+          )
+        ]
+      } else {
+        operateArr = [
+          h(
+            "el-button",
+            {
+              props: {
+                type: "danger",
+                size: 'mini'
+              },
+              style: {
+                display:
+                params.row.accept_type === 0 
+                    ? "unset"
+                    : "none",
+              },
+              on: {
+                click: () => {
+                  this.handleControl(params.row);
+                },
+              },
+            },
+            "受理"
+          ),
+          h(
+            "el-button",
+            {
+              props: { type: "success",size: 'mini' },
+              style: {
+                display:
+                  params.row.status === 1 &&
+                  this.permissionArr.includes("UserPunishLog@remove")
+                    ? "unset"
+                    : "none",
+              },
+              on: {
+                click: () => {
+                  this.relieve(params.row);
+                },
+              },
+            },
+            "解除"
+          ),
+          h(
+            "el-button",
+            {
+              props: { type: "danger",size: 'mini' },
+              style: {
+                display:
+                  params.row.status === 0 &&
+                  this.permissionArr.includes("UserPunishLog@save")
+                    ? "unset"
+                    : "none",
+              },
+              on: {
+                click: () => {
+                  this.blocked(params.row);
+                },
+              },
+            },
+            "处罚"
+          ),
+          h(
+            "el-button",
+            {
+              props: { type: "primary",size: 'mini' },
+              style: {
+                display:
+                  params.row.status === 0 &&
+                  this.filterType === 'user' &&
+                  this.permissionArr.includes("UserPunishLog@pass")
+                    ? "unset"
+                    : "none",
+              },
+              on: {
+                click: () => {
+                  this.neglect(params.row.id);
+                },
+              },
+            },
+            "忽略"
+          ),
+          h(
+            "el-button",
+            {
+              props: { type: "danger",size: 'mini' },
+              style: {
+                display:
+                  params.row.status !== 0 &&
+                  this.permissionArr.includes("UserPunishLog@save")
+                    ? "unset"
+                    : "none",
+              },
+              on: {
+                click: () => {
+                  this.reblocked(params.row);
+                },
+              },
+            },
+            "复审处罚"
+          ),
+          h(
+            "el-button",
+            {
+              props: { type: "primary",size: 'mini' },
+              style: {
+                display:
+                  params.row.from === "后台处罚" &&
+                  params.row.status === 1 &&
+                  this.permissionArr.includes("UserPunishLog@updateSource")
+                    ? "unset"
+                    : "none",
+              },
+              on: {
+                click: () => {
+                  this.update(params.row);
+                },
+              },
+            },
+            "补充/修改证据"
+          ),
+          h(
+            "el-button",
+            {
+              props: { type: "primary",size: 'mini' },
+              on: {
+                click: () => {
+                  this.handleOperationLog(params.row);
+                },
+              },
+            },
+            "操作日志"
+          ),
+        ];
+      }
+      return operateArr;
+    },
     // 配置参数
     beforeSearch(params) {
       let s = { ...this.searchParams, ...this.dateTimeParams };
@@ -831,6 +875,13 @@ export default {
         this.$success("受理成功");
         this.getList();
       }
+    },
+    // 公会受理
+    handleGuildControl(row) {
+      this.isDestoryComp = true;
+      setTimeout(() => {
+        this.$refs.guildComplainComp.load(row);
+      }, 50);
     },
     // 风控文案库
     handleCustom() {
