@@ -117,8 +117,12 @@ export default {
           },
           {
             label: '余额',
+            width: 400,
             render: (h, params) => {
-              return h('span', params.row.balance ? Number(params.row.balance) : '0')
+              const balance = params.row.balance? Number(params.row.balance) : 0;
+              const freezeBalance = params.row.freeze_balance? Number(params.row.freeze_balance) : 0;
+              const str  = `可用余额：${balance}+冻结余额：${freezeBalance}`
+              return h('span', str)
             }
           },
           {

@@ -357,7 +357,7 @@ export default {
     currentPeriodOrderResName: {
       type: String,
       default: ''
-    },    
+    },
     // 昨日 - 操作
     showYesterday: {
       type: Boolean,
