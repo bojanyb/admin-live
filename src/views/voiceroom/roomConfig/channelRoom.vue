@@ -44,9 +44,11 @@ import editComp from "./components/editComp.vue";
 // 引入api
 import REQUEST from "@/request/index.js";
 // 引入公共方法
-import { timeFormat } from "@/utils/common.js";
+import { timeFormat, convertSecondsToTime } from "@/utils/common.js";
 // 引入公共参数
 import mixins from "@/utils/mixins.js";
+// 引入公共map
+import MAPDATA from "@/utils/jsonMap.js";
 
 export default {
   name: "channelRoom",
@@ -107,12 +109,34 @@ export default {
           prop: "name",
         },
         {
+          label: "性别",
+          prop: "sex",
+          render: (h, params) => {
+            let data = MAPDATA.SEXLIST.find((item) => {
+              return item.value === params.row.sex;
+            });
+            return h("span", data ? data.name : "未知");
+          },
+        },
+        {
           label: "渠道ID",
           prop: "channels",
         },
         {
           label: "进房ID",
           prop: "room_number",
+        },
+        {
+          label: "生效时间",
+          prop: "end_time",
+          render: (h, params) => {
+              return h(
+                "span",
+                params.row.end_time
+                  ? convertSecondsToTime(params.row.end_time)
+                  : ""
+              );
+            },
         },
         {
           label: "推荐状态",

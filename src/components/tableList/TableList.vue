@@ -286,6 +286,7 @@
         };
         if (typeof vm.beforeSearch === 'function') {
           params = vm.beforeSearch(params);
+          console.log(params);
           if(window.location.href.indexOf('/serviceConfig/message-history') !== -1 && tabIndex !== '2') { // 模拟缓存当前列表数据 - 仅限消息记录页面使用
             params.max_id = max_id
           }
@@ -307,13 +308,11 @@
             break;
           }
           params.sort_field = sort_field
-
           params.sort = this.search.sort.split(",")[1] === 'asc' ? 'asc' : 'desc'
         }
         // 用来比对分页 - 重置分页
         this.oldPage = params.page
         this.oldParams = params
-
         if (this.cfgs.url) {
           request({
             url: this.cfgs.url,
