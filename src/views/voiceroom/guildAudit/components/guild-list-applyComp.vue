@@ -242,8 +242,8 @@ export default {
 </script>
 
 <style lang="scss">
-// .guild-apply-list-box {
-//     padding: 20px;
-//     box-sizing: border-box;
-// }
+.guild-apply-list-box {
+    padding: 20px;
+    box-sizing: border-box;
+}
 </style>
