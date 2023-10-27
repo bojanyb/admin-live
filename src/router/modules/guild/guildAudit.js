@@ -19,6 +19,15 @@ const guildAuditRouter = {
 				noCache: true
 			}
 		},
+    {
+			path: 'guild-apply',
+			component: () => import('@/views/voiceroom/guildAudit/components/guild-list-applyComp'),
+			name: 'guild-apply',
+			meta: {
+				title: '公会申请',
+				noCache: true
+			}
+		},
 		{
 			path: 'guild-apply-list',
 			component: () => import('@/views/voiceroom/guildAudit/guild-apply-list'),
@@ -43,6 +52,15 @@ const guildAuditRouter = {
 			name: 'guildRoom',
 			meta: {
 				title: '公会房间',
+				noCache: true
+			}
+		},
+		{
+			path: 'guildApply',
+			component: () => import('@/views/voiceroom/guildAudit/guildApplication/components/guild-apply'),
+			name: 'guildApply',
+			meta: {
+				title: '公会房间申请',
 				noCache: true
 			}
 		},
@@ -79,6 +97,15 @@ const guildAuditRouter = {
 			name: 'guildRebate-list',
 			meta: {
 				title: '派对结算',
+				noCache: true
+			}
+		},
+    {
+			path: 'party-settlement-list',
+			component: () => import('@/views/voiceroom/guildAudit/party-settlement-list'),
+			name: 'party-settlement-list',
+			meta: {
+				title: '派对结算（新）',
 				noCache: true
 			}
 		},

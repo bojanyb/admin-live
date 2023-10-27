@@ -703,6 +703,43 @@ const DWACTIVITYTYPE = [
   }
 ]
 
+// 礼物状态
+const GIFTSTATUS = [
+  {
+    name: '正常',
+    value: 1
+  },
+  {
+    name: '废除',
+    value: 0
+  }
+]
+
+// 礼物状态
+const PKACTIVITYTYPE = [
+  {
+    name: '增加PK值',
+    value: 1
+  },
+  {
+    name: '减少PK值',
+    value: 0
+  }
+]
+
+// 是否跨屏
+const PKGIFTCROSSSCREEN = [
+  {
+    name: '是',
+    value: 1
+  },
+  {
+    name: '否',
+    value: 0
+  }
+]
+
+
 /*
 *公会管理 - 公会返佣列表
 */
@@ -3362,6 +3399,9 @@ export default {
   DURATION,
   CLASSLIST,
   DWACTIVITYTYPE,
+  GIFTSTATUS,
+  PKACTIVITYTYPE,
+  PKGIFTCROSSSCREEN,
   BANKLIST,
   INSTITUTION,
   IDENTIFICATION,
