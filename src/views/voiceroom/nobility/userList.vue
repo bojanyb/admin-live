@@ -70,16 +70,16 @@ export default {
           isNum: true,
           placeholder: "请输入用户ID",
         },
-        {
-          name: "sort_field",
-          type: "select",
-          value: "id",
-          keyName: "value",
-          optionLabel: "name",
-          label: "排序",
-          placeholder: "请选择",
-          options: MAPDATA.NOBILITYUSERSORTLIST,
-        },
+        // {
+        //   name: "sort_field",
+        //   type: "select",
+        //   value: "id",
+        //   keyName: "value",
+        //   optionLabel: "name",
+        //   label: "排序",
+        //   placeholder: "请选择",
+        //   options: MAPDATA.NOBILITYUSERSORTLIST,
+        // },
       ];
     },
     cfgs() {
@@ -122,9 +122,9 @@ export default {
             render: (h, params) => {
               return h(
                 "span",
-                params.row.create_time
+                params.row.last_create_time
                   ? timeFormat(
-                      params.row.create_time,
+                      params.row.last_create_time,
                       "YYYY-MM-DD HH:mm:ss",
                       true
                     )
