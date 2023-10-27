@@ -428,6 +428,9 @@ const request = {
         canChangeType: `${HTTPHEADER}/PartyRoom/canChangeType`, // 全部房间-获取房间类别
 
         charmTopByLive: `${HTTPHEADER}/RoomV2/charmTopByLive`, // 每场直播的魅力榜单
+
+        closeRoomLives: `${HTTPHEADER}/partyRoom/closeRoom`, // 每场直播的魅力榜单
+        partyRoomListExcel: `${HTTPHEADER}/PartyRoom/export`, // 导出excel
     },
 
     // 直播管理
