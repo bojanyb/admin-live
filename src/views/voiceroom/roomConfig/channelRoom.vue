@@ -108,35 +108,41 @@ export default {
           label: "渠道名称",
           prop: "name",
         },
-        {
-          label: "性别",
-          prop: "sex",
-          render: (h, params) => {
-            let data = MAPDATA.SEXLIST.find((item) => {
-              return item.value === params.row.sex;
-            });
-            return h("span", data ? data.name : "未知");
-          },
-        },
+        // {
+        //   label: "性别",
+        //   prop: "sex",
+        //   render: (h, params) => {
+        //     let data = MAPDATA.SEXLIST.find((item) => {
+        //       return item.value === params.row.sex;
+        //     });
+        //     return h("span", data ? data.name : "未知");
+        //   },
+        // },
         {
           label: "渠道ID",
           prop: "channels",
         },
         {
-          label: "进房ID",
+          label: "进房间ID",
           prop: "room_number",
+        },
+        {
+          label: "进入人数",
+          prop: "number",
         },
         {
           label: "生效时间",
           prop: "end_time",
           render: (h, params) => {
-              return h(
-                "span",
-                params.row.end_time
-                  ? convertSecondsToTime(params.row.end_time)
-                  : ""
-              );
-            },
+            const date = new Date();
+            const formattedDate = `${date.getFullYear()}-${(
+              "0" +
+              (date.getMonth() + 1)
+            ).slice(-2)}-${("0" + date.getDate()).slice(
+              -2
+            )} ${convertSecondsToTime(params.row.end_time)}`;
+            return h("span", params.row.end_time ? formattedDate : "");
+          },
         },
         {
           label: "推荐状态",
