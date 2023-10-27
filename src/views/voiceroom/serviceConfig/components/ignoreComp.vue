@@ -21,11 +21,12 @@
 
 <script>
 // 引入api
-import { passUserPunish } from "@/api/risk";
+import { passUserPunish, guildPassUserPunish } from "@/api/risk";
 export default {
   data() {
       return {
           dialogVisible: false,
+          type: '',
           ruleForm: {
             remark: ''
           },
@@ -42,7 +43,8 @@ export default {
         this.dialogVisible = false
       },
       // 打开弹窗
-      load(id) {
+      load(id, type) {
+        this.type = type;
         this.ruleForm.id = id;
         this.ruleForm.remark = '';
         this.dialogVisible = true
@@ -51,7 +53,12 @@ export default {
       async submitForm(formName) {
           this.$refs[formName].validate(async (valid) => {
             if (valid) {
-                let res = await passUserPunish(this.ruleForm)
+                let res;
+                if(this.type === 'guild') {
+                  res = await guildPassUserPunish(this.ruleForm);
+                } else {
+                  res = await passUserPunish(this.ruleForm);
+                }
                 if(res.code === 2000) {
                     this.dialogVisible = false
                     this.$success('操作成功')

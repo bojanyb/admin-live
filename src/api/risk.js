@@ -253,3 +253,21 @@ export function getReportGuildUserDetail(data) {
     data
   })
 }
+
+// 公会处罚-忽略
+export function guildPassUserPunish(data) {
+  return request({
+    url: api.risk.guildPassUserPunish,
+    method: 'post',
+    data
+  })
+}
+
+// 公会投诉更换证据
+export function guildUpdateSource(data) {
+  return request({
+    url: api.risk.guildUpdateSource,
+    method: 'post',
+    data
+  })
+}

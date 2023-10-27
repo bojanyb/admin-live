@@ -491,6 +491,8 @@ const request = {
         punishAgain: `${HTTPHEADER}/UserPunishLog/punishAgain`, // 处罚-复审处罚
         getFeedbackGuildDetail: `${HTTPHEADER}/NewPunishLog/getFeedbackGuildDetail`, // 获取被举报公会信息
         getReportGuildUserDetail: `${HTTPHEADER}/NewPunishLog/getReportGuildUserDetail`, // 查找举报公会的举报人的信息
+        guildPassUserPunish: `${HTTPHEADER}/UserComplaint/pass`, // 公会处罚-忽略
+        guildUpdateSource: `${HTTPHEADER}/UserComplaint/updateSource`, // 公会投诉更换证据
     },
 
     // 心动速配

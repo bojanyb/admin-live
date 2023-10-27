@@ -47,7 +47,7 @@
 
 <script>
 // 引入api
-import { updateSource } from "@/api/risk.js";
+import { updateSource, guildUpdateSource } from "@/api/risk.js";
 // 引入oss
 import { uploadOSS } from "@/utils/oss.js";
 import { debounce } from "lodash";
@@ -57,6 +57,7 @@ export default {
       dialogVisible: false,
       fileList: [],
       form: {},
+      type: '',
       ruleForm: {
         remark: ''
       },
@@ -101,7 +102,8 @@ export default {
         });
     },
     // 获取数据并加载参数
-    loadParams(row) {
+    loadParams(row, type) {
+      this.type = type;
       this.dialogVisible = true;
       this.form = row;
       this.ruleForm.remark = '';
@@ -160,8 +162,13 @@ export default {
           };
 
           try {
-            const { code } = await updateSource(params);
-            if (code === 2000) {
+            let res;
+            if(this.type === 'guild') {
+              res = await guildUpdateSource(params);
+            } else {
+              res = await updateSource(params);
+            }
+            if (res.code === 2000) {
               this.$success("修改成功");
               this.dialogVisible = false;
               this.$emit("getList");

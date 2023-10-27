@@ -780,7 +780,7 @@ export default {
     update(row) {
       this.isDestoryComp = true;
       setTimeout(() => {
-        this.$refs.uploadImg.loadParams(row);
+        this.$refs.uploadImg.loadParams(row, this.filterType);
       }, 50);
     },
     load(status, row) {
@@ -800,7 +800,7 @@ export default {
     },
     // 忽略
     neglect(id) {
-      this.$refs.ignoreComp.load(id)
+      this.$refs.ignoreComp.load(id, this.filterType)
     },
     // 导出excel
     async BatchRurn() {
@@ -867,9 +867,6 @@ export default {
         "审核人",
         "备注说明",
       ];
-//       “被举报用户当前所属公会 / 加入公会时间 / 公会状态““被举报用户举报时所属公会 / 加入公会时间 / 公会状态”
-
-// “举报用户当前所属公会 / 加入公会时间 / 公会状态““举报用户举报时所属公会 / 加入公会时间 / 公会状态”
       let tableName = this.filterType === 'user' ? '用户/主播处罚举报记录':'公会处罚举报记录' 
       exportTableData(arr, nameList, tableName);
     },
