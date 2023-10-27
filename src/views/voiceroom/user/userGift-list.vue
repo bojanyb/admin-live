@@ -195,7 +195,7 @@
             {
 							label: '房间类型',
               render: (h, params) => {
-								let data = this.roomTypeList.find(item => { return item.id === params.row.guild_type })
+								let data = this.renderRoomTypeList.find(item => { return item.id === params.row.guild_type })
 								return h('span', data ? data.name : '无')
 							}
 						},
@@ -257,6 +257,20 @@
 				{
 					id : 0,
 					name : "全部"
+				},
+				{
+					id : 1,
+					name : "直播房间"
+				},
+				{
+					id : 2,
+					name : "派对房间"
+				}
+				],
+        renderRoomTypeList: [
+				{
+					id : 0,
+					name : "--"
 				},
 				{
 					id : 1,
