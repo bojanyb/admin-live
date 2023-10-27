@@ -16,6 +16,7 @@
               :disabled="cDisabled(item)"
               :clearable="item.clearable || false"
               :multiple="item.multiple || false"
+              :collapse-tags="item.collapse || false"
               @change="mergeEvent(arguments, item)"
             >
               <el-option

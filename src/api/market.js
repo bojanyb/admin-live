@@ -39,9 +39,18 @@ export function exportOnlineUserData(data) {
 }
 
 // 市场监测配置管理 - 添加
-export function adConfList(data) {
+export function addAdConf(data) {
   return request({
     url: api.market.addAdConf,
+    method: 'post',
+    data
+  })
+}
+
+// 市场监测配置管理 - 修改
+export function updateAdConf(data) {
+  return request({
+    url: api.market.updateAdConf,
     method: 'post',
     data
   })
@@ -60,6 +69,15 @@ export function handleAdConf(data) {
 export function getAdSelect(data) {
   return request({
     url: api.market.getAdSelect,
+    method: 'post',
+    data
+  })
+}
+
+// 市场监测配置管理 - 推广活动下拉框列表
+export function getAdTypeSelect(data) {
+  return request({
+    url: api.market.getAdTypeSelect,
     method: 'post',
     data
   })
