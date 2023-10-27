@@ -523,24 +523,62 @@ export default {
             "el-button",
             {
               props: {
-                type: params.row.status === 0 ? "danger" : "info",
-                size: "mini",
+                type: "danger",
+                size: 'mini'
               },
               style: {
                 display:
-                  this.permissionArr.includes("UserComplaint@handle")
+                params.row.status === 0 &&
+                this.permissionArr.includes("UserComplaint@handle")
                     ? "unset"
                     : "none",
               },
               on: {
                 click: () => {
-                  if(params.row.status) return;
                   this.handleGuildControl(params.row);
                 },
               },
             },
-            `${params.row.status === 0 ? "未受理" : "已受理"}`
-          )
+            "受理"
+          ),
+          h(
+            "el-button",
+            {
+              props: { type: "primary",size: 'mini' },
+              style: {
+                display:
+                  params.row.status === 0 &&
+                  this.permissionArr.includes("UserPunishLog@pass")
+                    ? "unset"
+                    : "none",
+              },
+              on: {
+                click: () => {
+                  this.neglect(params.row.id);
+                },
+              },
+            },
+            "忽略"
+          ),
+          h(
+            "el-button",
+            {
+              props: { type: "primary",size: 'mini' },
+              style: {
+                display:
+                  params.row.status === 1 &&
+                  this.permissionArr.includes("UserPunishLog@updateSource")
+                    ? "unset"
+                    : "none",
+              },
+              on: {
+                click: () => {
+                  this.update(params.row);
+                },
+              },
+            },
+            "补充/修改证据"
+          ),
         ]
       } else {
         operateArr = [
@@ -610,7 +648,6 @@ export default {
               style: {
                 display:
                   params.row.status === 0 &&
-                  this.filterType === 'user' &&
                   this.permissionArr.includes("UserPunishLog@pass")
                     ? "unset"
                     : "none",
