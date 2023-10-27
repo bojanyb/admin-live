@@ -61,23 +61,6 @@ export default {
     cfgs() {
       const arr = [
         {
-          label: "商品类型",
-          render: (h, params) => {
-            let data = MAPDATA.SHOPPING.find((item) => {
-              return item.value === params.row.goods_type;
-            });
-            return h("div", { class: { bounce_fa: true } }, [
-              h("span", {
-                class: { "el-icon-top bounce": true },
-                style: {
-                  display: params.row.is_first === 1 ? "unset" : "none",
-                },
-              }),
-              h("span", data ? data.name : "--"),
-            ]);
-          },
-        },
-        {
           label: "序号",
           prop: "id",
         },
@@ -97,20 +80,32 @@ export default {
           imgHeight: "50px",
         },
         {
-          label: "礼物价值",
+          label: "礼物价值(钻石)",
           prop: "gift_diamond",
         },
         {
           label: "PK类型",
           prop: "pk_type",
+          render: (h, params) => {
+            let data = MAPDATA.PKACTIVITYTYPE.find((item) => {
+              return item.value === params.row.pk_type;
+            });
+            return h("span", data.name);
+          },
         },
         {
-          label: "PK值",
+          label: "PK值(钻石)",
           prop: "pk_value",
         },
         {
           label: "是否跨屏",
           prop: "accross_screen",
+          render: (h, params) => {
+            let data = MAPDATA.PKGIFTCROSSSCREEN.find((item) => {
+              return item.value === params.row.accross_screen;
+            });
+            return h("span", data.name);
+          },
         },
         {
           label: "说明",
@@ -119,38 +114,21 @@ export default {
         {
           label: "状态",
           prop: "status",
+          render: (h, params) => {
+            let data = MAPDATA.GIFTSTATUS.find((item) => {
+              return item.value === params.row.status;
+            });
+            return h("span", data.name);
+          },
         },
         {
           label: "更新时间",
           prop: "created_at",
           render: (h, params) => {
-            return h("span", params.row.created_at ? params.row.created_at : "--");
-          },
-        },
-        {
-          label: "上架时间",
-          minWidth: "160px",
-          render: (h, params) => {
             return h(
               "span",
-              params.row.up_time
-                ? timeFormat(params.row.up_time, "YYYY-MM-DD HH:mm:ss", true)
-                : "--"
-            );
-          },
-        },
-        {
-          label: "修改时间",
-          minWidth: "160px",
-          render: (h, params) => {
-            return h(
-              "span",
-              params.row.update_time
-                ? timeFormat(
-                    params.row.update_time,
-                    "YYYY-MM-DD HH:mm:ss",
-                    true
-                  )
+              params.row.created_at
+                ? timeFormat(params.row.created_at, "YYYY-MM-DD HH:mm:ss", true)
                 : "--"
             );
           },
@@ -175,45 +153,7 @@ export default {
                     },
                   },
                 },
-                "修改"
-              ),
-              h(
-                "el-button",
-                {
-                  props: { type: "danger" },
-                  style: {
-                    display:
-                      params.row.status === 1 &&
-                      !this.permissionArr.includes("Goods@down")
-                        ? "none"
-                        : "unset",
-                  },
-                  on: {
-                    click: () => {
-                      this.down(params.row, 1);
-                    },
-                  },
-                },
-                "上架"
-              ),
-              h(
-                "el-button",
-                {
-                  props: { type: "danger" },
-                  style: {
-                    display:
-                      params.row.status === 2 &&
-                      !this.permissionArr.includes("Goods@down")
-                        ? "none"
-                        : "unset",
-                  },
-                  on: {
-                    click: () => {
-                      this.down(params.row, 2);
-                    },
-                  },
-                },
-                "下架"
+                "编辑"
               ),
             ]);
           },
@@ -272,7 +212,6 @@ export default {
     },
     // 配置参数
     beforeSearch(params) {
-      console.log(this.searchParams); 
       let s = { ...this.searchParams, ...this.dateTimeParams };
       return {
         page: params.page,
@@ -326,17 +265,17 @@ export default {
     update(row) {
       this.load("update", row);
     },
-    down(row, status) {
-      let params = {
-        id: row.id,
-        status: status,
-      };
-      down(params).then((res) => {
-        if (res.code === 2000) {
-          this.onSearch();
-        }
-      });
-    },
+    // down(row, status) {
+    //   let params = {
+    //     id: row.id,
+    //     status: status,
+    //   };
+    //   down(params).then((res) => {
+    //     if (res.code === 2000) {
+    //       this.onSearch();
+    //     }
+    //   });
+    // },
     load(status, row) {
       this.isDestoryComp = true;
       setTimeout(() => {
@@ -349,22 +288,22 @@ export default {
       this.isDestoryComp = false;
     },
     // 更改
-    async changeSwitch(show_special, row) {
-      let params = {
-        ...row,
-        show_special,
-        noble_level: row.noble_level ? row.noble_level : null,
-      };
-      let res = await add(params);
-      if (res.code === 2000) {
-        if (show_special === 2) {
-          this.$message.success("启用成功");
-        } else {
-          this.$message.success("禁用成功");
-        }
-        this.getList();
-      }
-    },
+    // async changeSwitch(show_special, row) {
+    //   let params = {
+    //     ...row,
+    //     show_special,
+    //     noble_level: row.noble_level ? row.noble_level : null,
+    //   };
+    //   let res = await add(params);
+    //   if (res.code === 2000) {
+    //     if (show_special === 2) {
+    //       this.$message.success("启用成功");
+    //     } else {
+    //       this.$message.success("禁用成功");
+    //     }
+    //     this.getList();
+    //   }
+    // },
   },
 };
 </script>

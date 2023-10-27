@@ -31,6 +31,7 @@ const request = {
         stop: `${HTTPHEADER}/Activityins/stop`, // 停止和开启
         addFirstCharge: `${HTTPHEADER}/activityins/addFirstCharge`, // 配置首充活动
         chargeLog: `${HTTPHEADER}/activityins/chargeLog`, // 首充用户列表
+        getGiftsList: `${HTTPHEADER}/activityins/giftList`, // 获取普通礼物列表
     },
 
     // 系统设置
@@ -139,6 +140,8 @@ const request = {
         },
         pkActivity: {
             list: `${HTTPHEADER}/PkSet/list`,
+            updatePKGift: `${HTTPHEADER}/PkSet/updateGift`, // 更新PK礼物
+            addPKGift: `${HTTPHEADER}/PkSet/addGift`, // 新增PK礼物
         }
     },
 
