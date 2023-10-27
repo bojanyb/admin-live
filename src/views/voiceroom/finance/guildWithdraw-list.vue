@@ -623,7 +623,7 @@ export default {
               return data && params.row.buyer_id ? (
                 <div style="display: flex">
                   <div style="text-align: left;" title={data.name}>
-                    {params.row && params.row.complaint_id > 0 && (
+                    {params.row && params.row.complaint_id > 0 ? (
                       <span>
                         <el-popover
                           placement="top-start"
@@ -640,8 +640,7 @@ export default {
                                   {params.row.complaint_description}
                                 </div>
                                 <div>
-                                  投诉详情:{" "}
-                                  {params.row.complaint_detail}
+                                  投诉详情: {params.row.complaint_detail}
                                 </div>
                               </div>
                             )}
@@ -694,6 +693,22 @@ export default {
                           </div>
                         </el-popover>
                       </span>
+                    ) : (
+                      <div>
+                        <span>
+                          {params.row.buyer_id ? params.row.buyer_id : "-"}
+                        </span>
+
+                        <span>
+                          （
+                          {params.row.wx_merchant
+                            ? params.row.wx_merchant
+                            : params.row.ali_merchant
+                            ? params.row.ali_merchant
+                            : "-"}
+                          ）
+                        </span>
+                      </div>
                     )}
                   </div>
                   {params.row.is_complaint + "" === "1" ? (
