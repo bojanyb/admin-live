@@ -280,7 +280,7 @@ const request = {
         roomS: `${HTTPHEADER}/guild/roomS`, // 查询房间流水列表
         delStatisticsroom: `${HTTPHEADER}/guild/delStatisticsroom`, // 移除24小时房间统计
         roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 移除24小时房间统计
-
+        saveWechatCode: `${HTTPHEADER}/GuildOperate/saveWechatCode`, // 修改二维码
 
         // v2
         list: `${HTTPHEADER}/Guild/guildListV2`, // 公会列表

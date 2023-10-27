@@ -64,6 +64,15 @@ const guildAuditRouter = {
 				noCache: true
 			}
 		},
+    {
+			path: 'guildApply',
+			component: () => import('@/views/voiceroom/guildAudit/guildApplication/components/guild-apply'),
+			name: 'guildApply',
+			meta: {
+				title: '公会房间申请',
+				noCache: true
+			}
+		},
 		// {
 		// 	path: 'guildLevelRebate',
 		// 	component: () => import('@/views/voiceroom/guildAudit/guildLevelRebate'),
