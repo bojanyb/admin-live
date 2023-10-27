@@ -64,27 +64,27 @@
                         <el-input type="textarea" placeholder="请输入备注内容，此内容用户不会看到，建议20个字以内。" :rows="4" maxlength="20" show-word-limit v-model="ruleForm.remark" :disabled="disabled || ruleForm.category === '2'"></el-input>
                     </el-form-item>
                 </div>
-                <div class="infoBox" :class="[{'infoBox_hign': status === 'blocked' && !isIncludeReset},{'infoBox_hign_copy_box': status !== 'blocked' && !isIncludeReset},{'infoBox_hign_copy': status !== 'blocked' && isIncludeReset},{'infoBox_hign_copy_box_two': status === 'blocked' && isIncludeReset}]" v-if="userList.length > 0" v-for="(item,index) in userList" :key="index">
+                <div v-if="userInfo" class="infoBox" :class="[{'infoBox_hign': status === 'blocked' && !isIncludeReset},{'infoBox_hign_copy_box': status !== 'blocked' && !isIncludeReset},{'infoBox_hign_copy': status !== 'blocked' && isIncludeReset},{'infoBox_hign_copy_box_two': status === 'blocked' && isIncludeReset}]">
                     <div class="upBox">
-                        <img :src="item.face" alt="">
+                        <img :src="userInfo.face" alt="">
                         <div class="rightBox">
-                            <div class="name">{{ item.nickname }}</div>
-                            <div class="id">ID：{{ item.user_number }}</div>
-                            <div class="id">userId：{{ item.id }}</div>
+                            <div class="name">{{ userInfo.nickname }}</div>
+                            <div class="id">ID：{{ userInfo.user_number }}</div>
+                            <div class="id">userId：{{ userInfo.id }}</div>
                         </div>
                     </div>
                     <div class="downBox">
-                        <p>用户等级：<span>{{ item.user_rank }}</span></p>
-                        <p>魅力等级：<span>{{ item.live_rank }}</span></p>
-                        <p>用户状态：<span>{{ item.statusText ? item.statusText : "无" }}</span></p>
-                        <p>违规信息：<span>{{ item.lineText ? item.lineText : "无" }}</span></p>
-                        <p>实名信息：<span>{{ item.real_name ? item.real_name : '无' }}</span></p>
-                        <p>所属派对公会：<span>{{ item.party_name ? item.party_name : '无' }}</span></p>
-                        <p>所属直播公会：<span>{{ item.live_name ? item.live_name : '无' }}</span></p>
-                        <p>注册时间：<span>{{ item.create_time }}</span></p>
+                        <p>用户等级：<span>{{ userInfo.user_rank }}</span></p>
+                        <p>魅力等级：<span>{{ userInfo.live_rank }}</span></p>
+                        <p>用户状态：<span>{{ userInfo.statusText ? userInfo.statusText : "无" }}</span></p>
+                        <p>违规信息：<span>{{ userInfo.lineText ? userInfo.lineText : "无" }}</span></p>
+                        <p>实名信息：<span>{{ userInfo.real_name ? userInfo.real_name : '无' }}</span></p>
+                        <p>所属派对公会：<span>{{ userInfo.party_name ? userInfo.party_name : '无' }}</span></p>
+                        <p>所属直播公会：<span>{{ userInfo.live_name ? userInfo.live_name : '无' }}</span></p>
+                        <p>注册时间：<span>{{ userInfo.create_time }}</span></p>
                     </div>
                 </div>
-                <div class="infoBox emptyBox" :class="[{'infoBox_hign_copy': isIncludeReset}]" v-if="userList.length <= 0">暂无数据</div>
+                <div class="infoBox emptyBox" :class="[{'infoBox_hign_copy': isIncludeReset}]" v-if="!userInfo">暂无数据</div>
 
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -132,7 +132,7 @@ export default {
             resetList: MAPDATA.USERPUNIRESETLISTCOPY,
             riskLevelList: MAPDATA.RISKLEVELLISTCOPY,
             status: 'add',
-            userList: [], // 查询用户
+            userInfo: null, // 查询用户
             ruleForm: {
                 user_number: '',
                 category: '1',
@@ -281,7 +281,7 @@ export default {
                     this.$warning('查询不到数据')
                 } else {
                     res.data.list[0].create_time = moment(res.data.list[0].create_time * 1000).format('YYYY-MM-DD HH:mm:ss')
-                    this.userList = res.data.list || []
+                    this.userInfo = res.data.list[0] || null;
                     this.getPunishStatus(res.data.list[0].id)
                 }
             }
@@ -292,8 +292,8 @@ export default {
             formdata.append("user_id",user_id);
             let res = await punishStatus(formdata)
             if(res.code === 2000) {
-                this.$set(this.userList[0],'statusText',res.data.status)
-                this.$set(this.userList[0],'lineText',res.data.stat)
+                this.$set(this.userInfo,'statusText',res.data.status)
+                this.$set(this.userInfo,'lineText',res.data.stat)
             }
         },
         // 获取数据
@@ -532,6 +532,7 @@ export default {
 
     .el-form {
         display: flex;
+        align-items: flex-start;
     }
 
     .inputBox {
@@ -552,7 +553,6 @@ export default {
         padding: 10px 20px;
         box-sizing: border-box;
         margin-left: 20px;
-        height: 370px;
         .upBox {
             display: flex;
             align-items: center;
@@ -581,8 +581,6 @@ export default {
     }
 
     .infoBox_hign {
-        // height: 270px;
-        height: auto;
         .downBox {
             margin-top: 10px;
             p {
@@ -592,7 +590,6 @@ export default {
     }
 
     .infoBox_hign_copy {
-        height: auto;
         .downBox {
             margin-top: 30px;
             p {
@@ -602,8 +599,6 @@ export default {
     }
 
     .infoBox_hign_copy_box {
-        // height: 370px;
-        height: auto;
         .downBox {
             margin-top: 30px;
             p {
@@ -613,7 +608,6 @@ export default {
     }
 
     .infoBox_hign_copy_box_two {
-        height: 211px;
         .downBox {
             margin-top: 5px;
             p {
