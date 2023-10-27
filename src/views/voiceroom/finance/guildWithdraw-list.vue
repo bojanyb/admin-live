@@ -66,8 +66,12 @@
     </div>
 
     <!-- 批量补单 -->
-    <el-dialog title="批量查询反馈" width="30%" :visible.sync="batchDialogVisible">
-      <div style="padding: 10px;">
+    <el-dialog
+      title="批量查询反馈"
+      width="30%"
+      :visible.sync="batchDialogVisible"
+    >
+      <div style="padding: 10px">
         查询出共{{ batchResultData && batchResultData.length }}条数据已支付成功
       </div>
       <div
@@ -123,10 +127,14 @@
     </el-dialog>
 
     <!-- 批量补单结果 -->
-    <el-dialog class="queryPayResult" title="批量补单结果" width="50%" :visible.sync="queryOrderResultVisible" @close="stopTimer">
-      <el-table
-        :data="orderPayData"
-        style="width: 100%">
+    <el-dialog
+      class="queryPayResult"
+      title="批量补单结果"
+      width="50%"
+      :visible.sync="queryOrderResultVisible"
+      @close="stopTimer"
+    >
+      <el-table :data="orderPayData" style="width: 100%">
         <el-table-column
           prop="add_time"
           label="批量查单时间"
@@ -142,7 +150,11 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <template v-if="[2,3].includes(scope.row.status)">{{ `${scope.row.success_number || 0}条成功 / 共补单${scope.row.total_number || 0}条记录` }}</template>
+            <template v-if="[2, 3].includes(scope.row.status)">{{
+              `${scope.row.success_number || 0}条成功 / 共补单${
+                scope.row.total_number || 0
+              }条记录`
+            }}</template>
             <template v-else>正在补单，请等待...</template>
           </template>
         </el-table-column>
@@ -164,23 +176,18 @@
       />
     </el-dialog>
 
-
     <!-- 补单明细 -->
-    <el-dialog class="queryOrderResult" title="成功补单明细" width="50%" :visible.sync="queryOrderDetailVisible" @close="startTimer">
-      <el-table
-        :data="orderDetailData"
-        style="width: 100%">
-        <el-table-column
-          prop="trade_no"
-          label="商户单号"
-          show-overflow-tooltip
-          >
+    <el-dialog
+      class="queryOrderResult"
+      title="成功补单明细"
+      width="50%"
+      :visible.sync="queryOrderDetailVisible"
+      @close="startTimer"
+    >
+      <el-table :data="orderDetailData" style="width: 100%">
+        <el-table-column prop="trade_no" label="商户单号" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column
-          prop="remark"
-          label="补单结果"
-          show-overflow-tooltip
-          >
+        <el-table-column prop="remark" label="补单结果" show-overflow-tooltip>
         </el-table-column>
       </el-table>
       <!--工具条-->
@@ -260,9 +267,14 @@
           </template>
         </el-table-column>
       </el-table>
-      				<!--工具条-->
-				<pagination v-show="currentPeriodOrderDetailTotal>0" :total="currentPeriodOrderDetailTotal" :page.sync="currentPeriodOrderDetailPage.page"
-					:limit.sync="currentPeriodOrderDetailPage.limit" @pagination="getCurPeriodOrderDetails" />
+      <!--工具条-->
+      <pagination
+        v-show="currentPeriodOrderDetailTotal > 0"
+        :total="currentPeriodOrderDetailTotal"
+        :page.sync="currentPeriodOrderDetailPage.page"
+        :limit.sync="currentPeriodOrderDetailPage.limit"
+        @pagination="getCurPeriodOrderDetails"
+      />
     </el-dialog>
 
     <!-- 当前时段补单明细 -->
@@ -290,23 +302,42 @@
         >
         </el-table-column>
       </el-table>
-      <pagination v-show="curPeriodOrderDetailLogTotal>0" :total="curPeriodOrderDetailLogTotal" :page.sync="curPeriodOrderDetailLogPage.page"
-        :limit.sync="curPeriodOrderDetailLogPage.limit" @pagination="openTaskOrderLog" />
+      <pagination
+        v-show="curPeriodOrderDetailLogTotal > 0"
+        :total="curPeriodOrderDetailLogTotal"
+        :page.sync="curPeriodOrderDetailLogPage.page"
+        :limit.sync="curPeriodOrderDetailLogPage.limit"
+        @pagination="openTaskOrderLog"
+      />
     </el-dialog>
 
-      <!-- 当前时段补单反馈 -->
-      <el-dialog title="当前时段补单反馈" width="30%" :visible.sync="curPeriodOrderDialogVisible">
-        <div style="padding: 10px;">
-             操作成功
-        </div>
-      </el-dialog>
-
+    <!-- 当前时段补单反馈 -->
+    <el-dialog
+      title="当前时段补单反馈"
+      width="30%"
+      :visible.sync="curPeriodOrderDialogVisible"
+    >
+      <div style="padding: 10px">操作成功</div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 // 引入api
-import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails, addTask,getTaskList,getTaskDetail,getTaskDetailLog, diamondRechargeTotal, fetchMerchantList} from "@/api/finance.js";
+import {
+  diamondRechargeAll,
+  getMerchantList,
+  wxMerchantList,
+  queryPayStatus,
+  getQueryPayTask,
+  getQueryPayDetails,
+  addTask,
+  getTaskList,
+  getTaskDetail,
+  getTaskDetailLog,
+  diamondRechargeTotal,
+  fetchMerchantList,
+} from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
@@ -586,21 +617,100 @@ export default {
                     : params.row.ali_merchant_status)
                 );
               });
+              // return (
+
+              // );
               return data && params.row.buyer_id ? (
                 <div style="display: flex">
                   <div style="text-align: left;" title={data.name}>
-                    <el-tag type={data.type}>
-                      {params.row.buyer_id ? params.row.buyer_id : "-"}
+                    {params.row && params.row.complaint_id > 0 ? (
                       <span>
-                        （
-                        {params.row.wx_merchant
-                          ? params.row.wx_merchant
-                          : params.row.ali_merchant
-                          ? params.row.ali_merchant
-                          : "-"}
-                        ）
+                        <el-popover
+                          placement="top-start"
+                          title="投诉详情"
+                          width="300"
+                          trigger="hover"
+                        >
+                          <div>
+                            {/* 微信 */}
+                            {params.row.channel === "微信" && (
+                              <div>
+                                <div>
+                                  投诉类型:
+                                  {params.row.complaint_description}
+                                </div>
+                                <div>
+                                  投诉详情: {params.row.complaint_detail}
+                                </div>
+                              </div>
+                            )}
+                            {/* 支付宝 */}
+                            {params.row.channel === "支付宝" && (
+                              <div>
+                                <div>
+                                  投诉诉求:
+                                  {params.row.complaint_require}
+                                </div>
+                                <div>
+                                  投诉原因:
+                                  {params.row.complaint_description}
+                                </div>
+                                <div>
+                                  投诉内容:{params.row.complaint_detail}
+                                </div>
+                              </div>
+                            )}
+                            <div>投诉时间:{params.row.complaint_time}</div>
+                          </div>
+                          <div slot="reference">
+                            <el-tag type={data.type}>
+                              {params.row.complaint_id > 0 ? (
+                                <span style="color:#ff4949;">
+                                  {params.row.buyer_id
+                                    ? params.row.buyer_id
+                                    : "-"}
+                                </span>
+                              ) : (
+                                <span>
+                                  {params.row.buyer_id
+                                    ? params.row.buyer_id
+                                    : "-"}
+                                </span>
+                              )}
+
+                              <span>
+                                （
+                                {params.row.wx_merchant
+                                  ? params.row.wx_merchant
+                                  : params.row.ali_merchant
+                                  ? params.row.ali_merchant
+                                  : "-"}
+                                ）
+                              </span>
+                            </el-tag>
+                            <span style="color:#ff4949;">
+                              {params.row.complaint_status_desc}
+                            </span>
+                          </div>
+                        </el-popover>
                       </span>
-                    </el-tag>
+                    ) : (
+                      <div>
+                        <span>
+                          {params.row.buyer_id ? params.row.buyer_id : "-"}
+                        </span>
+
+                        <span>
+                          （
+                          {params.row.wx_merchant
+                            ? params.row.wx_merchant
+                            : params.row.ali_merchant
+                            ? params.row.ali_merchant
+                            : "-"}
+                          ）
+                        </span>
+                      </div>
+                    )}
                   </div>
                   {params.row.is_complaint + "" === "1" ? (
                     <el-tag type="danger" style="margin-left: 10px;">
@@ -731,11 +841,17 @@ export default {
                     style: {
                       display: params.row.status === 3 ? "unset" : "none",
                     },
-                    on: { click: () => { this.handleQueryOrder(params.row) } }
-                  }, "补单")
-                ])
-            }
-          }
+                    on: {
+                      click: () => {
+                        this.handleQueryOrder(params.row);
+                      },
+                    },
+                  },
+                  "补单"
+                ),
+              ]);
+            },
+          },
         ],
       };
     },
@@ -799,7 +915,7 @@ export default {
   },
   filters: {
     filtersTime(str) {
-      return timeFormat(str, "YYYY-MM-DD HH:mm:ss", true) || "无"
+      return timeFormat(str, "YYYY-MM-DD HH:mm:ss", true) || "无";
     },
   },
   data() {
@@ -892,8 +1008,8 @@ export default {
         page: 1,
         limit: 10,
       },
-      curPeriodDetailLogData:null,
-      allMerchantList: []
+      curPeriodDetailLogData: null,
+      allMerchantList: [],
     };
   },
   methods: {
@@ -1184,10 +1300,9 @@ export default {
     },
     // 批量补单
     handleBatchQurtyOrder() {
-
-      if (this.topupStatus + '' !== '3') {
-        this.$warning('未支付状态才能批量补单')
-        return
+      if (this.topupStatus + "" !== "3") {
+        this.$warning("未支付状态才能批量补单");
+        return;
       }
 
       if (!(this.list && this.list.length)) {
@@ -1304,18 +1419,20 @@ export default {
       }
     },
 
-   //当前时段补单
-   async handleCurrentPeriodOrder(){
-    const {start_time,end_time}  = this.dateTimeParams;
-     addTask({
-        start_time:  Math.floor( start_time / 1000),
-        end_time:  Math.floor( end_time / 1000)
-      }).then(({code,data})=>{
-        console.log(data)
-        this.curPeriodOrderDialogVisible = true
-      }).catch(err=>{
-        console.log(err)
+    //当前时段补单
+    async handleCurrentPeriodOrder() {
+      const { start_time, end_time } = this.dateTimeParams;
+      addTask({
+        start_time: Math.floor(start_time / 1000),
+        end_time: Math.floor(end_time / 1000),
       })
+        .then(({ code, data }) => {
+          console.log(data);
+          this.curPeriodOrderDialogVisible = true;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
         .then(({ code, data }) => {
           console.log(data);
           this.curPeriodOrderDialogVisible = true;
@@ -1329,9 +1446,8 @@ export default {
     hanldeQueryCurPeriodDetail(row) {
       this.queryCurPeriodOrderData = row;
       this.queryCurPeriodOrderDetailVisible = true;
-      this.currentPeriodOrderDetailPage.page = 1;//重置页码
-      this.getCurPeriodOrderDetails()
-
+      this.currentPeriodOrderDetailPage.page = 1; //重置页码
+      this.getCurPeriodOrderDetails();
     },
 
     //当前时段补单结果

@@ -67,14 +67,14 @@ export default {
               key: 4,
               value: "提现到账",
             },
-            {
-              key: 5,
-              value: "adapay提现失败",
-            },
-            {
-              key: 6,
-              value: "部分成功",
-            },
+            // {
+            //   key: 5,
+            //   value: "adapay提现失败",
+            // },
+            // {
+            //   key: 6,
+            //   value: "部分成功",
+            // },
             {
               key: 7,
               value: "用户取消",
@@ -113,11 +113,19 @@ export default {
             <span>{moment(row.addtime * 1000).format("YYYY-MM-DD HH:mm:ss")}</span>
           ),
         },
-        { prop: "user_id", exportable: true, label: "用户ID" },
+        { prop: "user_number", exportable: true, label: "用户ID" },
         { prop: "nickname", exportable: true, label: "用户昵称" },
         { prop: "guild_name", exportable: true, label: "公会名称" },
         { prop: "gain", exportable: true, label: "结算喵粮" },
-        { prop: "real_money", exportable: true, label: "结算金额" },
+        {
+          prop: "real_money",
+          exportable: true,
+          export_format: (row) => {
+            return row.real_money / 100;
+          },
+          label: "结算金额",
+          render: (h, row) => <span>{(row.real_money / 100).toFixed(2)}元</span>,
+        },
         {
           prop: "status",
           label: "申请状态",
@@ -246,6 +254,7 @@ export default {
         this.showAuditPassDialog = false;
         this.showAuditRejectDialog = false;
       }
+      this.fetchData();
     },
     onExportExcel() {
       const keys = this.columns
@@ -264,19 +273,25 @@ export default {
       });
     },
     async fetchData() {
-      this.loading = true;
-      const res = await request({
-        url: REQUEST.finance.getAnchorCash,
-        method: "post",
-        data: this.fetchParams,
-      });
-      if (res.code === 2000) {
-        // this.page = res.data.page;
-        // this.pagesize = res.data.pagesize;
-        this.total = res.data.count;
-        this.data = res.data.list;
+      try {
+        this.loading = true;
+        const res = await request({
+          url: REQUEST.finance.getAnchorCash,
+          method: "post",
+          data: this.fetchParams,
+        });
+        if (res.code === 2000) {
+          // this.page = res.data.page;
+          // this.pagesize = res.data.pagesize;
+          this.total = res.data.count;
+          this.data = res.data.list;
+        }
+      } catch (e) {
+        this.data = [];
+        console.error(e.message);
+      } finally {
+        this.loading = false;
       }
-      this.loading = false;
     },
   },
   mounted() {
@@ -305,7 +320,11 @@ export default {
         >
       </template>
     </SearchPanel>
-    <el-table :data="data" @selection-change="(val) => (selected_rows = val)" v-loading="loading">
+    <el-table
+      :data="data"
+      @selection-change="(val) => (selected_rows = val)"
+      v-loading="loading"
+    >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column v-for="(item, i) in columns" align="center" :key="i" v-bind="item">
         <template v-if="item.render" #default="slotProps">
@@ -372,7 +391,7 @@ export default {
         }}
         <el-input
           v-model="reject_reason"
-          placeholder="请输入拒绝原因"
+          placeholder="请输入拒绝原因(必填)"
           style="margin-bottom: 20px"
         ></el-input>
         <div class="action-btns">
@@ -386,7 +405,11 @@ export default {
           >
             取消
           </el-button>
-          <el-button type="primary" @click="audit(false, showAuditRejectDialog)">
+          <el-button
+            type="primary"
+            :disabled="!reject_reason"
+            @click="audit(false, showAuditRejectDialog)"
+          >
             确定退回
           </el-button>
         </div>

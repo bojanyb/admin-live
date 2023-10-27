@@ -455,6 +455,8 @@ const request = {
         canChangeType: `${HTTPHEADER}/PartyRoom/canChangeType`, // 全部房间-获取房间类别
 
         charmTopByLive: `${HTTPHEADER}/RoomV2/charmTopByLive`, // 每场直播的魅力榜单
+
+        closeRoomLives: `${HTTPHEADER}/partyRoom/closeRoom`, // 每场直播的魅力榜单
     },
 
     // 直播管理
@@ -515,6 +517,13 @@ const request = {
 
         punishWordsList: `${HTTPHEADER}/Punish`, // 获取风控文案库列表
         updatePunishWords: `${HTTPHEADER}/Punish/update`, // 修改风控文案
+        getReportingGuildList: `${HTTPHEADER}/BackendReport/getGuildList`, // 获取举报公会记录
+        getReportingUserList: `${HTTPHEADER}/BackendReport/getUserList`, // 获取举报用户记录
+        reportGuildOrUser: `${HTTPHEADER}/BackendReport/report`, // 提交举报公会/用户
+
+        usersPunishList: `${HTTPHEADER}/UserPunishLog/getPunishTypeList`, //获取用户举报类型列表
+        guildsPunishList: `${HTTPHEADER}/UserComplaint/init`, //获取公会举报类型列表
+        guildOrUserInfo: `${HTTPHEADER}/BackendReport/searchObject`, //搜索用户或公会
     },
 
     // 心动速配
@@ -714,6 +723,10 @@ const request = {
       chain: `${HTTPHEADER}/NewUserData/chain`, // 获取监测链接
       monitorChainData: `${HTTPHEADER}/NewUserData/monitorChainData`, // 监测链接数据
       exportOnlineUserData: `${HTTPHEADER}/NewUserData/exportOnlineUserData`, // 导出监测链接数据
+      adConfList: `${HTTPHEADER}/AdClickConf/index`, // 市场监测配置管理 - 列表
+      addAdConf: `${HTTPHEADER}/AdClickConf/addData`, // 市场监测配置管理 - 添加
+      handleAdConf: `${HTTPHEADER}/AdClickConf/handle`, // 市场监测配置管理 - 启用/停用
+      getAdSelect: `${HTTPHEADER}/AdClickConf/getSelect`, // 市场监测配置管理 - 媒体下拉框列表
   }
 }
 

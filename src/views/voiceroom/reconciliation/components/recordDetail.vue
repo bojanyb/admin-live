@@ -18,6 +18,7 @@ export default {
   props: ["record"],
   data() {
     return {
+      loading: false,
       page: 1,
       pagesize: 10,
       total: 0,
@@ -104,10 +105,14 @@ export default {
             return <span>{d}</span>;
           },
         },
-        { prop: "user_id", label: "用户ID" },
+        { prop: "user_number", label: "用户ID" },
         { prop: "nickname", label: "用户昵称" },
         { prop: "gain", label: "结算喵粮" },
-        { prop: "real_money", label: "结算金额" },
+        {
+          prop: "real_money",
+          label: "结算金额",
+          render: (h, row) => <span>{(row.real_money / 100).toFixed(2)}元</span>,
+        },
         {
           prop: "status",
           label: "申请状态",
@@ -159,17 +164,25 @@ export default {
       this.fetchData();
     },
     async fetchData() {
-      const res = await request({
-        url: REQUEST.finance.getGuildCashBill,
-        method: "post",
-        data: this.fetchParams,
-      });
-      if (res.code === 2000) {
-        this.page = res.data.page;
-        this.pagesize = res.data.pagesize;
-        this.total = res.data.count;
-        this.data = res.data.list;
-        this.summary_data = res.data.data;
+      try {
+        this.loading = false;
+        const res = await request({
+          url: REQUEST.finance.getGuildCashBill,
+          method: "post",
+          data: this.fetchParams,
+        });
+        if (res.code === 2000) {
+          // this.page = res.data.page;
+          // this.pagesize = res.data.pagesize;
+          this.total = res.data.count;
+          this.data = res.data.list;
+          this.summary_data = res.data.data;
+        }
+      } catch (e) {
+        this.data = [];
+        console.error(e.message);
+      } finally {
+        this.loading = false;
       }
     },
   },
@@ -186,13 +199,30 @@ export default {
       :show-search-btn="true"
       @onSearch="onSearch"
     ></SearchPanel>
-    <el-table :data="data">
+    <el-table :data="data" v-loading="loading">
       <el-table-column v-for="(item, i) in columns" align="center" :key="i" v-bind="item">
         <template v-if="item.render" #default="slotProps">
           <vnode :row="slotProps.row" :col="item" />
         </template>
       </el-table-column>
     </el-table>
+    <div class="pagination">
+      <el-pagination
+        background
+        :page-size="pagesize"
+        :current-page="page"
+        :page-sizes="[10, 20, 30]"
+        :total="total"
+        class="fr"
+        @current-change="
+          (p) => {
+            page = p;
+            fetchData();
+          }
+        "
+      >
+      </el-pagination>
+    </div>
     <div v-if="summary_data" class="summary_data">
       查询期间：用户人数：{{ summary_data.total_user }}人；结算笔数：{{
         summary_data.total_count
@@ -204,6 +234,8 @@ export default {
 </template>
 <style lang="scss">
 .record-detail {
+  display: flex;
+  flex-direction: column;
   .summary_data {
     margin: 20px auto;
     padding: 20px;

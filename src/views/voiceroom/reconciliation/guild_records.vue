@@ -90,15 +90,27 @@ export default {
       ],
       columns: [
         { prop: "create_time", exportable: true, label: "申请时间" },
-        { prop: "guild_id", exportable: true, label: "公会ID" },
+        { prop: "guild_number", exportable: true, label: "公会ID" },
         { prop: "guild_name", exportable: true, label: "公会名称" },
         { prop: "company_name", exportable: true, label: "企业名称" },
-        { prop: "bank_address", exportable: true, label: "开户银行" },
-        { prop: "bank_name", exportable: true, label: "开户支行" },
+        { prop: "bank_name", exportable: true, label: "开户银行" },
+        { prop: "bank_address", exportable: true, label: "开户支行" },
         { prop: "bank_card", exportable: true, label: "银行账号" },
         { prop: "gain", exportable: true, label: "结算喵粮" },
-        { prop: "deduct_money", exportable: true, label: "违规扣除" },
-        { prop: "real_money", exportable: true, label: "结算金额" },
+        {
+          prop: "deduct_money",
+          exportable: true,
+          label: "违规扣除",
+        },
+        {
+          prop: "money",
+          exportable: true,
+          export_format: (row) => {
+            return row.money;
+          },
+          label: "结算金额",
+          render: (h, row) => <span>{row.money}元</span>,
+        },
         { prop: "status_desc", exportable: true, label: "结算状态" },
         {
           prop: "",
@@ -111,19 +123,32 @@ export default {
         },
         {
           prop: "file_url",
+          minWidth: "200px",
+          showOverflowTooltip: true,
           exportable: true,
+          export_format: (row) => {
+            return row.file_url || row.courier_number;
+          },
           label: "发票",
           render: (h, row) => {
-            if (row.file_url) {
-              if (row.invoice_type === 1) {
-                // const test = "https://photo.aiyi.live/3e22531ef33448adeb74aea70191e8ba.pdf";
-                return (
-                  <el-button type="text" onClick={() => window.open(row.file_url)}>
-                    点击查看电子发票
-                  </el-button>
-                );
-              }
-              return <span>快递单号：{row.file_url}</span>;
+            if (row.invoice_type === 1 && row.file_url) {
+              // const test = "https://photo.aiyi.live/3e22531ef33448adeb74aea70191e8ba.pdf";
+              return (
+                <el-button type="text" onClick={() => window.open(row.file_url)}>
+                  点击查看电子发票
+                </el-button>
+              );
+            } else if (row.courier_number) {
+              return (
+                <span
+                  v-clipboard={{
+                    text: row.courier_number,
+                    onSuccess: () => this.$notify.success({ message: "复制成功" }),
+                  }}
+                >
+                  快递单号：{row.courier_number}
+                </span>
+              );
             }
             return null;
           },
@@ -156,6 +181,8 @@ export default {
       showDetailRow: undefined,
       showApplyAuditDialog: false,
       showSettlementAuditDialog: false,
+      showSettlementAuditFailDialog: false,
+      settlementAuditFailReason: "",
       showInvoiceAuditDialog: false,
       showInvoiceAuditFailDialog: false,
       invoiceAuditFailReason: "",
@@ -184,11 +211,15 @@ export default {
       this.fetchData();
     },
     onExportExcel() {
-      const keys = this.columns.filter((c) => c.exportable === true).map((c) => c.prop);
+      const keys = this.columns
+        .filter((c) => c.exportable === true)
+        .map((c) =>
+          c.export_format ? (row) => c.export_format(row) : _.property(c.prop)
+        );
       const header = this.columns
         .filter((c) => c.exportable === true)
         .map((c) => c.label);
-      const preset_data = this.selected_rows.map((row) => keys.map((k) => _.get(row, k)));
+      const preset_data = this.selected_rows.map((row) => keys.map((k) => k(row)));
       export_json_to_excel({ data: preset_data, header, filename: "公会对公结算记录" });
     },
     batchAction() {
@@ -221,6 +252,7 @@ export default {
       if (_.every(res, (r) => r.code === 2000)) {
         this.showApplyAuditDialog = false;
       }
+      this.fetchData();
     },
     async settlementAudit(isPass, rows) {
       const res = await Promise.all(
@@ -236,8 +268,11 @@ export default {
         )
       );
       if (_.every(res, (r) => r.code === 2000)) {
+        this.settlementAuditFailReason = "";
         this.showSettlementAuditDialog = false;
+        this.showSettlementAuditFailDialog = false;
       }
+      this.fetchData();
     },
     async invoiceAudit(isPass, rows) {
       const res = await Promise.all(
@@ -256,22 +291,30 @@ export default {
       if (_.every(res, (r) => r.code === 2000)) {
         this.invoiceAuditFailReason = "";
         this.showInvoiceAuditDialog = false;
+        this.showInvoiceAuditFailDialog = false;
       }
+      this.fetchData();
     },
     async fetchData() {
-      this.loading = true;
-      const res = await request({
-        url: REQUEST.finance.getGuildCashList,
-        method: "post",
-        data: this.fetchParams,
-      });
-      if (res.code === 2000) {
-        this.page = res.data.page;
-        this.pagesize = res.data.pagesize;
-        this.total = res.data.count;
-        this.data = res.data.list;
+      try {
+        this.loading = true;
+        const res = await request({
+          url: REQUEST.finance.getGuildCashList,
+          method: "post",
+          data: this.fetchParams,
+        });
+        if (res.code === 2000) {
+          this.page = res.data.page;
+          this.pagesize = res.data.pagesize;
+          this.total = res.data.count;
+          this.data = res.data.list;
+        }
+      } catch (e) {
+        this.data = [];
+        console.error(e.message);
+      } finally {
+        this.loading = false;
       }
-      this.loading = false;
     },
   },
   mounted() {
@@ -334,6 +377,7 @@ export default {
     >
       <Detail v-if="showDetailRow" :record="showDetailRow" />
     </el-dialog>
+
     <el-dialog
       :width="'300px'"
       :visible.sync="showApplyAuditDialog"
@@ -347,6 +391,7 @@ export default {
         >
       </div>
     </el-dialog>
+
     <el-dialog
       :width="'300px'"
       :visible.sync="showSettlementAuditDialog"
@@ -354,7 +399,13 @@ export default {
       destroy-on-close
     >
       <div class="action-btns">
-        <el-button @click="settlementAudit(false, showSettlementAuditDialog)"
+        <el-button
+          @click="
+            () => {
+              settlementAuditFailReason = '';
+              showSettlementAuditFailDialog = true;
+            }
+          "
           >发放失败</el-button
         >
         <el-button
@@ -364,6 +415,35 @@ export default {
         >
       </div>
     </el-dialog>
+    <el-dialog
+      :width="'300px'"
+      :visible.sync="showSettlementAuditFailDialog"
+      title="提示"
+      destroy-on-close
+    >
+      <el-input
+        v-model="settlementAuditFailReason"
+        placeholder="请输入发放失败原因"
+        style="margin-bottom: 20px"
+      ></el-input>
+      <div class="action-btns">
+        <el-button
+          @click="
+            () => {
+              showSettlementAuditFailDialog = false;
+              settlementAuditFailReason = '';
+            }
+          "
+          >取消</el-button
+        >
+        <el-button
+          type="primary"
+          @click="settlementAudit(false, showSettlementAuditDialog)"
+          >确定</el-button
+        >
+      </div>
+    </el-dialog>
+
     <el-dialog
       :width="'300px'"
       :visible.sync="showInvoiceAuditDialog"

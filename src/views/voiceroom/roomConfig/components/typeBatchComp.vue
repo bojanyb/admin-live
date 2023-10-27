@@ -1,27 +1,13 @@
 <template>
   <div class="roomConfig-typeComp-box">
     <el-dialog
-      title="房间操作"
+      title="批量设置房间类型"
       :visible.sync="dialogVisible"
       width="500px"
       :before-close="handleClose"
     >
       <el-row>
-        <div>直播状态：{{ ruleForm.is_live === 1 ? "开播中" : "已关播" }}</div>
-      </el-row>
-      <el-divider></el-divider>
-      <el-row>
-        <el-button
-          type="primary"
-          round
-          :disabled="ruleForm.is_live !== 1"
-          style="margin-bottom: 30px"
-          @click="closeLive"
-          >关播</el-button
-        >
-      </el-row>
-      <!-- <el-row>
-        <div>修改房间类型</div>
+        <div>批量修改房间类型</div>
       </el-row>
       <el-divider></el-divider>
       <el-row>
@@ -42,7 +28,7 @@
 
           <el-button type="primary" @click="bindTypes">确 定</el-button>
         </div>
-      </el-row> -->
+      </el-row>
       <!-- <span slot="footer" class="dialog-footer">
         <el-button type="success" @click="bindTypes">确 定</el-button>
       </span> -->
@@ -76,7 +62,8 @@ export default {
       this.ruleForm = {
         ...row,
       };
-      // this.getCanChangeTypeData(row.user_id);
+      let ids = row.map(item => item.room_id).join(',');
+      this.getCanChangeTypeData(ids);
     },
     // 销毁组件
     closed() {
@@ -111,25 +98,6 @@ export default {
       if (res.code + "" === "2000") {
         this.typeList = res.data;
       }
-    },
-    // 关播
-    closeLive() {
-      this.$confirm("确定要关闭直播吗？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(async () => {
-        const {room_id,user_id} = this.ruleForm;
-        let res = await closeRoomLives({
-          room_ids: room_id,
-          user_ids: user_id,
-        });
-        if (res.code === 2000) {
-          this.$success("关闭成功");
-          this.dialogVisible = false;
-          this.$emit("getList");
-        }
-      });
     },
   },
 };

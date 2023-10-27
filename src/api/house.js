@@ -243,3 +243,13 @@ export function charmTopByLive(data) {
     data
   })
 }
+
+
+// 批量关停房间直播
+export function closeRoomLives(data) {
+  return request({
+    url: api.house.closeRoomLives,
+    method: 'post',
+    data
+  })
+}

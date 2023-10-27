@@ -1,5 +1,6 @@
 // 自定义指令
 import Vue from 'vue'
+import Clipboard from '@/directive/clipboard/clipboard'
 
 const directives = {}
 
@@ -151,3 +152,4 @@ directives.downLoad = Vue.directive('downLoad', {
     });
   },
 });
+Vue.directive('clipboard', Clipboard)
