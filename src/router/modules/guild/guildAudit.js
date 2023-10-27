@@ -83,6 +83,15 @@ const guildAuditRouter = {
 			}
 		},
     {
+			path: 'party-settlement-list',
+			component: () => import('@/views/voiceroom/guildAudit/party-settlement-list'),
+			name: 'party-settlement-list',
+			meta: {
+				title: '派对结算（新）',
+				noCache: true
+			}
+		},
+    {
 			path: 'liveRebate-list',
 			component: () => import('@/views/voiceroom/guildAudit/liveRebate-list'),
 			name: 'liveRebate-list',
