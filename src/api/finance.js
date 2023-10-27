@@ -183,9 +183,53 @@ export function getQueryPayDetails(data) {
   })
 }
 
+// 对公转账详情
+export function getCashDetail(data) {
+  return request({
+    url: REQUEST.finance.getCashDetail,
+    method: 'post',
+    data
+  })
+}
+
+// 审核退回
+export function refuseCash(data) {
+  return request({
+    url: REQUEST.finance.refuseCash,
+    method: 'post',
+    data
+  })
+}
+
+// 确定结算
+export function completeCash(data) {
+  return request({
+    url: REQUEST.finance.completeCash,
+    method: 'post',
+    data
+  })
+}
+
+// 审核退回
+export function refuseApply(data) {
+  return request({
+    url: REQUEST.finance.refuseApply,
+    method: 'post',
+    data
+  })
+}
+
+// 账单明细
+export function getBillDetail(data) {
+  return request({
+    url: REQUEST.finance.getBillDetail,
+    method: 'post',
+    data
+  })
+}
 
  // 按时间批量查单
-export function addTask(data) {
+ export function addTask(data) {
   return request({
     url: REQUEST.finance.addTask,
     method: 'post',

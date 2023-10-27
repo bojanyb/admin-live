@@ -22,7 +22,7 @@
           >
             <el-table-column fixed prop="id_card" label="身份证">
             </el-table-column>
-            <el-table-column prop="name" label="姓名" width="100">
+            <el-table-column prop="name" label="姓名1" width="100">
             </el-table-column>
             <el-table-column prop="alipay_cash_channel" label="当前支付宝提现通道">
               <template slot-scope="scope">
@@ -88,6 +88,7 @@ import { updateCashChannel } from "@/api/videoRoom";
 // 引入公共map
 import MAPDATA from "@/utils/jsonMap.js";
 import { cloneDeep } from "lodash";
+import { array } from 'jszip/lib/support';
 export default {
   components: {},
   data() {
@@ -126,13 +127,23 @@ export default {
     // 新增 - 修改
     async loadParams(status, row) {
       this.status = status;
+      let rowData = cloneDeep(row);
+      let userNumber = null;
+
+      if (Array.isArray(rowData)) {
+        userNumber = rowData.map(item => item.user_number).join(",");
+      } else {
+        userNumber = rowData.user_number;
+      }
+
       if (status === "single") {
         this.tableData = [row];
-        let rowData = cloneDeep(row);
         this.ruleForm.alipay_cash_channel = rowData.alipay_cash_channel;
         this.ruleForm.cash_channel = rowData.cash_channel;
+        this.ruleForm.user_number = userNumber;
       } else if (status === "batch") {
         this.tableData = row;
+        this.ruleForm.user_number = userNumber;
       }
       this.openComp();
     },
@@ -169,6 +180,7 @@ export default {
             id_card: ids,
             cash_channel: this.ruleForm.cash_channel,
             alipay_cash_channel: this.ruleForm.alipay_cash_channel,
+            user_number: this.ruleForm.user_number,
           };
 
           const res = await updateCashChannel(temp);

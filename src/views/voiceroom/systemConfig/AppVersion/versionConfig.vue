@@ -21,6 +21,7 @@
             <el-radio-button label="1">iOS</el-radio-button>
             <el-radio-button label="3" v-if="node_env.indexOf('aidoo') == -1">模拟器</el-radio-button>
             <el-radio-button label="4">PC</el-radio-button>
+            <el-radio-button label="5">Win7-PC</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="任务名" prop="title">
@@ -45,7 +46,7 @@
         <el-form-item label="版本号" prop="version">
           <el-input v-model="Form.version" placeholder="如: 1.0.1"></el-input>
         </el-form-item>
-        <el-form-item :label="platform == '4' ? 'PC Code' : '安卓Code' " prop="version_code" v-if="platform !== '1'">
+        <el-form-item :label="(platform == '4' || platform == '5') ? 'PC Code' : '安卓Code' " prop="version_code" v-if="platform !== '1'">
           <el-input v-model="Form.version_code"></el-input>
         </el-form-item>
         <el-form-item label="热更新code" prop="hotfix" v-if="is_mandatory === 30 && platform !== '1'"
@@ -362,6 +363,9 @@ export default {
                 case 4:
                   platformName = "PC";
                   break;
+                case 5:
+                  platformName = "Win7-PC";
+                  break;
                 default:
                   platformName = "其他";
                   break;
@@ -676,6 +680,7 @@ export default {
   .navItem {
     width: 150px;
     text-align: center;
+    cursor: pointer;
   }
 
   .navItem.active {

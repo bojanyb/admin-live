@@ -40,6 +40,11 @@
                         <p>公会名称：<span>{{ item.guild_name ? item.guild_name : '无' }}</span></p>
                         <p>注册时间：<span>{{ item.create_time }}</span></p>
                         <p>用户余额：<span style="color: #ff4949;font-size: 17px;">{{ form.balance }}</span></p>
+
+                        <p>钻石余额：<span>{{ form.diamond }}</span></p>
+                        <p>派对喵粮：<span>{{ form.party_gain }}</span></p>
+                        <p>直播喵粮：<span>{{ form.live_gain }}</span></p>
+                        <p>私聊猫粮：<span>{{ form.gain }}</span></p>
                     </div>
                 </div>
                 <div class="right_Con_Box emptyBox" v-if="userList.length <= 0">暂无数据</div>
@@ -123,7 +128,9 @@ export default {
                             }
                         })
                         if(Number(this.ruleForm.amount) > 10000000) {
-                            cb(new Error('充值数量最大范围10000000'))
+                          cb(new Error('充值数量最大范围10000000'))
+                        } else if([-0,0].includes(Number(this.ruleForm.amount))) {
+                          cb(new Error('增发数额不能为0'))
                         } else if(arr[0] === '-' || arr[0] === '+') {
                             if(arr[0] !== '-' && (arr[0] !== '+' || a.length != 1 || s.length != 0)) {
                                 cb(new Error('请输入正确数额，只能有一个"+", 且必须在第一位'))
@@ -213,7 +220,7 @@ export default {
             }
             let res = await getUserWallet(params)
             this.form = { ...res.data }
-            this.form.balance = Number(this.form.diamond) + Number(this.form.gain)
+            this.form.balance = Number(this.form.diamond) + Number(this.form.gain) + + Number(this.form.party_gain) + + Number(this.form.live_gain)
         },
         // 销毁组件
         closed() {
@@ -250,7 +257,7 @@ export default {
         padding: 10px 20px;
         box-sizing: border-box;
         margin-left: 20px;
-        height: 270px;
+        // height: 380px;
         .upBox {
             display: flex;
             align-items: center;

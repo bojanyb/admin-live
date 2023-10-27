@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <el-button v-if="ruleForm.time_limit.length < 3" @click="addData">添加</el-button>
-                    
+
                 </el-form-item>
                 <el-form-item label="商品播放类型" prop="play_type" @input="handleChangePlayType">
                     <el-radio-group v-model="ruleForm.play_type">
@@ -494,7 +494,7 @@ export default {
                 color: #ff4949;
             }
         }
-        
+
     }
 }
 </style>

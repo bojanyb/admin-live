@@ -1,36 +1,58 @@
 <template>
   <div class="roomConfig-typeComp-box">
     <el-dialog
-      title="设置房间分类"
+      title="房间操作"
       :visible.sync="dialogVisible"
       width="500px"
       :before-close="handleClose"
     >
-      <div class="btnBox">
-        <el-select
-          v-model="ruleForm.room_type"
-          placeholder="请选择房间分类"
-          style="margin-right: 10px"
+      <el-row>
+        <div>直播状态：{{ ruleForm.is_live === 1 ? "开播中" : "已关播" }}</div>
+      </el-row>
+      <el-divider></el-divider>
+      <el-row>
+        <el-button
+          type="primary"
+          round
+          :disabled="ruleForm.is_live !== 1"
+          style="margin-bottom: 30px"
+          @click="closeLive"
+          >关播</el-button
         >
-          <el-option
-            v-for="item in typeList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
+      </el-row>
+      <!-- <el-row>
+        <div>修改房间类型</div>
+      </el-row>
+      <el-divider></el-divider>
+      <el-row>
+        <div class="btnBox">
+          <el-select
+            v-model="ruleForm.room_type"
+            placeholder="请选择房间分类"
+            style="margin-right: 10px"
           >
-          </el-option>
-        </el-select>
-      </div>
-      <span slot="footer" class="dialog-footer">
+            <el-option
+              v-for="item in typeList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+
+          <el-button type="primary" @click="bindTypes">确 定</el-button>
+        </div>
+      </el-row> -->
+      <!-- <span slot="footer" class="dialog-footer">
         <el-button type="success" @click="bindTypes">确 定</el-button>
-      </span>
+      </span> -->
     </el-dialog>
   </div>
 </template>
 
 <script>
 // 引入api
-import { changePartyRoom, canChangeType } from "@/api/house.js";
+import { changePartyRoom, canChangeType, closeRoomLives } from "@/api/house.js";
 export default {
   data() {
     return {
@@ -41,6 +63,7 @@ export default {
         room_type: null,
         guild_number: null,
       },
+      room_type: null,
     };
   },
   methods: {
@@ -53,11 +76,20 @@ export default {
       this.ruleForm = {
         ...row,
       };
-      this.getCanChangeTypeData(row.user_id)
+      // this.getCanChangeTypeData(row.user_id);
     },
     // 销毁组件
     closed() {
       this.$emit("destoryComp");
+    },
+    changeType() {
+      this.$confirm("确定要更改房间类型吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        this.bindTypes();
+      });
     },
     // 绑定分类
     async bindTypes() {
@@ -68,7 +100,7 @@ export default {
       let { room_type, user_id } = this.$data.ruleForm;
       let res = await changePartyRoom({ room_type, user_id });
       if (res.code === 2000) {
-        this.$success("添加成功");
+        this.$success("修改成功");
         this.dialogVisible = false;
         this.$emit("getList");
       }
@@ -79,6 +111,25 @@ export default {
       if (res.code + "" === "2000") {
         this.typeList = res.data;
       }
+    },
+    // 关播
+    closeLive() {
+      this.$confirm("确定要关闭直播吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(async () => {
+        const {room_id,user_id} = this.ruleForm;
+        let res = await closeRoomLives({
+          room_ids: room_id,
+          user_ids: user_id,
+        });
+        if (res.code === 2000) {
+          this.$success("关闭成功");
+          this.dialogVisible = false;
+          this.$emit("getList");
+        }
+      });
     },
   },
 };

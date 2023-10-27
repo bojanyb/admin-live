@@ -175,7 +175,6 @@ const actions = {
             })
           }
           ax(newList.length > 0? newList : arr)
-
           newList.forEach((item,index) => {
             array.push({
               component: item.params ? item.params.component : Layout,
@@ -220,6 +219,18 @@ const actions = {
             redirect: '/404',
             hidden: true
           })
+
+          // 隐藏菜单
+          array.reduce((curr, prev) => {
+            if (curr.path === '/giveAway') {
+              curr.children.forEach(item => {
+                if (item.path === 'public-transfer') {
+                  item.hidden = true;
+                }
+              })
+            }
+            return prev
+          }, [])
 
           // 获取储存路由
           let jumpPath = localStorage.getItem('jumpPath')

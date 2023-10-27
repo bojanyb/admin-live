@@ -215,7 +215,7 @@ const STATUSLIST = [
   },
   {
     value: 3,
-    name: '退回'
+    name: '财务退回'
   },
   {
     value: 4,
@@ -228,6 +228,10 @@ const STATUSLIST = [
   {
     value: 6,
     name: '部分完成'
+  },
+  {
+    value: 7,
+    name: '用户取消'
   }
 ]
 
@@ -252,8 +256,8 @@ const STATUSLISTCOPY = [
 
 const HISTORYSTATUSLISTCOPY = [
   {
-      value: '',
-      name: '全部'
+    value: '',
+    name: '全部'
   },
   {
     value: 4,
@@ -318,6 +322,10 @@ const CASHCHANNEL = [
     disabled: true
   },
   {
+    value: 12,
+    name: '对公转账',
+  },
+  {
     value: 13,
     name: '薪遇见银行卡',
   },
@@ -333,6 +341,15 @@ const CASHCHANNEL = [
   {
     value: 16,
     name: '中职支付宝',
+    disabled: true
+  },
+  {
+    value: 17,
+    name: '智变量银行卡',
+  },
+  {
+    value: 18,
+    name: '智变量支付宝',
     disabled: true
   }
 ]
@@ -369,7 +386,11 @@ const BANKCASHCHANNEL = [
   {
     value: 15,
     name: '中职银行卡',
-  }
+  },
+  {
+    value: 17,
+    name: '智变量银行卡',
+  },
 ]
 
 /*
@@ -383,7 +404,7 @@ const ALIPAYCASHCHANNEL = [
   {
     value: 5,
     name: '小猪支付宝',
-    disabled: true
+    // disabled: true
   },
   {
     value: 7,
@@ -402,11 +423,16 @@ const ALIPAYCASHCHANNEL = [
   {
     value: 14,
     name: '薪遇见支付宝',
-    disabled: true
+    // disabled: true
   },
   {
     value: 16,
     name: '中职支付宝',
+    disabled: true
+  },
+  {
+    value: 18,
+    name: '智变量支付宝',
     disabled: true
   }
 ]
@@ -1116,8 +1142,8 @@ const DISSOLUTIONTYPELISTCOPY = [
     name: '后台关播'
   }
 ]
-  // 游戏配置 - 游戏列表
-  const PARTYGAMELIST = [
+// 游戏配置 - 游戏列表
+const PARTYGAMELIST = [
   // {
   //   index: 1,
   //   nickname: 'billiards',
@@ -1900,8 +1926,16 @@ const FINANCEGIVETYPELIST = [
     value: 1
   },
   {
-    name: '喵粮',
+    name: '私聊喵粮',
     value: 2
+  },
+  {
+    name: '派对喵粮',
+    value: 3
+  },
+  {
+    name: '直播喵粮',
+    value: 4
   }
 ]
 
@@ -2065,6 +2099,10 @@ const DEALSOURCELIST = [
   {
     id: 4,
     name: '个人私聊'
+  },
+  {
+    id: 5,
+    name: '心动岛房间'
   }
 ]
 // 流水记录 - 类型
@@ -2609,6 +2647,26 @@ const USERPUNISHSTATUSLIST = [
   {
     name: '已解除',
     value: 2
+  }
+]
+
+// 用户处罚 - 风险级别
+const USERPUNISHRISKLIST = [
+  {
+    name: '空',
+    value: 0
+  },
+  {
+    name: '轻微',
+    value: 1
+  },
+  {
+    name: '一般',
+    value: 2
+  },
+  {
+    name: '严重',
+    value: 3
   }
 ]
 
@@ -3255,6 +3313,36 @@ const REVIEWSTATUSLIST = [
   },
 ]
 
+const CASHAUDITLIST = [
+  {
+    name: '结算审核中',
+    value: 1
+  },
+  {
+    name: '结算审核退回',
+    value: 2
+  },
+  {
+    name: '已结算',
+    value: 3
+  },
+]
+
+const TYPEAUDITLIST = [
+  {
+    name: '发起申请',
+    value: 1
+  },
+  {
+    name: '审核退回',
+    value: 2
+  },
+  {
+    name: '确认结算',
+    value: 3
+  },
+]
+
 const RISKLEVELLIST = [
   {
     name: '全部',
@@ -3287,6 +3375,22 @@ const RISKLEVELLISTCOPY = [
     name: '严重',
     value: 3
   },
+]
+
+// 充值记录 - 是否被投诉
+const COMPLAINLIST = [
+  {
+    name: '全部',
+    value: -1
+  },
+  {
+    name: '是',
+    value: 1
+  },
+  {
+    name: '否',
+    value: 0
+  }
 ]
 
 // 推荐状态 0-全部 1-生效中 2-待生效 3-已过期
@@ -3396,6 +3500,7 @@ export default {
   USERPUNISHTYPELISTCOPY,
   USERPUNISHTYPELISTCOPYTWO,
   USERPUNISHSTATUSLIST,
+  USERPUNISHRISKLIST,
   USERPUNISHSTATUSLISTCOPY,
   OPERATIONTYPE,
   GIFTSHOWTYPELIST,
@@ -3468,6 +3573,9 @@ export default {
   GIFTACTIVETYLIST,
   ISACTIVETYLIST,
   REVIEWSTATUSLIST,
+  CASHAUDITLIST,
+  TYPEAUDITLIST,
+  COMPLAINLIST,
   RISKLEVELLIST,
   RISKLEVELLISTCOPY,
   RECOMMENDSTATUSLIST,

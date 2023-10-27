@@ -14,12 +14,15 @@ import guildListComp from './components/guild-listComp.vue'
 import guildLiveComp from './components/guild-liveComp.vue'
 // 引入公会申请列表组件
 import guildListApplyComp from './components/guild-list-applyComp.vue'
+// 引入公会申请列表组件
+import guildQrCodeComp from './components/guild-qrCodeComp.vue'
 export default {
   components: {
     menuComp,
     guildListComp,
     guildListApplyComp,
-    guildLiveComp
+    guildLiveComp,
+    guildQrCodeComp
   },
   data() {
     return {
@@ -33,6 +36,9 @@ export default {
         },
         {
           name: '公会申请列表'
+        },
+        {
+          name: '二维码配置'
         }
       ],
       tabIndex: '0',
@@ -50,6 +56,9 @@ export default {
           break;
         case "2":
           nav = "guildListApplyComp"
+          break;
+        case "3":
+          nav = "guildQrCodeComp"
           break;
         default:
           break;

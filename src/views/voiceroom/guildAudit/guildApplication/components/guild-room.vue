@@ -138,6 +138,8 @@ export default {
           {
             label: '创建时间',
             width: '160px',
+            prop: "create_time",
+            sortable: 'custom',
             render: (h, params) => {
               return h('span', params.row.create_time ? timeFormat(params.row.create_time, 'YYYY-MM-DD HH:mm:ss', true) : '无')
             }
@@ -559,6 +561,10 @@ export default {
     },
     // 导出excel
     BatchRurn() {
+      if(this.file_name == ""){
+        this.$message.warning("请先输入有效的文件名");
+        return
+      }
       let s = this.beforeSearch();
       s.file_name = this.file_name;
       delete s.page;

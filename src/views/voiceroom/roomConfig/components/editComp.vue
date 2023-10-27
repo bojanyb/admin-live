@@ -14,28 +14,38 @@
         class="body_box-line"
         label-suffix=":"
         :hide-required-asterisk="status === 'see'"
+        v-loading="fromLoading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.8)"
       >
         <el-row>
           <el-col :span="24">
-            <el-form-item label="渠道编号" prop="code">
-              <!-- <el-input
-                v-model="ruleForm.code"
-                placeholder="请输入渠道编号"
-                :disabled="status === 'update'"
-              ></el-input> -->
-              <el-select
-                v-model="ruleForm.code"
-                :disabled="status === 'update'"
-                placeholder="请选择渠道编号"
-              >
-                <el-option
-                  v-for="item in channelsList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
+            <el-row>
+              <el-col :span="16">
+                <el-form-item label="渠道编号" prop="code">
+                  <el-select
+                    v-model="ruleForm.code"
+                    :disabled="status === 'update'"
+                    placeholder="请选择渠道编号"
+                    multiple
+                    collapse-tags
+                  >
+                    <el-option
+                      v-for="item in channelsList"
+                      :key="item.value"
+                      :label="item.name"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-button v-if="status !== 'update'" style="margin-left: 10px; width: 100px;" @click="toggleSelectAll" :type="isAllSelected ? 'danger' : 'primary'">
+                  {{ isAllSelected ? '取消全选' : '全选' }}
+                </el-button>
+              </el-col>
+            </el-row>
           </el-col>
           <el-col :span="24">
             <el-form-item label="用户性别" prop="sex" v-if="tabIndex === '0'">
@@ -276,6 +286,7 @@ export default {
         { name: "女", value: "2" },
       ],
       channelsList: [],
+      fromLoading: false
     };
   },
   computed: {
@@ -347,6 +358,9 @@ export default {
         return "渠道设置";
       }
     },
+    isAllSelected() {
+      return this.ruleForm.code.length === this.channelsList.length;
+    },
   },
   mounted() {
     // 开始时间和结束时间
@@ -365,7 +379,7 @@ export default {
         let params = JSON.parse(JSON.stringify(row));
         let para = {};
         const ZeroPoint = new Date(new Date().toLocaleDateString()).getTime();
-        para.code = params.code || "";
+        para.code = params.code ? params.code.split(",") : "";
         para.name = params.name || "";
         para.number = params.number || "";
         para.channels = params.channels || "";
@@ -427,7 +441,7 @@ export default {
     async submitForm() {
       this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
-          let params = { ...this.ruleForm };
+          let params = { ...this.ruleForm,  code: Array.isArray(this.ruleForm.code) ? this.ruleForm.code.join(",") : "" };
           params.room_ids = this.tableData.reduce((pev, cur) => {
             pev.push(cur.id);
             return pev;
@@ -538,29 +552,35 @@ export default {
     },
     // 获取渠道
     async getChannelsList() {
-      const params = {
-        page: 1,
-        pagesize: 100
+      try {
+        this.fromLoading = true;
+        const params = {
+          page: 1,
+          pagesize: 100
+        };
+        const response = await getChannels(params);
+        this.fromLoading = false;
+        if (response.code === 2000) {
+          this.channelsList = (response.data.list || []).map(channel => ({
+            name: channel.name,
+            value: String(channel.code)
+          }));
+        } else {
+          this.fromLoading = false;
+          const errorMessage = '获取渠道失败：' + response.message;
+          console.error(errorMessage);
+        }
+      } catch (error) {
+        this.fromLoading = false;
+        const errorMessage = '获取渠道时发生错误：' + error;
+        console.error(errorMessage);
       }
-      const response = await getChannels(params)
-      if(response.code == 2000){
-        const tempArr = Array.from(
-          Array.isArray(response.data.list) ? response.data.list : []
-        )
-        this.channelsList = tempArr.reduce((prev, curr) => {
-          prev.push({
-            name: curr.name,
-            value: curr.code + ""
-          })
-          return prev
-        }, []) || [];
-
-        const channelsAllString = this.channelsList.map(curr => {
-          console.log(curr.value);
-          return curr.value
-        }).join(",")
-
-        this.channelsList.unshift({ name: "全部", value: channelsAllString })
+    },
+    toggleSelectAll() {
+      if (this.isAllSelected) {
+        this.ruleForm.code = [];
+      } else {
+        this.ruleForm.code = this.channelsList.map(item => item.value);
       }
     },
   },
