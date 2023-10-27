@@ -57,7 +57,7 @@
     <!-- 解封弹窗 -->
     <unbanComp ref="unbanComp" @getList="getList"></unbanComp>
     <!-- 忽略弹窗 -->
-    <ignoreComp ref="ignoreComp"></ignoreComp>
+    <ignoreComp ref="ignoreComp" @getList="getList"></ignoreComp>
   </div>
 </template>
 
