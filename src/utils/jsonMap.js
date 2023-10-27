@@ -2666,6 +2666,14 @@ const OPERATIONTYPE = [
     name: '修改证据',
     value: 5
   },
+  {
+    name: '复审处罚',
+    value: 6
+  },
+  {
+    name: '警告',
+    value: 7
+  },
 ]
 
 // 用户处罚 - 处罚时间
