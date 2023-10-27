@@ -18,7 +18,7 @@ vue Copy
         class="demo-ruleForm"
       >
         <el-form-item label="媒体" prop="category_id">
-          <el-select v-model="ruleForm.category_id" placeholder="请选择">
+          <el-select v-model="ruleForm.category_id" placeholder="请选择" :disabled="disabled">
             <el-option v-for="item in chainList" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -41,6 +41,7 @@ vue Copy
             v-model="ruleForm.ad_type"
             placeholder="请输入链接编号"
             clearable
+            :disabled="disabled"
           />
         </el-form-item>
         <!-- <el-form-item label="绑定用户ID" prop="user_number">
@@ -63,12 +64,13 @@ vue Copy
 
 <script>
 import { deepClone } from "@/utils/index";
-import { getAdSelect, adConfList } from "@/api/market";
+import { getAdSelect, addAdConf, updateAdConf } from "@/api/market";
 export default {
   data() {
     return {
       status: "add",
       dialogVisible: false,
+      disabled: false,
       ruleForm: {
         category_id: "",
         name: "",
@@ -101,31 +103,13 @@ export default {
   methods: {
     load(status, row) {
       this.status = status;
+      this.disabled = false;
       if (status !== "add") {
+        this.disabled = true;
         let params = JSON.parse(JSON.stringify(row));
         this.$set(this.$data, "ruleForm", params);
       }
       this.dialogVisible = true;
-    },
-    async handleSave(index, row) {
-      console.log(index, row);
-      const prama = {
-        ad_type: row.ad_type,
-        channel: row.channel,
-      };
-      console.log(prama);
-      try {
-        const response = await adConfList(prama);
-        if (response.code === 2000) {
-          this.$message({
-            type: "success",
-            message: "保存成功",
-          });
-          this.editingIndex = -1;
-        }
-      } catch (error) {
-        console.error(error);
-      }
     },
     handleClose() {
       this.dialogVisible = false;
@@ -142,17 +126,25 @@ export default {
       });
     },
     // 提交
-    handleSubmit() {
-      adConfList(this.ruleForm)
-        .then((res) => {
-          if (res.code === 2000) {
-            this.dialogVisible = false;
-            this.$emit("onSearch");
-          }
-        })
-        .catch((err) => {
-          this.$message.error(err);
-        });
+    async handleSubmit() {
+      try {
+        let response;
+        if(this.status === 'add') {
+          response = await addAdConf(this.ruleForm);
+        } else {
+          response = await updateAdConf(this.ruleForm);
+        }
+        if (response.code === 2000) {
+          this.$message({
+            type: "success",
+            message: "操作成功",
+          });
+          this.dialogVisible = false;
+          this.$emit("onSearch");
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
     /**
      * 获取监测链接数据并处理
