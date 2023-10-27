@@ -40,8 +40,8 @@ const option = {
 	  outputDir: 'dist',
 	  assetsDir: 'static',
 	  mode: 'info',
-    domainHttps: 'http://api.member3.member.juliang.vip', // https环境地址
-    domainHttp: 'http://m.member3.member.juliang.vip', // app端接口
+    domainHttps: '//api.member1.member.juliang.vip', // https环境地址
+    domainHttp: '//m.member1.member.juliang.vip', // app端接口
 	  httpHeader: '', // 后台本地携带
     favicon: 'favicon.ico',
     logo: 'images/logo.png',
