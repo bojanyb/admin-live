@@ -37,29 +37,33 @@
     <el-dialog
       :visible.sync="inputIdUpdateVisible"
       title="批量输入ID修改"
-      width="30%"
+      width="40%"
       append-to-body
-      @close="inputIdForm = {}"
     >
       <el-form
         ref="inputIdForm"
         :model="inputIdForm"
         label-suffix=":"
-        label-width="90px"
+        label-width="120px"
       >
-        <el-form-item label="用户ID">
+      <el-form-item label="提现类型" label-width="120px">
+        <el-radio-group v-model="inputIdForm.channel_type">
+        <el-radio-button :label="0">支付宝</el-radio-button>
+        <el-radio-button :label="1">银行卡</el-radio-button>
+      </el-radio-group>
+      </el-form-item>
+        <el-form-item label="用户ID" label-width="120px">
           <el-input
             type="textarea"
             v-model="inputIdForm.user_number"
+            :rows="6"
+            placeholder="请输入需要修改通道的用户ID，使用逗号间隔"
           ></el-input>
         </el-form-item>
-        <el-row style="padding: 20px">
-          <el-col :span="12">
-            <el-form-item label="支付宝提现通道" label-width="80">
+        <el-form-item label="支付宝提现通道" label-width="120px" v-if="!inputIdForm.channel_type">
               <el-select
                 v-model="inputIdForm.alipay_cash_channel"
                 placeholder="请选择修改提现通道"
-                style="width: 80%"
               >
                 <el-option
                   v-for="item in alipayCashList"
@@ -70,14 +74,10 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="银行卡提现通道" label-width="80">
+            <el-form-item label="银行卡提现通道" label-width="120px" v-else>
               <el-select
                 v-model="inputIdForm.cash_channel"
                 placeholder="请选择修改提现通道"
-                style="width: 80%"
               >
                 <el-option
                   v-for="item in bankCashList"
@@ -88,11 +88,9 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-        </el-row>
         <el-form-item>
-          <el-button type="primary" @click="submitForm">提交</el-button>
-          <el-button @click="inputIdForm = {}">重置</el-button>
+          <el-button @click="handleCloseRespsone">取消</el-button>
+          <el-button type="primary" @click="submitForm">开始切换</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -162,7 +160,9 @@ export default {
       cashList: MAPDATA.CASHCHANNEL,
       alipayCashList: MAPDATA.ALIPAYCASHCHANNEL,
       bankCashList: MAPDATA.BANKCASHCHANNEL,
-      inputIdForm: {}, // 批量输入ID表单
+      inputIdForm: {
+        channel_type: 0
+      }, // 批量输入ID表单
       respsoneData: {
         // 批量输入ID返回表单
         error_user: "",
@@ -537,9 +537,14 @@ export default {
         if (valid) {
           let temp = {
             user_number: this.inputIdForm.user_number,
-            cash_channel: this.inputIdForm.cash_channel,
-            alipay_cash_channel: this.inputIdForm.alipay_cash_channel,
           };
+
+          if (this.inputIdForm.channel_type) {
+            temp.cash_channel = this.inputIdForm.cash_channel
+          } else {
+            temp.alipay_cash_channel = this.inputIdForm.alipay_cash_channel
+          }
+
           const res = await updateCashChannel(temp);
           if (res.code + "" === "2000") {
             this.respsoneData = res.data;
@@ -614,8 +619,11 @@ export default {
     handleCloseRespsone() {
       this.respsoneDataVisible = false;
       this.inputIdUpdateVisible = false;
+      inputIdForm = {
+        channel_type: 0
+      }
       this.getList();
-    },
+    }
   },
 };
 </script>

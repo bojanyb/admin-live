@@ -426,16 +426,6 @@ export default {
           options: MAPDATA.IDENTIFICATION,
         },
         {
-          name: "is_complaint",
-          type: "select",
-          value: -1,
-          keyName: "value",
-          optionLabel: "name",
-          label: "是否被投诉",
-          placeholder: "请选择",
-          options: MAPDATA.COMPLAINLIST,
-        },
-        {
           name: "pay_config_id",
           type: "select",
           value: "",
@@ -446,6 +436,21 @@ export default {
           clearable: true,
           options: this.allMerchantList,
         },
+        {
+          name: "is_complaint",
+          type: "select",
+          value: -1,
+          keyName: "value",
+          optionLabel: "name",
+          label: "是否被投诉",
+          placeholder: "请选择",
+          options: MAPDATA.COMPLAINLIST,
+        },
+        // {
+        //     name: 'time',
+        //     type: 'dateControl',
+        //     label: '时间选择',
+        // },
         {
           name: "dateTimeParams",
           type: "datePicker",

@@ -299,6 +299,10 @@
 				{
 					id : 2,
 					name : "派对房间"
+				},
+				{
+					id : 3,
+					name : "心动岛房间"
 				}
 				],
 				batchFileNameVisible: false,

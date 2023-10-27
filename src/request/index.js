@@ -284,6 +284,7 @@ const request = {
         roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 移除24小时房间统计
         guildOperateList: `${HTTPHEADER}/GuildOperate/list`, // 公会运营二维码列表
         saveWechatCode: `${HTTPHEADER}/GuildOperate/saveWechatCode`, // 修改二维码
+        roomFlowNew: `${HTTPHEADER}/RoomFlow/indexNew`, // 房间流水明细(新)
 
 
 
@@ -343,6 +344,9 @@ const request = {
         noblePrice: `${HTTPHEADER}/noblePrice/index`, // 贵族价格管理
         priceSave: `${HTTPHEADER}/noblePrice/save`, // 贵族价格新增/修改
         nobleUser: `${HTTPHEADER}/nobleUser/index`, // 贵族用户列表
+
+        getUserNobleLog: `${HTTPHEADER}/nobleUser/getUserNobleLog`, // 用户贵族状态清单
+        getUserGrowthValueLog: `${HTTPHEADER}/nobleUser/getUserGrowthValueLog`, // 成长值变化记录
     },
 
     // 财务管理
@@ -367,6 +371,15 @@ const request = {
         getTaskList: `${HTTPHEADER}/Recharge/getTaskList`, // 按时间批量查单-获取结果
         getTaskDetail: `${HTTPHEADER}/Recharge/getTaskDetail`, // 按时间批量查单-获取明细
         getTaskDetailLog: `${HTTPHEADER}/Recharge/getTaskDetailLog`, // 按时间批量查单-获取补单明细
+        getGuildCashList: `${HTTPHEADER}/guildCash/getGuildCashList`, // 对公结算记录（公会）
+        getAnchorCash: `${HTTPHEADER}/cash/getAnchorCash`, // 对公结算记录（主播）
+        getGuildCashBill: `${HTTPHEADER}/guildCash/getGuildCashBill`, // 对公结算账单明细
+        applyAudit: `${HTTPHEADER}/guildCash/applyAudit`, // 对公结算申请审核
+        settlementAudit: `${HTTPHEADER}/guildCash/settlementAudit`, // 对公结算银行结算审核
+        invoiceAudit: `${HTTPHEADER}/guildCash/invoiceAudit`, // 对公结算发票审核
+        doCash: `${HTTPHEADER}/guildCash/doCash`, // 对公结算审核操作（主播）
+        getGuildCashBank: `${HTTPHEADER}/guildCash/getGuildCashBank`, // 对公资质管理列表
+        bankAudit: `${HTTPHEADER}/guildCash/bankAudit`, // 对公资质审核
     },
 
     // 消息管理
@@ -376,6 +389,10 @@ const request = {
         delete: `${HTTPHEADER}/ActivityPush/delete`, // 活动通知列表
         pushLogList: `${HTTPHEADER}/PushLog`, // 活动通知列表
         addPushLog: `${HTTPHEADER}/pushLog/add`, // 活动通知列表
+        recallRuleList: `${HTTPHEADER}/UserRecallRule/index`,
+        addRecallRule: `${HTTPHEADER}/UserRecallRule/add`,
+        updateRecallRule: `${HTTPHEADER}/UserRecallRule/update`,
+        delRecallRule: `${HTTPHEADER}/UserRecallRule/del`,
     },
 
     // 举报管理
@@ -513,6 +530,15 @@ const request = {
         rmHeartAnchor: `${HTTPHEADER}/Heartbeat/rmHeartAnchor`, // 移除心动主播
         heartOrder: `${HTTPHEADER}/Heartbeat/heartOrder`, // 心动记录
         serachTag: `${HTTPHEADER}/Heartbeat/serachTag`, // 获取音色分类
+        getChatConfig: `${HTTPHEADER}/System/getSyetermConfigChat`, // 心动分成配置
+        saveChatConfig: `${HTTPHEADER}/System/saveSyetermConfigChat`, // 设置心动分成配置
+
+
+        heartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/list`, // 心动主播
+        addHeartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/add`, // 添加心动主播
+        editHeartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/update`, // 编辑心动主播
+        rmHeartAnchorV2: `${HTTPHEADER}/ChatCardAnchorRecommend/delete`, // 移除心动主播
+        serachTagV2: `${HTTPHEADER}/ChatCardAnchorRecommend/common`, // 获取音色分类
     },
 
     // 动态管理

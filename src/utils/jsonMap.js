@@ -215,7 +215,7 @@ const STATUSLIST = [
   },
   {
     value: 3,
-    name: '退回'
+    name: '财务退回'
   },
   {
     value: 4,
@@ -228,6 +228,10 @@ const STATUSLIST = [
   {
     value: 6,
     name: '部分完成'
+  },
+  {
+    value: 7,
+    name: '用户取消'
   }
 ]
 
@@ -1904,8 +1908,16 @@ const FINANCEGIVETYPELIST = [
     value: 1
   },
   {
-    name: '喵粮',
+    name: '私聊喵粮',
     value: 2
+  },
+  {
+    name: '派对喵粮',
+    value: 3
+  },
+  {
+    name: '直播喵粮',
+    value: 4
   }
 ]
 
@@ -2069,6 +2081,10 @@ const DEALSOURCELIST = [
   {
     id: 4,
     name: '个人私聊'
+  },
+  {
+    id: 5,
+    name: '心动岛房间'
   }
 ]
 // 流水记录 - 类型
