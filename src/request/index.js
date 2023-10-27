@@ -501,6 +501,7 @@ const request = {
 
         punishWordsList: `${HTTPHEADER}/Punish`, // 获取风控文案库列表
         updatePunishWords: `${HTTPHEADER}/Punish/update`, // 修改风控文案
+        deletePunishWords: `${HTTPHEADER}/Punish/del`, // 删除风控文案
 
         NewUserPunishLog: `${HTTPHEADER}/NewPunishLog/getUserLogs`, // 获取举报用户记录
         NewGuildPunishLog: `${HTTPHEADER}/NewPunishLog/getGuildLogs`, // 获取举报公会记录

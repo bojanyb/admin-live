@@ -200,6 +200,15 @@ export function updatePunishWords(data) {
   })
 }
 
+// 删除风控文案
+export function deletePunishWords(data) {
+  return request({
+    url: api.risk.deletePunishWords,
+    method: 'post',
+    data
+  })
+}
+
 // 获取举报用户记录
 export function NewUserPunishLog(data) {
   return request({
