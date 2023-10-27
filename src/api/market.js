@@ -39,9 +39,18 @@ export function exportOnlineUserData(data) {
 }
 
 // 市场监测配置管理 - 添加
-export function adConfList(data) {
+export function addAdConf(data) {
   return request({
     url: api.market.addAdConf,
+    method: 'post',
+    data
+  })
+}
+
+// 市场监测配置管理 - 修改
+export function updateAdConf(data) {
+  return request({
+    url: api.market.updateAdConf,
     method: 'post',
     data
   })
