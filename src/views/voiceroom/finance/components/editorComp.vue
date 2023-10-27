@@ -162,6 +162,7 @@
               <el-col
                 :span="24"
                 v-for="subItem in item.audit_data"
+                :key="id"
                 class="audit-col"
               >
                 <div v-if="item.type !== 1">

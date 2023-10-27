@@ -342,6 +342,15 @@ const CASHCHANNEL = [
     value: 16,
     name: '中职支付宝',
     disabled: true
+  },
+  {
+    value: 17,
+    name: '智变量银行卡',
+  },
+  {
+    value: 18,
+    name: '智变量支付宝',
+    disabled: true
   }
 ]
 
@@ -377,7 +386,11 @@ const BANKCASHCHANNEL = [
   {
     value: 15,
     name: '中职银行卡',
-  }
+  },
+  {
+    value: 17,
+    name: '智变量银行卡',
+  },
 ]
 
 /*
@@ -415,6 +428,11 @@ const ALIPAYCASHCHANNEL = [
   {
     value: 16,
     name: '中职支付宝',
+    disabled: true
+  },
+  {
+    value: 18,
+    name: '智变量支付宝',
     disabled: true
   }
 ]
@@ -1908,8 +1926,16 @@ const FINANCEGIVETYPELIST = [
     value: 1
   },
   {
-    name: '喵粮',
+    name: '私聊喵粮',
     value: 2
+  },
+  {
+    name: '派对喵粮',
+    value: 3
+  },
+  {
+    name: '直播喵粮',
+    value: 4
   }
 ]
 
@@ -2621,6 +2647,26 @@ const USERPUNISHSTATUSLIST = [
   {
     name: '已解除',
     value: 2
+  }
+]
+
+// 用户处罚 - 风险级别
+const USERPUNISHRISKLIST = [
+  {
+    name: '空',
+    value: 0
+  },
+  {
+    name: '轻微',
+    value: 1
+  },
+  {
+    name: '一般',
+    value: 2
+  },
+  {
+    name: '严重',
+    value: 3
   }
 ]
 
@@ -3454,6 +3500,7 @@ export default {
   USERPUNISHTYPELISTCOPY,
   USERPUNISHTYPELISTCOPYTWO,
   USERPUNISHSTATUSLIST,
+  USERPUNISHRISKLIST,
   USERPUNISHSTATUSLISTCOPY,
   OPERATIONTYPE,
   GIFTSHOWTYPELIST,

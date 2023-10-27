@@ -344,6 +344,9 @@ const request = {
         noblePrice: `${HTTPHEADER}/noblePrice/index`, // 贵族价格管理
         priceSave: `${HTTPHEADER}/noblePrice/save`, // 贵族价格新增/修改
         nobleUser: `${HTTPHEADER}/nobleUser/index`, // 贵族用户列表
+
+        getUserNobleLog: `${HTTPHEADER}/nobleUser/getUserNobleLog`, // 用户贵族状态清单
+        getUserGrowthValueLog: `${HTTPHEADER}/nobleUser/getUserGrowthValueLog`, // 成长值变化记录
     },
 
     // 财务管理
@@ -368,6 +371,15 @@ const request = {
         getTaskList: `${HTTPHEADER}/Recharge/getTaskList`, // 按时间批量查单-获取结果
         getTaskDetail: `${HTTPHEADER}/Recharge/getTaskDetail`, // 按时间批量查单-获取明细
         getTaskDetailLog: `${HTTPHEADER}/Recharge/getTaskDetailLog`, // 按时间批量查单-获取补单明细
+        getGuildCashList: `${HTTPHEADER}/guildCash/getGuildCashList`, // 对公结算记录（公会）
+        getAnchorCash: `${HTTPHEADER}/cash/getAnchorCash`, // 对公结算记录（主播）
+        getGuildCashBill: `${HTTPHEADER}/guildCash/getGuildCashBill`, // 对公结算账单明细
+        applyAudit: `${HTTPHEADER}/guildCash/applyAudit`, // 对公结算申请审核
+        settlementAudit: `${HTTPHEADER}/guildCash/settlementAudit`, // 对公结算银行结算审核
+        invoiceAudit: `${HTTPHEADER}/guildCash/invoiceAudit`, // 对公结算发票审核
+        doCash: `${HTTPHEADER}/guildCash/doCash`, // 对公结算审核操作（主播）
+        getGuildCashBank: `${HTTPHEADER}/guildCash/getGuildCashBank`, // 对公资质管理列表
+        bankAudit: `${HTTPHEADER}/guildCash/bankAudit`, // 对公资质审核
     },
 
     // 消息管理
@@ -506,6 +518,13 @@ const request = {
 
         punishWordsList: `${HTTPHEADER}/Punish`, // 获取风控文案库列表
         updatePunishWords: `${HTTPHEADER}/Punish/update`, // 修改风控文案
+        getReportingGuildList: `${HTTPHEADER}/BackendReport/getGuildList`, // 获取举报公会记录
+        getReportingUserList: `${HTTPHEADER}/BackendReport/getUserList`, // 获取举报用户记录
+        reportGuildOrUser: `${HTTPHEADER}/BackendReport/report`, // 提交举报公会/用户
+
+        usersPunishList: `${HTTPHEADER}/UserPunishLog/getPunishTypeList`, //获取用户举报类型列表
+        guildsPunishList: `${HTTPHEADER}/UserComplaint/init`, //获取公会举报类型列表
+        guildOrUserInfo: `${HTTPHEADER}/BackendReport/searchObject`, //搜索用户或公会
     },
 
     // 心动速配
@@ -705,6 +724,10 @@ const request = {
       chain: `${HTTPHEADER}/NewUserData/chain`, // 获取监测链接
       monitorChainData: `${HTTPHEADER}/NewUserData/monitorChainData`, // 监测链接数据
       exportOnlineUserData: `${HTTPHEADER}/NewUserData/exportOnlineUserData`, // 导出监测链接数据
+      adConfList: `${HTTPHEADER}/AdClickConf/index`, // 市场监测配置管理 - 列表
+      addAdConf: `${HTTPHEADER}/AdClickConf/addData`, // 市场监测配置管理 - 添加
+      handleAdConf: `${HTTPHEADER}/AdClickConf/handle`, // 市场监测配置管理 - 启用/停用
+      getAdSelect: `${HTTPHEADER}/AdClickConf/getSelect`, // 市场监测配置管理 - 媒体下拉框列表
   }
 }
 
