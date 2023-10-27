@@ -70,16 +70,16 @@ export default {
           isNum: true,
           placeholder: "请输入用户ID",
         },
-        {
-          name: "sort_field",
-          type: "select",
-          value: "id",
-          keyName: "value",
-          optionLabel: "name",
-          label: "排序",
-          placeholder: "请选择",
-          options: MAPDATA.NOBILITYUSERSORTLIST,
-        },
+        // {
+        //   name: "sort_field",
+        //   type: "select",
+        //   value: "id",
+        //   keyName: "value",
+        //   optionLabel: "name",
+        //   label: "排序",
+        //   placeholder: "请选择",
+        //   options: MAPDATA.NOBILITYUSERSORTLIST,
+        // },
       ];
     },
     cfgs() {
