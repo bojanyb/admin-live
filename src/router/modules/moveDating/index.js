@@ -46,7 +46,25 @@ const moveDatingRouter = {
 				title: '心动记录',
 				noCache: true
 			}
-		}
+		},
+		{
+			path: 'distribution',
+			component: () => import('@/views/voiceroom/moveDating/distribution'),
+			name: 'distribution',
+			meta: {
+				title: '分成配置',
+				noCache: true
+			}
+		},
+		{
+			path: 'chatRecord',
+			component: () => import('@/views/voiceroom/moveDating/chatRecord'),
+			name: 'chatRecord',
+			meta: {
+				title: '畅聊记录',
+				noCache: true
+			}
+		},
 	]
 }
 
