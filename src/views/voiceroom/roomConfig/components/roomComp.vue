@@ -50,6 +50,22 @@
             </el-select>
           </el-form-item> -->
         </div>
+        <div class="flexBox">
+          <el-form-item label="房间类型" prop="room_category_id">
+            <el-select
+              v-model="ruleForm.room_category_id"
+              placeholder="请选择房间类型"
+            >
+              <el-option
+                v-for="item in typeList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </div>
         <el-form-item label="房间封面" prop="room_cover">
           <uploadImg
             ref="uploadImg"
@@ -78,7 +94,7 @@
 // 引入抽屉组件
 import drawer from "@/components/drawer/index";
 // 引入api
-import { updateParty } from "@/api/house.js";
+import { updateParty,canChangeType } from "@/api/house.js";
 // 引入图片上传组件
 import uploadImg from "@/components/uploadImg/index.vue";
 // 引入公共map
@@ -87,6 +103,12 @@ export default {
   components: {
     uploadImg,
     drawer,
+  },
+  props: {
+    classifyList: {
+      type: Array,
+      default: [],
+    },
   },
   data() {
     return {
@@ -119,6 +141,9 @@ export default {
         // admin_recommend_status: [
         //   { required: true, message: "请输入热门推荐", trigger: "blur" },
         // ],
+        room_category_id: [
+          { required: false, message: "请选择房间类型", trigger: "blur" },
+        ],
         room_notice: [
           { required: false, message: "请输入房间公告", trigger: "blur" },
         ],
@@ -152,6 +177,13 @@ export default {
     handleClose() {
       this.openComp(false);
     },
+    // 获取房间类型
+    async getCanChangeTypeData(user_id) {
+      let res = await canChangeType({ user_id });
+      if (res.code + "" === "2000") {
+        this.typeList = res.data;
+      }
+    },
     // 获取参数
     loadParams(status, row, list) {
       this.openComp();
@@ -159,7 +191,7 @@ export default {
       this.status = status;
       let params = JSON.parse(JSON.stringify(row));
       this.$set(this.$data, "ruleForm", params);
-
+      this.getCanChangeTypeData(row.user_id);
       this.oldParams = JSON.parse(JSON.stringify(this.ruleForm));
     },
     openComp(status = true) {
@@ -177,6 +209,7 @@ export default {
             // admin_recommend_status: s.admin_recommend_status,
             room_cover: s.room_cover,
             room_notice: s.room_notice,
+            user_id: s.user_id,
           };
           let res = await updateParty(params);
           if (res.code === 2000) {

@@ -16,9 +16,11 @@
       >
     </div>
     <div class="searchParams">
+      <!-- 当前时间前6个月 不包含当前月 preMonth -->
       <SearchPanel
         v-model="searchParams"
         :forms="forms"
+        :preMonth="6"
         :show-reset="true"
         :show-search-btn="true"
         :showYesterday="true"
@@ -64,8 +66,12 @@
     </div>
 
     <!-- 批量补单 -->
-    <el-dialog title="批量查询反馈" width="30%" :visible.sync="batchDialogVisible">
-      <div style="padding: 10px;">
+    <el-dialog
+      title="批量查询反馈"
+      width="30%"
+      :visible.sync="batchDialogVisible"
+    >
+      <div style="padding: 10px">
         查询出共{{ batchResultData && batchResultData.length }}条数据已支付成功
       </div>
       <div
@@ -121,13 +127,17 @@
     </el-dialog>
 
     <!-- 批量补单结果 -->
-    <el-dialog class="queryPayResult" title="批量补单结果" width="50%" :visible.sync="queryOrderResultVisible" @close="stopTimer">
-      <el-table
-        :data="orderPayData"
-        style="width: 100%">
+    <el-dialog
+      class="queryPayResult"
+      title="批量补单结果"
+      width="50%"
+      :visible.sync="queryOrderResultVisible"
+      @close="stopTimer"
+    >
+      <el-table :data="orderPayData" style="width: 100%">
         <el-table-column
           prop="add_time"
-          label="批量补单时间"
+          label="批量查单时间"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
@@ -140,7 +150,11 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <template v-if="[2,3].includes(scope.row.status)">{{ `${scope.row.success_number || 0}条成功 / 共补单${scope.row.total_number || 0}条记录` }}</template>
+            <template v-if="[2, 3].includes(scope.row.status)">{{
+              `${scope.row.success_number || 0}条成功 / 共补单${
+                scope.row.total_number || 0
+              }条记录`
+            }}</template>
             <template v-else>正在补单，请等待...</template>
           </template>
         </el-table-column>
@@ -162,23 +176,18 @@
       />
     </el-dialog>
 
-
     <!-- 补单明细 -->
-    <el-dialog class="queryOrderResult" title="成功补单明细" width="50%" :visible.sync="queryOrderDetailVisible" @close="startTimer">
-      <el-table
-        :data="orderDetailData"
-        style="width: 100%">
-        <el-table-column
-          prop="trade_no"
-          label="商户单号"
-          show-overflow-tooltip
-          >
+    <el-dialog
+      class="queryOrderResult"
+      title="成功补单明细"
+      width="50%"
+      :visible.sync="queryOrderDetailVisible"
+      @close="startTimer"
+    >
+      <el-table :data="orderDetailData" style="width: 100%">
+        <el-table-column prop="trade_no" label="商户单号" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column
-          prop="remark"
-          label="补单结果"
-          show-overflow-tooltip
-          >
+        <el-table-column prop="remark" label="补单结果" show-overflow-tooltip>
         </el-table-column>
       </el-table>
       <!--工具条-->
@@ -191,114 +200,144 @@
       />
     </el-dialog>
 
-
-
     <!-- 当前时段补单 -->
-    <el-dialog class="queryPayResult" title="当前时段补单结果" width="50%" :visible.sync="showCurPeriodOrderResult">
-      <el-table
-        :data="currentPeriodOrderPayData"
-        style="width: 100%">
+    <el-dialog
+      class="queryPayResult"
+      title="当前时段补单结果"
+      width="50%"
+      :visible.sync="showCurPeriodOrderResult"
+    >
+      <el-table :data="currentPeriodOrderPayData" style="width: 100%">
         <el-table-column
           prop="add_time"
           label="当前时段补单时间"
           show-overflow-tooltip
-          >
+        >
           <template slot-scope="scope">
-              {{ scope.row.create_time  }}
+            {{ scope.row.create_time }}
           </template>
         </el-table-column>
         <el-table-column
           prop="success_number"
           label="结果"
           show-overflow-tooltip
-          >
+        >
           <template slot-scope="scope">
-            {{scope.row.status}}
+            {{ scope.row.status }}
           </template>
         </el-table-column>
         <el-table-column label="操作">
-            <template slot-scope="scope">
-                <el-button type="primary" @click="hanldeQueryCurPeriodDetail(scope.row)">查看明细</el-button>
-            </template>
+          <template slot-scope="scope">
+            <el-button
+              type="primary"
+              @click="hanldeQueryCurPeriodDetail(scope.row)"
+              >查看明细</el-button
+            >
+          </template>
         </el-table-column>
       </el-table>
-				<!--工具条-->
-				<pagination v-show="currentPeriodOrderPayTotal>0" :total="currentPeriodOrderPayTotal" :page.sync="currentPeriodOrderPayPage.page"
-					:limit.sync="currentPeriodOrderPayPage.limit" @pagination="getCurPeriodOrderResult" />
+      <!--工具条-->
+      <pagination
+        v-show="currentPeriodOrderPayTotal > 0"
+        :total="currentPeriodOrderPayTotal"
+        :page.sync="currentPeriodOrderPayPage.page"
+        :limit.sync="currentPeriodOrderPayPage.limit"
+        @pagination="getCurPeriodOrderResult"
+      />
     </el-dialog>
 
     <!-- 当前时段补单任务列表 -->
-    <el-dialog class="queryOrderResult" title="当前时段补单任务" width="50%" :visible.sync="curPeriodOrderDetailVisible">
-      <el-table
-        :data="currentPeriodOrderDetailData"
-        style="width: 100%">
-        <el-table-column
-          prop="id"
-          label="任务id"
-          show-overflow-tooltip
-          >
+    <el-dialog
+      class="queryOrderResult"
+      title="当前时段补单任务"
+      width="50%"
+      :visible.sync="curPeriodOrderDetailVisible"
+    >
+      <el-table :data="currentPeriodOrderDetailData" style="width: 100%">
+        <el-table-column prop="id" label="任务id" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column
-          prop="status"
-          label="任务状态"
-          show-overflow-tooltip
-          >
+        <el-table-column prop="status" label="任务状态" show-overflow-tooltip>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <!--  -->
-              <el-button type="primary" @click="openTaskOrderLog(scope.row)">查看明细</el-button>
+            <el-button type="primary" @click="openTaskOrderLog(scope.row)"
+              >查看明细</el-button
+            >
           </template>
-      </el-table-column>
+        </el-table-column>
       </el-table>
-      				<!--工具条-->
-				<pagination v-show="currentPeriodOrderDetailTotal>0" :total="currentPeriodOrderDetailTotal" :page.sync="currentPeriodOrderDetailPage.page"
-					:limit.sync="currentPeriodOrderDetailPage.limit" @pagination="getCurPeriodOrderDetails" />
+      <!--工具条-->
+      <pagination
+        v-show="currentPeriodOrderDetailTotal > 0"
+        :total="currentPeriodOrderDetailTotal"
+        :page.sync="currentPeriodOrderDetailPage.page"
+        :limit.sync="currentPeriodOrderDetailPage.limit"
+        @pagination="getCurPeriodOrderDetails"
+      />
     </el-dialog>
 
     <!-- 当前时段补单明细 -->
-    <el-dialog class="queryOrderResult" title="当前时段补单明细" width="50%" :visible.sync=" showCurPeriodOrderLogList ">
-      <el-table
-        :data="curPeriodDetailLogList"
-        style="width: 100%">
+    <el-dialog
+      class="queryOrderResult"
+      title="当前时段补单明细"
+      width="50%"
+      :visible.sync="showCurPeriodOrderLogList"
+    >
+      <el-table :data="curPeriodDetailLogList" style="width: 100%">
         <el-table-column
           prop="trade_no"
           label="商户单号"
           width="250"
           show-overflow-tooltip
-          >
+        >
         </el-table-column>
-        <el-table-column
-          prop="status"
-          label="补单结果"
-          show-overflow-tooltip
-          >
+        <el-table-column prop="status" label="补单结果" show-overflow-tooltip>
         </el-table-column>
         <el-table-column
           prop="remark"
           label="备注"
           width="360"
           show-overflow-tooltip
-          >
+        >
         </el-table-column>
       </el-table>
-      <pagination v-show="curPeriodOrderDetailLogTotal>0" :total="curPeriodOrderDetailLogTotal" :page.sync="curPeriodOrderDetailLogPage.page"
-        :limit.sync="curPeriodOrderDetailLogPage.limit" @pagination="openTaskOrderLog" />
+      <pagination
+        v-show="curPeriodOrderDetailLogTotal > 0"
+        :total="curPeriodOrderDetailLogTotal"
+        :page.sync="curPeriodOrderDetailLogPage.page"
+        :limit.sync="curPeriodOrderDetailLogPage.limit"
+        @pagination="openTaskOrderLog"
+      />
     </el-dialog>
 
-      <!-- 当前时段补单反馈 -->
-      <el-dialog title="当前时段补单反馈" width="30%" :visible.sync="curPeriodOrderDialogVisible">
-        <div style="padding: 10px;">
-             操作成功
-        </div>
-      </el-dialog>
-
+    <!-- 当前时段补单反馈 -->
+    <el-dialog
+      title="当前时段补单反馈"
+      width="30%"
+      :visible.sync="curPeriodOrderDialogVisible"
+    >
+      <div style="padding: 10px">操作成功</div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 // 引入api
-import { diamondRechargeAll, getMerchantList, wxMerchantList, queryPayStatus, getQueryPayTask, getQueryPayDetails, addTask,getTaskList,getTaskDetail,getTaskDetailLog, diamondRechargeTotal, fetchMerchantList} from "@/api/finance.js";
+import {
+  diamondRechargeAll,
+  getMerchantList,
+  wxMerchantList,
+  queryPayStatus,
+  getQueryPayTask,
+  getQueryPayDetails,
+  addTask,
+  getTaskList,
+  getTaskDetail,
+  getTaskDetailLog,
+  diamondRechargeTotal,
+  fetchMerchantList,
+} from "@/api/finance.js";
 // 引入列表组件
 import tableList from "@/components/tableList/TableList.vue";
 // 引入菜单组件
@@ -429,6 +468,21 @@ export default {
           options: this.allMerchantList,
         },
         {
+          name: "is_complaint",
+          type: "select",
+          value: -1,
+          keyName: "value",
+          optionLabel: "name",
+          label: "是否被投诉",
+          placeholder: "请选择",
+          options: MAPDATA.COMPLAINLIST,
+        },
+        // {
+        //     name: 'time',
+        //     type: 'dateControl',
+        //     label: '时间选择',
+        // },
+        {
           name: "dateTimeParams",
           type: "datePicker",
           dateType: "datetimerange",
@@ -510,6 +564,23 @@ export default {
             },
           },
           {
+            label: "退款金额",
+            minWidth: "150px",
+            render: (h, params) => {
+              return h("span", params.row.refund_amount / 100);
+            },
+          },
+          {
+            label: "实际到账金额",
+            minWidth: "150px",
+            render: (h, params) => {
+              return h(
+                "span",
+                params.row.amount / 100 - params.row.refund_amount / 100
+              );
+            },
+          },
+          {
             label: "充值类型",
             minWidth: "80px",
             render: (h, params) => {
@@ -546,20 +617,108 @@ export default {
                     : params.row.ali_merchant_status)
                 );
               });
+              // return (
+
+              // );
               return data && params.row.buyer_id ? (
-                <div style="text-align: left;" title={data.name}>
-                  <el-tag type={data.type}>
-                    {params.row.buyer_id ? params.row.buyer_id : "-"}
-                    <span>
-                      （
-                      {params.row.wx_merchant
-                        ? params.row.wx_merchant
-                        : params.row.ali_merchant
-                        ? params.row.ali_merchant
-                        : "-"}
-                      ）
-                    </span>
-                  </el-tag>
+                <div style="display: flex">
+                  <div style="text-align: left;" title={data.name}>
+                    {params.row && params.row.complaint_id > 0 ? (
+                      <span>
+                        <el-popover
+                          placement="top-start"
+                          title="投诉详情"
+                          width="300"
+                          trigger="hover"
+                        >
+                          <div>
+                            {/* 微信 */}
+                            {params.row.channel === "微信" && (
+                              <div>
+                                <div>
+                                  投诉类型:
+                                  {params.row.complaint_description}
+                                </div>
+                                <div>
+                                  投诉详情: {params.row.complaint_detail}
+                                </div>
+                              </div>
+                            )}
+                            {/* 支付宝 */}
+                            {params.row.channel === "支付宝" && (
+                              <div>
+                                <div>
+                                  投诉诉求:
+                                  {params.row.complaint_require}
+                                </div>
+                                <div>
+                                  投诉原因:
+                                  {params.row.complaint_description}
+                                </div>
+                                <div>
+                                  投诉内容:{params.row.complaint_detail}
+                                </div>
+                              </div>
+                            )}
+                            <div>投诉时间:{params.row.complaint_time}</div>
+                          </div>
+                          <div slot="reference">
+                            <el-tag type={data.type}>
+                              {params.row.complaint_id > 0 ? (
+                                <span style="color:#ff4949;">
+                                  {params.row.buyer_id
+                                    ? params.row.buyer_id
+                                    : "-"}
+                                </span>
+                              ) : (
+                                <span>
+                                  {params.row.buyer_id
+                                    ? params.row.buyer_id
+                                    : "-"}
+                                </span>
+                              )}
+
+                              <span>
+                                （
+                                {params.row.wx_merchant
+                                  ? params.row.wx_merchant
+                                  : params.row.ali_merchant
+                                  ? params.row.ali_merchant
+                                  : "-"}
+                                ）
+                              </span>
+                            </el-tag>
+                            <span style="color:#ff4949;">
+                              {params.row.complaint_status_desc}
+                            </span>
+                          </div>
+                        </el-popover>
+                      </span>
+                    ) : (
+                      <div>
+                        <span>
+                          {params.row.buyer_id ? params.row.buyer_id : "-"}
+                        </span>
+
+                        <span>
+                          （
+                          {params.row.wx_merchant
+                            ? params.row.wx_merchant
+                            : params.row.ali_merchant
+                            ? params.row.ali_merchant
+                            : "-"}
+                          ）
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  {params.row.is_complaint + "" === "1" ? (
+                    <el-tag type="danger" style="margin-left: 10px;">
+                      (被投诉订单)
+                    </el-tag>
+                  ) : (
+                    ""
+                  )}
                 </div>
               ) : (
                 <div>无</div>
@@ -682,11 +841,17 @@ export default {
                     style: {
                       display: params.row.status === 3 ? "unset" : "none",
                     },
-                    on: { click: () => { this.handleQueryOrder(params.row) } }
-                  }, "补单")
-                ])
-            }
-          }
+                    on: {
+                      click: () => {
+                        this.handleQueryOrder(params.row);
+                      },
+                    },
+                  },
+                  "补单"
+                ),
+              ]);
+            },
+          },
         ],
       };
     },
@@ -750,7 +915,7 @@ export default {
   },
   filters: {
     filtersTime(str) {
-      return timeFormat(str, "YYYY-MM-DD HH:mm:ss", true) || "无"
+      return timeFormat(str, "YYYY-MM-DD HH:mm:ss", true) || "无";
     },
   },
   data() {
@@ -817,11 +982,11 @@ export default {
       },
       queryOrderData: {},
 
-      queryCurPeriodOrderDetailVisible:false,
-      showCurPeriodOrderResult:false,
-      currentPeriodOrderPayData:[],
-      currentPeriodOrderPayTotal:0,
-      currentPeriodOrderPayPage:{
+      queryCurPeriodOrderDetailVisible: false,
+      showCurPeriodOrderResult: false,
+      currentPeriodOrderPayData: [],
+      currentPeriodOrderPayTotal: 0,
+      currentPeriodOrderPayPage: {
         page: 1,
         limit: 10,
       },
@@ -829,22 +994,22 @@ export default {
       currentPeriodOrderDetailData: [],
       currentPeriodOrderDetailTotal: 0,
       currentPeriodOrderDetailPage: {
-          page: 1,
-          limit: 10,
-      },
-      queryCurPeriodOrderData: {},
-      curPeriodOrderDetailVisible:false,
-      curPeriodOrderDialogVisible: false,
-
-      curPeriodDetailLogList:[],
-      showCurPeriodOrderLogList:false,
-      curPeriodOrderDetailLogTotal:0,
-      curPeriodOrderDetailLogPage:{
         page: 1,
         limit: 10,
       },
-      curPeriodDetailLogData:null,
-      allMerchantList: []
+      queryCurPeriodOrderData: {},
+      curPeriodOrderDetailVisible: false,
+      curPeriodOrderDialogVisible: false,
+
+      curPeriodDetailLogList: [],
+      showCurPeriodOrderLogList: false,
+      curPeriodOrderDetailLogTotal: 0,
+      curPeriodOrderDetailLogPage: {
+        page: 1,
+        limit: 10,
+      },
+      curPeriodDetailLogData: null,
+      allMerchantList: [],
     };
   },
   methods: {
@@ -938,6 +1103,7 @@ export default {
           buyer_id: s.buyer_id,
           purpose: s.purpose,
           risk_status: s.risk_status,
+          is_complaint: s.is_complaint,
           wx_merchant_id: s.wx_merchant_id,
           pay_config_id: s.pay_config_id,
         };
@@ -1134,10 +1300,9 @@ export default {
     },
     // 批量补单
     handleBatchQurtyOrder() {
-
-      if (this.topupStatus + '' !== '3') {
-        this.$warning('未支付状态才能批量补单')
-        return
+      if (this.topupStatus + "" !== "3") {
+        this.$warning("未支付状态才能批量补单");
+        return;
       }
 
       if (!(this.list && this.list.length)) {
@@ -1225,8 +1390,6 @@ export default {
       this.stopTimer();
     },
 
-
-
     async getDetails() {
       const response = await getQueryPayDetails({
         task_id: this.queryOrderData.task_id,
@@ -1234,7 +1397,6 @@ export default {
         pagesize: this.orderDetailPage.limit,
       });
       if (response.code === 2000) {
-
         this.orderDetailData = response.data.list;
         this.orderDetailTotal = response.data.count;
       }
@@ -1257,82 +1419,89 @@ export default {
       }
     },
 
-   //当前时段补单
-   async handleCurrentPeriodOrder(){
-    const {start_time,end_time}  = this.dateTimeParams;
-     addTask({
-        start_time:  Math.floor( start_time / 1000),
-        end_time:  Math.floor( end_time / 1000)
-      }).then(({code,data})=>{
-        console.log(data)
-        this.curPeriodOrderDialogVisible = true
-      }).catch(err=>{
-        console.log(err)
+    //当前时段补单
+    async handleCurrentPeriodOrder() {
+      const { start_time, end_time } = this.dateTimeParams;
+      addTask({
+        start_time: Math.floor(start_time / 1000),
+        end_time: Math.floor(end_time / 1000),
       })
+        .then(({ code, data }) => {
+          console.log(data);
+          this.curPeriodOrderDialogVisible = true;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .then(({ code, data }) => {
+          console.log(data);
+          this.curPeriodOrderDialogVisible = true;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     // 当前时段补单明细
     hanldeQueryCurPeriodDetail(row) {
       this.queryCurPeriodOrderData = row;
       this.queryCurPeriodOrderDetailVisible = true;
-      this.currentPeriodOrderDetailPage.page = 1;//重置页码
-      this.getCurPeriodOrderDetails()
-
+      this.currentPeriodOrderDetailPage.page = 1; //重置页码
+      this.getCurPeriodOrderDetails();
     },
 
     //当前时段补单结果
-    getCurPeriodOrderResult(){
+    getCurPeriodOrderResult() {
       this.showCurPeriodOrderResult = true;
       getTaskList({
         page: this.currentPeriodOrderPayPage.page,
-        pagesize: this.currentPeriodOrderPayPage.limit
-      }).then(({code,data:{list,count}})=>{
-        console.log(list,count)
-        if(code === 2000){
-          this.currentPeriodOrderPayData = list;
-          this.currentPeriodOrderPayTotal = count;
-        }
-      }).catch(err=>{
-        console.log(err)
+        pagesize: this.currentPeriodOrderPayPage.limit,
       })
+        .then(({ code, data: { list, count } }) => {
+          console.log(list, count);
+          if (code === 2000) {
+            this.currentPeriodOrderPayData = list;
+            this.currentPeriodOrderPayTotal = count;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     async getCurPeriodOrderDetails() {
-      const {code,data} = await getTaskDetail({
+      const { code, data } = await getTaskDetail({
         task_id: this.queryCurPeriodOrderData.id,
         page: this.currentPeriodOrderDetailPage.page,
-        pagesize:this.currentPeriodOrderDetailPage.limit
-
-      })
-      console.log(data)
+        pagesize: this.currentPeriodOrderDetailPage.limit,
+      });
+      console.log(data);
       if (code === 2000) {
         this.currentPeriodOrderDetailData = data.list;
-        this.currentPeriodOrderDetailTotal = data.count
-        this.curPeriodOrderDetailVisible = true
+        this.currentPeriodOrderDetailTotal = data.count;
+        this.curPeriodOrderDetailVisible = true;
       }
     },
 
-    async openTaskOrderLog(params){
+    async openTaskOrderLog(params) {
       // 初次打开
-       if(params && params.id){
-         this.curPeriodDetailLogData =  params;   // 当前点击的记录
-         this.curPeriodOrderDetailLogPage.page = 1; //重置
-       }
+      if (params && params.id) {
+        this.curPeriodDetailLogData = params; // 当前点击的记录
+        this.curPeriodOrderDetailLogPage.page = 1; //重置
+      }
       //  debugger
-       const {code,data} = await getTaskDetailLog({
+      const { code, data } = await getTaskDetailLog({
         task_id: this.queryCurPeriodOrderData.id,
         detail_id: this.curPeriodDetailLogData.id,
         page: this.curPeriodOrderDetailLogPage.page,
-        pagesize:this.curPeriodOrderDetailLogPage.limit
-
-      })
-      console.log(data)
+        pagesize: this.curPeriodOrderDetailLogPage.limit,
+      });
+      console.log(data);
       if (code === 2000) {
         this.curPeriodDetailLogList = data.list;
-        this.curPeriodOrderDetailLogTotal = data.count
+        this.curPeriodOrderDetailLogTotal = data.count;
         this.showCurPeriodOrderLogList = true;
       }
     },
-
     // 获取充值记录顶部信息
     async getDiamondRechargeTotal() {
       this.ruleForm = {};
@@ -1393,6 +1562,7 @@ export default {
 .finance-guildWithdraw-list {
   padding: 20px;
   box-sizing: border-box;
+
   .model {
     width: 100%;
     height: 40px;
@@ -1403,12 +1573,14 @@ export default {
     box-sizing: border-box;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
     margin-bottom: 20px;
+
     > span {
       font-size: 15px;
       color: #fff;
       margin-right: 100px;
     }
   }
+
   ::-webkit-scrollbar {
     height: 10px;
     width: 10px;
@@ -1420,9 +1592,11 @@ export default {
     border-radius: 5px;
   }
 }
+
 .el-table__fixed-body-wrapper {
   bottom: 0;
 }
+
 .downFileSearchPop {
   .el-dialog {
     margin-top: 5vh !important;

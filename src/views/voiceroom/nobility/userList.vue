@@ -70,16 +70,16 @@ export default {
           isNum: true,
           placeholder: "请输入用户ID",
         },
-        // {
-        //   name: "sort_field",
-        //   type: "select",
-        //   value: "id",
-        //   keyName: "value",
-        //   optionLabel: "name",
-        //   label: "排序",
-        //   placeholder: "请选择",
-        //   options: MAPDATA.NOBILITYUSERSORTLIST,
-        // },
+        {
+          name: "sort_field",
+          type: "select",
+          value: "id",
+          keyName: "value",
+          optionLabel: "name",
+          label: "排序",
+          placeholder: "请选择",
+          options: MAPDATA.NOBILITYUSERSORTLIST,
+        },
       ];
     },
     cfgs() {
@@ -94,10 +94,6 @@ export default {
           {
             label: "用户ID",
             prop: "user_number",
-          },
-          {
-            label: "已累计成长值",
-            prop: "heap_value",
           },
           {
             label: "魅力成长值",
@@ -126,9 +122,9 @@ export default {
             render: (h, params) => {
               return h(
                 "span",
-                params.row.last_create_time
+                params.row.create_time
                   ? timeFormat(
-                      params.row.last_create_time,
+                      params.row.create_time,
                       "YYYY-MM-DD HH:mm:ss",
                       true
                     )
