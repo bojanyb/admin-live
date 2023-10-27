@@ -45,27 +45,14 @@ export default {
     return {
       isDestroyedComponent: false, // 销毁组件
       chainList: [],
-      activeNameList: [],
     };
   },
   mounted() {
-    this.fetchChainData();
     this.fetchAdTypeData();
   },
   computed: {
     searchFormFields() {
       return [
-        // {
-        //   name: "category_id",
-        //   type: "select",
-        //   value: "",
-        //   keyName: "id",
-        //   optionLabel: "name",
-        //   label: "媒体",
-        //   placeholder: "请选择",
-        //   options: this.chainList,
-        //   clearable: true,
-        // },
         {
           name: "chains",
           type: "cascader",
@@ -74,7 +61,7 @@ export default {
           optionLabel: "label",
           label: "推广活动",
           placeholder: "请选择",
-          options: this.activeNameList,
+          options: this.chainList,
           clearable: true,
           multiple: true,
           collapse: true,
@@ -232,21 +219,6 @@ export default {
     /**
      * 获取监测链接数据并处理
      */
-    async fetchChainData() {
-      try {
-        const response = await getAdSelect();
-        if (response.code === 2000) {
-          this.chainList = response.data;
-          this.chainList.unshift({ id: -1, name: "全部" });
-          console.log(this.chainList, "this.chainList");
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    /**
-     * 获取监测链接数据并处理
-     */
     async fetchAdTypeData() {
       try {
         const response = await getAdTypeSelect();
@@ -266,8 +238,7 @@ export default {
             prev.push(temp)
             return prev;
           }, [])
-          this.activeNameList = result;
-          console.log(this.activeNameList, "this.activeNameList");
+          this.chainList = result;
         }
       } catch (error) {
         console.error(error);
