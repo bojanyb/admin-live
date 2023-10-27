@@ -136,6 +136,9 @@ const request = {
             list: `${HTTPHEADER}/Activity/aclist`,
             configDW: `${HTTPHEADER}/Activityins/configDW`,
             dragonBoatFestival: `${HTTPHEADER}/Statistical/dragonBoatFestival`,
+        },
+        pkActivity: {
+            list: `${HTTPHEADER}/PkSet/list`,
         }
     },
 
