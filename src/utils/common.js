@@ -332,3 +332,20 @@ export function numChangeThousand(num){
   let reg = /\d{1,3}(?=(\d{3})+$)/g;
   return String(num).replace(reg, '$&,');
 }
+
+/**
+ * 将秒数转换为时分秒格式（HH:MM:SS）
+ * @param {number} seconds - 总秒数
+ * @returns {string} 格式化后的时间字符串
+ */
+export function convertSecondsToTime(seconds) {
+  const hours = Math.floor(seconds / 3600); // 计算小时数
+  const minutes = Math.floor((seconds % 3600) / 60); // 计算分钟数
+  const remainingSeconds = seconds % 60; // 计算剩余的秒数
+
+  const formattedHours = String(hours).padStart(2, "0"); // 将小时数转换为两位数，并在不足两位时填充零
+  const formattedMinutes = String(minutes).padStart(2, "0"); // 将分钟数转换为两位数，并在不足两位时填充零
+  const formattedSeconds = String(remainingSeconds).padStart(2, "0"); // 将剩余的秒数转换为两位数，并在不足两位时填充零
+
+  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`; // 返回格式化后的时间字符串
+}
