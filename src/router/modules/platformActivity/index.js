@@ -112,12 +112,12 @@ const platformActivityRouter = {
 			]
 		},
     {
-      path: 'pk-gifts',
+      path: 'PK礼物管理',
       component: () => import('@/views/voiceroom/platformActivity/pkActivity/pkList'),
       meta: {
         title: 'PK礼物管理',
       },
-      name: 'zzbxallocation'
+      name: 'PK礼物管理'
     },
 		{
 			path: 'first-charge',

@@ -215,6 +215,7 @@ export default {
       let s = { ...this.searchParams, ...this.dateTimeParams };
       return {
         page: params.page,
+        pagesize: params.size,
         status: s.status,
         user_number: s.user_number,
         start_time: Math.floor(s.start_time / 1000),
