@@ -18,7 +18,7 @@ vue Copy
         class="demo-ruleForm"
       >
         <el-form-item label="媒体" prop="category_id">
-          <el-select v-model="ruleForm.category_id" placeholder="请选择" :disabled="disabledSelect">
+          <el-select v-model="ruleForm.category_id" placeholder="请选择" :disabled="disabled">
             <el-option v-for="item in chainList" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -41,6 +41,7 @@ vue Copy
             v-model="ruleForm.ad_type"
             placeholder="请输入链接编号"
             clearable
+            :disabled="disabled"
           />
         </el-form-item>
         <!-- <el-form-item label="绑定用户ID" prop="user_number">
@@ -69,7 +70,7 @@ export default {
     return {
       status: "add",
       dialogVisible: false,
-      disabledSelect: false,
+      disabled: false,
       ruleForm: {
         category_id: "",
         name: "",
@@ -102,9 +103,9 @@ export default {
   methods: {
     load(status, row) {
       this.status = status;
-      this.disabledSelect = false;
+      this.disabled = false;
       if (status !== "add") {
-        this.disabledSelect = true;
+        this.disabled = true;
         let params = JSON.parse(JSON.stringify(row));
         this.$set(this.$data, "ruleForm", params);
       }
