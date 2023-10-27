@@ -64,3 +64,12 @@ export function getAdSelect(data) {
     data
   })
 }
+
+// 市场监测配置管理 - 推广活动下拉框列表
+export function getAdTypeSelect(data) {
+  return request({
+    url: api.market.getAdTypeSelect,
+    method: 'post',
+    data
+  })
+}

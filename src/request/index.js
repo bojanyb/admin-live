@@ -657,6 +657,7 @@ const request = {
       addAdConf: `${HTTPHEADER}/AdClickConf/addData`, // 市场监测配置管理 - 添加
       handleAdConf: `${HTTPHEADER}/AdClickConf/handle`, // 市场监测配置管理 - 启用/停用
       getAdSelect: `${HTTPHEADER}/AdClickConf/getSelect`, // 市场监测配置管理 - 媒体下拉框列表
+      getAdTypeSelect: `${HTTPHEADER}/AdClickConf/getAdTypeSelect`, // 市场监测配置管理 - 推广活动名称下拉框列表
   }
 }
 
