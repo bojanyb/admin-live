@@ -43,13 +43,13 @@ vue Copy
             clearable
           />
         </el-form-item>
-        <el-form-item label="绑定用户ID" prop="user_number">
+        <!-- <el-form-item label="绑定用户ID" prop="user_number">
           <el-input
             v-model="ruleForm.user_number"
             placeholder="请输入用户ID"
             clearable
           />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
