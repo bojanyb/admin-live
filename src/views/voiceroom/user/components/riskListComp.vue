@@ -142,7 +142,6 @@ export default {
   },
   methods: {
     show(row) {
-      console.log(row);
       this.searchParams.id = row.id;
       this.setSevenDay();
       this.dialogVisible = true;

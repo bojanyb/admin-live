@@ -286,6 +286,7 @@
         };
         if (typeof vm.beforeSearch === 'function') {
           params = vm.beforeSearch(params);
+          console.log(params);
           if(window.location.href.indexOf('/serviceConfig/message-history') !== -1 && tabIndex !== '2') { // 模拟缓存当前列表数据 - 仅限消息记录页面使用
             params.max_id = max_id
           }
