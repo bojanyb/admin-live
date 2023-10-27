@@ -1346,6 +1346,15 @@ export function roomFlow(data) {
   })
 }
 
+// 房间流水明细(新)
+export function roomFlowNew(data) {
+  return request({
+    url: api.guild.roomFlowNew,
+    method: 'post',
+    data
+  })
+}
+
 // 保存有效直播奖励
 export function effectSave(data) {
   return request({
@@ -1386,6 +1395,15 @@ export function couplingDelete(data) {
 export function settlementLog(data) {
   return request({
     url: api.guild.settlementLog,
+    method: 'post',
+    data
+  })
+}
+
+// 公会批量结算
+export function settlementLogNew(data) {
+  return request({
+    url: api.guild.settlementLogNew,
     method: 'post',
     data
   })

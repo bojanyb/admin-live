@@ -271,6 +271,7 @@ const request = {
         getUserComplainList: `${HTTPHEADER}/UserComplaint/index`, // 公会投诉列表（风险客服）
         handleUserComplain: `${HTTPHEADER}/UserComplaint/handle`, // 公会投诉处理（风险客服）
         settlementLog: `${HTTPHEADER}/Guild/settlementLog`, // 返点操作日志
+        settlementLogNew: `${HTTPHEADER}/Guild/settlementLogWeekV2`, // 返点操作日志新
         newGuildApplyList: `${HTTPHEADER}/guild/newGuildApplyList`, // 创建工会申请列表
         newGuildApplyCheck: `${HTTPHEADER}/guild/newGuildApplyCheck`, // 创建工会审核已联系或者驳回
         bindRoom: `${HTTPHEADER}/guild/bindRoom`, // 绑定工会厅
@@ -280,6 +281,9 @@ const request = {
         roomS: `${HTTPHEADER}/guild/roomS`, // 查询房间流水列表
         delStatisticsroom: `${HTTPHEADER}/guild/delStatisticsroom`, // 移除24小时房间统计
         roomFlow: `${HTTPHEADER}/RoomFlow/index`, // 移除24小时房间统计
+        guildOperateList: `${HTTPHEADER}/GuildOperate/list`, // 公会运营二维码列表
+        saveWechatCode: `${HTTPHEADER}/GuildOperate/saveWechatCode`, // 修改二维码
+        roomFlowNew: `${HTTPHEADER}/RoomFlow/indexNew`, // 房间流水明细(新)
 
 
         // v2
