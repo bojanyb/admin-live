@@ -126,21 +126,21 @@ export default {
           },
           {
             label: "操作",
-            width: '100px',
+            width: '150px',
             render: (h, params) => {
               return h("div", [
-                // h(
-                //   "el-button",
-                //   {
-                //     props: { type: "primary", size: 'mini' },
-                //     on: {
-                //       click: () => {
-                //         this.updateForm(params.row);
-                //       },
-                //     },
-                //   },
-                //   "修改"
-                // ),
+                h(
+                  "el-button",
+                  {
+                    props: { type: "primary", size: 'mini' },
+                    on: {
+                      click: () => {
+                        this.updateForm(params.row);
+                      },
+                    },
+                  },
+                  "修改"
+                ),
                 h(
                   "el-button",
                   {

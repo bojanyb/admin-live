@@ -29,7 +29,7 @@
 <script>
 import mixins from "@/utils/mixins.js";
 import REQUEST from "@/request/index.js";
-import { getAdSelect } from "@/api/market";
+import { getAdSelect, getAdTypeSelect } from "@/api/market";
 import SearchPanel from "@/components/SearchPanel/final.vue"
 import TableList from "@/components/tableList/TableList.vue"
 import LinkMonitor from "./linkMonitor"
@@ -48,37 +48,25 @@ export default {
     };
   },
   mounted() {
-    this.fetchChainData();
+    this.fetchAdTypeData();
   },
   computed: {
     searchFormFields() {
       return [
         {
-          name: "category_id",
-          type: "select",
+          name: "chains",
+          type: "cascader",
           value: "",
-          keyName: "id",
-          optionLabel: "name",
-          label: "媒体",
+          keyName: "value",
+          optionLabel: "label",
+          label: "推广活动",
           placeholder: "请选择",
           options: this.chainList,
           clearable: true,
-        },
-        {
-          name: "remark",
-          type: "input",
-          value: "",
-          label: "代理名称",
-          placeholder: "请输入",
-          clearable: true,
-        },
-        {
-          name: "name",
-          type: "input",
-          value: "",
-          label: "推广活动名称",
-          placeholder: "请输入",
-          clearable: true,
+          multiple: true,
+          collapse: true,
+          filterable: true,
+          props: { multiple: true }
         },
         {
           name: "dateTimeParams",
@@ -166,18 +154,25 @@ export default {
     },
     // 配置参数
     beforeSearch(params) {
-      const { ...searchParams } = {
+      const s = {
         ...this.searchParams,
         ...this.dateTimeParams,
       };
+      let data = s.chains ? JSON.parse(JSON.stringify(s.chains)) : []
+      const result = data.reduce((prev, curr) => {
+        curr.map((item, index) => {
+          if (index !== 0) {
+            prev.push(item)
+          }
+        })
+        return prev
+      }, [])
       return {
         page: params ? params.page : null,
         pagesize: params ? params.size : null,
-        category_id: searchParams.category_id,
-        remark: searchParams.remark,
-        name: searchParams.name,
-        start_time: Math.floor(searchParams.start_time / 1000),
-        end_time: Math.floor(searchParams.end_time / 1000),
+        chains: (result && result.length) ? result : [],
+        start_time: Math.floor(s.start_time / 1000),
+        end_time: Math.floor(s.end_time / 1000),
       };
     },
     // 设置时间段
@@ -224,13 +219,26 @@ export default {
     /**
      * 获取监测链接数据并处理
      */
-    async fetchChainData() {
+    async fetchAdTypeData() {
       try {
-        const response = await getAdSelect();
+        const response = await getAdTypeSelect();
         if (response.code === 2000) {
-          this.chainList = response.data;
-          this.chainList.unshift({ id: -1, name: "全部" });
-          console.log(this.chainList, "this.chainList");
+          console.log('[ response.data ] >', )
+          const result = response.data.reduce((prev, curr) => {
+            const temp = {
+              value: curr.category_id + '',
+              label: curr.name,
+              children: curr.select.map(item => {
+                return {
+                  value: item.ad_type + '',
+                  label: item.remark,
+                }
+              })
+            }
+            prev.push(temp)
+            return prev;
+          }, [])
+          this.chainList = result;
         }
       } catch (error) {
         console.error(error);
