@@ -115,9 +115,14 @@ export default {
           url: path,
         };
       };
-
-      const videoPaths = row.video_path ? row.video_path.split(",") : [];
-      const imgPaths = row.img_path ? row.img_path.split(",") : [];
+      let videoPaths = [];
+      if(row.video_path) {
+        videoPaths = Array.isArray(row.video_path) ? row.video_path : row.video_path.split(",")
+      }
+      let imgPaths = [];
+      if(row.img_path) {
+        imgPaths = Array.isArray(row.img_path) ? row.img_path : row.img_path.split(",")
+      }
       this.fileList = [...videoPaths, ...imgPaths].map(parsePath);
     },
     // 处理表单提交
@@ -137,10 +142,10 @@ export default {
           let params = {
             remark: this.ruleForm.remark
           };
-          if (this.form.id_array.length > 1) {
+          if (this.form.id_array) {
             params.ids = this.form.id_array;
           } else {
-            params.id = this.form.id_array.join();
+            params.id = this.form.id;
           }
 
           // 将文件列表拆分为视频路径和图片路径

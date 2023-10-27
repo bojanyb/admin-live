@@ -566,7 +566,6 @@ export default {
               props: { type: "primary",size: 'mini' },
               style: {
                 display:
-                  params.row.status === 1 &&
                   this.permissionArr.includes("UserPunishLog@updateSource")
                     ? "unset"
                     : "none",

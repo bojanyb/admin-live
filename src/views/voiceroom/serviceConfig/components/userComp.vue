@@ -342,9 +342,18 @@ export default {
                 punish_type_id: params.punish_type_id
               }
               // 回显媒体资源
-              const soundArr = params.sound_path?params.sound_path.split(','):[];
-              const videoArr = params.video_path?params.video_path.split(','):[];
-              const imgArr = params.img_path?params.img_path.split(','):[];
+              let soundArr = [];
+              if(params.sound_path) {
+                soundArr = Array.isArray(params.sound_path) ? params.sound_path : params.sound_path.split(",")
+              }
+              let videoArr = [];
+              if(params.video_path) {
+                videoArr = Array.isArray(params.video_path) ? params.video_path : params.video_path.split(",")
+              }
+              let imgArr = [];
+              if(params.img_path) {
+                imgPaths = Array.isArray(params.img_path) ? params.img_path : params.img_path.split(",")
+              }
               const mediaArr = [].concat(soundArr, videoArr, imgArr)
               mediaArr.forEach(item => {
                 if(item) {
