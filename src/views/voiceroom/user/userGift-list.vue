@@ -24,6 +24,8 @@
 	import REQUEST from '@/request/index.js'
 	// 引入公共方法
 	import { timeFormat } from '@/utils/common.js'
+  	// 引入公共map
+	import MAPDATA from '@/utils/jsonMap.js'
 	export default {
 		name: 'userGift-list',
 		components: {
@@ -70,15 +72,45 @@
 						isNum: true,
 						placeholder: '收礼人ID'
 					},
+					// {
+					// 	name: 'is_room',
+					// 	type: 'select',
+					// 	value: '',
+					// 	keyName: 'id',
+					// 	optionLabel: 'name',
+					// 	label: '类型',
+					// 	placeholder: '请选择',
+					// 	options: this.typeList
+					// },
 					{
-						name: 'is_room',
+						name: 'source',
 						type: 'select',
-						value: '',
+						value: 0,
+						keyName: 'value',
+						optionLabel: 'name',
+						label: '流水类型',
+						placeholder: '请选择',
+						options: MAPDATA.DEALSOURCETYPELIST
+					},
+					{
+						name: 'flow_type',
+						type: 'select',
+						value: 0,
 						keyName: 'id',
 						optionLabel: 'name',
-						label: '类型',
+						label: '房间来源',
 						placeholder: '请选择',
-						options: this.typeList
+						options: MAPDATA.DEALSOURCELIST
+					},
+          {
+						name: 'guild_type',
+						type: 'select',
+						value: 0,
+						keyName: 'id',
+						optionLabel: 'name',
+						label: '房间类型',
+						placeholder: '请选择',
+						options: this.roomTypeList
 					},
 					{
 						name: 'dateTimeParams',
@@ -98,7 +130,7 @@
 								this.getList()
 							}
 						}
-					}
+					},
 				]
 			},
 			cfgs() {
@@ -122,13 +154,16 @@
 							prop: 'reveive_user_number'
 						},
 						{
-							label: '礼物来源',
+							label: '房间ID',
 							render: (h, params) => {
-                return h('span',
-                  +params.row.room_category === 0 ? '私聊' :
-                  +params.row.room_category === 1 ? '直播房间' :
-                  +params.row.room_category === 2 ? '派对房间' : '无'
-                )
+								return h('span', params.row.room_number || '无')
+							}
+						},
+						{
+							label: '收礼人公会ID',
+              minWidth: '100px',
+							render: (h, params) => {
+								return h('span', params.row.live_guild_number || '无')
 							}
 						},
 						{
@@ -144,18 +179,41 @@
 							prop: 'amount'
 						},
 						{
+							label: '流水类型',
+							render: (h, params) => {
+								let data = MAPDATA.DEALSOURCETYPELIST.find(item => { return item.value === params.row.source })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
+							label: '房间来源',
+							render: (h, params) => {
+								let data = MAPDATA.DEALSOURCELIST.find(item => { return item.id === params.row.flow_type })
+								return h('span', data ? data.name : '无')
+							}
+						},
+            {
+							label: '房间类型',
+              render: (h, params) => {
+								let data = this.renderRoomTypeList.find(item => { return item.id === params.row.guild_type })
+								return h('span', data ? data.name : '无')
+							}
+						},
+						{
 							label: '交易流水号',
-							minWidth: '150px',
+							minWidth: '160px',
 							prop: 'relation_trade_no'
 						},
             {
 							label: '送礼人IP',
+              minWidth: '130px',
 							render: (h, params) => {
 								return h('span', params.row.send_ip || '无')
 							}
 						},
             {
 							label: '收礼人IP',
+              minWidth: '130px',
 							render: (h, params) => {
 								return h('span', params.row.receive_ip || '无')
 							}
@@ -166,24 +224,24 @@
 		},
 		data() {
 			return {
-				typeList: [
-					{
-						id: 0,
-						name: '全部'
-					},
-					{
-						id: 1,
-						name: '派对房间'
-					},
-					{
-						id: 3,
-						name: '直播房间'
-					},
-					{
-						id: 2,
-						name: '私聊'
-          }
-				],
+				// typeList: [
+				// 	{
+				// 		id: 0,
+				// 		name: '全部'
+				// 	},
+				// 	{
+				// 		id: 1,
+				// 		name: '派对房间'
+				// 	},
+				// 	{
+				// 		id: 3,
+				// 		name: '直播房间'
+				// 	},
+				// 	{
+				// 		id: 2,
+				// 		name: '私聊'
+        //   }
+				// ],
 				id: null,
 				searchParams: {
 					dateTimeParams: []
@@ -194,7 +252,35 @@
 				},
         ruleForm: {
           total_amount: 0
-        }
+        },
+        roomTypeList: [
+				{
+					id : 0,
+					name : "全部"
+				},
+				{
+					id : 1,
+					name : "直播房间"
+				},
+				{
+					id : 2,
+					name : "派对房间"
+				}
+				],
+        renderRoomTypeList: [
+				{
+					id : 0,
+					name : "--"
+				},
+				{
+					id : 1,
+					name : "直播房间"
+				},
+				{
+					id : 2,
+					name : "派对房间"
+				}
+				],
 			}
 		},
 		methods: {
@@ -221,7 +307,10 @@
 					send_user_number: s.send_user_number || '',
 					start_time: s.start_time ? Math.floor(s.start_time / 1000) : '',
 					end_time: s.end_time ? Math.floor(s.end_time / 1000) : '',
-					is_room: s.is_room
+					// is_room: s.is_room,
+          flow_type: s.flow_type,
+          guild_type: s.guild_type,
+					source: s.source
 				}
 			},
 			// 重置
