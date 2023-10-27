@@ -142,6 +142,7 @@ const request = {
             list: `${HTTPHEADER}/PkSet/list`,
             updatePKGift: `${HTTPHEADER}/PkSet/updateGift`, // 更新PK礼物
             addPKGift: `${HTTPHEADER}/PkSet/addGift`, // 新增PK礼物
+            getPKGifts: `${HTTPHEADER}/PkSet/giftList`, // 新增PK礼物
         }
     },
 

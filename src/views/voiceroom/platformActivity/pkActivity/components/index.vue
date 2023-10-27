@@ -8,7 +8,6 @@
       :close-on-click-modal="false"
       @closed="destoryComp"
     >
-      {{ ruleForm }}
       <el-form
         :model="ruleForm"
         :rules="rules"
@@ -80,7 +79,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="选择礼物" prop="gift_id">
-          <el-select v-model="ruleForm.gift_id" placeholder="请选择礼物">
+          <el-select v-model="ruleForm.gift_id" placeholder="请选择礼物" :disabled="status === 'update'">
             <el-option
               v-for="item in gifts"
               :label="item.gift_name"

@@ -22,7 +22,7 @@ export function addFirstCharge(params) {
 // 用户活动 - 礼物列表
 export function getGiftsList(params) {
   return request({
-    url: api.platformActivity.getGiftsList,
+    url: api.userActivity.pkActivity.getPKGifts,
     method: "post",
     data: params,
   });
