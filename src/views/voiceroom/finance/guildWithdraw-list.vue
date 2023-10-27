@@ -628,7 +628,7 @@ export default {
                         <el-popover
                           placement="top-start"
                           title="投诉详情"
-                          width="200"
+                          width="300"
                           trigger="hover"
                         >
                           <div>
@@ -660,6 +660,7 @@ export default {
                                 </div>
                               </div>
                             )}
+                            <div>投诉时间:{params.row.complaint_time}</div>
                           </div>
                           <div slot="reference">
                             <el-tag type={data.type}>
