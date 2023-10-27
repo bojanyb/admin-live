@@ -338,6 +338,9 @@ const request = {
         noblePrice: `${HTTPHEADER}/noblePrice/index`, // 贵族价格管理
         priceSave: `${HTTPHEADER}/noblePrice/save`, // 贵族价格新增/修改
         nobleUser: `${HTTPHEADER}/nobleUser/index`, // 贵族用户列表
+
+        getUserNobleLog: `${HTTPHEADER}/nobleUser/getUserNobleLog`, // 用户贵族状态清单
+        getUserGrowthValueLog: `${HTTPHEADER}/nobleUser/getUserGrowthValueLog`, // 成长值变化记录
     },
 
     // 财务管理
