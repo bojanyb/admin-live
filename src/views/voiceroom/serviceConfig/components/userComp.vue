@@ -334,17 +334,17 @@ export default {
               let data = {
                 user_number: params.feedback_number,
                 category: String(params.type),
-                type: params.type_array,
-                risk_level: params.risk_level,
+                type: [],
+                risk_level: '',
                 ban_duration: '',
                 remark: params.remark,
                 reset: [],
                 punish_type_id: params.punish_type_id
               }
               // 回显媒体资源
-              const soundArr = params.sound_path.split(',')
-              const videoArr = params.video_path.split(',')
-              const imgArr = params.img_path.split(',')
+              const soundArr = params.sound_path?params.sound_path.split(','):[];
+              const videoArr = params.video_path?params.video_path.split(','):[];
+              const imgArr = params.img_path?params.img_path.split(','):[];
               const mediaArr = [].concat(soundArr, videoArr, imgArr)
               mediaArr.forEach(item => {
                 if(item) {
@@ -391,7 +391,12 @@ export default {
                         if(s.reset.length <= 0) {
                             delete s.reset
                         }
-                        let res = await saveUserPunish(s)
+                        let res;
+                        if(this.status === 'reblocked') {
+                          res = await punishAgain(s)
+                        } else {
+                          res = await saveUserPunish(s)
+                        }
                         if(res.code === 2000) {
                             this.$message.success('处理成功')
                             this.dialogVisible = false
@@ -423,12 +428,7 @@ export default {
                         if(params.reset.length <= 0) {
                             delete params.reset
                         }
-                        let res
-                        if(this.status === 'reblocked') {
-                          res = await punishAgain(params)
-                        } else {
-                          res = await addUserPunish(params)
-                        }
+                        let res = await addUserPunish(params)
                         if(res.code === 2000) {
                             this.$success('操作成功')
                             this.dialogVisible = false

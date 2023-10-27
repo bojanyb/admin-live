@@ -168,25 +168,25 @@ export default {
     forms() {
       return [
         {
-          name: "user_number",
+          name: "report_event_id",
           type: "input",
           value: "",
-          label: "用户ID",
+          label: "事件编号",
+          placeholder: "请输入事件编号",
+        },
+        {
+          name: "user",
+          type: "input",
+          value: "",
+          label: "用户",
           placeholder: "请输入用户ID",
         },
         {
-          name: "guild_number",
+          name: "guild",
           type: "input",
           value: "",
-          label: "公会ID",
-          placeholder: "请输入公会ID",
-        },
-        {
-          name: "guild_name",
-          type: "input",
-          value: "",
-          label: "公会昵称",
-          placeholder: "请输入公会昵称",
+          label: "公会",
+          placeholder: "请输入公会ID或昵称",
         },
         {
           name: "operator",
@@ -557,7 +557,7 @@ export default {
                   props: { type: "danger",size: 'mini' },
                   style: {
                     display:
-                      params.row.status === 1 &&
+                      params.row.status === 2 &&
                       this.permissionArr.includes("UserPunishLog@save")
                         ? "unset"
                         : "none",
@@ -641,9 +641,9 @@ export default {
         page: params ? params.page : 1,
         page_size: params ? params.size : 10,
         group: s.group,
-        user_number: s.user_number,
-        guild_number: s.guild_number,
-        guild_name: s.guild_name,
+        report_event_id: s.report_event_id,
+        user: s.user,
+        guild: s.guild,
         operator: s.operator,
         punish_type_id: s.punish_type_id,
         status: s.status,
