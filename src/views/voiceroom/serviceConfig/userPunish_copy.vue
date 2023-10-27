@@ -76,7 +76,7 @@ import {
   passUserPunish,
   UserPunishLog,
   acceptPunish,
-  deletePunishWords
+  deletePunishWords,
   NewUserPunishLog,
   NewGuildPunishLog,
 } from "@/api/risk";
