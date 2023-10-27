@@ -244,11 +244,19 @@ export function charmTopByLive(data) {
   })
 }
 
-
 // 批量关停房间直播
 export function closeRoomLives(data) {
   return request({
     url: api.house.closeRoomLives,
+    method: 'post',
+    data
+  })
+}
+
+// 导出excel
+export function partyRoomListExcel(data) {
+  return request({
+    url: api.house.partyRoomListExcel,
     method: 'post',
     data
   })

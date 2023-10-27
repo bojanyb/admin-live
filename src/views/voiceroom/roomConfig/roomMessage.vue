@@ -10,6 +10,8 @@
         @batchPass="handleBatchPass"
         batchFuncName="批量修改房间类型"
         :show-batch-rurn="true"
+        :show-export="true"
+        @export="BatchRurn"
         @onReset="reset"
         @onSearch="onSearch"
         @BatchRurn="handleBatchRurn"
@@ -52,7 +54,11 @@
 
 <script>
 // 引入api
-import { partyRoomTypes, closeRoomLives } from "@/api/house.js";
+import {
+  partyRoomTypes,
+  closeRoomLives,
+  partyRoomListExcel,
+} from "@/api/house.js";
 // 引入房间类型详情组件
 import typeComp from "./components/typeNewComp.vue";
 // 引入新增 - 修改组件
@@ -236,7 +242,7 @@ export default {
             label: "今日流水",
             minWidth: "100px",
             prop: "today_flow",
-            sortable: true,
+            // sortable: "custom",
             render: (h, params) => {
               return h("div", params.row.today_flow + "钻石");
             },
@@ -245,7 +251,7 @@ export default {
             label: "昨日流水",
             minWidth: "100px",
             prop: "yestoday_flow",
-            sortable: true,
+            // sortable: "custom",
             render: (h, params) => {
               return h("div", params.row.yestoday_flow + "钻石");
             },
@@ -254,7 +260,7 @@ export default {
             label: "本周流水",
             minWidth: "100px",
             prop: "week_flow",
-            sortable: true,
+            // sortable: "custom",
             render: (h, params) => {
               return h("div", params.row.week_flow + "钻石");
             },
@@ -263,18 +269,18 @@ export default {
             label: "上周流水",
             minWidth: "100px",
             prop: "last_week_flow",
-            sortable: true,
+            // sortable: "custom",
             render: (h, params) => {
               return h("div", params.row.last_week_flow + "钻石");
             },
           },
-          {
-            label: "房间人数",
-            minWidth: "100px",
-            render: (h, params) => {
-              return h("span", params.row.numbers + "人");
-            },
-          },
+          // {
+          //   label: "房间人数",
+          //   minWidth: "100px",
+          //   render: (h, params) => {
+          //     return h("span", params.row.numbers + "人");
+          //   },
+          // },
           // {
           //     minWidth: '100px',
           //     label: '热门推荐',
@@ -347,6 +353,8 @@ export default {
       // if(s.admin_recommend_status > -1){
       //     data.admin_recommend_status = s.admin_recommend_status
       // }
+
+
       return {
         page: params.page,
         pagesize: params.size,
@@ -363,6 +371,16 @@ export default {
         // party_status: 2,
         // admin_recommend_status: -1
       };
+      // 去除排序样式
+      this.$refs.tableList.search.sort = "";
+      this.$refs.tableList.$el
+        .querySelectorAll(".is-sortable")
+        .forEach((item) => {
+          // 移除table表头中的排序样式descending和ascending
+          item.classList.remove("descending");
+          item.classList.remove("ascending");
+        });
+
       this.getList();
     },
     // 查询
@@ -436,12 +454,37 @@ export default {
     handleBatchRurn() {
       this.batchClose();
     },
+    // 导出excel
+    async BatchRurn() {
+      // let s = {
+      //   page: 1,
+      //   pagesize: 10,
+      //   room_number: "",
+      //   user_number: "",
+      //   guild_number: "",
+      //   room_category_id: "",
+      // };
+      // let res = {};
+      const res = await partyRoomListExcel(this.searchParams);
+
+
+      if (res.code !== 2000) {
+        this.$warning("当前没有数据可以导出");
+        return;
+      }
+
+      const link = document.createElement("a");
+      link.href = res.data.url;
+      // link.download = timeFormat(new Date(), 'YYYY-MM-DD', false) + title + '.xls';
+      link.download = "房间数据.xls";
+      link.click();
+    },
     batchClose() {
       if (this.selectList.length <= 0) {
         this.$warning("请至少选择一条数据");
         return false;
       }
-      this.$confirm("你确定要批量关停此批数据吗？", "操作提醒", {
+      this.$confirm("确定批量关播当前选中的房间吗？", "提示", {
         type: "warning",
         confirmButtonText: "确定",
         cancelButtonText: "取消",

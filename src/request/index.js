@@ -430,6 +430,7 @@ const request = {
         charmTopByLive: `${HTTPHEADER}/RoomV2/charmTopByLive`, // 每场直播的魅力榜单
 
         closeRoomLives: `${HTTPHEADER}/partyRoom/closeRoom`, // 每场直播的魅力榜单
+        partyRoomListExcel: `${HTTPHEADER}/PartyRoom/export`, // 导出excel
     },
 
     // 直播管理
