@@ -31,6 +31,9 @@
             <div slot="tip" class="el-upload__tip">只能上传jpg/png/mp4文件</div>
           </el-upload>
         </el-form-item>
+        <el-form-item label="备注说明" prop="remark">
+          <el-input v-model="ruleForm.remark" type="textarea" placeholder="请输入备注内容，此内容用户不会看到，建议20个字以内。" :rows="4" maxlength="20" show-word-limit></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -44,7 +47,7 @@
 
 <script>
 // 引入api
-import { updateSource } from "@/api/risk.js";
+import { updateSource, guildUpdateSource } from "@/api/risk.js";
 // 引入oss
 import { uploadOSS } from "@/utils/oss.js";
 import { debounce } from "lodash";
@@ -54,12 +57,18 @@ export default {
       dialogVisible: false,
       fileList: [],
       form: {},
-      ruleForm: {},
+      type: '',
+      ruleForm: {
+        remark: ''
+      },
       rules: {
         img: [
           { required: true, message: "请输入违规证据", trigger: "blur" },
           // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
+        remark: [
+          { required: false, message: '请输入备注说明', trigger: 'blur' }
+        ]
       },
     };
   },
@@ -93,9 +102,11 @@ export default {
         });
     },
     // 获取数据并加载参数
-    loadParams(row) {
+    loadParams(row, type) {
+      this.type = type;
       this.dialogVisible = true;
       this.form = row;
+      this.ruleForm.remark = '';
 
       const parsePath = (path) => {
         const name = path.split(".live/")[1];
@@ -104,9 +115,14 @@ export default {
           url: path,
         };
       };
-
-      const videoPaths = row.video_path ? row.video_path.split(",") : [];
-      const imgPaths = row.img_path ? row.img_path.split(",") : [];
+      let videoPaths = [];
+      if(row.video_path) {
+        videoPaths = Array.isArray(row.video_path) ? row.video_path : row.video_path.split(",")
+      }
+      let imgPaths = [];
+      if(row.img_path) {
+        imgPaths = Array.isArray(row.img_path) ? row.img_path : row.img_path.split(",")
+      }
       this.fileList = [...videoPaths, ...imgPaths].map(parsePath);
     },
     // 处理表单提交
@@ -123,11 +139,13 @@ export default {
             return;
           }
 
-          let params = {};
-          if (this.form.id_array.length > 1) {
+          let params = {
+            remark: this.ruleForm.remark
+          };
+          if (this.form.id_array) {
             params.ids = this.form.id_array;
           } else {
-            params.id = this.form.id_array.join();
+            params.id = this.form.id;
           }
 
           // 将文件列表拆分为视频路径和图片路径
@@ -149,8 +167,13 @@ export default {
           };
 
           try {
-            const { code } = await updateSource(params);
-            if (code === 2000) {
+            let res;
+            if(this.type === 'guild') {
+              res = await guildUpdateSource(params);
+            } else {
+              res = await updateSource(params);
+            }
+            if (res.code === 2000) {
               this.$success("修改成功");
               this.dialogVisible = false;
               this.$emit("getList");

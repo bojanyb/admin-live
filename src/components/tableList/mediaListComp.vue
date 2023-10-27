@@ -1,32 +1,45 @@
 <template>
   <div class="imgAndVideoListComp-box">
-    <div class="list-wrap" v-if="imgSrcList.length || videoSrcList.length">
-      <el-image
-        v-for="(item, index) in imgSrcList"
-        :key="'img' + index"
-        :src="item"
-        :style="{ width: width, height: height }"
-        :preview-src-list="imgSrcList"
-        @click.stop="handleClickStop"
-      >
-        <div slot="error" class="image-slot">
-          <img :src="imgUrl" />
+    <div class="list-wrap" v-if="imgSrcList.length || videoSrcList.length || audioSrcList.length">
+      <template v-if="audioSrcList.length">
+        <div
+          class="audio-box"
+          v-for="(item, index) in audioSrcList"
+          :key="'audio' + index"
+        >
+          <audio :src="item.src" controls="controls" @play="playAudio"></audio>
         </div>
-      </el-image>
-      <div
-        class="video-box"
-        v-for="(item, index) in videoSrcList"
-        :key="'vide' + index"
-        :alt="item"
-        :style="{ width: width, height: height }"
-        @click="zoomClick(item)"
-      >
-        <videoPlayerComp
-          class="videoPlayComp"
-          ref="videoPlayerComp"
-          :url="item"
-        ></videoPlayerComp>
-      </div>
+      </template>
+      <template v-if="imgSrcList.length">
+        <el-image
+          v-for="(item, index) in imgSrcList"
+          :key="'img' + index"
+          :src="item"
+          :style="{ width: width, height: height }"
+          :preview-src-list="imgSrcList"
+          @click.stop="handleClickStop"
+        >
+          <div slot="error" class="image-slot">
+            <img :src="imgUrl" />
+          </div>
+        </el-image>
+      </template>
+      <template v-if="videoSrcList.length">
+        <div
+          class="video-box"
+          v-for="(item, index) in videoSrcList"
+          :key="'video' + index"
+          :alt="item"
+          :style="{ width: width, height: height }"
+          @click="zoomClick(item)"
+        >
+          <videoPlayerComp
+            class="videoPlayComp"
+            ref="videoPlayerComp"
+            :url="item"
+          ></videoPlayerComp>
+        </div>
+      </template>
     </div>
     <div v-else>无</div>
 
@@ -54,22 +67,33 @@ export default {
     imgSrcList: {
       // 图片地址
       type: Array,
-      default: [],
+      default: () => {
+        return []
+      },
     },
     videoSrcList: {
       // 视频地址
       type: Array,
-      default: [],
+      default: () => {
+        return []
+      },
     },
+    audioSrcList: {
+      // 音频地址
+      type: Array,
+      default: () => {
+        return []
+      },
+    },
+    // 宽度
     width: {
-      // 宽度
       type: String,
-      default: "",
+      default: "50px",
     },
+    // 高度
     height: {
-      // 高度
       type: String,
-      default: "",
+      default: "50px",
     },
   },
   data() {
@@ -106,6 +130,17 @@ export default {
         });
       });
     },
+    playAudio(e) {
+      this.pauseAll(e.target);
+    },
+    // 暂停音频播放
+    pauseAll(target) {
+      const audioList = document.getElementsByTagName("audio");
+      [].forEach.call(audioList, (item) => {
+          // 将audioList中其他的audio全部暂停
+          item.src !== target.src && item.pause();
+      })
+    }
   },
 };
 </script>
@@ -114,6 +149,9 @@ export default {
 .imgAndVideoListComp-box {
   display: flex;
   justify-content: center;
+  .audio-box {
+    padding: 0 10px;
+  }
   .list-wrap {
     display: flex;
     flex-wrap: wrap;
@@ -129,6 +167,9 @@ export default {
     overflow: hidden;
     .videoPlayComp {
       pointer-events: none;
+    }
+    ::v-deep .video-js .vjs-modal-dialog {
+      overflow: hidden;
     }
   }
   .screenBox {

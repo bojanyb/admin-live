@@ -251,7 +251,7 @@ export default {
     }
   }
   .tableList {
-    height: calc(100vh - 230px);
+    min-height: calc(100vh - 230px);
     display: flex;
     flex-direction: column;
     .title {

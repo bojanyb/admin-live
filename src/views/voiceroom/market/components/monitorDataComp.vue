@@ -170,12 +170,12 @@ export default {
         ...this.searchParams,
         ...this.dateTimeParams,
       };
-      console.log(searchParams.chains, "searchParams.chains");
-      searchParams.chains = searchParams.chains ? [searchParams.chains] : "";
       return {
         page: params ? params.page : null,
         pagesize: params ? params.size : null,
-        chains: searchParams.chains,
+        category_id: searchParams.category_id,
+        remark: searchParams.remark,
+        name: searchParams.name,
         start_time: Math.floor(searchParams.start_time / 1000),
         end_time: Math.floor(searchParams.end_time / 1000),
       };
