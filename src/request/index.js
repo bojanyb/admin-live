@@ -511,6 +511,13 @@ const request = {
         getReportGuildUserDetail: `${HTTPHEADER}/NewPunishLog/getReportGuildUserDetail`, // 查找举报公会的举报人的信息
         guildPassUserPunish: `${HTTPHEADER}/UserComplaint/pass`, // 公会处罚-忽略
         guildUpdateSource: `${HTTPHEADER}/UserComplaint/updateSource`, // 公会投诉更换证据
+        getReportingGuildList: `${HTTPHEADER}/BackendReport/getGuildList`, // 获取举报公会记录
+        getReportingUserList: `${HTTPHEADER}/BackendReport/getUserList`, // 获取举报用户记录
+        reportGuildOrUser: `${HTTPHEADER}/BackendReport/report`, // 提交举报公会/用户
+
+        usersPunishList: `${HTTPHEADER}/UserPunishLog/getPunishTypeList`, //获取用户举报类型列表
+        guildsPunishList: `${HTTPHEADER}/UserComplaint/init`, //获取公会举报类型列表
+        guildOrUserInfo: `${HTTPHEADER}/BackendReport/searchObject`, //搜索用户或公会
     },
 
     // 心动速配
@@ -686,10 +693,8 @@ const request = {
       exportOnlineUserData: `${HTTPHEADER}/NewUserData/exportOnlineUserData`, // 导出监测链接数据
       adConfList: `${HTTPHEADER}/AdClickConf/index`, // 市场监测配置管理 - 列表
       addAdConf: `${HTTPHEADER}/AdClickConf/addData`, // 市场监测配置管理 - 添加
-      updateAdConf: `${HTTPHEADER}/AdClickConf/update`, // 市场监测配置管理 - 修改
       handleAdConf: `${HTTPHEADER}/AdClickConf/handle`, // 市场监测配置管理 - 启用/停用
       getAdSelect: `${HTTPHEADER}/AdClickConf/getSelect`, // 市场监测配置管理 - 媒体下拉框列表
-      getAdTypeSelect: `${HTTPHEADER}/AdClickConf/getAdTypeSelect`, // 市场监测配置管理 - 推广活动名称下拉框列表
   }
 }
 

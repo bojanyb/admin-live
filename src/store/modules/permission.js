@@ -175,7 +175,6 @@ const actions = {
             })
           }
           ax(newList.length > 0? newList : arr)
-
           newList.forEach((item,index) => {
             array.push({
               component: item.params ? item.params.component : Layout,

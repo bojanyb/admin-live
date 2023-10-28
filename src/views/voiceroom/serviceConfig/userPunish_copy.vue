@@ -1,5 +1,6 @@
 <template>
   <div class="app-container serviceConfig-userPunish-box">
+
     <div class="searchParams">
       <SearchPanel
         v-model="searchParams"
@@ -14,7 +15,7 @@
         @add="add"
         batchRurnName="导出EXCEL"
         @BatchRurn="BatchRurn"
-        customName="投诉/举报配置"
+        customName="风控文案库"
         @custom="handleCustom"
       ></SearchPanel>
     </div>
@@ -323,7 +324,7 @@ export default {
           label: "被举报用户身份",
           minWidth: "120px",
           render: (h, params) => {
-            return h("div", 
+            return h("div",
               {
                 on: {
                   click: ()=>{
@@ -332,8 +333,8 @@ export default {
                   }
                 }
               },
-              [ 
-                h("span", params.row.feedback_identity || "无"), 
+              [
+                h("span", params.row.feedback_identity || "无"),
                 h("i",
                   {
                     class: {
@@ -390,7 +391,7 @@ export default {
           minWidth: "120px",
           prop: "report_identity",
           render: (h, params) => {
-            return h("div", 
+            return h("div",
               {
                 on: {
                   click: ()=>{
@@ -401,8 +402,8 @@ export default {
                   }
                 }
               },
-              [ 
-                h("span", params.row.report_identity || "无"), 
+              [
+                h("span", params.row.report_identity || "无"),
                 h("i",
                   {
                     class: {
@@ -591,7 +592,7 @@ export default {
               },
               style: {
                 display:
-                params.row.accept_type === 0 
+                params.row.accept_type === 0
                     ? "unset"
                     : "none",
               },
@@ -867,7 +868,7 @@ export default {
         "审核人",
         "备注说明",
       ];
-      let tableName = this.filterType === 'user' ? '用户/主播处罚举报记录':'公会处罚举报记录' 
+      let tableName = this.filterType === 'user' ? '用户/主播处罚举报记录':'公会处罚举报记录'
       exportTableData(arr, nameList, tableName);
     },
     // 销毁组件
@@ -948,15 +949,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.user-punish-popper-wrap {
-  background: #303133;
-  color: #fff;
-  .popper__arrow::after {
-    border-bottom-color: #303133 !important;
-  }
-}
-</style>
 <style lang="scss" scoped>
 .serviceConfig-userPunish-box {
   ::v-deep .share-table-list-box .el-table__body-wrapper {
