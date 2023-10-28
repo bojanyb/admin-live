@@ -352,7 +352,7 @@ export default {
               }
               let imgArr = [];
               if(params.img_path) {
-                imgPaths = Array.isArray(params.img_path) ? params.img_path : params.img_path.split(",")
+                imgArr = Array.isArray(params.img_path) ? params.img_path : params.img_path.split(",")
               }
               const mediaArr = [].concat(soundArr, videoArr, imgArr)
               mediaArr.forEach(item => {
