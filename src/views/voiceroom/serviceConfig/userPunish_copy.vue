@@ -25,12 +25,12 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></tableList>
     <!-- 新增组件 -->
-    <addReportComp
+    <userComp
       v-if="isDestoryComp"
       ref="userComp"
       @destoryComp="destoryComp"
       @getList="getList"
-    ></addReportComp>
+    ></userComp>
     <!-- 修改证据弹窗 -->
     <uploadImg
       v-if="isDestoryComp"
@@ -58,7 +58,6 @@ import {
 import { getPunishTypeList } from "@/api/videoRoom";
 // 引入新增组件
 import userComp from "./components/userComp.vue";
-import addReportComp from "./components/addReportComp.vue";
 // 引入修改证据弹窗
 import uploadImg from "./components/uploadImg.vue";
 // 引入菜单组件
@@ -87,7 +86,6 @@ export default {
     uploadImg,
     operationLogComp,
     wordsComp,
-    addReportComp
   },
   data() {
     return {
