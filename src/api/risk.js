@@ -280,3 +280,60 @@ export function guildUpdateSource(data) {
     data
   })
 }
+
+// 获取举报公会记录
+export function getReportingGuildList(data) {
+  return request({
+    url: api.risk.getReportingGuildList,
+    method: 'post',
+    data
+  })
+}
+
+// 获取举报用户记录
+export function getReportingUserList(data) {
+  return request({
+    url: api.risk.getReportingUserList,
+    method: 'post',
+    data
+  })
+}
+
+// 提交举报公会/用户
+export function reportGuildOrUser(data) {
+  return request({
+    url: api.risk.reportGuildOrUser,
+    method: 'post',
+    data
+  })
+}
+
+
+// 用户举报列表
+export function usersPunishList(data) {
+  return request({
+    url: api.risk.usersPunishList,
+    method: 'post',
+    data
+  })
+}
+
+
+// 公会举报列表
+export function guildsPunishList(data) {
+  return request({
+    url: api.risk.guildsPunishList,
+    method: 'post',
+    data
+  })
+}
+
+
+// 搜索用户或公会
+export function guildOrUserInfo(data) {
+  return request({
+    url: api.risk.guildOrUserInfo,
+    method: 'post',
+    data
+  })
+}
