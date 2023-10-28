@@ -296,6 +296,7 @@ const request = {
         // v2
         list: `${HTTPHEADER}/Guild/guildListV2`, // 公会列表
         getGuildUsers: `${HTTPHEADER}/guild/guildUsers`, // 成员列表
+        guildLogByUserId: `${HTTPHEADER}/guild/guildLogByUserId`, // 获取公会成员的公会记录
         changePrivateChat: `${HTTPHEADER}/guild/changePrivateChat`, // 成员列表
         rmGuildUser: `${HTTPHEADER}/guild/rmGuildUser`, // 删除公会成员
         guildUserApply: `${HTTPHEADER}/guild/guildUserApply`, // 主播申请列表

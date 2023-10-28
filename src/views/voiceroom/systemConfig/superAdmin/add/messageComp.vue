@@ -24,6 +24,9 @@
         <el-form-item label="序号" prop="sort">
           <el-input type="number" v-model="ruleForm.sort"></el-input>
         </el-form-item>
+        <el-form-item label="标题" prop="title">
+          <el-input v-model="ruleForm.title"></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -48,10 +51,12 @@ export default {
         type: "",
         content: "",
         sort: "",
+        title: ""
       },
       rules: {
         content: [{ required: true, message: "请输入文案", trigger: "blur" }],
         sort: [{ required: true, message: "请输入序号", trigger: "blur" }],
+        title: [{ required: true, message: "请输入标题", trigger: "blur" }],
       },
     };
   },
@@ -98,6 +103,7 @@ export default {
             type: s.type,
             content: s.content.replace(/\t|\n|\v|\r|\f|\s|\r\n/g,''),
             sort: s.sort,
+            title: s.title
           };
           let res;
           if (this.status === "add") {
